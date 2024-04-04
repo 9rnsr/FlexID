@@ -26,7 +26,33 @@ namespace FlexID.Calc
     }
 
     /// <summary>
-    /// 臓器(コンパートメント)を表現する
+    /// 臓器機能。
+    /// </summary>
+    public enum OrganFunc
+    {
+        /// <summary>
+        /// 入力。
+        /// </summary>
+        inp,
+
+        /// <summary>
+        /// 蓄積。
+        /// </summary>
+        acc,
+
+        /// <summary>
+        /// 混合。
+        /// </summary>
+        mix,
+
+        /// <summary>
+        /// 排泄。
+        /// </summary>
+        exc,
+    }
+
+    /// <summary>
+    /// 臓器(コンパートメント)を表現する。
     /// </summary>
     public class Organ
     {
@@ -58,7 +84,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 臓器機能
         /// </summary>
-        public string Func;
+        public OrganFunc Func;
 
         /// <summary>
         /// 生物学的崩壊定数
@@ -132,17 +158,25 @@ namespace FlexID.Calc
             {
                 values = inpRead[num].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-                int id = int.Parse(values[0]);
-                var inflowNum = int.Parse(values[4]);
+                var organId = int.Parse(values[0]);     // 臓器番号
+                var inflowNum = int.Parse(values[4]);   // 流入臓器数
+
+                var func = values[2];  // 臓器機能名称
+                var organFunc =
+                    func == "inp" ? OrganFunc.inp :
+                    func == "acc" ? OrganFunc.acc :
+                    func == "mix" ? OrganFunc.mix :
+                    func == "exc" ? OrganFunc.exc :
+                    throw Program.Error($"Unrecognized organ function '{func}'.");
 
                 var organ = new Organ
                 {
                     Nuclide = nuc,
                     NuclideDecay = data.Ramd[nuc],
-                    ID = id,
+                    ID = organId,
                     Index = data.Organs.Count,
                     Name = values[1],
-                    Func = values[2],
+                    Func = organFunc,
                     BioDecay = double.Parse(values[3]),
                     BioDecayCalc = double.Parse(values[3]),
                     Inflows = new List<Inflow>(inflowNum),
@@ -154,7 +188,7 @@ namespace FlexID.Calc
                 {
                     num++;
                 }
-                else if (organ.Func == "inp")   // 入力
+                else if (organ.Func == OrganFunc.inp)   // 入力
                 {
                     if (inflowNum != 1)
                         throw Program.Error("The number of inflow paths in the Input compartment should be 0.");
@@ -262,17 +296,25 @@ namespace FlexID.Calc
                     {
                         values = inpRead[num].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-                        int id = int.Parse(values[0]);
-                        var inflowNum = int.Parse(values[4]);
+                        var organId = int.Parse(values[0]);     // 臓器番号
+                        var inflowNum = int.Parse(values[4]);   // 流入臓器数
+
+                        var func = values[2];  // 臓器機能名称
+                        var organFunc =
+                            func == "inp" ? OrganFunc.inp :
+                            func == "acc" ? OrganFunc.acc :
+                            func == "mix" ? OrganFunc.mix :
+                            func == "exc" ? OrganFunc.exc :
+                            throw Program.Error($"Unrecognized organ function '{func}'.");
 
                         var organ = new Organ
                         {
                             Nuclide = nuc,
                             NuclideDecay = data.Ramd[nuc],
-                            ID = id,
+                            ID = organId,
                             Index = data.Organs.Count,
                             Name = values[1],
-                            Func = values[2],
+                            Func = organFunc,
                             BioDecay = double.Parse(values[3]),
                             BioDecayCalc = double.Parse(values[3]),
                             Inflows = new List<Inflow>(inflowNum),
@@ -284,7 +326,7 @@ namespace FlexID.Calc
                         {
                             num++;
                         }
-                        else if (organ.Func == "inp")   // 入力
+                        else if (organ.Func == OrganFunc.inp)   // 入力
                         {
                             if (inflowNum != 1)
                                 throw Program.Error("The number of inflow paths in the Input compartment should be 0.");

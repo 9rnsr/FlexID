@@ -44,7 +44,7 @@ namespace FlexID.Calc
                 foreach (var inflow in organ.Inflows)
                 {
                     // 流入元の臓器機能が"入力"でないものをはじく
-                    if (inflow.Organ.Func != "inp")
+                    if (inflow.Organ.Func != OrganFunc.inp)
                         continue;
 
                     // inputから初期値を受け取る臓器、対象組織が対象核種の組織か確認
