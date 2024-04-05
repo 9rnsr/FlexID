@@ -396,8 +396,8 @@ namespace FlexID.Calc
                             continue;
 
                         // 放射能*S係数
-                        int indexAM = Array.IndexOf(sourceAM, data.CorrNum[Tuple.Create(organ.Nuclide, organ.Name)]);
-                        int indexAF = Array.IndexOf(sourceAF, data.CorrNum[Tuple.Create(organ.Nuclide, organ.Name)]);
+                        int indexAM = Array.IndexOf(sourceAM, data.CorrNum[(organ.Nuclide, organ.Name)]);
+                        int indexAF = Array.IndexOf(sourceAF, data.CorrNum[(organ.Nuclide, organ.Name)]);
                         if (indexAM > 0) // indexが1より下は組織と対応するS係数無し
                             totalAM += Act * double.Parse(S_coeAM[indexAM]);
                         if (indexAF > 0)
@@ -864,7 +864,7 @@ namespace FlexID.Calc
                             continue;
 
                         // 放射能*S係数
-                        int index = Array.IndexOf(source, dataLow.CorrNum[Tuple.Create(organ.Nuclide, organ.Name)]);
+                        int index = Array.IndexOf(source, dataLow.CorrNum[(organ.Nuclide, organ.Name)]);
                         if (index > 0) // indexが1より下は組織と対応するS係数無し
                             total += Act * double.Parse(_see[index]);
                     }
