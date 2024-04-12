@@ -2,14 +2,14 @@ using System;
 
 namespace FlexID.Calc
 {
-    class SubRoutine
+    static class SubRoutine
     {
         /// <summary>
         /// inputから各臓器に初期値を振り分ける
         /// </summary>
         /// <param name="Act"></param>
         /// <param name="data"></param>
-        public void Init(Activity Act, DataClass data)
+        public static void Init(Activity Act, DataClass data)
         {
             Act.Pre = new OrganActivity[data.Organs.Count];
             Act.Now = new OrganActivity[data.Organs.Count];
@@ -67,7 +67,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 排泄物
         /// </summary>
-        public void Excretion(Organ organ, Activity Act, double dt)
+        public static void Excretion(Organ organ, Activity Act, double dt)
         {
             double ini = 0;
             double ave = 0;
@@ -91,7 +91,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 混合
         /// </summary>
-        public void Mix(Organ organ, Activity Act)
+        public static void Mix(Organ organ, Activity Act)
         {
             double ini = 0;
             double ave = 0;
@@ -117,7 +117,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 入力
         /// </summary>
-        public void Input(Organ organ, Activity Act)
+        public static void Input(Organ organ, Activity Act)
         {
             // 初期振り分けはしたので0を設定するだけ？
             // todo: 機能3の区画にID=0以外の区画からの流入がある場合はその前提が崩れるため、
@@ -132,7 +132,7 @@ namespace FlexID.Calc
         /// 蓄積(OIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public void Accumulation(double dT, Organ organ, Activity Act, double d)
+        public static void Accumulation(double dT, Organ organ, Activity Act, double d)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             var alpha = organ.NuclideDecay + organ.BioDecay;
@@ -192,7 +192,7 @@ namespace FlexID.Calc
         /// 蓄積(EIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public void Accumulate_EIR(double dT, Organ organLow, Organ organHigh, Activity Act, double day, int LowDays, int HighDays)
+        public static void Accumulate_EIR(double dT, Organ organLow, Organ organHigh, Activity Act, double day, int LowDays, int HighDays)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             double alpha;

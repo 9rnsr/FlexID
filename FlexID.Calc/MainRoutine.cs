@@ -10,7 +10,6 @@ namespace FlexID.Calc
 {
     public class MainRoutine
     {
-        SubRoutine sub = new SubRoutine();
         Activity Act { get; } = new Activity();
         CalcOut CalcOut = new CalcOut();
 
@@ -136,7 +135,7 @@ namespace FlexID.Calc
                 var calcNowT = CalcTimeMesh[ctime];
 
                 // inputの初期値を各臓器に振り分ける
-                sub.Init(Act, data);
+                SubRoutine.Init(Act, data);
 
                 iterLog[calcNowT] = 0;
 
@@ -222,19 +221,19 @@ namespace FlexID.Calc
                         // 臓器機能ごとに異なる処理をする 
                         if (func == OrganFunc.inp) // 入力
                         {
-                            sub.Input(organ, Act);
+                            SubRoutine.Input(organ, Act);
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            sub.Accumulation(calcNowT - calcPreT, organ, Act, calcNowT);
+                            SubRoutine.Accumulation(calcNowT - calcPreT, organ, Act, calcNowT);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
-                            sub.Mix(organ, Act);
+                            SubRoutine.Mix(organ, Act);
                         }
                         else if (func == OrganFunc.exc) // 排泄物
                         {
-                            sub.Excretion(organ, Act, calcNowT - calcPreT);
+                            SubRoutine.Excretion(organ, Act, calcNowT - calcPreT);
                         }
 
                         Act.Now[organ.Index].ini = Act.rNow[organ.Index].ini;
@@ -572,7 +571,7 @@ namespace FlexID.Calc
                 var calcNowT = CalcTimeMesh[ctime];
 
                 // inputの初期値を各臓器に振り分ける
-                sub.Init(Act, dataLow);
+                SubRoutine.Init(Act, dataLow);
 
                 iterLog[calcNowT] = 0;
 
@@ -687,19 +686,19 @@ namespace FlexID.Calc
                         // 臓器機能ごとに異なる処理をする
                         if (func == OrganFunc.inp) // 入力
                         {
-                            sub.Input(organLow, Act);
+                            SubRoutine.Input(organLow, Act);
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            sub.Accumulate_EIR(calcNowT - calcPreT, organLow, organHigh, Act, calcNowT + ExposureDays, LowDays, HighDays);
+                            SubRoutine.Accumulate_EIR(calcNowT - calcPreT, organLow, organHigh, Act, calcNowT + ExposureDays, LowDays, HighDays);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
-                            sub.Mix(organLow, Act);
+                            SubRoutine.Mix(organLow, Act);
                         }
                         else if (func == OrganFunc.exc) // 排泄物
                         {
-                            sub.Excretion(organLow, Act, calcNowT - calcPreT);
+                            SubRoutine.Excretion(organLow, Act, calcNowT - calcPreT);
                         }
 
                         Act.Now[organLow.Index].ini = Act.rNow[organLow.Index].ini;
