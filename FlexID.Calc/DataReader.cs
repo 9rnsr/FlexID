@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace FlexID.Calc
@@ -185,6 +186,18 @@ namespace FlexID.Calc
                 if (isProgeny)
                     data.ListProgeny.Add(nuc);
 
+                string[] sourceRegions;
+                {
+                    var linesAM = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AM_{(isProgeny ? "prg_" : "")}S-Coefficient.txt"));
+                    var linesAF = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AF_{(isProgeny ? "prg_" : "")}S-Coefficient.txt"));
+
+                    var sourceAM = linesAM.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var sourceAF = linesAF.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (!Enumerable.SequenceEqual(sourceAM, sourceAF))
+                        throw Program.Error($"Found mismatch of source region names in S-Coefficient data for nuclide {nuc}.");
+                    sourceRegions = sourceAM;
+                }
+
                 // 核種を構成する臓器の定義行を読み込む。
                 while (true)
                 {
@@ -211,7 +224,7 @@ namespace FlexID.Calc
                     var organFn = values[2];                // 臓器機能名称
                     var bioDecay = double.Parse(values[3]); // 生物学的崩壊定数
                     var inflowNum = int.Parse(values[4]);   // 流入臓器数
-                    var ScoeffName = values[7];             // S係数との紐付け名称
+                    var sourceRegionName = values[7];       // 臓器に対応する線源領域の名称
 
                     var organFunc =
                         organFn == "inp" ? OrganFunc.inp :
@@ -219,6 +232,9 @@ namespace FlexID.Calc
                         organFn == "mix" ? OrganFunc.mix :
                         organFn == "exc" ? OrganFunc.exc :
                         throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
+
+                    if (sourceRegionName != "-" && !sourceRegions.Contains(sourceRegionName))
+                        throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegionName}'");
 
                     var organ = new Organ
                     {
@@ -233,7 +249,7 @@ namespace FlexID.Calc
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
-                    data.CorrNum[(nuc, organ.Name)] = ScoeffName;
+                    data.CorrNum[(nuc, organ.Name)] = sourceRegionName;
 
                     if (organ.Func == OrganFunc.inp)
                     {
@@ -355,6 +371,15 @@ namespace FlexID.Calc
                     { }
                 }
 
+                string[] sourceRegions;
+                {
+                    var linesSEE = File.ReadLines(Path.Combine("lib", "EIR", nuc + "SEE.txt"));
+
+                    var sourceSEE = linesSEE.Skip(1).First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                    sourceRegions = sourceSEE;
+                }
+
                 // 核種を構成する臓器の定義行を読み込む。
                 while (true)
                 {
@@ -381,7 +406,7 @@ namespace FlexID.Calc
                     var organFn = values[2];                // 臓器機能名称
                     var bioDecay = double.Parse(values[3]); // 生物学的崩壊定数
                     var inflowNum = int.Parse(values[4]);   // 流入臓器数
-                    var ScoeffName = values[7];             // S係数との紐付け名称
+                    var sourceRegionName = values[7];       // 臓器に対応する線源領域の名称
 
                     var organFunc =
                         organFn == "inp" ? OrganFunc.inp :
@@ -389,6 +414,9 @@ namespace FlexID.Calc
                         organFn == "mix" ? OrganFunc.mix :
                         organFn == "exc" ? OrganFunc.exc :
                         throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
+
+                    if (sourceRegionName != "-" && !sourceRegions.Contains(sourceRegionName))
+                        throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegionName}'");
 
                     var organ = new Organ
                     {
@@ -403,7 +431,7 @@ namespace FlexID.Calc
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
-                    data.CorrNum[(nuc, organ.Name)] = ScoeffName;
+                    data.CorrNum[(nuc, organ.Name)] = sourceRegionName;
 
                     if (organ.Func == OrganFunc.inp)
                     {
