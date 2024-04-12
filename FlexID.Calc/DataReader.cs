@@ -129,7 +129,7 @@ namespace FlexID.Calc
         /// <summary>
         /// S-coeと対応する臓器名
         /// </summary>
-        public Dictionary<Tuple<string, string>, string> CorrNum = new Dictionary<Tuple<string, string>, string>();
+        public Dictionary<(string, string), string> CorrNum = new Dictionary<(string, string), string>();
 
         /// <summary>
         /// 子孫核種のリスト
@@ -182,7 +182,7 @@ namespace FlexID.Calc
                     Inflows = new List<Inflow>(inflowNum),
                 };
 
-                data.CorrNum[Tuple.Create(nuc, organ.Name)] = values[7];
+                data.CorrNum[(nuc, organ.Name)] = values[7];
 
                 if (inflowNum == 0)
                 {
@@ -320,7 +320,7 @@ namespace FlexID.Calc
                             Inflows = new List<Inflow>(inflowNum),
                         };
 
-                        data.CorrNum[Tuple.Create(nuc, organ.Name)] = values[7];
+                        data.CorrNum[(nuc, organ.Name)] = values[7];
 
                         if (inflowNum == 0)
                         {
