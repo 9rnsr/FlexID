@@ -153,9 +153,24 @@ namespace FlexID.Calc
 
                 string GetNextLine()
                 {
+                Lagain:
                     if (num == lines.Count)
                         throw Program.Error("Reach to EOF while reading input file.");
-                    return lines[num++];
+                    var ln = lines[num++].Trim();
+
+                    // 空行を読み飛ばす。
+                    if (ln.Length == 0)
+                        goto Lagain;
+
+                    // コメント行を読み飛ばす。
+                    if (ln.StartsWith("#"))
+                        goto Lagain;
+
+                    // 行末コメントを除去する。
+                    var trailingComment = ln.IndexOf("#");
+                    if (trailingComment != -1)
+                        ln = ln.Substring(0, trailingComment).TrimEnd();
+                    return ln;
                 }
 
                 var isProgeny = false;
@@ -173,7 +188,7 @@ namespace FlexID.Calc
                 // 核種を構成する臓器の定義行を読み込む。
                 while (true)
                 {
-                    var ln = GetNextLine().Trim();
+                    var ln = GetNextLine();
                     if (ln == "end")
                         break;
 
@@ -302,9 +317,24 @@ namespace FlexID.Calc
 
                 string GetNextLine()
                 {
+                Lagain:
                     if (num == lines.Count)
                         throw Program.Error("Reach to EOF while reading input file.");
-                    return lines[num++];
+                    var ln = lines[num++].Trim();
+
+                    // 空行を読み飛ばす。
+                    if (ln.Length == 0)
+                        goto Lagain;
+
+                    // コメント行を読み飛ばす。
+                    if (ln.StartsWith("#"))
+                        goto Lagain;
+
+                    // 行末コメントを除去する。
+                    var trailingComment = ln.IndexOf("#");
+                    if (trailingComment != -1)
+                        ln = ln.Substring(0, trailingComment).TrimEnd();
+                    return ln;
                 }
 
                 var isProgeny = false;
@@ -321,14 +351,14 @@ namespace FlexID.Calc
                 else
                 {
                     // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
-                    while (GetNextLine().Trim() != age)
+                    while (GetNextLine() != age)
                     { }
                 }
 
                 // 核種を構成する臓器の定義行を読み込む。
                 while (true)
                 {
-                    var ln = GetNextLine().Trim();
+                    var ln = GetNextLine();
                     if (ln == "end" || ln == "next")
                         break;
 
