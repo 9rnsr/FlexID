@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace FlexID.Calc
 {
@@ -277,6 +280,26 @@ namespace FlexID.Calc
                 Act.rNow[organLow.Index].end = 0;
             if (Act.rNow[organLow.Index].total <= 1e-60)
                 Act.rNow[organLow.Index].total = 0;
+        }
+
+        /// <summary>
+        /// 組織加重係数の読み込み。
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static Dictionary<string, double> WeightTissue(string fileName)
+        {
+            var wT = new Dictionary<string, double>();
+
+            var fileLines = File.ReadLines(fileName);
+            foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
+            {
+                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var tissueName = values[0];
+                var weight = double.Parse(values[1]);
+                wT[tissueName] = weight;
+            }
+            return wT;
         }
     }
 }

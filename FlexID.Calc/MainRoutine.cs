@@ -55,7 +55,7 @@ namespace FlexID.Calc
             var OutTimeMesh = fileReader.OutReader(OutTimeMeshPath);
 
             var data = DataClass.Read(Input, CalcProgeny);
-            var wT = WeightTissue(@"lib\OIR\wT.txt");
+            var wT = SubRoutine.WeightTissue(@"lib\OIR\wT.txt");
 
             var RetentionPath = OutputPath + "_Retention.out";
             var CumulativePath = OutputPath + "_Cumulative.out";
@@ -464,7 +464,7 @@ namespace FlexID.Calc
             var OutTimeMesh = fileReader.OutReader(OutTimeMeshPath);
 
             var dataList = DataClass.Read_EIR(Input, CalcProgeny);
-            var wT = WeightTissue(@"lib\EIR\wT.txt");
+            var wT = SubRoutine.WeightTissue(@"lib\EIR\wT.txt");
 
             var RetentionPath = OutputPath + "_Retention.out";
             var CumulativePath = OutputPath + "_Cumulative.out";
@@ -921,22 +921,6 @@ namespace FlexID.Calc
                     otime++;
                 }
             }
-        }
-
-        // 組織加重係数読込
-        Dictionary<string, double> WeightTissue(string fileName)
-        {
-            var wT = new Dictionary<string, double>();
-
-            var fileLines = File.ReadLines(fileName);
-            foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
-            {
-                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var tissueName = values[0];
-                var weight = double.Parse(values[1]);
-                wT[tissueName] = weight;
-            }
-            return wT;
         }
 
         public static double Interpolation(double day, double LowValue, double HighValue, int LowDays, int HighDays)
