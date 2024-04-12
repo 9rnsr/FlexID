@@ -58,7 +58,7 @@ namespace FlexID.Calc
             if (args.Length == 0)
                 return usage();
 
-            MainRoutine main = new MainRoutine();
+            var main = new MainRoutine_OIR();
             try
             {
                 // パラメータファイルが2つ以上の時エラー

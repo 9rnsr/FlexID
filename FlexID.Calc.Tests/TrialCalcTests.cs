@@ -116,7 +116,7 @@ namespace FlexID.Calc.Tests
                 "50years";
 #endif
 
-            var main = new MainRoutine();
+            var main = new MainRoutine_OIR();
             main.InputPath        /**/= inputPath;
             main.OutputPath       /**/= outputPath;
             main.CalcTimeMeshPath /**/= cTimeMeshFile;
@@ -174,7 +174,7 @@ namespace FlexID.Calc.Tests
                 throw new NotSupportedException();
 #endif
 
-            var main = new MainRoutine();
+            var main = new MainRoutine_EIR();
             main.InputPath        /**/= inputPath;
             main.OutputPath       /**/= outputPath;
             main.CalcTimeMeshPath /**/= cTimeMeshFile;
@@ -183,7 +183,7 @@ namespace FlexID.Calc.Tests
             main.CalcProgeny      /**/= true;
             main.ExposureAge      /**/= exposureAge;
 
-            main.Main_EIR();
+            main.Main();
 
             Assert.Equal(
                 File.ReadLines(Path.Combine(expectDir, target + "_Cumulative.out")),

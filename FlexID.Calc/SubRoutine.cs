@@ -195,7 +195,7 @@ namespace FlexID.Calc
         /// 蓄積(EIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public static void Accumulate_EIR(double dT, Organ organLow, Organ organHigh, Activity Act, double day, int LowDays, int HighDays)
+        public static void Accumulation_EIR(double dT, Organ organLow, Organ organHigh, Activity Act, double day, int LowDays, int HighDays)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             double alpha;
@@ -210,22 +210,22 @@ namespace FlexID.Calc
 
                 double beforeBio;
                 // 流入元生物学的崩壊定数
-                if (day <= MainRoutine.adult)
+                if (day <= MainRoutine_EIR.adult)
                 {
                     if (organLow.Name == "Plasma" && organLow.Inflows[i].Organ.Name == "SI")
                     {
                         beforeBio = organLow.Inflows[i].Organ.BioDecay * organLow.Inflows[i].Rate;
-                        alpha = MainRoutine.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
+                        alpha = MainRoutine_EIR.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
                     }
                     else if (organLow.Name == "SI")
                     {
-                        beforeBio = MainRoutine.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
+                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
                         alpha = organLow.BioDecay;
                     }
                     else
                     {
-                        beforeBio = MainRoutine.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
-                        alpha = MainRoutine.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
+                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
+                        alpha = MainRoutine_EIR.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
                     }
                 }
                 else
