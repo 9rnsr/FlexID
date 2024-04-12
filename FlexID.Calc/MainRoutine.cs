@@ -220,19 +220,19 @@ namespace FlexID.Calc
                         var func = organ.Func; // 臓器機能
 
                         // 臓器機能ごとに異なる処理をする 
-                        if (func == "inp") // 入力
+                        if (func == OrganFunc.inp) // 入力
                         {
                             sub.Input(organ, Act);
                         }
-                        else if (func == "acc") // 蓄積
+                        else if (func == OrganFunc.acc) // 蓄積
                         {
                             sub.Accumulation(calcNowT - calcPreT, organ, Act, calcNowT);
                         }
-                        else if (func == "mix") // 混合
+                        else if (func == OrganFunc.mix) // 混合
                         {
                             sub.Mix(organ, Act);
                         }
-                        else if (func == "exc") // 排泄物
+                        else if (func == OrganFunc.exc) // 排泄物
                         {
                             sub.Excretion(organ, Act, calcNowT - calcPreT);
                         }
@@ -396,8 +396,8 @@ namespace FlexID.Calc
                             continue;
 
                         // 放射能*S係数
-                        int indexAM = Array.IndexOf(sourceAM, data.CorrNum[Tuple.Create(organ.Nuclide, organ.Name)]);
-                        int indexAF = Array.IndexOf(sourceAF, data.CorrNum[Tuple.Create(organ.Nuclide, organ.Name)]);
+                        int indexAM = Array.IndexOf(sourceAM, data.CorrNum[(organ.Nuclide, organ.Name)]);
+                        int indexAF = Array.IndexOf(sourceAF, data.CorrNum[(organ.Nuclide, organ.Name)]);
                         if (indexAM > 0) // indexが1より下は組織と対応するS係数無し
                             totalAM += Act * double.Parse(S_coeAM[indexAM]);
                         if (indexAF > 0)
@@ -428,7 +428,7 @@ namespace FlexID.Calc
                     var flgTime = true;
                     foreach (var organ in data.Organs)
                     {
-                        if (organ.Func == "exc")
+                        if (organ.Func == OrganFunc.exc)
                             Act.Now[organ.Index].end = Act.Excreta[organ.Index] / (outNowT - outPreT);
 
                         if (!iterLog.ContainsKey(outNowT))
@@ -685,19 +685,19 @@ namespace FlexID.Calc
                         var func = organLow.Func; // 臓器機能
 
                         // 臓器機能ごとに異なる処理をする
-                        if (func == "inp") // 入力
+                        if (func == OrganFunc.inp) // 入力
                         {
                             sub.Input(organLow, Act);
                         }
-                        else if (func == "acc") // 蓄積
+                        else if (func == OrganFunc.acc) // 蓄積
                         {
                             sub.Accumulate_EIR(calcNowT - calcPreT, organLow, organHigh, Act, calcNowT + ExposureDays, LowDays, HighDays);
                         }
-                        else if (func == "mix") // 混合
+                        else if (func == OrganFunc.mix) // 混合
                         {
                             sub.Mix(organLow, Act);
                         }
-                        else if (func == "exc") // 排泄物
+                        else if (func == OrganFunc.exc) // 排泄物
                         {
                             sub.Excretion(organLow, Act, calcNowT - calcPreT);
                         }
@@ -864,7 +864,7 @@ namespace FlexID.Calc
                             continue;
 
                         // 放射能*S係数
-                        int index = Array.IndexOf(source, dataLow.CorrNum[Tuple.Create(organ.Nuclide, organ.Name)]);
+                        int index = Array.IndexOf(source, dataLow.CorrNum[(organ.Nuclide, organ.Name)]);
                         if (index > 0) // indexが1より下は組織と対応するS係数無し
                             total += Act * double.Parse(_see[index]);
                     }
@@ -897,7 +897,7 @@ namespace FlexID.Calc
                     var flgTime = true;
                     foreach (var organ in dataLow.Organs)
                     {
-                        if (organ.Func == "exc")
+                        if (organ.Func == OrganFunc.exc)
                             Act.Now[organ.Index].end = Act.Excreta[organ.Index] / (outNowT - outPreT);
 
                         if (!iterLog.ContainsKey(outNowT))
