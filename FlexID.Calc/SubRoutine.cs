@@ -2,11 +2,39 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FlexID.Calc
 {
     static class SubRoutine
     {
+        private static Regex patternPeriod =
+            new Regex(@"^ *(?<num>\d+) *(?<unit>days|months|years) *$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// 預託期間を日数に換算する。
+        /// </summary>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public static int CommitmentPeriodToDays(string period)
+        {
+            var m = patternPeriod.Match(period);
+            if (m.Success)
+            {
+                var num = int.Parse(m.Groups["num"].Value);
+                var unit = m.Groups["unit"].Value.ToLowerInvariant();
+                var days = unit == "days" ? num :
+                           unit == "months" ? num * 31 :
+                           unit == "years" ? num * 365 :
+                           throw Program.Error("Please enter the period ('days', 'months', 'years').");
+                return days;
+            }
+            else
+            {
+                throw Program.Error("Please enter integer for the Commitment Period.");
+            }
+        }
+
         /// <summary>
         /// inputから各臓器に初期値を振り分ける
         /// </summary>

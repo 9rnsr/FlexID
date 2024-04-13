@@ -113,27 +113,8 @@ namespace FlexID.Calc
             const double convergence = 1E-14; // 収束値
             const int iterMax = 1500;  // iterationの最大回数
 
-            // 預託期間を"days"に変換
-            int commitmentDays = 0; // dayに変換した預託期間
-            if (CommitmentPeriod.IndexOf("days", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                if (!int.TryParse(Regex.Replace(CommitmentPeriod, "days", "", RegexOptions.IgnoreCase), out commitmentDays))
-                    throw Program.Error("Please enter integer for the Commitment Period.");
-            }
-            else if (CommitmentPeriod.IndexOf("months", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                if (!int.TryParse(Regex.Replace(CommitmentPeriod, "months", "", RegexOptions.IgnoreCase), out commitmentDays))
-                    throw Program.Error("Please enter integer for the Commitment Period.");
-                commitmentDays = commitmentDays * 31;
-            }
-            else if (CommitmentPeriod.IndexOf("years", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                if (!int.TryParse(Regex.Replace(CommitmentPeriod, "years", "", RegexOptions.IgnoreCase), out commitmentDays))
-                    throw Program.Error("Please enter integer for the Commitment Period.");
-                commitmentDays = commitmentDays * 365;
-            }
-            else
-                throw Program.Error("Please enter the period ('days', 'months', 'years').");
+            // 預託期間[day]を取得。
+            var commitmentDays = SubRoutine.CommitmentPeriodToDays(CommitmentPeriod);
 
             // 被ばく年齢を"days"に変換
             int ExposureDays = 0;
