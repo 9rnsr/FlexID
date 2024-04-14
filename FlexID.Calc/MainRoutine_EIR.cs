@@ -261,7 +261,7 @@ namespace FlexID.Calc
             var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
 
             // 標的組織の名称をヘッダーとして出力。
-            CalcOut.CommitmentTarget(targetTissues.ToList(), dataList[0]);
+            CalcOut.CommitmentTarget(targetTissues, dataList[0]);
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
