@@ -226,34 +226,34 @@ namespace FlexID.Calc
         public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
-            double alpha;
-            alpha = organLo.BioDecay;
+            double alpha = organLo.BioDecay;
+
             #region 流入臓器の数ループ
             double ave = 0.0;
             for (int i = 0; i < organLo.Inflows.Count; i++)
             {
                 // 丸め誤差が出るので、Roundするか否か
-                var InflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
-                var InflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
+                var inflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
+                var inflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
 
-                double beforeBio;
                 // 流入元生物学的崩壊定数
+                double beforeBio;
                 if (day <= MainRoutine_EIR.adult)
                 {
                     if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                     {
                         beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
-                        alpha = MainRoutine_EIR.Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+                        alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                     else if (organLo.Name == "SI")
                     {
-                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLo, InflowHi, daysLo, daysHi);
+                        beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
                         alpha = organLo.BioDecay;
                     }
                     else
                     {
-                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLo, InflowHi, daysLo, daysHi);
-                        alpha = MainRoutine_EIR.Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+                        beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
+                        alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                 }
                 else
@@ -308,6 +308,13 @@ namespace FlexID.Calc
                 Act.rNow[organLo.Index].end = 0;
             if (Act.rNow[organLo.Index].total <= 1e-60)
                 Act.rNow[organLo.Index].total = 0;
+        }
+
+        public static double Interpolation(double day, double valueLo, double valueHi, int daysLo, int daysHi)
+        {
+            double value;
+            value = valueLo + (day - daysLo) * (valueHi - valueLo) / (daysHi - daysLo);
+            return value;
         }
 
         /// <summary>
