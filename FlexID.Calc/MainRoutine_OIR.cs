@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using TextIO;
 
 namespace FlexID.Calc
 {
@@ -67,7 +65,7 @@ namespace FlexID.Calc
             var CumulativePath = OutputPath + "_Cumulative.out";
             var DosePath = OutputPath + "_Dose.out";
             var DoseRatePath = OutputPath + "_DoseRate.out";
-            var IterPath = OutputPath + "_IterLog.out";
+            //var IterPath = OutputPath + "_IterLog.out";
 
             Directory.CreateDirectory(Path.GetDirectoryName(RetentionPath));
 
@@ -84,8 +82,10 @@ namespace FlexID.Calc
 
             // テンポラリファイルを並び替えて出力
             CalcOut.ActivityOut(RetentionPath, CumulativePath, TmpFile, data);
+
             // Iter出力
             //CalcOut.IterOut(CalcTimeMesh, iterLog, IterPath);
+
             File.Delete(TmpFile);
         }
 
@@ -111,6 +111,13 @@ namespace FlexID.Calc
                         inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
                 }
             }
+
+            // 標的組織の名称リストを(親核種のS係数データから)取得。
+            var targetTissues = data.Nuclides[0].TargetTissues;
+            var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
+
+            // 標的組織の名称をヘッダーとして出力。
+            CalcOut.CommitmentTarget(targetTissues.ToList(), data);
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
@@ -141,16 +148,6 @@ namespace FlexID.Calc
                 }
             }
 
-            // 線源臓器リストの抽出
-            var source = new Dictionary<string, string>();
-            for (int i = 0; i < data.Nuclides.Count; i++)
-            {
-                var nuclide = data.Nuclides[i];
-                var nuc = nuclide.Nuclide;
-                var prg = nuclide.IsProgeny ? "_prg" : "";
-                source[nuc + "AM"] = File.ReadLines($@"lib\OIR\{nuc}_AM{prg}_S-Coefficient.txt").First();
-                source[nuc + "AF"] = File.ReadLines($@"lib\OIR\{nuc}_AF{prg}_S-Coefficient.txt").First();
-            }
             // 処理中の出力メッシュにおける臓器毎の積算放射能
             var OutMeshTotal = new double[data.Organs.Count];
 
@@ -168,8 +165,6 @@ namespace FlexID.Calc
                 }
             }
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
-
-            var flgTarget = true;   // 預託線量ヘッダー出力用フラグ
 
             ctime = 1;
             otime = 1;
@@ -192,7 +187,7 @@ namespace FlexID.Calc
                     {
                         var func = organ.Func; // 臓器機能
 
-                        // 臓器機能ごとに異なる処理をする 
+                        // 臓器機能ごとに異なる処理をする
                         if (func == OrganFunc.inp) // 入力
                         {
                             SubRoutine.Input(organ, Act);
@@ -213,6 +208,7 @@ namespace FlexID.Calc
                         Act.Now[organ.Index].ini = Act.rNow[organ.Index].ini;
                         Act.Now[organ.Index].ave = Act.rNow[organ.Index].ave;
                         Act.Now[organ.Index].end = Act.rNow[organ.Index].end;
+
                         Act.Now[organ.Index].total = Act.rNow[organ.Index].total;
 
                         // 臓器毎の積算放射能算出
@@ -268,134 +264,43 @@ namespace FlexID.Calc
                 if (OutTimeMesh.Count <= otime)
                     break;
 
-                // S-Coefficient読込
-                var S_coe = new Dictionary<string, StreamLineReader>();
-                for (int i = 0; i < data.Nuclides.Count; i++)
-                {
-                    var n = data.Nuclides[i];
-                    var nuc = n.Nuclide;
-                    if (n.IsProgeny)
-                    {
-                        S_coe[nuc + "AM"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AM_prg_S-Coefficient.txt");
-                        S_coe[nuc + "AF"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AF_prg_S-Coefficient.txt");
-                    }
-                    else
-                    {
-                        S_coe[nuc + "AM"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AM_S-Coefficient.txt");
-                        S_coe[nuc + "AF"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AF_S-Coefficient.txt");
-                    }
-                }
-
                 // ΔT[sec]
                 var deltaT = (calcNowT - calcPreT) * 24 * 3600;
-                string[] sourceAM = new string[0];
-                string[] sourceAF = new string[0];
-                string lineAM = "";
-                string lineAF = "";
-                // ヘッダーを送る
-                for (int i = 0; i < data.Nuclides.Count; i++)
+
+                foreach (var organ in data.Organs)
                 {
-                    var nuc = data.Nuclides[i].Nuclide;
+                    if (organ.Name.Contains("mix"))
+                        continue;
 
-                    var r = S_coe[nuc + "AM"];
-                    lineAM = r.ReadLine();
-                    sourceAM = lineAM.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    r = S_coe[nuc + "AF"];
-                    lineAF = r.ReadLine();
-                    sourceAF = lineAF.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                }
+                    var nuclide = organ.Nuclide;
+                    var nucDecay = nuclide.Ramd;
 
-                var TargetList = new List<string>();
+                    // タイムステップごとの放射能　
+                    var activity = Act.Now[organ.Index].end * deltaT * nucDecay;
+                    if (activity == 0)
+                        continue;
 
-                var nuclide = data.Nuclides[0]; // 現在対象としている核種
-                var nucId = nuclide.Nuclide;
-                var S_coeAM = new string[0];
-                var S_coeAF = new string[0];
-                int oCount = 0;
-
-                while (true)
-                {
-                    double totalAM = 0;
-                    double totalAF = 0;
-                    bool flgScoe = true;
-
-                    foreach (var organ in data.Organs)
+                    if (organ.SourceRegion != null)
                     {
-                        StreamLineReader r;
-
-                        if (organ.Name.Contains("mix"))
-                            continue;
-
-                        if (flgScoe)
+                        // コンパートメントから各標的組織への預託線量を計算する。
+                        for (int indexT = 0; indexT < 43; indexT++)
                         {
-                            nuclide = organ.Nuclide;
-                            nucId = nuclide.Nuclide;
-                            var am = source[nucId + "AM"];
-                            sourceAM = am.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            var af = source[nucId + "AF"];
-                            sourceAF = af.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            // 標的組織の部分的な重量。
+                            var targetWeight = targetWeights[indexT];
 
-                            r = S_coe[nucId + "AM"];
-                            lineAM = r.ReadLine();
-                            r = S_coe[nucId + "AF"];
-                            lineAF = r.ReadLine();
-                            if (lineAM == null)
-                                break;
+                            // S係数(男女平均)。
+                            var scoeff = organ.S_Coefficients[indexT];
 
-                            S_coeAM = lineAM.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            S_coeAF = lineAF.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            TargetList.Add(S_coeAM[0]);
-                            flgScoe = false;
+                            // 等価線量 = 放射能 * S係数
+                            var equivalentDose = activity * scoeff;
+
+                            // 実効線量 = 等価線量 * wT
+                            var effectiveDose = equivalentDose * targetWeight;
+
+                            Result[indexT] += equivalentDose;
+                            WholeBody += effectiveDose;
                         }
-
-                        // 対象としてる核種が変わったら見るS係数ファイルを変える
-                        if (nuclide != organ.Nuclide)
-                        {
-                            nuclide = organ.Nuclide;
-                            nucId = nuclide.Nuclide;
-                            var am = source[nucId + "AM"];
-                            sourceAM = am.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            var af = source[nucId + "AF"];
-                            sourceAF = af.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                            r = S_coe[nucId + "AM"];
-                            lineAM = r.ReadLine();
-                            r = S_coe[nucId + "AF"];
-                            lineAF = r.ReadLine();
-
-                            S_coeAM = lineAM.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            S_coeAF = lineAF.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                        }
-
-                        var nucDecay = nuclide.Ramd;
-
-                        // タイムステップごとの放射能　
-                        var Act = this.Act.Now[organ.Index].end * deltaT * nucDecay;
-                        if (Act == 0)
-                            continue;
-
-                        // 放射能*S係数
-                        int indexAM = Array.IndexOf(sourceAM, data.CorrNum[(organ.Nuclide.Nuclide, organ.Name)]);
-                        int indexAF = Array.IndexOf(sourceAF, data.CorrNum[(organ.Nuclide.Nuclide, organ.Name)]);
-                        if (indexAM > 0) // indexが1より下は組織と対応するS係数無し
-                            totalAM += Act * double.Parse(S_coeAM[indexAM]);
-                        if (indexAF > 0)
-                            totalAF += Act * double.Parse(S_coeAF[indexAF]);
                     }
-
-                    if (lineAF == null)
-                        break;
-
-                    Result[oCount] += (totalAM + totalAF) / 2;
-                    WholeBody += ((totalAM * wT[S_coeAM[0]]) + (totalAF * wT[S_coeAM[0]])) / 2; // 実効線量 =（男性等価線量*wT+女性等価線量*wT）/2
-                    oCount++;
-                }
-
-                // 初回のみヘッダーの標的組織出力
-                if (flgTarget)
-                {
-                    CalcOut.CommitmentTarget(TargetList, data);
-                    flgTarget = false;
                 }
 
                 if (calcNowT == OutTimeMesh[otime])
