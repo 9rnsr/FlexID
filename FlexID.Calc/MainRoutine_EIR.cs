@@ -104,11 +104,11 @@ namespace FlexID.Calc
 
         private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, List<DataClass> dataList, Dictionary<string, double> wT)
         {
-            DataClass dataLow;
-            DataClass dataHigh;
+            DataClass dataLo;
+            DataClass dataHi;
 
             // 移行係数以外は変わらないので、とりあえず3monthのデータを入れる
-            dataLow = dataList[0];
+            dataLo = dataList[0];
 
             const double convergence = 1E-14; // 収束値
             const int iterMax = 1500;  // iterationの最大回数
@@ -159,7 +159,7 @@ namespace FlexID.Calc
                 var calcNowT = CalcTimeMesh[ctime];
 
                 // inputの初期値を各臓器に振り分ける
-                SubRoutine.Init(Act, dataLow);
+                SubRoutine.Init(Act, dataLo);
 
                 iterLog[calcNowT] = 0;
 
@@ -167,7 +167,7 @@ namespace FlexID.Calc
 
                 // 計算結果をテンポラリファイルに出力
                 var flgTime = true;
-                foreach (var organ in dataLow.Organs)
+                foreach (var organ in dataLo.Organs)
                 {
                     var nucDecay = organ.NuclideDecay;
 
@@ -182,7 +182,7 @@ namespace FlexID.Calc
             }
 
             // 処理中の出力メッシュにおける臓器毎の積算放射能
-            var OutMeshTotal = new double[dataLow.Organs.Count];
+            var OutMeshTotal = new double[dataLo.Organs.Count];
 
             double WholeBody = 0;  // 積算線量
             double preBody = 0;
@@ -191,7 +191,7 @@ namespace FlexID.Calc
 
             void ClearOutMeshTotal()
             {
-                foreach (var organ in dataLow.Organs)
+                foreach (var organ in dataLo.Organs)
                 {
                     OutMeshTotal[organ.Index] = 0;
                 }
@@ -206,55 +206,55 @@ namespace FlexID.Calc
             for (; ctime < CalcTimeMesh.Count; ctime++)
             {
                 // 不要な前ステップのデータを削除
-                Act.NextTime(dataLow);
+                Act.NextTime(dataLo);
 
                 var calcPreT = CalcTimeMesh[ctime - 1];
                 var calcNowT = CalcTimeMesh[ctime - 0];
 
-                int LowDays = 0;
-                int HighDays = 0;
-                // 生まれてからの日数によってLowとHighを変える
+                int daysLo;
+                int daysHi;
+                // 生まれてからの日数によってLoとHiを変える
                 if (calcNowT + ExposureDays <= year1)
                 {
-                    dataLow = dataList[0];
-                    dataHigh = dataList[1];
-                    LowDays = month3;
-                    HighDays = year1;
+                    dataLo = dataList[0];
+                    dataHi = dataList[1];
+                    daysLo = month3;
+                    daysHi = year1;
                 }
                 else if (calcNowT + ExposureDays <= year5)
                 {
-                    dataLow = dataList[1];
-                    dataHigh = dataList[2];
-                    LowDays = year1;
-                    HighDays = year5;
+                    dataLo = dataList[1];
+                    dataHi = dataList[2];
+                    daysLo = year1;
+                    daysHi = year5;
                 }
                 else if (calcNowT + ExposureDays <= year10)
                 {
-                    dataLow = dataList[2];
-                    dataHigh = dataList[3];
-                    LowDays = year5;
-                    HighDays = year10;
+                    dataLo = dataList[2];
+                    dataHi = dataList[3];
+                    daysLo = year5;
+                    daysHi = year10;
                 }
                 else if (calcNowT + ExposureDays <= year15)
                 {
-                    dataLow = dataList[3];
-                    dataHigh = dataList[4];
-                    LowDays = year10;
-                    HighDays = year15;
+                    dataLo = dataList[3];
+                    dataHi = dataList[4];
+                    daysLo = year10;
+                    daysHi = year15;
                 }
                 else if (calcNowT + ExposureDays <= adult)
                 {
-                    dataLow = dataList[4];
-                    dataHigh = dataList[5];
-                    LowDays = year15;
-                    HighDays = adult;
+                    dataLo = dataList[4];
+                    dataHi = dataList[5];
+                    daysLo = year15;
+                    daysHi = adult;
                 }
                 else
                 {
-                    dataLow = dataList[5];
-                    dataHigh = dataList[5];
-                    LowDays = adult;
-                    HighDays = adult;
+                    dataLo = dataList[5];
+                    dataHi = dataList[5];
+                    daysLo = adult;
+                    daysHi = adult;
                 }
 
                 // 預託期間を超える計算は行わない
@@ -264,47 +264,47 @@ namespace FlexID.Calc
                 #region 1つの計算時間メッシュ内で収束計算を繰り返す
                 for (int iter = 1; iter <= iterMax; iter++)
                 {
-                    for (int i = 0; i < dataLow.Organs.Count; i++)
+                    for (int i = 0; i < dataLo.Organs.Count; i++)
                     {
-                        var organLow = dataLow.Organs[i];
-                        var organHigh = dataHigh.Organs[i];
+                        var organLo = dataLo.Organs[i];
+                        var organHi = dataHi.Organs[i];
 
-                        var func = organLow.Func; // 臓器機能
+                        var func = organLo.Func; // 臓器機能
 
                         // 臓器機能ごとに異なる処理をする
                         if (func == OrganFunc.inp) // 入力
                         {
-                            SubRoutine.Input(organLow, Act);
+                            SubRoutine.Input(organLo, Act);
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            SubRoutine.Accumulation_EIR(calcNowT - calcPreT, organLow, organHigh, Act, calcNowT + ExposureDays, LowDays, HighDays);
+                            SubRoutine.Accumulation_EIR(calcNowT - calcPreT, organLo, organHi, Act, calcNowT + ExposureDays, daysLo, daysHi);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
-                            SubRoutine.Mix(organLow, Act);
+                            SubRoutine.Mix(organLo, Act);
                         }
                         else if (func == OrganFunc.exc) // 排泄物
                         {
-                            SubRoutine.Excretion(organLow, Act, calcNowT - calcPreT);
+                            SubRoutine.Excretion(organLo, Act, calcNowT - calcPreT);
                         }
 
-                        Act.Now[organLow.Index].ini = Act.rNow[organLow.Index].ini;
-                        Act.Now[organLow.Index].ave = Act.rNow[organLow.Index].ave;
-                        Act.Now[organLow.Index].end = Act.rNow[organLow.Index].end;
+                        Act.Now[organLo.Index].ini = Act.rNow[organLo.Index].ini;
+                        Act.Now[organLo.Index].ave = Act.rNow[organLo.Index].ave;
+                        Act.Now[organLo.Index].end = Act.rNow[organLo.Index].end;
 
-                        Act.Now[organLow.Index].total = Act.rNow[organLow.Index].total;
+                        Act.Now[organLo.Index].total = Act.rNow[organLo.Index].total;
 
                         // 臓器毎の積算放射能算出
-                        Act.IntakeQuantityNow[organLow.Index] =
-                            Act.IntakeQuantityPre[organLow.Index] + Act.Now[organLow.Index].total;
+                        Act.IntakeQuantityNow[organLo.Index] =
+                            Act.IntakeQuantityPre[organLo.Index] + Act.Now[organLo.Index].total;
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
                     if (iter > 1)
                     {
                         var flgIter = true;
-                        foreach (var o in dataLow.Organs)
+                        foreach (var o in dataLo.Organs)
                         {
                             double s1 = 0;
                             double s2 = 0;
@@ -333,12 +333,12 @@ namespace FlexID.Calc
                         }
                     }
 
-                    Act.NextIter(dataLow);
+                    Act.NextIter(dataLo);
                 }
                 #endregion
 
                 // 時間メッシュ毎の放射能を足していく
-                foreach (var organ in dataLow.Organs)
+                foreach (var organ in dataLo.Organs)
                 {
                     OutMeshTotal[organ.Index] += Act.Now[organ.Index].total;
                     Act.Excreta[organ.Index] += Act.PreExcreta[organ.Index];
@@ -350,9 +350,9 @@ namespace FlexID.Calc
 
                 // S-Coefficient読込
                 var SEE = new Dictionary<string, string[]>();
-                for (int i = 0; i < dataLow.TargetNuc.Count; i++)
+                for (int i = 0; i < dataLo.TargetNuc.Count; i++)
                 {
-                    var nuclide = dataLow.TargetNuc[i];
+                    var nuclide = dataLo.TargetNuc[i];
                     SEE[nuclide] = File.ReadAllLines("lib\\EIR\\" + nuclide + "SEE.txt");
                 }
 
@@ -365,10 +365,10 @@ namespace FlexID.Calc
                 var _see = new List<string>();
                 string line = "";
                 int oCount = 0;
-                List<string> SEElow = new List<string>();
-                List<string> SEEhigh = new List<string>();
-                string[] S_low;
-                string[] S_high;
+                List<string> SEElo = new List<string>();
+                List<string> SEEhi = new List<string>();
+                string[] S_lo;
+                string[] S_hi;
                 int S_count = 0;
                 string[] source = new string[0];
 
@@ -377,7 +377,7 @@ namespace FlexID.Calc
                     double total = 0;
                     bool flgScoe = true;
 
-                    foreach (var organ in dataLow.Organs)
+                    foreach (var organ in dataLo.Organs)
                     {
                         if (organ.Name.Contains("mix"))
                             continue;
@@ -389,22 +389,22 @@ namespace FlexID.Calc
                             source = lines[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                             _see = new List<string>();
-                            (SEElow, SEEhigh) = SEE_select(SEE[nucId], calcNowT, ExposureDays);
-                            S_low = SEElow[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            S_high = SEEhigh[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            _see.Add(S_low[0]);
+                            (SEElo, SEEhi) = SEE_select(SEE[nucId], calcNowT, ExposureDays);
+                            S_lo = SEElo[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            S_hi = SEEhi[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            _see.Add(S_lo[0]);
                             if (calcNowT + ExposureDays < 6205)
                             {
-                                for (int i = 1; i < S_low.Length; i++)
+                                for (int i = 1; i < S_lo.Length; i++)
                                 {
-                                    _see.Add(Interpolation(calcNowT + ExposureDays, double.Parse(S_low[i]), double.Parse(S_high[i]), LowDays, HighDays).ToString());
+                                    _see.Add(Interpolation(calcNowT + ExposureDays, double.Parse(S_lo[i]), double.Parse(S_hi[i]), daysLo, daysHi).ToString());
                                 }
                             }
                             else
                             {
-                                for (int i = 1; i < S_low.Length; i++)
+                                for (int i = 1; i < S_lo.Length; i++)
                                 {
-                                    _see.Add(S_low[i]);
+                                    _see.Add(S_lo[i]);
                                 }
                             }
 
@@ -423,27 +423,27 @@ namespace FlexID.Calc
                             source = lines[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                             _see = new List<string>();
-                            (SEElow, SEEhigh) = SEE_select(SEE[nucId], calcNowT, ExposureDays);
-                            S_low = SEElow[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            S_high = SEEhigh[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            _see.Add(S_low[0]);
+                            (SEElo, SEEhi) = SEE_select(SEE[nucId], calcNowT, ExposureDays);
+                            S_lo = SEElo[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            S_hi = SEEhi[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            _see.Add(S_lo[0]);
                             if (calcNowT + ExposureDays < 6205)
                             {
-                                for (int i = 1; i < S_low.Length; i++)
+                                for (int i = 1; i < S_lo.Length; i++)
                                 {
-                                    _see.Add(Interpolation(calcNowT + ExposureDays, double.Parse(S_low[i]), double.Parse(S_high[i]), LowDays, HighDays).ToString());
+                                    _see.Add(Interpolation(calcNowT + ExposureDays, double.Parse(S_lo[i]), double.Parse(S_hi[i]), daysLo, daysHi).ToString());
                                 }
                             }
                             else
                             {
-                                for (int i = 1; i < S_low.Length; i++)
+                                for (int i = 1; i < S_lo.Length; i++)
                                 {
-                                    _see.Add(S_low[i]);
+                                    _see.Add(S_lo[i]);
                                 }
                             }
                         }
 
-                        var nucDecay = dataLow.Ramd[nucId];
+                        var nucDecay = dataLo.Ramd[nucId];
 
                         // タイムステップごとの放射能　
                         var Act = this.Act.Now[organ.Index].end * deltaT * nucDecay;
@@ -451,7 +451,7 @@ namespace FlexID.Calc
                             continue;
 
                         // 放射能*S係数
-                        int index = Array.IndexOf(source, dataLow.CorrNum[(organ.Nuclide, organ.Name)]);
+                        int index = Array.IndexOf(source, dataLo.CorrNum[(organ.Nuclide, organ.Name)]);
                         if (index > 0) // indexが1より下は組織と対応するS係数無し
                             total += Act * double.Parse(_see[index]);
                     }
@@ -464,14 +464,14 @@ namespace FlexID.Calc
                     oCount++;
                     S_count++;
 
-                    if (S_count >= SEElow.Count)
+                    if (S_count >= SEElo.Count)
                         break;
                 }
 
                 // 初回のみヘッダーの標的組織出力
                 if (flgTarget)
                 {
-                    CalcOut.CommitmentTarget(TargetList, dataLow);
+                    CalcOut.CommitmentTarget(TargetList, dataLo);
                     flgTarget = false;
                 }
 
@@ -482,7 +482,7 @@ namespace FlexID.Calc
 
                     #region 残留放射能をテンポラリファイルに出力
                     var flgTime = true;
-                    foreach (var organ in dataLow.Organs)
+                    foreach (var organ in dataLo.Organs)
                     {
                         if (organ.Func == OrganFunc.exc)
                             Act.Now[organ.Index].end = Act.Excreta[organ.Index] / (outNowT - outPreT);
@@ -511,51 +511,51 @@ namespace FlexID.Calc
             }
         }
 
-        public static double Interpolation(double day, double LowValue, double HighValue, int LowDays, int HighDays)
+        public static double Interpolation(double day, double valueLo, double valueHi, int daysLo, int daysHi)
         {
-            double value = 0;
-            value = LowValue + (day - LowDays) * (HighValue - LowValue) / (HighDays - LowDays);
+            double value;
+            value = valueLo + (day - daysLo) * (valueHi - valueLo) / (daysHi - daysLo);
             return value;
         }
 
         private (List<string>, List<string>) SEE_select(string[] data, double calcNowT, int ExposureDays)
         {
-            List<string> dataLow = new List<string>();
-            List<string> dataHigh = new List<string>();
+            List<string> dataLo = new List<string>();
+            List<string> dataHi = new List<string>();
 
             List<string> Data = new List<string>(data);
 
             if (calcNowT + ExposureDays <= year1)
             {
-                dataLow = DataClass.Read_See(Data, "Age:3month");
-                dataHigh = DataClass.Read_See(Data, "Age:1year");
+                dataLo = DataClass.Read_See(Data, "Age:3month");
+                dataHi = DataClass.Read_See(Data, "Age:1year");
             }
             else if (calcNowT + ExposureDays <= year5)
             {
-                dataLow = DataClass.Read_See(Data, "Age:1year");
-                dataHigh = DataClass.Read_See(Data, "Age:5year");
+                dataLo = DataClass.Read_See(Data, "Age:1year");
+                dataHi = DataClass.Read_See(Data, "Age:5year");
             }
             else if (calcNowT + ExposureDays <= year10)
             {
-                dataLow = DataClass.Read_See(Data, "Age:5year");
-                dataHigh = DataClass.Read_See(Data, "Age:10year");
+                dataLo = DataClass.Read_See(Data, "Age:5year");
+                dataHi = DataClass.Read_See(Data, "Age:10year");
             }
             else if (calcNowT + ExposureDays <= year15)
             {
-                dataLow = DataClass.Read_See(Data, "Age:10year");
-                dataHigh = DataClass.Read_See(Data, "Age:15year");
+                dataLo = DataClass.Read_See(Data, "Age:10year");
+                dataHi = DataClass.Read_See(Data, "Age:15year");
             }
             else if (calcNowT + ExposureDays <= adult)
             {
-                dataLow = DataClass.Read_See(Data, "Age:15year");
-                dataHigh = DataClass.Read_See(Data, "Age:adult");
+                dataLo = DataClass.Read_See(Data, "Age:15year");
+                dataHi = DataClass.Read_See(Data, "Age:adult");
             }
             else
             {
-                dataLow = DataClass.Read_See(Data, "Age:adult");
-                dataHigh = DataClass.Read_See(Data, "Age:adult");
+                dataLo = DataClass.Read_See(Data, "Age:adult");
+                dataHi = DataClass.Read_See(Data, "Age:adult");
             }
-            return (dataLow, dataHigh);
+            return (dataLo, dataHi);
         }
     }
 }

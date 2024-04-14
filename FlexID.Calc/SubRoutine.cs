@@ -223,63 +223,63 @@ namespace FlexID.Calc
         /// 蓄積(EIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public static void Accumulation_EIR(double dT, Organ organLow, Organ organHigh, Activity Act, double day, int LowDays, int HighDays)
+        public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             double alpha;
-            alpha = organLow.BioDecay;
+            alpha = organLo.BioDecay;
             #region 流入臓器の数ループ
             double ave = 0.0;
-            for (int i = 0; i < organLow.Inflows.Count; i++)
+            for (int i = 0; i < organLo.Inflows.Count; i++)
             {
                 // 丸め誤差が出るので、Roundするか否か
-                var InflowLow = Math.Round(organLow.Inflows[i].Organ.BioDecay * organLow.Inflows[i].Rate, 6);
-                var InflowHigh = Math.Round(organHigh.Inflows[i].Organ.BioDecay * organHigh.Inflows[i].Rate, 6);
+                var InflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
+                var InflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
 
                 double beforeBio;
                 // 流入元生物学的崩壊定数
                 if (day <= MainRoutine_EIR.adult)
                 {
-                    if (organLow.Name == "Plasma" && organLow.Inflows[i].Organ.Name == "SI")
+                    if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                     {
-                        beforeBio = organLow.Inflows[i].Organ.BioDecay * organLow.Inflows[i].Rate;
-                        alpha = MainRoutine_EIR.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
+                        beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                        alpha = MainRoutine_EIR.Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
-                    else if (organLow.Name == "SI")
+                    else if (organLo.Name == "SI")
                     {
-                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
-                        alpha = organLow.BioDecay;
+                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLo, InflowHi, daysLo, daysHi);
+                        alpha = organLo.BioDecay;
                     }
                     else
                     {
-                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
-                        alpha = MainRoutine_EIR.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
+                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLo, InflowHi, daysLo, daysHi);
+                        alpha = MainRoutine_EIR.Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                 }
                 else
                 {
-                    beforeBio = organLow.Inflows[i].Organ.BioDecay * organLow.Inflows[i].Rate;
-                    alpha = organLow.BioDecay;
+                    beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                    alpha = organLo.BioDecay;
                 }
 
                 // デバッグ用
-                //if (organLow.Inflows[i].Organ.Name == "Plasma" & organLow.Name == "ULI")
-                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day.ToString(), organLow.Inflows[i].Organ.Name, organLow.Name, beforeBio.ToString());
+                //if (organLo.Inflows[i].Organ.Name == "Plasma" & organLo.Name == "ULI")
+                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day.ToString(), organLo.Inflows[i].Organ.Name, organLo.Name, beforeBio.ToString());
 
                 // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-                if (organLow.Inflows[i].Organ.Nuclide != organLow.Nuclide)
-                    beforeBio = 1 * organLow.Inflows[i].Rate;
+                if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
+                    beforeBio = 1 * organLo.Inflows[i].Rate;
 
                 // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入
-                ave += Act.Now[organLow.Inflows[i].Organ.Index].ave * beforeBio;
+                ave += Act.Now[organLo.Inflows[i].Organ.Index].ave * beforeBio;
             }
             #endregion
 
-            alpha += organLow.NuclideDecay;
+            alpha += organLo.NuclideDecay;
 
             var alpha_dT = alpha * dT;
 
-            double rini = Act.Pre[organLow.Index].end;
+            double rini = Act.Pre[organLo.Index].end;
             double rend;
             double rtotal;
             if (alpha_dT <= 1E-9)
@@ -296,18 +296,18 @@ namespace FlexID.Calc
                 rtotal = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
             }
 
-            Act.rNow[organLow.Index].ini = rini;
-            Act.rNow[organLow.Index].ave = rtotal / dT;    // 当該臓器の平均放射能 = 当該臓器の積算放射能 / Δt
-            Act.rNow[organLow.Index].end = rend;
-            Act.rNow[organLow.Index].total = rtotal;
+            Act.rNow[organLo.Index].ini = rini;
+            Act.rNow[organLo.Index].ave = rtotal / dT;    // 当該臓器の平均放射能 = 当該臓器の積算放射能 / Δt
+            Act.rNow[organLo.Index].end = rend;
+            Act.rNow[organLo.Index].total = rtotal;
 
             // 計算値が1E-60以下の場合は0とする
-            if (Act.rNow[organLow.Index].ave <= 1e-60)
-                Act.rNow[organLow.Index].ave = 0;
-            if (Act.rNow[organLow.Index].end <= 1e-60)
-                Act.rNow[organLow.Index].end = 0;
-            if (Act.rNow[organLow.Index].total <= 1e-60)
-                Act.rNow[organLow.Index].total = 0;
+            if (Act.rNow[organLo.Index].ave <= 1e-60)
+                Act.rNow[organLo.Index].ave = 0;
+            if (Act.rNow[organLo.Index].end <= 1e-60)
+                Act.rNow[organLo.Index].end = 0;
+            if (Act.rNow[organLo.Index].total <= 1e-60)
+                Act.rNow[organLo.Index].total = 0;
         }
 
         /// <summary>
