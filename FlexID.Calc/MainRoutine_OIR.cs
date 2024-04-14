@@ -108,7 +108,7 @@ namespace FlexID.Calc
                     var nucDecay = inflow.Organ.NuclideDecay;
 
                     if (inflow.Rate < 0)
-                        inflow.Rate = data.DecayRate[organ.Nuclide] * nucDecay;
+                        inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
                 }
             }
 
@@ -143,23 +143,13 @@ namespace FlexID.Calc
 
             // 線源臓器リストの抽出
             var source = new Dictionary<string, string>();
-            for (int i = 0; i < data.TargetNuc.Count; i++)
+            for (int i = 0; i < data.Nuclides.Count; i++)
             {
-                var nuclide = data.TargetNuc[i];
-                if (data.ListProgeny.Contains(nuclide))
-                {
-                    var lines = File.ReadAllLines(@"lib\OIR\" + nuclide + "_AM_prg_S-Coefficient.txt");
-                    source[nuclide + "AM"] = lines[0];
-                    lines = File.ReadAllLines(@"lib\OIR\" + nuclide + "_AF_prg_S-Coefficient.txt");
-                    source[nuclide + "AF"] = lines[0];
-                }
-                else
-                {
-                    var lines = File.ReadAllLines(@"lib\OIR\" + nuclide + "_AM_S-Coefficient.txt");
-                    source[nuclide + "AM"] = lines[0];
-                    lines = File.ReadAllLines(@"lib\OIR\" + nuclide + "_AF_S-Coefficient.txt");
-                    source[nuclide + "AF"] = lines[0];
-                }
+                var nuclide = data.Nuclides[i];
+                var nuc = nuclide.Nuclide;
+                var prg = nuclide.IsProgeny ? "_prg" : "";
+                source[nuc + "AM"] = File.ReadLines($@"lib\OIR\{nuc}_AM{prg}_S-Coefficient.txt").First();
+                source[nuc + "AF"] = File.ReadLines($@"lib\OIR\{nuc}_AF{prg}_S-Coefficient.txt").First();
             }
             // 処理中の出力メッシュにおける臓器毎の積算放射能
             var OutMeshTotal = new double[data.Organs.Count];
@@ -280,18 +270,19 @@ namespace FlexID.Calc
 
                 // S-Coefficient読込
                 var S_coe = new Dictionary<string, StreamLineReader>();
-                for (int i = 0; i < data.TargetNuc.Count; i++)
+                for (int i = 0; i < data.Nuclides.Count; i++)
                 {
-                    var nuclide = data.TargetNuc[i];
-                    if (data.ListProgeny.Contains(nuclide))
+                    var n = data.Nuclides[i];
+                    var nuc = n.Nuclide;
+                    if (n.IsProgeny)
                     {
-                        S_coe[nuclide + "AM"] = new StreamLineReader(@"lib\OIR\" + nuclide + "_AM_prg_S-Coefficient.txt");
-                        S_coe[nuclide + "AF"] = new StreamLineReader(@"lib\OIR\" + nuclide + "_AF_prg_S-Coefficient.txt");
+                        S_coe[nuc + "AM"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AM_prg_S-Coefficient.txt");
+                        S_coe[nuc + "AF"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AF_prg_S-Coefficient.txt");
                     }
                     else
                     {
-                        S_coe[nuclide + "AM"] = new StreamLineReader(@"lib\OIR\" + nuclide + "_AM_S-Coefficient.txt");
-                        S_coe[nuclide + "AF"] = new StreamLineReader(@"lib\OIR\" + nuclide + "_AF_S-Coefficient.txt");
+                        S_coe[nuc + "AM"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AM_S-Coefficient.txt");
+                        S_coe[nuc + "AF"] = new StreamLineReader(@"lib\OIR\" + nuc + "_AF_S-Coefficient.txt");
                     }
                 }
 
@@ -302,19 +293,22 @@ namespace FlexID.Calc
                 string lineAM = "";
                 string lineAF = "";
                 // ヘッダーを送る
-                for (int i = 0; i < data.TargetNuc.Count; i++)
+                for (int i = 0; i < data.Nuclides.Count; i++)
                 {
-                    var r = S_coe[data.TargetNuc[i] + "AM"];
+                    var nuc = data.Nuclides[i].Nuclide;
+
+                    var r = S_coe[nuc + "AM"];
                     lineAM = r.ReadLine();
                     sourceAM = lineAM.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    r = S_coe[data.TargetNuc[i] + "AF"];
+                    r = S_coe[nuc + "AF"];
                     lineAF = r.ReadLine();
                     sourceAF = lineAF.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 }
 
                 var TargetList = new List<string>();
 
-                var nucId = data.TargetNuc[0]; // 現在対象としている核種
+                var nuclide = data.Nuclides[0]; // 現在対象としている核種
+                var nucId = nuclide.Nuclide;
                 var S_coeAM = new string[0];
                 var S_coeAF = new string[0];
                 int oCount = 0;
@@ -334,7 +328,8 @@ namespace FlexID.Calc
 
                         if (flgScoe)
                         {
-                            nucId = organ.Nuclide;
+                            nuclide = organ.Nuclide;
+                            nucId = nuclide.Nuclide;
                             var am = source[nucId + "AM"];
                             sourceAM = am.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                             var af = source[nucId + "AF"];
@@ -354,9 +349,10 @@ namespace FlexID.Calc
                         }
 
                         // 対象としてる核種が変わったら見るS係数ファイルを変える
-                        if (nucId != organ.Nuclide)
+                        if (nuclide != organ.Nuclide)
                         {
-                            nucId = organ.Nuclide;
+                            nuclide = organ.Nuclide;
+                            nucId = nuclide.Nuclide;
                             var am = source[nucId + "AM"];
                             sourceAM = am.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                             var af = source[nucId + "AF"];
@@ -371,7 +367,7 @@ namespace FlexID.Calc
                             S_coeAF = lineAF.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                         }
 
-                        var nucDecay = data.Ramd[nucId];
+                        var nucDecay = nuclide.Ramd;
 
                         // タイムステップごとの放射能　
                         var Act = this.Act.Now[organ.Index].end * deltaT * nucDecay;
@@ -379,8 +375,8 @@ namespace FlexID.Calc
                             continue;
 
                         // 放射能*S係数
-                        int indexAM = Array.IndexOf(sourceAM, data.CorrNum[(organ.Nuclide, organ.Name)]);
-                        int indexAF = Array.IndexOf(sourceAF, data.CorrNum[(organ.Nuclide, organ.Name)]);
+                        int indexAM = Array.IndexOf(sourceAM, data.CorrNum[(organ.Nuclide.Nuclide, organ.Name)]);
+                        int indexAF = Array.IndexOf(sourceAF, data.CorrNum[(organ.Nuclide.Nuclide, organ.Name)]);
                         if (indexAM > 0) // indexが1より下は組織と対応するS係数無し
                             totalAM += Act * double.Parse(S_coeAM[indexAM]);
                         if (indexAF > 0)

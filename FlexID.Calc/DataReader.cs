@@ -58,84 +58,95 @@ namespace FlexID.Calc
     public class Organ
     {
         /// <summary>
-        /// 臓器が対象とする核種
+        /// 臓器が対象とする核種。
         /// </summary>
-        public string Nuclide;
+        public NuclideData Nuclide;
 
         /// <summary>
-        /// 崩壊定数
+        /// 崩壊定数。
         /// </summary>
-        public double NuclideDecay;
+        public double NuclideDecay => Nuclide.Ramd;
 
         /// <summary>
-        /// 臓器番号
+        /// 臓器番号。
         /// </summary>
         public int ID;
 
         /// <summary>
-        /// 臓器毎のデータを配列から引くためのインデックス
+        /// 臓器毎のデータを配列から引くためのインデックス。
         /// </summary>
         public int Index;
 
         /// <summary>
-        /// 臓器名
+        /// 臓器名。
         /// </summary>
         public string Name;
 
         /// <summary>
-        /// 臓器機能
+        /// 臓器機能。
         /// </summary>
         public OrganFunc Func;
 
         /// <summary>
-        /// 生物学的崩壊定数
+        /// 生物学的崩壊定数。
         /// </summary>
         public double BioDecay;
 
         /// <summary>
-        /// 生物学的崩壊定数(計算用)
+        /// 生物学的崩壊定数(計算用)。
         /// </summary>
         public double BioDecayCalc;
 
         /// <summary>
-        /// 流入経路
+        /// 流入経路。
         /// </summary>
         public List<Inflow> Inflows;
     }
 
+    public class NuclideData
+    {
+        /// <summary>
+        /// 核種の一覧。
+        /// </summary>
+        public string Nuclide;
+
+        /// <summary>
+        /// 被ばく経路。
+        /// </summary>
+        public string IntakeRoute;
+
+        /// <summary>
+        /// 崩壊定数。
+        /// </summary>
+        public double Ramd;
+
+        /// <summary>
+        /// 親核種からの崩壊割合(100%＝1.00と置いた比で持つ)。
+        /// </summary>
+        public double DecayRate;
+
+        /// <summary>
+        /// 子孫核種の場合は<c>true</c>。
+        /// </summary>
+        public bool IsProgeny;
+    }
+
     public class DataClass
     {
-        public List<string> TargetNuc = new List<string>();
-
         /// <summary>
-        /// 被ばく経路
+        /// 全ての核種。
         /// </summary>
-        public Dictionary<string, string> IntakeRoute = new Dictionary<string, string>();
+        public List<NuclideData> Nuclides = new List<NuclideData>();
 
         /// <summary>
-        /// 崩壊定数
-        /// </summary>
-        public Dictionary<string, double> Ramd = new Dictionary<string, double>();
-
-        /// <summary>
-        /// 親核種からの崩壊割合(100%＝1.00と置いた比で持つ)
-        /// </summary>
-        public Dictionary<string, double> DecayRate = new Dictionary<string, double>();
-
-        /// <summary>
-        /// 全ての臓器
+        /// 全ての臓器。
         /// </summary>
         public List<Organ> Organs = new List<Organ>();
 
         /// <summary>
-        /// S-coeと対応する臓器名
+        /// S-coeと対応する臓器名(TODO: 削除予定。)。
         /// </summary>
         public Dictionary<(string, string), string> CorrNum = new Dictionary<(string, string), string>();
-
-        /// <summary>
-        /// 子孫核種のリスト
-        /// </summary>
-        public List<string> ListProgeny = new List<string>();
 
         private DataClass() { }
 
@@ -178,27 +189,20 @@ namespace FlexID.Calc
             Lcont:
                 // 核種のヘッダ行を読み込む。
                 var values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var nuc = values[0];
-                data.TargetNuc.Add(nuc);
-                data.IntakeRoute[nuc] = values[1];
-                data.Ramd[nuc] = double.Parse(values[2]);
-                data.DecayRate[nuc] = double.Parse(values[3]);
-                if (isProgeny)
-                    data.ListProgeny.Add(nuc);
 
-                string[] sourceRegions;
+                var nuclide = new NuclideData
                 {
-                    var linesAM = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AM_{(isProgeny ? "prg_" : "")}S-Coefficient.txt"));
-                    var linesAF = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AF_{(isProgeny ? "prg_" : "")}S-Coefficient.txt"));
+                    Nuclide = values[0],
+                    IntakeRoute = values[1],
+                    Ramd = double.Parse(values[2]),
+                    DecayRate = double.Parse(values[3]),
+                    IsProgeny = isProgeny,
+                };
+                data.Nuclides.Add(nuclide);
 
-                    var sourceAM = linesAM.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    var sourceAF = linesAF.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (!Enumerable.SequenceEqual(sourceAM, sourceAF))
-                        throw Program.Error($"Found mismatch of source region names in S-Coefficient data for nuclide {nuc}.");
-                    sourceRegions = sourceAM;
-                }
+                var sourceRegions = ReadSCoeff(nuclide);
 
-                // 核種を構成する臓器の定義行を読み込む。
+                // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
                 while (true)
                 {
                     var ln = GetNextLine();
@@ -224,7 +228,7 @@ namespace FlexID.Calc
                     var organFn = values[2];                // 臓器機能名称
                     var bioDecay = double.Parse(values[3]); // 生物学的崩壊定数
                     var inflowNum = int.Parse(values[4]);   // 流入臓器数
-                    var sourceRegionName = values[7];       // 臓器に対応する線源領域の名称
+                    var sourceRegion = values[7];           // 臓器に対応する線源領域の名称
 
                     var organFunc =
                         organFn == "inp" ? OrganFunc.inp :
@@ -233,13 +237,9 @@ namespace FlexID.Calc
                         organFn == "exc" ? OrganFunc.exc :
                         throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
 
-                    if (sourceRegionName != "-" && !sourceRegions.Contains(sourceRegionName))
-                        throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegionName}'");
-
                     var organ = new Organ
                     {
-                        Nuclide = nuc,
-                        NuclideDecay = data.Ramd[nuc],
+                        Nuclide = nuclide,
                         ID = organId,
                         Index = data.Organs.Count,
                         Name = organName,
@@ -249,8 +249,16 @@ namespace FlexID.Calc
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
-                    data.CorrNum[(nuc, organ.Name)] = sourceRegionName;
+                    if (sourceRegion != "-")
+                    {
+                        // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
+                        if (!sourceRegions.Contains(sourceRegion))
+                            throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegion}'");
+                    }
 
+                    data.CorrNum[(nuclide.Nuclide, organ.Name)] = sourceRegion;
+
+                    // コンパートメントへの流入経路の記述を読み込む。
                     if (organ.Func == OrganFunc.inp)
                     {
                         if (inflowNum != 0)
@@ -304,6 +312,26 @@ namespace FlexID.Calc
             }
 
             return data;
+        }
+
+        private static string[] ReadSCoeff(NuclideData nuclide)
+        {
+            var nuc = nuclide.Nuclide;
+            var prg = nuclide.IsProgeny ? "prg_" : "";
+
+            string[] sourceRegions;
+            {
+                var linesAM = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AM_{prg}S-Coefficient.txt"));
+                var linesAF = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AF_{prg}S-Coefficient.txt"));
+
+                var sourceAM = linesAM.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var sourceAF = linesAF.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                if (!Enumerable.SequenceEqual(sourceAM, sourceAF))
+                    throw Program.Error($"Found mismatch of source region names in S-Coefficient data for nuclide {nuc}.");
+                sourceRegions = sourceAM;
+            }
+
+            return sourceRegions;
         }
 
         /// <summary>
@@ -357,30 +385,27 @@ namespace FlexID.Calc
             Lcont:
                 // 核種のヘッダ行を読み込む。
                 var values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var nuc = values[0];
-                data.TargetNuc.Add(nuc);
-                data.IntakeRoute[nuc] = values[1];
-                data.Ramd[nuc] = double.Parse(values[2]);
-                data.DecayRate[nuc] = double.Parse(values[3]);
-                if (isProgeny)
-                { } //data.ListProgeny.Add(nuc); // TOOD
-                else
+
+                var nuclide = new NuclideData
+                {
+                    Nuclide = values[0],
+                    IntakeRoute = values[1],
+                    Ramd = double.Parse(values[2]),
+                    DecayRate = double.Parse(values[3]),
+                    IsProgeny = isProgeny,
+                };
+                data.Nuclides.Add(nuclide);
+
+                if (!isProgeny)
                 {
                     // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
                     while (GetNextLine() != age)
                     { }
                 }
 
-                string[] sourceRegions;
-                {
-                    var linesSEE = File.ReadLines(Path.Combine("lib", "EIR", nuc + "SEE.txt"));
+                var sourceRegions = ReadSee(nuclide);
 
-                    var sourceSEE = linesSEE.Skip(1).First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                    sourceRegions = sourceSEE;
-                }
-
-                // 核種を構成する臓器の定義行を読み込む。
+                // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
                 while (true)
                 {
                     var ln = GetNextLine();
@@ -406,7 +431,7 @@ namespace FlexID.Calc
                     var organFn = values[2];                // 臓器機能名称
                     var bioDecay = double.Parse(values[3]); // 生物学的崩壊定数
                     var inflowNum = int.Parse(values[4]);   // 流入臓器数
-                    var sourceRegionName = values[7];       // 臓器に対応する線源領域の名称
+                    var sourceRegion = values[7];           // 臓器に対応する線源領域の名称
 
                     var organFunc =
                         organFn == "inp" ? OrganFunc.inp :
@@ -415,13 +440,9 @@ namespace FlexID.Calc
                         organFn == "exc" ? OrganFunc.exc :
                         throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
 
-                    if (sourceRegionName != "-" && !sourceRegions.Contains(sourceRegionName))
-                        throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegionName}'");
-
                     var organ = new Organ
                     {
-                        Nuclide = nuc,
-                        NuclideDecay = data.Ramd[nuc],
+                        Nuclide = nuclide,
                         ID = organId,
                         Index = data.Organs.Count,
                         Name = organName,
@@ -431,8 +452,16 @@ namespace FlexID.Calc
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
-                    data.CorrNum[(nuc, organ.Name)] = sourceRegionName;
+                    if (sourceRegion != "-")
+                    {
+                        // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
+                        if (!sourceRegions.Contains(sourceRegion))
+                            throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegion}'");
+                    }
 
+                    data.CorrNum[(nuclide.Nuclide, organ.Name)] = sourceRegion;
+
+                    // コンパートメントへの流入経路の記述を読み込む。
                     if (organ.Func == OrganFunc.inp)
                     {
                         if (inflowNum != 0)
@@ -486,6 +515,23 @@ namespace FlexID.Calc
             }
 
             return data;
+        }
+
+        private static string[] ReadSee(NuclideData nuclide)
+        {
+            var nuc = nuclide.Nuclide;
+
+            string[] sourceRegions;
+
+            {
+                var linesSEE = File.ReadLines(Path.Combine("lib", "EIR", $"{nuc}SEE.txt"));
+
+                var sourceSEE = linesSEE.Skip(1).First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                sourceRegions = sourceSEE;
+            }
+
+            return sourceRegions;
         }
 
         public static List<string> Read_See(List<string> inpRead, string age)

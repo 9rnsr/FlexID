@@ -81,7 +81,7 @@ namespace FlexID.Calc
                     // inputから初期値を受け取る臓器、対象組織が対象核種の組織か確認
                     if (inflow.Organ.Nuclide == nuclide)
                     {
-                        var nucDecay = data.Ramd[nuclide];
+                        var nucDecay = nuclide.Ramd;
 
                         var init = inflow.Rate / nucDecay;
                         Act.Now[organ.Index].ini = init;

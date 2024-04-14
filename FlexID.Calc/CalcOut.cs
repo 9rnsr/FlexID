@@ -29,13 +29,15 @@ namespace FlexID.Calc
         // 預託線量標的組織出力
         public void CommitmentTarget(List<string> Target, DataClass data)
         {
+            var nuclide = data.Nuclides[0];
+
             // 線量係数
-            dCom.WriteLine("{0} {1} {2}", " Effective/Equivalent_Dose ", data.TargetNuc[0], data.IntakeRoute[data.TargetNuc[0]]);
+            dCom.WriteLine("{0} {1} {2}", " Effective/Equivalent_Dose ", nuclide.Nuclide, nuclide.IntakeRoute);
             dCom.Write("     Time    ");
             dCom.Write("     WholeBody   ");
 
             // 線量率
-            rCom.WriteLine("{0} {1} {2}", " DoseRate ", data.TargetNuc[0], data.IntakeRoute[data.TargetNuc[0]]);
+            rCom.WriteLine("{0} {1} {2}", " DoseRate ", nuclide.Nuclide, nuclide.IntakeRoute);
             rCom.Write("     Time    ");
             rCom.Write("     WholeBody   ");
 
@@ -83,17 +85,17 @@ namespace FlexID.Calc
             using (var r = new StreamWriter(RetePath, false, Encoding.UTF8))
             using (var c = new StreamWriter(CumuPath, false, Encoding.UTF8))
             {
-                foreach (var nuc in data.TargetNuc)
+                foreach (var nuclide in data.Nuclides)
                 {
                     // ヘッダー出力
-                    r.WriteLine(" {0} {1} {2}", "Retention ", nuc, data.IntakeRoute[nuc]);
+                    r.WriteLine(" {0} {1} {2}", "Retention ", nuclide.Nuclide, nuclide.IntakeRoute);
                     r.Write("     Time      ");
-                    c.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuc, data.IntakeRoute[nuc]);
+                    c.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuclide.Nuclide, nuclide.IntakeRoute);
                     c.Write("     Time      ");
 
                     foreach (var Organ in data.Organs)
                     {
-                        if (nuc == Organ.Nuclide)
+                        if (nuclide == Organ.Nuclide)
                         {
                             r.Write("  {0,-14:n}", Organ.Name);
                             c.Write("  {0,-14:n}", Organ.Name);
@@ -106,7 +108,7 @@ namespace FlexID.Calc
 
                     foreach (var Organ in data.Organs)
                     {
-                        if (nuc == Organ.Nuclide)
+                        if (nuclide == Organ.Nuclide)
                         {
                             r.Write("  [Bq/Bq]       ");
                             c.Write("     [Bq]       ");
@@ -130,7 +132,7 @@ namespace FlexID.Calc
                             foreach (var Organ in data.Organs)
                             {
                                 values = AllLines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                                if (Organ.Nuclide == nuc)
+                                if (nuclide == Organ.Nuclide)
                                 {
                                     r.Write("  {0:0.00000000E+00}", values[1]);
                                     c.Write("  {0:0.00000000E+00}", values[3]);

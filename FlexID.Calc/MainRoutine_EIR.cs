@@ -147,7 +147,7 @@ namespace FlexID.Calc
                         var nucDecay = inflow.Organ.NuclideDecay;
 
                         if (inflow.Rate < 0)
-                            inflow.Rate = data.DecayRate[organ.Nuclide] * nucDecay;
+                            inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
                     }
                 }
             }
@@ -350,10 +350,10 @@ namespace FlexID.Calc
 
                 // S-Coefficient読込
                 var SEE = new Dictionary<string, string[]>();
-                for (int i = 0; i < dataLo.TargetNuc.Count; i++)
+                for (int i = 0; i < dataLo.Nuclides.Count; i++)
                 {
-                    var nuclide = dataLo.TargetNuc[i];
-                    SEE[nuclide] = File.ReadAllLines("lib\\EIR\\" + nuclide + "SEE.txt");
+                    var nuc = dataLo.Nuclides[i].Nuclide;
+                    SEE[nuc] = File.ReadAllLines("lib\\EIR\\" + nuc + "SEE.txt");
                 }
 
                 // ΔT[sec]
@@ -362,6 +362,7 @@ namespace FlexID.Calc
                 var TargetList = new List<string>();
 
                 var nucId = ""; // 現在対象としている核種
+                NuclideData nuclide = null;
                 var _see = new List<string>();
                 string line = "";
                 int oCount = 0;
@@ -384,7 +385,8 @@ namespace FlexID.Calc
 
                         if (flgScoe)
                         {
-                            nucId = organ.Nuclide;
+                            nuclide = organ.Nuclide;
+                            nucId = nuclide.Nuclide;
                             var lines = SEE[nucId].ToArray();
                             source = lines[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -416,9 +418,10 @@ namespace FlexID.Calc
                         }
 
                         // 対象としてる核種が変わったら見るS係数ファイルを変える
-                        if (nucId != organ.Nuclide)
+                        if (nuclide != organ.Nuclide)
                         {
-                            nucId = organ.Nuclide;
+                            nuclide = organ.Nuclide;
+                            nucId = nuclide.Nuclide;
                             var lines = SEE[nucId].ToArray();
                             source = lines[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -443,7 +446,7 @@ namespace FlexID.Calc
                             }
                         }
 
-                        var nucDecay = dataLo.Ramd[nucId];
+                        var nucDecay = nuclide.Ramd;
 
                         // タイムステップごとの放射能　
                         var Act = this.Act.Now[organ.Index].end * deltaT * nucDecay;
@@ -451,7 +454,7 @@ namespace FlexID.Calc
                             continue;
 
                         // 放射能*S係数
-                        int index = Array.IndexOf(source, dataLo.CorrNum[(organ.Nuclide, organ.Name)]);
+                        int index = Array.IndexOf(source, dataLo.CorrNum[(organ.Nuclide.Nuclide, organ.Name)]);
                         if (index > 0) // indexが1より下は組織と対応するS係数無し
                             total += Act * double.Parse(_see[index]);
                     }
