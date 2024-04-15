@@ -101,6 +101,16 @@ namespace FlexID.Calc
         /// 流入経路。
         /// </summary>
         public List<Inflow> Inflows;
+
+        /// <summary>
+        /// 線源領域の名称。
+        /// </summary>
+        public string SourceRegion;
+
+        /// <summary>
+        /// コンパートメントに対応付けられた線源領域から各標的組織へのS係数。
+        /// </summary>
+        public double[] S_Coefficients;
     }
 
     public class NuclideData
@@ -129,24 +139,37 @@ namespace FlexID.Calc
         /// 子孫核種の場合は<c>true</c>。
         /// </summary>
         public bool IsProgeny;
+
+        /// <summary>
+        /// S係数データにおける各線源領域の名称。
+        /// </summary>
+        public string[] SourceRegions;
+
+        /// <summary>
+        /// S係数データにおける各標的組織の名称。
+        /// </summary>
+        public string[] TargetTissues;
     }
 
     public class DataClass
     {
+        // このコンパートメントモデルが対象とする被ばく評価期間の開始年齢[day]。
+        public int StartAge;
+
         /// <summary>
         /// 全ての核種。
         /// </summary>
         public List<NuclideData> Nuclides = new List<NuclideData>();
 
         /// <summary>
+        /// 核種毎のS係数データ表。
+        /// </summary>
+        public List<Dictionary<string, double[]>> SCoeffTables = new List<Dictionary<string, double[]>>();
+
+        /// <summary>
         /// 全ての臓器。
         /// </summary>
         public List<Organ> Organs = new List<Organ>();
-
-        /// <summary>
-        /// S-coeと対応する臓器名(TODO: 削除予定。)。
-        /// </summary>
-        public Dictionary<(string, string), string> CorrNum = new Dictionary<(string, string), string>();
 
         private DataClass() { }
 
@@ -200,7 +223,9 @@ namespace FlexID.Calc
                 };
                 data.Nuclides.Add(nuclide);
 
-                var sourceRegions = ReadSCoeff(nuclide);
+                // 核種に対応するS係数データを読み込む。
+                var tableSCoeff = ReadSCoeff(nuclide);
+                data.SCoeffTables.Add(tableSCoeff);
 
                 // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
                 while (true)
@@ -252,11 +277,14 @@ namespace FlexID.Calc
                     if (sourceRegion != "-")
                     {
                         // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
-                        if (!sourceRegions.Contains(sourceRegion))
+                        var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
+                        if (indexS == -1)
                             throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegion}'");
-                    }
 
-                    data.CorrNum[(nuclide.Nuclide, organ.Name)] = sourceRegion;
+                        // コンパートメントの放射能を各標的組織に振り分けるためのS係数データを関連付ける。
+                        organ.SourceRegion = sourceRegion;
+                        organ.S_Coefficients = tableSCoeff[sourceRegion];
+                    }
 
                     // コンパートメントへの流入経路の記述を読み込む。
                     if (organ.Func == OrganFunc.inp)
@@ -314,24 +342,69 @@ namespace FlexID.Calc
             return data;
         }
 
-        private static string[] ReadSCoeff(NuclideData nuclide)
+        /// <summary>
+        /// S係数データを読み込む。
+        /// </summary>
+        /// <param name="nuclide">対象核種。線源領域と標的組織の名称が設定される。</param>
+        /// <returns>キーが線源領域の名称、値が各標的組織に対する成人男女平均のS係数、となる辞書。</returns>
+        private static Dictionary<string, double[]> ReadSCoeff(NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
             var prg = nuclide.IsProgeny ? "prg_" : "";
 
-            string[] sourceRegions;
+            var fileAM = $"{nuc}_AM_{prg}S-Coefficient.txt";
+            var fileAF = $"{nuc}_AF_{prg}S-Coefficient.txt";
+            using (var readerAM = new StreamReader(Path.Combine("lib", "OIR", fileAM)))
+            using (var readerAF = new StreamReader(Path.Combine("lib", "OIR", fileAF)))
             {
-                var linesAM = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AM_{prg}S-Coefficient.txt"));
-                var linesAF = File.ReadLines(Path.Combine("lib", "OIR", $"{nuc}_AF_{prg}S-Coefficient.txt"));
+                // 1行目から線源領域の名称を配列で取得。
+                var sourcesAM = readerAM.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
+                var sourcesAF = readerAF.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
+                if (sourcesAM is null) throw Program.Error($"Incorrect S-Coefficient file format: {fileAM}");
+                if (sourcesAF is null) throw Program.Error($"Incorrect S-Coefficient file format: {fileAF}");
 
-                var sourceAM = linesAM.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var sourceAF = linesAF.First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (!Enumerable.SequenceEqual(sourceAM, sourceAF))
+                if (!Enumerable.SequenceEqual(sourcesAM, sourcesAF))
                     throw Program.Error($"Found mismatch of source region names in S-Coefficient data for nuclide {nuc}.");
-                sourceRegions = sourceAM;
-            }
+                var sources = sourcesAM;
+                var sourcesCount = sources.Length;
 
-            return sourceRegions;
+                var targets = new string[43];
+
+                var table = sources.ToDictionary(s => s, s => new double[43]);
+
+                for (int indexT = 0; indexT < 43; indexT++)
+                {
+                    var valuesAM = readerAM.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var valuesAF = readerAF.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (valuesAM?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {fileAM}");
+                    if (valuesAF?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {fileAF}");
+
+                    // 各行の1列目から標的組織の名称を取得。
+                    var targetAM = valuesAM[0];
+                    var targetAF = valuesAF[0];
+                    if (targetAM != targetAF)
+                        throw Program.Error($"Found mismatch of target tissue names in S-Coefficient data for nuclide {nuc}.");
+                    targets[indexT] = targetAM;
+
+                    for (int indexS = 0; indexS < sourcesCount; indexS++)
+                    {
+                        var sourceRegion = sources[indexS];
+
+                        // ここでS係数の男女平均を取る。
+                        var scoeffAM = double.Parse(valuesAM[1 + indexS]);
+                        var scoeffAF = double.Parse(valuesAF[1 + indexS]);
+                        var scoeff = (scoeffAM + scoeffAF) / 2;
+
+                        table[sourceRegion][indexT] = scoeff;
+                    }
+                }
+
+                // 核種の線源領域と標的組織の名称を設定する。
+                nuclide.SourceRegions = sources;
+                nuclide.TargetTissues = targets;
+
+                return table;
+            }
         }
 
         /// <summary>
@@ -355,6 +428,15 @@ namespace FlexID.Calc
         public static DataClass Read_EIR(List<string> lines, bool calcProgeny, string age)
         {
             var data = new DataClass();
+
+            data.StartAge =
+                age == "Age:3month" /**/? 100 :
+                age == "Age:1year"  /**/? 365 :
+                age == "Age:5year"  /**/? 365 * 5 :
+                age == "Age:10year" /**/? 365 * 10 :
+                age == "Age:15year" /**/? 365 * 15 :
+                age == "Age:adult"  /**/? 365 * 25 : // 現在はSrしか計算しないため25歳で決め打ち、今後インプット等で成人の年齢を読み込む必要あり？
+                throw new NotSupportedException();
 
             {
                 int num = 0;
@@ -403,7 +485,9 @@ namespace FlexID.Calc
                     { }
                 }
 
-                var sourceRegions = ReadSee(nuclide);
+                // 核種に対応するS係数データを読み込む。
+                var tableSCoeff = ReadSee(age, nuclide);
+                data.SCoeffTables.Add(tableSCoeff);
 
                 // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
                 while (true)
@@ -455,11 +539,14 @@ namespace FlexID.Calc
                     if (sourceRegion != "-")
                     {
                         // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
-                        if (!sourceRegions.Contains(sourceRegion))
+                        var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
+                        if (indexS == -1)
                             throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegion}'");
-                    }
 
-                    data.CorrNum[(nuclide.Nuclide, organ.Name)] = sourceRegion;
+                        // コンパートメントの放射能を各標的組織に振り分けるためのS係数データを関連付ける。
+                        organ.SourceRegion = sourceRegion;
+                        organ.S_Coefficients = tableSCoeff[sourceRegion];
+                    }
 
                     // コンパートメントへの流入経路の記述を読み込む。
                     if (organ.Func == OrganFunc.inp)
@@ -517,43 +604,57 @@ namespace FlexID.Calc
             return data;
         }
 
-        private static string[] ReadSee(NuclideData nuclide)
+        /// <summary>
+        /// SEEデータを読み込む。
+        /// </summary>
+        /// <param name="age">被ばく評価期間の開始年齢</param>
+        /// <param name="nuclide">対象核種。線源領域と標的組織の名称が設定される。</param>
+        /// <returns>キーが線源領域の名称、値が各標的組織に対する成人男女平均のS係数、となる辞書。</returns>
+        private static Dictionary<string, double[]> ReadSee(string age, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
+            var file = $"{nuc}SEE.txt";
 
-            string[] sourceRegions;
-
+            using (var reader = new StreamReader(Path.Combine("lib", "EIR", file)))
             {
-                var linesSEE = File.ReadLines(Path.Combine("lib", "EIR", $"{nuc}SEE.txt"));
+                while (reader.ReadLine() != age)
+                { }
 
-                var sourceSEE = linesSEE.Skip(1).First().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                // 2行目から線源領域の名称を配列で取得。
+                var sources = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
+                if (sources is null)
+                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+                if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
+                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+                var sourcesCount = sources.Length;
 
-                sourceRegions = sourceSEE;
-            }
-
-            return sourceRegions;
-        }
-
-        public static List<string> Read_See(List<string> inpRead, string age)
-        {
-            List<string> data = new List<string>();
-            for (int i = 0; i < inpRead.Count; i++)
-            {
-                if (inpRead[i].Trim() == age)
+                var targets = new string[31];
+                var table = sources.ToDictionary(s => s, s => new double[31]);
+                for (int indexT = 0; indexT < 31; indexT++)
                 {
-                    i++;
-                    i++;
-                    while (true)
-                    {
-                        data.Add(inpRead[i]);
-                        i++;
+                    var values = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (values?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
 
-                        if ((i > inpRead.Count - 1) || inpRead[i].StartsWith("Age:"))
-                            break;
+                    // 各行の1列目から標的組織の名称を取得。
+                    var target = values[0];
+                    targets[indexT] = target;
+
+                    for (int indexS = 0; indexS < sourcesCount; indexS++)
+                    {
+                        var sourceRegion = sources[indexS];
+                        var scoeff = double.Parse(values[1 + indexS]);
+                        table[sourceRegion][indexT] = scoeff;
                     }
                 }
+                if (nuclide.TargetTissues != null && !Enumerable.SequenceEqual(nuclide.TargetTissues, targets))
+                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+
+                // 核種の線源領域と標的組織の名称を設定する。
+                nuclide.SourceRegions = sources;
+                nuclide.TargetTissues = targets;
+
+                return table;
             }
-            return data;
         }
     }
 }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using TextIO;
 
 namespace FlexID.Calc
 {
@@ -80,7 +78,7 @@ namespace FlexID.Calc
             var CumulativePath = OutputPath + "_Cumulative.out";
             var DosePath = OutputPath + "_Dose.out";
             var DoseRatePath = OutputPath + "_DoseRate.out";
-            var IterPath = OutputPath + "_IterLog.out";
+            //var IterPath = OutputPath + "_IterLog.out";
 
             Directory.CreateDirectory(Path.GetDirectoryName(RetentionPath));
 
@@ -97,8 +95,10 @@ namespace FlexID.Calc
 
             // テンポラリファイルを並び替えて出力
             CalcOut.ActivityOut(RetentionPath, CumulativePath, TmpFile, dataList[0]);
+
             // Iter出力
             //CalcOut.IterOut(CalcTimeMesh, iterLog, IterPath);
+
             File.Delete(TmpFile);
         }
 
@@ -152,6 +152,117 @@ namespace FlexID.Calc
                 }
             }
 
+            DataClass dataLoInterp = null;  // 年齢区間の切り替わり検出用。
+            double[][] sourcesSee = null;
+            double[][] organsSee = null;
+
+            // S係数の補間のための領域を確保する。
+            void InterpolationAlloc()
+            {
+                if (dataLo == dataLoInterp)
+                    return;
+                dataLoInterp = dataLo;
+
+                // 実際の所、EIRでは全ての年齢区間で線源領域は同じのはずで、
+                // また体内動態モデルを定義するコンパートメント群も同じになるようだが
+                // 現状のデータの持ち方としてこれらが年齢区間毎に異なり得ると想定している。
+                Array.Resize(ref sourcesSee, dataLo.Nuclides.Select(n => n.SourceRegions.Length).Sum());
+                Array.Resize(ref organsSee, dataLo.Organs.Count);
+
+                int offsetS = 0;
+                foreach (var nuclide in dataLo.Nuclides)
+                {
+                    var sourcesCount = nuclide.SourceRegions.Length;
+
+                    for (int indexS = 0; indexS < sourcesCount; indexS++)
+                    {
+                        // ある核種における線源領域の1つ。
+                        var sourceRegion = nuclide.SourceRegions[indexS];
+
+                        // 各標的組織への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
+                        var see = sourcesSee[offsetS + indexS];
+                        see = see ?? (sourcesSee[offsetS + indexS] = new double[31]);
+
+                        // 線源領域に対応する全てのコンパートメントに、
+                        // 補間されたS係数値が書き込まれる予定の配列を割り当てる。
+                        foreach (var organ in dataLo.Organs
+                            .Where(o => o.Nuclide == nuclide && o.SourceRegion == sourceRegion))
+                        {
+                            organsSee[organ.Index] = see;
+                        }
+                    }
+
+                    offsetS += sourcesCount;
+                }
+            }
+
+            // S係数の補間をやめて、コンパートメント毎に設定されたS係数を使用するよう切り替える。
+            void InterporationReset()
+            {
+                if (dataLo == dataLoInterp && sourcesSee is null)
+                    return;
+                dataLoInterp = dataLo;
+
+                sourcesSee = null;
+                Array.Resize(ref organsSee, dataLo.Organs.Count);
+
+                foreach (var organ in dataLo.Organs)
+                {
+                    organsSee[organ.Index] = organ.S_Coefficients;
+                }
+            }
+
+            // 指定の計算時間メッシュにおけるS係数の補間計算を実施する。
+            void InterpopationCalc(double nowT)
+            {
+                if (nowT < 6205)
+                {
+                    // 17歳未満の被ばく期間では、SEEデータを補間する。
+                    InterpolationAlloc();
+
+                    int offsetS = 0;
+                    foreach (var nuclide in dataLo.Nuclides)
+                    {
+                        var sourcesCount = nuclide.SourceRegions.Length;
+
+                        int indexN = dataLo.Nuclides.IndexOf(nuclide);
+                        var tableLo = dataLo.SCoeffTables[indexN];
+                        var tableHi = dataHi.SCoeffTables[indexN];
+
+                        for (int indexS = 0; indexS < sourcesCount; indexS++)
+                        {
+                            // ある核種における線源領域の1つ。
+                            var sourceRegion = nuclide.SourceRegions[indexS];
+
+                            // 各標的組織への補間されたS係数値を書き込むための配列を取得する。
+                            var see = sourcesSee[offsetS + indexS];
+
+                            var seeLo = tableLo[sourceRegion];
+                            var seeHi = tableHi[sourceRegion];
+                            for (int indexT = 0; indexT < 31; indexT++)
+                            {
+                                var scoeffLo = seeLo[indexT];
+                                var scoeffHi = seeHi[indexT];
+                                var scoeff = SubRoutine.Interpolation(nowT, scoeffLo, scoeffHi, dataLo.StartAge, dataHi.StartAge);
+                                see[indexT] = scoeff;
+                            }
+                        }
+                        offsetS += sourcesCount;
+                    }
+                }
+                else
+                {
+                    InterporationReset();
+                }
+            }
+
+            // 標的組織の名称リストを(親核種のS係数データから)取得。
+            var targetTissues = dataList[0].Nuclides[0].TargetTissues;
+            var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
+
+            // 標的組織の名称をヘッダーとして出力。
+            CalcOut.CommitmentTarget(targetTissues, dataList[0]);
+
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
             int otime = 0;  // 出力時間メッシュのインデックス
@@ -198,11 +309,8 @@ namespace FlexID.Calc
             }
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
 
-            var flgTarget = true;   // 預託線量ヘッダー出力用フラグ
-
             ctime = 1;
             otime = 1;
-
             for (; ctime < CalcTimeMesh.Count; ctime++)
             {
                 // 不要な前ステップのデータを削除
@@ -211,55 +319,43 @@ namespace FlexID.Calc
                 var calcPreT = CalcTimeMesh[ctime - 1];
                 var calcNowT = CalcTimeMesh[ctime - 0];
 
-                int daysLo;
-                int daysHi;
+                // 預託期間を超える計算は行わない
+                if (calcNowT > commitmentDays)
+                    break;
+
                 // 生まれてからの日数によってLoとHiを変える
                 if (calcNowT + ExposureDays <= year1)
                 {
                     dataLo = dataList[0];
                     dataHi = dataList[1];
-                    daysLo = month3;
-                    daysHi = year1;
                 }
                 else if (calcNowT + ExposureDays <= year5)
                 {
                     dataLo = dataList[1];
                     dataHi = dataList[2];
-                    daysLo = year1;
-                    daysHi = year5;
                 }
                 else if (calcNowT + ExposureDays <= year10)
                 {
                     dataLo = dataList[2];
                     dataHi = dataList[3];
-                    daysLo = year5;
-                    daysHi = year10;
                 }
                 else if (calcNowT + ExposureDays <= year15)
                 {
                     dataLo = dataList[3];
                     dataHi = dataList[4];
-                    daysLo = year10;
-                    daysHi = year15;
                 }
                 else if (calcNowT + ExposureDays <= adult)
                 {
                     dataLo = dataList[4];
                     dataHi = dataList[5];
-                    daysLo = year15;
-                    daysHi = adult;
                 }
                 else
                 {
                     dataLo = dataList[5];
                     dataHi = dataList[5];
-                    daysLo = adult;
-                    daysHi = adult;
                 }
-
-                // 預託期間を超える計算は行わない
-                if (calcNowT > commitmentDays)
-                    break;
+                int daysLo = dataLo.StartAge;
+                int daysHi = dataHi.StartAge;
 
                 #region 1つの計算時間メッシュ内で収束計算を繰り返す
                 for (int iter = 1; iter <= iterMax; iter++)
@@ -348,134 +444,46 @@ namespace FlexID.Calc
                 if (OutTimeMesh.Count <= otime)
                     break;
 
-                // S-Coefficient読込
-                var SEE = new Dictionary<string, string[]>();
-                for (int i = 0; i < dataLo.Nuclides.Count; i++)
-                {
-                    var nuc = dataLo.Nuclides[i].Nuclide;
-                    SEE[nuc] = File.ReadAllLines("lib\\EIR\\" + nuc + "SEE.txt");
-                }
+                // S係数の補間計算を実施する。
+                InterpopationCalc(calcNowT + ExposureDays);
 
                 // ΔT[sec]
                 var deltaT = (calcNowT - calcPreT) * 24 * 3600;
 
-                var TargetList = new List<string>();
-
-                var nucId = ""; // 現在対象としている核種
-                NuclideData nuclide = null;
-                var _see = new List<string>();
-                string line = "";
-                int oCount = 0;
-                List<string> SEElo = new List<string>();
-                List<string> SEEhi = new List<string>();
-                string[] S_lo;
-                string[] S_hi;
-                int S_count = 0;
-                string[] source = new string[0];
-
-                while (true)
+                foreach (var organ in dataLo.Organs)
                 {
-                    double total = 0;
-                    bool flgScoe = true;
+                    if (organ.Name.Contains("mix"))
+                        continue;
 
-                    foreach (var organ in dataLo.Organs)
+                    var nuclide = organ.Nuclide;
+                    var nucDecay = nuclide.Ramd;
+
+                    // タイムステップごとの放射能　
+                    var activity = Act.Now[organ.Index].end * deltaT * nucDecay;
+                    if (activity == 0)
+                        continue;
+
+                    if (organ.SourceRegion != null)
                     {
-                        if (organ.Name.Contains("mix"))
-                            continue;
-
-                        if (flgScoe)
+                        // コンパートメントから各標的組織への預託線量を計算する。
+                        for (int indexT = 0; indexT < 31; indexT++)
                         {
-                            nuclide = organ.Nuclide;
-                            nucId = nuclide.Nuclide;
-                            var lines = SEE[nucId].ToArray();
-                            source = lines[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            // 標的組織の部分的な重量。
+                            var targetWeight = targetWeights[indexT];
 
-                            _see = new List<string>();
-                            (SEElo, SEEhi) = SEE_select(SEE[nucId], calcNowT, ExposureDays);
-                            S_lo = SEElo[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            S_hi = SEEhi[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            _see.Add(S_lo[0]);
-                            if (calcNowT + ExposureDays < 6205)
-                            {
-                                for (int i = 1; i < S_lo.Length; i++)
-                                {
-                                    _see.Add(Interpolation(calcNowT + ExposureDays, double.Parse(S_lo[i]), double.Parse(S_hi[i]), daysLo, daysHi).ToString());
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 1; i < S_lo.Length; i++)
-                                {
-                                    _see.Add(S_lo[i]);
-                                }
-                            }
+                            // S係数(補間あり)。
+                            var scoeff = organsSee[organ.Index][indexT];
 
-                            if (line == null)
-                                break;
+                            // 等価線量 = 放射能 * S係数
+                            var equivalentDose = activity * scoeff;
 
-                            TargetList.Add(_see[0]);
-                            flgScoe = false;
+                            // 実効線量 = 等価線量 * wT
+                            var effectiveDose = equivalentDose * targetWeight;
+
+                            Result[indexT] += equivalentDose;
+                            WholeBody += effectiveDose;
                         }
-
-                        // 対象としてる核種が変わったら見るS係数ファイルを変える
-                        if (nuclide != organ.Nuclide)
-                        {
-                            nuclide = organ.Nuclide;
-                            nucId = nuclide.Nuclide;
-                            var lines = SEE[nucId].ToArray();
-                            source = lines[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                            _see = new List<string>();
-                            (SEElo, SEEhi) = SEE_select(SEE[nucId], calcNowT, ExposureDays);
-                            S_lo = SEElo[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            S_hi = SEEhi[S_count].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                            _see.Add(S_lo[0]);
-                            if (calcNowT + ExposureDays < 6205)
-                            {
-                                for (int i = 1; i < S_lo.Length; i++)
-                                {
-                                    _see.Add(Interpolation(calcNowT + ExposureDays, double.Parse(S_lo[i]), double.Parse(S_hi[i]), daysLo, daysHi).ToString());
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 1; i < S_lo.Length; i++)
-                                {
-                                    _see.Add(S_lo[i]);
-                                }
-                            }
-                        }
-
-                        var nucDecay = nuclide.Ramd;
-
-                        // タイムステップごとの放射能　
-                        var Act = this.Act.Now[organ.Index].end * deltaT * nucDecay;
-                        if (Act == 0)
-                            continue;
-
-                        // 放射能*S係数
-                        int index = Array.IndexOf(source, dataLo.CorrNum[(organ.Nuclide.Nuclide, organ.Name)]);
-                        if (index > 0) // indexが1より下は組織と対応するS係数無し
-                            total += Act * double.Parse(_see[index]);
                     }
-
-                    if (line == null)
-                        break;
-
-                    Result[oCount] += total;
-                    WholeBody += total * wT[_see[0]];  // 実効線量 = 男性等価線量*wT
-                    oCount++;
-                    S_count++;
-
-                    if (S_count >= SEElo.Count)
-                        break;
-                }
-
-                // 初回のみヘッダーの標的組織出力
-                if (flgTarget)
-                {
-                    CalcOut.CommitmentTarget(TargetList, dataLo);
-                    flgTarget = false;
                 }
 
                 if (calcNowT == OutTimeMesh[otime])
@@ -512,53 +520,6 @@ namespace FlexID.Calc
                     otime++;
                 }
             }
-        }
-
-        public static double Interpolation(double day, double valueLo, double valueHi, int daysLo, int daysHi)
-        {
-            double value;
-            value = valueLo + (day - daysLo) * (valueHi - valueLo) / (daysHi - daysLo);
-            return value;
-        }
-
-        private (List<string>, List<string>) SEE_select(string[] data, double calcNowT, int ExposureDays)
-        {
-            List<string> dataLo = new List<string>();
-            List<string> dataHi = new List<string>();
-
-            List<string> Data = new List<string>(data);
-
-            if (calcNowT + ExposureDays <= year1)
-            {
-                dataLo = DataClass.Read_See(Data, "Age:3month");
-                dataHi = DataClass.Read_See(Data, "Age:1year");
-            }
-            else if (calcNowT + ExposureDays <= year5)
-            {
-                dataLo = DataClass.Read_See(Data, "Age:1year");
-                dataHi = DataClass.Read_See(Data, "Age:5year");
-            }
-            else if (calcNowT + ExposureDays <= year10)
-            {
-                dataLo = DataClass.Read_See(Data, "Age:5year");
-                dataHi = DataClass.Read_See(Data, "Age:10year");
-            }
-            else if (calcNowT + ExposureDays <= year15)
-            {
-                dataLo = DataClass.Read_See(Data, "Age:10year");
-                dataHi = DataClass.Read_See(Data, "Age:15year");
-            }
-            else if (calcNowT + ExposureDays <= adult)
-            {
-                dataLo = DataClass.Read_See(Data, "Age:15year");
-                dataHi = DataClass.Read_See(Data, "Age:adult");
-            }
-            else
-            {
-                dataLo = DataClass.Read_See(Data, "Age:adult");
-                dataHi = DataClass.Read_See(Data, "Age:adult");
-            }
-            return (dataLo, dataHi);
         }
     }
 }

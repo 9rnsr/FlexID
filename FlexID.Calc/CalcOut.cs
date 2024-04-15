@@ -27,7 +27,7 @@ namespace FlexID.Calc
         }
 
         // 預託線量標的組織出力
-        public void CommitmentTarget(List<string> Target, DataClass data)
+        public void CommitmentTarget(string[] targets, DataClass data)
         {
             var nuclide = data.Nuclides[0];
 
@@ -41,10 +41,10 @@ namespace FlexID.Calc
             rCom.Write("     Time    ");
             rCom.Write("     WholeBody   ");
 
-            for (int i = 0; i < Target.Count; i++)
+            for (int i = 0; i < targets.Length; i++)
             {
-                dCom.Write("  {0,-12:n}", Target[i]);
-                rCom.Write("  {0,-12:n}", Target[i]);
+                dCom.Write("  {0,-12:n}", targets[i]);
+                rCom.Write("  {0,-12:n}", targets[i]);
             }
             dCom.WriteLine();
             dCom.Write("     [day]       ");
@@ -52,7 +52,7 @@ namespace FlexID.Calc
             rCom.WriteLine();
             rCom.Write("     [day]       ");
             rCom.Write("  [Sv/h]      ");
-            for (int i = 0; i < Target.Count; i++)
+            for (int i = 0; i < targets.Length; i++)
             {
                 dCom.Write("  [Sv/Bq]     ");
                 rCom.Write("  [Sv/h]      ");
