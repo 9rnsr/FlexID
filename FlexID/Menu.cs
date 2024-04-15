@@ -141,7 +141,7 @@ namespace FlexID
         {
             button_Start.Enabled = false;
             Button_start_EIR.Enabled = false;
-            MainRoutine main = new MainRoutine();
+            var main = new MainRoutine_OIR();
             try
             {
                 bool check = CheckParam();
@@ -221,7 +221,7 @@ namespace FlexID
         {
             button_Start.Enabled = false;
             Button_start_EIR.Enabled = false;
-            MainRoutine main = new MainRoutine();
+            var main = new MainRoutine_EIR();
             try
             {
                 bool check = CheckParam_EIR();
@@ -235,7 +235,7 @@ namespace FlexID
                     main.CalcProgeny = Progeny_EIR.Checked;
                     main.ExposureAge = Age_EIR.Text;
 
-                    await Task.Run(() => main.Main_EIR());
+                    await Task.Run(() => main.Main());
 
                     // ファイルパスを引数にして出力GUI実行
                     Process p = Process.Start("FlexID.Viewer.exe", main.OutputPath);

@@ -19,7 +19,7 @@ namespace FlexID.Calc.Tests
 
             Directory.CreateDirectory(ResultDir);
 
-            var main = new MainRoutine();
+            var main = new MainRoutine_OIR();
             main.InputPath = Path.Combine(TargetDir, target);
             main.OutputPath = Path.Combine(ResultDir, TargetName);
             main.CalcTimeMeshPath = Path.Combine(TargetDir, "time-per-1d.dat");
@@ -57,7 +57,7 @@ namespace FlexID.Calc.Tests
 
             Directory.CreateDirectory(ResultDir);
 
-            var main = new MainRoutine();
+            var main = new MainRoutine_OIR();
             main.InputPath = Path.Combine(@"inp\OIR\Sr-90", target);
             main.OutputPath = Path.Combine(ResultDir, TargetName);
             main.CalcTimeMeshPath = @"lib\time.dat";

@@ -1,15 +1,46 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FlexID.Calc
 {
-    class SubRoutine
+    static class SubRoutine
     {
+        private static Regex patternPeriod =
+            new Regex(@"^ *(?<num>\d+) *(?<unit>days|months|years) *$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// 預託期間を日数に換算する。
+        /// </summary>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public static int CommitmentPeriodToDays(string period)
+        {
+            var m = patternPeriod.Match(period);
+            if (m.Success)
+            {
+                var num = int.Parse(m.Groups["num"].Value);
+                var unit = m.Groups["unit"].Value.ToLowerInvariant();
+                var days = unit == "days" ? num :
+                           unit == "months" ? num * 31 :
+                           unit == "years" ? num * 365 :
+                           throw Program.Error("Please enter the period ('days', 'months', 'years').");
+                return days;
+            }
+            else
+            {
+                throw Program.Error("Please enter integer for the Commitment Period.");
+            }
+        }
+
         /// <summary>
         /// inputから各臓器に初期値を振り分ける
         /// </summary>
         /// <param name="Act"></param>
         /// <param name="data"></param>
-        public void Init(Activity Act, DataClass data)
+        public static void Init(Activity Act, DataClass data)
         {
             Act.Pre = new OrganActivity[data.Organs.Count];
             Act.Now = new OrganActivity[data.Organs.Count];
@@ -50,7 +81,7 @@ namespace FlexID.Calc
                     // inputから初期値を受け取る臓器、対象組織が対象核種の組織か確認
                     if (inflow.Organ.Nuclide == nuclide)
                     {
-                        var nucDecay = data.Ramd[nuclide];
+                        var nucDecay = nuclide.Ramd;
 
                         var init = inflow.Rate / nucDecay;
                         Act.Now[organ.Index].ini = init;
@@ -67,7 +98,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 排泄物
         /// </summary>
-        public void Excretion(Organ organ, Activity Act, double dt)
+        public static void Excretion(Organ organ, Activity Act, double dt)
         {
             double ini = 0;
             double ave = 0;
@@ -91,7 +122,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 混合
         /// </summary>
-        public void Mix(Organ organ, Activity Act)
+        public static void Mix(Organ organ, Activity Act)
         {
             double ini = 0;
             double ave = 0;
@@ -117,7 +148,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 入力
         /// </summary>
-        public void Input(Organ organ, Activity Act)
+        public static void Input(Organ organ, Activity Act)
         {
             // 初期振り分けはしたので0を設定するだけ？
             // todo: 機能3の区画にID=0以外の区画からの流入がある場合はその前提が崩れるため、
@@ -132,7 +163,7 @@ namespace FlexID.Calc
         /// 蓄積(OIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public void Accumulation(double dT, Organ organ, Activity Act, double d)
+        public static void Accumulation(double dT, Organ organ, Activity Act, double d)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             var alpha = organ.NuclideDecay + organ.BioDecay;
@@ -192,63 +223,63 @@ namespace FlexID.Calc
         /// 蓄積(EIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public void Accumulate_EIR(double dT, Organ organLow, Organ organHigh, Activity Act, double day, int LowDays, int HighDays)
+        public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             double alpha;
-            alpha = organLow.BioDecay;
+            alpha = organLo.BioDecay;
             #region 流入臓器の数ループ
             double ave = 0.0;
-            for (int i = 0; i < organLow.Inflows.Count; i++)
+            for (int i = 0; i < organLo.Inflows.Count; i++)
             {
                 // 丸め誤差が出るので、Roundするか否か
-                var InflowLow = Math.Round(organLow.Inflows[i].Organ.BioDecay * organLow.Inflows[i].Rate, 6);
-                var InflowHigh = Math.Round(organHigh.Inflows[i].Organ.BioDecay * organHigh.Inflows[i].Rate, 6);
+                var InflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
+                var InflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
 
                 double beforeBio;
                 // 流入元生物学的崩壊定数
-                if (day <= MainRoutine.adult)
+                if (day <= MainRoutine_EIR.adult)
                 {
-                    if (organLow.Name == "Plasma" && organLow.Inflows[i].Organ.Name == "SI")
+                    if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                     {
-                        beforeBio = organLow.Inflows[i].Organ.BioDecay * organLow.Inflows[i].Rate;
-                        alpha = MainRoutine.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
+                        beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                        alpha = MainRoutine_EIR.Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
-                    else if (organLow.Name == "SI")
+                    else if (organLo.Name == "SI")
                     {
-                        beforeBio = MainRoutine.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
-                        alpha = organLow.BioDecay;
+                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLo, InflowHi, daysLo, daysHi);
+                        alpha = organLo.BioDecay;
                     }
                     else
                     {
-                        beforeBio = MainRoutine.Interpolation(day, InflowLow, InflowHigh, LowDays, HighDays);
-                        alpha = MainRoutine.Interpolation(day, organLow.BioDecay, organHigh.BioDecay, LowDays, HighDays);
+                        beforeBio = MainRoutine_EIR.Interpolation(day, InflowLo, InflowHi, daysLo, daysHi);
+                        alpha = MainRoutine_EIR.Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                 }
                 else
                 {
-                    beforeBio = organLow.Inflows[i].Organ.BioDecay * organLow.Inflows[i].Rate;
-                    alpha = organLow.BioDecay;
+                    beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                    alpha = organLo.BioDecay;
                 }
 
                 // デバッグ用
-                //if (organLow.Inflows[i].Organ.Name == "Plasma" & organLow.Name == "ULI")
-                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day.ToString(), organLow.Inflows[i].Organ.Name, organLow.Name, beforeBio.ToString());
+                //if (organLo.Inflows[i].Organ.Name == "Plasma" & organLo.Name == "ULI")
+                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day.ToString(), organLo.Inflows[i].Organ.Name, organLo.Name, beforeBio.ToString());
 
                 // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-                if (organLow.Inflows[i].Organ.Nuclide != organLow.Nuclide)
-                    beforeBio = 1 * organLow.Inflows[i].Rate;
+                if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
+                    beforeBio = 1 * organLo.Inflows[i].Rate;
 
                 // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入
-                ave += Act.Now[organLow.Inflows[i].Organ.Index].ave * beforeBio;
+                ave += Act.Now[organLo.Inflows[i].Organ.Index].ave * beforeBio;
             }
             #endregion
 
-            alpha += organLow.NuclideDecay;
+            alpha += organLo.NuclideDecay;
 
             var alpha_dT = alpha * dT;
 
-            double rini = Act.Pre[organLow.Index].end;
+            double rini = Act.Pre[organLo.Index].end;
             double rend;
             double rtotal;
             if (alpha_dT <= 1E-9)
@@ -265,18 +296,38 @@ namespace FlexID.Calc
                 rtotal = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
             }
 
-            Act.rNow[organLow.Index].ini = rini;
-            Act.rNow[organLow.Index].ave = rtotal / dT;    // 当該臓器の平均放射能 = 当該臓器の積算放射能 / Δt
-            Act.rNow[organLow.Index].end = rend;
-            Act.rNow[organLow.Index].total = rtotal;
+            Act.rNow[organLo.Index].ini = rini;
+            Act.rNow[organLo.Index].ave = rtotal / dT;    // 当該臓器の平均放射能 = 当該臓器の積算放射能 / Δt
+            Act.rNow[organLo.Index].end = rend;
+            Act.rNow[organLo.Index].total = rtotal;
 
             // 計算値が1E-60以下の場合は0とする
-            if (Act.rNow[organLow.Index].ave <= 1e-60)
-                Act.rNow[organLow.Index].ave = 0;
-            if (Act.rNow[organLow.Index].end <= 1e-60)
-                Act.rNow[organLow.Index].end = 0;
-            if (Act.rNow[organLow.Index].total <= 1e-60)
-                Act.rNow[organLow.Index].total = 0;
+            if (Act.rNow[organLo.Index].ave <= 1e-60)
+                Act.rNow[organLo.Index].ave = 0;
+            if (Act.rNow[organLo.Index].end <= 1e-60)
+                Act.rNow[organLo.Index].end = 0;
+            if (Act.rNow[organLo.Index].total <= 1e-60)
+                Act.rNow[organLo.Index].total = 0;
+        }
+
+        /// <summary>
+        /// 組織加重係数の読み込み。
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static Dictionary<string, double> WeightTissue(string fileName)
+        {
+            var wT = new Dictionary<string, double>();
+
+            var fileLines = File.ReadLines(fileName);
+            foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
+            {
+                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var tissueName = values[0];
+                var weight = double.Parse(values[1]);
+                wT[tissueName] = weight;
+            }
+            return wT;
         }
     }
 }
