@@ -1,0 +1,15 @@
+# comment
+until     , step
+   30 mins,    1 min
+   50 days,    3 mins
+
+            # comment
+  100 days,    5 mins
+  250 days,   10 mins
+  365 days,   30 mins      # 1 year
+ 1000 days,   60 mins
+ 2000 days,    4 hours
+ 3650 days,   12 hours     # 10 year
+27375 days,   24 hours     # 75 year
+
+# comment
