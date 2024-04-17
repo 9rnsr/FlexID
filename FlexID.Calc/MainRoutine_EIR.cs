@@ -287,6 +287,7 @@ namespace FlexID.Calc
                 foreach (var organ in dataLo.Organs)
                 {
                     OutMeshTotal[organ.Index] = 0;
+                    Act.Excreta[organ.Index] = 0;
                 }
             }
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
