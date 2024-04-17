@@ -134,24 +134,6 @@ namespace FlexID.Calc
             else
                 throw Program.Error("Please select the age at the time of exposure.");
 
-            // 流入割合がマイナスの時の処理は親からの分岐比*親の崩壊定数とする
-            foreach (var data in dataList)
-            {
-                foreach (var organ in data.Organs)
-                {
-                    foreach (var inflow in organ.Inflows)
-                    {
-                        if (inflow.Organ == null)
-                            continue;
-
-                        var nucDecay = inflow.Organ.NuclideDecay;
-
-                        if (inflow.Rate < 0)
-                            inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
-                    }
-                }
-            }
-
             DataClass dataLoInterp = null;  // 年齢区間の切り替わり検出用。
             double[][] sourcesSee = null;
             double[][] organsSee = null;
@@ -197,7 +179,7 @@ namespace FlexID.Calc
             }
 
             // S係数の補間をやめて、コンパートメント毎に設定されたS係数を使用するよう切り替える。
-            void InterporationReset()
+            void InterpolationReset()
             {
                 if (dataLo == dataLoInterp && sourcesSee is null)
                     return;
@@ -213,7 +195,7 @@ namespace FlexID.Calc
             }
 
             // 指定の計算時間メッシュにおけるS係数の補間計算を実施する。
-            void InterpopationCalc(double nowT)
+            void InterpolationCalc(double nowT)
             {
                 if (nowT < 6205)
                 {
@@ -252,7 +234,7 @@ namespace FlexID.Calc
                 }
                 else
                 {
-                    InterporationReset();
+                    InterpolationReset();
                 }
             }
 
@@ -445,7 +427,7 @@ namespace FlexID.Calc
                     break;
 
                 // S係数の補間計算を実施する。
-                InterpopationCalc(calcNowT + ExposureDays);
+                InterpolationCalc(calcNowT + ExposureDays);
 
                 // ΔT[sec]
                 var deltaT = (calcNowT - calcPreT) * 24 * 3600;
