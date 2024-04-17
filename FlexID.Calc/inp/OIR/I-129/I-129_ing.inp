@@ -1,50 +1,56 @@
- I-129 Ingestion                             1.209575E-10    0.0
-   1 input             inp      0.0        0     0      0.0        -
-   3 Oralcavity        acc   7200.0        1     1    100.0        O-cavity
-   4 OralcavityRe      acc   7200.0        1   118    100.0        O-cavity
-   5 Oesophagus-f      acc  12343.0        1     3     90.0        Oesophagus-f
-   6 Oesophagus-s      acc   2160.0        1     3     10.0        Oesophagus-s
-   7 Oesophagus-sRe    acc   2160.0        1     4    100.0        Oesophagus-s
-   8 St-wall           acc     50.0        1   110      1.2781     St-wall
-   9 St-con            acc     20.57       2     5    100.0        St-cont
-                                                 6    100.0
-  10 St-conRe          acc     20.57       2     7    100.0        St-cont
-                                                 8    100.0
-  11 SI-con            acc    600.0        1     9    100.0        SI-cont
-  12 SI-conRe          acc    600.0        1    10    100.0        SI-cont
-  13 RC-con            acc      2.0        3    11      1.0        RC-cont
-                                                12      1.0
-                                               113      0.377
-  14 LC-con            acc      2.0        1    13    100.0        LC-cont
-  15 RS-con            acc      2.0        1    14    100.0        RS-cont
-  16 Faeces            exc      0.0        1    15    100.0        -
- 110 Blood1            acc    672.86      10    11     99.0        Blood
-                                                12     99.0
-                                               112    100.0
-                                               113      0.6598
-                                               114    100.0
-                                               115      0.6623
-                                               116     27.4809
-                                               117      0.0
-                                               119     90.411
-                                               122     18.4211
- 111 Blood2            acc     39.6        4   113     98.9632     Blood
-                                               115     99.3377
-                                               117    100.0
-                                               121     94.5946
- 112 Liver1            acc    100.0        1   110      2.2293     Liver
- 113 Liver2            acc     21.22       1   111     53.0303     Liver
- 114 Kidneys1          acc    100.0        1   110      3.7155     Kidneys
- 115 Kidneys2          acc     21.14       1   111      9.0909     Kidneys
- 116 Thyroid1          acc    131.0        1   110      1.079      Thyroid
- 117 Thyroid2          acc      0.0077     1   116     72.5191     Thyroid
- 118 S-glands          acc     50.0        1   110      0.7669     S-glands
- 119 Other1            acc    365.0        2   110     89.1716     Other
-                                               120    100.0
- 120 Other2            acc     56.0        1   119      9.589      Other
- 121 Other3            acc     22.2        2   111     37.8788     Other
-                                               122     81.5789
- 122 Other4            acc      0.76       1   121      5.4054     Other
- 123 UB-con            acc     12.0        1   110      1.7597     UB-cont
- 124 Urine             exc      0.0        1   123    100.0        -
+# Nuclide | Intake route                         | Ramd           | DecayRate
+#---------+--------------------------------------+----------------+---------------
+  I-129     Ingestion                              1.209575E-10     0.0
+#
+#----------------------------| --------------| Inflow  -----------| S-Coefficient
+# No  Compartment       Func | BioDecay      | n   id    Rate     | Source Region
+#---+------------------+-----+---------------+--------+-----------+---------------
+   1  input              inp      0.0          0    0    0.0        -
+   3  Oralcavity         acc   7200.0          1    1  100.0        O-cavity
+   4  OralcavityRe       acc   7200.0          1  118  100.0        O-cavity
+   5  Oesophagus-f       acc  12343.0          1    3   90.0        Oesophagus-f
+   6  Oesophagus-s       acc   2160.0          1    3   10.0        Oesophagus-s
+   7  Oesophagus-sRe     acc   2160.0          1    4  100.0        Oesophagus-s
+   8  St-wall            acc     50.0          1  110    1.2781     St-wall
+   9  St-con             acc     20.57         2    5  100.0        St-cont
+                                                    6  100.0
+  10  St-conRe           acc     20.57         2    7  100.0        St-cont
+                                                    8  100.0
+  11  SI-con             acc    600.0          1    9  100.0        SI-cont
+  12  SI-conRe           acc    600.0          1   10  100.0        SI-cont
+  13  RC-con             acc      2.0          3   11    1.0        RC-cont
+                                                   12    1.0
+                                                  113    0.377
+  14  LC-con             acc      2.0          1   13  100.0        LC-cont
+  15  RS-con             acc      2.0          1   14  100.0        RS-cont
+  16  Faeces             exc      0.0          1   15  100.0        -
+ 110  Blood1             acc    672.86        10   11   99.0        Blood
+                                                   12   99.0
+                                                  112  100.0
+                                                  113    0.6598
+                                                  114  100.0
+                                                  115    0.6623
+                                                  116   27.4809
+                                                  117    0.0
+                                                  119   90.411
+                                                  122   18.4211
+ 111  Blood2             acc     39.6          4  113   98.9632     Blood
+                                                  115   99.3377
+                                                  117  100.0
+                                                  121   94.5946
+ 112  Liver1             acc    100.0          1  110    2.2293     Liver
+ 113  Liver2             acc     21.22         1  111   53.0303     Liver
+ 114  Kidneys1           acc    100.0          1  110    3.7155     Kidneys
+ 115  Kidneys2           acc     21.14         1  111    9.0909     Kidneys
+ 116  Thyroid1           acc    131.0          1  110    1.079      Thyroid
+ 117  Thyroid2           acc      0.0077       1  116   72.5191     Thyroid
+ 118  S-glands           acc     50.0          1  110    0.7669     S-glands
+ 119  Other1             acc    365.0          2  110   89.1716     Other
+                                                  120  100.0
+ 120  Other2             acc     56.0          1  119    9.589      Other
+ 121  Other3             acc     22.2          2  111   37.8788     Other
+                                                  122   81.5789
+ 122  Other4             acc      0.76         1  121    5.4054     Other
+ 123  UB-con             acc     12.0          1  110    1.7597     UB-cont
+ 124  Urine              exc      0.0          1  123  100.0        -
 end
