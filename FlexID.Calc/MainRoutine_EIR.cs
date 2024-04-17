@@ -134,24 +134,6 @@ namespace FlexID.Calc
             else
                 throw Program.Error("Please select the age at the time of exposure.");
 
-            // 流入割合がマイナスの時の処理は親からの分岐比*親の崩壊定数とする
-            foreach (var data in dataList)
-            {
-                foreach (var organ in data.Organs)
-                {
-                    foreach (var inflow in organ.Inflows)
-                    {
-                        if (inflow.Organ == null)
-                            continue;
-
-                        var nucDecay = inflow.Organ.NuclideDecay;
-
-                        if (inflow.Rate < 0)
-                            inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
-                    }
-                }
-            }
-
             DataClass dataLoInterp = null;  // 年齢区間の切り替わり検出用。
             double[][] sourcesSee = null;
             double[][] organsSee = null;

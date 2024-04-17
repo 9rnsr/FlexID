@@ -328,14 +328,22 @@ namespace FlexID.Calc
                 }
             }
 
-            // 流入経路から流入元臓器の情報を直接引くための参照を設定する
             foreach (var organ in data.Organs)
             {
                 foreach (var inflow in organ.Inflows)
                 {
                     if (inflow.ID == 0)
                         continue;
+
+                    // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
                     inflow.Organ = data.Organs.First(o => o.ID == inflow.ID);
+
+                    // 流入割合がマイナスの時の処理は親からの分岐比*親の崩壊定数とする。
+                    if (inflow.Rate < 0)
+                    {
+                        var nucDecay = inflow.Organ.NuclideDecay;
+                        inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
+                    }
                 }
             }
 
@@ -590,14 +598,22 @@ namespace FlexID.Calc
                 }
             }
 
-            // 流入経路から流入元臓器の情報を直接引くための参照を設定する
             foreach (var organ in data.Organs)
             {
                 foreach (var inflow in organ.Inflows)
                 {
                     if (inflow.ID == 0)
                         continue;
+
+                    // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
                     inflow.Organ = data.Organs.First(o => o.ID == inflow.ID);
+
+                    // 流入割合がマイナスの時の処理は親からの分岐比*親の崩壊定数とする。
+                    if (inflow.Rate < 0)
+                    {
+                        var nucDecay = inflow.Organ.NuclideDecay;
+                        inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
+                    }
                 }
             }
 

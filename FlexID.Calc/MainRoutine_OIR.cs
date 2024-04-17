@@ -97,21 +97,6 @@ namespace FlexID.Calc
             // 預託期間[day]を取得。
             var commitmentDays = SubRoutine.CommitmentPeriodToDays(CommitmentPeriod);
 
-            // 流入割合がマイナスの時の処理は親からの分岐比*親の崩壊定数とする
-            foreach (var organ in data.Organs)
-            {
-                foreach (var inflow in organ.Inflows)
-                {
-                    if (inflow.Organ == null)
-                        continue;
-
-                    var nucDecay = inflow.Organ.NuclideDecay;
-
-                    if (inflow.Rate < 0)
-                        inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
-                }
-            }
-
             // 標的組織の名称リストを(親核種のS係数データから)取得。
             var targetTissues = data.Nuclides[0].TargetTissues;
             var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
