@@ -197,7 +197,7 @@ namespace FlexID.Calc
             }
 
             // S係数の補間をやめて、コンパートメント毎に設定されたS係数を使用するよう切り替える。
-            void InterporationReset()
+            void InterpolationReset()
             {
                 if (dataLo == dataLoInterp && sourcesSee is null)
                     return;
@@ -213,7 +213,7 @@ namespace FlexID.Calc
             }
 
             // 指定の計算時間メッシュにおけるS係数の補間計算を実施する。
-            void InterpopationCalc(double nowT)
+            void InterpolationCalc(double nowT)
             {
                 if (nowT < 6205)
                 {
@@ -252,7 +252,7 @@ namespace FlexID.Calc
                 }
                 else
                 {
-                    InterporationReset();
+                    InterpolationReset();
                 }
             }
 
@@ -445,7 +445,7 @@ namespace FlexID.Calc
                     break;
 
                 // S係数の補間計算を実施する。
-                InterpopationCalc(calcNowT + ExposureDays);
+                InterpolationCalc(calcNowT + ExposureDays);
 
                 // ΔT[sec]
                 var deltaT = (calcNowT - calcPreT) * 24 * 3600;
