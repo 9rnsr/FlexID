@@ -1,104 +1,110 @@
- Zn-65 Inhalation:Type-S                     2.840069E-03    0.0
-   1 input             inp      0.0        0     0      0.0        -
-   6 Oesophagus-S      acc   2160.0        2    32     97.0874     Oesophagus-s
-                                                72     99.9999
-   7 St-con            acc     20.57       1     6    100.0        St-cont
-   8 SI-con            acc      6.03015    1     7    100.0        SI-cont
-   9 SI-conRe          acc     12.0        3   111      0.141      SI-cont
-                                               115      0.3339
-                                               117     40.0
-  10 RC-con            acc      2.0        2     8     99.5        RC-cont
-                                                 9     50.0
-  11 LC-con            acc      2.0        1    10    100.0        LC-cont
-  12 RS-con            acc      2.0        1    11    100.0        RS-cont
-  13 Faeces            exc      0.0        1    12    100.0        -
-  31 ET1-F             acc      2.1        1     1      0.4794     ET1-sur
-  32 ET2-F             acc    103.0        3     1      0.2576836  ET2-sur
-                                                31     71.4286
-                                                35     76.9231
-  33 ETseq-F           acc      3.001      1     1      0.0005164  ET2-seq
-  34 LNET-F            acc      3.0        1    33      0.0333     LN-ET
-  35 BB-F              acc     13.0        2     1      0.0177644  Bronchi
-                                                37      6.25
-  36 BBseq-F           acc      3.001      1     1      0.0000356  Bronchi-q
-  37 bb-F              acc      3.2        2     1      0.010978   Brchiole
-                                                39      0.0666
-  38 bbseq-F           acc      3.001      1     1      0.000022   Brchiole-q
-  39 ALV-F             acc      3.003      1     1      0.0532     ALV
-  40 INT-F             acc      3.00003    1    39      0.0333     ALV
-  41 LNTH-F            acc      3.0        3    36      0.0333     LN-Th
-                                                38      0.0333
-                                                40      0.001
-  71 ET1-S             acc      2.1        1     1     47.4606     ET1-sur
-  72 ET2-S             acc    100.0001     3     1     25.5106764  ET2-sur
-                                                71     71.4286
-                                                75     99.999
-  73 ETseq-S           acc      0.0011     1     1      0.0511236  ET2-seq
-  74 LNET-S            acc      0.0001     1    73     90.9091     LN-ET
-  75 BB-S              acc     10.0001     2     1      1.7586756  Bronchi
-                                                77     99.95
-  76 BBseq-S           acc      0.0011     1     1      0.0035244  Bronchi-q
-  77 bb-S              acc      0.2001     2     1      1.086822   Brchiole
-                                                79     64.5161
-  78 bbseq-S           acc      0.0011     1     1      0.002178   Brchiole-q
-  79 ALV-S             acc      0.0031     1     1      5.2668     ALV
-  80 INT-S             acc      0.00013    1    79     32.2581     ALV
-  81 LNTH-S            acc      0.0001     3    76     90.9091     LN-Th
-                                                78     90.9091
-                                                80     23.0769
-  99 Environment       exc      0.0        3     1     18.04       -
-                                                31     28.5714
-                                                71     28.5714
- 110 mix-Blood         mix      0.0       20    32      2.9126     -
-                                                33     99.9667
-                                                34    100.0
-                                                35     23.0769
-                                                36     99.9667
-                                                37     93.75
-                                                38     99.9667
-                                                39     99.9001
-                                                40     99.999
-                                                41    100.0
-                                                72      0.0001
-                                                73      9.0909
-                                                74    100.0
-                                                75      0.001
-                                                76      9.0909
-                                                77      0.05
-                                                78      9.0909
-                                                79      3.2258
-                                                80     76.9231
-                                                81    100.0
- 111 Plasma            acc    141.81      16     8      0.5        Blood
-                                                 9     50.0
-                                               110    100.0
-                                               112    100.0
-                                               113    100.0
-                                               114    100.0
-                                               115     49.8331
-                                               116    100.0
-                                               117     60.0
-                                               118    100.0
-                                               119    100.0
-                                               120    100.0
-                                               121     94.97
-                                               122    100.0
-                                               123     94.97
-                                               124    100.0
- 112 ST0               acc     10.0        1   111     28.2068     Other
- 113 ST1               acc      3.0        1   111     21.1551     Other
- 114 ST2               acc      0.01       1   111      0.2821     Other
- 115 Liver1            acc     20.067      1   111     42.3101     Liver
- 116 Liver2            acc      0.6        1   115     49.8331     Liver
- 117 Pancreas          acc      2.5        1   111      2.1155     Pancreas
- 118 Muscle            acc      0.005      1   111      1.4103     Muscle
- 119 Kidneys           acc      0.7        1   111      2.8207     Kidneys
- 120 RBC               acc      0.14       1   111      1.0578     Blood
- 121 C-bone-S          acc      0.01053    1   111      0.2116     C-bone-S
- 122 C-bone-V          acc      0.0000821  1   121      5.03       C-bone-V
- 123 T-bone-S          acc      0.01053    1   111      0.1058     T-bone-S
- 124 T-bone-V          acc      0.000493   1   123      5.03       T-bone-V
- 125 Excreta           exc      0.0        1   111      0.0917     -
- 126 UB-con            acc     12.0        1   111      0.0917     UB-cont
- 127 Urine             exc      0.0        1   126    100.0        -
+# Nuclide | Intake route                         | Ramd           | DecayRate
+#---------+--------------------------------------+----------------+---------------
+  Zn-65    Inhalation:Type-S                       2.840069E-03     0.0
+#
+#----------------------------| --------------| Inflow  -----------| S-Coefficient
+# No  Compartment       Func | BioDecay      | n   id    Rate     | Source Region
+#---+------------------+-----+---------------+--------+-----------+---------------
+   1  input              inp      0.0          0    0    0.0        -
+   6  Oesophagus-S       acc   2160.0          2   32   97.0874     Oesophagus-s
+                                                   72   99.9999
+   7  St-con             acc     20.57         1    6  100.0        St-cont
+   8  SI-con             acc      6.03015      1    7  100.0        SI-cont
+   9  SI-conRe           acc     12.0          3  111    0.141      SI-cont
+                                                  115    0.3339
+                                                  117   40.0
+  10  RC-con             acc      2.0          2    8   99.5        RC-cont
+                                                    9   50.0
+  11  LC-con             acc      2.0          1   10  100.0        LC-cont
+  12  RS-con             acc      2.0          1   11  100.0        RS-cont
+  13  Faeces             exc      0.0          1   12  100.0        -
+  31  ET1-F              acc      2.1          1    1    0.4794     ET1-sur
+  32  ET2-F              acc    103.0          3    1    0.2576836  ET2-sur
+                                                   31   71.4286
+                                                   35   76.9231
+  33  ETseq-F            acc      3.001        1    1    0.0005164  ET2-seq
+  34  LNET-F             acc      3.0          1   33    0.0333     LN-ET
+  35  BB-F               acc     13.0          2    1    0.0177644  Bronchi
+                                                   37    6.25
+  36  BBseq-F            acc      3.001        1    1    0.0000356  Bronchi-q
+  37  bb-F               acc      3.2          2    1    0.010978   Brchiole
+                                                   39    0.0666
+  38  bbseq-F            acc      3.001        1    1    0.000022   Brchiole-q
+  39  ALV-F              acc      3.003        1    1    0.0532     ALV
+  40  INT-F              acc      3.00003      1   39    0.0333     ALV
+  41  LNTH-F             acc      3.0          3   36    0.0333     LN-Th
+                                                   38    0.0333
+                                                   40    0.001
+  71  ET1-S              acc      2.1          1    1   47.4606     ET1-sur
+  72  ET2-S              acc    100.0001       3    1   25.5106764  ET2-sur
+                                                   71   71.4286
+                                                   75   99.999
+  73  ETseq-S            acc      0.0011       1    1    0.0511236  ET2-seq
+  74  LNET-S             acc      0.0001       1   73   90.9091     LN-ET
+  75  BB-S               acc     10.0001       2    1    1.7586756  Bronchi
+                                                   77   99.95
+  76  BBseq-S            acc      0.0011       1    1    0.0035244  Bronchi-q
+  77  bb-S               acc      0.2001       2    1    1.086822   Brchiole
+                                                   79   64.5161
+  78  bbseq-S            acc      0.0011       1    1    0.002178   Brchiole-q
+  79  ALV-S              acc      0.0031       1    1    5.2668     ALV
+  80  INT-S              acc      0.00013      1   79   32.2581     ALV
+  81  LNTH-S             acc      0.0001       3   76   90.9091     LN-Th
+                                                   78   90.9091
+                                                   80   23.0769
+  99  Environment        exc      0.0          3    1   18.04       -
+                                                   31   28.5714
+                                                   71   28.5714
+ 110  mix-Blood          mix      0.0         20   32    2.9126     -
+                                                   33   99.9667
+                                                   34  100.0
+                                                   35   23.0769
+                                                   36   99.9667
+                                                   37   93.75
+                                                   38   99.9667
+                                                   39   99.9001
+                                                   40   99.999
+                                                   41  100.0
+                                                   72    0.0001
+                                                   73    9.0909
+                                                   74  100.0
+                                                   75    0.001
+                                                   76    9.0909
+                                                   77    0.05
+                                                   78    9.0909
+                                                   79    3.2258
+                                                   80   76.9231
+                                                   81  100.0
+ 111  Plasma             acc    141.81        16    8    0.5        Blood
+                                                    9   50.0
+                                                  110  100.0
+                                                  112  100.0
+                                                  113  100.0
+                                                  114  100.0
+                                                  115   49.8331
+                                                  116  100.0
+                                                  117   60.0
+                                                  118  100.0
+                                                  119  100.0
+                                                  120  100.0
+                                                  121   94.97
+                                                  122  100.0
+                                                  123   94.97
+                                                  124  100.0
+ 112  ST0                acc     10.0          1  111   28.2068     Other
+ 113  ST1                acc      3.0          1  111   21.1551     Other
+ 114  ST2                acc      0.01         1  111    0.2821     Other
+ 115  Liver1             acc     20.067        1  111   42.3101     Liver
+ 116  Liver2             acc      0.6          1  115   49.8331     Liver
+ 117  Pancreas           acc      2.5          1  111    2.1155     Pancreas
+ 118  Muscle             acc      0.005        1  111    1.4103     Muscle
+ 119  Kidneys            acc      0.7          1  111    2.8207     Kidneys
+ 120  RBC                acc      0.14         1  111    1.0578     Blood
+ 121  C-bone-S           acc      0.01053      1  111    0.2116     C-bone-S
+ 122  C-bone-V           acc      0.0000821    1  121    5.03       C-bone-V
+ 123  T-bone-S           acc      0.01053      1  111    0.1058     T-bone-S
+ 124  T-bone-V           acc      0.000493     1  123    5.03       T-bone-V
+ 125  Excreta            exc      0.0          1  111    0.0917     -
+ 126  UB-con             acc     12.0          1  111    0.0917     UB-cont
+ 127  Urine              exc      0.0          1  126  100.0        -
 end
