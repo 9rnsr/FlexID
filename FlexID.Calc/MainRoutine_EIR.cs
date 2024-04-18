@@ -72,7 +72,6 @@ namespace FlexID.Calc
             var OutTimeMesh = fileReader.OutReader(OutTimeMeshPath);
 
             var dataList = DataClass.Read_EIR(Input, CalcProgeny);
-            var wT = SubRoutine.WeightTissue(@"lib\EIR\wT.txt");
 
             var RetentionPath = OutputPath + "_Retention.out";
             var CumulativePath = OutputPath + "_Cumulative.out";
@@ -90,7 +89,7 @@ namespace FlexID.Calc
                 CalcOut.dCom = dCom;
                 CalcOut.rCom = rCom;
 
-                MainCalc(CalcTimeMesh, OutTimeMesh, dataList, wT);
+                MainCalc(CalcTimeMesh, OutTimeMesh, dataList);
             }
 
             // テンポラリファイルを並び替えて出力
@@ -102,7 +101,7 @@ namespace FlexID.Calc
             File.Delete(TmpFile);
         }
 
-        private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, List<DataClass> dataList, Dictionary<string, double> wT)
+        private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, List<DataClass> dataList)
         {
             DataClass dataLo;
             DataClass dataHi;
@@ -238,12 +237,11 @@ namespace FlexID.Calc
                 }
             }
 
-            // 標的領域の名称リストを(親核種のS係数データから)取得。
-            var targetRegions = dataList[0].Nuclides[0].TargetRegions;
-            var targetWeights = targetRegions.Select(t => wT[t]).ToArray();
+            // 標的領域の組織加重係数を取得。
+            var targetWeights = dataList[0].TargetWeights;
 
             // 標的領域の名称をヘッダーとして出力。
-            CalcOut.CommitmentTarget(targetRegions, dataList[0]);
+            CalcOut.CommitmentTarget(dataList[0]);
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス

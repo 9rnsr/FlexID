@@ -144,11 +144,6 @@ namespace FlexID.Calc
         /// S係数データにおける各線源領域の名称。
         /// </summary>
         public string[] SourceRegions;
-
-        /// <summary>
-        /// S係数データにおける各標的領域の名称。
-        /// </summary>
-        public string[] TargetRegions;
     }
 
     public class DataClass
@@ -160,6 +155,16 @@ namespace FlexID.Calc
         /// 全ての核種。
         /// </summary>
         public List<NuclideData> Nuclides = new List<NuclideData>();
+
+        /// <summary>
+        /// 組織加重係数データにおける各標的領域の名称。
+        /// </summary>
+        public string[] TargetRegions;
+
+        /// <summary>
+        /// 組織加重係数データにおける各標的領域の係数。
+        /// </summary>
+        public double[] TargetWeights;
 
         /// <summary>
         /// 核種毎のS係数データ表。
@@ -223,8 +228,16 @@ namespace FlexID.Calc
                 };
                 data.Nuclides.Add(nuclide);
 
+                if (!isProgeny)
+                {
+                    // 組織加重係数データを読み込む。
+                    var (ts, ws) = ReadTissueWeights(Path.Combine("lib", "OIR", "wT.txt"));
+                    data.TargetRegions = ts;
+                    data.TargetWeights = ws;
+                }
+
                 // 核種に対応するS係数データを読み込む。
-                var tableSCoeff = ReadSCoeff(nuclide);
+                var tableSCoeff = ReadSCoeff(data, nuclide);
                 data.SCoeffTables.Add(tableSCoeff);
 
                 // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
@@ -353,9 +366,9 @@ namespace FlexID.Calc
         /// <summary>
         /// S係数データを読み込む。
         /// </summary>
-        /// <param name="nuclide">対象核種。線源領域と標的領域の名称が設定される。</param>
+        /// <param name="nuclide">対象核種。線源領域の名称が設定される。</param>
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
-        private static Dictionary<string, double[]> ReadSCoeff(NuclideData nuclide)
+        private static Dictionary<string, double[]> ReadSCoeff(DataClass data, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
             var prg = nuclide.IsProgeny ? "prg_" : "";
@@ -407,9 +420,11 @@ namespace FlexID.Calc
                     }
                 }
 
-                // 核種の線源領域と標的領域の名称を設定する。
+                // 核種が考慮する線源領域の名称を設定する。
                 nuclide.SourceRegions = sources;
-                nuclide.TargetRegions = targets;
+
+                if (!Enumerable.SequenceEqual(data.TargetRegions, targets))
+                    throw Program.Error($"Found mismatch of target region names between tissue weighting factor data and S-Coefficient data for nuclide {nuc}.");
 
                 return table;
             }
@@ -488,13 +503,18 @@ namespace FlexID.Calc
 
                 if (!isProgeny)
                 {
+                    // 組織加重係数データを読み込む。
+                    var (ts, ws) = ReadTissueWeights(Path.Combine("lib", "EIR", "wT.txt"));
+                    data.TargetRegions = ts;
+                    data.TargetWeights = ws;
+
                     // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
                     while (GetNextLine() != age)
                     { }
                 }
 
                 // 核種に対応するS係数データを読み込む。
-                var tableSCoeff = ReadSee(age, nuclide);
+                var tableSCoeff = ReadSee(data, age, nuclide);
                 data.SCoeffTables.Add(tableSCoeff);
 
                 // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
@@ -624,9 +644,9 @@ namespace FlexID.Calc
         /// SEEデータを読み込む。
         /// </summary>
         /// <param name="age">被ばく評価期間の開始年齢</param>
-        /// <param name="nuclide">対象核種。線源領域と標的領域の名称が設定される。</param>
+        /// <param name="nuclide">対象核種。線源領域の名称が設定される。</param>
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
-        private static Dictionary<string, double[]> ReadSee(string age, NuclideData nuclide)
+        private static Dictionary<string, double[]> ReadSee(DataClass data, string age, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
             var file = $"{nuc}SEE.txt";
@@ -662,15 +682,39 @@ namespace FlexID.Calc
                         table[sourceRegion][indexT] = scoeff;
                     }
                 }
-                if (nuclide.TargetRegions != null && !Enumerable.SequenceEqual(nuclide.TargetRegions, targets))
-                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
 
-                // 核種の線源領域と標的領域の名称を設定する。
+                // 核種が考慮する線源領域の名称を設定する。
                 nuclide.SourceRegions = sources;
-                nuclide.TargetRegions = targets;
+
+                if (!Enumerable.SequenceEqual(data.TargetRegions, targets))
+                    throw Program.Error($"Found mismatch of target region names between tissue weighting factor data and S-Coefficient data for nuclide {nuc}.");
 
                 return table;
             }
+        }
+
+        /// <summary>
+        /// 組織加重係数データを読み込む。
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private static (string[] targets, double[] weights) ReadTissueWeights(string fileName)
+        {
+            var targets = new List<string>();
+            var weights = new List<double>();
+
+            var fileLines = File.ReadLines(fileName);
+            foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
+            {
+                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var target = values[0];
+                var weight = double.Parse(values[1]);
+
+                targets.Add(target);
+                weights.Add(weight);
+            }
+
+            return (targets.ToArray(), weights.ToArray());
         }
     }
 }
