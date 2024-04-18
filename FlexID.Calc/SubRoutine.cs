@@ -163,28 +163,26 @@ namespace FlexID.Calc
         /// 蓄積(OIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public static void Accumulation(double dT, Organ organ, Activity Act, double d)
+        public static void Accumulation(double dT, Organ organ, Activity Act)
         {
-            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
-            var alpha = organ.NuclideDecay + organ.BioDecay;
-
-            #region 流入臓器の数ループ
-            double ave = 0.0;
+            var ave = 0.0;  // 流入する平均放射能の積算値
             foreach (var inflow in organ.Inflows)
             {
                 var inflowOrgan = inflow.Organ;
 
-                // 流入元生物学的崩壊定数
-                var beforeBio = inflowOrgan.BioDecayCalc;
+                var beforeBio = inflowOrgan.BioDecayCalc;   // 流入元の生物学的崩壊定数
+                var inflowRate = inflow.Rate;               // 流入割合
 
-                // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
+                // 親核種からの崩壊の場合、同じコンパートメント内で崩壊するので生物学的崩壊定数の影響を受けない。
                 if (inflowOrgan.Nuclide != organ.Nuclide)
                     beforeBio = 1;
 
-                // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入元臓器の生物学的崩壊定数 * 流入割合
-                ave += Act.Now[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+                // 平均放射能の積算値 += 流入元のタイムステップ毎の平均放射能 * 流入元の生物学的崩壊定数 * 流入割合
+                ave += Act.Now[inflowOrgan.Index].ave * beforeBio * inflowRate;
             }
-            #endregion
+
+            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
+            var alpha = organ.NuclideDecay + organ.BioDecay;
 
             Accumulation(alpha, dT, ave, in Act.Pre[organ.Index], ref Act.rNow[organ.Index]);
         }
@@ -195,67 +193,71 @@ namespace FlexID.Calc
         /// <param name="dT">ΔT[day]</param>
         public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
         {
-            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
-            double alpha = organLo.BioDecay;
+            // 年齢区間における補間を行わない場合はtrue。
+            var noAgeInterp = organHi == organLo;
 
-            #region 流入臓器の数ループ
-            double ave = 0.0;
+            var ave = 0.0;  // 流入する平均放射能の積算値
             for (int i = 0; i < organLo.Inflows.Count; i++)
             {
-                var inflowLo = organLo.Inflows[i];
-                var inflowHi = organHi.Inflows[i];
+                var inflow = organLo.Inflows[i];
+                var inflowOrgan = inflow.Organ;
 
-                var inflowOrganLo = inflowLo.Organ;
-                var inflowOrganHi = inflowHi.Organ;
-
-                // 流入元生物学的崩壊定数
-                double beforeBio;
-                if (day <= MainRoutine_EIR.adult)
+                double beforeBio;           // 流入元の生物学的崩壊定数
+                double inflowRate;          // 流入割合
+                if (noAgeInterp)
                 {
-                    if (organLo.Name == "Plasma" && inflowOrganLo.Name == "SI")
-                    {
-                        beforeBio = inflowOrganLo.BioDecay * inflowLo.Rate;
-                        alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
-                    }
-                    else if (organLo.Name == "SI")
-                    {
-                        // 丸め誤差が出るので、Roundするか否か
-                        var beforeBioLo = Math.Round(inflowOrganLo.BioDecay * inflowLo.Rate, 6);
-                        var beforeBioHi = Math.Round(inflowOrganHi.BioDecay * inflowHi.Rate, 6);
-
-                        beforeBio = Interpolation(day, beforeBioLo, beforeBioHi, daysLo, daysHi);
-                        alpha = organLo.BioDecay;
-                    }
-                    else
-                    {
-                        // 丸め誤差が出るので、Roundするか否か
-                        var beforeBioLo = Math.Round(inflowOrganLo.BioDecay * inflowLo.Rate, 6);
-                        var beforeBioHi = Math.Round(inflowOrganHi.BioDecay * inflowHi.Rate, 6);
-
-                        beforeBio = Interpolation(day, beforeBioLo, beforeBioHi, daysLo, daysHi);
-                        alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
-                    }
+                    beforeBio = inflowOrgan.BioDecay;
+                    inflowRate = inflow.Rate;
+                }
+                else if (inflowOrgan.Name == "SI" && organLo.Name == "Plasma")
+                {
+                    // fA値は年齢間の補間を行わない。
+                    beforeBio = inflowOrgan.BioDecay;
+                    inflowRate = inflow.Rate;
                 }
                 else
                 {
-                    beforeBio = inflowOrganLo.BioDecay * inflowLo.Rate;
-                    alpha = organLo.BioDecay;
+                    var inflowHi = organHi.Inflows[i];
+                    var inflowOrganHi = inflowHi.Organ;
+
+                    var beforeBioLo = inflowOrgan.BioDecay;
+                    var beforeBioHi = inflowOrganHi.BioDecay;
+                    beforeBio = Interpolation(day, beforeBioLo, beforeBioHi, daysLo, daysHi);
+
+                    var inflowRateLo = inflow.Rate;
+                    var inflowRateHi = inflowHi.Rate;
+                    inflowRate = Interpolation(day, inflowRateLo, inflowRateHi, daysLo, daysHi);
                 }
 
                 // デバッグ用
-                //if (inflowOrganLo.Name == "Plasma" & organLo.Name == "ULI")
-                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day.ToString(), inflowOrganLo.Name, organLo.Name, beforeBio.ToString());
+                //if (inflowOrganLo.Name == "Plasma" && organLo.Name == "ULI")
+                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day, inflowOrganLo.Name, organLo.Name, beforeBio);
 
-                // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-                if (inflowOrganLo.Nuclide != organLo.Nuclide)
-                    beforeBio = 1 * inflowLo.Rate;
+                // 親核種からの崩壊の場合、同じコンパートメント内で崩壊するので生物学的崩壊定数の影響を受けない。
+                if (inflowOrgan.Nuclide != organLo.Nuclide)
+                    beforeBio = 1;
 
-                // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入
-                ave += Act.Now[inflowOrganLo.Index].ave * beforeBio;
+                // 平均放射能の積算値 += 流入元のタイムステップ毎の平均放射能 * 流入元の生物学的崩壊定数 * 流入割合
+                ave += Act.Now[inflowOrgan.Index].ave * beforeBio * inflowRate;
             }
-            #endregion
 
-            alpha += organLo.NuclideDecay;
+            double organBioDecay;
+            if (noAgeInterp)
+            {
+                organBioDecay = organLo.BioDecay;
+            }
+            else if (organLo.Name == "SI")
+            {
+                // ???
+                organBioDecay = organLo.BioDecay;
+            }
+            else
+            {
+                organBioDecay = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+            }
+
+            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
+            var alpha = organLo.NuclideDecay + organBioDecay;
 
             Accumulation(alpha, dT, ave, in Act.Pre[organLo.Index], ref Act.rNow[organLo.Index]);
         }

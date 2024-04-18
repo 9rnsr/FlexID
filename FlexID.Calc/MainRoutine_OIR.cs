@@ -135,7 +135,7 @@ namespace FlexID.Calc
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            SubRoutine.Accumulation(calcNowT - calcPreT, organ, Act, calcNowT);
+                            SubRoutine.Accumulation(calcNowT - calcPreT, organ, Act);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
