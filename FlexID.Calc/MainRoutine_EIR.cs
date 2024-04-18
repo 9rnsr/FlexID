@@ -72,7 +72,6 @@ namespace FlexID.Calc
             var OutTimeMesh = fileReader.OutReader(OutTimeMeshPath);
 
             var dataList = DataClass.Read_EIR(Input, CalcProgeny);
-            var wT = SubRoutine.WeightTissue(@"lib\EIR\wT.txt");
 
             var RetentionPath = OutputPath + "_Retention.out";
             var CumulativePath = OutputPath + "_Cumulative.out";
@@ -90,7 +89,7 @@ namespace FlexID.Calc
                 CalcOut.dCom = dCom;
                 CalcOut.rCom = rCom;
 
-                MainCalc(CalcTimeMesh, OutTimeMesh, dataList, wT);
+                MainCalc(CalcTimeMesh, OutTimeMesh, dataList);
             }
 
             // テンポラリファイルを並び替えて出力
@@ -102,7 +101,7 @@ namespace FlexID.Calc
             File.Delete(TmpFile);
         }
 
-        private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, List<DataClass> dataList, Dictionary<string, double> wT)
+        private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, List<DataClass> dataList)
         {
             DataClass dataLo;
             DataClass dataHi;
@@ -161,7 +160,7 @@ namespace FlexID.Calc
                         // ある核種における線源領域の1つ。
                         var sourceRegion = nuclide.SourceRegions[indexS];
 
-                        // 各標的組織への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
+                        // 各標的領域への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
                         var see = sourcesSee[offsetS + indexS];
                         see = see ?? (sourcesSee[offsetS + indexS] = new double[31]);
 
@@ -216,7 +215,7 @@ namespace FlexID.Calc
                             // ある核種における線源領域の1つ。
                             var sourceRegion = nuclide.SourceRegions[indexS];
 
-                            // 各標的組織への補間されたS係数値を書き込むための配列を取得する。
+                            // 各標的領域への補間されたS係数値を書き込むための配列を取得する。
                             var see = sourcesSee[offsetS + indexS];
 
                             var seeLo = tableLo[sourceRegion];
@@ -238,12 +237,11 @@ namespace FlexID.Calc
                 }
             }
 
-            // 標的組織の名称リストを(親核種のS係数データから)取得。
-            var targetTissues = dataList[0].Nuclides[0].TargetTissues;
-            var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
+            // 標的領域の組織加重係数を取得。
+            var targetWeights = dataList[0].TargetWeights;
 
-            // 標的組織の名称をヘッダーとして出力。
-            CalcOut.CommitmentTarget(targetTissues, dataList[0]);
+            // 標的領域の名称をヘッダーとして出力。
+            CalcOut.CommitmentTarget(dataList[0]);
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
@@ -255,23 +253,6 @@ namespace FlexID.Calc
                 SubRoutine.Init(Act, dataLo);
 
                 iterLog[calcNowT] = 0;
-
-                var outNowT = calcNowT;
-
-                // 計算結果をテンポラリファイルに出力
-                var flgTime = true;
-                foreach (var organ in dataLo.Organs)
-                {
-                    var nucDecay = organ.NuclideDecay;
-
-                    CalcOut.TemporaryOut(
-                        outNowT, flgTime, organ.ID,
-                        Act.Now[organ.Index].end * nucDecay,
-                        Act.Now[organ.Index].total * nucDecay,
-                        Act.IntakeQuantityNow[organ.Index] * nucDecay,
-                        iterLog[outNowT]);
-                    flgTime = false;
-                }
             }
 
             // 処理中の出力メッシュにおける臓器毎の積算放射能
@@ -291,6 +272,9 @@ namespace FlexID.Calc
                 }
             }
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
+
+            // 初期配分された残留放射能をテンポラリファイルに出力
+            CalcOut.TemporaryOut(0.0, dataLo, Act, OutMeshTotal, iterLog[0.0]);
 
             ctime = 1;
             otime = 1;
@@ -448,10 +432,10 @@ namespace FlexID.Calc
 
                     if (organ.SourceRegion != null)
                     {
-                        // コンパートメントから各標的組織への預託線量を計算する。
+                        // コンパートメントから各標的領域への預託線量を計算する。
                         for (int indexT = 0; indexT < 31; indexT++)
                         {
-                            // 標的組織の部分的な重量。
+                            // 標的領域の部分的な重量。
                             var targetWeight = targetWeights[indexT];
 
                             // S係数(補間あり)。
@@ -474,30 +458,19 @@ namespace FlexID.Calc
                     var outPreT = OutTimeMesh[otime - 1];
                     var outNowT = OutTimeMesh[otime - 0];
 
-                    #region 残留放射能をテンポラリファイルに出力
-                    var flgTime = true;
                     foreach (var organ in dataLo.Organs)
                     {
                         if (organ.Func == OrganFunc.exc)
                             Act.Now[organ.Index].end = Act.Excreta[organ.Index] / (outNowT - outPreT);
-
-                        if (!iterLog.ContainsKey(outNowT))
-                            continue;   // iterの上限を超える場合　iter上限を挙げている為現状到達しないはず
-
-                        var nucDecay = organ.NuclideDecay;
-
-                        CalcOut.TemporaryOut(
-                            outNowT, flgTime, organ.ID,
-                            Act.Now[organ.Index].end * nucDecay,
-                            OutMeshTotal[organ.Index] * nucDecay,
-                            Act.IntakeQuantityNow[organ.Index] * nucDecay,
-                            iterLog[outNowT]);
-                        flgTime = false;
                     }
-                    ClearOutMeshTotal();
-                    #endregion
+
+                    // 残留放射能をテンポラリファイルに出力
+                    CalcOut.TemporaryOut(outNowT, dataLo, Act, OutMeshTotal, iterLog[outNowT]);
 
                     CalcOut.CommitmentOut(outNowT, outPreT, WholeBody, preBody, Result, preResult);
+
+                    ClearOutMeshTotal();
+
                     preBody = WholeBody;
                     Array.Copy(Result, preResult, Result.Length);
                     otime++;

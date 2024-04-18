@@ -59,7 +59,6 @@ namespace FlexID.Calc
             var OutTimeMesh = fileReader.OutReader(OutTimeMeshPath);
 
             var data = DataClass.Read(Input, CalcProgeny);
-            var wT = SubRoutine.WeightTissue(@"lib\OIR\wT.txt");
 
             var RetentionPath = OutputPath + "_Retention.out";
             var CumulativePath = OutputPath + "_Cumulative.out";
@@ -77,7 +76,7 @@ namespace FlexID.Calc
                 CalcOut.dCom = dCom;
                 CalcOut.rCom = rCom;
 
-                MainCalc(CalcTimeMesh, OutTimeMesh, data, wT);
+                MainCalc(CalcTimeMesh, OutTimeMesh, data);
             }
 
             // テンポラリファイルを並び替えて出力
@@ -89,7 +88,7 @@ namespace FlexID.Calc
             File.Delete(TmpFile);
         }
 
-        private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, DataClass data, Dictionary<string, double> wT)
+        private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, DataClass data)
         {
             const double convergence = 1E-8; // 収束値
             const int iterMax = 1500;  // iterationの最大回数
@@ -97,12 +96,11 @@ namespace FlexID.Calc
             // 預託期間[day]を取得。
             var commitmentDays = SubRoutine.CommitmentPeriodToDays(CommitmentPeriod);
 
-            // 標的組織の名称リストを(親核種のS係数データから)取得。
-            var targetTissues = data.Nuclides[0].TargetTissues;
-            var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
+            // 標的領域の組織加重係数を取得。
+            var targetWeights = data.TargetWeights;
 
-            // 標的組織の名称をヘッダーとして出力。
-            CalcOut.CommitmentTarget(targetTissues, data);
+            // 標的領域の名称をヘッダーとして出力。
+            CalcOut.CommitmentTarget(data);
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
@@ -114,23 +112,6 @@ namespace FlexID.Calc
                 SubRoutine.Init(Act, data);
 
                 iterLog[calcNowT] = 0;
-
-                var outNowT = calcNowT;
-
-                // 計算結果をテンポラリファイルに出力
-                var flgTime = true;
-                foreach (var organ in data.Organs)
-                {
-                    var nucDecay = organ.NuclideDecay;
-
-                    CalcOut.TemporaryOut(
-                        outNowT, flgTime, organ.ID,
-                        Act.Now[organ.Index].end * nucDecay,
-                        Act.Now[organ.Index].total * nucDecay,
-                        Act.IntakeQuantityNow[organ.Index] * nucDecay,
-                        iterLog[outNowT]);
-                    flgTime = false;
-                }
             }
 
             // 処理中の出力メッシュにおける臓器毎の積算放射能
@@ -150,6 +131,9 @@ namespace FlexID.Calc
                 }
             }
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
+
+            // 初期配分された残留放射能をテンポラリファイルに出力
+            CalcOut.TemporaryOut(0.0, data, Act, OutMeshTotal, iterLog[0.0]);
 
             ctime = 1;
             otime = 1;
@@ -267,10 +251,10 @@ namespace FlexID.Calc
 
                     if (organ.SourceRegion != null)
                     {
-                        // コンパートメントから各標的組織への預託線量を計算する。
+                        // コンパートメントから各標的領域への預託線量を計算する。
                         for (int indexT = 0; indexT < 43; indexT++)
                         {
-                            // 標的組織の部分的な重量。
+                            // 標的領域の部分的な重量。
                             var targetWeight = targetWeights[indexT];
 
                             // S係数(男女平均)。
@@ -293,30 +277,19 @@ namespace FlexID.Calc
                     var outPreT = OutTimeMesh[otime - 1];
                     var outNowT = OutTimeMesh[otime - 0];
 
-                    #region 残留放射能をテンポラリファイルに出力
-                    var flgTime = true;
                     foreach (var organ in data.Organs)
                     {
                         if (organ.Func == OrganFunc.exc)
                             Act.Now[organ.Index].end = Act.Excreta[organ.Index] / (outNowT - outPreT);
-
-                        if (!iterLog.ContainsKey(outNowT))
-                            continue;   // iterの上限を超える場合　iter上限を挙げている為現状到達しないはず
-
-                        var nucDecay = organ.NuclideDecay;
-
-                        CalcOut.TemporaryOut(
-                            outNowT, flgTime, organ.ID,
-                            Act.Now[organ.Index].end * nucDecay,
-                            OutMeshTotal[organ.Index] * nucDecay,
-                            Act.IntakeQuantityNow[organ.Index] * nucDecay,
-                            iterLog[outNowT]);
-                        flgTime = false;
                     }
-                    ClearOutMeshTotal();
-                    #endregion
+
+                    // 残留放射能をテンポラリファイルに出力
+                    CalcOut.TemporaryOut(outNowT, data, Act, OutMeshTotal, iterLog[outNowT]);
 
                     CalcOut.CommitmentOut(outNowT, outPreT, WholeBody, preBody, Result, preResult);
+
+                    ClearOutMeshTotal();
+
                     preBody = WholeBody;
                     Array.Copy(Result, preResult, Result.Length);
                     otime++;

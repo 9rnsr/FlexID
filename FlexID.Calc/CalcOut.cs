@@ -16,18 +16,27 @@ namespace FlexID.Calc
         // 線量率用
         public StreamWriter rCom;
 
-        // テンポラリファイルに出力
-        public void TemporaryOut(double outT, bool flgTime, int organId, double end, double total, double cumulative, int iter)
+        // 計算結果をテンポラリファイルに出力
+        public void TemporaryOut(double outT, DataClass data, Activity Act, double[] OutMeshTotal, int iter)
         {
-            if (flgTime)
-                wTmp.WriteLine(" {0:0.000000E+00}", outT);
+            wTmp.WriteLine(" {0:0.000000E+00}", outT);
 
-            wTmp.WriteLine(" {0,3:0}  {1:0.00000000E+00}    {2:0.00000000E+00}    {3:0.00000000E+00}     {4,3:0}",
-                            organId, end, total, cumulative, iter);
+            foreach (var organ in data.Organs)
+            {
+                var nucDecay = organ.NuclideDecay;
+
+                var organId = organ.ID;
+                var end = Act.Now[organ.Index].end * nucDecay;
+                var total = OutMeshTotal[organ.Index] * nucDecay;
+                var cumulative = Act.IntakeQuantityNow[organ.Index] * nucDecay;
+
+                wTmp.WriteLine(" {0,3:0}  {1:0.00000000E+00}    {2:0.00000000E+00}    {3:0.00000000E+00}     {4,3:0}",
+                                organId, end, total, cumulative, iter);
+            }
         }
 
-        // 預託線量標的組織出力
-        public void CommitmentTarget(string[] targets, DataClass data)
+        // 預託線量のヘッダー出力
+        public void CommitmentTarget(DataClass data)
         {
             var nuclide = data.Nuclides[0];
 
@@ -41,10 +50,10 @@ namespace FlexID.Calc
             rCom.Write("     Time    ");
             rCom.Write("     WholeBody   ");
 
-            for (int i = 0; i < targets.Length; i++)
+            for (int i = 0; i < data.TargetRegions.Length; i++)
             {
-                dCom.Write("  {0,-12:n}", targets[i]);
-                rCom.Write("  {0,-12:n}", targets[i]);
+                dCom.Write("  {0,-12:n}", data.TargetRegions[i]);
+                rCom.Write("  {0,-12:n}", data.TargetRegions[i]);
             }
             dCom.WriteLine();
             dCom.Write("     [day]       ");
@@ -52,7 +61,7 @@ namespace FlexID.Calc
             rCom.WriteLine();
             rCom.Write("     [day]       ");
             rCom.Write("  [Sv/h]      ");
-            for (int i = 0; i < targets.Length; i++)
+            for (int i = 0; i < data.TargetRegions.Length; i++)
             {
                 dCom.Write("  [Sv/Bq]     ");
                 rCom.Write("  [Sv/h]      ");
@@ -61,7 +70,7 @@ namespace FlexID.Calc
             rCom.WriteLine();
         }
 
-        // 預託線量計算結果出力
+        // 預託線量の計算結果出力
         public void CommitmentOut(double now, double pre, double WholeBody, double preBody, double[] Result, double[] preResult)
         {
             dCom.Write("{0,14:0.000000E+00}  ", now);
@@ -134,8 +143,8 @@ namespace FlexID.Calc
                                 values = AllLines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                                 if (nuclide == Organ.Nuclide)
                                 {
-                                    r.Write("  {0:0.00000000E+00}", values[1]);
-                                    c.Write("  {0:0.00000000E+00}", values[3]);
+                                    r.Write("  {0:0.00000000E+00}", values[1]); // end
+                                    c.Write("  {0:0.00000000E+00}", values[3]); // cumulative
                                 }
                                 i++;
                             }

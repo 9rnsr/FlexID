@@ -186,37 +186,7 @@ namespace FlexID.Calc
             }
             #endregion
 
-            var alpha_dT = alpha * dT;
-
-            double rini = Act.Pre[organ.Index].end;
-            double rend;
-            double rtotal;
-            if (alpha_dT <= 1E-9)
-            {
-                rend = ave * alpha_dT / alpha + rini * Math.Exp(-alpha_dT);
-                rtotal = ave * (dT - alpha_dT / alpha) / alpha + rini / alpha * (alpha_dT);
-            }
-            else
-            {
-                if (alpha_dT >= 100)
-                    alpha_dT = 100;
-
-                rend = ave * (1 - Math.Exp(-alpha_dT)) / alpha + rini * Math.Exp(-alpha_dT);
-                rtotal = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
-            }
-
-            Act.rNow[organ.Index].ini = rini;
-            Act.rNow[organ.Index].ave = rtotal / dT;    // 当該臓器の平均放射能 = 当該臓器の積算放射能 / Δt
-            Act.rNow[organ.Index].end = rend;
-            Act.rNow[organ.Index].total = rtotal;
-
-            // 計算値が1E-60以下の場合は0とする
-            if (Act.rNow[organ.Index].ave <= 1e-60)
-                Act.rNow[organ.Index].ave = 0;
-            if (Act.rNow[organ.Index].end <= 1e-60)
-                Act.rNow[organ.Index].end = 0;
-            if (Act.rNow[organ.Index].total <= 1e-60)
-                Act.rNow[organ.Index].total = 0;
+            Accumulation(alpha, dT, ave, in Act.Pre[organ.Index], ref Act.rNow[organ.Index]);
         }
 
         /// <summary>
@@ -277,15 +247,28 @@ namespace FlexID.Calc
 
             alpha += organLo.NuclideDecay;
 
+            Accumulation(alpha, dT, ave, in Act.Pre[organLo.Index], ref Act.rNow[organLo.Index]);
+        }
+
+        /// <summary>
+        /// コンパートメントの蓄積計算。
+        /// </summary>
+        /// <param name="alpha">崩壊定数[/day]。</param>
+        /// <param name="dT">時間メッシュの幅[day]</param>
+        /// <param name="ave">流入する平均放射能[Bq/day]</param>
+        /// <param name="pre">前回時間メッシュの計算結果。</param>
+        /// <param name="now">今回時間メッシュの計算結果。</param>
+        private static void Accumulation(double alpha, double dT, double ave, in OrganActivity pre, ref OrganActivity now)
+        {
             var alpha_dT = alpha * dT;
 
-            double rini = Act.Pre[organLo.Index].end;
-            double rend;
-            double rtotal;
+            double rini = pre.end;  // 初期放射能
+            double rend;            // 末期放射能
+            double rtot;            // 積算放射能
             if (alpha_dT <= 1E-9)
             {
-                rend = ave * (alpha_dT) / alpha + rini * Math.Exp(-alpha_dT);
-                rtotal = ave * (dT - alpha_dT / alpha) / alpha + rini / alpha * (alpha_dT);
+                rend = ave * alpha_dT / alpha + rini * Math.Exp(-alpha_dT);
+                rtot = ave * (dT - alpha_dT / alpha) / alpha + rini / alpha * alpha_dT;
             }
             else
             {
@@ -293,21 +276,23 @@ namespace FlexID.Calc
                     alpha_dT = 100;
 
                 rend = ave * (1 - Math.Exp(-alpha_dT)) / alpha + rini * Math.Exp(-alpha_dT);
-                rtotal = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
+                rtot = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
             }
 
-            Act.rNow[organLo.Index].ini = rini;
-            Act.rNow[organLo.Index].ave = rtotal / dT;    // 当該臓器の平均放射能 = 当該臓器の積算放射能 / Δt
-            Act.rNow[organLo.Index].end = rend;
-            Act.rNow[organLo.Index].total = rtotal;
+            var rave = rtot / dT;   // 平均放射能 = 積算放射能 / Δt
 
             // 計算値が1E-60以下の場合は0とする
-            if (Act.rNow[organLo.Index].ave <= 1e-60)
-                Act.rNow[organLo.Index].ave = 0;
-            if (Act.rNow[organLo.Index].end <= 1e-60)
-                Act.rNow[organLo.Index].end = 0;
-            if (Act.rNow[organLo.Index].total <= 1e-60)
-                Act.rNow[organLo.Index].total = 0;
+            if (rave <= 1E-60)
+                rave = 0;
+            if (rend <= 1E-60)
+                rend = 0;
+            if (rtot <= 1E-60)
+                rtot = 0;
+
+            now.ini = rini;
+            now.ave = rave;
+            now.end = rend;
+            now.total = rtot;
         }
 
         public static double Interpolation(double day, double valueLo, double valueHi, int daysLo, int daysHi)
@@ -315,26 +300,6 @@ namespace FlexID.Calc
             double value;
             value = valueLo + (day - daysLo) * (valueHi - valueLo) / (daysHi - daysLo);
             return value;
-        }
-
-        /// <summary>
-        /// 組織加重係数の読み込み。
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public static Dictionary<string, double> WeightTissue(string fileName)
-        {
-            var wT = new Dictionary<string, double>();
-
-            var fileLines = File.ReadLines(fileName);
-            foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
-            {
-                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var tissueName = values[0];
-                var weight = double.Parse(values[1]);
-                wT[tissueName] = weight;
-            }
-            return wT;
         }
     }
 }
