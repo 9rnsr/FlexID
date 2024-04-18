@@ -202,46 +202,56 @@ namespace FlexID.Calc
             double ave = 0.0;
             for (int i = 0; i < organLo.Inflows.Count; i++)
             {
-                // 丸め誤差が出るので、Roundするか否か
-                var inflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
-                var inflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
+                var inflowLo = organLo.Inflows[i];
+                var inflowHi = organHi.Inflows[i];
+
+                var inflowOrganLo = inflowLo.Organ;
+                var inflowOrganHi = inflowHi.Organ;
 
                 // 流入元生物学的崩壊定数
                 double beforeBio;
                 if (day <= MainRoutine_EIR.adult)
                 {
-                    if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
+                    if (organLo.Name == "Plasma" && inflowOrganLo.Name == "SI")
                     {
-                        beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                        beforeBio = inflowOrganLo.BioDecay * inflowLo.Rate;
                         alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                     else if (organLo.Name == "SI")
                     {
-                        beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
+                        // 丸め誤差が出るので、Roundするか否か
+                        var beforeBioLo = Math.Round(inflowOrganLo.BioDecay * inflowLo.Rate, 6);
+                        var beforeBioHi = Math.Round(inflowOrganHi.BioDecay * inflowHi.Rate, 6);
+
+                        beforeBio = Interpolation(day, beforeBioLo, beforeBioHi, daysLo, daysHi);
                         alpha = organLo.BioDecay;
                     }
                     else
                     {
-                        beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
+                        // 丸め誤差が出るので、Roundするか否か
+                        var beforeBioLo = Math.Round(inflowOrganLo.BioDecay * inflowLo.Rate, 6);
+                        var beforeBioHi = Math.Round(inflowOrganHi.BioDecay * inflowHi.Rate, 6);
+
+                        beforeBio = Interpolation(day, beforeBioLo, beforeBioHi, daysLo, daysHi);
                         alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                 }
                 else
                 {
-                    beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                    beforeBio = inflowOrganLo.BioDecay * inflowLo.Rate;
                     alpha = organLo.BioDecay;
                 }
 
                 // デバッグ用
-                //if (organLo.Inflows[i].Organ.Name == "Plasma" & organLo.Name == "ULI")
-                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day.ToString(), organLo.Inflows[i].Organ.Name, organLo.Name, beforeBio.ToString());
+                //if (inflowOrganLo.Name == "Plasma" & organLo.Name == "ULI")
+                //    System.Diagnostics.Debug.Print("{0}  {1,-14:n}  {2,-14:n}  {3}", day.ToString(), inflowOrganLo.Name, organLo.Name, beforeBio.ToString());
 
                 // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-                if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
-                    beforeBio = 1 * organLo.Inflows[i].Rate;
+                if (inflowOrganLo.Nuclide != organLo.Nuclide)
+                    beforeBio = 1 * inflowLo.Rate;
 
                 // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入
-                ave += Act.Now[organLo.Inflows[i].Organ.Index].ave * beforeBio;
+                ave += Act.Now[inflowOrganLo.Index].ave * beforeBio;
             }
             #endregion
 
