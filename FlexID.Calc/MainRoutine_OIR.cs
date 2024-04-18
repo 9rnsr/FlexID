@@ -97,12 +97,12 @@ namespace FlexID.Calc
             // 預託期間[day]を取得。
             var commitmentDays = SubRoutine.CommitmentPeriodToDays(CommitmentPeriod);
 
-            // 標的組織の名称リストを(親核種のS係数データから)取得。
-            var targetTissues = data.Nuclides[0].TargetTissues;
-            var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
+            // 標的領域の名称リストを(親核種のS係数データから)取得。
+            var targetRegions = data.Nuclides[0].TargetRegions;
+            var targetWeights = targetRegions.Select(t => wT[t]).ToArray();
 
-            // 標的組織の名称をヘッダーとして出力。
-            CalcOut.CommitmentTarget(targetTissues, data);
+            // 標的領域の名称をヘッダーとして出力。
+            CalcOut.CommitmentTarget(targetRegions, data);
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
@@ -253,10 +253,10 @@ namespace FlexID.Calc
 
                     if (organ.SourceRegion != null)
                     {
-                        // コンパートメントから各標的組織への預託線量を計算する。
+                        // コンパートメントから各標的領域への預託線量を計算する。
                         for (int indexT = 0; indexT < 43; indexT++)
                         {
-                            // 標的組織の部分的な重量。
+                            // 標的領域の部分的な重量。
                             var targetWeight = targetWeights[indexT];
 
                             // S係数(男女平均)。

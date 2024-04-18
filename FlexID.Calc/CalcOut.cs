@@ -35,7 +35,7 @@ namespace FlexID.Calc
             }
         }
 
-        // 預託線量標的組織出力
+        // 預託線量のヘッダー出力
         public void CommitmentTarget(string[] targets, DataClass data)
         {
             var nuclide = data.Nuclides[0];
@@ -70,7 +70,7 @@ namespace FlexID.Calc
             rCom.WriteLine();
         }
 
-        // 預託線量計算結果出力
+        // 預託線量の計算結果出力
         public void CommitmentOut(double now, double pre, double WholeBody, double preBody, double[] Result, double[] preResult)
         {
             dCom.Write("{0,14:0.000000E+00}  ", now);

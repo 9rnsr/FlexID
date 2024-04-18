@@ -161,7 +161,7 @@ namespace FlexID.Calc
                         // ある核種における線源領域の1つ。
                         var sourceRegion = nuclide.SourceRegions[indexS];
 
-                        // 各標的組織への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
+                        // 各標的領域への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
                         var see = sourcesSee[offsetS + indexS];
                         see = see ?? (sourcesSee[offsetS + indexS] = new double[31]);
 
@@ -216,7 +216,7 @@ namespace FlexID.Calc
                             // ある核種における線源領域の1つ。
                             var sourceRegion = nuclide.SourceRegions[indexS];
 
-                            // 各標的組織への補間されたS係数値を書き込むための配列を取得する。
+                            // 各標的領域への補間されたS係数値を書き込むための配列を取得する。
                             var see = sourcesSee[offsetS + indexS];
 
                             var seeLo = tableLo[sourceRegion];
@@ -238,12 +238,12 @@ namespace FlexID.Calc
                 }
             }
 
-            // 標的組織の名称リストを(親核種のS係数データから)取得。
-            var targetTissues = dataList[0].Nuclides[0].TargetTissues;
-            var targetWeights = targetTissues.Select(t => wT[t]).ToArray();
+            // 標的領域の名称リストを(親核種のS係数データから)取得。
+            var targetRegions = dataList[0].Nuclides[0].TargetRegions;
+            var targetWeights = targetRegions.Select(t => wT[t]).ToArray();
 
-            // 標的組織の名称をヘッダーとして出力。
-            CalcOut.CommitmentTarget(targetTissues, dataList[0]);
+            // 標的領域の名称をヘッダーとして出力。
+            CalcOut.CommitmentTarget(targetRegions, dataList[0]);
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
@@ -434,10 +434,10 @@ namespace FlexID.Calc
 
                     if (organ.SourceRegion != null)
                     {
-                        // コンパートメントから各標的組織への預託線量を計算する。
+                        // コンパートメントから各標的領域への預託線量を計算する。
                         for (int indexT = 0; indexT < 31; indexT++)
                         {
-                            // 標的組織の部分的な重量。
+                            // 標的領域の部分的な重量。
                             var targetWeight = targetWeights[indexT];
 
                             // S係数(補間あり)。
