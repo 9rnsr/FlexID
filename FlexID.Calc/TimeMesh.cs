@@ -31,6 +31,33 @@ namespace FlexID.Calc
     /// </summary>
     public class TimeMesh
     {
+        private static Regex patternPeriod =
+            new Regex(@"^ *(?<num>\d+) *(?<unit>days|months|years) *$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// 預託期間を秒数に換算する。
+        /// </summary>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public static long CommitmentPeriodToSeconds(string period)
+        {
+            var m = patternPeriod.Match(period);
+            if (m.Success)
+            {
+                var num = long.Parse(m.Groups["num"].Value);
+                var unit = m.Groups["unit"].Value.ToLowerInvariant();
+                var days = unit == "days" ? num :
+                           unit == "months" ? num * 31 :
+                           unit == "years" ? num * 365 :
+                           throw Program.Error("Please enter the period ('days', 'months', 'years').");
+                return days * 24 * 60 * 60;
+            }
+            else
+            {
+                throw Program.Error("Please enter integer for the Commitment Period.");
+            }
+        }
+
         private static Regex patternTime = new Regex(
             @"^ *(?<num>\d+) *(?<unit>s(?:ec(?:ond)?s?)?|m(?:in(?:ute)?s?)?|h(?:ours?)?|d(?:ays?)?|y(?:ears?)?) *$",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -55,6 +82,28 @@ namespace FlexID.Calc
                 unit == 'd' ? 60 * 60 * 24 :
                 unit == 'y' ? 60 * 60 * 24 * 365 : throw new NotSupportedException("unreachable");
             return timeValue * multiplier;
+        }
+
+        /// <summary>
+        /// 日数(整数値)を秒数に換算する。
+        /// </summary>
+        /// <param name="days"></param>
+        /// <returns></returns>
+        public static long DaysToSeconds(int days)
+        {
+            const long factor = 24 * 60 * 60;
+            return days * factor;
+        }
+
+        /// <summary>
+        /// 秒数を日数(実数値)に換算する。
+        /// </summary>
+        /// <param name="outT"></param>
+        /// <returns></returns>
+        public static double SecondsToDays(long outT)
+        {
+            const double factor = 24 * 60 * 60;
+            return outT / factor;
         }
 
         private readonly TimeMeshBoundary[] boundaries;
