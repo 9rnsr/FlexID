@@ -158,14 +158,14 @@ namespace FlexID.Calc
             }
         }
 
-        public void IterOut(List<double> CalcTimeMesh, Dictionary<double, int> iterLog, string IterPath)
+        public void IterOut(List<(double time, int iter)> iterLog, string IterPath)
         {
             using (var w = new StreamWriter(IterPath, false, Encoding.UTF8))
             {
                 w.WriteLine("   time(day)    Iteration");
-                for (int i = 0; i < iterLog.Count; i++)
+                foreach (var (time, iter) in iterLog)
                 {
-                    w.WriteLine("  {0:0.00000E+00}     {1,3:0}", CalcTimeMesh[i], iterLog[CalcTimeMesh[i]]);
+                    w.WriteLine("  {0:0.00000E+00}     {1,3:0}", time, iter);
                 }
             }
         }

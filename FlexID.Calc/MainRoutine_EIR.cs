@@ -51,9 +51,6 @@ namespace FlexID.Calc
 
         private CalcOut CalcOut { get; } = new CalcOut();
 
-        // 反復回数カウント
-        private Dictionary<double, int> iterLog = new Dictionary<double, int>();
-
         // EIR計算時の切替年齢
         private int month3 = 100;
         private int year1 = 365;
@@ -245,14 +242,12 @@ namespace FlexID.Calc
 
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
-            int otime = 0;  // 出力時間メッシュのインデックス
+            int otime;      // 出力時間メッシュのインデックス
             {
                 var calcNowT = CalcTimeMesh[ctime];
 
                 // inputの初期値を各臓器に振り分ける
                 SubRoutine.Init(Act, dataLo);
-
-                iterLog[calcNowT] = 0;
             }
 
             // 処理中の出力メッシュにおける臓器毎の積算放射能
@@ -263,6 +258,8 @@ namespace FlexID.Calc
             var Result = new double[31];  // 組織毎の計算結果
             var preResult = new double[31];
 
+            int outIter;
+
             void ClearOutMeshTotal()
             {
                 foreach (var organ in dataLo.Organs)
@@ -270,11 +267,13 @@ namespace FlexID.Calc
                     OutMeshTotal[organ.Index] = 0;
                     Act.Excreta[organ.Index] = 0;
                 }
+
+                outIter = 0;
             }
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
 
             // 初期配分された残留放射能をテンポラリファイルに出力
-            CalcOut.TemporaryOut(0.0, dataLo, Act, OutMeshTotal, iterLog[0.0]);
+            CalcOut.TemporaryOut(0.0, dataLo, Act, OutMeshTotal, 0);
 
             ctime = 1;
             otime = 1;
@@ -391,7 +390,11 @@ namespace FlexID.Calc
                         // 前回との差が全ての臓器で収束した場合
                         if (flgIter)
                         {
-                            iterLog[calcNowT] = iter;
+                            // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
+                            outIter = iter;
+
+                            // // 出力メッシュ内での総反復回数を保存する。
+                            // // outIter += iter;
                             break;
                         }
                     }
@@ -465,7 +468,7 @@ namespace FlexID.Calc
                     }
 
                     // 残留放射能をテンポラリファイルに出力
-                    CalcOut.TemporaryOut(outNowT, dataLo, Act, OutMeshTotal, iterLog[outNowT]);
+                    CalcOut.TemporaryOut(outNowT, dataLo, Act, OutMeshTotal, outIter);
 
                     CalcOut.CommitmentOut(outNowT, outPreT, WholeBody, preBody, Result, preResult);
 
