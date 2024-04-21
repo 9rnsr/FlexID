@@ -49,7 +49,7 @@ namespace FlexID.Calc
 
         private Activity Act { get; } = new Activity();
 
-        private CalcOut CalcOut { get; } = new CalcOut();
+        private CalcOut CalcOut { get; set; }
 
         // EIR計算時の切替年齢
         private int month3 = 100;
@@ -61,8 +61,6 @@ namespace FlexID.Calc
 
         public void Main()
         {
-            string TmpFile = Path.GetTempFileName();
-
             var fileReader = new FileReader();
             var Input = fileReader.InfoReader(InputPath);
             var CalcTimeMesh = fileReader.MeshReader(CalcTimeMeshPath);
@@ -70,32 +68,10 @@ namespace FlexID.Calc
 
             var dataList = DataClass.Read_EIR(Input, CalcProgeny);
 
-            var RetentionPath = OutputPath + "_Retention.out";
-            var CumulativePath = OutputPath + "_Cumulative.out";
-            var DosePath = OutputPath + "_Dose.out";
-            var DoseRatePath = OutputPath + "_DoseRate.out";
-            //var IterPath = OutputPath + "_IterLog.out";
-
-            Directory.CreateDirectory(Path.GetDirectoryName(RetentionPath));
-
-            using (var wTmp = new StreamWriter(TmpFile)) // テンポラリファイル
-            using (var dCom = new StreamWriter(DosePath, false, Encoding.UTF8)) // 実効線量
-            using (var rCom = new StreamWriter(DoseRatePath, false, Encoding.UTF8)) // 線量率
+            using (CalcOut = new CalcOut(dataList[0], OutputPath))
             {
-                CalcOut.wTmp = wTmp;
-                CalcOut.dCom = dCom;
-                CalcOut.rCom = rCom;
-
                 MainCalc(CalcTimeMesh, OutTimeMesh, dataList);
             }
-
-            // テンポラリファイルを並び替えて出力
-            CalcOut.ActivityOut(RetentionPath, CumulativePath, TmpFile, dataList[0]);
-
-            // Iter出力
-            //CalcOut.IterOut(CalcTimeMesh, iterLog, IterPath);
-
-            File.Delete(TmpFile);
         }
 
         private void MainCalc(List<double> CalcTimeMesh, List<double> OutTimeMesh, List<DataClass> dataList)
@@ -237,9 +213,6 @@ namespace FlexID.Calc
             // 標的領域の組織加重係数を取得。
             var targetWeights = dataList[0].TargetWeights;
 
-            // 標的領域の名称をヘッダーとして出力。
-            CalcOut.CommitmentTarget(dataList[0]);
-
             // 経過時間=0での計算結果を処理する
             int ctime = 0;  // 計算時間メッシュのインデックス
             int otime;      // 出力時間メッシュのインデックス
@@ -273,7 +246,7 @@ namespace FlexID.Calc
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
 
             // 初期配分された残留放射能をテンポラリファイルに出力
-            CalcOut.TemporaryOut(0.0, dataLo, Act, OutMeshTotal, 0);
+            CalcOut.ActivityOut(0.0, Act, OutMeshTotal, 0);
 
             ctime = 1;
             otime = 1;
@@ -468,7 +441,7 @@ namespace FlexID.Calc
                     }
 
                     // 残留放射能をテンポラリファイルに出力
-                    CalcOut.TemporaryOut(outNowT, dataLo, Act, OutMeshTotal, outIter);
+                    CalcOut.ActivityOut(outNowT, Act, OutMeshTotal, outIter);
 
                     CalcOut.CommitmentOut(outNowT, outPreT, WholeBody, preBody, Result, preResult);
 
