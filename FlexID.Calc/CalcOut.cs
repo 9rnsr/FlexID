@@ -1,171 +1,281 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace FlexID.Calc
 {
-    class CalcOut
+    class CalcOut : IDisposable
     {
-        // テンポラリファイル用
-        public StreamWriter wTmp;
+        private readonly DataClass data;
 
-        // 線量係数用
-        public StreamWriter dCom;
+        public string DosePath { get; }
+        public string DoseRatePath { get; }
+        public string RetentionPath { get; }
+        public string CumulativePath { get; }
 
-        // 線量率用
-        public StreamWriter rCom;
+        // 線量の出力ファイル用
+        private StreamWriter wDose;
 
-        // 計算結果をテンポラリファイルに出力
-        public void TemporaryOut(double outT, DataClass data, Activity Act, double[] OutMeshTotal, int iter)
+        // 線量率の出力ファイル用
+        private StreamWriter wRate;
+
+        // 残留放射能の出力ファイル用
+        private StreamWriter[] wsRete;
+
+        // 積算放射能の出力ファイル用
+        private StreamWriter[] wsCumu;
+
+        private StreamWriter[] wsOrgansRete;
+        private StreamWriter[] wsOrgansCumu;
+
+        public CalcOut(DataClass data, string outputPath)
         {
-            wTmp.WriteLine(" {0:0.000000E+00}", outT);
+            this.data = data;
+
+            var outputDir = Path.GetDirectoryName(outputPath);
+            Directory.CreateDirectory(outputDir);
+
+            DosePath = outputPath + "_Dose.out";
+            DoseRatePath = outputPath + "_DoseRate.out";
+            RetentionPath = outputPath + "_Retention.out";
+            CumulativePath = outputPath + "_Cumulative.out";
+
+            // 預託線量の出力ファイルを用意する。
+            wDose = new StreamWriter(DosePath, false, Encoding.UTF8);
+            wRate = new StreamWriter(DoseRatePath, false, Encoding.UTF8);
+
+            // 残留放射能の出力ファイルを用意する。
+            wsRete = CreateWriters(RetentionPath).ToArray();
+            wsCumu = CreateWriters(CumulativePath).ToArray();
+
+            IEnumerable<StreamWriter> CreateWriters(string basePath)
+            {
+                // 親核種の出力ファイルはそのまま結果ファイルになる。
+                yield return new StreamWriter(basePath, false, Encoding.UTF8);
+
+                // 子孫核種の出力ファイルは一時ファイルとし、計算出力時に削除する。
+                for (int n = 1; n < data.Nuclides.Count; n++)
+                {
+                    var path = basePath + $".{n}";
+                    var writer = new StreamWriter(path, false, Encoding.UTF8);
+
+                    // 隠しファイル属性を設定しておく。
+                    File.SetAttributes(path, FileAttributes.Hidden);
+
+                    yield return writer;
+                }
+            }
+
+            // 残留放射能の数値を出力するStreamWriterを
+            // コンパートメント毎にorgan.Indexでアクセスできるようにする。
+            wsOrgansRete = GetOrganWriters(wsRete).ToArray();
+            wsOrgansCumu = GetOrganWriters(wsCumu).ToArray();
+
+            IEnumerable<StreamWriter> GetOrganWriters(StreamWriter[] ws)
+            {
+                foreach (var organ in data.Organs)
+                {
+                    var indexN = data.Nuclides.IndexOf(organ.Nuclide);
+                    yield return ws[indexN];
+                }
+            }
+
+            // コンパートメントの名称をヘッダ―として出力。
+            ActivityHeader();
+
+            // 標的領域の名称をヘッダーとして出力。
+            CommitmentHeader();
+        }
+
+        /// <summary>
+        /// 残留放射能の出力ファイルにヘッダーを書き出す。
+        /// </summary>
+        private void ActivityHeader()
+        {
+            // Retention
+            foreach (var nuclide in data.Nuclides)
+            {
+                var indexN = data.Nuclides.IndexOf(nuclide);
+                var wRete = wsRete[indexN];
+
+                wRete.WriteLine(" {0} {1} {2}", "Retention ", nuclide.Nuclide, nuclide.IntakeRoute);
+
+                wRete.Write("     Time      ");
+                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                    wRete.Write("  {0,-14:n}", organ.Name);
+                wRete.WriteLine();
+
+                wRete.Write("     [day]       ");
+                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                    wRete.Write("  [Bq/Bq]       ");
+                wRete.WriteLine();
+            }
+
+            // Cumulative
+            foreach (var nuclide in data.Nuclides)
+            {
+                var indexN = data.Nuclides.IndexOf(nuclide);
+                var wCumu = wsCumu[indexN];
+
+                wCumu.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuclide.Nuclide, nuclide.IntakeRoute);
+                wCumu.Write("     Time      ");
+                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                    wCumu.Write("  {0,-14:n}", organ.Name);
+                wCumu.WriteLine();
+
+                wCumu.Write("     [day]       ");
+                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                    wCumu.Write("     [Bq]       ");
+                wCumu.WriteLine();
+            }
+        }
+
+        /// <summary>
+        /// 預託線量の出力ファイルにヘッダーを書き出す。
+        /// </summary>
+        public void CommitmentHeader()
+        {
+            var nuclide = data.Nuclides[0];
+            var targets = data.TargetRegions;
+
+            // Dose
+            {
+                wDose.WriteLine("{0} {1} {2}", " Effective/Equivalent_Dose ", nuclide.Nuclide, nuclide.IntakeRoute);
+
+                wDose.Write("     Time    ");
+                wDose.Write("     WholeBody   ");
+                foreach (var t in targets) wDose.Write("  {0,-12:n}", t);
+                wDose.WriteLine();
+
+                wDose.Write("     [day]       ");
+                wDose.Write("  [Sv/Bq]     ");
+                foreach (var _ in targets) wDose.Write("  [Sv/Bq]     ");
+                wDose.WriteLine();
+            }
+
+            // DoseRate
+            {
+                wRate.WriteLine("{0} {1} {2}", " DoseRate ", nuclide.Nuclide, nuclide.IntakeRoute);
+
+                wRate.Write("     Time    ");
+                wRate.Write("     WholeBody   ");
+                foreach (var t in targets) wRate.Write("  {0,-12:n}", t);
+                wRate.WriteLine();
+
+                wRate.Write("     [day]       ");
+                wRate.Write("  [Sv/h]      ");
+                foreach (var _ in targets) wRate.Write("  [Sv/h]      ");
+                wRate.WriteLine();
+            }
+        }
+
+        /// <summary>
+        /// 出力時間メッシュにおける残留放射能を出力。
+        /// </summary>
+        /// <param name="outT"></param>
+        /// <param name="Act"></param>
+        /// <param name="OutMeshTotal"></param>
+        /// <param name="iter"></param>
+        public void ActivityOut(double outT, Activity Act, double[] OutMeshTotal, int iter)
+        {
+            foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
+            foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
 
             foreach (var organ in data.Organs)
             {
                 var nucDecay = organ.NuclideDecay;
 
-                var organId = organ.ID;
+                //var organId = organ.ID;
                 var end = Act.Now[organ.Index].end * nucDecay;
-                var total = OutMeshTotal[organ.Index] * nucDecay;
+                //var total = OutMeshTotal[organ.Index] * nucDecay;
                 var cumulative = Act.IntakeQuantityNow[organ.Index] * nucDecay;
 
-                wTmp.WriteLine(" {0,3:0}  {1:0.00000000E+00}    {2:0.00000000E+00}    {3:0.00000000E+00}     {4,3:0}",
-                                organId, end, total, cumulative, iter);
+                var wrRete = wsOrgansRete[organ.Index];
+                var wrCumu = wsOrgansCumu[organ.Index];
+                wrRete.Write("  {0:0.00000000E+00}", end);
+                wrCumu.Write("  {0:0.00000000E+00}", cumulative);
             }
+
+            foreach (var w in wsRete) w.WriteLine();
+            foreach (var w in wsCumu) w.WriteLine();
         }
 
-        // 預託線量のヘッダー出力
-        public void CommitmentTarget(DataClass data)
-        {
-            var nuclide = data.Nuclides[0];
-
-            // 線量係数
-            dCom.WriteLine("{0} {1} {2}", " Effective/Equivalent_Dose ", nuclide.Nuclide, nuclide.IntakeRoute);
-            dCom.Write("     Time    ");
-            dCom.Write("     WholeBody   ");
-
-            // 線量率
-            rCom.WriteLine("{0} {1} {2}", " DoseRate ", nuclide.Nuclide, nuclide.IntakeRoute);
-            rCom.Write("     Time    ");
-            rCom.Write("     WholeBody   ");
-
-            for (int i = 0; i < data.TargetRegions.Length; i++)
-            {
-                dCom.Write("  {0,-12:n}", data.TargetRegions[i]);
-                rCom.Write("  {0,-12:n}", data.TargetRegions[i]);
-            }
-            dCom.WriteLine();
-            dCom.Write("     [day]       ");
-            dCom.Write("  [Sv/Bq]     ");
-            rCom.WriteLine();
-            rCom.Write("     [day]       ");
-            rCom.Write("  [Sv/h]      ");
-            for (int i = 0; i < data.TargetRegions.Length; i++)
-            {
-                dCom.Write("  [Sv/Bq]     ");
-                rCom.Write("  [Sv/h]      ");
-            }
-            dCom.WriteLine();
-            rCom.WriteLine();
-        }
-
-        // 預託線量の計算結果出力
+        /// <summary>
+        /// 出力時間メッシュにおける預託線量を出力。
+        /// </summary>
+        /// <param name="now"></param>
+        /// <param name="pre"></param>
+        /// <param name="WholeBody"></param>
+        /// <param name="preBody"></param>
+        /// <param name="Result"></param>
+        /// <param name="preResult"></param>
         public void CommitmentOut(double now, double pre, double WholeBody, double preBody, double[] Result, double[] preResult)
         {
-            dCom.Write("{0,14:0.000000E+00}  ", now);
-            dCom.Write("{0,13:0.000000E+00}", WholeBody);
-            rCom.Write("{0,14:0.000000E+00}  ", now);
-            rCom.Write("{0,13:0.000000E+00}", (WholeBody - preBody) / ((now - pre) * 24));
+            wDose.Write("{0,14:0.000000E+00}  ", now);
+            wDose.Write("{0,13:0.000000E+00}", WholeBody);
+            wRate.Write("{0,14:0.000000E+00}  ", now);
+            wRate.Write("{0,13:0.000000E+00}", (WholeBody - preBody) / ((now - pre) * 24));
             for (int i = 0; i < Result.Length; i++)
             {
-                dCom.Write("  {0,12:0.000000E+00}", Result[i]);
-                rCom.Write("  {0,12:0.000000E+00}", (Result[i] - preResult[i]) / ((now - pre) * 24));
+                wDose.Write("  {0,12:0.000000E+00}", Result[i]);
+                wRate.Write("  {0,12:0.000000E+00}", (Result[i] - preResult[i]) / ((now - pre) * 24));
             }
-            dCom.WriteLine();
-            rCom.WriteLine();
+            wDose.WriteLine();
+            wRate.WriteLine();
         }
 
-        // テンポラリファイルを並び替えて出力
-        public void ActivityOut(string RetePath, string CumuPath, string TmpFile, DataClass data)
+        public void Dispose()
         {
-            var AllLines = File.ReadAllLines(TmpFile);
+            wDose.Dispose();
+            wRate.Dispose();
+            foreach (var w in wsRete) w.Dispose();
+            foreach (var w in wsCumu) w.Dispose();
 
-            using (var r = new StreamWriter(RetePath, false, Encoding.UTF8))
-            using (var c = new StreamWriter(CumuPath, false, Encoding.UTF8))
+            // 預託線量について、子孫核種の出力ファイルの内容を親核種の出力ファイルに追記していく。
+            var nuclideCount = data.Nuclides.Count;
+            if (nuclideCount >= 2)
             {
-                foreach (var nuclide in data.Nuclides)
+                using (var wRete = new StreamWriter(RetentionPath, append: true))
                 {
-                    // ヘッダー出力
-                    r.WriteLine(" {0} {1} {2}", "Retention ", nuclide.Nuclide, nuclide.IntakeRoute);
-                    r.Write("     Time      ");
-                    c.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuclide.Nuclide, nuclide.IntakeRoute);
-                    c.Write("     Time      ");
-
-                    foreach (var Organ in data.Organs)
+                    for (int n = 1; n < nuclideCount; n++)
                     {
-                        if (nuclide == Organ.Nuclide)
-                        {
-                            r.Write("  {0,-14:n}", Organ.Name);
-                            c.Write("  {0,-14:n}", Organ.Name);
-                        }
-                    }
-                    r.WriteLine();
-                    r.Write("     [day]       ");
-                    c.WriteLine();
-                    c.Write("     [day]       ");
+                        wRete.WriteLine();
 
-                    foreach (var Organ in data.Organs)
+                        var progenyRetentionFile = RetentionPath + $".{n}";
+                        foreach (var ln in File.ReadLines(progenyRetentionFile))
+                            wRete.WriteLine(ln);
+                        File.Delete(progenyRetentionFile);
+                    }
+                }
+
+                using (var wCumu = new StreamWriter(CumulativePath, append: true))
+                {
+                    for (int n = 1; n < nuclideCount; n++)
                     {
-                        if (nuclide == Organ.Nuclide)
-                        {
-                            r.Write("  [Bq/Bq]       ");
-                            c.Write("     [Bq]       ");
-                        }
-                    }
+                        wCumu.WriteLine();
 
-                    for (int i = 0; i < AllLines.Length;)
-                    {
-                        var values = AllLines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                        if (values.Length == 1)
-                        {
-                            r.WriteLine();
-                            r.Write("  {0:0.00000000E+00} ", values[0]);
-                            c.WriteLine();
-                            c.Write("  {0:0.00000000E+00} ", values[0]);
-                            i++;
-                        }
-                        else if (values.Length > 4)
-                        {
-                            foreach (var Organ in data.Organs)
-                            {
-                                values = AllLines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                                if (nuclide == Organ.Nuclide)
-                                {
-                                    r.Write("  {0:0.00000000E+00}", values[1]); // end
-                                    c.Write("  {0:0.00000000E+00}", values[3]); // cumulative
-                                }
-                                i++;
-                            }
-                        }
+                        var progenyCumulativeFile = CumulativePath + $".{n}";
+                        foreach (var ln in File.ReadLines(progenyCumulativeFile))
+                            wCumu.WriteLine(ln);
+                        File.Delete(progenyCumulativeFile);
                     }
-                    r.WriteLine();
-                    r.WriteLine();
-                    c.WriteLine();
-                    c.WriteLine();
                 }
             }
+
+            // Iter出力
+            //IterOut(CalcTimeMesh, iterLog, IterPath);
         }
 
-        public void IterOut(List<double> CalcTimeMesh, Dictionary<double, int> iterLog, string IterPath)
+        public void IterOut(List<(double time, int iter)> iterLog, string IterPath)
         {
             using (var w = new StreamWriter(IterPath, false, Encoding.UTF8))
             {
                 w.WriteLine("   time(day)    Iteration");
-                for (int i = 0; i < iterLog.Count; i++)
+                foreach (var (time, iter) in iterLog)
                 {
-                    w.WriteLine("  {0:0.00000E+00}     {1,3:0}", CalcTimeMesh[i], iterLog[CalcTimeMesh[i]]);
+                    w.WriteLine("  {0:0.00000E+00}     {1,3:0}", time, iter);
                 }
             }
         }
