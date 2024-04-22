@@ -230,8 +230,8 @@ namespace FlexID.Calc
         {
             wDose.Dispose();
             wRate.Dispose();
-            foreach (var w in wsRete) { w.WriteLine(); w.Dispose(); }
-            foreach (var w in wsCumu) { w.WriteLine(); w.Dispose(); }
+            foreach (var w in wsRete) w.Dispose();
+            foreach (var w in wsCumu) w.Dispose();
 
             // 預託線量について、子孫核種の出力ファイルの内容を親核種の出力ファイルに追記していく。
             var nuclideCount = data.Nuclides.Count;
@@ -241,6 +241,8 @@ namespace FlexID.Calc
                 {
                     for (int n = 1; n < nuclideCount; n++)
                     {
+                        wRete.WriteLine();
+
                         var progenyRetentionFile = RetentionPath + $".{n}";
                         foreach (var ln in File.ReadLines(progenyRetentionFile))
                             wRete.WriteLine(ln);
@@ -252,6 +254,8 @@ namespace FlexID.Calc
                 {
                     for (int n = 1; n < nuclideCount; n++)
                     {
+                        wCumu.WriteLine();
+
                         var progenyCumulativeFile = CumulativePath + $".{n}";
                         foreach (var ln in File.ReadLines(progenyCumulativeFile))
                             wCumu.WriteLine(ln);
