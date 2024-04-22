@@ -151,6 +151,8 @@ namespace FlexID.Calc
         // このコンパートメントモデルが対象とする被ばく評価期間の開始年齢[day]。
         public int StartAge;
 
+        public double BeginAgeDay;
+
         /// <summary>
         /// 全ての核種。
         /// </summary>
@@ -452,13 +454,13 @@ namespace FlexID.Calc
         {
             var data = new DataClass();
 
-            data.StartAge =
-                age == "Age:3month" /**/? 100 :
-                age == "Age:1year"  /**/? 365 :
-                age == "Age:5year"  /**/? 365 * 5 :
-                age == "Age:10year" /**/? 365 * 10 :
-                age == "Age:15year" /**/? 365 * 15 :
-                age == "Age:adult"  /**/? 365 * 25 : // 現在はSrしか計算しないため25歳で決め打ち、今後インプット等で成人の年齢を読み込む必要あり？
+            (data.StartAge, data.BeginAgeDay) =
+                age == "Age:3month" /**/? (100      /**/, 0) :
+                age == "Age:1year"  /**/? (365      /**/, 365) :
+                age == "Age:5year"  /**/? (365 * 5  /**/, 2 * 365) :
+                age == "Age:10year" /**/? (365 * 10 /**/, 7 * 365) :
+                age == "Age:15year" /**/? (365 * 15 /**/, 12 * 365) :
+                age == "Age:adult"  /**/? (365 * 25 /**/, 17 * 365) : // 現在はSrしか計算しないため25歳で決め打ち、今後インプット等で成人の年齢を読み込む必要あり？
                 throw new NotSupportedException();
 
             {

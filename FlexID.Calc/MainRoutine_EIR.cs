@@ -313,7 +313,12 @@ namespace FlexID.Calc
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            SubRoutine.Accumulation_EIR(calcNowT - calcPreT, organLo, organHi, Act, calcNowT + ExposureDays, daysLo, daysHi);
+                            var dT = calcNowT - calcPreT;
+                            var ageDay = calcNowT + ExposureDays;
+                            if (ageDay <= dataHi.BeginAgeDay)
+                                SubRoutine.Accumulation(dT, organLo, Act);
+                            else
+                                SubRoutine.Accumulation(dT, organHi, Act);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
