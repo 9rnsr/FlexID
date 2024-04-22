@@ -193,8 +193,8 @@ namespace FlexID.Calc
         /// <param name="dT">ΔT[day]</param>
         public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
         {
-            // 年齢区間における補間を行わない場合はtrue。
-            var noAgeInterp = organHi == organLo;
+            // 年齢区間における補間を行う場合はtrue。
+            var doInterp = organHi != organLo;
 
             var ave = 0.0;  // 流入する平均放射能の積算値
             for (int i = 0; i < organLo.Inflows.Count; i++)
@@ -204,18 +204,7 @@ namespace FlexID.Calc
 
                 double beforeBio;           // 流入元の生物学的崩壊定数
                 double inflowRate;          // 流入割合
-                if (noAgeInterp)
-                {
-                    beforeBio = inflowOrgan.BioDecay;
-                    inflowRate = inflow.Rate;
-                }
-                else if (inflowOrgan.Name == "SI" && organLo.Name == "Plasma")
-                {
-                    // fA値は年齢間の補間を行わない。
-                    beforeBio = inflowOrgan.BioDecay;
-                    inflowRate = inflow.Rate;
-                }
-                else
+                if (doInterp)
                 {
                     var inflowHi = organHi.Inflows[i];
                     var inflowOrganHi = inflowHi.Organ;
@@ -227,6 +216,11 @@ namespace FlexID.Calc
                     var inflowRateLo = inflow.Rate;
                     var inflowRateHi = inflowHi.Rate;
                     inflowRate = Interpolation(day, inflowRateLo, inflowRateHi, daysLo, daysHi);
+                }
+                else
+                {
+                    beforeBio = inflowOrgan.BioDecay;
+                    inflowRate = inflow.Rate;
                 }
 
                 // デバッグ用
@@ -242,18 +236,13 @@ namespace FlexID.Calc
             }
 
             double organBioDecay;
-            if (noAgeInterp)
+            if (doInterp)
             {
-                organBioDecay = organLo.BioDecay;
-            }
-            else if (organLo.Name == "SI")
-            {
-                // ???
-                organBioDecay = organLo.BioDecay;
+                organBioDecay = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
             }
             else
             {
-                organBioDecay = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+                organBioDecay = organLo.BioDecay;
             }
 
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
