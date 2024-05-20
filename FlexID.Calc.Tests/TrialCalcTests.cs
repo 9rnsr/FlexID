@@ -107,14 +107,9 @@ namespace FlexID.Calc.Tests
             var outputPath = Path.Combine(resultDir, target);
 
             var cTimeMeshFile = @"lib\time.dat";
-            var oTimeMeshFile = @"lib\out-time.dat";
+            var oTimeMeshFile = @"TestFiles\TrialCalc\out-time.dat";
 
-            var commitmentPeriod =
-#if true
-                "5days";
-#else
-                "50years";
-#endif
+            var commitmentPeriod = "50years";
 
             var main = new MainRoutine_OIR();
             main.InputPath        /**/= inputPath;
@@ -159,12 +154,9 @@ namespace FlexID.Calc.Tests
             var outputPath = Path.Combine(resultDir, target);
 
             var cTimeMeshFile = @"lib\time.dat";
-            var oTimeMeshFile = @"lib\out-time.dat";
+            var oTimeMeshFile = @"TestFiles\TrialCalc\out-time.dat";
 
             var commitmentPeriod =
-#if true
-                "5days";
-#else
                 exposureAge == "3months old" /**/? "25450days" : // 70years - 100days = 25550days - 100days
                 exposureAge == "1years old"  /**/? "69years" :   // 70years -  1years
                 exposureAge == "5years old"  /**/? "65years" :   // 70years -  5years
@@ -172,7 +164,6 @@ namespace FlexID.Calc.Tests
                 exposureAge == "15years old" /**/? "55years" :   // 70years - 15years
                 exposureAge == "adult"       /**/? "50years" :   // 75years - 25years
                 throw new NotSupportedException();
-#endif
 
             var main = new MainRoutine_EIR();
             main.InputPath        /**/= inputPath;
