@@ -59,15 +59,12 @@ namespace FlexID.Calc
 
         public void Main()
         {
-            var fileReader = new FileReader();
-            var Input = fileReader.InfoReader(InputPath);
-
             var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
             var outTimeMesh = new TimeMesh(OutTimeMeshPath);
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-            var dataList = DataClass.Read_EIR(Input, CalcProgeny);
+            var dataList = DataClass.Read_EIR(InputPath, CalcProgeny);
 
             using (CalcOut = new CalcOut(dataList[0], OutputPath))
             {
