@@ -181,13 +181,14 @@ namespace FlexID.Calc
         /// <summary>
         /// OIR用のインプットファイルを読み込む。
         /// </summary>
-        /// <param name="lines">インプットファイルの各行。</param>
+        /// <param name="inputPath">インプットファイルのパス文字列。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
         /// <returns></returns>
-        public static DataClass Read(List<string> lines, bool calcProgeny)
+        public static DataClass Read(string inputPath, bool calcProgeny)
         {
-            var data = new DataClass();
+            var lines = File.ReadLines(inputPath).ToList();
 
+            var data = new DataClass();
             {
                 int num = 0;
 
@@ -433,11 +434,13 @@ namespace FlexID.Calc
         /// <summary>
         /// EIR用のインプットファイルを読み込む。
         /// </summary>
-        /// <param name="lines">インプットファイルの各行。</param>
+        /// <param name="inputPath">インプットファイルのパス文字列。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
         /// <returns></returns>
-        public static List<DataClass> Read_EIR(List<string> lines, bool calcProgeny)
+        public static List<DataClass> Read_EIR(string inputPath, bool calcProgeny)
         {
+            var lines = File.ReadLines(inputPath).ToList();
+
             var dataList = new List<DataClass>();
             dataList.Add(Read_EIR(lines, calcProgeny, "Age:3month"));
             dataList.Add(Read_EIR(lines, calcProgeny, "Age:1year"));

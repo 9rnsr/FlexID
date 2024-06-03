@@ -94,10 +94,8 @@ namespace FlexID.Calc.Tests
         [InlineData(@"inp/OIR/Zn-65/Zn-65_inh-TypeS.inp")]
         public void Test_OIR(string inputPath)
         {
-            var lines = File.ReadLines(inputPath).ToList();
-
             var calcProgeny = true;
-            var data = DataClass.Read(lines, calcProgeny);
+            var data = DataClass.Read(inputPath, calcProgeny);
             Assert.NotNull(data);
         }
 
@@ -105,10 +103,8 @@ namespace FlexID.Calc.Tests
         [InlineData(@"inp/EIR/Sr-90/Sr-90_ing.inp")]
         public void Test_EIR(string inputPath)
         {
-            var lines = File.ReadLines(inputPath).ToList();
-
             var calcProgeny = true;
-            var data = DataClass.Read_EIR(lines, calcProgeny);
+            var data = DataClass.Read_EIR(inputPath, calcProgeny);
             Assert.NotNull(data);
         }
     }
