@@ -214,6 +214,7 @@ namespace FlexID.Calc
             var calcTimes = calcTimeMesh.Start();
             long calcPreT;
             long calcNowT = calcTimes.Current;
+            int calcIter;   // 計算時間メッシュ毎の収束計算回数
 
             // inputの初期値を各臓器に振り分ける
             SubRoutine.Init(Act, dataLo);
@@ -222,6 +223,7 @@ namespace FlexID.Calc
             var outTimes = outTimeMesh.Start();
             long outPreT;
             long outNowT = outTimes.Current;
+            int outIter;    // 出力時間メッシュ毎の収束計算回数
 
             // 処理中の出力メッシュにおける臓器毎の積算放射能
             var OutMeshTotal = new double[dataLo.Organs.Count];
@@ -230,8 +232,6 @@ namespace FlexID.Calc
             double preBody = 0;
             var Result = new double[31];  // 組織毎の計算結果
             var preResult = new double[31];
-
-            int outIter;
 
             void ClearOutMeshTotal()
             {
@@ -307,7 +307,7 @@ namespace FlexID.Calc
                 int daysHi = dataHi.StartAge;
 
                 #region 1つの計算時間メッシュ内で収束計算を繰り返す
-                for (int iter = 1; iter <= iterMax; iter++)
+                for (calcIter = 1; calcIter <= iterMax; calcIter++)
                 {
                     for (int i = 0; i < dataLo.Organs.Count; i++)
                     {
@@ -346,9 +346,9 @@ namespace FlexID.Calc
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
-                    if (iter > 1)
+                    if (calcIter > 1)
                     {
-                        var flgIter = true;
+                        var converged = true;
                         foreach (var o in dataLo.Organs)
                         {
                             double s1 = 0;
@@ -364,18 +364,18 @@ namespace FlexID.Calc
 
                             if (s1 > convergence || s2 > convergence || s3 > convergence)
                             {
-                                flgIter = false;
+                                converged = false;
                                 break;
                             }
                         }
                         // 前回との差が全ての臓器で収束した場合
-                        if (flgIter)
+                        if (converged)
                         {
                             // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
-                            outIter = iter;
+                            outIter = calcIter;
 
                             // // 出力メッシュ内での総反復回数を保存する。
-                            // // outIter += iter;
+                            // outIter += iter;
                             break;
                         }
                     }
