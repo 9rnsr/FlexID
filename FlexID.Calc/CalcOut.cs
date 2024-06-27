@@ -59,6 +59,12 @@ namespace FlexID.Calc
                 for (int n = 1; n < data.Nuclides.Count; n++)
                 {
                     var path = basePath + $".{n}";
+
+                    // 前回実行時の一時ファイルが残ってしまった場合を想定して、
+                    // 同名のファイルが存在する場合はこの隠し属性を外しておく。
+                    if (File.Exists(path))
+                        File.SetAttributes(path, File.GetAttributes(path) & ~FileAttributes.Hidden);
+
                     var writer = new StreamWriter(path, false, Encoding.UTF8);
 
                     // 隠しファイル属性を設定しておく。
