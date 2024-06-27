@@ -30,6 +30,16 @@ namespace FlexID.Calc
         private StreamWriter[] wsOrgansRete;
         private StreamWriter[] wsOrgansCumu;
 
+        /// <summary>
+        /// 計算処理が正常に終了した場合に<c>true</c>を設定する。
+        /// </summary>
+        private bool IsFinished = false;
+
+        /// <summary>
+        /// コンストラクタ。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="outputPath"></param>
         public CalcOut(DataClass data, string outputPath)
         {
             this.data = data;
@@ -232,8 +242,28 @@ namespace FlexID.Calc
             wRate.WriteLine();
         }
 
+        /// <summary>
+        /// 計算完了時のメッセージを出力する。
+        /// </summary>
+        public void FinishOut()
+        {
+            // 現在はメッセージ出力は存在せず、終了フラグを設定するだけとなっている。
+            IsFinished = true;
+        }
+
         public void Dispose()
         {
+            if (!IsFinished)
+            {
+                // 計算が未完了の場合は、中断メッセージを出力する。
+                const string message = "[Abort Calculation]";
+
+                wDose.WriteLine(message);
+                wRate.WriteLine(message);
+                foreach (var w in wsRete) w.WriteLine(message);
+                foreach (var w in wsCumu) w.WriteLine(message);
+            }
+
             wDose.Dispose();
             wRate.Dispose();
             foreach (var w in wsRete) w.Dispose();
