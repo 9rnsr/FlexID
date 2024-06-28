@@ -180,8 +180,6 @@ namespace FlexID.Calc
                                 s2 = Math.Abs((Act.rNow[o.Index].ave - Act.rPre[o.Index].ave) / Act.rNow[o.Index].ave);
                             if (Act.rNow[o.Index].end != 0)
                                 s3 = Math.Abs((Act.rNow[o.Index].end - Act.rPre[o.Index].end) / Act.rNow[o.Index].end);
-                            else
-                                continue;   // todo: s3==0のときにs1,s2の差を無視してしまう？
 
                             if (s1 > convergence || s2 > convergence || s3 > convergence)
                             {
