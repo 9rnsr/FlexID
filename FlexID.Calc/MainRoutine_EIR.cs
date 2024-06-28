@@ -462,6 +462,9 @@ namespace FlexID.Calc
                     Array.Copy(Result, preResult, Result.Length);
                 }
             }
+
+            // 計算完了の出力を行う。
+            CalcOut.FinishOut();
         }
     }
 }
