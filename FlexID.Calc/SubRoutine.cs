@@ -136,13 +136,15 @@ namespace FlexID.Calc
         /// 蓄積(OIR)
         /// </summary>
         /// <param name="dT">ΔT[day]</param>
-        public static void Accumulation(double dT, Organ organ, Activity Act, double d)
+        public static void Accumulation_OIR(double dT, Organ organ, Activity Act)
         {
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             var alpha = organ.NuclideDecay + organ.BioDecay;
 
+            // 流入する平均放射能
+            var ave = 0.0;
+
             #region 流入臓器の数ループ
-            double ave = 0.0;
             foreach (var inflow in organ.Inflows)
             {
                 var inflowOrgan = inflow.Organ;

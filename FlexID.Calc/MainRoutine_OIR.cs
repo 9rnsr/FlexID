@@ -142,7 +142,7 @@ namespace FlexID.Calc
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            SubRoutine.Accumulation(calcDeltaDay, organ, Act, calcNowDay);
+                            SubRoutine.Accumulation_OIR(calcDeltaDay, organ, Act);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
