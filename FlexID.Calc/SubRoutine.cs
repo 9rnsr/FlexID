@@ -87,10 +87,10 @@ namespace FlexID.Calc
 
             foreach (var inflow in organ.Inflows)
             {
-                // 流入元の生物崩壊・流入割合
+                // 流入元の生物学的崩壊定数[/day]
                 var beforeBio = inflow.Organ.BioDecayCalc;
 
-                // 放射能 = 流入元臓器の放射能 * 流入元臓器の生物学的崩壊定数 * 流入割合
+                // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
                 ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
                 end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
@@ -111,10 +111,10 @@ namespace FlexID.Calc
 
             foreach (var inflow in organ.Inflows)
             {
-                // 流入元の生物崩壊・流入割合
+                // 流入元の生物学的崩壊定数[/day]
                 var beforeBio = inflow.Organ.BioDecayCalc;
 
-                // 放射能 = 流入元臓器の放射能 * 流入元臓器の生物学的崩壊定数 * 流入割合
+                // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
                 ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
                 end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
@@ -146,10 +146,10 @@ namespace FlexID.Calc
         /// <param name="dT">ΔT[day]</param>
         public static void Accumulation_OIR(double dT, Organ organ, Activity Act)
         {
-            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
+            // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
             var alpha = organ.NuclideDecay + organ.BioDecay;
 
-            // 流入する平均放射能
+            // 流入する平均放射能[Bq/day]
             var ave = 0.0;
 
             #region 流入臓器の数ループ
@@ -157,14 +157,14 @@ namespace FlexID.Calc
             {
                 var inflowOrgan = inflow.Organ;
 
-                // 流入元生物学的崩壊定数
+                // 流入元の生物学的崩壊定数[/day]
                 var beforeBio = inflowOrgan.BioDecayCalc;
 
                 // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
                 if (inflowOrgan.Nuclide != organ.Nuclide)
                     beforeBio = 1;
 
-                // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入元臓器の生物学的崩壊定数 * 流入割合
+                // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 ave += Act.CalcNow[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
             }
             #endregion
@@ -178,9 +178,10 @@ namespace FlexID.Calc
         /// <param name="dT">ΔT[day]</param>
         public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
         {
+            // 当該臓器の生物学的崩壊定数[/day]
             var bioDecay = organLo.BioDecay;
 
-            // 流入する平均放射能
+            // 流入する平均放射能[Bq/day]
             var ave = 0.0;
 
             #region 流入臓器の数ループ
@@ -190,7 +191,7 @@ namespace FlexID.Calc
                 var inflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
                 var inflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
 
-                // 流入元生物学的崩壊定数
+                // 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 double beforeBio;
                 if (day <= MainRoutine_EIR.AgeAdult)
                 {
@@ -224,12 +225,12 @@ namespace FlexID.Calc
                 if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
                     beforeBio = 1 * organLo.Inflows[i].Rate;
 
-                // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入
+                // 放射能[Bq/day] = 流入元臓器の放射能[Bq/day] * 流入元臓器の生物学的崩壊定数 * 流入割合
                 ave += Act.CalcNow[organLo.Inflows[i].Organ.Index].ave * beforeBio;
             }
             #endregion
 
-            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
+            // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
             var alpha = organLo.NuclideDecay + bioDecay;
 
             Accumulation(alpha, dT, ave, in Act.CalcPre[organLo.Index], ref Act.IterNow[organLo.Index]);
@@ -247,9 +248,9 @@ namespace FlexID.Calc
         {
             var alpha_dT = alpha * dT;
 
-            double rini = pre.end;  // 初期放射能
-            double rend;            // 末期放射能
-            double rtot;            // 積算放射能
+            double rini = pre.end;  // 初期放射能[Bq/day]
+            double rend;            // 末期放射能[Bq/day]
+            double rtot;            // 積算放射能[Bq]
             if (alpha_dT <= 1E-9)
             {
                 rend = ave * alpha_dT / alpha + rini * Math.Exp(-alpha_dT);
@@ -264,7 +265,7 @@ namespace FlexID.Calc
                 rtot = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
             }
 
-            var rave = rtot / dT;   // 平均放射能 = 積算放射能 / Δt
+            var rave = rtot / dT;   // 平均放射能[Bq/day] = 積算放射能[Bq] / Δt[day]
 
             // 計算値が1E-60以下の場合は0とする
             if (rave <= 1E-60)

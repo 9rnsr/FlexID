@@ -386,8 +386,7 @@ namespace FlexID.Calc
                     if (organ.Name.Contains("mix"))
                         continue;
 
-                    var nuclide = organ.Nuclide;
-                    var nucDecay = nuclide.Ramd;
+                    var nucDecay = organ.NuclideDecay;
 
                     // タイムステップごとの放射能　
                     var activity = Act.CalcNow[organ.Index].end * calcDeltaT * nucDecay;

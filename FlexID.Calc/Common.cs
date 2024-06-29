@@ -6,22 +6,22 @@ namespace FlexID.Calc
     public struct OrganActivity
     {
         /// <summary>
-        /// 計算時間メッシュにおける初期放射能。
+        /// 計算時間メッシュにおける初期放射能[Bq/day]。
         /// </summary>
         public double ini;
 
         /// <summary>
-        /// 計算時間メッシュにおける平均放射能。
+        /// 計算時間メッシュにおける平均放射能[Bq/day]。
         /// </summary>
         public double ave;
 
         /// <summary>
-        /// 計算時間メッシュにおける末期放射能。
+        /// 計算時間メッシュにおける末期放射能[Bq/day]。
         /// </summary>
         public double end;
 
         /// <summary>
-        /// 計算時間メッシュにおける積算放射能。
+        /// 計算時間メッシュにおける積算放射能[Bq]。
         /// </summary>
         public double total;
     }
