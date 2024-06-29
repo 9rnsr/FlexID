@@ -21,6 +21,8 @@ namespace FlexID.Calc
             Act.IterPre = new OrganActivity[data.Organs.Count];
             Act.IterNow = new OrganActivity[data.Organs.Count];
 
+            Act.OutTotalNow = new double[data.Organs.Count];
+
             Act.IntakeQuantityPre = new double[data.Organs.Count];
             Act.IntakeQuantityNow = new double[data.Organs.Count];
 
@@ -39,7 +41,12 @@ namespace FlexID.Calc
                 Act.CalcNow[organ.Index].ave = 0;
                 Act.CalcNow[organ.Index].end = 0;
                 Act.CalcNow[organ.Index].total = 0;
+
+                Act.OutTotalNow[organ.Index] = 0;
+
                 Act.IntakeQuantityNow[organ.Index] = 0;
+
+                Act.Excreta[organ.Index] = 0;
             }
 
             foreach (var organ in data.Organs)

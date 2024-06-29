@@ -192,9 +192,8 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="outT"></param>
         /// <param name="Act"></param>
-        /// <param name="OutMeshTotal"></param>
         /// <param name="iter"></param>
-        public void ActivityOut(double outT, Activity Act, double[] OutMeshTotal, int iter)
+        public void ActivityOut(double outT, Activity Act, int iter)
         {
             foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
             foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
@@ -205,7 +204,7 @@ namespace FlexID.Calc
 
                 //var organId = organ.ID;
                 var end = Act.CalcNow[organ.Index].end * nucDecay;
-                //var total = OutMeshTotal[organ.Index] * nucDecay;
+                //var total = Act.OutTotalNow[organ.Index] * nucDecay;
                 var cumulative = Act.IntakeQuantityNow[organ.Index] * nucDecay;
 
                 var wrRete = wsOrgansRete[organ.Index];

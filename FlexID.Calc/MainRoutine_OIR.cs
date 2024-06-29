@@ -80,19 +80,6 @@ namespace FlexID.Calc
             long outNowT = outTimes.Current;
             int outIter;    // 出力時間メッシュ毎の収束計算回数
 
-            // 処理中の出力メッシュにおける臓器毎の積算放射能
-            var OutMeshTotal = new double[data.Organs.Count];
-
-            void ClearOutMeshTotal()
-            {
-                foreach (var organ in data.Organs)
-                {
-                    OutMeshTotal[organ.Index] = 0;
-                    Act.Excreta[organ.Index] = 0;
-                }
-            }
-            ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
-
             var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
             var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
             var resultNow = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
@@ -102,7 +89,7 @@ namespace FlexID.Calc
             SubRoutine.Init(Act, data);
 
             // 初期配分された放射能をファイルに出力する。
-            CalcOut.ActivityOut(0.0, Act, OutMeshTotal, 0);
+            CalcOut.ActivityOut(0.0, Act, 0);
 
             // 出力時間メッシュを進める。
             outTimes.MoveNext();
@@ -207,7 +194,7 @@ namespace FlexID.Calc
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in data.Organs)
                 {
-                    OutMeshTotal[organ.Index] += Act.CalcNow[organ.Index].total;
+                    Act.OutTotalNow[organ.Index] += Act.CalcNow[organ.Index].total;
                     Act.Excreta[organ.Index] += Act.PreExcreta[organ.Index];
                 }
 
@@ -261,7 +248,7 @@ namespace FlexID.Calc
                     }
 
                     // 放射能をファイルに出力する。
-                    CalcOut.ActivityOut(outNowDay, Act, OutMeshTotal, outIter);
+                    CalcOut.ActivityOut(outNowDay, Act, outIter);
 
                     // 線量をファイルに出力する。
                     CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
@@ -275,7 +262,7 @@ namespace FlexID.Calc
                     outNowT = outTimes.Current;
                     outIter = 0;
 
-                    ClearOutMeshTotal();
+                    Act.NextOut(data);
 
                     wholeBodyPre = wholeBodyNow;
                     Array.Copy(resultNow, resultPre, resultNow.Length);
