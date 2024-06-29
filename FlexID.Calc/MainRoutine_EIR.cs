@@ -210,16 +210,13 @@ namespace FlexID.Calc
             // 標的領域の組織加重係数を取得。
             var targetWeights = dataList[0].TargetWeights;
 
-            // 計算時間メッシュ
+            // 計算時間メッシュを準備する。
             var calcTimes = calcTimeMesh.Start();
             long calcPreT;
             long calcNowT = calcTimes.Current;
             int calcIter;   // 計算時間メッシュ毎の収束計算回数
 
-            // inputの初期値を各臓器に振り分ける
-            SubRoutine.Init(Act, dataLo);
-
-            // 出力時間メッシュ
+            // 出力時間メッシュを準備する。
             var outTimes = outTimeMesh.Start();
             long outPreT;
             long outNowT = outTimes.Current;
@@ -228,11 +225,6 @@ namespace FlexID.Calc
             // 処理中の出力メッシュにおける臓器毎の積算放射能
             var OutMeshTotal = new double[dataLo.Organs.Count];
 
-            var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
-            var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
-            var resultNow = new double[31]; // 今回の出力時間メッシュにおける組織毎の計算結果。
-            var resultPre = new double[31]; // 前回の出力時間メッシュにおける組織毎の計算結果。
-
             void ClearOutMeshTotal()
             {
                 foreach (var organ in dataLo.Organs)
@@ -240,18 +232,27 @@ namespace FlexID.Calc
                     OutMeshTotal[organ.Index] = 0;
                     Act.Excreta[organ.Index] = 0;
                 }
-
-                outIter = 0;
             }
             ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
 
-            // 初期配分された残留放射能をテンポラリファイルに出力
+            var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
+            var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
+            var resultNow = new double[31]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+            var resultPre = new double[31]; // 前回の出力時間メッシュにおける組織毎の計算結果。
+
+            // inputの初期値を各コンパートメントに振り分ける。
+            SubRoutine.Init(Act, dataLo);
+
+            // 初期配分された放射能をファイルに出力する。
             CalcOut.ActivityOut(0.0, Act, OutMeshTotal, 0);
 
+            // 出力時間メッシュを進める。
             outTimes.MoveNext();
             outPreT = outNowT;
             outNowT = outTimes.Current;
+            outIter = 0;
 
+            // 計算時間メッシュを進める。
             while (calcTimes.MoveNext())
             {
                 // 不要な前ステップのデータを削除
@@ -443,18 +444,22 @@ namespace FlexID.Calc
                             Act.CalcNow[organ.Index].end = Act.Excreta[organ.Index] / outDeltaDay;
                     }
 
-                    // 残留放射能をテンポラリファイルに出力
+                    // 放射能をファイルに出力する。
                     CalcOut.ActivityOut(outNowDay, Act, OutMeshTotal, outIter);
 
+                    // 線量をファイルに出力する。
                     CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
-
-                    ClearOutMeshTotal();
 
                     // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                     if (!outTimes.MoveNext())
                         break;
+
+                    // 出力時間メッシュを進める。
                     outPreT = outNowT;
                     outNowT = outTimes.Current;
+                    outIter = 0;
+
+                    ClearOutMeshTotal();
 
                     wholeBodyPre = wholeBodyNow;
                     Array.Copy(resultNow, resultPre, resultNow.Length);
