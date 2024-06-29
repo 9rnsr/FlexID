@@ -100,15 +100,14 @@ namespace FlexID.Calc
             // 計算時間メッシュを進める。
             while (calcTimes.MoveNext())
             {
-                // 不要な前ステップのデータを削除
-                Act.NextTime(data);
-
                 calcPreT = calcNowT;
                 calcNowT = calcTimes.Current;
 
                 // 預託期間を超える計算は行わない
                 if (commitmentPeriod < calcNowT)
                     break;
+
+                Act.NextCalc(data);
 
                 var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
 

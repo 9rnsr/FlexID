@@ -63,10 +63,10 @@ namespace FlexID.Calc
         public double[] PreExcreta;
 
         /// <summary>
-        /// 処理中の時間メッシュを次に進める
+        /// 次の計算時間メッシュのための準備を行う。
         /// </summary>
         /// <param name="data"></param>
-        public void NextTime(DataClass data)
+        public void NextCalc(DataClass data)
         {
             Swap(ref CalcPre, ref CalcNow);
 
@@ -83,7 +83,7 @@ namespace FlexID.Calc
         }
 
         /// <summary>
-        /// 処理中の収束計算回を次に進める
+        /// 次の収束計算回のための準備を行う。
         /// </summary>
         /// <param name="data"></param>
         public void NextIter(DataClass data)
