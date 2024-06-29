@@ -326,10 +326,6 @@ namespace FlexID.Calc
                         Act.CalcNow[organLo.Index].end = Act.IterNow[organLo.Index].end;
 
                         Act.CalcNow[organLo.Index].total = Act.IterNow[organLo.Index].total;
-
-                        // 臓器毎の積算放射能算出
-                        Act.IntakeQuantityNow[organLo.Index] =
-                            Act.IntakeQuantityPre[organLo.Index] + Act.CalcNow[organLo.Index].total;
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
@@ -372,6 +368,9 @@ namespace FlexID.Calc
                 {
                     // 今回の出力時間メッシュにおける積算放射能。
                     Act.OutTotalNow[organ.Index] += Act.CalcNow[organ.Index].total;
+
+                    // 摂取時からの積算放射能。
+                    Act.OutTotalFromIntake[organ.Index] += Act.CalcNow[organ.Index].total;
                 }
 
                 // S係数の補間計算を実施する。
@@ -426,7 +425,7 @@ namespace FlexID.Calc
                         {
                             Act.CalcNow[organ.Index].end = Act.OutTotalNow[organ.Index] / outDeltaDay;
 
-                            Act.IntakeQuantityNow[organ.Index] = 0; // TODO: for compatibility
+                            Act.OutTotalFromIntake[organ.Index] = 0; // TODO: for compatibility
                         }
                     }
 

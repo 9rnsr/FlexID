@@ -53,11 +53,10 @@ namespace FlexID.Calc
         /// </summary>
         public double[] OutTotalNow;
 
-        // 1つ前の時間メッシュにおける、摂取時からの積算放射能
-        public double[] IntakeQuantityPre;
-
-        // 1つ前の時間メッシュにおける、摂取時からの積算放射能
-        public double[] IntakeQuantityNow;
+        /// <summary>
+        /// 摂取時からの、コンパートメント毎の積算放射能[Bq]。
+        /// </summary>
+        public double[] OutTotalFromIntake;
 
         /// <summary>
         /// 次の計算時間メッシュのための準備を行う。
@@ -67,15 +66,12 @@ namespace FlexID.Calc
         {
             Swap(ref CalcPre, ref CalcNow);
 
-            Swap(ref IntakeQuantityPre, ref IntakeQuantityNow);
-
             foreach (var o in data.Organs)
             {
                 CalcNow[o.Index].ini = 0;
                 CalcNow[o.Index].ave = 0;
                 CalcNow[o.Index].end = 0;
                 CalcNow[o.Index].total = 0;
-                IntakeQuantityNow[o.Index] = 0;
             }
         }
 

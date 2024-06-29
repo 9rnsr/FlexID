@@ -205,7 +205,7 @@ namespace FlexID.Calc
                 //var organId = organ.ID;
                 var end = Act.CalcNow[organ.Index].end * nucDecay;
                 //var total = Act.OutTotalNow[organ.Index] * nucDecay;
-                var cumulative = Act.IntakeQuantityNow[organ.Index] * nucDecay;
+                var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
 
                 var wrRete = wsOrgansRete[organ.Index];
                 var wrCumu = wsOrgansCumu[organ.Index];

@@ -22,9 +22,7 @@ namespace FlexID.Calc
             Act.IterNow = new OrganActivity[data.Organs.Count];
 
             Act.OutTotalNow = new double[data.Organs.Count];
-
-            Act.IntakeQuantityPre = new double[data.Organs.Count];
-            Act.IntakeQuantityNow = new double[data.Organs.Count];
+            Act.OutTotalFromIntake = new double[data.Organs.Count];
 
             // 全ての組織における計算結果を初期化する
             foreach (var organ in data.Organs)
@@ -40,8 +38,7 @@ namespace FlexID.Calc
                 Act.CalcNow[organ.Index].total = 0;
 
                 Act.OutTotalNow[organ.Index] = 0;
-
-                Act.IntakeQuantityNow[organ.Index] = 0;
+                Act.OutTotalFromIntake[organ.Index] = 0;
             }
 
             foreach (var organ in data.Organs)
@@ -60,7 +57,6 @@ namespace FlexID.Calc
                     Act.CalcNow[organ.Index].ave = init;
                     Act.CalcNow[organ.Index].end = init;
                     Act.CalcNow[organ.Index].total = 0;
-                    Act.IntakeQuantityNow[organ.Index] = 0;
                 }
             }
         }
