@@ -1,13 +1,28 @@
 namespace FlexID.Calc
 {
     /// <summary>
-    /// 臓器毎の、初期・平均・末期・時間メッシュ内の積算放射能を保持する
+    /// あるコンパートメントにおける、計算時間メッシュ内の放射能を保持する。
     /// </summary>
     public struct OrganActivity
     {
+        /// <summary>
+        /// 計算時間メッシュにおける初期放射能。
+        /// </summary>
         public double ini;
+
+        /// <summary>
+        /// 計算時間メッシュにおける平均放射能。
+        /// </summary>
         public double ave;
+
+        /// <summary>
+        /// 計算時間メッシュにおける末期放射能。
+        /// </summary>
         public double end;
+
+        /// <summary>
+        /// 計算時間メッシュにおける積算放射能。
+        /// </summary>
         public double total;
     }
 
