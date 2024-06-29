@@ -15,13 +15,14 @@ namespace FlexID.Calc
         /// <param name="data"></param>
         public static void Init(Activity Act, DataClass data)
         {
-            Act.Pre = new OrganActivity[data.Organs.Count];
-            Act.Now = new OrganActivity[data.Organs.Count];
+            Act.CalcPre = new OrganActivity[data.Organs.Count];
+            Act.CalcNow = new OrganActivity[data.Organs.Count];
+
+            Act.IterPre = new OrganActivity[data.Organs.Count];
+            Act.IterNow = new OrganActivity[data.Organs.Count];
+
             Act.IntakeQuantityPre = new double[data.Organs.Count];
             Act.IntakeQuantityNow = new double[data.Organs.Count];
-
-            Act.rPre = new OrganActivity[data.Organs.Count];
-            Act.rNow = new OrganActivity[data.Organs.Count];
 
             Act.Excreta = new double[data.Organs.Count];
             Act.PreExcreta = new double[data.Organs.Count];
@@ -29,15 +30,15 @@ namespace FlexID.Calc
             // 全ての組織における計算結果を初期化する
             foreach (var organ in data.Organs)
             {
-                Act.Pre[organ.Index].ini = 0;
-                Act.Pre[organ.Index].ave = 0;
-                Act.Pre[organ.Index].end = 0;
-                Act.Pre[organ.Index].total = 0;
+                Act.CalcPre[organ.Index].ini = 0;
+                Act.CalcPre[organ.Index].ave = 0;
+                Act.CalcPre[organ.Index].end = 0;
+                Act.CalcPre[organ.Index].total = 0;
 
-                Act.Now[organ.Index].ini = 0;
-                Act.Now[organ.Index].ave = 0;
-                Act.Now[organ.Index].end = 0;
-                Act.Now[organ.Index].total = 0;
+                Act.CalcNow[organ.Index].ini = 0;
+                Act.CalcNow[organ.Index].ave = 0;
+                Act.CalcNow[organ.Index].end = 0;
+                Act.CalcNow[organ.Index].total = 0;
                 Act.IntakeQuantityNow[organ.Index] = 0;
             }
 
@@ -57,10 +58,10 @@ namespace FlexID.Calc
                         var nucDecay = nuclide.Ramd;
 
                         var init = inflow.Rate / nucDecay;
-                        Act.Now[organ.Index].ini = init;
-                        Act.Now[organ.Index].ave = init;
-                        Act.Now[organ.Index].end = init;
-                        Act.Now[organ.Index].total = 0;
+                        Act.CalcNow[organ.Index].ini = init;
+                        Act.CalcNow[organ.Index].ave = init;
+                        Act.CalcNow[organ.Index].end = init;
+                        Act.CalcNow[organ.Index].total = 0;
                         Act.IntakeQuantityNow[organ.Index] = 0;
                         break;
                     }
@@ -83,9 +84,9 @@ namespace FlexID.Calc
                 var beforeBio = inflow.Organ.BioDecayCalc;
 
                 // 放射能 = 流入元臓器の放射能 * 流入元臓器の生物学的崩壊定数 * 流入割合
-                ini += Act.rNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-                ave += Act.rNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-                end += Act.rNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+                ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
+                ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
+                end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
             }
             organ.BioDecayCalc = 1;
 
@@ -107,14 +108,14 @@ namespace FlexID.Calc
                 var beforeBio = inflow.Organ.BioDecayCalc;
 
                 // 放射能 = 流入元臓器の放射能 * 流入元臓器の生物学的崩壊定数 * 流入割合
-                ini += Act.rNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-                ave += Act.rNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-                end += Act.rNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+                ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
+                ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
+                end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
             }
-            Act.rNow[organ.Index].ini = ini;
-            Act.rNow[organ.Index].ave = ave;
-            Act.rNow[organ.Index].end = end;
-            Act.rNow[organ.Index].total = 0;
+            Act.IterNow[organ.Index].ini = ini;
+            Act.IterNow[organ.Index].ave = ave;
+            Act.IterNow[organ.Index].end = end;
+            Act.IterNow[organ.Index].total = 0;
             organ.BioDecayCalc = 1;
         }
 
@@ -126,10 +127,10 @@ namespace FlexID.Calc
             // 初期振り分けはしたので0を設定するだけ？
             // todo: 機能3の区画にID=0以外の区画からの流入がある場合はその前提が崩れるため、
             // 入力ファイルを読み取った時点でそのような経路をエラーとする必要がある
-            Act.rNow[organ.Index].ini = 0;
-            Act.rNow[organ.Index].ave = 0;
-            Act.rNow[organ.Index].end = 0;
-            Act.rNow[organ.Index].total = 0;
+            Act.IterNow[organ.Index].ini = 0;
+            Act.IterNow[organ.Index].ave = 0;
+            Act.IterNow[organ.Index].end = 0;
+            Act.IterNow[organ.Index].total = 0;
         }
 
         /// <summary>
@@ -157,11 +158,11 @@ namespace FlexID.Calc
                     beforeBio = 1;
 
                 // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入元臓器の生物学的崩壊定数 * 流入割合
-                ave += Act.Now[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+                ave += Act.CalcNow[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
             }
             #endregion
 
-            Accumulation(alpha, dT, ave, in Act.Pre[organ.Index], ref Act.rNow[organ.Index]);
+            Accumulation(alpha, dT, ave, in Act.CalcPre[organ.Index], ref Act.IterNow[organ.Index]);
         }
 
         /// <summary>
@@ -217,14 +218,14 @@ namespace FlexID.Calc
                     beforeBio = 1 * organLo.Inflows[i].Rate;
 
                 // 平均放射能の積算値 += 流入元臓器のタイムステップ毎の平均放射能 * 流入
-                ave += Act.Now[organLo.Inflows[i].Organ.Index].ave * beforeBio;
+                ave += Act.CalcNow[organLo.Inflows[i].Organ.Index].ave * beforeBio;
             }
             #endregion
 
             // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
             var alpha = organLo.NuclideDecay + bioDecay;
 
-            Accumulation(alpha, dT, ave, in Act.Pre[organLo.Index], ref Act.rNow[organLo.Index]);
+            Accumulation(alpha, dT, ave, in Act.CalcPre[organLo.Index], ref Act.IterNow[organLo.Index]);
         }
 
         /// <summary>

@@ -334,15 +334,15 @@ namespace FlexID.Calc
                             SubRoutine.Excretion(organLo, Act, calcDeltaDay);
                         }
 
-                        Act.Now[organLo.Index].ini = Act.rNow[organLo.Index].ini;
-                        Act.Now[organLo.Index].ave = Act.rNow[organLo.Index].ave;
-                        Act.Now[organLo.Index].end = Act.rNow[organLo.Index].end;
+                        Act.CalcNow[organLo.Index].ini = Act.IterNow[organLo.Index].ini;
+                        Act.CalcNow[organLo.Index].ave = Act.IterNow[organLo.Index].ave;
+                        Act.CalcNow[organLo.Index].end = Act.IterNow[organLo.Index].end;
 
-                        Act.Now[organLo.Index].total = Act.rNow[organLo.Index].total;
+                        Act.CalcNow[organLo.Index].total = Act.IterNow[organLo.Index].total;
 
                         // 臓器毎の積算放射能算出
                         Act.IntakeQuantityNow[organLo.Index] =
-                            Act.IntakeQuantityPre[organLo.Index] + Act.Now[organLo.Index].total;
+                            Act.IntakeQuantityPre[organLo.Index] + Act.CalcNow[organLo.Index].total;
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
@@ -355,12 +355,12 @@ namespace FlexID.Calc
                             double s2 = 0;
                             double s3 = 0;
 
-                            if (Act.rNow[o.Index].ini != 0)
-                                s1 = Math.Abs((Act.rNow[o.Index].ini - Act.rPre[o.Index].ini) / Act.rNow[o.Index].ini);
-                            if (Act.rNow[o.Index].ave != 0)
-                                s2 = Math.Abs((Act.rNow[o.Index].ave - Act.rPre[o.Index].ave) / Act.rNow[o.Index].ave);
-                            if (Act.rNow[o.Index].end != 0)
-                                s3 = Math.Abs((Act.rNow[o.Index].end - Act.rPre[o.Index].end) / Act.rNow[o.Index].end);
+                            if (Act.IterNow[o.Index].ini != 0)
+                                s1 = Math.Abs((Act.IterNow[o.Index].ini - Act.IterPre[o.Index].ini) / Act.IterNow[o.Index].ini);
+                            if (Act.IterNow[o.Index].ave != 0)
+                                s2 = Math.Abs((Act.IterNow[o.Index].ave - Act.IterPre[o.Index].ave) / Act.IterNow[o.Index].ave);
+                            if (Act.IterNow[o.Index].end != 0)
+                                s3 = Math.Abs((Act.IterNow[o.Index].end - Act.IterPre[o.Index].end) / Act.IterNow[o.Index].end);
 
                             if (s1 > convergence || s2 > convergence || s3 > convergence)
                             {
@@ -387,7 +387,7 @@ namespace FlexID.Calc
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in dataLo.Organs)
                 {
-                    OutMeshTotal[organ.Index] += Act.Now[organ.Index].total;
+                    OutMeshTotal[organ.Index] += Act.CalcNow[organ.Index].total;
                     Act.Excreta[organ.Index] += Act.PreExcreta[organ.Index];
                 }
 
@@ -403,7 +403,7 @@ namespace FlexID.Calc
                     var nucDecay = nuclide.Ramd;
 
                     // タイムステップごとの放射能　
-                    var activity = Act.Now[organ.Index].end * calcDeltaT * nucDecay;
+                    var activity = Act.CalcNow[organ.Index].end * calcDeltaT * nucDecay;
                     if (activity == 0)
                         continue;
 
@@ -440,7 +440,7 @@ namespace FlexID.Calc
                     foreach (var organ in dataLo.Organs)
                     {
                         if (organ.Func == OrganFunc.exc)
-                            Act.Now[organ.Index].end = Act.Excreta[organ.Index] / outDeltaDay;
+                            Act.CalcNow[organ.Index].end = Act.Excreta[organ.Index] / outDeltaDay;
                     }
 
                     // 残留放射能をテンポラリファイルに出力
