@@ -168,11 +168,12 @@ namespace FlexID.Calc
         /// <param name="dT">ΔT[day]</param>
         public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
         {
-            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
-            double alpha = organLo.BioDecay;
+            var bioDecay = organLo.BioDecay;
+
+            // 流入する平均放射能
+            var ave = 0.0;
 
             #region 流入臓器の数ループ
-            double ave = 0.0;
             for (int i = 0; i < organLo.Inflows.Count; i++)
             {
                 // 丸め誤差が出るので、Roundするか否か
@@ -186,23 +187,23 @@ namespace FlexID.Calc
                     if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                     {
                         beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
-                        alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+                        bioDecay = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                     else if (organLo.Name == "SI")
                     {
                         beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
-                        alpha = organLo.BioDecay;
+                        bioDecay = organLo.BioDecay;
                     }
                     else
                     {
                         beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
-                        alpha = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+                        bioDecay = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                 }
                 else
                 {
                     beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
-                    alpha = organLo.BioDecay;
+                    bioDecay = organLo.BioDecay;
                 }
 
                 // デバッグ用
@@ -218,7 +219,8 @@ namespace FlexID.Calc
             }
             #endregion
 
-            alpha += organLo.NuclideDecay;
+            // alpha = 核種の崩壊定数 + 当該臓器の生物学的崩壊定数
+            var alpha = organLo.NuclideDecay + bioDecay;
 
             Accumulation(alpha, dT, ave, in Act.Pre[organLo.Index], ref Act.rNow[organLo.Index]);
         }
