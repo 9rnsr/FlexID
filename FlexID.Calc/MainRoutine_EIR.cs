@@ -228,10 +228,10 @@ namespace FlexID.Calc
             // 処理中の出力メッシュにおける臓器毎の積算放射能
             var OutMeshTotal = new double[dataLo.Organs.Count];
 
-            double WholeBody = 0;  // 積算線量
-            double preBody = 0;
-            var Result = new double[31];  // 組織毎の計算結果
-            var preResult = new double[31];
+            var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
+            var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
+            var resultNow = new double[31]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+            var resultPre = new double[31]; // 前回の出力時間メッシュにおける組織毎の計算結果。
 
             void ClearOutMeshTotal()
             {
@@ -424,8 +424,8 @@ namespace FlexID.Calc
                             // 実効線量 = 等価線量 * wT
                             var effectiveDose = equivalentDose * targetWeight;
 
-                            Result[indexT] += equivalentDose;
-                            WholeBody += effectiveDose;
+                            resultNow[indexT] += equivalentDose;
+                            wholeBodyNow += effectiveDose;
                         }
                     }
                 }
@@ -446,7 +446,7 @@ namespace FlexID.Calc
                     // 残留放射能をテンポラリファイルに出力
                     CalcOut.ActivityOut(outNowDay, Act, OutMeshTotal, outIter);
 
-                    CalcOut.CommitmentOut(outNowDay, outPreDay, WholeBody, preBody, Result, preResult);
+                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
 
                     ClearOutMeshTotal();
 
@@ -456,8 +456,8 @@ namespace FlexID.Calc
                     outPreT = outNowT;
                     outNowT = outTimes.Current;
 
-                    preBody = WholeBody;
-                    Array.Copy(Result, preResult, Result.Length);
+                    wholeBodyPre = wholeBodyNow;
+                    Array.Copy(resultNow, resultPre, resultNow.Length);
                 }
             }
 
