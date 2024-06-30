@@ -77,8 +77,17 @@ namespace FlexID.Calc
             double ave = 0;
             double end = 0;
 
+            // 排泄コンパートメントでは、計算時間メッシュ期間において
+            // 他のコンパートメントからの流入量のみに着目する。
+            // このため、以下の2つの経路についての計算を行わない。
+            // - 親核種の崩壊による子核種への移行(親exc側からの流出、及び子exc側への流入)
+            // - 蓄積した核種の崩壊による流出(減衰)
             foreach (var inflow in organ.Inflows)
             {
+                // 親核種から子核種への崩壊による流入経路をスキップする。
+                if (inflow.Organ.Nuclide != organ.Nuclide)
+                    continue;
+
                 // 流入元の生物学的崩壊定数[/day]
                 var beforeBio = inflow.Organ.BioDecayCalc;
 
@@ -87,9 +96,12 @@ namespace FlexID.Calc
                 ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
                 end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
             }
-            organ.BioDecayCalc = 1;
-
+            Act.IterNow[organ.Index].ini = ini;
+            Act.IterNow[organ.Index].ave = ave;
+            Act.IterNow[organ.Index].end = end;
             Act.IterNow[organ.Index].total = dT * ave;
+
+            organ.BioDecayCalc = 1;
         }
 
         /// <summary>
