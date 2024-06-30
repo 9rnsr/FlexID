@@ -192,9 +192,8 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="outT"></param>
         /// <param name="Act"></param>
-        /// <param name="OutMeshTotal"></param>
         /// <param name="iter"></param>
-        public void ActivityOut(double outT, Activity Act, double[] OutMeshTotal, int iter)
+        public void ActivityOut(double outT, Activity Act, int iter)
         {
             foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
             foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
@@ -204,8 +203,8 @@ namespace FlexID.Calc
                 var nucDecay = organ.NuclideDecay;
 
                 //var organId = organ.ID;
-                var end = Act.Now[organ.Index].end * nucDecay;
-                //var total = OutMeshTotal[organ.Index] * nucDecay;
+                var end = Act.CalcNow[organ.Index].end * nucDecay;
+                //var total = Act.OutTotalNow[organ.Index] * nucDecay;
                 var cumulative = Act.IntakeQuantityNow[organ.Index] * nucDecay;
 
                 var wrRete = wsOrgansRete[organ.Index];
@@ -221,22 +220,22 @@ namespace FlexID.Calc
         /// <summary>
         /// 出力時間メッシュにおける預託線量を出力。
         /// </summary>
-        /// <param name="now"></param>
-        /// <param name="pre"></param>
-        /// <param name="WholeBody"></param>
-        /// <param name="preBody"></param>
-        /// <param name="Result"></param>
-        /// <param name="preResult"></param>
-        public void CommitmentOut(double now, double pre, double WholeBody, double preBody, double[] Result, double[] preResult)
+        /// <param name="nowT">今回の出力時刻。</param>
+        /// <param name="preT">前回の出力時刻。</param>
+        /// <param name="wholeBodyNow">今回出力における全身の実効線量。</param>
+        /// <param name="wholeBodyPre">前回出力における全身の実効線量。</param>
+        /// <param name="resultNow">今回出力における標的組織毎の等価線量。</param>
+        /// <param name="resultPre">前回出力における標的組織毎の等価線量。</param>
+        public void CommitmentOut(double nowT, double preT, double wholeBodyNow, double wholeBodyPre, double[] resultNow, double[] resultPre)
         {
-            wDose.Write("{0,14:0.000000E+00}  ", now);
-            wDose.Write("{0,13:0.000000E+00}", WholeBody);
-            wRate.Write("{0,14:0.000000E+00}  ", now);
-            wRate.Write("{0,13:0.000000E+00}", (WholeBody - preBody) / ((now - pre) * 24));
-            for (int i = 0; i < Result.Length; i++)
+            wDose.Write("{0,14:0.000000E+00}  ", nowT);
+            wDose.Write("{0,13:0.000000E+00}", wholeBodyNow);
+            wRate.Write("{0,14:0.000000E+00}  ", nowT);
+            wRate.Write("{0,13:0.000000E+00}", (wholeBodyNow - wholeBodyPre) / ((nowT - preT) * 24));
+            for (int i = 0; i < resultNow.Length; i++)
             {
-                wDose.Write("  {0,12:0.000000E+00}", Result[i]);
-                wRate.Write("  {0,12:0.000000E+00}", (Result[i] - preResult[i]) / ((now - pre) * 24));
+                wDose.Write("  {0,12:0.000000E+00}", resultNow[i]);
+                wRate.Write("  {0,12:0.000000E+00}", (resultNow[i] - resultPre[i]) / ((nowT - preT) * 24));
             }
             wDose.WriteLine();
             wRate.WriteLine();

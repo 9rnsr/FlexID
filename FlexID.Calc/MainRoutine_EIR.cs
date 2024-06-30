@@ -210,59 +210,46 @@ namespace FlexID.Calc
             // 標的領域の組織加重係数を取得。
             var targetWeights = dataList[0].TargetWeights;
 
-            // 計算時間メッシュ
+            // 計算時間メッシュを準備する。
             var calcTimes = calcTimeMesh.Start();
             long calcPreT;
             long calcNowT = calcTimes.Current;
+            int calcIter;   // 計算時間メッシュ毎の収束計算回数
 
-            // inputの初期値を各臓器に振り分ける
-            SubRoutine.Init(Act, dataLo);
-
-            // 出力時間メッシュ
+            // 出力時間メッシュを準備する。
             var outTimes = outTimeMesh.Start();
             long outPreT;
             long outNowT = outTimes.Current;
+            int outIter;    // 出力時間メッシュ毎の収束計算回数
 
-            // 処理中の出力メッシュにおける臓器毎の積算放射能
-            var OutMeshTotal = new double[dataLo.Organs.Count];
+            var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
+            var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
+            var resultNow = new double[31]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+            var resultPre = new double[31]; // 前回の出力時間メッシュにおける組織毎の計算結果。
 
-            double WholeBody = 0;  // 積算線量
-            double preBody = 0;
-            var Result = new double[31];  // 組織毎の計算結果
-            var preResult = new double[31];
+            // inputの初期値を各コンパートメントに振り分ける。
+            SubRoutine.Init(Act, dataLo);
 
-            int outIter;
+            // 初期配分された放射能をファイルに出力する。
+            CalcOut.ActivityOut(0.0, Act, 0);
 
-            void ClearOutMeshTotal()
-            {
-                foreach (var organ in dataLo.Organs)
-                {
-                    OutMeshTotal[organ.Index] = 0;
-                    Act.Excreta[organ.Index] = 0;
-                }
-
-                outIter = 0;
-            }
-            ClearOutMeshTotal();    // 各臓器の積算放射能として0を設定する
-
-            // 初期配分された残留放射能をテンポラリファイルに出力
-            CalcOut.ActivityOut(0.0, Act, OutMeshTotal, 0);
-
+            // 出力時間メッシュを進める。
             outTimes.MoveNext();
             outPreT = outNowT;
             outNowT = outTimes.Current;
+            outIter = 0;
 
+            // 計算時間メッシュを進める。
             while (calcTimes.MoveNext())
             {
-                // 不要な前ステップのデータを削除
-                Act.NextTime(dataLo);
-
                 calcPreT = calcNowT;
                 calcNowT = calcTimes.Current;
 
                 // 預託期間を超える計算は行わない
                 if (commitmentPeriod < calcNowT)
                     break;
+
+                Act.NextCalc(dataLo);
 
                 var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
 
@@ -307,7 +294,7 @@ namespace FlexID.Calc
                 int daysHi = dataHi.StartAge;
 
                 #region 1つの計算時間メッシュ内で収束計算を繰り返す
-                for (int iter = 1; iter <= iterMax; iter++)
+                for (calcIter = 1; calcIter <= iterMax; calcIter++)
                 {
                     for (int i = 0; i < dataLo.Organs.Count; i++)
                     {
@@ -323,59 +310,55 @@ namespace FlexID.Calc
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            SubRoutine.Accumulation_EIR(calcDeltaDay, organLo, organHi, Act, ageDay, daysLo, daysHi);
+                            SubRoutine.Accumulation_EIR(organLo, organHi, Act, calcDeltaDay, ageDay, daysLo, daysHi);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
                             SubRoutine.Mix(organLo, Act);
                         }
-                        else if (func == OrganFunc.exc) // 排泄物
+                        else if (func == OrganFunc.exc) // 排泄
                         {
                             SubRoutine.Excretion(organLo, Act, calcDeltaDay);
                         }
 
-                        Act.Now[organLo.Index].ini = Act.rNow[organLo.Index].ini;
-                        Act.Now[organLo.Index].ave = Act.rNow[organLo.Index].ave;
-                        Act.Now[organLo.Index].end = Act.rNow[organLo.Index].end;
+                        Act.CalcNow[organLo.Index].ini = Act.IterNow[organLo.Index].ini;
+                        Act.CalcNow[organLo.Index].ave = Act.IterNow[organLo.Index].ave;
+                        Act.CalcNow[organLo.Index].end = Act.IterNow[organLo.Index].end;
 
-                        Act.Now[organLo.Index].total = Act.rNow[organLo.Index].total;
+                        Act.CalcNow[organLo.Index].total = Act.IterNow[organLo.Index].total;
 
                         // 臓器毎の積算放射能算出
                         Act.IntakeQuantityNow[organLo.Index] =
-                            Act.IntakeQuantityPre[organLo.Index] + Act.Now[organLo.Index].total;
+                            Act.IntakeQuantityPre[organLo.Index] + Act.CalcNow[organLo.Index].total;
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
-                    if (iter > 1)
+                    if (calcIter > 1)
                     {
-                        var flgIter = true;
+                        var converged = true;
                         foreach (var o in dataLo.Organs)
                         {
-                            double s1 = 0;
-                            double s2 = 0;
-                            double s3 = 0;
+                            ref var iterNow = ref Act.IterNow[o.Index];
+                            ref var iterPre = ref Act.IterPre[o.Index];
 
-                            if (Act.rNow[o.Index].ini != 0)
-                                s1 = Math.Abs((Act.rNow[o.Index].ini - Act.rPre[o.Index].ini) / Act.rNow[o.Index].ini);
-                            if (Act.rNow[o.Index].ave != 0)
-                                s2 = Math.Abs((Act.rNow[o.Index].ave - Act.rPre[o.Index].ave) / Act.rNow[o.Index].ave);
-                            if (Act.rNow[o.Index].end != 0)
-                                s3 = Math.Abs((Act.rNow[o.Index].end - Act.rPre[o.Index].end) / Act.rNow[o.Index].end);
+                            var s1 = iterNow.ini != 0 ? Math.Abs((iterNow.ini - iterPre.ini) / iterNow.ini) : 0;
+                            var s2 = iterNow.ave != 0 ? Math.Abs((iterNow.ave - iterPre.ave) / iterNow.ave) : 0;
+                            var s3 = iterNow.end != 0 ? Math.Abs((iterNow.end - iterPre.end) / iterNow.end) : 0;
 
                             if (s1 > convergence || s2 > convergence || s3 > convergence)
                             {
-                                flgIter = false;
+                                converged = false;
                                 break;
                             }
                         }
                         // 前回との差が全ての臓器で収束した場合
-                        if (flgIter)
+                        if (converged)
                         {
                             // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
-                            outIter = iter;
+                            outIter = calcIter;
 
                             // // 出力メッシュ内での総反復回数を保存する。
-                            // // outIter += iter;
+                            // outIter += iter;
                             break;
                         }
                     }
@@ -387,7 +370,7 @@ namespace FlexID.Calc
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in dataLo.Organs)
                 {
-                    OutMeshTotal[organ.Index] += Act.Now[organ.Index].total;
+                    Act.OutTotalNow[organ.Index] += Act.CalcNow[organ.Index].total;
                     Act.Excreta[organ.Index] += Act.PreExcreta[organ.Index];
                 }
 
@@ -396,37 +379,37 @@ namespace FlexID.Calc
 
                 foreach (var organ in dataLo.Organs)
                 {
+                    // コンパートメントが線源領域に対応しない場合は何もしない。
+                    if (organ.SourceRegion is null)
+                        continue;
+
                     if (organ.Name.Contains("mix"))
                         continue;
 
-                    var nuclide = organ.Nuclide;
-                    var nucDecay = nuclide.Ramd;
+                    var nucDecay = organ.NuclideDecay;
 
-                    // タイムステップごとの放射能　
-                    var activity = Act.Now[organ.Index].end * calcDeltaT * nucDecay;
+                    // コンパートメントの残留放射能がゼロの場合は何もしない。
+                    var activity = Act.CalcNow[organ.Index].end * calcDeltaT * nucDecay;
                     if (activity == 0)
                         continue;
 
-                    if (organ.SourceRegion != null)
+                    // コンパートメントから各標的領域への預託線量を計算する。
+                    for (int indexT = 0; indexT < 31; indexT++)
                     {
-                        // コンパートメントから各標的領域への預託線量を計算する。
-                        for (int indexT = 0; indexT < 31; indexT++)
-                        {
-                            // 標的領域の部分的な重量。
-                            var targetWeight = targetWeights[indexT];
+                        // 標的領域の部分的な重量。
+                        var targetWeight = targetWeights[indexT];
 
-                            // S係数(補間あり)。
-                            var scoeff = organsSee[organ.Index][indexT];
+                        // S係数(補間あり)。
+                        var scoeff = organsSee[organ.Index][indexT];
 
-                            // 等価線量 = 放射能 * S係数
-                            var equivalentDose = activity * scoeff;
+                        // 等価線量 = 放射能 * S係数
+                        var equivalentDose = activity * scoeff;
 
-                            // 実効線量 = 等価線量 * wT
-                            var effectiveDose = equivalentDose * targetWeight;
+                        // 実効線量 = 等価線量 * wT
+                        var effectiveDose = equivalentDose * targetWeight;
 
-                            Result[indexT] += equivalentDose;
-                            WholeBody += effectiveDose;
-                        }
+                        resultNow[indexT] += equivalentDose;
+                        wholeBodyNow += effectiveDose;
                     }
                 }
 
@@ -440,24 +423,28 @@ namespace FlexID.Calc
                     foreach (var organ in dataLo.Organs)
                     {
                         if (organ.Func == OrganFunc.exc)
-                            Act.Now[organ.Index].end = Act.Excreta[organ.Index] / outDeltaDay;
+                            Act.CalcNow[organ.Index].end = Act.Excreta[organ.Index] / outDeltaDay;
                     }
 
-                    // 残留放射能をテンポラリファイルに出力
-                    CalcOut.ActivityOut(outNowDay, Act, OutMeshTotal, outIter);
+                    // 放射能をファイルに出力する。
+                    CalcOut.ActivityOut(outNowDay, Act, outIter);
 
-                    CalcOut.CommitmentOut(outNowDay, outPreDay, WholeBody, preBody, Result, preResult);
-
-                    ClearOutMeshTotal();
+                    // 線量をファイルに出力する。
+                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
 
                     // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                     if (!outTimes.MoveNext())
                         break;
+
+                    // 出力時間メッシュを進める。
                     outPreT = outNowT;
                     outNowT = outTimes.Current;
+                    outIter = 0;
 
-                    preBody = WholeBody;
-                    Array.Copy(Result, preResult, Result.Length);
+                    Act.NextOut(dataLo);
+
+                    wholeBodyPre = wholeBodyNow;
+                    Array.Copy(resultNow, resultPre, resultNow.Length);
                 }
             }
 

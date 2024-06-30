@@ -63,7 +63,7 @@ namespace FlexID.Calc
         public NuclideData Nuclide;
 
         /// <summary>
-        /// 崩壊定数。
+        /// 崩壊定数[/day]。(＝ ln(2) / 半減期[day])
         /// </summary>
         public double NuclideDecay => Nuclide.Ramd;
 
@@ -88,12 +88,12 @@ namespace FlexID.Calc
         public OrganFunc Func;
 
         /// <summary>
-        /// 生物学的崩壊定数。
+        /// 生物学的崩壊定数[/day]。
         /// </summary>
         public double BioDecay;
 
         /// <summary>
-        /// 生物学的崩壊定数(計算用)。
+        /// 生物学的崩壊定数[/day](計算用)。
         /// </summary>
         public double BioDecayCalc;
 
@@ -126,7 +126,7 @@ namespace FlexID.Calc
         public string IntakeRoute;
 
         /// <summary>
-        /// 崩壊定数。
+        /// 崩壊定数[/day]。(＝ ln(2) / 半減期[day])
         /// </summary>
         public double Ramd;
 
