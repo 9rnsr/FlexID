@@ -202,14 +202,15 @@ namespace FlexID.Calc
             {
                 var nucDecay = organ.NuclideDecay;
 
-                //var organId = organ.ID;
-                var end = Act.CalcNow[organ.Index].end * nucDecay;
-                //var total = Act.OutTotalNow[organ.Index] * nucDecay;
-                var cumulative = Act.IntakeQuantityNow[organ.Index] * nucDecay;
+                var retention = organ.Func == OrganFunc.exc
+                    ? Act.OutNow[organ.Index].ave * nucDecay    // TODO: for ICRP OIR data compatibility?
+                    : Act.OutNow[organ.Index].end * nucDecay;
+
+                var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
 
                 var wrRete = wsOrgansRete[organ.Index];
                 var wrCumu = wsOrgansCumu[organ.Index];
-                wrRete.Write("  {0:0.00000000E+00}", end);
+                wrRete.Write("  {0:0.00000000E+00}", retention);
                 wrCumu.Write("  {0:0.00000000E+00}", cumulative);
             }
 

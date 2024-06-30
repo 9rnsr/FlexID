@@ -145,10 +145,6 @@ namespace FlexID.Calc
                         Act.CalcNow[organ.Index].end = Act.IterNow[organ.Index].end;
 
                         Act.CalcNow[organ.Index].total = Act.IterNow[organ.Index].total;
-
-                        // 臓器毎の積算放射能算出
-                        Act.IntakeQuantityNow[organ.Index] =
-                            Act.IntakeQuantityPre[organ.Index] + Act.CalcNow[organ.Index].total;
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
@@ -189,8 +185,11 @@ namespace FlexID.Calc
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in data.Organs)
                 {
-                    Act.OutTotalNow[organ.Index] += Act.CalcNow[organ.Index].total;
-                    Act.Excreta[organ.Index] += Act.PreExcreta[organ.Index];
+                    // 今回の出力時間メッシュにおける積算放射能。
+                    Act.OutNow[organ.Index].total += Act.CalcNow[organ.Index].total;
+
+                    // 摂取時からの積算放射能。
+                    Act.OutTotalFromIntake[organ.Index] += Act.CalcNow[organ.Index].total;
                 }
 
                 foreach (var organ in data.Organs)
@@ -236,10 +235,17 @@ namespace FlexID.Calc
                     var outNowDay = TimeMesh.SecondsToDays(outNowT);
                     var outPreDay = TimeMesh.SecondsToDays(outPreT);
                     var outDeltaDay = TimeMesh.SecondsToDays(outDeltaT);
+
+                    // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                     foreach (var organ in data.Organs)
                     {
+                        Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
+                        Act.OutNow[organ.Index].end = Act.CalcNow[organ.Index].end;
+
                         if (organ.Func == OrganFunc.exc)
-                            Act.CalcNow[organ.Index].end = Act.Excreta[organ.Index] / outDeltaDay;
+                        {
+                            Act.OutTotalFromIntake[organ.Index] = 0; // TODO: for compatibility
+                        }
                     }
 
                     // 放射能をファイルに出力する。

@@ -21,13 +21,8 @@ namespace FlexID.Calc
             Act.IterPre = new OrganActivity[data.Organs.Count];
             Act.IterNow = new OrganActivity[data.Organs.Count];
 
-            Act.OutTotalNow = new double[data.Organs.Count];
-
-            Act.IntakeQuantityPre = new double[data.Organs.Count];
-            Act.IntakeQuantityNow = new double[data.Organs.Count];
-
-            Act.Excreta = new double[data.Organs.Count];
-            Act.PreExcreta = new double[data.Organs.Count];
+            Act.OutNow = new OrganActivity[data.Organs.Count];
+            Act.OutTotalFromIntake = new double[data.Organs.Count];
 
             // 全ての組織における計算結果を初期化する
             foreach (var organ in data.Organs)
@@ -42,11 +37,12 @@ namespace FlexID.Calc
                 Act.CalcNow[organ.Index].end = 0;
                 Act.CalcNow[organ.Index].total = 0;
 
-                Act.OutTotalNow[organ.Index] = 0;
+                Act.OutNow[organ.Index].ini = 0;
+                Act.OutNow[organ.Index].ave = 0;
+                Act.OutNow[organ.Index].end = 0;
+                Act.OutNow[organ.Index].total = 0;
 
-                Act.IntakeQuantityNow[organ.Index] = 0;
-
-                Act.Excreta[organ.Index] = 0;
+                Act.OutTotalFromIntake[organ.Index] = 0;
             }
 
             foreach (var organ in data.Organs)
@@ -65,7 +61,9 @@ namespace FlexID.Calc
                     Act.CalcNow[organ.Index].ave = init;
                     Act.CalcNow[organ.Index].end = init;
                     Act.CalcNow[organ.Index].total = 0;
-                    Act.IntakeQuantityNow[organ.Index] = 0;
+
+                    // 初期配分結果の出力に使用される。
+                    Act.OutNow[organ.Index] = Act.CalcNow[organ.Index];
                 }
             }
         }
@@ -82,8 +80,17 @@ namespace FlexID.Calc
             double ave = 0;
             double end = 0;
 
+            // 排泄コンパートメントでは、計算時間メッシュ期間において
+            // 他のコンパートメントからの流入量のみに着目する。
+            // このため、以下の2つの経路についての計算を行わない。
+            // - 親核種の崩壊による子核種への移行(親exc側からの流出、及び子exc側への流入)
+            // - 蓄積した核種の崩壊による流出(減衰)
             foreach (var inflow in organ.Inflows)
             {
+                // 親核種から子核種への崩壊による流入経路をスキップする。
+                if (inflow.Organ.Nuclide != organ.Nuclide)
+                    continue;
+
                 // 流入元の生物学的崩壊定数[/day]
                 var beforeBio = inflow.Organ.BioDecayCalc;
 
@@ -92,9 +99,12 @@ namespace FlexID.Calc
                 ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
                 end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
             }
-            organ.BioDecayCalc = 1;
+            Act.IterNow[organ.Index].ini = ini;
+            Act.IterNow[organ.Index].ave = ave;
+            Act.IterNow[organ.Index].end = end;
+            Act.IterNow[organ.Index].total = dT * ave;
 
-            Act.PreExcreta[organ.Index] = dT * ave;
+            organ.BioDecayCalc = 1;
         }
 
         /// <summary>
@@ -121,7 +131,11 @@ namespace FlexID.Calc
             Act.IterNow[organ.Index].ini = ini;
             Act.IterNow[organ.Index].ave = ave;
             Act.IterNow[organ.Index].end = end;
+
+            // 混合コンパートメントでは、流入放射能は全て接続先へ流出するため、
+            // 計算時間メッシュ期間における積算放射能をゼロと計算する。
             Act.IterNow[organ.Index].total = 0;
+
             organ.BioDecayCalc = 1;
         }
 
@@ -138,6 +152,9 @@ namespace FlexID.Calc
             Act.IterNow[organ.Index].ini = 0;
             Act.IterNow[organ.Index].ave = 0;
             Act.IterNow[organ.Index].end = 0;
+
+            // 入力コンパートメントでは、全ての放射能は初期配分によって接続先へ流出するため、
+            // 計算時間メッシュ期間における積算放射能をゼロと計算する。
             Act.IterNow[organ.Index].total = 0;
         }
 
