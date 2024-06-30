@@ -338,16 +338,12 @@ namespace FlexID.Calc
                         var converged = true;
                         foreach (var o in dataLo.Organs)
                         {
-                            double s1 = 0;
-                            double s2 = 0;
-                            double s3 = 0;
+                            ref var iterNow = ref Act.IterNow[o.Index];
+                            ref var iterPre = ref Act.IterPre[o.Index];
 
-                            if (Act.IterNow[o.Index].ini != 0)
-                                s1 = Math.Abs((Act.IterNow[o.Index].ini - Act.IterPre[o.Index].ini) / Act.IterNow[o.Index].ini);
-                            if (Act.IterNow[o.Index].ave != 0)
-                                s2 = Math.Abs((Act.IterNow[o.Index].ave - Act.IterPre[o.Index].ave) / Act.IterNow[o.Index].ave);
-                            if (Act.IterNow[o.Index].end != 0)
-                                s3 = Math.Abs((Act.IterNow[o.Index].end - Act.IterPre[o.Index].end) / Act.IterNow[o.Index].end);
+                            var s1 = iterNow.ini != 0 ? Math.Abs((iterNow.ini - iterPre.ini) / iterNow.ini) : 0;
+                            var s2 = iterNow.ave != 0 ? Math.Abs((iterNow.ave - iterPre.ave) / iterNow.ave) : 0;
+                            var s3 = iterNow.end != 0 ? Math.Abs((iterNow.end - iterPre.end) / iterNow.end) : 0;
 
                             if (s1 > convergence || s2 > convergence || s3 > convergence)
                             {
