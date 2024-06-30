@@ -53,25 +53,19 @@ namespace FlexID.Calc
             {
                 var nuclide = organ.Nuclide;
 
-                foreach (var inflow in organ.Inflows)
+                // organが、inputからの流入経路を持ち、かつinputと同じ対象核種に属するかを確認する。
+                var inflowFromInp = organ.Inflows.FirstOrDefault(i => i.Organ.Func == OrganFunc.inp &&
+                                                                      i.Organ.Nuclide == nuclide);
+                if (inflowFromInp != null)
                 {
-                    // 流入元の臓器機能が"入力"でないものをはじく
-                    if (inflow.Organ.Func != OrganFunc.inp)
-                        continue;
+                    var nucDecay = nuclide.Ramd;
 
-                    // inputから初期値を受け取る臓器、対象組織が対象核種の組織か確認
-                    if (inflow.Organ.Nuclide == nuclide)
-                    {
-                        var nucDecay = nuclide.Ramd;
-
-                        var init = inflow.Rate / nucDecay;
-                        Act.CalcNow[organ.Index].ini = init;
-                        Act.CalcNow[organ.Index].ave = init;
-                        Act.CalcNow[organ.Index].end = init;
-                        Act.CalcNow[organ.Index].total = 0;
-                        Act.IntakeQuantityNow[organ.Index] = 0;
-                        break;
-                    }
+                    var init = inflowFromInp.Rate / nucDecay;
+                    Act.CalcNow[organ.Index].ini = init;
+                    Act.CalcNow[organ.Index].ave = init;
+                    Act.CalcNow[organ.Index].end = init;
+                    Act.CalcNow[organ.Index].total = 0;
+                    Act.IntakeQuantityNow[organ.Index] = 0;
                 }
             }
         }
