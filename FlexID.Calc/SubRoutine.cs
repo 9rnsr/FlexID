@@ -77,9 +77,12 @@ namespace FlexID.Calc
         }
 
         /// <summary>
-        /// 排泄物
+        /// 排泄
         /// </summary>
-        public static void Excretion(Organ organ, Activity Act, double dt)
+        /// <param name="organ">対象コンパートメント</param>
+        /// <param name="Act">計算結果</param>
+        /// <param name="dT">ΔT[day]</param>
+        public static void Excretion(Organ organ, Activity Act, double dT)
         {
             double ini = 0;
             double ave = 0;
@@ -97,12 +100,14 @@ namespace FlexID.Calc
             }
             organ.BioDecayCalc = 1;
 
-            Act.PreExcreta[organ.Index] = dt * ave;
+            Act.PreExcreta[organ.Index] = dT * ave;
         }
 
         /// <summary>
         /// 混合
         /// </summary>
+        /// <param name="organ">対象コンパートメント</param>
+        /// <param name="Act">計算結果</param>
         public static void Mix(Organ organ, Activity Act)
         {
             double ini = 0;
@@ -129,6 +134,8 @@ namespace FlexID.Calc
         /// <summary>
         /// 入力
         /// </summary>
+        /// <param name="organ">対象コンパートメント</param>
+        /// <param name="Act">計算結果</param>
         public static void Input(Organ organ, Activity Act)
         {
             // 初期振り分けはしたので0を設定するだけ？
@@ -143,8 +150,10 @@ namespace FlexID.Calc
         /// <summary>
         /// 蓄積(OIR)
         /// </summary>
+        /// <param name="organ">対象コンパートメント</param>
+        /// <param name="Act">計算結果</param>
         /// <param name="dT">ΔT[day]</param>
-        public static void Accumulation_OIR(double dT, Organ organ, Activity Act)
+        public static void Accumulation_OIR(Organ organ, Activity Act, double dT)
         {
             // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
             var alpha = organ.NuclideDecay + organ.BioDecay;
@@ -175,8 +184,14 @@ namespace FlexID.Calc
         /// <summary>
         /// 蓄積(EIR)
         /// </summary>
+        /// <param name="organLo">補間期間下限側の対象コンパートメント</param>
+        /// <param name="organHi">補間期間上限側の対象コンパートメント</param>
+        /// <param name="Act">計算結果</param>
         /// <param name="dT">ΔT[day]</param>
-        public static void Accumulation_EIR(double dT, Organ organLo, Organ organHi, Activity Act, double day, int daysLo, int daysHi)
+        /// <param name="ageDay">評価時刻における年齢[day]</param>
+        /// <param name="daysLo">補間期間下限側の年齢[day]</param>
+        /// <param name="daysHi">補間期間上限側の年齢[day]</param>
+        public static void Accumulation_EIR(Organ organLo, Organ organHi, Activity Act, double dT, double ageDay, int daysLo, int daysHi)
         {
             // 当該臓器の生物学的崩壊定数[/day]
             var bioDecay = organLo.BioDecay;
@@ -193,22 +208,22 @@ namespace FlexID.Calc
 
                 // 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 double beforeBio;
-                if (day <= MainRoutine_EIR.AgeAdult)
+                if (ageDay <= MainRoutine_EIR.AgeAdult)
                 {
                     if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                     {
                         beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
-                        bioDecay = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+                        bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                     else if (organLo.Name == "SI")
                     {
-                        beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
+                        beforeBio = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
                         bioDecay = organLo.BioDecay;
                     }
                     else
                     {
-                        beforeBio = Interpolation(day, inflowLo, inflowHi, daysLo, daysHi);
-                        bioDecay = Interpolation(day, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
+                        beforeBio = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
+                        bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                     }
                 }
                 else

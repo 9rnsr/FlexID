@@ -129,13 +129,13 @@ namespace FlexID.Calc
                         }
                         else if (func == OrganFunc.acc) // 蓄積
                         {
-                            SubRoutine.Accumulation_OIR(calcDeltaDay, organ, Act);
+                            SubRoutine.Accumulation_OIR(organ, Act, calcDeltaDay);
                         }
                         else if (func == OrganFunc.mix) // 混合
                         {
                             SubRoutine.Mix(organ, Act);
                         }
-                        else if (func == OrganFunc.exc) // 排泄物
+                        else if (func == OrganFunc.exc) // 排泄
                         {
                             SubRoutine.Excretion(organ, Act, calcDeltaDay);
                         }
