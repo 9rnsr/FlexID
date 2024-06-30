@@ -189,8 +189,8 @@ namespace FlexID.Calc
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in data.Organs)
                 {
+                    // 今回の出力時間メッシュにおける積算放射能。
                     Act.OutTotalNow[organ.Index] += Act.CalcNow[organ.Index].total;
-                    Act.Excreta[organ.Index] += Act.PreExcreta[organ.Index];
                 }
 
                 foreach (var organ in data.Organs)
@@ -239,7 +239,11 @@ namespace FlexID.Calc
                     foreach (var organ in data.Organs)
                     {
                         if (organ.Func == OrganFunc.exc)
-                            Act.CalcNow[organ.Index].end = Act.Excreta[organ.Index] / outDeltaDay;
+                        {
+                            Act.CalcNow[organ.Index].end = Act.OutTotalNow[organ.Index] / outDeltaDay;
+
+                            Act.IntakeQuantityNow[organ.Index] = 0; // TODO: for compatibility
+                        }
                     }
 
                     // 放射能をファイルに出力する。

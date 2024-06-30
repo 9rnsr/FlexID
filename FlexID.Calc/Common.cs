@@ -59,9 +59,6 @@ namespace FlexID.Calc
         // 1つ前の時間メッシュにおける、摂取時からの積算放射能
         public double[] IntakeQuantityNow;
 
-        public double[] Excreta;
-        public double[] PreExcreta;
-
         /// <summary>
         /// 次の計算時間メッシュのための準備を行う。
         /// </summary>
@@ -96,7 +93,6 @@ namespace FlexID.Calc
                 IterNow[o.Index].ave = 0;
                 IterNow[o.Index].end = 0;
                 IterNow[o.Index].total = 0;
-                PreExcreta[o.Index] = 0;
             }
         }
 
@@ -109,7 +105,6 @@ namespace FlexID.Calc
             foreach (var organ in data.Organs)
             {
                 OutTotalNow[organ.Index] = 0;
-                Excreta[organ.Index] = 0;
             }
         }
 

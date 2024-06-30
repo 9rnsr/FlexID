@@ -26,9 +26,6 @@ namespace FlexID.Calc
             Act.IntakeQuantityPre = new double[data.Organs.Count];
             Act.IntakeQuantityNow = new double[data.Organs.Count];
 
-            Act.Excreta = new double[data.Organs.Count];
-            Act.PreExcreta = new double[data.Organs.Count];
-
             // 全ての組織における計算結果を初期化する
             foreach (var organ in data.Organs)
             {
@@ -45,8 +42,6 @@ namespace FlexID.Calc
                 Act.OutTotalNow[organ.Index] = 0;
 
                 Act.IntakeQuantityNow[organ.Index] = 0;
-
-                Act.Excreta[organ.Index] = 0;
             }
 
             foreach (var organ in data.Organs)
@@ -94,7 +89,7 @@ namespace FlexID.Calc
             }
             organ.BioDecayCalc = 1;
 
-            Act.PreExcreta[organ.Index] = dT * ave;
+            Act.IterNow[organ.Index].total = dT * ave;
         }
 
         /// <summary>
@@ -121,7 +116,11 @@ namespace FlexID.Calc
             Act.IterNow[organ.Index].ini = ini;
             Act.IterNow[organ.Index].ave = ave;
             Act.IterNow[organ.Index].end = end;
+
+            // 混合コンパートメントでは、流入放射能は全て接続先へ流出するため、
+            // 計算時間メッシュ期間における積算放射能をゼロと計算する。
             Act.IterNow[organ.Index].total = 0;
+
             organ.BioDecayCalc = 1;
         }
 
@@ -138,6 +137,9 @@ namespace FlexID.Calc
             Act.IterNow[organ.Index].ini = 0;
             Act.IterNow[organ.Index].ave = 0;
             Act.IterNow[organ.Index].end = 0;
+
+            // 入力コンパートメントでは、全ての放射能は初期配分によって接続先へ流出するため、
+            // 計算時間メッシュ期間における積算放射能をゼロと計算する。
             Act.IterNow[organ.Index].total = 0;
         }
 
