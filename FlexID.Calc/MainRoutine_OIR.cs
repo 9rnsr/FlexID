@@ -186,7 +186,7 @@ namespace FlexID.Calc
                 foreach (var organ in data.Organs)
                 {
                     // 今回の出力時間メッシュにおける積算放射能。
-                    Act.OutTotalNow[organ.Index] += Act.CalcNow[organ.Index].total;
+                    Act.OutNow[organ.Index].total += Act.CalcNow[organ.Index].total;
 
                     // 摂取時からの積算放射能。
                     Act.OutTotalFromIntake[organ.Index] += Act.CalcNow[organ.Index].total;
@@ -235,12 +235,15 @@ namespace FlexID.Calc
                     var outNowDay = TimeMesh.SecondsToDays(outNowT);
                     var outPreDay = TimeMesh.SecondsToDays(outPreT);
                     var outDeltaDay = TimeMesh.SecondsToDays(outDeltaT);
+
+                    // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                     foreach (var organ in data.Organs)
                     {
+                        Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
+                        Act.OutNow[organ.Index].end = Act.CalcNow[organ.Index].end;
+
                         if (organ.Func == OrganFunc.exc)
                         {
-                            Act.CalcNow[organ.Index].end = Act.OutTotalNow[organ.Index] / outDeltaDay;
-
                             Act.OutTotalFromIntake[organ.Index] = 0; // TODO: for compatibility
                         }
                     }

@@ -21,7 +21,7 @@ namespace FlexID.Calc
             Act.IterPre = new OrganActivity[data.Organs.Count];
             Act.IterNow = new OrganActivity[data.Organs.Count];
 
-            Act.OutTotalNow = new double[data.Organs.Count];
+            Act.OutNow = new OrganActivity[data.Organs.Count];
             Act.OutTotalFromIntake = new double[data.Organs.Count];
 
             // 全ての組織における計算結果を初期化する
@@ -37,7 +37,11 @@ namespace FlexID.Calc
                 Act.CalcNow[organ.Index].end = 0;
                 Act.CalcNow[organ.Index].total = 0;
 
-                Act.OutTotalNow[organ.Index] = 0;
+                Act.OutNow[organ.Index].ini = 0;
+                Act.OutNow[organ.Index].ave = 0;
+                Act.OutNow[organ.Index].end = 0;
+                Act.OutNow[organ.Index].total = 0;
+
                 Act.OutTotalFromIntake[organ.Index] = 0;
             }
 
@@ -57,6 +61,9 @@ namespace FlexID.Calc
                     Act.CalcNow[organ.Index].ave = init;
                     Act.CalcNow[organ.Index].end = init;
                     Act.CalcNow[organ.Index].total = 0;
+
+                    // 初期配分結果の出力に使用される。
+                    Act.OutNow[organ.Index] = Act.CalcNow[organ.Index];
                 }
             }
         }

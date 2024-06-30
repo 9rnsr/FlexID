@@ -49,9 +49,9 @@ namespace FlexID.Calc
         public OrganActivity[] CalcNow;
 
         /// <summary>
-        /// 今回の出力時間メッシュにおける、コンパートメント毎の積算放射能。
+        /// 今回の出力時間メッシュにおける、コンパートメント毎の放射能。
         /// </summary>
-        public double[] OutTotalNow;
+        public OrganActivity[] OutNow;
 
         /// <summary>
         /// 摂取時からの、コンパートメント毎の積算放射能[Bq]。
@@ -98,9 +98,13 @@ namespace FlexID.Calc
         /// <param name="data"></param>
         public void NextOut(DataClass data)
         {
-            foreach (var organ in data.Organs)
+            foreach (var o in data.Organs)
             {
-                OutTotalNow[organ.Index] = 0;
+                // 前回の末期放射能を今回の初期放射能とする。
+                OutNow[o.Index].ini = OutNow[o.Index].end;
+                OutNow[o.Index].ave = 0;
+                OutNow[o.Index].end = 0;
+                OutNow[o.Index].total = 0;
             }
         }
 
