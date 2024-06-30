@@ -379,36 +379,37 @@ namespace FlexID.Calc
 
                 foreach (var organ in dataLo.Organs)
                 {
+                    // コンパートメントが線源領域に対応しない場合は何もしない。
+                    if (organ.SourceRegion is null)
+                        continue;
+
                     if (organ.Name.Contains("mix"))
                         continue;
 
                     var nucDecay = organ.NuclideDecay;
 
-                    // タイムステップごとの放射能　
+                    // コンパートメントの残留放射能がゼロの場合は何もしない。
                     var activity = Act.CalcNow[organ.Index].end * calcDeltaT * nucDecay;
                     if (activity == 0)
                         continue;
 
-                    if (organ.SourceRegion != null)
+                    // コンパートメントから各標的領域への預託線量を計算する。
+                    for (int indexT = 0; indexT < 31; indexT++)
                     {
-                        // コンパートメントから各標的領域への預託線量を計算する。
-                        for (int indexT = 0; indexT < 31; indexT++)
-                        {
-                            // 標的領域の部分的な重量。
-                            var targetWeight = targetWeights[indexT];
+                        // 標的領域の部分的な重量。
+                        var targetWeight = targetWeights[indexT];
 
-                            // S係数(補間あり)。
-                            var scoeff = organsSee[organ.Index][indexT];
+                        // S係数(補間あり)。
+                        var scoeff = organsSee[organ.Index][indexT];
 
-                            // 等価線量 = 放射能 * S係数
-                            var equivalentDose = activity * scoeff;
+                        // 等価線量 = 放射能 * S係数
+                        var equivalentDose = activity * scoeff;
 
-                            // 実効線量 = 等価線量 * wT
-                            var effectiveDose = equivalentDose * targetWeight;
+                        // 実効線量 = 等価線量 * wT
+                        var effectiveDose = equivalentDose * targetWeight;
 
-                            resultNow[indexT] += equivalentDose;
-                            wholeBodyNow += effectiveDose;
-                        }
+                        resultNow[indexT] += equivalentDose;
+                        wholeBodyNow += effectiveDose;
                     }
                 }
 
