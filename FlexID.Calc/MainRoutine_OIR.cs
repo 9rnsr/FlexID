@@ -204,9 +204,7 @@ namespace FlexID.Calc
                     var nucDecay = organ.NuclideDecay;
 
                     // コンパートメントの残留放射能がゼロの場合は何もしない。
-                    // TODO: 線量の計算には、コンパートメントの計算時間メッシュ期間における
-                    // 末期の残留放射能ではなく、平均の残留放射能を使用するべきでは？
-                    var activity = Act.CalcNow[organ.Index].end * calcDeltaT * nucDecay;
+                    var activity = Act.CalcNow[organ.Index].ave * calcDeltaT * nucDecay;
                     if (activity == 0)
                         continue;
 
