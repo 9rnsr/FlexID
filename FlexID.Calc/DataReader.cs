@@ -89,13 +89,9 @@ namespace FlexID.Calc
 
         /// <summary>
         /// 生物学的崩壊定数[/day]。
+        /// 蓄積コンパートメントのみで意味を持ち、それ以外では1.0となる。
         /// </summary>
         public double BioDecay;
-
-        /// <summary>
-        /// 生物学的崩壊定数[/day](計算用)。
-        /// </summary>
-        public double BioDecayCalc;
 
         /// <summary>
         /// 流入経路。
@@ -276,6 +272,9 @@ namespace FlexID.Calc
                         organFn == "exc" ? OrganFunc.exc :
                         throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
 
+                    if (organFunc != OrganFunc.acc)
+                        bioDecay = 1.0;
+
                     var organ = new Organ
                     {
                         Nuclide = nuclide,
@@ -284,7 +283,6 @@ namespace FlexID.Calc
                         Name = organName,
                         Func = organFunc,
                         BioDecay = bioDecay,
-                        BioDecayCalc = bioDecay,
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
@@ -555,6 +553,9 @@ namespace FlexID.Calc
                         organFn == "exc" ? OrganFunc.exc :
                         throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
 
+                    if (organFunc != OrganFunc.acc)
+                        bioDecay = 1.0;
+
                     var organ = new Organ
                     {
                         Nuclide = nuclide,
@@ -563,7 +564,6 @@ namespace FlexID.Calc
                         Name = organName,
                         Func = organFunc,
                         BioDecay = bioDecay,
-                        BioDecayCalc = bioDecay,
                         Inflows = new List<Inflow>(inflowNum),
                     };
 

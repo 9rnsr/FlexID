@@ -92,7 +92,7 @@ namespace FlexID.Calc
                     continue;
 
                 // 流入元の生物学的崩壊定数[/day]
-                var beforeBio = inflow.Organ.BioDecayCalc;
+                var beforeBio = inflow.Organ.BioDecay;
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
@@ -103,8 +103,6 @@ namespace FlexID.Calc
             Act.IterNow[organ.Index].ave = ave;
             Act.IterNow[organ.Index].end = end;
             Act.IterNow[organ.Index].total = dT * ave;
-
-            organ.BioDecayCalc = 1;
         }
 
         /// <summary>
@@ -121,7 +119,7 @@ namespace FlexID.Calc
             foreach (var inflow in organ.Inflows)
             {
                 // 流入元の生物学的崩壊定数[/day]
-                var beforeBio = inflow.Organ.BioDecayCalc;
+                var beforeBio = inflow.Organ.BioDecay;
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
@@ -135,8 +133,6 @@ namespace FlexID.Calc
             // 混合コンパートメントでは、流入放射能は全て接続先へ流出するため、
             // 計算時間メッシュ期間における積算放射能をゼロと計算する。
             Act.IterNow[organ.Index].total = 0;
-
-            organ.BioDecayCalc = 1;
         }
 
         /// <summary>
@@ -178,7 +174,7 @@ namespace FlexID.Calc
                 var inflowOrgan = inflow.Organ;
 
                 // 流入元の生物学的崩壊定数[/day]
-                var beforeBio = inflowOrgan.BioDecayCalc;
+                var beforeBio = inflowOrgan.BioDecay;
 
                 // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
                 if (inflowOrgan.Nuclide != organ.Nuclide)
