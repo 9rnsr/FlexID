@@ -49,40 +49,67 @@ namespace FlexID
             // 被ばく経路設定
             inpFile = new Dictionary<string, string>();
 
-            string Dir = @"inp\OIR\" + nuc;
-            string[] FileList = Directory.GetFileSystemEntries(Dir, @"*.inp");
+            var nuclideDir = @"inp\OIR\" + nuc;
+            var inputFiles = Directory.GetFileSystemEntries(nuclideDir, @"*.inp");
 
-            // コンボボックスの項目をキーとしてインプットファイルパス格納
-            for (int i = 0; i < FileList.Length; i++)
+            var anyProgeny = false;
+            foreach (var inputFile in inputFiles)
             {
-                var Lines = File.ReadAllLines(FileList[i]);
-                var line = Lines[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                comboBox_Route.Items.Add(line[1]);
-                inpFile.Add(line[1], FileList[i]);
-            }
+                var inputLines = File.ReadLines(inputFile).GetEnumerator();
 
-            // 子孫核種の有無判断
-            for (int i = 0; i < FileList.Length; i++)
-            {
-                bool Progeny = false;
-                var file = File.ReadAllLines(FileList[i]);
-                foreach (var x in file)
+                string GetNextLine()
                 {
-                    if (x.Trim().StartsWith("cont"))
+                Lagain:
+                    if (!inputLines.MoveNext())
+                        return null;
+                    var ln = inputLines.Current.Trim();
+
+                    // 空行を読み飛ばす。
+                    if (ln.Length == 0)
+                        goto Lagain;
+
+                    // コメント行を読み飛ばす。
+                    if (ln.StartsWith("#"))
+                        goto Lagain;
+
+                    // 行末コメントを除去する。
+                    var trailingComment = ln.IndexOf("#");
+                    if (trailingComment != -1)
+                        ln = ln.Substring(0, trailingComment).TrimEnd();
+                    return ln;
+                }
+
+                var line = GetNextLine();
+                var parts = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var type = parts[1];
+
+                // 子孫核種の有無を判断する。
+                var hasProgeny = false;
+                while ((line = GetNextLine()) != null)
+                {
+                    if (line.Trim().StartsWith("cont"))
                     {
-                        radioButton_Yes.Enabled = true;
-                        radioButton_Yes.Checked = true;
-                        Progeny = true;
+                        hasProgeny = true;
                         break;
                     }
-                    else
-                    {
-                        radioButton_Yes.Enabled = false;
-                        radioButton_No.Checked = true;
-                    }
                 }
-                if (Progeny)
-                    break;
+
+                comboBox_Route.Items.Add(type);
+                inpFile.Add(type, inputFile);
+
+                if (hasProgeny)
+                    anyProgeny = true;
+            }
+
+            if (anyProgeny)
+            {
+                radioButton_Yes.Enabled = true;
+                radioButton_Yes.Checked = true;
+            }
+            else
+            {
+                radioButton_Yes.Enabled = false;
+                radioButton_No.Checked = true;
             }
         }
 
@@ -94,40 +121,67 @@ namespace FlexID
             // 被ばく経路設定
             inpFile = new Dictionary<string, string>();
 
-            string Dir = @"inp\EIR\" + nuc;
-            string[] FileList = Directory.GetFileSystemEntries(Dir, @"*.inp");
+            var nuclideDir = @"inp\EIR\" + nuc;
+            var inputFiles = Directory.GetFileSystemEntries(nuclideDir, @"*.inp");
 
-            // コンボボックスの項目をキーとしてインプットファイルパス格納
-            for (int i = 0; i < FileList.Length; i++)
+            var anyProgeny = false;
+            foreach (var inputFile in inputFiles)
             {
-                var Lines = File.ReadAllLines(FileList[i]);
-                var line = Lines[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                Route_EIR.Items.Add(line[1]);
-                inpFile.Add(line[1], FileList[i]);
-            }
+                var inputLines = File.ReadLines(inputFile).GetEnumerator();
 
-            // 子孫核種の有無判断
-            for (int i = 0; i < FileList.Length; i++)
-            {
-                bool Progeny = false;
-                var file = File.ReadAllLines(FileList[i]);
-                foreach (var x in file)
+                string GetNextLine()
                 {
-                    if (x.Trim().StartsWith("cont"))
+                Lagain:
+                    if (!inputLines.MoveNext())
+                        return null;
+                    var ln = inputLines.Current.Trim();
+
+                    // 空行を読み飛ばす。
+                    if (ln.Length == 0)
+                        goto Lagain;
+
+                    // コメント行を読み飛ばす。
+                    if (ln.StartsWith("#"))
+                        goto Lagain;
+
+                    // 行末コメントを除去する。
+                    var trailingComment = ln.IndexOf("#");
+                    if (trailingComment != -1)
+                        ln = ln.Substring(0, trailingComment).TrimEnd();
+                    return ln;
+                }
+
+                var line = GetNextLine();
+                var parts = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var type = parts[1];
+
+                // 子孫核種の有無を判断する。
+                var hasProgeny = false;
+                while ((line = GetNextLine()) != null)
+                {
+                    if (line.Trim().StartsWith("cont"))
                     {
-                        radioButton_Yes.Enabled = true;
-                        radioButton_Yes.Checked = true;
-                        Progeny = true;
+                        hasProgeny = true;
                         break;
                     }
-                    else
-                    {
-                        radioButton_Yes.Enabled = false;
-                        radioButton_No.Checked = true;
-                    }
                 }
-                if (Progeny)
-                    break;
+
+                Route_EIR.Items.Add(type);
+                inpFile.Add(type, inputFile);
+
+                if (hasProgeny)
+                    anyProgeny = true;
+            }
+
+            if (anyProgeny)
+            {
+                Progeny_EIR.Enabled = true;
+                Progeny_EIR.Checked = true;
+            }
+            else
+            {
+                Progeny_EIR.Enabled = false;
+                radioButton2.Checked = true;
             }
         }
 
