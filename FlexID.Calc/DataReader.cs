@@ -171,45 +171,76 @@ namespace FlexID.Calc
         /// 全ての臓器。
         /// </summary>
         public List<Organ> Organs = new List<Organ>();
+    }
 
-        private DataClass() { }
+    /// <summary>
+    /// インプットファイルの読み取り処理。
+    /// </summary>
+    public class DataReader : IDisposable
+    {
+        /// <summary>
+        /// インプットファイルの読み出し用TextReader。
+        /// </summary>
+        private readonly StreamReader reader;
+
+        /// <summary>
+        /// 子孫核種のインプットを読み飛ばす場合は<c>true</c>。
+        /// </summary>
+        private readonly bool calcProgeny;
+
+        /// <summary>
+        /// 行番号(1始まり)。
+        /// </summary>
+        private int lineNum;
+
+        /// <summary>
+        /// コンストラクタ。
+        /// </summary>
+        /// <param name="inputPath">インプットファイルのパス文字列。</param>
+        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
+        public DataReader(string inputPath, bool calcProgeny)
+        {
+            var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var reader = new StreamReader(stream);
+
+            this.reader = reader;
+            this.calcProgeny = calcProgeny;
+        }
+
+        public void Dispose() => reader.Dispose();
+
+        private string GetNextLine()
+        {
+        Lagain:
+            var line = reader.ReadLine();
+            if (line is null)
+                throw Program.Error("Reach to EOF while reading input file.");
+            line = line.Trim();
+            lineNum++;
+
+            // 空行を読み飛ばす。
+            if (line.Length == 0)
+                goto Lagain;
+
+            // コメント行を読み飛ばす。
+            if (line.StartsWith("#"))
+                goto Lagain;
+
+            // 行末コメントを除去する。
+            var trailingComment = line.IndexOf("#");
+            if (trailingComment != -1)
+                line = line.Substring(0, trailingComment).TrimEnd();
+            return line;
+        }
 
         /// <summary>
         /// OIR用のインプットファイルを読み込む。
         /// </summary>
-        /// <param name="inputPath">インプットファイルのパス文字列。</param>
-        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
         /// <returns></returns>
-        public static DataClass Read(string inputPath, bool calcProgeny)
+        public DataClass Read_OIR()
         {
-            var lines = File.ReadLines(inputPath).ToList();
-
             var data = new DataClass();
             {
-                int num = 0;
-
-                string GetNextLine()
-                {
-                Lagain:
-                    if (num == lines.Count)
-                        throw Program.Error("Reach to EOF while reading input file.");
-                    var ln = lines[num++].Trim();
-
-                    // 空行を読み飛ばす。
-                    if (ln.Length == 0)
-                        goto Lagain;
-
-                    // コメント行を読み飛ばす。
-                    if (ln.StartsWith("#"))
-                        goto Lagain;
-
-                    // 行末コメントを除去する。
-                    var trailingComment = ln.IndexOf("#");
-                    if (trailingComment != -1)
-                        ln = ln.Substring(0, trailingComment).TrimEnd();
-                    return ln;
-                }
-
                 var isProgeny = false;
             Lcont:
                 // 核種のヘッダ行を読み込む。
@@ -256,7 +287,7 @@ namespace FlexID.Calc
                     values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                     if (values.Length != 8)
-                        throw Program.Error($"Line {num}: First line of compartment definition should have 8 values.");
+                        throw Program.Error($"Line {lineNum}: First line of compartment definition should have 8 values.");
 
                     var organId = int.Parse(values[0]);     // 臓器番号
                     var organName = values[1];              // 臓器名
@@ -270,7 +301,7 @@ namespace FlexID.Calc
                         organFn == "acc" ? OrganFunc.acc :
                         organFn == "mix" ? OrganFunc.mix :
                         organFn == "exc" ? OrganFunc.exc :
-                        throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
+                        throw Program.Error($"Line {lineNum}: Unrecognized organ function '{organFn}'.");
 
                     if (organFunc != OrganFunc.acc)
                         bioDecay = 1.0;
@@ -291,7 +322,7 @@ namespace FlexID.Calc
                         // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
                         var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
                         if (indexS == -1)
-                            throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegion}'");
+                            throw Program.Error($"Line {lineNum}: Unknown source region name: '{sourceRegion}'");
 
                         // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
                         organ.SourceRegion = sourceRegion;
@@ -302,12 +333,12 @@ namespace FlexID.Calc
                     if (organ.Func == OrganFunc.inp)
                     {
                         if (inflowNum != 0)
-                            throw Program.Error($"Line {num}: The number of inflow paths in the Input compartment should be 0.");
+                            throw Program.Error($"Line {lineNum}: The number of inflow paths in the Input compartment should be 0.");
                     }
                     else
                     {
                         if (inflowNum <= 0)
-                            throw Program.Error($"Line {num}: The number of inflow paths should be >= 1.");
+                            throw Program.Error($"Line {lineNum}: The number of inflow paths should be >= 1.");
 
                         for (int i = 0; i < inflowNum; i++)
                         {
@@ -322,7 +353,7 @@ namespace FlexID.Calc
                             {
                                 values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                                 if (values.Length != 2)
-                                    throw Program.Error($"Line {num}: Continuous lines of compartment definition should have 2 values.");
+                                    throw Program.Error($"Line {lineNum}: Continuous lines of compartment definition should have 2 values.");
 
                                 inflowID = int.Parse(values[0]);
                                 inflowRate = double.Parse(values[1]);
@@ -432,25 +463,26 @@ namespace FlexID.Calc
         /// <summary>
         /// EIR用のインプットファイルを読み込む。
         /// </summary>
-        /// <param name="inputPath">インプットファイルのパス文字列。</param>
-        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
         /// <returns></returns>
-        public static List<DataClass> Read_EIR(string inputPath, bool calcProgeny)
+        public List<DataClass> Read_EIR()
         {
-            var lines = File.ReadLines(inputPath).ToList();
-
             var dataList = new List<DataClass>();
-            dataList.Add(Read_EIR(lines, calcProgeny, "Age:3month"));
-            dataList.Add(Read_EIR(lines, calcProgeny, "Age:1year"));
-            dataList.Add(Read_EIR(lines, calcProgeny, "Age:5year"));
-            dataList.Add(Read_EIR(lines, calcProgeny, "Age:10year"));
-            dataList.Add(Read_EIR(lines, calcProgeny, "Age:15year"));
-            dataList.Add(Read_EIR(lines, calcProgeny, "Age:adult"));
+            dataList.Add(Read_EIR("Age:3month"));
+            dataList.Add(Read_EIR("Age:1year"));
+            dataList.Add(Read_EIR("Age:5year"));
+            dataList.Add(Read_EIR("Age:10year"));
+            dataList.Add(Read_EIR("Age:15year"));
+            dataList.Add(Read_EIR("Age:adult"));
             return dataList;
         }
 
-        public static DataClass Read_EIR(List<string> lines, bool calcProgeny, string age)
+        public DataClass Read_EIR(string age)
         {
+            // 読み取り位置をファイル先頭に戻す。
+            reader.BaseStream.Position = 0;
+            reader.DiscardBufferedData();
+            lineNum = 0;
+
             var data = new DataClass();
 
             data.StartAge =
@@ -463,30 +495,6 @@ namespace FlexID.Calc
                 throw new NotSupportedException();
 
             {
-                int num = 0;
-
-                string GetNextLine()
-                {
-                Lagain:
-                    if (num == lines.Count)
-                        throw Program.Error("Reach to EOF while reading input file.");
-                    var ln = lines[num++].Trim();
-
-                    // 空行を読み飛ばす。
-                    if (ln.Length == 0)
-                        goto Lagain;
-
-                    // コメント行を読み飛ばす。
-                    if (ln.StartsWith("#"))
-                        goto Lagain;
-
-                    // 行末コメントを除去する。
-                    var trailingComment = ln.IndexOf("#");
-                    if (trailingComment != -1)
-                        ln = ln.Substring(0, trailingComment).TrimEnd();
-                    return ln;
-                }
-
                 var isProgeny = false;
             Lcont:
                 // 核種のヘッダ行を読み込む。
@@ -537,7 +545,7 @@ namespace FlexID.Calc
                     values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                     if (values.Length != 8)
-                        throw Program.Error($"Line {num}: First line of compartment definition should have 8 values.");
+                        throw Program.Error($"Line {lineNum}: First line of compartment definition should have 8 values.");
 
                     var organId = int.Parse(values[0]);     // 臓器番号
                     var organName = values[1];              // 臓器名
@@ -551,7 +559,7 @@ namespace FlexID.Calc
                         organFn == "acc" ? OrganFunc.acc :
                         organFn == "mix" ? OrganFunc.mix :
                         organFn == "exc" ? OrganFunc.exc :
-                        throw Program.Error($"Line {num}: Unrecognized organ function '{organFn}'.");
+                        throw Program.Error($"Line {lineNum}: Unrecognized organ function '{organFn}'.");
 
                     if (organFunc != OrganFunc.acc)
                         bioDecay = 1.0;
@@ -572,7 +580,7 @@ namespace FlexID.Calc
                         // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
                         var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
                         if (indexS == -1)
-                            throw Program.Error($"Line {num}: Unknown source region name: '{sourceRegion}'");
+                            throw Program.Error($"Line {lineNum}: Unknown source region name: '{sourceRegion}'");
 
                         // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
                         organ.SourceRegion = sourceRegion;
@@ -583,12 +591,12 @@ namespace FlexID.Calc
                     if (organ.Func == OrganFunc.inp)
                     {
                         if (inflowNum != 0)
-                            throw Program.Error($"Line {num}: The number of inflow paths in the Input compartment should be 0.");
+                            throw Program.Error($"Line {lineNum}: The number of inflow paths in the Input compartment should be 0.");
                     }
                     else
                     {
                         if (inflowNum <= 0)
-                            throw Program.Error($"Line {num}: The number of inflow paths should be >= 1.");
+                            throw Program.Error($"Line {lineNum}: The number of inflow paths should be >= 1.");
 
                         for (int i = 0; i < inflowNum; i++)
                         {
@@ -603,7 +611,7 @@ namespace FlexID.Calc
                             {
                                 values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                                 if (values.Length != 2)
-                                    throw Program.Error($"Line {num}: Continuous lines of compartment definition should have 2 values.");
+                                    throw Program.Error($"Line {lineNum}: Continuous lines of compartment definition should have 2 values.");
 
                                 inflowID = int.Parse(values[0]);
                                 inflowRate = double.Parse(values[1]);
