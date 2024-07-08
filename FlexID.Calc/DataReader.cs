@@ -214,7 +214,7 @@ namespace FlexID.Calc
         Lagain:
             var line = reader.ReadLine();
             if (line is null)
-                throw Program.Error("Reach to EOF while reading input file.");
+                return null;
             line = line.Trim();
             lineNum++;
 
@@ -239,12 +239,16 @@ namespace FlexID.Calc
         /// <returns></returns>
         public DataClass Read_OIR()
         {
+            var firstLine = GetNextLine();
+            if (firstLine is null)
+                throw Program.Error("Reach to EOF while reading input file.");
+
             var data = new DataClass();
             {
                 var isProgeny = false;
             Lcont:
                 // 核種のヘッダ行を読み込む。
-                var values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var values = firstLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                 var nuclide = new NuclideData
                 {
@@ -272,6 +276,8 @@ namespace FlexID.Calc
                 while (true)
                 {
                     var ln = GetNextLine();
+                    if (ln is null)
+                        throw Program.Error("Reach to EOF while reading input file.");
                     if (ln == "end")
                         break;
 
@@ -281,6 +287,9 @@ namespace FlexID.Calc
                             break;
 
                         isProgeny = true;
+                        firstLine = GetNextLine();
+                        if (firstLine is null)
+                            throw Program.Error("Reach to EOF while reading input file.");
                         goto Lcont;
                     }
 
@@ -351,7 +360,10 @@ namespace FlexID.Calc
                             }
                             else
                             {
-                                values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                                ln = GetNextLine();
+                                if (ln is null)
+                                    throw Program.Error("Reach to EOF while reading input file.");
+                                values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                                 if (values.Length != 2)
                                     throw Program.Error($"Line {lineNum}: Continuous lines of compartment definition should have 2 values.");
 
@@ -483,6 +495,10 @@ namespace FlexID.Calc
             reader.DiscardBufferedData();
             lineNum = 0;
 
+            var firstLine = GetNextLine();
+            if (firstLine is null)
+                throw Program.Error("Reach to EOF while reading input file.");
+
             var data = new DataClass();
 
             data.StartAge =
@@ -498,7 +514,7 @@ namespace FlexID.Calc
                 var isProgeny = false;
             Lcont:
                 // 核種のヘッダ行を読み込む。
-                var values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var values = firstLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                 var nuclide = new NuclideData
                 {
@@ -518,8 +534,14 @@ namespace FlexID.Calc
                     data.TargetWeights = ws;
 
                     // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
-                    while (GetNextLine() != age)
-                    { }
+                    while (true)
+                    {
+                        var ln = GetNextLine();
+                        if (ln is null)
+                            throw Program.Error("Reach to EOF while reading input file.");
+                        if (ln == age)
+                            break;
+                    }
                 }
 
                 // 核種に対応するS係数データを読み込む。
@@ -530,6 +552,8 @@ namespace FlexID.Calc
                 while (true)
                 {
                     var ln = GetNextLine();
+                    if (ln is null)
+                        throw Program.Error("Reach to EOF while reading input file.");
                     if (ln == "end" || ln == "next")
                         break;
 
@@ -539,6 +563,9 @@ namespace FlexID.Calc
                             break;
 
                         isProgeny = true;
+                        firstLine = GetNextLine();
+                        if (firstLine is null)
+                            throw Program.Error("Reach to EOF while reading input file.");
                         goto Lcont;
                     }
 
@@ -609,7 +636,10 @@ namespace FlexID.Calc
                             }
                             else
                             {
-                                values = GetNextLine().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                                ln = GetNextLine();
+                                if (ln is null)
+                                    throw Program.Error("Reach to EOF while reading input file.");
+                                values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                                 if (values.Length != 2)
                                     throw Program.Error($"Line {lineNum}: Continuous lines of compartment definition should have 2 values.");
 
