@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FlexID.Calc
 {
@@ -144,6 +145,11 @@ namespace FlexID.Calc
 
     public class DataClass
     {
+        /// <summary>
+        /// インプットのタイトル文字列。
+        /// </summary>
+        public string Title;
+
         // このコンパートメントモデルが対象とする被ばく評価期間の開始年齢[day]。
         public int StartAge;
 
@@ -242,6 +248,8 @@ namespace FlexID.Calc
             var firstLine = GetNextLine();
             if (firstLine is null)
                 throw Program.Error("Reach to EOF while reading input file.");
+            if (firstLine.StartsWith("["))
+                return Read_OIR_New(firstLine);
 
             var data = new DataClass();
             {
@@ -326,7 +334,7 @@ namespace FlexID.Calc
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
-                    if (sourceRegion != "-")
+                    if (!IsBar(sourceRegion))
                     {
                         // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
                         var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
@@ -400,6 +408,413 @@ namespace FlexID.Calc
                         inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
                     }
                 }
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// 新しい形式でOIR用のインプットファイルを読み込む。
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        private DataClass Read_OIR_New(string line)
+        {
+            bool CheckSectionHeader(string ln) => ln.StartsWith("[");
+
+            ReadOnlySpan<char> GetSectionHeader(string ln)
+            {
+                if (!CheckSectionHeader(ln))
+                    throw new NotSupportedException("unreachable");
+                if (!ln.EndsWith("]"))
+                    throw Program.Error($"Line {lineNum}: Section header is not closed with ']'.");
+
+                return ln.AsSpan(1, ln.Length - 2).Trim();
+            }
+
+            var inputTitle = default(string);
+            var nuclides = new List<NuclideData>();
+            var nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
+            var nuclideTransfers = new Dictionary<string,
+                    List<(int lineNum, string from, string to, double? coeff, bool isRate)>>();
+            var SCoeffTables = new List<Dictionary<string, double[]>>();
+            int organId = 0;
+
+            while (true)
+            {
+                var header = GetSectionHeader(line);
+
+                Span<char> buffer = stackalloc char[header.Length];
+                for (int i = 0; i < header.Length; i++)
+                    buffer[i] = char.ToLowerInvariant(header[i]);
+
+                if (buffer.SequenceEqual("title".AsSpan()))
+                {
+                    GetTitle(out line);
+                }
+                else if (buffer.SequenceEqual("nuclide".AsSpan()))
+                {
+                    GetNuclides(out line);
+                }
+                else if (buffer.EndsWith(":compartment".AsSpan()))
+                {
+                    var i = header.IndexOf(':');
+                    var nuc = header.Slice(0, i).ToString();
+                    GetCompartments(nuc, out line);
+                }
+                else if (buffer.EndsWith(":transfer".AsSpan()))
+                {
+                    var i = header.IndexOf(':');
+                    var nuc = header.Slice(0, i).ToString();
+                    GetTransfers(nuc, out line);
+                }
+                else
+                    throw Program.Error($"Line {lineNum}: Unrecognized section $'[{header.ToString()}]'.");
+
+                if (line is null)
+                    break;
+            }
+
+            // タイトルの定義セクションを読み込む。
+            void GetTitle(out string nextLine)
+            {
+                if (inputTitle != null)
+                    throw Program.Error($"Line {lineNum}: Duplicated [title] section.");
+
+                var title = GetNextLine();
+                if (title is null)
+                    throw Program.Error($"Line {lineNum}: Reach to EOF while reading title section.");
+                inputTitle = title;
+
+                nextLine = GetNextLine();
+                if (!CheckSectionHeader(nextLine))
+                    throw Program.Error($"Line {lineNum}: Unrecognized line in [title] section.");
+            }
+
+            // 核種の定義セクションを読み込む。
+            void GetNuclides(out string nextLine)
+            {
+                // 1番目が親核種、2番目以降が子孫核種になる。
+                var isProgeny = false;
+
+                while (true)
+                {
+                    nextLine = GetNextLine();
+                    if (nextLine is null)
+                        break;
+                    if (CheckSectionHeader(nextLine))
+                        break;
+
+                    // 核種の定義行を読み込む。
+                    var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (values.Length != 4)
+                        throw Program.Error($"Line {lineNum}: Nuclide definition should have 4 values.");
+
+                    var nuclide = new NuclideData
+                    {
+                        Nuclide = values[0],
+                        IntakeRoute = values[1],
+                        Ramd = double.Parse(values[2]),
+                        DecayRate = double.Parse(values[3]),
+                        IsProgeny = isProgeny,
+                    };
+                    nuclides.Add(nuclide);
+
+                    isProgeny = true;
+                }
+            }
+
+            // コンパートメントの定義セクションを読み込む。
+            void GetCompartments(string nuc, out string nextLine)
+            {
+                if (nuclideOrgans.TryGetValue(nuc, out var organs))
+                    throw Program.Error($"Line {lineNum}: Duplicated [compartment] section for nuclide '{nuc}'.");
+
+                organs = new List<(int lineNum, Organ)>();
+                nuclideOrgans.Add(nuc, organs);
+
+                while (true)
+                {
+                    nextLine = GetNextLine();
+                    if (nextLine is null)
+                        break;
+                    if (CheckSectionHeader(nextLine))
+                        break;
+
+                    var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (values.Length != 4)
+                        throw Program.Error($"Line {lineNum}: Compartment definition should have 4 values.");
+
+                    var organFn = values[0];        // コンパートメント機能
+                    var organName = values[1];      // コンパートメント名
+                    var bioDecayStr = values[2];    // 生物学的崩壊定数
+                    var sourceRegion = values[3];   // コンパートメントに対応する線源領域の名称
+
+                    var organFunc =
+                        organFn == "inp" ? OrganFunc.inp :
+                        organFn == "acc" ? OrganFunc.acc :
+                        organFn == "mix" ? OrganFunc.mix :
+                        organFn == "exc" ? OrganFunc.exc :
+                        throw Program.Error($"Line {lineNum}: Unrecognized organ function '{organFn}'.");
+
+                    double bioDecay;
+                    if (organFunc == OrganFunc.acc)
+                    {
+                        if (!double.TryParse(bioDecayStr, out bioDecay))
+                            throw Program.Error($"Line {lineNum}: Bio-decay value for '{organFunc} shoule be a number, not '{bioDecayStr}'.");
+                    }
+                    else
+                    {
+                        if (!IsBar(bioDecayStr))
+                            throw Program.Error($"Line {lineNum}: Bio-decay value for '{organFunc}' should be '---', not '{bioDecayStr}'.");
+                        bioDecay = 1.0;
+                    }
+
+                    var organ = new Organ
+                    {
+                        Nuclide = null,     // 後で設定する。
+                        ID = ++organId,
+                        Index = -1,         // 後で設定する。
+                        Name = organName,
+                        Func = organFunc,
+                        BioDecay = bioDecay,
+                        Inflows = new List<Inflow>(),
+                    };
+
+                    // 線源領域の名称については、妥当性を後で確認する。
+                    organ.SourceRegion = sourceRegion;
+
+                    organs.Add((lineNum, organ));
+                }
+            }
+
+            // 移行係数の定義セクションを読み込む。
+            void GetTransfers(string nuc, out string nextLine)
+            {
+                if (nuclideTransfers.TryGetValue(nuc, out var transfers))
+                    throw Program.Error($"Line {lineNum}: Duplicated [transfer] section for nuclide '{nuc}'.");
+
+                transfers = new List<(int, string, string, double?, bool)>();
+                nuclideTransfers.Add(nuc, transfers);
+
+                while (true)
+                {
+                    nextLine = GetNextLine();
+                    if (nextLine is null)
+                        break;
+                    if (CheckSectionHeader(nextLine))
+                        break;
+
+                    var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (values.Length != 3)
+                        throw Program.Error($"Line {lineNum}: Transfer path definition should have 3 values.");
+
+                    var orgamFrom = values[0];
+                    var organTo = values[1];
+                    var coeffStr = values[2];    // 移行係数、[/d] or [%]
+
+                    double? coeff = null;
+                    var isRate = false;
+                    if (!IsBar(coeffStr))
+                    {
+                        if (coeffStr.EndsWith("%"))
+                        {
+                            isRate = true;
+                            coeffStr = coeffStr.Substring(0, coeffStr.Length - 1);
+                        }
+                        if (double.TryParse(coeffStr, out var v))
+                            coeff = v;
+                        else
+                            throw Program.Error($"Line {lineNum}: Transfer coefficient should be a number or '---', not '{coeffStr}'.");
+                    }
+
+                    transfers.Add((lineNum, orgamFrom, organTo, coeff, isRate));
+                }
+            }
+
+            var data = new DataClass();
+
+            data.Title = inputTitle;
+
+            // 組織加重係数データを読み込む。
+            var (ts, ws) = ReadTissueWeights(Path.Combine("lib", "OIR", "wT.txt"));
+            data.TargetRegions = ts;
+            data.TargetWeights = ws;
+
+            if (!nuclides.Any())
+                throw Program.Error($"missing [nuclide] section.");
+
+            // 全ての核種のコンパートメントを定義する。
+            foreach (var nuclide in nuclides)
+            {
+                if (!calcProgeny && nuclide.IsProgeny)
+                    continue;
+
+                var nuc = nuclide.Nuclide;
+                if (!nuclideOrgans.TryGetValue(nuc, out var organs))
+                    throw Program.Error($"missing [compartment] section for nuclide '{nuc}'.");
+                if (!organs.Any())
+                    throw Program.Error($"none of compartments defined for nuclide '{nuc}'.");
+
+                if (!nuclideTransfers.TryGetValue(nuc, out var transfers))
+                    throw Program.Error($"missing [transfer] section for nuclide '{nuc}'.");
+                if (!transfers.Any())
+                    throw Program.Error($"none of compartments defined for nuclide '{nuc}'.");
+
+                data.Nuclides.Add(nuclide);
+
+                // 核種に対応するS係数データを読み込む。
+                var tableSCoeff = ReadSCoeff(data, nuclide);
+                data.SCoeffTables.Add(tableSCoeff);
+
+                foreach (var (lineNum, organ) in organs)
+                {
+                    organ.Nuclide = nuclide;
+                    organ.Index = data.Organs.Count;
+
+                    data.Organs.Add(organ);
+
+                    var sourceRegion = organ.SourceRegion;
+                    if (!IsBar(sourceRegion))
+                    {
+                        // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
+                        var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
+                        if (indexS == -1)
+                            throw Program.Error($"Line {lineNum}: Unknown source region name: '{sourceRegion}'");
+
+                        // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
+                        organ.S_Coefficients = tableSCoeff[sourceRegion];
+                    }
+                    else
+                    {
+                        organ.SourceRegion = null;
+                    }
+                }
+            }
+
+            // コンパートメント間の移行経路を定義する。
+            foreach (var nuclide in nuclides)
+            {
+                if (!calcProgeny && nuclide.IsProgeny)
+                    continue;
+
+                var nuc = nuclide.Nuclide;
+                var transfers = nuclideTransfers[nuc];
+
+                // 移行経路の定義が正しいことの確認と、
+                // 各コンパートメントから流出する移行係数の総計を求める。
+                var definedTransfers = new HashSet<(string from, string to)>();
+                var transfersCorrect = new List<(Organ from, Organ to, double coeff, bool isRate)>();
+                var sumOfOutflowCoeff = new Dictionary<Organ, double>();
+                foreach (var (lineNum, from, to, coeff, isRate) in transfers)
+                {
+                    var fromName = from;
+                    var fromNuclide = nuclide;
+                    if (from.IndexOf('/') is int i && i != -1)
+                    {
+                        // 親核種から探す。
+                        var parentNuc = from.Substring(0, i);
+                        fromName = from.Substring(i + 1);
+                        fromNuclide = nuclides.First(n => n.Nuclide == parentNuc);
+                    }
+
+                    var toName = to;
+                    var toNuclide = nuclide;
+                    if (to.IndexOf('/') != -1)
+                    {
+                        // 移行先は定義している核種に属するコンパートメントのみとする。
+                        throw Program.Error($"Line {lineNum}: Cannot define transfer path to a compartment which is not belong to '{nuc}'.");
+                    }
+
+                    var organFrom = data.Organs.FirstOrDefault(o => o.Name == fromName && o.Nuclide == fromNuclide);
+                    var organTo = data.Organs.FirstOrDefault(o => o.Name == toName && o.Nuclide == toNuclide);
+
+                    // 移行元と移行先のそれぞれがcompartmentセクションで定義済みかを確認する。
+                    if (organFrom is null)
+                        throw Program.Error($"Line {lineNum}: Undefined compartment '{from}'.");
+                    if (organTo is null)
+                        throw Program.Error($"Line {lineNum}: Undefined compartment '{to}'.");
+
+                    // 同じ移行経路が複数回定義されていないことを確認する。
+                    if (!definedTransfers.Add((from, to)))
+                        throw Program.Error($"Line {lineNum}: Multiple transfer path from '{from}' to '{to}'.");
+
+                    // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
+                    if (organTo.Func == OrganFunc.inp)
+                        throw Program.Error($"Line {lineNum}: Transfer path to 'inp' is invalid.");
+                    //if (organFrom.Func == OrganFunc.exc)
+                    //    throw Program.Error($"Line {lineNum}: Transfer path from 'exc' is invalid.");
+                    //if (organFrom.Func == OrganFunc.mix && organTo.Func == OrganFunc.mix)
+                    //    throw Program.Error($"Line {lineNum}: Transfer path from 'mix' to 'inp' is invalid.");
+
+                    // 移行係数を設定できない箇所に数値が入っていないことを確認する。
+                    if (fromNuclide != nuclide && coeff != null)
+                        throw Program.Error($"Line {lineNum}: Transfer coefficient from parent nuclide should be '---'.");
+                    //if (organFrom.Func == OrganFunc.inp && coeff != null)
+                    //    throw Program.Error($"Line {lineNum}: Transfer coefficient from 'inp' should be '---'.");
+
+                    // 移行係数が負の値でないことを確認する。
+                    if (coeff != null && coeff < 0.0)
+                        throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
+
+                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0.0, isRate));
+
+                    if (coeff is double coeff_v)
+                    {
+                        if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
+                            sum = 0;
+                        sumOfOutflowCoeff[organFrom] = sum + coeff_v;
+                    }
+                }
+
+                // あるコンパートメントから流出する全経路の移行係数が同じ単位であるかを確認する。
+                var outflowGroups = transfersCorrect
+                    .Where(t => t.from.Nuclide == nuclide).GroupBy(t => t.from);
+                foreach (var outflows in outflowGroups)
+                {
+                    if (!outflows.Any())
+                        continue;
+                    var first = outflows.First().isRate;
+                    if (!outflows.All(t => t.isRate == first))
+                        throw Program.Error($"Transfer paths from '{outflows.Key.Name}' have inconsistent coefficient units.");
+                }
+
+                // 各コンパートメントへの流入経路と、移行割合を設定する。
+                foreach (var (organFrom, organTo, coeff, isRate) in transfersCorrect)
+                {
+                    double inflowRate;
+                    if (organFrom.Nuclide != nuclide)
+                    {
+                        // 親から子への移行経路では、親からの分岐比*親の崩壊定数とする。
+                        inflowRate = organTo.Nuclide.DecayRate * organFrom.NuclideDecay;
+                    }
+                    else if (isRate)
+                    {
+                        // fromからtoへの移行割合 = 移行係数[%] / 100
+                        inflowRate = coeff * 0.01;
+                    }
+                    else
+                    {
+                        // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[d/]の総計
+                        inflowRate = coeff / sumOfOutflowCoeff[organFrom];
+                    }
+
+                    organTo.Inflows.Add(new Inflow
+                    {
+                        ID = organFrom.ID,
+                        Rate = inflowRate,
+
+                        // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
+                        Organ = organFrom,
+                    });
+                }
+
+                // TODO; inpを除く、流入がないコンパートメントがある場合はこれをエラーにする。
+                // TODO; excを除く、流出がないコンパートメントがある場合はこれをエラーにする。
             }
 
             return data;
@@ -602,7 +1017,7 @@ namespace FlexID.Calc
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
-                    if (sourceRegion != "-")
+                    if (!IsBar(sourceRegion))
                     {
                         // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
                         var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
@@ -757,5 +1172,9 @@ namespace FlexID.Calc
 
             return (targets.ToArray(), weights.ToArray());
         }
+
+        private static readonly Regex patternBar = new Regex("^-+$", RegexOptions.Compiled);
+
+        bool IsBar(string s) => patternBar.IsMatch(s);
     }
 }
