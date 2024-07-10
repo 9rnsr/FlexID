@@ -92,6 +92,7 @@ namespace FlexID.Calc.Tests
         [InlineData(@"Zn-65_inh-TypeF")]
         [InlineData(@"Zn-65_inh-TypeM")]
         [InlineData(@"Zn-65_inh-TypeS")]
+#if false
         public void Test_OIR(string target)
         {
             var nuclide = target.Split('_')[0];
@@ -101,6 +102,107 @@ namespace FlexID.Calc.Tests
             var data = new DataReader(inputPath, calcProgeny).Read_OIR();
             Assert.NotNull(data);
         }
+#else
+        public void Generate_OIR_NewInputs(string target)
+        {
+            var nuclide = target.Split('_')[0];
+            var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
+
+            var calcProgeny = true;
+            var data = new DataReader(inputPath, calcProgeny).Read_OIR();
+            Assert.NotNull(data);
+
+            var newDir = Path.GetFullPath(Path.Combine("inp/OIR_New", nuclide));
+            Directory.CreateDirectory(newDir);
+            using (var w = new StreamWriter(Path.Combine(newDir, Path.GetFileName(inputPath))))
+            {
+                WriteNewInput(w, data);
+            }
+        }
+
+        void WriteNewInput(TextWriter w, DataClass data)
+        {
+            var title = $"{data.Nuclides[0].Nuclide} {data.Nuclides[0].IntakeRoute}";
+
+            w.WriteLine(@"[title]");
+            w.WriteLine(title);
+            w.WriteLine();
+
+            w.WriteLine(@"[nuclide]");
+            w.WriteLine(@"# Nuclide | Intake route                         | Ramd           | DecayRate");
+            w.WriteLine(@"#---------+--------------------------------------+----------------+---------------");
+            foreach (var nuclide in data.Nuclides)
+            {
+                w.WriteLine($"  {nuclide.Nuclide,-8}  {nuclide.IntakeRoute,-37}  {nuclide.RamdStr,-15}  {nuclide.DecayRateStr}");
+            }
+
+            foreach (var nuclide in data.Nuclides)
+            {
+                var organs = data.Organs.Where(o => o.Nuclide == nuclide);
+
+                w.WriteLine();
+                w.WriteLine();
+                w.WriteLine($@"[{nuclide.Nuclide}:compartment]");
+                w.WriteLine(@"#-----+---------------------+---------------| S-Coefficient");
+                w.WriteLine(@"# Func| Compartment         | BioDecay[/d]  | Source Region");
+                w.WriteLine(@"#-----+---------------------+---------------+---------------");
+                foreach (var c in organs)
+                {
+                    var bioDecayStr = AlignDot(c.BioDecayStr, 15, 6);
+                    if (c.Func != OrganFunc.acc)
+                        bioDecayStr = "     ---       ";
+
+                    w.WriteLine($"  {c.Func}   {c.Name,-20} {bioDecayStr,15}  {c.SourceRegion ?? "---"}");
+                }
+
+                w.WriteLine();
+                w.WriteLine($@"[{nuclide.Nuclide}:transfer]");
+                w.WriteLine(@"#-----------------------+---------------------+--------------");
+                w.WriteLine(@"# From                  | To                  | InflowRate[%] # Coeff[/d]");
+                w.WriteLine(@"#-----------------------+---------------------+--------------");
+
+                var inflowsParent = organs.SelectMany(c => c.Inflows.Select(i => (c, i))).Where(x => x.i.Organ.Nuclide != nuclide);
+                if (inflowsParent.Any())
+                {
+                    w.WriteLine();
+                    w.WriteLine("# from parent to progeny");
+                    foreach (var (c, i) in inflowsParent)
+                    {
+                        var from = $"{i.Organ.Nuclide.Nuclide}/{i.Organ.Name}";
+
+                        w.WriteLine($"  {from,-22}  {c.Name,-20}      ---");
+                    }
+                }
+
+                var inflows = organs.SelectMany(c => c.Inflows.Select(i => (c, i))).Where(x => x.i.Organ.Nuclide == nuclide);
+                if (inflows.Any())
+                {
+                    w.WriteLine();
+                    foreach (var (c, i) in inflows)
+                    {
+                        var from = i.Organ.Name;
+                        var rateStr = AlignDot(i.RateStr, 14, 5).TrimEnd();
+
+                        // 元のインプットの移行割合をそのまま出力する。
+                        w.WriteLine($"  {from,-22}  {c.Name,-20}  {rateStr}%");
+                    }
+                }
+            }
+
+            string AlignDot(string s, int width, int dotPos)
+            {
+                var i = s.IndexOf('.');
+                if (i == -1)
+                    return s.PadRight(width);
+
+                var spacingL = dotPos - i;
+                if (spacingL > 0)
+                    s = s.PadLeft(s.Length + spacingL);
+                s = s.PadRight(width);
+                return s;
+            }
+        }
+#endif
 
         [Theory]
         [InlineData("OIR_old_Sr-90_ing-Other")]
