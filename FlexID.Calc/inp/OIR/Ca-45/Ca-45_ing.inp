@@ -1,41 +1,73 @@
+[title]
+Ca-45 Ingestion
+
+[nuclide]
 # Nuclide | Intake route                         | Ramd           | DecayRate
 #---------+--------------------------------------+----------------+---------------
   Ca-45     Ingestion                              4.261063E-03     0.0
-#
-#----------------------------| --------------| Inflow  -----------| S-Coefficient
-# No  Compartment       Func | BioDecay      | n   id    Rate     | Source Region
-#---+------------------+-----+---------------+--------+-----------+---------------
-   1  input              inp      0.0          0    0    0.0        -
-   4  Oralcavity         acc   7200.0          1    1  100.0        O-cavity
-   5  Oesophagus-F       acc  12343.0          1    4   90.0        Oesophagus-f
-   6  Oesophagus-S       acc   2160.0          1    4   10.0        Oesophagus-s
-   7  St-con             acc     20.57         2    5  100.0        St-cont
-                                                    6  100.0
-   8  SI-con             acc     10.0          1    7  100.0        SI-cont
-   9  RC-con             acc      2.0          2    8   60.0        RC-cont
-                                                  111    2.9999
-  10  LC-con             acc      2.0          1    9  100.0        LC-cont
-  11  RS-con             acc      2.0          1   10  100.0        RS-cont
-  12  Faeces             exc      0.0          1   11  100.0        -
- 111  Blood              acc     15.00075      8    8   40.0        Blood
-                                                  112  100.0
-                                                  113  100.0
-                                                  114  100.0
-                                                  115   83.2853
-                                                  117  100.0
-                                                  118   83.2853
-                                                  120  100.0
- 112  ST0                acc      2.9          1  111   57.9971     Other
- 113  ST1                acc      0.1733       1  111    9.9995     Other
- 114  ST2                acc      0.00038      1  111    0.005      Other
- 115  C-bone-S           acc      0.694        2  111   11.1328     C-bone-S
-                                                  116   40.0029
- 116  Exch-C-bone-V      acc      0.006932     1  115   16.7147     C-bone-V
- 117  Noch-C-bone-V      acc      8.21E-5      1  116   59.9971     C-bone-V
- 118  T-bone-S           acc      0.694        2  111   13.866      T-bone-S
-                                                  119   40.0029
- 119  Exch-T-bone-V      acc      0.0086       1  118   16.7147     T-bone-V
- 120  Noch-T-bone-V      acc      4.93E-4      1  119   59.9971     T-bone-V
- 121  UB-con             acc     12.0          1  111    3.9998     UB-cont
- 122  Urine              exc      0.0          1  121  100.0        -
-end
+
+
+[Ca-45:compartment]
+#-----+---------------------+---------------| S-Coefficient
+# Func| Compartment         | BioDecay[/d]  | Source Region
+#-----+---------------------+---------------+---------------
+  inp   input                     ---         ---
+  acc   Oralcavity             7200.0         O-cavity
+  acc   Oesophagus-F          12343.0         Oesophagus-f
+  acc   Oesophagus-S           2160.0         Oesophagus-s
+  acc   St-con                   20.57        St-cont
+  acc   SI-con                   10.0         SI-cont
+  acc   RC-con                    2.0         RC-cont
+  acc   LC-con                    2.0         LC-cont
+  acc   RS-con                    2.0         RS-cont
+  exc   Faeces                    ---         ---
+  acc   Blood                    15.00075     Blood
+  acc   ST0                       2.9         Other
+  acc   ST1                       0.1733      Other
+  acc   ST2                       0.00038     Other
+  acc   C-bone-S                  0.694       C-bone-S
+  acc   Exch-C-bone-V             0.006932    C-bone-V
+  acc   Noch-C-bone-V             8.21E-5     C-bone-V
+  acc   T-bone-S                  0.694       T-bone-S
+  acc   Exch-T-bone-V             0.0086      T-bone-V
+  acc   Noch-T-bone-V             4.93E-4     T-bone-V
+  acc   UB-con                   12.0         UB-cont
+  exc   Urine                     ---         ---
+
+[Ca-45:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | InflowRate[%] # Coeff[/d]
+#-----------------------+---------------------+--------------
+
+  input                   Oralcavity              100.0%
+  Oralcavity              Oesophagus-F             90.0%
+  Oralcavity              Oesophagus-S             10.0%
+  Oesophagus-F            St-con                  100.0%
+  Oesophagus-S            St-con                  100.0%
+  St-con                  SI-con                  100.0%
+  SI-con                  RC-con                   60.0%
+  Blood                   RC-con                    2.9999%
+  RC-con                  LC-con                  100.0%
+  LC-con                  RS-con                  100.0%
+  RS-con                  Faeces                  100.0%
+  SI-con                  Blood                    40.0%
+  ST0                     Blood                   100.0%
+  ST1                     Blood                   100.0%
+  ST2                     Blood                   100.0%
+  C-bone-S                Blood                    83.2853%
+  Noch-C-bone-V           Blood                   100.0%
+  T-bone-S                Blood                    83.2853%
+  Noch-T-bone-V           Blood                   100.0%
+  Blood                   ST0                      57.9971%
+  Blood                   ST1                       9.9995%
+  Blood                   ST2                       0.005%
+  Blood                   C-bone-S                 11.1328%
+  Exch-C-bone-V           C-bone-S                 40.0029%
+  C-bone-S                Exch-C-bone-V            16.7147%
+  Exch-C-bone-V           Noch-C-bone-V            59.9971%
+  Blood                   T-bone-S                 13.866%
+  Exch-T-bone-V           T-bone-S                 40.0029%
+  T-bone-S                Exch-T-bone-V            16.7147%
+  Exch-T-bone-V           Noch-T-bone-V            59.9971%
+  Blood                   UB-con                    3.9998%
+  UB-con                  Urine                   100.0%

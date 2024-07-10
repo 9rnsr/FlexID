@@ -25,7 +25,6 @@ namespace FlexID.Calc
         /// 流入割合
         /// </summary>
         public double Rate;
-        public string RateStr;
     }
 
     /// <summary>
@@ -94,7 +93,6 @@ namespace FlexID.Calc
         /// 蓄積コンパートメントのみで意味を持ち、それ以外では1.0となる。
         /// </summary>
         public double BioDecay;
-        public string BioDecayStr;
 
         /// <summary>
         /// 流入経路。
@@ -128,13 +126,11 @@ namespace FlexID.Calc
         /// 崩壊定数[/day]。(＝ ln(2) / 半減期[day])
         /// </summary>
         public double Ramd;
-        public string RamdStr;
 
         /// <summary>
         /// 親核種からの崩壊割合(100%＝1.00と置いた比で持つ)。
         /// </summary>
         public double DecayRate;
-        public string DecayRateStr;
 
         /// <summary>
         /// 子孫核種の場合は<c>true</c>。
@@ -267,9 +263,7 @@ namespace FlexID.Calc
                     Nuclide = values[0],
                     IntakeRoute = values[1],
                     Ramd = double.Parse(values[2]),
-                    RamdStr = values[2],
                     DecayRate = double.Parse(values[3]),
-                    DecayRateStr = values[3],
                     IsProgeny = isProgeny,
                 };
                 data.Nuclides.Add(nuclide);
@@ -337,7 +331,6 @@ namespace FlexID.Calc
                         Name = organName,
                         Func = organFunc,
                         BioDecay = bioDecay,
-                        BioDecayStr = values[3],
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
@@ -368,12 +361,10 @@ namespace FlexID.Calc
                         {
                             int inflowID;
                             double inflowRate;
-                            string inflowRateStr;
                             if (i == 0)
                             {
                                 inflowID = int.Parse(values[5]);
                                 inflowRate = double.Parse(values[6]);
-                                inflowRateStr = values[6];
                             }
                             else
                             {
@@ -386,14 +377,12 @@ namespace FlexID.Calc
 
                                 inflowID = int.Parse(values[0]);
                                 inflowRate = double.Parse(values[1]);
-                                inflowRateStr = values[1];
                             }
 
                             organ.Inflows.Add(new Inflow
                             {
                                 ID = inflowID,
                                 Rate = inflowRate * 0.01,
-                                RateStr = inflowRateStr,
                             });
                         }
                     }
@@ -592,7 +581,6 @@ namespace FlexID.Calc
                         Name = organName,
                         Func = organFunc,
                         BioDecay = bioDecay,
-                        BioDecayStr = bioDecayStr,
                         Inflows = new List<Inflow>(),
                     };
 
@@ -1026,7 +1014,6 @@ namespace FlexID.Calc
                         Name = organName,
                         Func = organFunc,
                         BioDecay = bioDecay,
-                        BioDecayStr = values[3],
                         Inflows = new List<Inflow>(inflowNum),
                     };
 
