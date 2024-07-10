@@ -36,7 +36,7 @@ Ba-133 Ingestion:Insoluble
 
 [Ba-133:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%

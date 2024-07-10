@@ -64,7 +64,7 @@ Cs-137 Inhalation:Type-F
 
 [Cs-137:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             50.0%
@@ -248,7 +248,7 @@ Cs-137 Inhalation:Type-F
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
 # from parent to progeny

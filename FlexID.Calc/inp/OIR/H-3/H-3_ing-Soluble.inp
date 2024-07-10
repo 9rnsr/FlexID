@@ -32,7 +32,7 @@ H-3 Ingestion:Soluble
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%

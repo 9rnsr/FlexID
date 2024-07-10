@@ -40,7 +40,7 @@ Fe-59 Ingestion:Unspecified
 
 [Fe-59:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%

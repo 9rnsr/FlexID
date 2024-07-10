@@ -63,7 +63,7 @@ Cs-134 Inhalation:Type-F
 
 [Cs-134:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             50.0%

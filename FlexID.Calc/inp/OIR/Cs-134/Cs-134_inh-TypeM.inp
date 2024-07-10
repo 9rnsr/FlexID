@@ -74,7 +74,7 @@ Cs-134 Inhalation:Type-M
 
 [Cs-134:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             97.0874%

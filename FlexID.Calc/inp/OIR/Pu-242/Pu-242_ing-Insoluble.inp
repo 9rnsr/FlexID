@@ -44,7 +44,7 @@ Pu-242 Ingestion:Insoluble
 
 [Pu-242:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%

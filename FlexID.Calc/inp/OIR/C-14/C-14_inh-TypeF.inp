@@ -52,7 +52,7 @@ C-14 Inhalation:Type-F
 
 [C-14:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             50.0%

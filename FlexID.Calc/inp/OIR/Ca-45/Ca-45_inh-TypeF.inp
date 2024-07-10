@@ -47,7 +47,7 @@ Ca-45 Inhalation:Type-F
 
 [Ca-45:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             58.8235%

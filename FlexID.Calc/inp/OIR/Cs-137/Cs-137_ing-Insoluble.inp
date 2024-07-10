@@ -53,7 +53,7 @@ Cs-137 Ingestion:Insoluble
 
 [Cs-137:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
@@ -199,7 +199,7 @@ Cs-137 Ingestion:Insoluble
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
 # from parent to progeny

@@ -53,7 +53,7 @@ Zn-65 Inhalation:Type-F
 
 [Zn-65:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             76.9231%

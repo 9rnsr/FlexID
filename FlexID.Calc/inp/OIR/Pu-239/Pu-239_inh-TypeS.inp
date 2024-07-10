@@ -76,7 +76,7 @@ Pu-239 Inhalation:Type-S
 
 [Pu-239:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             99.6016%

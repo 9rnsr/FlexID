@@ -69,7 +69,7 @@ Tc-99 Inhalation:Type-M
 
 [Tc-99:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   S-glands                OralcavityRe            100.0%

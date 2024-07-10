@@ -47,7 +47,7 @@ Ba-133 Inhalation:Type-F
 
 [Ba-133:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             83.3333%

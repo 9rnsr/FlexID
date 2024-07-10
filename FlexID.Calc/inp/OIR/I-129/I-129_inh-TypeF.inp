@@ -55,7 +55,7 @@ I-129 Inhalation:Type-F
 
 [I-129:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   S-glands                OralcavityRe            100.0%

@@ -59,7 +59,7 @@ Sr-90 Inhalation:Type-S
 
 [Sr-90:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             97.0874%
@@ -204,7 +204,7 @@ Sr-90 Inhalation:Type-S
 
 [Y-90:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
 # from parent to progeny

@@ -76,7 +76,7 @@ Pu-241 Inhalation:Type-M
 
 [Pu-241:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             99.6016%

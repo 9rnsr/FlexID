@@ -37,7 +37,7 @@ Sr-90 Ingestion:Other
 
 [Sr-90:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
@@ -104,7 +104,7 @@ Sr-90 Ingestion:Other
 
 [Y-90:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
 # from parent to progeny

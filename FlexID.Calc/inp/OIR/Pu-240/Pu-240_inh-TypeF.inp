@@ -65,7 +65,7 @@ Pu-240 Inhalation:Type-F
 
 [Pu-240:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | InflowRate[%] # Coeff[/d]
+# From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
   ET2-F                   Oesophagus-S             99.6016%
