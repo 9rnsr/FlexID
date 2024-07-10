@@ -1,142 +1,212 @@
+[title]
+Cs-134 Inhalation:Type-S
+
+[nuclide]
 # Nuclide | Intake route                         | Ramd           | DecayRate
 #---------+--------------------------------------+----------------+---------------
   Cs-134    Inhalation:Type-S                      9.197178E-04     0.0
-#
-#----------------------------| --------------| Inflow  -----------| S-Coefficient
-# No  Compartment       Func | BioDecay      | n   id    Rate     | Source Region
-#---+------------------+-----+---------------+--------+-----------+---------------
-   1  input              inp      0.0          0    0    0.0        -
-   6  Oesophagus-S       acc   2160.0          2   32   97.0874     Oesophagus-s
-                                                   72   99.9999
-   7  St-wall            acc      4.589        1  111    1.4902     St-wall
-   8  St-con             acc     20.57         1    6  100.0        St-cont
-   9  St-conRe           acc     20.57         2    7    4.5762     St-cont
-                                                  111    1.9082
-  10  SI-wall            acc     10.599        1  111   14.9022     SI-wall
-  11  SI-con             acc      6.060606     1    8  100.0        SI-cont
-  12  SI-conRe           acc    600.0          4    9  100.0        SI-cont
-                                                   10    1.9813
-                                                  111    0.4433
-                                                  113    5.0155
-  13  RC-wall            acc      7.431        1  111    2.3852     RC-wall
-  14  RC-con             acc      2.0          4   11   99.0        RC-cont
-                                                   12    1.0
-                                                   13    2.826
-                                                  111    0.0084
-  15  LC-wall            acc      7.431        1  111    2.3852     LC-wall
-  16  LC-con             acc      2.0          2   14  100.0        LC-cont
-                                                   15    2.826
-  17  RS-wall            acc      7.431        1  111    1.1947     RS-wall
-  18  RS-con             acc      2.0          2   16  100.0        RS-cont
-                                                   17    2.826
-  19  Faeces             exc      0.0          1   18  100.0        -
-  31  ET1-F              acc      2.1          1    1    0.4794     ET1-sur
-  32  ET2-F              acc    103.0          3    1    0.2576836  ET2-sur
-                                                   31   71.4286
-                                                   35   76.9231
-  33  ETseq-F            acc      3.001        1    1    0.0005164  ET2-seq
-  34  LNET-F             acc      3.0          1   33    0.0333     LN-ET
-  35  BB-F               acc     13.0          2    1    0.0177644  Bronchi
-                                                   37    6.25
-  36  BBseq-F            acc      3.001        1    1    0.0000356  Bronchi-q
-  37  bb-F               acc      3.2          2    1    0.010978   Brchiole
-                                                   39    0.0666
-  38  bbseq-F            acc      3.001        1    1    0.000022   Brchiole-q
-  39  ALV-F              acc      3.003        1    1    0.0532     ALV
-  40  INT-F              acc      3.00003      1   39    0.0333     ALV
-  41  LNTH-F             acc      3.0          3   36    0.0333     LN-Th
-                                                   38    0.0333
-                                                   40    0.001
-  71  ET1-S              acc      2.1          1    1   47.4606     ET1-sur
-  72  ET2-S              acc    100.0001       3    1   25.5106764  ET2-sur
-                                                   71   71.4286
-                                                   75   99.999
-  73  ETseq-S            acc      0.0011       1    1    0.0511236  ET2-seq
-  74  LNET-S             acc      0.0001       1   73   90.9091     LN-ET
-  75  BB-S               acc     10.0001       2    1    1.7586756  Bronchi
-                                                   77   99.95
-  76  BBseq-S            acc      0.0011       1    1    0.0035244  Bronchi-q
-  77  bb-S               acc      0.2001       2    1    1.086822   Brchiole
-                                                   79   64.5161
-  78  bbseq-S            acc      0.0011       1    1    0.002178   Brchiole-q
-  79  ALV-S              acc      0.0031       1    1    5.2668     ALV
-  80  INT-S              acc      0.00013      1   79   32.2581     ALV
-  81  LNTH-S             acc      0.0001       3   76   90.9091     LN-Th
-                                                   78   90.9091
-                                                   80   23.0769
-  99  Environment        exc      0.0          3    1   18.04       -
-                                                   31   28.5714
-                                                   71   28.5714
- 110  mix-Blood          mix      0.0         20   32    2.9126     -
-                                                   33   99.9667
-                                                   34  100.0
-                                                   35   23.0769
-                                                   36   99.9667
-                                                   37   93.75
-                                                   38   99.9667
-                                                   39   99.9001
-                                                   40   99.999
-                                                   41  100.0
-                                                   72    0.0001
-                                                   73    9.0909
-                                                   74  100.0
-                                                   75    0.001
-                                                   76    9.0909
-                                                   77    0.05
-                                                   78    9.0909
-                                                   79    3.2258
-                                                   80   76.9231
-                                                   81  100.0
- 111  Plasma             acc    236.87753     25    7   90.6516     Blood
-                                                   10   93.122
-                                                   11    1.0
-                                                   12   99.0
-                                                   13   92.316
-                                                   15   92.316
-                                                   17   92.316
-                                                  110  100.0
-                                                  112  100.0
-                                                  113   94.9845
-                                                  114   94.997
-                                                  115   94.9953
-                                                  116   95.0065
-                                                  117  100.0
-                                                  118   98.1991
-                                                  119  100.0
-                                                  120  100.0
-                                                  121  100.0
-                                                  122  100.0
-                                                  123  100.0
-                                                  124  100.0
-                                                  125  100.0
-                                                  126  100.0
-                                                  127  100.0
-                                                  128  100.0
- 112  RBC                acc      0.257        1  111    0.7599     Blood
- 113  Liver              acc      2.253        8    7    4.7723     Liver
-                                                   10    4.8967
-                                                   13    4.858
-                                                   15    4.858
-                                                   17    4.858
-                                                  111    8.2321
-                                                  115    5.0047
-                                                  116    4.9935
- 114  Kidneys            acc     33.58         1  111   28.3269     Kidneys
- 115  Spleen             acc      5.295        1  111    2.2374     Spleen
- 116  Pancreas           acc      1.7683       1  111    0.7472     Pancreas
- 117  SkeletalMuscle     acc      0.0751       1  111   12.6648     Muscle
- 118  Skin               acc      0.8829       1  111    1.8659     Skin
- 119  Adipose            acc      1.77         1  111    3.7277     Adipose
- 120  Brain              acc      0.0848       1  111    0.179      Brain
- 121  Ht-wall            acc      8.07         1  111    5.9524     Ht-wall
- 122  Lung-Tis           acc      1.47         1  111    1.8659     Lung-Tis
- 123  R-marrow           acc      0.706        1  111    2.2374     R-marrow
- 124  Cartilage          acc      0.2          1  111    1.2665     Cartilage
- 125  C-bone-S           acc      0.212        1  111    0.4475     C-bone-S
- 126  T-bone-S           acc      0.212        1  111    0.6712     T-bone-S
- 127  Other1             acc      0.762        1  111    4.0992     Other
- 128  Other2             acc      0.00141      1  111    0.0015     Other
- 129  Excreta(sweat)     exc      0.0          1  118    1.8009     -
- 130  UB-con             acc     12.0          1  114    5.003      UB-cont
- 131  Urine              exc      0.0          1  130  100.0        -
-end
+
+
+[Cs-134:compartment]
+#-----+---------------------+---------------| S-Coefficient
+# Func| Compartment         | BioDecay[/d]  | Source Region
+#-----+---------------------+---------------+---------------
+  inp   input                     ---         ---
+  acc   Oesophagus-S           2160.0         Oesophagus-s
+  acc   St-wall                   4.589       St-wall
+  acc   St-con                   20.57        St-cont
+  acc   St-conRe                 20.57        St-cont
+  acc   SI-wall                  10.599       SI-wall
+  acc   SI-con                    6.060606    SI-cont
+  acc   SI-conRe                600.0         SI-cont
+  acc   RC-wall                   7.431       RC-wall
+  acc   RC-con                    2.0         RC-cont
+  acc   LC-wall                   7.431       LC-wall
+  acc   LC-con                    2.0         LC-cont
+  acc   RS-wall                   7.431       RS-wall
+  acc   RS-con                    2.0         RS-cont
+  exc   Faeces                    ---         ---
+  acc   ET1-F                     2.1         ET1-sur
+  acc   ET2-F                   103.0         ET2-sur
+  acc   ETseq-F                   3.001       ET2-seq
+  acc   LNET-F                    3.0         LN-ET
+  acc   BB-F                     13.0         Bronchi
+  acc   BBseq-F                   3.001       Bronchi-q
+  acc   bb-F                      3.2         Brchiole
+  acc   bbseq-F                   3.001       Brchiole-q
+  acc   ALV-F                     3.003       ALV
+  acc   INT-F                     3.00003     ALV
+  acc   LNTH-F                    3.0         LN-Th
+  acc   ET1-S                     2.1         ET1-sur
+  acc   ET2-S                   100.0001      ET2-sur
+  acc   ETseq-S                   0.0011      ET2-seq
+  acc   LNET-S                    0.0001      LN-ET
+  acc   BB-S                     10.0001      Bronchi
+  acc   BBseq-S                   0.0011      Bronchi-q
+  acc   bb-S                      0.2001      Brchiole
+  acc   bbseq-S                   0.0011      Brchiole-q
+  acc   ALV-S                     0.0031      ALV
+  acc   INT-S                     0.00013     ALV
+  acc   LNTH-S                    0.0001      LN-Th
+  exc   Environment               ---         ---
+  mix   mix-Blood                 ---         ---
+  acc   Plasma                  236.87753     Blood
+  acc   RBC                       0.257       Blood
+  acc   Liver                     2.253       Liver
+  acc   Kidneys                  33.58        Kidneys
+  acc   Spleen                    5.295       Spleen
+  acc   Pancreas                  1.7683      Pancreas
+  acc   SkeletalMuscle            0.0751      Muscle
+  acc   Skin                      0.8829      Skin
+  acc   Adipose                   1.77        Adipose
+  acc   Brain                     0.0848      Brain
+  acc   Ht-wall                   8.07        Ht-wall
+  acc   Lung-Tis                  1.47        Lung-Tis
+  acc   R-marrow                  0.706       R-marrow
+  acc   Cartilage                 0.2         Cartilage
+  acc   C-bone-S                  0.212       C-bone-S
+  acc   T-bone-S                  0.212       T-bone-S
+  acc   Other1                    0.762       Other
+  acc   Other2                    0.00141     Other
+  exc   Excreta(sweat)            ---         ---
+  acc   UB-con                   12.0         UB-cont
+  exc   Urine                     ---         ---
+
+[Cs-134:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | InflowRate[%] # Coeff[/d]
+#-----------------------+---------------------+--------------
+
+  ET2-F                   Oesophagus-S             97.0874%
+  ET2-S                   Oesophagus-S             99.9999%
+  Plasma                  St-wall                   1.4902%
+  Oesophagus-S            St-con                  100.0%
+  St-wall                 St-conRe                  4.5762%
+  Plasma                  St-conRe                  1.9082%
+  Plasma                  SI-wall                  14.9022%
+  St-con                  SI-con                  100.0%
+  St-conRe                SI-conRe                100.0%
+  SI-wall                 SI-conRe                  1.9813%
+  Plasma                  SI-conRe                  0.4433%
+  Liver                   SI-conRe                  5.0155%
+  Plasma                  RC-wall                   2.3852%
+  SI-con                  RC-con                   99.0%
+  SI-conRe                RC-con                    1.0%
+  RC-wall                 RC-con                    2.826%
+  Plasma                  RC-con                    0.0084%
+  Plasma                  LC-wall                   2.3852%
+  RC-con                  LC-con                  100.0%
+  LC-wall                 LC-con                    2.826%
+  Plasma                  RS-wall                   1.1947%
+  LC-con                  RS-con                  100.0%
+  RS-wall                 RS-con                    2.826%
+  RS-con                  Faeces                  100.0%
+  input                   ET1-F                     0.4794%
+  input                   ET2-F                     0.2576836%
+  ET1-F                   ET2-F                    71.4286%
+  BB-F                    ET2-F                    76.9231%
+  input                   ETseq-F                   0.0005164%
+  ETseq-F                 LNET-F                    0.0333%
+  input                   BB-F                      0.0177644%
+  bb-F                    BB-F                      6.25%
+  input                   BBseq-F                   0.0000356%
+  input                   bb-F                      0.010978%
+  ALV-F                   bb-F                      0.0666%
+  input                   bbseq-F                   0.000022%
+  input                   ALV-F                     0.0532%
+  ALV-F                   INT-F                     0.0333%
+  BBseq-F                 LNTH-F                    0.0333%
+  bbseq-F                 LNTH-F                    0.0333%
+  INT-F                   LNTH-F                    0.001%
+  input                   ET1-S                    47.4606%
+  input                   ET2-S                    25.5106764%
+  ET1-S                   ET2-S                    71.4286%
+  BB-S                    ET2-S                    99.999%
+  input                   ETseq-S                   0.0511236%
+  ETseq-S                 LNET-S                   90.9091%
+  input                   BB-S                      1.7586756%
+  bb-S                    BB-S                     99.95%
+  input                   BBseq-S                   0.0035244%
+  input                   bb-S                      1.086822%
+  ALV-S                   bb-S                     64.5161%
+  input                   bbseq-S                   0.002178%
+  input                   ALV-S                     5.2668%
+  ALV-S                   INT-S                    32.2581%
+  BBseq-S                 LNTH-S                   90.9091%
+  bbseq-S                 LNTH-S                   90.9091%
+  INT-S                   LNTH-S                   23.0769%
+  input                   Environment              18.04%
+  ET1-F                   Environment              28.5714%
+  ET1-S                   Environment              28.5714%
+  ET2-F                   mix-Blood                 2.9126%
+  ETseq-F                 mix-Blood                99.9667%
+  LNET-F                  mix-Blood               100.0%
+  BB-F                    mix-Blood                23.0769%
+  BBseq-F                 mix-Blood                99.9667%
+  bb-F                    mix-Blood                93.75%
+  bbseq-F                 mix-Blood                99.9667%
+  ALV-F                   mix-Blood                99.9001%
+  INT-F                   mix-Blood                99.999%
+  LNTH-F                  mix-Blood               100.0%
+  ET2-S                   mix-Blood                 0.0001%
+  ETseq-S                 mix-Blood                 9.0909%
+  LNET-S                  mix-Blood               100.0%
+  BB-S                    mix-Blood                 0.001%
+  BBseq-S                 mix-Blood                 9.0909%
+  bb-S                    mix-Blood                 0.05%
+  bbseq-S                 mix-Blood                 9.0909%
+  ALV-S                   mix-Blood                 3.2258%
+  INT-S                   mix-Blood                76.9231%
+  LNTH-S                  mix-Blood               100.0%
+  St-wall                 Plasma                   90.6516%
+  SI-wall                 Plasma                   93.122%
+  SI-con                  Plasma                    1.0%
+  SI-conRe                Plasma                   99.0%
+  RC-wall                 Plasma                   92.316%
+  LC-wall                 Plasma                   92.316%
+  RS-wall                 Plasma                   92.316%
+  mix-Blood               Plasma                  100.0%
+  RBC                     Plasma                  100.0%
+  Liver                   Plasma                   94.9845%
+  Kidneys                 Plasma                   94.997%
+  Spleen                  Plasma                   94.9953%
+  Pancreas                Plasma                   95.0065%
+  SkeletalMuscle          Plasma                  100.0%
+  Skin                    Plasma                   98.1991%
+  Adipose                 Plasma                  100.0%
+  Brain                   Plasma                  100.0%
+  Ht-wall                 Plasma                  100.0%
+  Lung-Tis                Plasma                  100.0%
+  R-marrow                Plasma                  100.0%
+  Cartilage               Plasma                  100.0%
+  C-bone-S                Plasma                  100.0%
+  T-bone-S                Plasma                  100.0%
+  Other1                  Plasma                  100.0%
+  Other2                  Plasma                  100.0%
+  Plasma                  RBC                       0.7599%
+  St-wall                 Liver                     4.7723%
+  SI-wall                 Liver                     4.8967%
+  RC-wall                 Liver                     4.858%
+  LC-wall                 Liver                     4.858%
+  RS-wall                 Liver                     4.858%
+  Plasma                  Liver                     8.2321%
+  Spleen                  Liver                     5.0047%
+  Pancreas                Liver                     4.9935%
+  Plasma                  Kidneys                  28.3269%
+  Plasma                  Spleen                    2.2374%
+  Plasma                  Pancreas                  0.7472%
+  Plasma                  SkeletalMuscle           12.6648%
+  Plasma                  Skin                      1.8659%
+  Plasma                  Adipose                   3.7277%
+  Plasma                  Brain                     0.179%
+  Plasma                  Ht-wall                   5.9524%
+  Plasma                  Lung-Tis                  1.8659%
+  Plasma                  R-marrow                  2.2374%
+  Plasma                  Cartilage                 1.2665%
+  Plasma                  C-bone-S                  0.4475%
+  Plasma                  T-bone-S                  0.6712%
+  Plasma                  Other1                    4.0992%
+  Plasma                  Other2                    0.0015%
+  Skin                    Excreta(sweat)            1.8009%
+  Kidneys                 UB-con                    5.003%
+  UB-con                  Urine                   100.0%

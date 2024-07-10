@@ -1,86 +1,140 @@
+[title]
+Tc-99 Inhalation:Type-F
+
+[nuclide]
 # Nuclide | Intake route                         | Ramd           | DecayRate
 #---------+--------------------------------------+----------------+---------------
-  Tc-99    Inhalation:Type-F                       8.995895E-09     0.0
-#
-#----------------------------| --------------| Inflow  -----------| S-Coefficient
-# No  Compartment       Func | BioDecay      | n   id    Rate     | Source Region
-#---+------------------+-----+---------------+--------+-----------+---------------
-   1  input              inp      0.0          0    0    0.0        -
-   4  OralcavityRe       acc   7200.0          1  117  100.0        O-cavity
-   6  Oesophagus-s       acc   2160.0          1   32   50.0        Oesophagus-s
-   7  Oesophagus-sRe     acc   2160.0          1    4  100.0        Oesophagus-s
-   8  St-wall            acc     50.0          1  110    4.3        St-wall
-   9  St-con             acc     20.57         1    6  100.0        St-cont
-  10  St-conRe           acc     20.57         2    7  100.0        St-cont
-                                                    8  100.0
-  11  SI-con             acc     60.0          1    9  100.0        SI-cont
-  12  SI-conRe           acc     60.0          1   10  100.0        SI-cont
-  13  RC-wall            acc      1.39         1  110    3.4        RC-wall
-  14  RC-con             acc      2.0          3   11   10.0        RC-cont
-                                                   12   10.0
-                                                   13  100.0
-  15  LC-con             acc      2.0          1   14  100.0        LC-cont
-  16  RS-con             acc      2.0          1   15  100.0        RS-cont
-  17  Faeces             exc      0.0          1   16  100.0        -
-  31  ET1-F              acc      2.1          1    1   47.94       ET1-sur
-  32  ET2-F              acc    200.0          3    1   25.76836    ET2-sur
-                                                   31   71.4286
-                                                   35    9.0909
-  33  ETseq-F            acc    100.001        1    1    0.05164    ET2-seq
-  34  LNET-F             acc    100.0          1   33    0.001      LN-ET
-  35  BB-F               acc    110.0          2    1    1.77644    Bronchi
-                                                   37    0.1996
-  36  BBseq-F            acc    100.001        1    1    0.00356    Bronchi-q
-  37  bb-F               acc    100.2          2    1    1.0978     Brchiole
-                                                   39    0.002
-  38  bbseq-F            acc    100.001        1    1    0.0022     Brchiole-q
-  39  ALV-F              acc    100.003        1    1    5.32       ALV
-  40  INT-F              acc    100.00003      1   39    0.001      ALV
-  41  LNTH-F             acc    100.0          3   36    0.001      LN-Th
-                                                   38    0.001
-                                                   40    3.E-5
-  63  Environment        exc      0.0          2    1   18.04       -
-                                                   31   28.5714
- 109  mix-Blood          mix      0.0         10   32   50.0        -
-                                                   33   99.999
-                                                   34  100.0
-                                                   35   90.9091
-                                                   36   99.999
-                                                   37   99.8004
-                                                   38   99.999
-                                                   39   99.997
-                                                   40   99.99997
-                                                   41  100.0
- 110  Blood              acc    100.0         15   11   90.0        Blood
-                                                   12   90.0
-                                                  109  100.0
-                                                  111   98.9997
-                                                  112  100.0
-                                                  114  100.0
-                                                  115   99.0099
-                                                  116  100.0
-                                                  118   98.9992
-                                                  119  100.0
-                                                  120   98.9992
-                                                  121  100.0
-                                                  122  100.0
-                                                  123  100.0
-                                                  124  100.0
- 111  Liver1             acc      8.3172       1  110    4.5        Liver
- 112  Liver2             acc      0.0347       1  111    1.0003     Liver
- 113  Kidneys1           acc      8.32         1  110    0.7        Kidneys
- 114  Kidneys2           acc      0.0347       1  110    0.04       Kidneys
- 115  Thyroid1           acc    101.0          1  110    7.0        Thyroid
- 116  Thyroid2           acc      1.0          1  115    0.9901     Thyroid
- 117  S-glands           acc     50.0          1  110    2.6        S-glands
- 118  T-bone-S           acc      0.46162      1  110    0.35       T-bone-S
- 119  T-bone-V           acc      4.93E-4      1  118    1.0008     T-bone-V
- 120  C-bone-S           acc      0.46162      1  110    0.35       C-bone-S
- 121  C-bone-V           acc      8.21E-5      1  120    1.0008     C-bone-V
- 122  ST0                acc     50.0          1  110   71.88       Other
- 123  ST1                acc      0.462        1  110    3.0        Other
- 124  ST2                acc      0.0347       1  110    0.18       Other
- 125  UB-con             acc     12.0          2  110    1.7        UB-cont
-                                                  113  100.0
- 126  Urine              exc      0.0          1  125  100.0        -
-end
+  Tc-99     Inhalation:Type-F                      8.995895E-09     0.0
+
+
+[Tc-99:compartment]
+#-----+---------------------+---------------| S-Coefficient
+# Func| Compartment         | BioDecay[/d]  | Source Region
+#-----+---------------------+---------------+---------------
+  inp   input                     ---         ---
+  acc   OralcavityRe           7200.0         O-cavity
+  acc   Oesophagus-s           2160.0         Oesophagus-s
+  acc   Oesophagus-sRe         2160.0         Oesophagus-s
+  acc   St-wall                  50.0         St-wall
+  acc   St-con                   20.57        St-cont
+  acc   St-conRe                 20.57        St-cont
+  acc   SI-con                   60.0         SI-cont
+  acc   SI-conRe                 60.0         SI-cont
+  acc   RC-wall                   1.39        RC-wall
+  acc   RC-con                    2.0         RC-cont
+  acc   LC-con                    2.0         LC-cont
+  acc   RS-con                    2.0         RS-cont
+  exc   Faeces                    ---         ---
+  acc   ET1-F                     2.1         ET1-sur
+  acc   ET2-F                   200.0         ET2-sur
+  acc   ETseq-F                 100.001       ET2-seq
+  acc   LNET-F                  100.0         LN-ET
+  acc   BB-F                    110.0         Bronchi
+  acc   BBseq-F                 100.001       Bronchi-q
+  acc   bb-F                    100.2         Brchiole
+  acc   bbseq-F                 100.001       Brchiole-q
+  acc   ALV-F                   100.003       ALV
+  acc   INT-F                   100.00003     ALV
+  acc   LNTH-F                  100.0         LN-Th
+  exc   Environment               ---         ---
+  mix   mix-Blood                 ---         ---
+  acc   Blood                   100.0         Blood
+  acc   Liver1                    8.3172      Liver
+  acc   Liver2                    0.0347      Liver
+  acc   Kidneys1                  8.32        Kidneys
+  acc   Kidneys2                  0.0347      Kidneys
+  acc   Thyroid1                101.0         Thyroid
+  acc   Thyroid2                  1.0         Thyroid
+  acc   S-glands                 50.0         S-glands
+  acc   T-bone-S                  0.46162     T-bone-S
+  acc   T-bone-V                  4.93E-4     T-bone-V
+  acc   C-bone-S                  0.46162     C-bone-S
+  acc   C-bone-V                  8.21E-5     C-bone-V
+  acc   ST0                      50.0         Other
+  acc   ST1                       0.462       Other
+  acc   ST2                       0.0347      Other
+  acc   UB-con                   12.0         UB-cont
+  exc   Urine                     ---         ---
+
+[Tc-99:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | InflowRate[%] # Coeff[/d]
+#-----------------------+---------------------+--------------
+
+  S-glands                OralcavityRe            100.0%
+  ET2-F                   Oesophagus-s             50.0%
+  OralcavityRe            Oesophagus-sRe          100.0%
+  Blood                   St-wall                   4.3%
+  Oesophagus-s            St-con                  100.0%
+  Oesophagus-sRe          St-conRe                100.0%
+  St-wall                 St-conRe                100.0%
+  St-con                  SI-con                  100.0%
+  St-conRe                SI-conRe                100.0%
+  Blood                   RC-wall                   3.4%
+  SI-con                  RC-con                   10.0%
+  SI-conRe                RC-con                   10.0%
+  RC-wall                 RC-con                  100.0%
+  RC-con                  LC-con                  100.0%
+  LC-con                  RS-con                  100.0%
+  RS-con                  Faeces                  100.0%
+  input                   ET1-F                    47.94%
+  input                   ET2-F                    25.76836%
+  ET1-F                   ET2-F                    71.4286%
+  BB-F                    ET2-F                     9.0909%
+  input                   ETseq-F                   0.05164%
+  ETseq-F                 LNET-F                    0.001%
+  input                   BB-F                      1.77644%
+  bb-F                    BB-F                      0.1996%
+  input                   BBseq-F                   0.00356%
+  input                   bb-F                      1.0978%
+  ALV-F                   bb-F                      0.002%
+  input                   bbseq-F                   0.0022%
+  input                   ALV-F                     5.32%
+  ALV-F                   INT-F                     0.001%
+  BBseq-F                 LNTH-F                    0.001%
+  bbseq-F                 LNTH-F                    0.001%
+  INT-F                   LNTH-F                    3.E-5%
+  input                   Environment              18.04%
+  ET1-F                   Environment              28.5714%
+  ET2-F                   mix-Blood                50.0%
+  ETseq-F                 mix-Blood                99.999%
+  LNET-F                  mix-Blood               100.0%
+  BB-F                    mix-Blood                90.9091%
+  BBseq-F                 mix-Blood                99.999%
+  bb-F                    mix-Blood                99.8004%
+  bbseq-F                 mix-Blood                99.999%
+  ALV-F                   mix-Blood                99.997%
+  INT-F                   mix-Blood                99.99997%
+  LNTH-F                  mix-Blood               100.0%
+  SI-con                  Blood                    90.0%
+  SI-conRe                Blood                    90.0%
+  mix-Blood               Blood                   100.0%
+  Liver1                  Blood                    98.9997%
+  Liver2                  Blood                   100.0%
+  Kidneys2                Blood                   100.0%
+  Thyroid1                Blood                    99.0099%
+  Thyroid2                Blood                   100.0%
+  T-bone-S                Blood                    98.9992%
+  T-bone-V                Blood                   100.0%
+  C-bone-S                Blood                    98.9992%
+  C-bone-V                Blood                   100.0%
+  ST0                     Blood                   100.0%
+  ST1                     Blood                   100.0%
+  ST2                     Blood                   100.0%
+  Blood                   Liver1                    4.5%
+  Liver1                  Liver2                    1.0003%
+  Blood                   Kidneys1                  0.7%
+  Blood                   Kidneys2                  0.04%
+  Blood                   Thyroid1                  7.0%
+  Thyroid1                Thyroid2                  0.9901%
+  Blood                   S-glands                  2.6%
+  Blood                   T-bone-S                  0.35%
+  T-bone-S                T-bone-V                  1.0008%
+  Blood                   C-bone-S                  0.35%
+  C-bone-S                C-bone-V                  1.0008%
+  Blood                   ST0                      71.88%
+  Blood                   ST1                       3.0%
+  Blood                   ST2                       0.18%
+  Blood                   UB-con                    1.7%
+  Kidneys1                UB-con                  100.0%
+  UB-con                  Urine                   100.0%

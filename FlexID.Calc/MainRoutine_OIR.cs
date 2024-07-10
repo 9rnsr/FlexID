@@ -49,7 +49,7 @@ namespace FlexID.Calc
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-            var data = DataClass.Read(InputPath, CalcProgeny);
+            var data = new DataReader(InputPath, CalcProgeny).Read_OIR();
 
             using (CalcOut = new CalcOut(data, OutputPath))
             {

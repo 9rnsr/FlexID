@@ -1,32 +1,60 @@
+[title]
+H-3 Ingestion:Organic
+
+[nuclide]
 # Nuclide | Intake route                         | Ramd           | DecayRate
 #---------+--------------------------------------+----------------+---------------
   H-3       Ingestion:Organic                      1.541423E-04     0.0
-#
-#----------------------------| --------------| Inflow  -----------| S-Coefficient
-# No  Compartment       Func | BioDecay      | n   id    Rate     | Source Region
-#---+------------------+-----+---------------+--------+-----------+---------------
-   1  input              inp      0.0          0    0    0.0        -
-   4  Oralcavity         acc   7200.0          1    1  100.0        O-cavity
-   5  Oesophagus-F       acc  12343.0          1    4   90.0        Oesophagus-f
-   6  Oesophagus-S       acc   2160.0          1    4   10.0        Oesophagus-s
-   7  St-con             acc     20.57         2    5  100.0        St-cont
-                                                    6  100.0
-   8  SI-con             acc    600.0          1    7  100.0        SI-cont
-   9  RC-con             acc      2.0          2    8    1.0        RC-cont
-                                                  111    0.007
-  10  LC-con             acc      2.0          1    9  100.0        LC-cont
-  11  RS-con             acc      2.0          1   10  100.0        RS-cont
-  12  Faeces             exc      0.0          1   11  100.0        -
- 111  Blood              acc    400.7          2    8   49.5        Blood
-                                                  112   99.9985
- 112  ExtravasHTO        acc     44.00068      3  111   99.8253     Other
-                                                  113  100.0
-                                                  114  100.0
- 113  OBT1               acc      0.01733      2    8   49.5        Other
-                                                  112    0.0014
- 114  OBT2               acc      0.0019       1  112    0.0002     Other
- 115  Breath(discharge)  exc      0.0          1  111    0.021      -
- 116  Skin(discharge)    exc      0.0          1  111    0.0507     -
- 117  UB-con             acc     12.0          1  111    0.0961     UB-cont
- 118  Urine              exc      0.0          1  117  100.0        -
-end
+
+
+[H-3:compartment]
+#-----+---------------------+---------------| S-Coefficient
+# Func| Compartment         | BioDecay[/d]  | Source Region
+#-----+---------------------+---------------+---------------
+  inp   input                     ---         ---
+  acc   Oralcavity             7200.0         O-cavity
+  acc   Oesophagus-F          12343.0         Oesophagus-f
+  acc   Oesophagus-S           2160.0         Oesophagus-s
+  acc   St-con                   20.57        St-cont
+  acc   SI-con                  600.0         SI-cont
+  acc   RC-con                    2.0         RC-cont
+  acc   LC-con                    2.0         LC-cont
+  acc   RS-con                    2.0         RS-cont
+  exc   Faeces                    ---         ---
+  acc   Blood                   400.7         Blood
+  acc   ExtravasHTO              44.00068     Other
+  acc   OBT1                      0.01733     Other
+  acc   OBT2                      0.0019      Other
+  exc   Breath(discharge)         ---         ---
+  exc   Skin(discharge)           ---         ---
+  acc   UB-con                   12.0         UB-cont
+  exc   Urine                     ---         ---
+
+[H-3:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | InflowRate[%] # Coeff[/d]
+#-----------------------+---------------------+--------------
+
+  input                   Oralcavity              100.0%
+  Oralcavity              Oesophagus-F             90.0%
+  Oralcavity              Oesophagus-S             10.0%
+  Oesophagus-F            St-con                  100.0%
+  Oesophagus-S            St-con                  100.0%
+  St-con                  SI-con                  100.0%
+  SI-con                  RC-con                    1.0%
+  Blood                   RC-con                    0.007%
+  RC-con                  LC-con                  100.0%
+  LC-con                  RS-con                  100.0%
+  RS-con                  Faeces                  100.0%
+  SI-con                  Blood                    49.5%
+  ExtravasHTO             Blood                    99.9985%
+  Blood                   ExtravasHTO              99.8253%
+  OBT1                    ExtravasHTO             100.0%
+  OBT2                    ExtravasHTO             100.0%
+  SI-con                  OBT1                     49.5%
+  ExtravasHTO             OBT1                      0.0014%
+  ExtravasHTO             OBT2                      0.0002%
+  Blood                   Breath(discharge)         0.021%
+  Blood                   Skin(discharge)           0.0507%
+  Blood                   UB-con                    0.0961%
+  UB-con                  Urine                   100.0%

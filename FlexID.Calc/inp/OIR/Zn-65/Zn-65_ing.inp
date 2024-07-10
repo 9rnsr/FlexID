@@ -1,54 +1,92 @@
+[title]
+Zn-65 Ingestion
+
+[nuclide]
 # Nuclide | Intake route                         | Ramd           | DecayRate
 #---------+--------------------------------------+----------------+---------------
-  Zn-65    Ingestion                               2.840069E-03     0.0
-#
-#----------------------------| --------------| Inflow  -----------| S-Coefficient
-# No  Compartment       Func | BioDecay      | n   id    Rate     | Source Region
-#---+------------------+-----+---------------+--------+-----------+---------------
-   1  input              inp      0.0          0    0    0.0        -
-   4  Oralcavity         acc   7200.0          1    1  100.0        O-cavity
-   5  Oesophagus-F       acc  12343.0          1    4   90.0        Oesophagus-f
-   6  Oesophagus-S       acc   2160.0          1    4   10.0        Oesophagus-s
-   7  St-con             acc     20.57         2    5  100.0        St-cont
-                                                    6  100.0
-   8  SI-con             acc     12.0          1    7  100.0        SI-cont
-   9  SI-conRe           acc     12.0          3  111    0.141      SI-cont
-                                                  115    0.3339
-                                                  117   40.0
-  10  RC-con             acc      2.0          2    8   50.0        RC-cont
-                                                    9   50.0
-  11  LC-con             acc      2.0          1   10  100.0        LC-cont
-  12  RS-con             acc      2.0          1   11  100.0        RS-cont
-  13  Faeces             exc      0.0          1   12  100.0        -
- 111  Plasma             acc    141.81        15    8   50.0        Blood
-                                                    9   50.0
-                                                  112  100.0
-                                                  113  100.0
-                                                  114  100.0
-                                                  115   49.8331
-                                                  116  100.0
-                                                  117   60.0
-                                                  118  100.0
-                                                  119  100.0
-                                                  120  100.0
-                                                  121   94.97
-                                                  122  100.0
-                                                  123   94.97
-                                                  124  100.0
- 112  ST0                acc     10.0          1  111   28.2068     Other
- 113  ST1                acc      3.0          1  111   21.1551     Other
- 114  ST2                acc      0.01         1  111    0.2821     Other
- 115  Liver1             acc     20.067        1  111   42.3101     Liver
- 116  Liver2             acc      0.6          1  115   49.8331     Liver
- 117  Pancreas           acc      2.5          1  111    2.1155     Pancreas
- 118  Muscle             acc      0.005        1  111    1.4103     Muscle
- 119  Kidneys            acc      0.7          1  111    2.8207     Kidneys
- 120  RBC                acc      0.14         1  111    1.0578     Blood
- 121  C-bone-S           acc      0.01053      1  111    0.2116     C-bone-S
- 122  C-bone-V           acc      0.0000821    1  121    5.03       C-bone-V
- 123  T-bone-S           acc      0.01053      1  111    0.1058     T-bone-S
- 124  T-bone-V           acc      0.000493     1  123    5.03       T-bone-V
- 125  Excreta            exc      0.0          1  111    0.0917     -
- 126  UB-con             acc     12.0          1  111    0.0917     UB-cont
- 127  Urine              exc      0.0          1  126  100.0        -
-end
+  Zn-65     Ingestion                              2.840069E-03     0.0
+
+
+[Zn-65:compartment]
+#-----+---------------------+---------------| S-Coefficient
+# Func| Compartment         | BioDecay[/d]  | Source Region
+#-----+---------------------+---------------+---------------
+  inp   input                     ---         ---
+  acc   Oralcavity             7200.0         O-cavity
+  acc   Oesophagus-F          12343.0         Oesophagus-f
+  acc   Oesophagus-S           2160.0         Oesophagus-s
+  acc   St-con                   20.57        St-cont
+  acc   SI-con                   12.0         SI-cont
+  acc   SI-conRe                 12.0         SI-cont
+  acc   RC-con                    2.0         RC-cont
+  acc   LC-con                    2.0         LC-cont
+  acc   RS-con                    2.0         RS-cont
+  exc   Faeces                    ---         ---
+  acc   Plasma                  141.81        Blood
+  acc   ST0                      10.0         Other
+  acc   ST1                       3.0         Other
+  acc   ST2                       0.01        Other
+  acc   Liver1                   20.067       Liver
+  acc   Liver2                    0.6         Liver
+  acc   Pancreas                  2.5         Pancreas
+  acc   Muscle                    0.005       Muscle
+  acc   Kidneys                   0.7         Kidneys
+  acc   RBC                       0.14        Blood
+  acc   C-bone-S                  0.01053     C-bone-S
+  acc   C-bone-V                  0.0000821   C-bone-V
+  acc   T-bone-S                  0.01053     T-bone-S
+  acc   T-bone-V                  0.000493    T-bone-V
+  exc   Excreta                   ---         ---
+  acc   UB-con                   12.0         UB-cont
+  exc   Urine                     ---         ---
+
+[Zn-65:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | InflowRate[%] # Coeff[/d]
+#-----------------------+---------------------+--------------
+
+  input                   Oralcavity              100.0%
+  Oralcavity              Oesophagus-F             90.0%
+  Oralcavity              Oesophagus-S             10.0%
+  Oesophagus-F            St-con                  100.0%
+  Oesophagus-S            St-con                  100.0%
+  St-con                  SI-con                  100.0%
+  Plasma                  SI-conRe                  0.141%
+  Liver1                  SI-conRe                  0.3339%
+  Pancreas                SI-conRe                 40.0%
+  SI-con                  RC-con                   50.0%
+  SI-conRe                RC-con                   50.0%
+  RC-con                  LC-con                  100.0%
+  LC-con                  RS-con                  100.0%
+  RS-con                  Faeces                  100.0%
+  SI-con                  Plasma                   50.0%
+  SI-conRe                Plasma                   50.0%
+  ST0                     Plasma                  100.0%
+  ST1                     Plasma                  100.0%
+  ST2                     Plasma                  100.0%
+  Liver1                  Plasma                   49.8331%
+  Liver2                  Plasma                  100.0%
+  Pancreas                Plasma                   60.0%
+  Muscle                  Plasma                  100.0%
+  Kidneys                 Plasma                  100.0%
+  RBC                     Plasma                  100.0%
+  C-bone-S                Plasma                   94.97%
+  C-bone-V                Plasma                  100.0%
+  T-bone-S                Plasma                   94.97%
+  T-bone-V                Plasma                  100.0%
+  Plasma                  ST0                      28.2068%
+  Plasma                  ST1                      21.1551%
+  Plasma                  ST2                       0.2821%
+  Plasma                  Liver1                   42.3101%
+  Liver1                  Liver2                   49.8331%
+  Plasma                  Pancreas                  2.1155%
+  Plasma                  Muscle                    1.4103%
+  Plasma                  Kidneys                   2.8207%
+  Plasma                  RBC                       1.0578%
+  Plasma                  C-bone-S                  0.2116%
+  C-bone-S                C-bone-V                  5.03%
+  Plasma                  T-bone-S                  0.1058%
+  T-bone-S                T-bone-V                  5.03%
+  Plasma                  Excreta                   0.0917%
+  Plasma                  UB-con                    0.0917%
+  UB-con                  Urine                   100.0%
