@@ -32,7 +32,6 @@ Zn-65 Inhalation:Type-F
   acc   INT-F                    30.00003     ALV
   acc   LNTH-F                   30.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Plasma                  141.81        Blood
   acc   ST0                      10.0         Other
   acc   ST1                       3.0         Other
@@ -86,19 +85,18 @@ Zn-65 Inhalation:Type-F
   INT-F                   LNTH-F                    0.0001%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                23.0769%
-  ETseq-F                 mix-Blood                99.9967%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                75.0%
-  BBseq-F                 mix-Blood                99.9967%
-  bb-F                    mix-Blood                99.3377%
-  bbseq-F                 mix-Blood                99.9967%
-  ALV-F                   mix-Blood                99.99%
-  INT-F                   mix-Blood                99.9999%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Plasma                   23.0769%
+  ETseq-F                 Plasma                   99.9967%
+  LNET-F                  Plasma                  100.0%
+  BB-F                    Plasma                   75.0%
+  BBseq-F                 Plasma                   99.9967%
+  bb-F                    Plasma                   99.3377%
+  bbseq-F                 Plasma                   99.9967%
+  ALV-F                   Plasma                   99.99%
+  INT-F                   Plasma                   99.9999%
+  LNTH-F                  Plasma                  100.0%
   SI-con                  Plasma                   50.0%
   SI-conRe                Plasma                   50.0%
-  mix-Blood               Plasma                  100.0%
   ST0                     Plasma                  100.0%
   ST1                     Plasma                  100.0%
   ST2                     Plasma                  100.0%

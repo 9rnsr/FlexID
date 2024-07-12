@@ -47,7 +47,6 @@ I-129 Inhalation:Type-S
   acc   INT-S                     0.00013     ALV
   acc   LNTH-S                    0.0001      LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood1                  672.86        Blood
   acc   Blood2                   39.6         Blood
   acc   Liver1                  100.0         Liver
@@ -122,29 +121,28 @@ I-129 Inhalation:Type-S
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
   ET1-S                   Environment              28.5714%
-  ET2-F                   mix-Blood                 2.9126%
-  ETseq-F                 mix-Blood                99.9667%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                23.0769%
-  BBseq-F                 mix-Blood                99.9667%
-  bb-F                    mix-Blood                93.75%
-  bbseq-F                 mix-Blood                99.9667%
-  ALV-F                   mix-Blood                99.9001%
-  INT-F                   mix-Blood                99.999%
-  LNTH-F                  mix-Blood               100.0%
-  ET2-S                   mix-Blood                 0.0001%
-  ETseq-S                 mix-Blood                 9.0909%
-  LNET-S                  mix-Blood               100.0%
-  BB-S                    mix-Blood                 0.001%
-  BBseq-S                 mix-Blood                 9.0909%
-  bb-S                    mix-Blood                 0.05%
-  bbseq-S                 mix-Blood                 9.0909%
-  ALV-S                   mix-Blood                 3.2258%
-  INT-S                   mix-Blood                76.9231%
-  LNTH-S                  mix-Blood               100.0%
+  ET2-F                   Blood1                    2.9126%
+  ETseq-F                 Blood1                   99.9667%
+  LNET-F                  Blood1                  100.0%
+  BB-F                    Blood1                   23.0769%
+  BBseq-F                 Blood1                   99.9667%
+  bb-F                    Blood1                   93.75%
+  bbseq-F                 Blood1                   99.9667%
+  ALV-F                   Blood1                   99.9001%
+  INT-F                   Blood1                   99.999%
+  LNTH-F                  Blood1                  100.0%
+  ET2-S                   Blood1                    0.0001%
+  ETseq-S                 Blood1                    9.0909%
+  LNET-S                  Blood1                  100.0%
+  BB-S                    Blood1                    0.001%
+  BBseq-S                 Blood1                    9.0909%
+  bb-S                    Blood1                    0.05%
+  bbseq-S                 Blood1                    9.0909%
+  ALV-S                   Blood1                    3.2258%
+  INT-S                   Blood1                   76.9231%
+  LNTH-S                  Blood1                  100.0%
   SI-con                  Blood1                    1.0%
   SI-conRe                Blood1                   99.0%
-  mix-Blood               Blood1                  100.0%
   Liver1                  Blood1                  100.0%
   Liver2                  Blood1                    0.6598%
   Kidneys1                Blood1                  100.0%

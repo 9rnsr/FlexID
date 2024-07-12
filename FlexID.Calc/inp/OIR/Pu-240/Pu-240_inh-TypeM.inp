@@ -52,7 +52,6 @@ Pu-240 Inhalation:Type-M
   acc   INT-B                     0.0         ALV
   acc   LNTH-B                    0.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood1                    0.7700002   Blood
   acc   Blood2                  100.0         Blood
   acc   ST0                       0.099       Other
@@ -146,38 +145,37 @@ Pu-240 Inhalation:Type-M
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
   ET1-S                   Environment              28.5714%
-  ET2-F                   mix-Blood                 0.3976%
-  ETseq-F                 mix-Blood                99.5511%
-  LNET-F                  mix-Blood                99.8%
-  BB-F                    mix-Blood                 3.8385%
-  BBseq-F                 mix-Blood                99.5511%
-  bb-F                    mix-Blood                66.5333%
-  bbseq-F                 mix-Blood                99.5511%
-  ALV-F                   mix-Blood                99.0571%
-  INT-F                   mix-Blood                99.7925%
-  LNTH-F                  mix-Blood                99.8%
-  ET2-S                   mix-Blood                 0.00499%
-  ETseq-S                 mix-Blood                83.1667%
-  LNET-S                  mix-Blood                99.8%
-  BB-S                    mix-Blood                 0.0499%
-  BBseq-S                 mix-Blood                83.1667%
-  bb-S                    mix-Blood                 2.4341%
-  bbseq-S                 mix-Blood                83.1667%
-  ALV-S                   mix-Blood                62.375%
-  INT-S                   mix-Blood                99.2048%
-  LNTH-S                  mix-Blood                99.8%
-  ET2-B                   mix-Blood               100.0%
-  ETseq-B                 mix-Blood               100.0%
-  LNET-B                  mix-Blood               100.0%
-  BB-B                    mix-Blood               100.0%
-  BBseq-B                 mix-Blood               100.0%
-  bb-B                    mix-Blood               100.0%
-  bbseq-B                 mix-Blood               100.0%
-  ALV-B                   mix-Blood               100.0%
-  INT-B                   mix-Blood               100.0%
-  LNTH-B                  mix-Blood               100.0%
+  ET2-F                   Blood1                    0.3976%
+  ETseq-F                 Blood1                   99.5511%
+  LNET-F                  Blood1                   99.8%
+  BB-F                    Blood1                    3.8385%
+  BBseq-F                 Blood1                   99.5511%
+  bb-F                    Blood1                   66.5333%
+  bbseq-F                 Blood1                   99.5511%
+  ALV-F                   Blood1                   99.0571%
+  INT-F                   Blood1                   99.7925%
+  LNTH-F                  Blood1                   99.8%
+  ET2-S                   Blood1                    0.00499%
+  ETseq-S                 Blood1                   83.1667%
+  LNET-S                  Blood1                   99.8%
+  BB-S                    Blood1                    0.0499%
+  BBseq-S                 Blood1                   83.1667%
+  bb-S                    Blood1                    2.4341%
+  bbseq-S                 Blood1                   83.1667%
+  ALV-S                   Blood1                   62.375%
+  INT-S                   Blood1                   99.2048%
+  LNTH-S                  Blood1                   99.8%
+  ET2-B                   Blood1                  100.0%
+  ETseq-B                 Blood1                  100.0%
+  LNET-B                  Blood1                  100.0%
+  BB-B                    Blood1                  100.0%
+  BBseq-B                 Blood1                  100.0%
+  bb-B                    Blood1                  100.0%
+  bbseq-B                 Blood1                  100.0%
+  ALV-B                   Blood1                  100.0%
+  INT-B                   Blood1                  100.0%
+  LNTH-B                  Blood1                  100.0%
   SI-con                  Blood1                    0.01%
-  mix-Blood               Blood1                  100.0%
   Blood2                  Blood1                   67.55%
   ST0                     Blood1                  100.0%
   ST1                     Blood2                  100.0%

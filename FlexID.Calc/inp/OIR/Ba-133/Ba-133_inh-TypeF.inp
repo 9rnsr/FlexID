@@ -31,7 +31,6 @@ Ba-133 Inhalation:Type-F
   acc   INT-F                    20.00003     ALV
   acc   LNTH-F                   20.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Plasma                   70.04        Blood
   acc   ST0                       7.67        Other
   acc   ST1                       0.693       Other
@@ -77,18 +76,17 @@ Ba-133 Inhalation:Type-F
   INT-F                   LNTH-F                    0.0001%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                16.6667%
-  ETseq-F                 mix-Blood                99.995%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                67.0%
-  BBseq-F                 mix-Blood                99.995%
-  bb-F                    mix-Blood                99.0099%
-  bbseq-F                 mix-Blood                99.995%
-  ALV-F                   mix-Blood                99.985%
-  INT-F                   mix-Blood                99.9999%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Plasma                   16.6667%
+  ETseq-F                 Plasma                   99.995%
+  LNET-F                  Plasma                  100.0%
+  BB-F                    Plasma                   67.0%
+  BBseq-F                 Plasma                   99.995%
+  bb-F                    Plasma                   99.0099%
+  bbseq-F                 Plasma                   99.995%
+  ALV-F                   Plasma                   99.985%
+  INT-F                   Plasma                   99.9999%
+  LNTH-F                  Plasma                  100.0%
   SI-con                  Plasma                   20.0%
-  mix-Blood               Plasma                  100.0%
   ST0                     Plasma                  100.0%
   ST1                     Plasma                  100.0%
   ST2                     Plasma                  100.0%

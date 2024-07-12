@@ -31,7 +31,6 @@ C-14 Inhalation:Type-F
   acc   INT-F                   100.00003     ALV
   acc   LNTH-F                  100.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood0                    3.0         Blood
   acc   Blood1                  100.0         Blood
   acc   Blood2                 1000.0         Blood
@@ -83,18 +82,17 @@ C-14 Inhalation:Type-F
   INT-F                   LNTH-F                    3.E-5%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                50.0%
-  ETseq-F                 mix-Blood                99.999%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                90.9091%
-  BBseq-F                 mix-Blood                99.999%
-  bb-F                    mix-Blood                99.8004%
-  bbseq-F                 mix-Blood                99.999%
-  ALV-F                   mix-Blood                99.997%
-  INT-F                   mix-Blood                99.99997%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Blood0                   50.0%
+  ETseq-F                 Blood0                   99.999%
+  LNET-F                  Blood0                  100.0%
+  BB-F                    Blood0                   90.9091%
+  BBseq-F                 Blood0                   99.999%
+  bb-F                    Blood0                   99.8004%
+  bbseq-F                 Blood0                   99.999%
+  ALV-F                   Blood0                   99.997%
+  INT-F                   Blood0                   99.99997%
+  LNTH-F                  Blood0                  100.0%
   SI-con                  Blood0                   99.0%
-  mix-Blood               Blood0                  100.0%
   Sys-Tis(short)          Blood0                   40.0%
   Sys-Tis(short)          Blood1                   30.0%
   Sys-Tis(long)           Blood1                  100.0%

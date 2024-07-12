@@ -32,7 +32,6 @@ Fe-59 Inhalation:Type-F
   acc   INT-F                   100.00003     ALV
   acc   LNTH-F                  100.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   OtherPlasma              70.11        Blood
   acc   PlasmaTrans              11.095       Blood
   acc   RBC                       0.008338    Blood
@@ -84,19 +83,18 @@ Fe-59 Inhalation:Type-F
   INT-F                   LNTH-F                    3.E-5%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                50.0%
-  ETseq-F                 mix-Blood                99.999%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                90.9091%
-  BBseq-F                 mix-Blood                99.999%
-  bb-F                    mix-Blood                99.8004%
-  bbseq-F                 mix-Blood                99.999%
-  ALV-F                   mix-Blood                99.997%
-  INT-F                   mix-Blood                99.99997%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   OtherPlasma              50.0%
+  ETseq-F                 OtherPlasma              99.999%
+  LNET-F                  OtherPlasma             100.0%
+  BB-F                    OtherPlasma              90.9091%
+  BBseq-F                 OtherPlasma              99.999%
+  bb-F                    OtherPlasma              99.8004%
+  bbseq-F                 OtherPlasma              99.999%
+  ALV-F                   OtherPlasma              99.997%
+  INT-F                   OtherPlasma              99.99997%
+  LNTH-F                  OtherPlasma             100.0%
   SI-con                  OtherPlasma              10.0%
   SI-conRe                OtherPlasma              10.0%
-  mix-Blood               OtherPlasma             100.0%
   RBC                     OtherPlasma               9.9904%
   MarrowTransit           OtherPlasma              89.9909%
   OtherPlasma             PlasmaTrans              99.8431%

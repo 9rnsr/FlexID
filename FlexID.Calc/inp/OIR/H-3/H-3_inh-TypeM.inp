@@ -42,7 +42,6 @@ H-3 Inhalation:Type-M
   acc   INT-S                     0.00503     ALV
   acc   LNTH-S                    0.005       LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood                   400.7         Blood
   acc   ExtravasHTO              44.00068     Other
   acc   OBT1                      0.01733     Other
@@ -103,28 +102,27 @@ H-3 Inhalation:Type-M
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
   ET1-S                   Environment              28.5714%
-  ET2-F                   mix-Blood                 2.9126%
-  ETseq-F                 mix-Blood                99.9667%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                23.0769%
-  BBseq-F                 mix-Blood                99.9667%
-  bb-F                    mix-Blood                93.75%
-  bbseq-F                 mix-Blood                99.9667%
-  ALV-F                   mix-Blood                99.9001%
-  INT-F                   mix-Blood                99.999%
-  LNTH-F                  mix-Blood               100.0%
-  ET2-S                   mix-Blood                 0.005%
-  ETseq-S                 mix-Blood                83.3333%
-  LNET-S                  mix-Blood               100.0%
-  BB-S                    mix-Blood                 0.05%
-  BBseq-S                 mix-Blood                83.3333%
-  bb-S                    mix-Blood                 2.439%
-  bbseq-S                 mix-Blood                83.3333%
-  ALV-S                   mix-Blood                62.5%
-  INT-S                   mix-Blood                99.4036%
-  LNTH-S                  mix-Blood               100.0%
+  ET2-F                   Blood                     2.9126%
+  ETseq-F                 Blood                    99.9667%
+  LNET-F                  Blood                   100.0%
+  BB-F                    Blood                    23.0769%
+  BBseq-F                 Blood                    99.9667%
+  bb-F                    Blood                    93.75%
+  bbseq-F                 Blood                    99.9667%
+  ALV-F                   Blood                    99.9001%
+  INT-F                   Blood                    99.999%
+  LNTH-F                  Blood                   100.0%
+  ET2-S                   Blood                     0.005%
+  ETseq-S                 Blood                    83.3333%
+  LNET-S                  Blood                   100.0%
+  BB-S                    Blood                     0.05%
+  BBseq-S                 Blood                    83.3333%
+  bb-S                    Blood                     2.439%
+  bbseq-S                 Blood                    83.3333%
+  ALV-S                   Blood                    62.5%
+  INT-S                   Blood                    99.4036%
+  LNTH-S                  Blood                   100.0%
   SI-con                  Blood                    20.0%
-  mix-Blood               Blood                   100.0%
   ExtravasHTO             Blood                    99.9985%
   Blood                   ExtravasHTO              99.8253%
   OBT1                    ExtravasHTO             100.0%
