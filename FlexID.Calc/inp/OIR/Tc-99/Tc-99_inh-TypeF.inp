@@ -37,7 +37,6 @@ Tc-99 Inhalation:Type-F
   acc   INT-F                   100.00003     ALV
   acc   LNTH-F                  100.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood                   100.0         Blood
   acc   Liver1                    8.3172      Liver
   acc   Liver2                    0.0347      Liver
@@ -96,19 +95,18 @@ Tc-99 Inhalation:Type-F
   INT-F                   LNTH-F                    3.E-5%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                50.0%
-  ETseq-F                 mix-Blood                99.999%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                90.9091%
-  BBseq-F                 mix-Blood                99.999%
-  bb-F                    mix-Blood                99.8004%
-  bbseq-F                 mix-Blood                99.999%
-  ALV-F                   mix-Blood                99.997%
-  INT-F                   mix-Blood                99.99997%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Blood                    50.0%
+  ETseq-F                 Blood                    99.999%
+  LNET-F                  Blood                   100.0%
+  BB-F                    Blood                    90.9091%
+  BBseq-F                 Blood                    99.999%
+  bb-F                    Blood                    99.8004%
+  bbseq-F                 Blood                    99.999%
+  ALV-F                   Blood                    99.997%
+  INT-F                   Blood                    99.99997%
+  LNTH-F                  Blood                   100.0%
   SI-con                  Blood                    90.0%
   SI-conRe                Blood                    90.0%
-  mix-Blood               Blood                   100.0%
   Liver1                  Blood                    98.9997%
   Liver2                  Blood                   100.0%
   Kidneys2                Blood                   100.0%

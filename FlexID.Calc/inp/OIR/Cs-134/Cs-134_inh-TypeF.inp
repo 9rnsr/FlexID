@@ -38,7 +38,6 @@ Cs-134 Inhalation:Type-F
   acc   INT-F                   100.00003     ALV
   acc   LNTH-F                  100.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Plasma                  236.87753     Blood
   acc   RBC                       0.257       Blood
   acc   Liver                     2.253       Liver
@@ -108,16 +107,16 @@ Cs-134 Inhalation:Type-F
   INT-F                   LNTH-F                    0.00003%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                50.0%
-  ETseq-F                 mix-Blood                99.999%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                90.9091%
-  BBseq-F                 mix-Blood                99.999%
-  bb-F                    mix-Blood                99.8004%
-  bbseq-F                 mix-Blood                99.999%
-  ALV-F                   mix-Blood                99.997%
-  INT-F                   mix-Blood                99.99997%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Plasma                   50.0%
+  ETseq-F                 Plasma                   99.999%
+  LNET-F                  Plasma                  100.0%
+  BB-F                    Plasma                   90.9091%
+  BBseq-F                 Plasma                   99.999%
+  bb-F                    Plasma                   99.8004%
+  bbseq-F                 Plasma                   99.999%
+  ALV-F                   Plasma                   99.997%
+  INT-F                   Plasma                   99.99997%
+  LNTH-F                  Plasma                  100.0%
   St-wall                 Plasma                   90.6516%
   SI-wall                 Plasma                   93.122%
   SI-con                  Plasma                   99.0%
@@ -125,7 +124,6 @@ Cs-134 Inhalation:Type-F
   RC-wall                 Plasma                   92.316%
   LC-wall                 Plasma                   92.316%
   RS-wall                 Plasma                   92.316%
-  mix-Blood               Plasma                  100.0%
   RBC                     Plasma                  100.0%
   Liver                   Plasma                   94.9845%
   Kidneys                 Plasma                   94.997%

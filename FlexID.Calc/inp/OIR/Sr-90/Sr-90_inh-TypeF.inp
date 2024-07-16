@@ -32,7 +32,6 @@ Sr-90 Inhalation:Type-F
   acc   INT-F                    30.00003     ALV
   acc   LNTH-F                   30.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood1                   15.008       Blood
   acc   ST0                       2.5         Other
   acc   ST1                       0.116       Other
@@ -78,18 +77,17 @@ Sr-90 Inhalation:Type-F
   INT-F                   LNTH-F                    0.0001%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                23.0769%
-  ETseq-F                 mix-Blood                99.9967%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                75.0%
-  BBseq-F                 mix-Blood                99.9967%
-  bb-F                    mix-Blood                99.3377%
-  bbseq-F                 mix-Blood                99.9967%
-  ALV-F                   mix-Blood                99.99%
-  INT-F                   mix-Blood                99.9999%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Blood1                   23.0769%
+  ETseq-F                 Blood1                   99.9967%
+  LNET-F                  Blood1                  100.0%
+  BB-F                    Blood1                   75.0%
+  BBseq-F                 Blood1                   99.9967%
+  bb-F                    Blood1                   99.3377%
+  bbseq-F                 Blood1                   99.9967%
+  ALV-F                   Blood1                   99.99%
+  INT-F                   Blood1                   99.9999%
+  LNTH-F                  Blood1                  100.0%
   SI-con                  Blood1                   25.0%
-  mix-Blood               Blood1                  100.0%
   ST0                     Blood1                  100.0%
   ST1                     Blood1                  100.0%
   ST2                     Blood1                  100.0%
@@ -136,7 +134,6 @@ Sr-90 Inhalation:Type-F
   acc   INT-F                     1.00003     ALV
   acc   LNTH-F                    1.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood1                   16.6         Blood
   acc   Blood2                    0.462       Blood
   acc   ST0                       0.231       Other
@@ -208,18 +205,17 @@ Sr-90 Inhalation:Type-F
   bbseq-F                 LNTH-F                    0.0999%
   INT-F                   LNTH-F                    0.003%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                 0.9901%
-  ETseq-F                 mix-Blood                99.9001%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                 9.0909%
-  BBseq-F                 mix-Blood                99.9001%
-  bb-F                    mix-Blood                83.3333%
-  bbseq-F                 mix-Blood                99.9001%
-  ALV-F                   mix-Blood                99.7009%
-  INT-F                   mix-Blood                99.997%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Blood1                    0.9901%
+  ETseq-F                 Blood1                   99.9001%
+  LNET-F                  Blood1                  100.0%
+  BB-F                    Blood1                    9.0909%
+  BBseq-F                 Blood1                   99.9001%
+  bb-F                    Blood1                   83.3333%
+  bbseq-F                 Blood1                   99.9001%
+  ALV-F                   Blood1                   99.7009%
+  INT-F                   Blood1                   99.997%
+  LNTH-F                  Blood1                  100.0%
   SI-con                  Blood1                    0.01%
-  mix-Blood               Blood1                  100.0%
   Blood2                  Blood1                  100.0%
   ST0                     Blood1                  100.0%
   ST1                     Blood1                  100.0%

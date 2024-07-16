@@ -29,7 +29,6 @@ H-3 Inhalation:Type-F_Gas
   acc   ALV-F                   100.003       ALV
   acc   INT-F                   100.00003     ALV
   acc   LNTH-F                  100.0         LN-Th
-  mix   mix-Blood                 ---         ---
   acc   Blood                   400.7         Blood
   acc   ExtravasHTO              44.00068     Other
   acc   OBT1                      0.01733     Other
@@ -67,18 +66,17 @@ H-3 Inhalation:Type-F_Gas
   BBseq-F                 LNTH-F                    0.001%
   bbseq-F                 LNTH-F                    0.001%
   INT-F                   LNTH-F                    0.00003%
-  ET2-F                   mix-Blood                50.0%
-  ETseq-F                 mix-Blood                99.999%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                90.9091%
-  BBseq-F                 mix-Blood                99.999%
-  bb-F                    mix-Blood                99.8004%
-  bbseq-F                 mix-Blood                99.999%
-  ALV-F                   mix-Blood                99.997%
-  INT-F                   mix-Blood                99.99997%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Blood                    50.0%
+  ETseq-F                 Blood                    99.999%
+  LNET-F                  Blood                   100.0%
+  BB-F                    Blood                    90.9091%
+  BBseq-F                 Blood                    99.999%
+  bb-F                    Blood                    99.8004%
+  bbseq-F                 Blood                    99.999%
+  ALV-F                   Blood                    99.997%
+  INT-F                   Blood                    99.99997%
+  LNTH-F                  Blood                   100.0%
   SI-con                  Blood                    99.0%
-  mix-Blood               Blood                   100.0%
   ExtravasHTO             Blood                    99.9985%
   Blood                   ExtravasHTO              99.8253%
   OBT1                    ExtravasHTO             100.0%

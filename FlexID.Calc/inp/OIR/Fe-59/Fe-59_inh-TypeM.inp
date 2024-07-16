@@ -43,7 +43,6 @@ Fe-59 Inhalation:Type-M
   acc   INT-S                     0.00503     ALV
   acc   LNTH-S                    0.005       LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   OtherPlasma              70.11        Blood
   acc   PlasmaTrans              11.095       Blood
   acc   RBC                       0.008338    Blood
@@ -114,29 +113,28 @@ Fe-59 Inhalation:Type-M
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
   ET1-S                   Environment              28.5714%
-  ET2-F                   mix-Blood                 2.9126%
-  ETseq-F                 mix-Blood                99.9667%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                23.0769%
-  BBseq-F                 mix-Blood                99.9667%
-  bb-F                    mix-Blood                93.75%
-  bbseq-F                 mix-Blood                99.9667%
-  ALV-F                   mix-Blood                99.9001%
-  INT-F                   mix-Blood                99.999%
-  LNTH-F                  mix-Blood               100.0%
-  ET2-S                   mix-Blood                 0.005%
-  ETseq-S                 mix-Blood                83.3333%
-  LNET-S                  mix-Blood               100.0%
-  BB-S                    mix-Blood                 0.05%
-  BBseq-S                 mix-Blood                83.3333%
-  bb-S                    mix-Blood                 2.439%
-  bbseq-S                 mix-Blood                83.3333%
-  ALV-S                   mix-Blood                62.5%
-  INT-S                   mix-Blood                99.4036%
-  LNTH-S                  mix-Blood               100.0%
+  ET2-F                   OtherPlasma               2.9126%
+  ETseq-F                 OtherPlasma              99.9667%
+  LNET-F                  OtherPlasma             100.0%
+  BB-F                    OtherPlasma              23.0769%
+  BBseq-F                 OtherPlasma              99.9667%
+  bb-F                    OtherPlasma              93.75%
+  bbseq-F                 OtherPlasma              99.9667%
+  ALV-F                   OtherPlasma              99.9001%
+  INT-F                   OtherPlasma              99.999%
+  LNTH-F                  OtherPlasma             100.0%
+  ET2-S                   OtherPlasma               0.005%
+  ETseq-S                 OtherPlasma              83.3333%
+  LNET-S                  OtherPlasma             100.0%
+  BB-S                    OtherPlasma               0.05%
+  BBseq-S                 OtherPlasma              83.3333%
+  bb-S                    OtherPlasma               2.439%
+  bbseq-S                 OtherPlasma              83.3333%
+  ALV-S                   OtherPlasma              62.5%
+  INT-S                   OtherPlasma              99.4036%
+  LNTH-S                  OtherPlasma             100.0%
   SI-con                  OtherPlasma               2.0%
   SI-conRe                OtherPlasma              10.0%
-  mix-Blood               OtherPlasma             100.0%
   RBC                     OtherPlasma               9.9904%
   MarrowTransit           OtherPlasma              89.9909%
   OtherPlasma             PlasmaTrans              99.8431%

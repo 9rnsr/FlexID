@@ -31,7 +31,6 @@ Ca-45 Inhalation:Type-F
   acc   INT-F                    70.00003     ALV
   acc   LNTH-F                   70.0         LN-Th
   exc   Environment               ---         ---
-  mix   mix-Blood                 ---         ---
   acc   Blood                    15.00075     Blood
   acc   ST0                       2.9         Other
   acc   ST1                       0.1733      Other
@@ -77,18 +76,17 @@ Ca-45 Inhalation:Type-F
   INT-F                   LNTH-F                    0.000043%
   input                   Environment              18.04%
   ET1-F                   Environment              28.5714%
-  ET2-F                   mix-Blood                41.1765%
-  ETseq-F                 mix-Blood                99.9986%
-  LNET-F                  mix-Blood               100.0%
-  BB-F                    mix-Blood                87.5%
-  BBseq-F                 mix-Blood                99.9986%
-  bb-F                    mix-Blood                99.7151%
-  bbseq-F                 mix-Blood                99.9986%
-  ALV-F                   mix-Blood                99.9957%
-  INT-F                   mix-Blood                99.999957%
-  LNTH-F                  mix-Blood               100.0%
+  ET2-F                   Blood                    41.1765%
+  ETseq-F                 Blood                    99.9986%
+  LNET-F                  Blood                   100.0%
+  BB-F                    Blood                    87.5%
+  BBseq-F                 Blood                    99.9986%
+  bb-F                    Blood                    99.7151%
+  bbseq-F                 Blood                    99.9986%
+  ALV-F                   Blood                    99.9957%
+  INT-F                   Blood                    99.999957%
+  LNTH-F                  Blood                   100.0%
   SI-con                  Blood                    40.0%
-  mix-Blood               Blood                   100.0%
   ST0                     Blood                   100.0%
   ST1                     Blood                   100.0%
   ST2                     Blood                   100.0%
