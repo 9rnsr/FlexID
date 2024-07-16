@@ -120,12 +120,22 @@ namespace FlexID.Calc
 
                 wRete.Write("     Time      ");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
-                    wRete.Write("  {0,-14:n}", organ.Name);
+                {
+                    if (organ.Func == OrganFunc.inp)
+                        continue;
+
+                    wRete.Write("  {0,-14}", organ.Name);
+                }
                 wRete.WriteLine();
 
                 wRete.Write("     [day]       ");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                {
+                    if (organ.Func == OrganFunc.inp)
+                        continue;
+
                     wRete.Write("  [Bq/Bq]       ");
+                }
                 wRete.WriteLine();
             }
 
@@ -138,12 +148,22 @@ namespace FlexID.Calc
                 wCumu.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuclide.Nuclide, nuclide.IntakeRoute);
                 wCumu.Write("     Time      ");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
-                    wCumu.Write("  {0,-14:n}", organ.Name);
+                {
+                    if (organ.Func == OrganFunc.inp)
+                        continue;
+
+                    wCumu.Write("  {0,-14}", organ.Name);
+                }
                 wCumu.WriteLine();
 
                 wCumu.Write("     [day]       ");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                {
+                    if (organ.Func == OrganFunc.inp)
+                        continue;
+
                     wCumu.Write("     [Bq]       ");
+                }
                 wCumu.WriteLine();
             }
         }
@@ -200,6 +220,9 @@ namespace FlexID.Calc
 
             foreach (var organ in data.Organs)
             {
+                if (organ.Func == OrganFunc.inp)
+                    continue;
+
                 var nucDecay = organ.NuclideDecay;
 
                 var retention = organ.Func == OrganFunc.exc
