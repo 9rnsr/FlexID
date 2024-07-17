@@ -78,7 +78,6 @@ Sr-90 Ingestion:StrontiumTitanate
 #-----+---------------------+---------------| S-Coefficient
 # Func| Compartment         | BioDecay[/d]  | Source Region
 #-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
   acc   Oralcavity             7200.0         O-cavity
   acc   Oesophagus-F          12343.0         Oesophagus-f
   acc   Oesophagus-S           2160.0         Oesophagus-s
