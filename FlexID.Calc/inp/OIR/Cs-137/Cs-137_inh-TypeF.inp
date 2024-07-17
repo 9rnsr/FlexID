@@ -175,7 +175,6 @@ Cs-137 Inhalation:Type-F
 #-----+---------------------+---------------| S-Coefficient
 # Func| Compartment         | BioDecay[/d]  | Source Region
 #-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
   acc   Oesophagus-S           2160.0         Oesophagus-s
   acc   St-con                   20.57        St-cont
   acc   SI-con                    7.5         SI-cont

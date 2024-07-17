@@ -154,7 +154,6 @@ Sr-90 Inhalation:Type-M
 #-----+---------------------+---------------| S-Coefficient
 # Func| Compartment         | BioDecay[/d]  | Source Region
 #-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
   acc   Oesophagus-S           2160.0         Oesophagus-s
   acc   St-con                   20.57        St-cont
   acc   SI-con                    6.00012     SI-cont
