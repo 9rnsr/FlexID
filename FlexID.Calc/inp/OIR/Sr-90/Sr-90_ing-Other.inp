@@ -41,37 +41,47 @@ Sr-90 Ingestion:Other
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
-  Oralcavity              Oesophagus-F             90.0%
-  Oralcavity              Oesophagus-S             10.0%
-  Oesophagus-F            St-con                  100.0%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  SI-con                  RC-con                   75.0%
-  Blood1                  RC-con                    3.4981%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  SI-con                  Blood1                   25.0%
-  ST0                     Blood1                  100.0%
-  ST1                     Blood1                  100.0%
-  ST2                     Blood1                  100.0%
-  C-bone-S                Blood1                   83.2853%
-  Noch-C-bone-V           Blood1                  100.0%
-  T-bone-S                Blood1                   83.2853%
-  Noch-T-bone-V           Blood1                  100.0%
-  Blood1                  ST0                      49.9733%
-  Blood1                  ST1                       9.9947%
-  Blood1                  ST2                       0.02%
-  Blood1                  C-bone-S                 11.1274%
-  Exch-C-bone-V           C-bone-S                 50.0%
-  C-bone-S                Exch-C-bone-V            16.7147%
-  Exch-C-bone-V           Noch-C-bone-V            50.0%
-  Blood1                  T-bone-S                 13.8593%
-  Exch-T-bone-V           T-bone-S                 50.0%
-  T-bone-S                Exch-T-bone-V            16.7147%
-  Exch-T-bone-V           Noch-T-bone-V            50.0%
-  Blood1                  UB-con                   11.5272%
-  UB-con                  Urine                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.134 p.215 Table 10.2
+#   fA = 0.25   (Ingested material, All other chemical forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.25 * 6 / (1 - 0.25) = 2
+  SI-con                  Blood1                    2
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood1                  UB-con                    1.73
+  Blood1                  RC-con                    0.525
+  Blood1                  T-bone-S                  2.08
+  Blood1                  C-bone-S                  1.67
+  Blood1                  ST0                       7.5
+  Blood1                  ST1                       1.5
+  Blood1                  ST2                       0.003
+  T-bone-S                Blood1                    0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood1                    0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood1                    2.50
+  ST1                     Blood1                    0.116
+  ST2                     Blood1                    0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood1                    0.0000821
+  Noch-T-bone-V           Blood1                    0.000493
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 
 [Y-90:compartment]
@@ -129,37 +139,46 @@ Sr-90 Ingestion:Other
   Sr-90/UB-con            UB-con                    ---
   Sr-90/Urine             Urine                     ---
 
-  Oralcavity              Oesophagus-F             90.0%
-  Oralcavity              Oesophagus-S             10.0%
-  Oesophagus-F            St-con                  100.0%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  Blood1                  SI-con                    1.0%
-  Liver0                  SI-con                    9.9784%
-  SI-con                  RC-con                   99.99%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  SI-con                  Blood1                    0.01%
-  Blood2                  Blood1                  100.0%
-  ST0                     Blood1                  100.0%
-  ST1                     Blood1                  100.0%
-  Liver0                  Blood1                   39.9136%
-  Liver1                  Blood1                  100.0%
-  Kidneys                 Blood1                  100.0%
-  C-bone-S                Blood1                   66.6396%
-  C-bone-V                Blood1                  100.0%
-  T-bone-S                Blood1                   66.6216%
-  T-bone-V                Blood1                  100.0%
-  Blood1                  Blood2                    3.0%
-  Blood1                  ST0                      22.0%
-  Blood1                  ST1                       8.0%
-  Blood1                  Liver0                   10.0%
-  Liver0                  Liver1                   50.108%
-  Blood1                  Kidneys                   1.0%
-  Blood1                  C-bone-S                 20.0%
-  C-bone-S                C-bone-V                 33.3604%
-  Blood1                  T-bone-S                 20.0%
-  T-bone-S                T-bone-V                 33.3784%
-  Blood1                  UB-con                   15.0%
-  UB-con                  Urine                   100.0%
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.134 p.242 Table 11.2
+#   fA = 1E-4   (Ingested material, All chemical forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-4 * 6 / (1 - 1E-4) = 6.000600060006001E-4
+  SI-con                  Blood1                    6.000600060006001E-4
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-con                    0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-con                    0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
