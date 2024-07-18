@@ -60,90 +60,114 @@ Ba-133 Inhalation:Type-S
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-  ET2-F                   Oesophagus-S             97.0874%
-  ET2-S                   Oesophagus-S             99.9999%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  SI-con                  RC-con                   99.8%
-  Plasma                  RC-con                   28.7836%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  input                   ET1-F                     0.4794%
-  input                   ET2-F                     0.2576836%
-  ET1-F                   ET2-F                    71.4286%
-  BB-F                    ET2-F                    76.9231%
-  input                   ETseq-F                   0.0005164%
-  ETseq-F                 LNET-F                    0.0333%
-  input                   BB-F                      0.0177644%
-  bb-F                    BB-F                      6.25%
-  input                   BBseq-F                   0.0000356%
-  input                   bb-F                      0.010978%
-  ALV-F                   bb-F                      0.0666%
-  input                   bbseq-F                   0.000022%
-  input                   ALV-F                     0.0532%
-  ALV-F                   INT-F                     0.0333%
-  BBseq-F                 LNTH-F                    0.0333%
-  bbseq-F                 LNTH-F                    0.0333%
-  INT-F                   LNTH-F                    0.001%
-  input                   ET1-S                    47.4606%
-  input                   ET2-S                    25.5106764%
-  ET1-S                   ET2-S                    71.4286%
-  BB-S                    ET2-S                    99.999%
-  input                   ETseq-S                   0.0511236%
-  ETseq-S                 LNET-S                   90.9091%
-  input                   BB-S                      1.7586756%
-  bb-S                    BB-S                     99.95%
-  input                   BBseq-S                   0.0035244%
-  input                   bb-S                      1.086822%
-  ALV-S                   bb-S                     64.5161%
-  input                   bbseq-S                   0.002178%
-  input                   ALV-S                     5.2668%
-  ALV-S                   INT-S                    32.2581%
-  BBseq-S                 LNTH-S                   90.9091%
-  bbseq-S                 LNTH-S                   90.9091%
-  INT-S                   LNTH-S                   23.0769%
-  input                   Environment              18.04%
-  ET1-F                   Environment              28.5714%
-  ET1-S                   Environment              28.5714%
-  ET2-F                   Plasma                    2.9126%
-  ETseq-F                 Plasma                   99.9667%
-  LNET-F                  Plasma                  100.0%
-  BB-F                    Plasma                   23.0769%
-  BBseq-F                 Plasma                   99.9667%
-  bb-F                    Plasma                   93.75%
-  bbseq-F                 Plasma                   99.9667%
-  ALV-F                   Plasma                   99.9001%
-  INT-F                   Plasma                   99.999%
-  LNTH-F                  Plasma                  100.0%
-  ET2-S                   Plasma                    0.0001%
-  ETseq-S                 Plasma                    9.0909%
-  LNET-S                  Plasma                  100.0%
-  BB-S                    Plasma                    0.001%
-  BBseq-S                 Plasma                    9.0909%
-  bb-S                    Plasma                    0.05%
-  bbseq-S                 Plasma                    9.0909%
-  ALV-S                   Plasma                    3.2258%
-  INT-S                   Plasma                   76.9231%
-  LNTH-S                  Plasma                  100.0%
-  SI-con                  Plasma                    0.2%
-  ST0                     Plasma                  100.0%
-  ST1                     Plasma                  100.0%
-  ST2                     Plasma                  100.0%
-  C-bone-S                Plasma                   83.2853%
-  Noch-C-bone-V           Plasma                  100.0%
-  T-bone-S                Plasma                   83.2853%
-  Noch-T-bone-V           Plasma                  100.0%
-  Plasma                  ST0                      32.8384%
-  Plasma                  ST1                       9.9943%
-  Plasma                  ST2                       0.1999%
-  Plasma                  C-bone-S                 11.1079%
-  Exch-C-bone-V           C-bone-S                 69.7842%
-  C-bone-S                Exch-C-bone-V            16.7147%
-  Exch-C-bone-V           Noch-C-bone-V            30.2158%
-  Plasma                  T-bone-S                 13.8778%
-  Exch-T-bone-V           T-bone-S                 69.7842%
-  T-bone-S                Exch-T-bone-V            16.7147%
-  Exch-T-bone-V           Noch-T-bone-V            30.2158%
-  Plasma                  UB-con                    3.1982%
-  UB-con                  Urine                   100.0%
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.137 p.168 Table 7.2
+#     f_r = 0.01 ( 1%)
+# 1 - f_r = 0.99 (99%)
+  input                   ET1-F                     0.4794%     # =  1%          of 47.94%
+  input                   ET2-F                     0.2576836%  # =  1% of 99.8% of 25.82%
+  input                   ETseq-F                   0.0005164%  # =  1% of  0.2% of 25.82%
+  input                   BB-F                      0.0177644%  # =  1% of 99.8% of  1.78%
+  input                   BBseq-F                   0.0000356%  # =  1% of  0.2% of  1.78%
+  input                   bb-F                      0.010978%   # =  1% of 99.8% of  1.10%
+  input                   bbseq-F                   0.000022%   # =  1% of  0.2% of  1.10%
+  input                   ALV-F                     0.0532%     # =  1%          of  5.32%
+  input                   ET1-S                    47.4606%     # = 99%          of 47.94%
+  input                   ET2-S                    25.5106764%  # = 99% of 99.8% of 25.82%
+  input                   ETseq-S                   0.0511236%  # = 99% of  0.2% of 25.82%
+  input                   BB-S                      1.7586756%  # = 99% of 99.8% of  1.78%
+  input                   BBseq-S                   0.0035244%  # = 99% of  0.2% of  1.78%
+  input                   bb-S                      1.086822%   # = 99% of 99.8% of  1.10%
+  input                   bbseq-S                   0.002178%   # = 99% of  0.2% of  1.10%
+  input                   ALV-S                     5.2668%     # = 99%          of  5.32%
+  input                   Environment              18.04%       # = 100% - 81.96%
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002       #   0.0666%
+  ALV-F                   INT-F                     0.001       #   0.0333%
+  INT-F                   LNTH-F                    0.00003     #   0.001%
+  bb-F                    BB-F                      0.2         #   6.25%
+  bbseq-F                 LNTH-F                    0.001       #   0.0333%
+  BB-F                    ET2-F                    10           #  76.9231%
+  BBseq-F                 LNTH-F                    0.001       #   0.0333%
+  ET2-F                   Oesophagus-S            100           #  97.0874%
+  ETseq-F                 LNET-F                    0.001       #   0.0333%
+  ET1-F                   Environment               0.6         #  28.5714%
+  ET1-F                   ET2-F                     1.5         #  71.4286%
+
+  ALV-S                   bb-S                      0.002       #  64.5161%
+  ALV-S                   INT-S                     0.001       #  32.2581%
+  INT-S                   LNTH-S                    0.00003     #  23.0769%
+  bb-S                    BB-S                      0.2         #  99.95%
+  bbseq-S                 LNTH-S                    0.001       #  90.9091%
+  BB-S                    ET2-S                    10           #  99.999%
+  BBseq-S                 LNTH-S                    0.001       #  90.9091%
+  ET2-S                   Oesophagus-S            100           #  99.9999%
+  ETseq-S                 LNET-S                    0.001       #  90.9091%
+  ET1-S                   Environment               0.6         #  28.5714%
+  ET1-S                   ET2-S                     1.5         #  71.4286%
+
+# ICRP Publ.137 p.168 Table 7.2
+#   s_r = 3[/d]     (Inhaled particulate materials, Absorption type S)
+#   s_s = 1E-4[/d]  (Inhaled particulate materials, Absorption type S)
+  ALV-F                   Plasma                    3           #  99.9001%
+  INT-F                   Plasma                    3           #  99.999%
+  bb-F                    Plasma                    3           #  93.75%
+  bbseq-F                 Plasma                    3           #  99.9667%
+  BB-F                    Plasma                    3           #  23.0769%
+  BBseq-F                 Plasma                    3           #  99.9667%
+  ET2-F                   Plasma                    3           #   2.9126%
+  ETseq-F                 Plasma                    3           #  99.9667%
+  LNET-F                  Plasma                    3           # 100.0%
+  LNTH-F                  Plasma                    3           # 100.0%
+
+  ALV-S                   Plasma                    1E-4        #   3.2258%
+  INT-S                   Plasma                    1E-4        #  76.9231%
+  bb-S                    Plasma                    1E-4        #   0.05%
+  bbseq-S                 Plasma                    1E-4        #   9.0909%
+  BB-S                    Plasma                    1E-4        #   0.001%
+  BBseq-S                 Plasma                    1E-4        #   9.0909%
+  ET2-S                   Plasma                    1E-4        #   0.0001%
+  ETseq-S                 Plasma                    1E-4        #   9.0909%
+  LNET-S                  Plasma                    1E-4        # 100.0%
+  LNTH-S                  Plasma                    1E-4        # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  99.8%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.137 p.168 Table 7.2
+#   fA = 0.002   (Inhaled particulate materials, Absorption type S)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.002 * 6 / (1 - 0.002) = 1.202404809619238E-2
+  SI-con                  Plasma                    1.202404809619238E-2        # 0.2%
+
+# ICRP Publ.137 p.175 Table 7.3
+  Plasma                  UB-con                    2.24        #   3.1982%
+  Plasma                  RC-con                   20.16        #  28.7836%
+  Plasma                  T-bone-S                  9.72        #  13.8778%
+  Plasma                  C-bone-S                  7.78        #  11.1079%
+  Plasma                  ST0                      23.0         #  32.8384%
+  Plasma                  ST1                       7.0         #   9.9943%
+  Plasma                  ST2                       0.14        #   0.1999%
+  T-bone-S                Plasma                    0.578       #  83.2853%
+  T-bone-S                Exch-T-bone-V             0.116       #  16.7147%
+  C-bone-S                Plasma                    0.578       #  83.2853%
+  C-bone-S                Exch-C-bone-V             0.116       #  16.7147%
+  ST0                     Plasma                    7.67        # 100.0%
+  ST1                     Plasma                    0.693       # 100.0%
+  ST2                     Plasma                    0.00038     # 100.0%
+  Exch-T-bone-V           T-bone-S                  0.0097      #  69.7842%
+  Exch-T-bone-V           Noch-T-bone-V             0.0042      #  30.2158%
+  Exch-C-bone-V           C-bone-S                  0.0097      #  69.7842%
+  Exch-C-bone-V           Noch-C-bone-V             0.0042      #  30.2158%
+  Noch-C-bone-V           Plasma                    0.0000821   # 100.0%
+  Noch-T-bone-V           Plasma                    0.000493    # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%
