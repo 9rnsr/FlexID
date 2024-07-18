@@ -119,6 +119,7 @@ namespace FlexID.Calc
                 wRete.WriteLine(" {0} {1} {2}", "Retention ", nuclide.Nuclide, nuclide.IntakeRoute);
 
                 wRete.Write("     Time      ");
+                wRete.Write("  {0,-14}", "WholeBody");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -129,6 +130,7 @@ namespace FlexID.Calc
                 wRete.WriteLine();
 
                 wRete.Write("     [day]       ");
+                wRete.Write("  [Bq/Bq]       ");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -147,6 +149,7 @@ namespace FlexID.Calc
 
                 wCumu.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuclide.Nuclide, nuclide.IntakeRoute);
                 wCumu.Write("     Time      ");
+                wCumu.Write("  {0,-14}", "WholeBody");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -157,6 +160,7 @@ namespace FlexID.Calc
                 wCumu.WriteLine();
 
                 wCumu.Write("     [day]       ");
+                wCumu.Write("     [Bq]       ");
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -217,6 +221,35 @@ namespace FlexID.Calc
         {
             foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
             foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
+
+            // 核種毎にaccコンパートメントの数値を合算したものを
+            // 全身の放射能の数値として出力する。
+            for (int i = 0; i < data.Nuclides.Count; i++)
+            {
+                var nuclide = data.Nuclides[i];
+                var wholeBodyRete = 0.0;
+                var wholeBodyCumu = 0.0;
+
+                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                {
+                    if (organ.Func != OrganFunc.acc)
+                        continue;
+
+                    var nucDecay = organ.NuclideDecay;
+
+                    var retention = organ.Func == OrganFunc.exc
+                        ? Act.OutNow[organ.Index].ave * nucDecay    // TODO: for ICRP OIR data compatibility?
+                        : Act.OutNow[organ.Index].end * nucDecay;
+
+                    var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
+
+                    wholeBodyRete += retention;
+                    wholeBodyCumu += cumulative;
+                }
+
+                wsRete[i].Write("  {0:0.00000000E+00}", wholeBodyRete);
+                wsCumu[i].Write("  {0:0.00000000E+00}", wholeBodyCumu);
+            }
 
             foreach (var organ in data.Organs)
             {
