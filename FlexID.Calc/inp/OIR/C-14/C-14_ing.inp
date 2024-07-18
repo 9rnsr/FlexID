@@ -21,9 +21,9 @@ C-14 Ingestion
   acc   LC-con                    2.0         LC-cont
   acc   RS-con                    2.0         RS-cont
   exc   Faeces                    ---         ---
-  acc   Blood0                    3.0         Blood
-  acc   Blood1                  100.0         Blood
-  acc   Blood2                 1000.0         Blood
+  acc   Blood0                    3.0         Blood         # Generic model
+  acc   Blood1                  100.0         Blood         # CO2 model
+  acc   Blood2                 1000.0         Blood         # CO2 model
   acc   Sys-Tis(short)            0.231       Other
   acc   Sys-Tis(long)             0.0099      Other
   acc   ST0                      49.91        Other
@@ -45,45 +45,57 @@ C-14 Ingestion
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
-  Oralcavity              Oesophagus-F             90.0%
-  Oralcavity              Oesophagus-S             10.0%
-  Oesophagus-F            St-con                  100.0%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  SI-con                  RC-con                    1.0%
-  Blood1                  RC-con                    0.15%
-  Sys-Tis(short)          RC-con                   30.0%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  SI-con                  Blood0                   99.0%
-  Sys-Tis(short)          Blood0                   40.0%
-  Sys-Tis(short)          Blood1                   30.0%
-  Sys-Tis(long)           Blood1                  100.0%
-  ST0                     Blood1                  100.0%
-  ST1                     Blood1                   96.0006%
-  ST2                     Blood1                   95.9999%
-  ST3                     Blood1                   96.0013%
-  C-bone-S                Blood1                  100.0%
-  C-bone-V                Blood1                  100.0%
-  T-bone-S                Blood1                  100.0%
-  T-bone-V                Blood1                  100.0%
-  ST1                     Blood2                    3.9994%
-  ST2                     Blood2                    4.0001%
-  ST3                     Blood2                    3.9987%
-  Blood0                  Sys-Tis(short)           40.0%
-  Blood0                  Sys-Tis(long)            10.0%
-  Blood1                  ST0                      60.0%
-  Blood1                  ST1                       1.8%
-  Blood1                  ST2                       0.3%
-  Blood1                  ST3                       0.44%
-  Blood1                  C-bone-S                  0.06%
-  Blood1                  C-bone-V                  0.004%
-  Blood1                  T-bone-S                  0.09%
-  Blood1                  T-bone-V                  0.006%
-  Blood1                  Exhalation               36.2%
-  Blood1                  Excreta(skin)             0.3%
-  Blood0                  UB-con                   50.0%
-  Blood1                  UB-con                    0.65%
-  Blood2                  UB-con                  100.0%
-  UB-con                  Urine                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480           #  90.0%
+  Oralcavity              Oesophagus-S            720           #  10.0%
+  Oesophagus-F            St-con                12343           # 100.0%
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #   1.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.134 p.53 Table 3.3
+#   fA = 1≒0.99   (Ingested materials, All chemical forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
+  SI-con                  Blood0                  594           #  99.0%
+
+# ICRP Publ.134 p.66 Table 3.5
+  Blood1                  Exhalation               36.2
+  Blood1                  Excreta(skin)             0.3
+  Blood1                  UB-con                    0.65
+  Blood1                  RC-con                    0.15
+  Blood1                  ST0                      60
+  Blood1                  ST1                       1.8
+  Blood1                  ST2                       0.3
+  Blood1                  ST3                       0.44
+  Blood1                  T-bone-S                  0.09
+  Blood1                  C-bone-S                  0.06
+  Blood1                  T-bone-V                  0.006
+  Blood1                  C-bone-V                  0.004
+  ST0                     Blood1                   49.91
+  ST1                     Blood1                    1.331
+  ST2                     Blood1                    0.2218
+  ST3                     Blood1                    0.01664
+  ST1                     Blood2                    0.05545
+  ST2                     Blood2                    0.009242
+  ST3                     Blood2                    0.0006931
+  Blood2                  UB-con                 1000
+  T-bone-S                Blood1                    0.01733
+  C-bone-S                Blood1                    0.01733
+  T-bone-V                Blood1                    0.000493
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.134 p.68 Table 3.6
+  Blood0                  Sys-Tis(short)            1.2
+  Blood0                  Sys-Tis(long)             0.3
+  Blood0                  UB-con                    1.5
+  Sys-Tis(short)          Blood1                    0.0693
+  Sys-Tis(short)          Blood0                    0.0924
+  Sys-Tis(short)          RC-con                    0.0693
+  Sys-Tis(long)           Blood1                    0.0099
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
