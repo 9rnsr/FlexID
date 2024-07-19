@@ -53,69 +53,89 @@ Ra-223 Inhalation:Type-F
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-  ET2-F                   Oesophagus-S             90.9091%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  SI-con                  RC-con                   80.0%
-  Blood                   RC-con                   31.1304%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  input                   ET1-F                    47.94%
-  input                   ET2-F                    25.76836%
-  ET1-F                   ET2-F                    71.4286%
-  BB-F                    ET2-F                    50.0%
-  input                   ETseq-F                   0.05164%
-  ETseq-F                 LNET-F                    0.01%
-  input                   BB-F                      1.77644%
-  bb-F                    BB-F                      1.9608%
-  input                   BBseq-F                   0.00356%
-  input                   bb-F                      1.0978%
-  ALV-F                   bb-F                      0.02%
-  input                   bbseq-F                   0.0022%
-  input                   ALV-F                     5.32%
-  ALV-F                   INT-F                     0.01%
-  BBseq-F                 LNTH-F                    0.01%
-  bbseq-F                 LNTH-F                    0.01%
-  INT-F                   LNTH-F                    0.0003%
-  input                   Environment              18.04%
-  ET1-F                   Environment              28.5714%
-  ET2-F                   Blood                     9.0909%
-  ETseq-F                 Blood                    99.99%
-  LNET-F                  Blood                   100.0%
-  BB-F                    Blood                    50.0%
-  BBseq-F                 Blood                    99.99%
-  bb-F                    Blood                    98.0392%
-  bbseq-F                 Blood                    99.99%
-  ALV-F                   Blood                    99.97%
-  INT-F                   Blood                    99.9997%
-  LNTH-F                  Blood                   100.0%
-  SI-con                  Blood                    20.0%
-  ST0                     Blood                   100.0%
-  ST1                     Blood                   100.0%
-  ST2                     Blood                   100.0%
-  Liver1                  Blood                    99.6999%
-  Liver2                  Blood                   100.0%
-  Kidneys1                Blood                    99.6999%
-  Kidneys2                Blood                   100.0%
-  C-bone-S                Blood                    83.2853%
-  Noch-C-bone-V           Blood                   100.0%
-  T-bone-S                Blood                    83.2853%
-  Noch-T-bone-V           Blood                   100.0%
-  Blood                   ST0                      29.9017%
-  Blood                   ST1                       5.0003%
-  Blood                   ST2                       0.1%
-  Blood                   Liver1                    6.0003%
-  Liver1                  Liver2                    0.3001%
-  Blood                   Kidneys1                  2.0001%
-  Kidneys1                Kidneys2                  0.3001%
-  Blood                   C-bone-S                 11.1149%
-  Exch-C-bone-V           C-bone-S                 80.0866%
-  C-bone-S                Exch-C-bone-V            16.7147%
-  Exch-C-bone-V           Noch-C-bone-V            19.9134%
-  Blood                   T-bone-S                 13.8865%
-  Exch-T-bone-V           T-bone-S                 80.0866%
-  T-bone-S                Exch-T-bone-V            16.7147%
-  Exch-T-bone-V           Noch-T-bone-V            19.9134%
-  Blood                   UB-con                    0.8658%
-  UB-con                  Urine                   100.0%
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.137 p.325 Table 13.2
+#     f_r = 1 (100%)
+  input                   ET1-F                    47.94%       # =          47.94%
+  input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
+  input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
+  input                   BB-F                      1.77644%    # = 99.8% of  1.78%
+  input                   BBseq-F                   0.00356%    # =  0.2% of  1.78%
+  input                   bb-F                      1.0978%     # = 99.8% of  1.10%
+  input                   bbseq-F                   0.0022%     # =  0.2% of  1.10%
+  input                   ALV-F                     5.32%       # =           5.32%
+  input                   Environment              18.04%       # = 100% - 81.96%
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002       #   0.02%
+  ALV-F                   INT-F                     0.001       #   0.01%
+  INT-F                   LNTH-F                    0.00003     #   0.0003%
+  bb-F                    BB-F                      0.2         #   1.9608%
+  bbseq-F                 LNTH-F                    0.001       #   0.01%
+  BB-F                    ET2-F                    10           #  50.0%
+  BBseq-F                 LNTH-F                    0.001       #   0.01%
+  ET2-F                   Oesophagus-S            100           #  90.9091%
+  ETseq-F                 LNET-F                    0.001       #   0.01%
+  ET1-F                   Environment               0.6         #  28.5714%
+  ET1-F                   ET2-F                     1.5         #  71.4286%
+
+# ICRP Publ.137 p.325 Table 13.2
+#   s_r[/d] = 10  (Inhaled particulate materials, Absorption type F)
+  ALV-F                   Blood                    10           #  99.97%
+  INT-F                   Blood                    10           #  99.9997%
+  bb-F                    Blood                    10           #  98.0392%
+  bbseq-F                 Blood                    10           #  99.99%
+  BB-F                    Blood                    10           #  50.0%
+  BBseq-F                 Blood                    10           #  99.99%
+  ET2-F                   Blood                    10           #   9.0909%
+  ETseq-F                 Blood                    10           #  99.99%
+  LNET-F                  Blood                    10           # 100.0%
+  LNTH-F                  Blood                    10           # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  80.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.137 p.325 Table 13.2
+#   fA = 0.2   (Inhaled particulate materials, Absorption type F)
+#   ƒÉ(SI->Blood) = fA*ƒÉ(SI->RC)/(1-fA) = 0.2 * 6 / (1 - 0.2) = 1.5
+  SI-con                  Blood                     1.5         #  20.0%
+
+# ICRP Publ.137 p.332 Table 13.3
+  Blood                   UB-con                    0.606       #   0.8658%
+  Blood                   RC-con                   21.79        #  31.1304%
+  Blood                   T-bone-S                  9.72        #  13.8865%
+  Blood                   C-bone-S                  7.78        #  11.1149%
+  Blood                   ST0                      20.93        #  29.9017%
+  Blood                   ST1                       3.5         #   5.0003%
+  Blood                   ST2                       0.07        #   0.1%
+  Blood                   Liver1                    4.2         #   6.0003%
+  Blood                   Kidneys1                  1.4         #   2.0001%
+  T-bone-S                Blood                     0.578       #  83.2853%
+  T-bone-S                Exch-T-bone-V             0.116       #  16.7147%
+  C-bone-S                Blood                     0.578       #  83.2853%
+  C-bone-S                Exch-C-bone-V             0.116       #  16.7147%
+  ST0                     Blood                     6.98        # 100.0%
+  ST1                     Blood                     0.693       # 100.0%
+  ST2                     Blood                     0.00038     # 100.0%
+  Liver1                  Blood                     0.691       #  99.6999%
+  Liver1                  Liver2                    0.00208     #   0.3001%
+  Liver2                  Blood                     0.0019      # 100.0%
+  Kidneys1                Blood                     2.073       #  99.6999%
+  Kidneys1                Kidneys2                  0.00624     #   0.3001%
+  Kidneys2                Blood                     0.0019      # 100.0%
+  Exch-T-bone-V           T-bone-S                  0.0185      #  80.0866%
+  Exch-T-bone-V           Noch-T-bone-V             0.0046      #  19.9134%
+  Exch-C-bone-V           C-bone-S                  0.0185      #  80.0866%
+  Exch-C-bone-V           Noch-C-bone-V             0.0046      #  19.9134%
+  Noch-C-bone-V           Blood                     0.0000821   # 100.0%
+  Noch-T-bone-V           Blood                     0.000493    # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%
