@@ -55,74 +55,100 @@ Zn-65 Inhalation:Type-F
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-  ET2-F                   Oesophagus-S             76.9231%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  Plasma                  SI-conRe                  0.141%
-  Liver1                  SI-conRe                  0.3339%
-  Pancreas                SI-conRe                 40.0%
-  SI-con                  RC-con                   50.0%
-  SI-conRe                RC-con                   50.0%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  input                   ET1-F                    47.94%
-  input                   ET2-F                    25.76836%
-  ET1-F                   ET2-F                    71.4286%
-  BB-F                    ET2-F                    25.0%
-  input                   ETseq-F                   0.05164%
-  ETseq-F                 LNET-F                    0.0033%
-  input                   BB-F                      1.77644%
-  bb-F                    BB-F                      0.6623%
-  input                   BBseq-F                   0.00356%
-  input                   bb-F                      1.0978%
-  ALV-F                   bb-F                      0.0067%
-  input                   bbseq-F                   0.0022%
-  input                   ALV-F                     5.32%
-  ALV-F                   INT-F                     0.0033%
-  BBseq-F                 LNTH-F                    0.0033%
-  bbseq-F                 LNTH-F                    0.0033%
-  INT-F                   LNTH-F                    0.0001%
-  input                   Environment              18.04%
-  ET1-F                   Environment              28.5714%
-  ET2-F                   Plasma                   23.0769%
-  ETseq-F                 Plasma                   99.9967%
-  LNET-F                  Plasma                  100.0%
-  BB-F                    Plasma                   75.0%
-  BBseq-F                 Plasma                   99.9967%
-  bb-F                    Plasma                   99.3377%
-  bbseq-F                 Plasma                   99.9967%
-  ALV-F                   Plasma                   99.99%
-  INT-F                   Plasma                   99.9999%
-  LNTH-F                  Plasma                  100.0%
-  SI-con                  Plasma                   50.0%
-  SI-conRe                Plasma                   50.0%
-  ST0                     Plasma                  100.0%
-  ST1                     Plasma                  100.0%
-  ST2                     Plasma                  100.0%
-  Liver1                  Plasma                   49.8331%
-  Liver2                  Plasma                  100.0%
-  Pancreas                Plasma                   60.0%
-  Muscle                  Plasma                  100.0%
-  Kidneys                 Plasma                  100.0%
-  RBC                     Plasma                  100.0%
-  C-bone-S                Plasma                   94.97%
-  C-bone-V                Plasma                  100.0%
-  T-bone-S                Plasma                   94.97%
-  T-bone-V                Plasma                  100.0%
-  Plasma                  ST0                      28.2068%
-  Plasma                  ST1                      21.1551%
-  Plasma                  ST2                       0.2821%
-  Plasma                  Liver1                   42.3101%
-  Liver1                  Liver2                   49.8331%
-  Plasma                  Pancreas                  2.1155%
-  Plasma                  Muscle                    1.4103%
-  Plasma                  Kidneys                   2.8207%
-  Plasma                  RBC                       1.0578%
-  Plasma                  C-bone-S                  0.2116%
-  C-bone-S                C-bone-V                  5.03%
-  Plasma                  T-bone-S                  0.1058%
-  T-bone-S                T-bone-V                  5.03%
-  Plasma                  Excreta                   0.0917%
-  Plasma                  UB-con                    0.0917%
-  UB-con                  Urine                   100.0%
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.134 p.186 Table 9.2
+#     f_r = 1 (100%)
+  input                   ET1-F                    47.94%       # =          47.94%
+  input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
+  input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
+  input                   BB-F                      1.77644%    # = 99.8% of  1.78%
+  input                   BBseq-F                   0.00356%    # =  0.2% of  1.78%
+  input                   bb-F                      1.0978%     # = 99.8% of  1.10%
+  input                   bbseq-F                   0.0022%     # =  0.2% of  1.10%
+  input                   ALV-F                     5.32%       # =           5.32%
+  input                   Environment              18.04%       # = 100% - 81.96%
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002       #    0.0067%
+  ALV-F                   INT-F                     0.001       #    0.0033%
+  INT-F                   LNTH-F                    0.00003     #    0.0001%
+  bb-F                    BB-F                      0.2         #    0.6623%
+  bbseq-F                 LNTH-F                    0.001       #    0.0033%
+  BB-F                    ET2-F                    10           #   25.0%
+  BBseq-F                 LNTH-F                    0.001       #    0.0033%
+  ET2-F                   Oesophagus-S            100           #   76.9231%
+  ETseq-F                 LNET-F                    0.001       #    0.0033%
+  ET1-F                   Environment               0.6         #   28.5714%
+  ET1-F                   ET2-F                     1.5         #   71.4286%
+
+# ICRP Publ.134 p.186 Table 9.2
+#   s_r[/d] = 30  (Inhaled particulate materials, Absorption type F)
+  ALV-F                   Plasma                   30           #  99.99%
+  INT-F                   Plasma                   30           #  99.9999%
+  bb-F                    Plasma                   30           #  99.3377%
+  bbseq-F                 Plasma                   30           #  99.9967%
+  BB-F                    Plasma                   30           #  75.0%
+  BBseq-F                 Plasma                   30           #  99.9967%
+  ET2-F                   Plasma                   30           #  23.0769%
+  ETseq-F                 Plasma                   30           #  99.9967%
+  LNET-F                  Plasma                   30           # 100.0%
+  LNTH-F                  Plasma                   30           # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  50.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.134 p.186 Table 9.2
+#   fA = 0.5   (Inhaled particulate materials, Absorption type F)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.5 * 6 / (1 - 0.5) = 6
+  SI-con                  Plasma                    6           #  50.0%
+
+# ICRP Publ.130 p.76 Table 3.4
+  SI-conRe                RC-con                    6           #  50.0%
+
+# ICRP Publ.134 p.186 Table 9.2 footnote¶
+#   fA = 0.5   (re-absorption)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.5 * 6 / (1 - 0.5) = 6
+  SI-conRe                Plasma                    6           #  50.0%
+
+# ICRP Publ.134 p.199 Table 9.4
+  Plasma                  Liver1                   60           #  42.3101%
+  Plasma                  Kidneys                   4           #   2.8207%
+  Plasma                  Pancreas                  3           #   2.1155%
+  Plasma                  Muscle                    2           #   1.4103%
+  Plasma                  RBC                       1.5         #   1.0578%
+  Plasma                  ST0                      40           #  28.2068%
+  Plasma                  ST1                      30           #  21.1551%
+  Plasma                  ST2                       0.4         #   0.2821%
+  Plasma                  UB-con                    0.13        #   0.0917%
+  Plasma                  Excreta                   0.13        #   0.0917%
+  Plasma                  SI-conRe                  0.2         #   0.141%
+  Plasma                  T-bone-S                  0.15        #   0.1058%
+  Plasma                  C-bone-S                  0.3         #   0.2116%
+  Liver1                  Plasma                   10           #  49.8331%
+  Liver1                  SI-conRe                  0.067       #   0.3339%
+  Liver1                  Liver2                   10           #  49.8331%
+  Liver2                  Plasma                    0.6         # 100.0%
+  Kidneys                 Plasma                    0.7         # 100.0%
+  Pancreas                Plasma                    1.5         #  60.0%
+  Pancreas                SI-conRe                  1.0         #  40.0%
+  Muscle                  Plasma                    0.005       # 100.0%
+  RBC                     Plasma                    0.14        # 100.0%
+  ST0                     Plasma                   10           # 100.0%
+  ST1                     Plasma                    3           # 100.0%
+  ST2                     Plasma                    0.01        # 100.0%
+  T-bone-S                Plasma                    0.01        #  94.97%
+  C-bone-S                Plasma                    0.01        #  94.97%
+  T-bone-S                T-bone-V                  0.00053     #   5.03%
+  C-bone-S                C-bone-V                  0.00053     #   5.03%
+  T-bone-V                Plasma                    0.000493    # 100.0%
+  C-bone-V                Plasma                    0.0000821   # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%

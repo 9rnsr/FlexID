@@ -46,47 +46,63 @@ Zn-65 Ingestion
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
-  Oralcavity              Oesophagus-F             90.0%
-  Oralcavity              Oesophagus-S             10.0%
-  Oesophagus-F            St-con                  100.0%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  Plasma                  SI-conRe                  0.141%
-  Liver1                  SI-conRe                  0.3339%
-  Pancreas                SI-conRe                 40.0%
-  SI-con                  RC-con                   50.0%
-  SI-conRe                RC-con                   50.0%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  SI-con                  Plasma                   50.0%
-  SI-conRe                Plasma                   50.0%
-  ST0                     Plasma                  100.0%
-  ST1                     Plasma                  100.0%
-  ST2                     Plasma                  100.0%
-  Liver1                  Plasma                   49.8331%
-  Liver2                  Plasma                  100.0%
-  Pancreas                Plasma                   60.0%
-  Muscle                  Plasma                  100.0%
-  Kidneys                 Plasma                  100.0%
-  RBC                     Plasma                  100.0%
-  C-bone-S                Plasma                   94.97%
-  C-bone-V                Plasma                  100.0%
-  T-bone-S                Plasma                   94.97%
-  T-bone-V                Plasma                  100.0%
-  Plasma                  ST0                      28.2068%
-  Plasma                  ST1                      21.1551%
-  Plasma                  ST2                       0.2821%
-  Plasma                  Liver1                   42.3101%
-  Liver1                  Liver2                   49.8331%
-  Plasma                  Pancreas                  2.1155%
-  Plasma                  Muscle                    1.4103%
-  Plasma                  Kidneys                   2.8207%
-  Plasma                  RBC                       1.0578%
-  Plasma                  C-bone-S                  0.2116%
-  C-bone-S                C-bone-V                  5.03%
-  Plasma                  T-bone-S                  0.1058%
-  T-bone-S                T-bone-V                  5.03%
-  Plasma                  Excreta                   0.0917%
-  Plasma                  UB-con                    0.0917%
-  UB-con                  Urine                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480           #  90.0%
+  Oralcavity              Oesophagus-S            720           #  10.0%
+  Oesophagus-F            St-con                12343           # 100.0%
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  50.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.134 p.186 Table 9.2
+#   fA = 0.5   (Ingested materials, All forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.5 * 6 / (1 - 0.5) = 6
+  SI-con                  Plasma                    6           #  50.0%
+
+# ICRP Publ.130 p.76 Table 3.4
+  SI-conRe                RC-con                    6           #  50.0%
+
+# ICRP Publ.134 p.186 Table 9.2 footnote¶
+#   fA = 0.5   (re-absorption)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.5 * 6 / (1 - 0.5) = 6
+  SI-conRe                Plasma                    6           #  50.0%
+
+# ICRP Publ.134 p.199 Table 9.4
+  Plasma                  Liver1                   60           #  42.3101%
+  Plasma                  Kidneys                   4           #   2.8207%
+  Plasma                  Pancreas                  3           #   2.1155%
+  Plasma                  Muscle                    2           #   1.4103%
+  Plasma                  RBC                       1.5         #   1.0578%
+  Plasma                  ST0                      40           #  28.2068%
+  Plasma                  ST1                      30           #  21.1551%
+  Plasma                  ST2                       0.4         #   0.2821%
+  Plasma                  UB-con                    0.13        #   0.0917%
+  Plasma                  Excreta                   0.13        #   0.0917%
+  Plasma                  SI-conRe                  0.2         #   0.141%
+  Plasma                  T-bone-S                  0.15        #   0.1058%
+  Plasma                  C-bone-S                  0.3         #   0.2116%
+  Liver1                  Plasma                   10           #  49.8331%
+  Liver1                  SI-conRe                  0.067       #   0.3339%
+  Liver1                  Liver2                   10           #  49.8331%
+  Liver2                  Plasma                    0.6         # 100.0%
+  Kidneys                 Plasma                    0.7         # 100.0%
+  Pancreas                Plasma                    1.5         #  60.0%
+  Pancreas                SI-conRe                  1.0         #  40.0%
+  Muscle                  Plasma                    0.005       # 100.0%
+  RBC                     Plasma                    0.14        # 100.0%
+  ST0                     Plasma                   10           # 100.0%
+  ST1                     Plasma                    3           # 100.0%
+  ST2                     Plasma                    0.01        # 100.0%
+  T-bone-S                Plasma                    0.01        #  94.97%
+  C-bone-S                Plasma                    0.01        #  94.97%
+  T-bone-S                T-bone-V                  0.00053     #   5.03%
+  C-bone-S                C-bone-V                  0.00053     #   5.03%
+  T-bone-V                Plasma                    0.000493    # 100.0%
+  C-bone-V                Plasma                    0.0000821   # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%
