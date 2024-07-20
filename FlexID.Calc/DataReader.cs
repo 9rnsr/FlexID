@@ -799,8 +799,10 @@ namespace FlexID.Calc
                     }
                     else
                     {
-                        // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[d/]の総計
-                        inflowRate = coeff / sumOfOutflowCoeff[organFrom];
+                        var sum = sumOfOutflowCoeff[organFrom];
+
+                        // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[/d]の総計
+                        inflowRate = sum == 0 ? 0.0 : coeff / sum;
                     }
 
                     organTo.Inflows.Add(new Inflow
