@@ -96,8 +96,8 @@ Pu-239 Inhalation:Type-M
   input                   ETseq-S                   0.041312%   # = 80% of  0.2% of 25.82%
   input                   BB-S                      1.421152%   # = 80% of 99.8% of  1.78%
   input                   BBseq-S                   0.002848%   # = 80% of  0.2% of  1.78%
-  input                   bb-S                      0.8624%     # = 80% of 99.8% of  1.10%
-  input                   bbseq-S                   0.0176%     # = 80% of  0.2% of  1.10%
+  input                   bb-S                      0.87824%    # = 80% of 99.8% of  1.10%
+  input                   bbseq-S                   0.00176%    # = 80% of  0.2% of  1.10%
   input                   ALV-S                     4.256%      # = 80%          of  5.32%
   input                   Environment              18.04%       # = 100% - 81.96%
 
