@@ -1,9 +1,10 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using Xunit;
 
 namespace FlexID.Calc.Tests
 {
+    [TestClass]
     public class TimeMeshTests
     {
         private const long SecondsOfMinute = 60L;
@@ -11,88 +12,88 @@ namespace FlexID.Calc.Tests
         private const long SecondsOfDay = 24L * SecondsOfHour;
         private const long SecondsOfYear = 365L * SecondsOfDay;
 
-        [Theory]
-        [InlineData("123s",          /**/ 123L)]
-        [InlineData("123sec",        /**/ 123L)]
-        [InlineData("123secs",       /**/ 123L)]
-        [InlineData("123second",     /**/ 123L)]
-        [InlineData("123seconds",    /**/ 123L)]
-        [InlineData(" 123 S ",       /**/ 123L)]
-        [InlineData(" 123 sec ",     /**/ 123L)]
-        [InlineData(" 123 Secs ",    /**/ 123L)]
-        [InlineData(" 123 secOnd ",  /**/ 123L)]
-        [InlineData(" 123 secondS ", /**/ 123L)]
-        [InlineData("123m",          /**/ 123L * SecondsOfMinute)]
-        [InlineData("123min",        /**/ 123L * SecondsOfMinute)]
-        [InlineData("123mins",       /**/ 123L * SecondsOfMinute)]
-        [InlineData("123minute",     /**/ 123L * SecondsOfMinute)]
-        [InlineData("123minutes",    /**/ 123L * SecondsOfMinute)]
-        [InlineData(" 123 M ",       /**/ 123L * SecondsOfMinute)]
-        [InlineData(" 123 MIN ",     /**/ 123L * SecondsOfMinute)]
-        [InlineData(" 123 mIns ",    /**/ 123L * SecondsOfMinute)]
-        [InlineData(" 123 minUte ",  /**/ 123L * SecondsOfMinute)]
-        [InlineData(" 123 minuteS ", /**/ 123L * SecondsOfMinute)]
-        [InlineData("123h",          /**/ 123L * SecondsOfHour)]
-        [InlineData("123hour",       /**/ 123L * SecondsOfHour)]
-        [InlineData("123hours",      /**/ 123L * SecondsOfHour)]
-        [InlineData(" 123 H ",       /**/ 123L * SecondsOfHour)]
-        [InlineData(" 123 hOUr ",    /**/ 123L * SecondsOfHour)]
-        [InlineData(" 123 Hours ",   /**/ 123L * SecondsOfHour)]
-        [InlineData("123d",          /**/ 123L * SecondsOfDay)]
-        [InlineData("123day",        /**/ 123L * SecondsOfDay)]
-        [InlineData("123days",       /**/ 123L * SecondsOfDay)]
-        [InlineData(" 123 D ",       /**/ 123L * SecondsOfDay)]
-        [InlineData(" 123 daY ",     /**/ 123L * SecondsOfDay)]
-        [InlineData(" 123 DAYS ",    /**/ 123L * SecondsOfDay)]
-        [InlineData("123y",          /**/ 123L * SecondsOfYear)]
-        [InlineData("123year",       /**/ 123L * SecondsOfYear)]
-        [InlineData("123years",      /**/ 123L * SecondsOfYear)]
-        [InlineData(" 123 y ",       /**/ 123L * SecondsOfYear)]
-        [InlineData(" 123 Year ",    /**/ 123L * SecondsOfYear)]
-        [InlineData(" 123 yeaRs ",   /**/ 123L * SecondsOfYear)]
+        [TestMethod]
+        [DataRow("123s",          /**/ 123L)]
+        [DataRow("123sec",        /**/ 123L)]
+        [DataRow("123secs",       /**/ 123L)]
+        [DataRow("123second",     /**/ 123L)]
+        [DataRow("123seconds",    /**/ 123L)]
+        [DataRow(" 123 S ",       /**/ 123L)]
+        [DataRow(" 123 sec ",     /**/ 123L)]
+        [DataRow(" 123 Secs ",    /**/ 123L)]
+        [DataRow(" 123 secOnd ",  /**/ 123L)]
+        [DataRow(" 123 secondS ", /**/ 123L)]
+        [DataRow("123m",          /**/ 123L * SecondsOfMinute)]
+        [DataRow("123min",        /**/ 123L * SecondsOfMinute)]
+        [DataRow("123mins",       /**/ 123L * SecondsOfMinute)]
+        [DataRow("123minute",     /**/ 123L * SecondsOfMinute)]
+        [DataRow("123minutes",    /**/ 123L * SecondsOfMinute)]
+        [DataRow(" 123 M ",       /**/ 123L * SecondsOfMinute)]
+        [DataRow(" 123 MIN ",     /**/ 123L * SecondsOfMinute)]
+        [DataRow(" 123 mIns ",    /**/ 123L * SecondsOfMinute)]
+        [DataRow(" 123 minUte ",  /**/ 123L * SecondsOfMinute)]
+        [DataRow(" 123 minuteS ", /**/ 123L * SecondsOfMinute)]
+        [DataRow("123h",          /**/ 123L * SecondsOfHour)]
+        [DataRow("123hour",       /**/ 123L * SecondsOfHour)]
+        [DataRow("123hours",      /**/ 123L * SecondsOfHour)]
+        [DataRow(" 123 H ",       /**/ 123L * SecondsOfHour)]
+        [DataRow(" 123 hOUr ",    /**/ 123L * SecondsOfHour)]
+        [DataRow(" 123 Hours ",   /**/ 123L * SecondsOfHour)]
+        [DataRow("123d",          /**/ 123L * SecondsOfDay)]
+        [DataRow("123day",        /**/ 123L * SecondsOfDay)]
+        [DataRow("123days",       /**/ 123L * SecondsOfDay)]
+        [DataRow(" 123 D ",       /**/ 123L * SecondsOfDay)]
+        [DataRow(" 123 daY ",     /**/ 123L * SecondsOfDay)]
+        [DataRow(" 123 DAYS ",    /**/ 123L * SecondsOfDay)]
+        [DataRow("123y",          /**/ 123L * SecondsOfYear)]
+        [DataRow("123year",       /**/ 123L * SecondsOfYear)]
+        [DataRow("123years",      /**/ 123L * SecondsOfYear)]
+        [DataRow(" 123 y ",       /**/ 123L * SecondsOfYear)]
+        [DataRow(" 123 Year ",    /**/ 123L * SecondsOfYear)]
+        [DataRow(" 123 yeaRs ",   /**/ 123L * SecondsOfYear)]
         public void TestToSeconds(string time, long expect)
         {
             var actual = TimeMesh.ToSeconds(time);
-            Assert.Equal(expect, actual);
+            Assert.AreEqual(expect, actual);
         }
 
-        [Theory]
-        [InlineData("123")]
-        [InlineData("123ss")]
-        [InlineData("123ms")]
-        [InlineData("123hs")]
-        [InlineData("123ds")]
-        [InlineData("123ys")]
-        [InlineData("abc")]
-        [InlineData("seconds")]
-        [InlineData("d")]
-        [InlineData("hour")]
-        [InlineData("years")]
+        [TestMethod]
+        [DataRow("123")]
+        [DataRow("123ss")]
+        [DataRow("123ms")]
+        [DataRow("123hs")]
+        [DataRow("123ds")]
+        [DataRow("123ys")]
+        [DataRow("abc")]
+        [DataRow("seconds")]
+        [DataRow("d")]
+        [DataRow("hour")]
+        [DataRow("years")]
         public void TestToSecondsError(string time)
         {
-            Assert.Throws<FormatException>(() => TimeMesh.ToSeconds(time));
+            Assert.ThrowsException<FormatException>(() => TimeMesh.ToSeconds(time));
         }
 
-        [Theory]
-        [InlineData("TestFiles/TimeMesh/calc-time.dat")]
-        [InlineData("TestFiles/TimeMesh/out-time.dat")]
-        [InlineData("lib/time.dat")]
-        [InlineData("lib/out-time.dat")]
-        [InlineData("lib/out-per-h.dat")]
+        [TestMethod]
+        [DataRow("TestFiles/TimeMesh/calc-time.dat")]
+        [DataRow("TestFiles/TimeMesh/out-time.dat")]
+        [DataRow("lib/time.dat")]
+        [DataRow("lib/out-time.dat")]
+        [DataRow("lib/out-per-h.dat")]
         public void ReadTimeMeshFile(string filePath)
         {
             var timeMesh = new TimeMesh(filePath);
         }
 
-        [Theory]
-        [MemberData(nameof(CoverMeshes))]
+        [TestMethod]
+        [DynamicData(nameof(CoverMeshes), DynamicDataSourceType.Method)]
         public void TestCover(TimeMesh coarseMesh, TimeMesh fineMesh)
         {
             // 細かいメッシュは粗いメッシュを網羅する。
-            Assert.True(fineMesh.Cover(coarseMesh));
+            Assert.IsTrue(fineMesh.Cover(coarseMesh));
 
             // 粗いメッシュは細かいメッシュを網羅しない。
-            Assert.False(coarseMesh.Cover(fineMesh));
+            Assert.IsFalse(coarseMesh.Cover(fineMesh));
         }
 
         public static IEnumerable<object[]> CoverMeshes()
@@ -135,7 +136,7 @@ namespace FlexID.Calc.Tests
             };
         }
 
-        [Fact]
+        [TestMethod]
         public void TestCover_LongerCoerseMesh()
         {
             var longerCoarseMesh = new TimeMesh(new[]
@@ -148,10 +149,10 @@ namespace FlexID.Calc.Tests
             });
 
             // 細かいメッシュより長い期間を持つ粗いメッシュは網羅できない。
-            Assert.False(shorterFineMesh.Cover(longerCoarseMesh));
+            Assert.IsFalse(shorterFineMesh.Cover(longerCoarseMesh));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestCover_LongerFineMesh()
         {
             var shorterCoarseMesh = new TimeMesh(new[]
@@ -164,7 +165,7 @@ namespace FlexID.Calc.Tests
             });
 
             // 細かいメッシュが、粗いメッシュより長い期間を網羅している。
-            Assert.True(longerFineMesh.Cover(shorterCoarseMesh));
+            Assert.IsTrue(longerFineMesh.Cover(shorterCoarseMesh));
         }
     }
 }

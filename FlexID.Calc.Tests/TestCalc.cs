@@ -1,15 +1,16 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Xunit;
 
 namespace FlexID.Calc.Tests
 {
+    [TestClass]
     public class TestCalc
     {
         // 試計算
-        [Theory]
-        [InlineData(@"test_ing.inp")]
+        [TestMethod]
+        [DataRow("test_ing.inp")]
         public void Test(string target)
         {
             var TargetDir = @"TestFiles\TestCalc";
@@ -29,25 +30,27 @@ namespace FlexID.Calc.Tests
 
             main.Main();
 
-            Assert.Equal(
-                File.ReadLines(Path.Combine(ExpectDir, TargetName + "_Cumulative.out")),
-                File.ReadLines(Path.Combine(ResultDir, TargetName + "_Cumulative.out")));
-            Assert.Equal(
-                File.ReadLines(Path.Combine(ExpectDir, TargetName + "_Dose.out")),
-                File.ReadLines(Path.Combine(ResultDir, TargetName + "_Dose.out")));
-            Assert.Equal(
-                File.ReadLines(Path.Combine(ExpectDir, TargetName + "_DoseRate.out")),
-                File.ReadLines(Path.Combine(ResultDir, TargetName + "_DoseRate.out")));
-            Assert.Equal(
-                File.ReadLines(Path.Combine(ExpectDir, TargetName + "_Retention.out")),
-                File.ReadLines(Path.Combine(ResultDir, TargetName + "_Retention.out")));
+            CollectionAssert.AreEqual(
+                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Cumulative.out")),
+                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Cumulative.out")));
+            CollectionAssert.AreEqual(
+                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Dose.out")),
+                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Dose.out")));
+            CollectionAssert.AreEqual(
+                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_DoseRate.out")),
+                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_DoseRate.out")));
+            CollectionAssert.AreEqual(
+                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Retention.out")),
+                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Retention.out")));
         }
     }
 
+    [TestClass]
     public class TestCalc_Sr90_ing
     {
-        [Theory(Skip = "時間がかかるので普通はテストスキップする")]
-        [InlineData("Sr-90_ing-Other.inp")]
+        [Ignore("時間がかかるので普通はテストスキップする")]
+        [TestMethod]
+        [DataRow("Sr-90_ing-Other.inp")]
         public void Test(string target)
         {
             var TargetDir = @"TestFiles\TestCalc_Sr-90_ing";
