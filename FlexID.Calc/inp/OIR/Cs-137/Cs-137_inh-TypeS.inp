@@ -77,138 +77,169 @@ Cs-137 Inhalation:Type-S
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-  ET2-F                   Oesophagus-S             97.0874%
-  ET2-S                   Oesophagus-S             99.9999%
-  Plasma                  St-wall                   1.4902%
-  Oesophagus-S            St-con                  100.0%
-  St-wall                 St-conRe                  4.5762%
-  Plasma                  St-conRe                  1.9082%
-  Plasma                  SI-wall                  14.9022%
-  St-con                  SI-con                  100.0%
-  St-conRe                SI-conRe                100.0%
-  SI-wall                 SI-conRe                  1.9813%
-  Plasma                  SI-conRe                  0.4433%
-  Liver                   SI-conRe                  5.0155%
-  Plasma                  RC-wall                   2.3852%
-  SI-con                  RC-con                   99.0%
-  SI-conRe                RC-con                    1.0%
-  RC-wall                 RC-con                    2.826%
-  Plasma                  RC-con                    0.0084%
-  Plasma                  LC-wall                   2.3852%
-  RC-con                  LC-con                  100.0%
-  LC-wall                 LC-con                    2.826%
-  Plasma                  RS-wall                   1.1947%
-  LC-con                  RS-con                  100.0%
-  RS-wall                 RS-con                    2.826%
-  RS-con                  Faeces                  100.0%
-  input                   ET1-F                     0.4794%
-  input                   ET2-F                     0.2576836%
-  ET1-F                   ET2-F                    71.4286%
-  BB-F                    ET2-F                    76.9231%
-  input                   ETseq-F                   0.0005164%
-  ETseq-F                 LNET-F                    0.0333%
-  input                   BB-F                      0.0177644%
-  bb-F                    BB-F                      6.25%
-  input                   BBseq-F                   0.0000356%
-  input                   bb-F                      0.010978%
-  ALV-F                   bb-F                      0.0666%
-  input                   bbseq-F                   0.000022%
-  input                   ALV-F                     0.0532%
-  ALV-F                   INT-F                     0.0333%
-  BBseq-F                 LNTH-F                    0.0333%
-  bbseq-F                 LNTH-F                    0.0333%
-  INT-F                   LNTH-F                    0.001%
-  input                   ET1-S                    47.4606%
-  input                   ET2-S                    25.5106764%
-  ET1-S                   ET2-S                    71.4286%
-  BB-S                    ET2-S                    99.999%
-  input                   ETseq-S                   0.0511236%
-  ETseq-S                 LNET-S                   90.9091%
-  input                   BB-S                      1.7586756%
-  bb-S                    BB-S                     99.95%
-  input                   BBseq-S                   0.0035244%
-  input                   bb-S                      1.086822%
-  ALV-S                   bb-S                     64.5161%
-  input                   bbseq-S                   0.002178%
-  input                   ALV-S                     5.2668%
-  ALV-S                   INT-S                    32.2581%
-  BBseq-S                 LNTH-S                   90.9091%
-  bbseq-S                 LNTH-S                   90.9091%
-  INT-S                   LNTH-S                   23.0769%
-  input                   Environment              18.04%
-  ET1-F                   Environment              28.5714%
-  ET1-S                   Environment              28.5714%
-  ET2-F                   Plasma                    2.9126%
-  ETseq-F                 Plasma                   99.9667%
-  LNET-F                  Plasma                  100.0%
-  BB-F                    Plasma                   23.0769%
-  BBseq-F                 Plasma                   99.9667%
-  bb-F                    Plasma                   93.75%
-  bbseq-F                 Plasma                   99.9667%
-  ALV-F                   Plasma                   99.9001%
-  INT-F                   Plasma                   99.999%
-  LNTH-F                  Plasma                  100.0%
-  ET2-S                   Plasma                    0.0001%
-  ETseq-S                 Plasma                    9.0909%
-  LNET-S                  Plasma                  100.0%
-  BB-S                    Plasma                    0.001%
-  BBseq-S                 Plasma                    9.0909%
-  bb-S                    Plasma                    0.05%
-  bbseq-S                 Plasma                    9.0909%
-  ALV-S                   Plasma                    3.2258%
-  INT-S                   Plasma                   76.9231%
-  LNTH-S                  Plasma                  100.0%
-  St-wall                 Plasma                   90.6516%
-  SI-wall                 Plasma                   93.122%
-  SI-con                  Plasma                    1.0%
-  SI-conRe                Plasma                   99.0%
-  RC-wall                 Plasma                   92.316%
-  LC-wall                 Plasma                   92.316%
-  RS-wall                 Plasma                   92.316%
-  RBC                     Plasma                  100.0%
-  Liver                   Plasma                   94.9845%
-  Kidneys                 Plasma                   94.997%
-  Spleen                  Plasma                   94.9953%
-  Pancreas                Plasma                   95.0065%
-  SkeletalMuscle          Plasma                  100.0%
-  Skin                    Plasma                   98.1991%
-  Adipose                 Plasma                  100.0%
-  Brain                   Plasma                  100.0%
-  Ht-wall                 Plasma                  100.0%
-  Lung-Tis                Plasma                  100.0%
-  R-marrow                Plasma                  100.0%
-  Cartilage               Plasma                  100.0%
-  C-bone-S                Plasma                  100.0%
-  T-bone-S                Plasma                  100.0%
-  Other1                  Plasma                  100.0%
-  Other2                  Plasma                  100.0%
-  Plasma                  RBC                       0.7599%
-  St-wall                 Liver                     4.7723%
-  SI-wall                 Liver                     4.8967%
-  RC-wall                 Liver                     4.858%
-  LC-wall                 Liver                     4.858%
-  RS-wall                 Liver                     4.858%
-  Plasma                  Liver                     8.2321%
-  Spleen                  Liver                     5.0047%
-  Pancreas                Liver                     4.9935%
-  Plasma                  Kidneys                  28.3269%
-  Plasma                  Spleen                    2.2374%
-  Plasma                  Pancreas                  0.7472%
-  Plasma                  SkeletalMuscle           12.6648%
-  Plasma                  Skin                      1.8659%
-  Plasma                  Adipose                   3.7277%
-  Plasma                  Brain                     0.179%
-  Plasma                  Ht-wall                   5.9524%
-  Plasma                  Lung-Tis                  1.8659%
-  Plasma                  R-marrow                  2.2374%
-  Plasma                  Cartilage                 1.2665%
-  Plasma                  C-bone-S                  0.4475%
-  Plasma                  T-bone-S                  0.6712%
-  Plasma                  Other1                    4.0992%
-  Plasma                  Other2                    0.0015%
-  Skin                    Excreta(sweat)            1.8009%
-  Kidneys                 UB-con                    5.003%
-  UB-con                  Urine                   100.0%
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.137 p.142 Table 6.2
+#     f_r = 0.01 ( 1%)
+# 1 - f_r = 0.99 (99%)
+  input                   ET1-F                     0.4794%     # =  1%          of 47.94%
+  input                   ET2-F                     0.2576836%  # =  1% of 99.8% of 25.82%
+  input                   ETseq-F                   0.0005164%  # =  1% of  0.2% of 25.82%
+  input                   BB-F                      0.0177644%  # =  1% of 99.8% of  1.78%
+  input                   BBseq-F                   0.0000356%  # =  1% of  0.2% of  1.78%
+  input                   bb-F                      0.010978%   # =  1% of 99.8% of  1.10%
+  input                   bbseq-F                   0.000022%   # =  1% of  0.2% of  1.10%
+  input                   ALV-F                     0.0532%     # =  1%          of  5.32%
+  input                   ET1-S                    47.4606%     # = 99%          of 47.94%
+  input                   ET2-S                    25.5106764%  # = 99% of 99.8% of 25.82%
+  input                   ETseq-S                   0.0511236%  # = 99% of  0.2% of 25.82%
+  input                   BB-S                      1.7586756%  # = 99% of 99.8% of  1.78%
+  input                   BBseq-S                   0.0035244%  # = 99% of  0.2% of  1.78%
+  input                   bb-S                      1.086822%   # = 99% of 99.8% of  1.10%
+  input                   bbseq-S                   0.002178%   # = 99% of  0.2% of  1.10%
+  input                   ALV-S                     5.2668%     # = 99%          of  5.32%
+  input                   Environment              18.04%       # = 100% - 81.96%
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002       #   0.0666%
+  ALV-F                   INT-F                     0.001       #   0.0333%
+  INT-F                   LNTH-F                    0.00003     #   0.001%
+  bb-F                    BB-F                      0.2         #   6.25%
+  bbseq-F                 LNTH-F                    0.001       #   0.0333%
+  BB-F                    ET2-F                    10           #  76.9231%
+  BBseq-F                 LNTH-F                    0.001       #   0.0333%
+  ET2-F                   Oesophagus-S            100           #  97.0874%
+  ETseq-F                 LNET-F                    0.001       #   0.0333%
+  ET1-F                   Environment               0.6         #  28.5714%
+  ET1-F                   ET2-F                     1.5         #  71.4286%
+
+  ALV-S                   bb-S                      0.002       #  64.5161%
+  ALV-S                   INT-S                     0.001       #  32.2581%
+  INT-S                   LNTH-S                    0.00003     #  23.0769%
+  bb-S                    BB-S                      0.2         #  99.95%
+  bbseq-S                 LNTH-S                    0.001       #  90.9091%
+  BB-S                    ET2-S                    10           #  99.999%
+  BBseq-S                 LNTH-S                    0.001       #  90.9091%
+  ET2-S                   Oesophagus-S            100           #  99.9999%
+  ETseq-S                 LNET-S                    0.001       #  90.9091%
+  ET1-S                   Environment               0.6         #  28.5714%
+  ET1-S                   ET2-S                     1.5         #  71.4286%
+
+# ICRP Publ.137 p.142 Table 6.2
+#   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
+#   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
+  ALV-F                   Plasma                    3           #  99.9001%
+  INT-F                   Plasma                    3           #  99.999%
+  bb-F                    Plasma                    3           #  93.75%
+  bbseq-F                 Plasma                    3           #  99.9667%
+  BB-F                    Plasma                    3           #  23.0769%
+  BBseq-F                 Plasma                    3           #  99.9667%
+  ET2-F                   Plasma                    3           #   2.9126%
+  ETseq-F                 Plasma                    3           #  99.9667%
+  LNET-F                  Plasma                    3           # 100.0%
+  LNTH-F                  Plasma                    3           # 100.0%
+
+  ALV-S                   Plasma                    1E-4        #   3.2258%
+  INT-S                   Plasma                    1E-4        #  76.9231%
+  bb-S                    Plasma                    1E-4        #   0.05%
+  bbseq-S                 Plasma                    1E-4        #   9.0909%
+  BB-S                    Plasma                    1E-4        #   0.001%
+  BBseq-S                 Plasma                    1E-4        #   9.0909%
+  ET2-S                   Plasma                    1E-4        #   0.0001%
+  ETseq-S                 Plasma                    1E-4        #   9.0909%
+  LNET-S                  Plasma                    1E-4        # 100.0%
+  LNTH-S                  Plasma                    1E-4        # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  99.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.137 p.142 Table 6.2
+#   fA = 0.01   (Inhaled particulate materials, Absorption type S)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-2
+  SI-con                  Plasma                    6.060606060606061E-2        # 1.0%
+
+# ICRP Publ.137 p.146 Fig.6,1
+  St-conRe                SI-conRe                 20.57        # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.137 p.142 Table 6.2 footnote¶
+#   fA = 1≒0.99   (re-absorption)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
+  SI-conRe                RC-con                    6           #   1.0%
+  SI-conRe                Plasma                  594           #  99.0%
+
+# ICRP Publ.137 p.147 Table 6.3
+  Plasma                  RBC                       1.8         #   0.7599%
+  Plasma                  SkeletalMuscle           30.0         #  12.6648%
+  Plasma                  Liver                    19.5         #   8.2321%
+  Plasma                  Kidneys                  67.1         #  28.3269%
+  Plasma                  Spleen                    5.30        #   2.2374%
+  Plasma                  Pancreas                  1.77        #   0.7472%
+  Plasma                  Skin                      4.42        #   1.8659%
+  Plasma                  Adipose                   8.83        #   3.7277%
+  Plasma                  Brain                     0.424       #   0.179%
+  Plasma                  Ht-wall                  14.1         #   5.9524%
+  Plasma                  Lung-Tis                  4.42        #   1.8659%
+  Plasma                  R-marrow                  5.3         #   2.2374%
+  Plasma                  Cartilage                 3.0         #   1.2665%
+  Plasma                  T-bone-S                  1.59        #   0.6712%
+  Plasma                  C-bone-S                  1.06        #   0.4475%
+  Plasma                  St-wall                   3.53        #   1.4902%
+  Plasma                  St-conRe                  4.52        #   1.9082%
+  Plasma                  SI-wall                  35.3         #  14.9022%
+  Plasma                  SI-conRe                  1.05        #   0.4433%
+  Plasma                  RC-wall                   5.65        #   2.3852%
+  Plasma                  RC-con                    0.02        #   0.0084%
+  Plasma                  LC-wall                   5.65        #   2.3852%
+  Plasma                  RS-wall                   2.83        #   1.1947%
+  Plasma                  Other1                    9.71        #   4.0992%
+  Plasma                  Other2                    0.00353     #   0.0015%
+  RBC                     Plasma                    0.257       # 100.0%
+  SkeletalMuscle          Plasma                    0.0751      # 100.0%
+  Liver                   Plasma                    2.14        #  94.9845%
+  Liver                   SI-conRe                  0.113       #   5.0155%
+  Kidneys                 UB-con                    1.68        #   5.003%
+  Kidneys                 Plasma                   31.9         #  94.997%
+  Spleen                  Plasma                    5.03        #  94.9953%
+  Spleen                  Liver                     0.265       #   5.0047%
+  Pancreas                Plasma                    1.68        #  95.0065%
+  Pancreas                Liver                     0.0883      #   4.9935%
+  Skin                    Plasma                    0.867       #  98.1991%
+  Skin                    Excreta(sweat)            0.0159      #   1.8009%
+  Adipose                 Plasma                    1.77        # 100.0%
+  Brain                   Plasma                    0.0848      # 100.0%
+  Ht-wall                 Plasma                    8.07        # 100.0%
+  Lung-Tis                Plasma                    1.47        # 100.0%
+  R-marrow                Plasma                    0.706       # 100.0%
+  Cartilage               Plasma                    0.2         # 100.0%
+  T-bone-S                Plasma                    0.212       # 100.0%
+  C-bone-S                Plasma                    0.212       # 100.0%
+  St-wall                 Plasma                    4.16        #  90.6516%
+  St-wall                 Liver                     0.219       #   4.7723%
+  St-wall                 St-conRe                  0.21        #   4.5762%
+  SI-wall                 Plasma                    9.87        #  93.122%
+  SI-wall                 Liver                     0.519       #   4.8967%
+  SI-wall                 SI-conRe                  0.21        #   1.9813%
+  RC-wall                 Plasma                    6.86        #  92.316%
+  RC-wall                 Liver                     0.361       #   4.858%
+  RC-wall                 RC-con                    0.21        #   2.826%
+  LC-wall                 Plasma                    6.86        #  92.316%
+  LC-wall                 Liver                     0.361       #   4.858%
+  LC-wall                 LC-con                    0.21        #   2.826%
+  RS-wall                 Plasma                    6.86        #  92.316%
+  RS-wall                 Liver                     0.361       #   4.858%
+  RS-wall                 RS-con                    0.21        #   2.826%
+  Other1                  Plasma                    0.762       # 100.0%
+  Other2                  Plasma                    0.00141     # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%
 
 
 [Ba-137m:compartment]
@@ -356,123 +387,188 @@ Cs-137 Inhalation:Type-S
   Cs-137/Other1           Dec-Other1                ---
   Cs-137/Other2           Dec-Other2                ---
 
-  ET2-F                   Oesophagus-S             97.0874%
-  ET2-S                   Oesophagus-S             99.9999%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  SI-con                  RC-con                   99.8%
-  Plasma                  RC-con                   15.2773%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  ET1-F                   ET2-F                    71.4286%
-  BB-F                    ET2-F                    76.9231%
-  ETseq-F                 LNET-F                    0.0333%
-  bb-F                    BB-F                      6.25%
-  ALV-F                   bb-F                      0.0666%
-  ALV-F                   INT-F                     0.0333%
-  BBseq-F                 LNTH-F                    0.0333%
-  bbseq-F                 LNTH-F                    0.0333%
-  INT-F                   LNTH-F                    0.001%
-  ET1-S                   ET2-S                    71.4286%
-  BB-S                    ET2-S                    99.999%
-  ETseq-S                 LNET-S                   90.9091%
-  bb-S                    BB-S                     99.95%
-  ALV-S                   bb-S                     64.5161%
-  ALV-S                   INT-S                    32.2581%
-  BBseq-S                 LNTH-S                   90.9091%
-  bbseq-S                 LNTH-S                   90.9091%
-  INT-S                   LNTH-S                   23.0769%
-  ET1-F                   Environment              28.5714%
-  ET1-S                   Environment              28.5714%
-  ET2-F                   Plasma                    2.9126%
-  ETseq-F                 Plasma                   99.9667%
-  LNET-F                  Plasma                  100.0%
-  BB-F                    Plasma                   23.0769%
-  BBseq-F                 Plasma                   99.9667%
-  bb-F                    Plasma                   93.75%
-  bbseq-F                 Plasma                   99.9667%
-  ALV-F                   Plasma                   99.9001%
-  INT-F                   Plasma                   99.999%
-  LNTH-F                  Plasma                  100.0%
-  ET2-S                   Plasma                    0.0001%
-  ETseq-S                 Plasma                    9.0909%
-  LNET-S                  Plasma                  100.0%
-  BB-S                    Plasma                    0.001%
-  BBseq-S                 Plasma                    9.0909%
-  bb-S                    Plasma                    0.05%
-  bbseq-S                 Plasma                    9.0909%
-  ALV-S                   Plasma                    3.2258%
-  INT-S                   Plasma                   76.9231%
-  LNTH-S                  Plasma                  100.0%
-  SI-con                  Plasma                    0.2%
-  Ht-wall                 Plasma                  100.0%
-  Liver                   Plasma                  100.0%
-  Kidneys                 Plasma                  100.0%
-  SkeletalMuscle          Plasma                  100.0%
-  St-wall                 Plasma                  100.0%
-  SI-wall                 Plasma                  100.0%
-  RC-wall                 Plasma                  100.0%
-  LC-wall                 Plasma                  100.0%
-  RS-wall                 Plasma                  100.0%
-  Spleen                  Plasma                  100.0%
-  Pancreas                Plasma                  100.0%
-  Brain                   Plasma                  100.0%
-  R-marrow                Plasma                  100.0%
-  Skin                    Plasma                  100.0%
-  Lung-Tis                Plasma                  100.0%
-  Adipose                 Plasma                  100.0%
-  T-bone-S                Plasma                   83.2853%
-  C-bone-S                Plasma                   83.2853%
-  Other                   Plasma                  100.0%
-  Cartilage               Plasma                  100.0%
-  Noch-T-bone-V           Plasma                  100.0%
-  Noch-C-bone-V           Plasma                  100.0%
-  Dec-RBC                 Plasma                  100.0%
-  Dec-Muscle              Plasma                  100.0%
-  Dec-St-wall             Plasma                  100.0%
-  Dec-SI-wall             Plasma                  100.0%
-  Dec-RC-wall             Plasma                  100.0%
-  Dec-LC-wall             Plasma                  100.0%
-  Dec-RS-wall             Plasma                  100.0%
-  Dec-Liver               Plasma                  100.0%
-  Dec-Kidneys             Plasma                  100.0%
-  Dec-Spleen              Plasma                  100.0%
-  Dec-Pancreas            Plasma                  100.0%
-  Dec-Skin                Plasma                  100.0%
-  Dec-Adipose             Plasma                  100.0%
-  Dec-Brain               Plasma                  100.0%
-  Dec-Ht-wall             Plasma                  100.0%
-  Dec-Lung-Tis            Plasma                  100.0%
-  Dec-R-marrow            Plasma                  100.0%
-  Dec-Cartilage           Plasma                  100.0%
-  Dec-Other1              Plasma                  100.0%
-  Dec-Other2              Plasma                  100.0%
-  Plasma                  Ht-wall                   2.7901%
-  Plasma                  Liver                     4.5339%
-  Plasma                  Kidneys                  13.253%
-  Plasma                  SkeletalMuscle           11.8579%
-  Plasma                  St-wall                   0.6975%
-  Plasma                  SI-wall                   6.9752%
-  Plasma                  RC-wall                   1.1335%
-  Plasma                  LC-wall                   1.1335%
-  Plasma                  RS-wall                   0.5269%
-  Plasma                  Spleen                    2.0926%
-  Plasma                  Pancreas                  0.6975%
-  Plasma                  Brain                     8.3703%
-  Plasma                  R-marrow                  2.0926%
-  Plasma                  Skin                      3.4876%
-  Plasma                  Lung-Tis                  1.7438%
-  Plasma                  Adipose                   3.4876%
-  Plasma                  T-bone-S                  7.3543%
-  Exch-T-bone-V           T-bone-S                 69.7842%
-  Plasma                  C-bone-S                  5.9138%
-  Exch-C-bone-V           C-bone-S                 69.7842%
-  Plasma                  Other                     4.8827%
-  Plasma                  UB-con                    1.6983%
-  UB-con                  Urine                   100.0%
-  Plasma                  Cartilage                 3.791E-21%
-  T-bone-S                Exch-T-bone-V            16.7147%
-  C-bone-S                Exch-C-bone-V            16.7147%
-  Exch-T-bone-V           Noch-T-bone-V            30.2158%
-  Exch-C-bone-V           Noch-C-bone-V            30.2158%
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002       #   0.0666%
+  ALV-F                   INT-F                     0.001       #   0.0333%
+  INT-F                   LNTH-F                    0.00003     #   0.001%
+  bb-F                    BB-F                      0.2         #   6.25%
+  bbseq-F                 LNTH-F                    0.001       #   0.0333%
+  BB-F                    ET2-F                    10           #  76.9231%
+  BBseq-F                 LNTH-F                    0.001       #   0.0333%
+  ET2-F                   Oesophagus-S            100           #  97.0874%
+  ETseq-F                 LNET-F                    0.001       #   0.0333%
+  ET1-F                   Environment               0.6         #  28.5714%
+  ET1-F                   ET2-F                     1.5         #  71.4286%
+
+  ALV-S                   bb-S                      0.002       #  64.5161%
+  ALV-S                   INT-S                     0.001       #  32.2581%
+  INT-S                   LNTH-S                    0.00003     #  23.0769%
+  bb-S                    BB-S                      0.2         #  99.95%
+  bbseq-S                 LNTH-S                    0.001       #  90.9091%
+  BB-S                    ET2-S                    10           #  99.999%
+  BBseq-S                 LNTH-S                    0.001       #  90.9091%
+  ET2-S                   Oesophagus-S            100           #  99.9999%
+  ETseq-S                 LNET-S                    0.001       #  90.9091%
+  ET1-S                   Environment               0.6         #  28.5714%
+  ET1-S                   ET2-S                     1.5         #  71.4286%
+
+# ICRP Publ.137 p.168 Table 7.2
+#   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
+#   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
+  ALV-F                   Plasma                    3           #  99.9001%
+  INT-F                   Plasma                    3           #  99.999%
+  bb-F                    Plasma                    3           #  93.75%
+  bbseq-F                 Plasma                    3           #  99.9667%
+  BB-F                    Plasma                    3           #  23.0769%
+  BBseq-F                 Plasma                    3           #  99.9667%
+  ET2-F                   Plasma                    3           #   2.9126%
+  ETseq-F                 Plasma                    3           #  99.9667%
+  LNET-F                  Plasma                    3           # 100.0%
+  LNTH-F                  Plasma                    3           # 100.0%
+
+  ALV-S                   Plasma                    1E-4        #   3.2258%
+  INT-S                   Plasma                    1E-4        #  76.9231%
+  bb-S                    Plasma                    1E-4        #   0.05%
+  bbseq-S                 Plasma                    1E-4        #   9.0909%
+  BB-S                    Plasma                    1E-4        #   0.001%
+  BBseq-S                 Plasma                    1E-4        #   9.0909%
+  ET2-S                   Plasma                    1E-4        #   0.0001%
+  ETseq-S                 Plasma                    1E-4        #   9.0909%
+  LNET-S                  Plasma                    1E-4        # 100.0%
+  LNTH-S                  Plasma                    1E-4        # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  99.8%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.137 p.168 Table 7.2
+#   fA = 0.002   (Inhaled particulate materials, Absorption type S)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.002 * 6 / (1 - 0.002) = 1.202404809619238E-2
+  SI-con                  Plasma                    1.202404809619238E-2        # 0.2%
+
+# ICRP Publ.137 p.152-154 Para.317
+  # > Barium produced in skeletal muscle and red blood cells transfers to plasma at the
+  #   rate 1000 d^-1, the default value for extremely rapid transfer between systemic compartments.
+  # > 骨格筋と赤血球で生成されたバリウムは、全身コンパートメント間の極めて迅速な移行の
+  #   デフォルト値である 1000 d^-1 の速度で血漿に移行します。
+  Dec-RBC                 Plasma                 1000           # 100.0%
+  Dec-Muscle              Plasma                 1000           # 100.0%
+
+  # > Barium produced in all other soft tissue compartments transfers to
+  #   plasma at the rate 200 d^-1 (t½=5 min), chosen to yield, at most, a moderate deficiency
+  #   of 137mBa in these tissues compared with equilibrium values.
+  # > その他のすべての軟部組織コンパートメントで生成されたバリウムは、平衡値と比較してこれらの
+  #   組織で最大でも中程度の 137mBa の欠乏をもたらすように選択された 200 d^-1 (t½=5 分) の速度で
+  #   血漿に移行します。
+  Dec-St-wall             Plasma                  200           # 100.0%
+  Dec-SI-wall             Plasma                  200           # 100.0%
+  Dec-RC-wall             Plasma                  200           # 100.0%
+  Dec-LC-wall             Plasma                  200           # 100.0%
+  Dec-RS-wall             Plasma                  200           # 100.0%
+  Dec-Liver               Plasma                  200           # 100.0%
+  Dec-Kidneys             Plasma                  200           # 100.0%
+  Dec-Spleen              Plasma                  200           # 100.0%
+  Dec-Pancreas            Plasma                  200           # 100.0%
+  Dec-Skin                Plasma                  200           # 100.0%
+  Dec-Adipose             Plasma                  200           # 100.0%
+  Dec-Brain               Plasma                  200           # 100.0%
+  Dec-Ht-wall             Plasma                  200           # 100.0%
+  Dec-Lung-Tis            Plasma                  200           # 100.0%
+  Dec-R-marrow            Plasma                  200           # 100.0%
+  Dec-Cartilage           Plasma                  200           # 100.0%
+  Dec-Other1              Plasma                  200           # 100.0%
+  Dec-Other2              Plasma                  200           # 100.0%
+
+  # > Barium produced
+  #   in bone decays at its site of production. Barium transfers from plasma to trabecular
+  #   bone surfaces at the rate 19.4 d^-1, cortical bone surfaces at the rate 15.6 d^-1, right
+  #   colon contents at the rate 40.3 d^-1, urinary bladder contents at the rate 4.48 d^-1, and
+  #   a set of compartments representing extracellular fluids of each of the soft tissues
+  #   addressed in the model for cesium (Fig. 6.1) at a total rate of 184 d^-1.
+  # > 骨で生成されたバリウムは、生成された場所で崩壊します。バリウムは、血漿から海綿骨表面へは
+  #   19.4 d^-1 の速度で、皮質骨表面へは 15.6 d^-1 の速度で、右結腸内容物へは 40.3 d^-1 の
+  #   速度で、膀胱内容物へは 4.48 d^-1 の速度で、～移動します。(Fig. 6.1)
+  #
+  # > The transfer coefficients from plasma to bone surface compartments and excretion pathways
+  #   are two times the corresponding values given in the model for barium as a parent.
+  # > 血漿から骨表面コンパートメントおよび排泄経路への移行係数は、親バリウムのモデルで示されている
+  #   対応する値の 2 倍です。
+  Plasma                  T-bone-S                 19.4         # = 263.79/d * 7.3543%      # ≒ 2 * 9.72/d
+  Plasma                  C-bone-S                 15.6         # = 263.79/d * 5.9138%      # ≒ 2 * 7.78/d
+  Plasma                  RC-con                   40.3         # = 263.79/d * 15.2773%     # ≒ 2 * 20.16
+  Plasma                  UB-con                    4.48        # = 263.79/d *  1.6983%     # ≒ 2 * 2.24
+
+  # > and a set of compartments representing extracellular fluids of each of the soft tissues
+  #   addressed in the model for cesium (Fig. 6.1) at a total rate of 184 d^-1.
+  # > そしてセシウムのモデルで扱われている各軟組織の細胞外液を表すコンパートメントのセットへは
+  #   合計 184 /d の速度で移動します (Fig.6.1)
+  #
+  # > Transfer rates from blood to
+  #   individual soft tissue pools are based on the reference arterial distribution of cardiac
+  #   output in the adult male given in Publication 89 (2002, p. 142). For example, the
+  #   transfer rate from blood to spleen is calculated as 0.03 × 184 d^-1 = 5.52 d^-1, where
+  #   0.03 is the reference fraction of cardiac output going to the spleen.
+  # > 血液から個々の軟部組織プールへの移行率は、Publication 89 (2002、p. 142)に記載されている
+  #   成人男性の心拍出量の基準動脈分布に基づいています。たとえば、血液から脾臓への移行率は
+  #   0.03 × 184 d^-1 = 5.52 d^-1 と計算されます。ここで、0.03 は脾臓に送られる心拍出量の基準割合です。
+  #
+  # Publ.89 p.142 Para.318
+  Plasma                  Ht-wall                   7.36        # = 263.79/d *  2.7901%     # = 184/d * 0.04  (?)
+  Plasma                  Liver                    11.96        # = 263.79/d *  4.5339%     # = 184/d *  6.5% (arterial)
+  Plasma                  Kidneys                  34.96        # = 263.79/d * 13.253%      # = 184/d * 19%
+  Plasma                  SkeletalMuscle           31.28        # = 263.79/d * 11.8579%     # = 184/d * 17%
+  Plasma                  St-wall                   1.84        # = 263.79/d *  0.6975%     # = 184/d *  1.0%
+  Plasma                  SI-wall                  18.4         # = 263.79/d *  6.9752%     # = 184/d * 10%
+  Plasma                  RC-wall                   3           # = 263.79/d *  1.1335%     # = 184/d * a (a+b+c=0.04) → 3/dに近似(?)
+  Plasma                  LC-wall                   3           # = 263.79/d *  1.1335%     # = 184/d * b (a+b+c=0.04) → 3/dに近似(?)
+  Plasma                  RS-wall                   1.36        # = 263.79/d *  0.5269%     # = 184/d * c (a+b+c=0.04) → 1.36/dに近似(?)
+  Plasma                  Spleen                    5.52        # = 263.79/d *  2.0926%     # = 184/d *  3.0%
+  Plasma                  Pancreas                  1.84        # = 263.79/d *  0.6975%     # = 184/d *  1.0%
+  Plasma                  Brain                    22.08        # = 263.79/d *  8.3703%     # = 184/d * 12%
+  Plasma                  R-marrow                  5.52        # = 263.79/d *  2.0926%     # = 184/d *  3.0%
+  Plasma                  Skin                      9.2         # = 263.79/d *  3.4876%     # = 184/d *  5.0%
+  Plasma                  Lung-Tis                   4.6        # = 263.79/d *  1.7438%     # = 184/d * 0.025
+  Plasma                  Adipose                    9.2        # = 263.79/d *  3.4876%     # = 184/d *  5.0% (Fat) # その他の軟組織(other soft tissues)?
+  Plasma                  Other                     12.88       # = 263.79/d *  4.8827%     # = 184/d * (?)         # その他の軟組織(other soft tissues)?
+  Plasma                  Cartilage                  1E-20      # = 263.79/d *  3.791E-21%  # = 184/d * (?)         # その他の軟組織(other soft tissues)?
+
+  # > The transfer coefficient from the soft tissue compartment back to plasma is 61.4 d^-1.
+  # > 軟組織コンパートメントから血漿へ戻る際の移動係数は 61.4 /d です。
+  Ht-wall                 Plasma                   61.4         # 100.0%
+  Liver                   Plasma                   61.4         # 100.0%
+  Kidneys                 Plasma                   61.4         # 100.0%
+  SkeletalMuscle          Plasma                   61.4         # 100.0%
+  St-wall                 Plasma                   61.4         # 100.0%
+  SI-wall                 Plasma                   61.4         # 100.0%
+  RC-wall                 Plasma                   61.4         # 100.0%
+  LC-wall                 Plasma                   61.4         # 100.0%
+  RS-wall                 Plasma                   61.4         # 100.0%
+  Spleen                  Plasma                   61.4         # 100.0%
+  Pancreas                Plasma                   61.4         # 100.0%
+  Brain                   Plasma                   61.4         # 100.0%
+  R-marrow                Plasma                   61.4         # 100.0%
+  Skin                    Plasma                   61.4         # 100.0%
+  Lung-Tis                Plasma                   61.4         # 100.0%
+  Adipose                 Plasma                   61.4         # 100.0%    # その他の軟組織(other soft tissues)?
+  Other                   Plasma                   61.4         # 100.0%    # その他の軟組織(other soft tissues)?
+  Cartilage               Plasma                   61.4         # 100.0%    # その他の軟組織(other soft tissues)?
+
+# Publ.137 p.175 Table 7.3 (?)
+  T-bone-S                Plasma                    0.578       #  83.2853% of 0.694/d
+  T-bone-S                Exch-T-bone-V             0.116       #  16.7147% of 0.694/d
+  C-bone-S                Plasma                    0.578       #  83.2853% of 0.694/d
+  C-bone-S                Exch-C-bone-V             0.116       #  16.7147% of 0.694/d
+  Exch-T-bone-V           T-bone-S                  0.097       #  69.7842% of 0.139/d  # 0.0097 = 69.7842% of 0.0139の間違いか？
+  Exch-T-bone-V           Noch-T-bone-V             0.042       #  30.2158% of 0.139/d  # 0.0042 = 30.2158% of 0.0139の間違いか？
+  Exch-C-bone-V           C-bone-S                  0.097       #  69.7842% of 0.139/d  # 0.0097 = 69.7842% of 0.0139の間違いか？
+  Exch-C-bone-V           Noch-C-bone-V             0.042       #  30.2158% of 0.139/d  # 0.0042 = 30.2158% of 0.0139の間違いか？
+  Noch-C-bone-V           Plasma                    4.93E-4     # 100.0%                # 0.0000821 の間違いか？
+  Noch-T-bone-V           Plasma                    8.21E-5     # 100.0%                # 0.000493 の間違いか？
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%
