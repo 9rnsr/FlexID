@@ -100,7 +100,7 @@ namespace FlexID.Calc
                 ExposureAge == /**/ "5years old" ? age5yearT :
                 ExposureAge == /**/"10years old" ? age10yearT :
                 ExposureAge == /**/"15years old" ? age15yearT :
-                ExposureAge == /**/"adult" ? ageAdultT :
+                ExposureAge == /**/"Adult" ? ageAdultT :
                 throw Program.Error("Please select the age at the time of exposure.");
 
             DataClass dataLoInterp = null;  // 年齢区間の切り替わり検出用。

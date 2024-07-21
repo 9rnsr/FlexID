@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -55,50 +56,28 @@ namespace FlexID
             var anyProgeny = false;
             foreach (var inputFile in inputFiles)
             {
-                var inputLines = File.ReadLines(inputFile).GetEnumerator();
-
-                string GetNextLine()
+                try
                 {
-                Lagain:
-                    if (!inputLines.MoveNext())
-                        return null;
-                    var ln = inputLines.Current.Trim();
+                    var reader = new DataReader(inputFile, calcProgeny: true);
+                    var data = reader.Read_OIR();
 
-                    // 空行を読み飛ばす。
-                    if (ln.Length == 0)
-                        goto Lagain;
+                    var parentNuclide = data.Nuclides.FirstOrDefault();
+                    if (parentNuclide is null)
+                        continue;
 
-                    // コメント行を読み飛ばす。
-                    if (ln.StartsWith("#"))
-                        goto Lagain;
+                    var type = parentNuclide.IntakeRoute;
+                    var hasProgeny = data.Nuclides.Count > 1;
 
-                    // 行末コメントを除去する。
-                    var trailingComment = ln.IndexOf("#");
-                    if (trailingComment != -1)
-                        ln = ln.Substring(0, trailingComment).TrimEnd();
-                    return ln;
+                    comboBox_Route.Items.Add(type);
+                    inpFile.Add(type, inputFile);
+
+                    if (hasProgeny)
+                        anyProgeny = true;
                 }
-
-                var line = GetNextLine();
-                var parts = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var type = parts[1];
-
-                // 子孫核種の有無を判断する。
-                var hasProgeny = false;
-                while ((line = GetNextLine()) != null)
+                catch
                 {
-                    if (line.Trim().StartsWith("cont"))
-                    {
-                        hasProgeny = true;
-                        break;
-                    }
+                    // 読み込みに失敗したので一覧には出さない。
                 }
-
-                comboBox_Route.Items.Add(type);
-                inpFile.Add(type, inputFile);
-
-                if (hasProgeny)
-                    anyProgeny = true;
             }
 
             if (anyProgeny)
@@ -127,50 +106,28 @@ namespace FlexID
             var anyProgeny = false;
             foreach (var inputFile in inputFiles)
             {
-                var inputLines = File.ReadLines(inputFile).GetEnumerator();
-
-                string GetNextLine()
+                try
                 {
-                Lagain:
-                    if (!inputLines.MoveNext())
-                        return null;
-                    var ln = inputLines.Current.Trim();
+                    var reader = new DataReader(inputFile, calcProgeny: true);
+                    var data = reader.Read_EIR().FirstOrDefault();
 
-                    // 空行を読み飛ばす。
-                    if (ln.Length == 0)
-                        goto Lagain;
+                    var parentNuclide = data?.Nuclides.FirstOrDefault();
+                    if (parentNuclide is null)
+                        continue;
 
-                    // コメント行を読み飛ばす。
-                    if (ln.StartsWith("#"))
-                        goto Lagain;
+                    var type = parentNuclide.IntakeRoute;
+                    var hasProgeny = data.Nuclides.Count > 1;
 
-                    // 行末コメントを除去する。
-                    var trailingComment = ln.IndexOf("#");
-                    if (trailingComment != -1)
-                        ln = ln.Substring(0, trailingComment).TrimEnd();
-                    return ln;
+                    Route_EIR.Items.Add(type);
+                    inpFile.Add(type, inputFile);
+
+                    if (hasProgeny)
+                        anyProgeny = true;
                 }
-
-                var line = GetNextLine();
-                var parts = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var type = parts[1];
-
-                // 子孫核種の有無を判断する。
-                var hasProgeny = false;
-                while ((line = GetNextLine()) != null)
+                catch
                 {
-                    if (line.Trim().StartsWith("cont"))
-                    {
-                        hasProgeny = true;
-                        break;
-                    }
+                    // 読み込みに失敗したので一覧には出さない。
                 }
-
-                Route_EIR.Items.Add(type);
-                inpFile.Add(type, inputFile);
-
-                if (hasProgeny)
-                    anyProgeny = true;
             }
 
             if (anyProgeny)
