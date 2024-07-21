@@ -141,7 +141,7 @@ namespace FlexID.Calc.Tests
         [InlineData(@"Sr-90_ing", "5years old")]
         [InlineData(@"Sr-90_ing", "10years old")]
         [InlineData(@"Sr-90_ing", "15years old")]
-        [InlineData(@"Sr-90_ing", "adult")]
+        [InlineData(@"Sr-90_ing", "Adult")]
         public void Test_EIR(string target, string exposureAge)
         {
             var nuclide = target.Split('_')[0];
@@ -162,7 +162,7 @@ namespace FlexID.Calc.Tests
                 exposureAge == "5years old"  /**/? "65years" :   // 70years -  5years
                 exposureAge == "10years old" /**/? "60years" :   // 70years - 10years
                 exposureAge == "15years old" /**/? "55years" :   // 70years - 15years
-                exposureAge == "adult"       /**/? "50years" :   // 75years - 25years
+                exposureAge == "Adult"       /**/? "50years" :   // 75years - 25years
                 throw new NotSupportedException();
 
             var main = new MainRoutine_EIR();
