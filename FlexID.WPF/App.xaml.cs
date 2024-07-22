@@ -1,3 +1,4 @@
+using FlexID.ViewModels;
 using FlexID.Views;
 using Prism.Ioc;
 using System.Windows;
@@ -11,6 +12,7 @@ namespace FlexID
     {
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterSingleton<CalcState>();
             containerRegistry.RegisterForNavigation<InputOIRView>();
             containerRegistry.RegisterForNavigation<InputEIRView>();
         }

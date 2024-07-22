@@ -1,4 +1,5 @@
 using Prism.Mvvm;
+using Reactive.Bindings;
 
 namespace FlexID.ViewModels
 {
@@ -10,5 +11,10 @@ namespace FlexID.ViewModels
         public MainWindowViewModel()
         {
         }
+    }
+
+    public class CalcState
+    {
+        public ReactivePropertySlim<bool> CanExecute { get; } = new ReactivePropertySlim<bool>(true);
     }
 }

@@ -3,8 +3,10 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:prism="http://prismlibrary.com/"
+  xmlns:vb="clr-namespace:FlexID.Views.Behaviors"
   xmlns:vm="clr-namespace:FlexID.ViewModels"
   d:DataContext="{d:DesignInstance vm:InputEIRViewModel}"
   d:Width="500"
@@ -39,15 +41,26 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox />
-      <Button Grid.Column="2" Content="Browse" />
+      <TextBox Text="{Binding OutputFilePath.Value}">
+        <i:Interaction.Behaviors>
+          <vb:PathDropBehavior />
+        </i:Interaction.Behaviors>
+      </TextBox>
+      <Button
+        Grid.Column="2"
+        Command="{Binding SelectOutputFilePathCommand}"
+        Content="Browse" />
     </Grid>
 
     <Label
       Grid.Row="1"
       Grid.Column="0"
       Content="Nuclide" />
-    <ComboBox Grid.Row="1" Grid.Column="1" />
+    <ComboBox
+      Grid.Row="1"
+      Grid.Column="1"
+      ItemsSource="{Binding Nuclides}"
+      SelectedValue="{Binding SelectedNuclide.Value}" />
 
     <Label
       Grid.Row="2"
@@ -62,15 +75,26 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <RadioButton Grid.Column="0" Content="Yes" />
-      <RadioButton Grid.Column="1" Content="No" />
+      <RadioButton
+        Grid.Column="0"
+        Content="Yes"
+        IsChecked="{Binding CalcProgeny.Value}"
+        IsEnabled="{Binding HasProgeny.Value}" />
+      <RadioButton
+        Grid.Column="1"
+        Content="No"
+        IsChecked="{Binding CalcProgeny.Value, Converter={StaticResource Inverted}}" />
     </Grid>
 
     <Label
       Grid.Row="3"
       Grid.Column="0"
       Content="Route / &#xA;Chemical Form" />
-    <ComboBox Grid.Row="3" Grid.Column="1" />
+    <ComboBox
+      Grid.Row="3"
+      Grid.Column="1"
+      ItemsSource="{Binding ModelTypes}"
+      SelectedValue="{Binding SelectedModelType.Value}" />
 
     <Label
       Grid.Row="4"
@@ -82,8 +106,15 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox />
-      <Button Grid.Column="2" Content="Browse" />
+      <TextBox Text="{Binding CalcTimeMeshFilePath.Value}">
+        <i:Interaction.Behaviors>
+          <vb:PathDropBehavior />
+        </i:Interaction.Behaviors>
+      </TextBox>
+      <Button
+        Grid.Column="2"
+        Command="{Binding SelectCalcTimeMeshFilePathCommand}"
+        Content="Browse" />
     </Grid>
 
     <Label
@@ -96,8 +127,15 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox />
-      <Button Grid.Column="2" Content="Browse" />
+      <TextBox Text="{Binding OutTimeMeshFilePath.Value}">
+        <i:Interaction.Behaviors>
+          <vb:PathDropBehavior />
+        </i:Interaction.Behaviors>
+      </TextBox>
+      <Button
+        Grid.Column="2"
+        Command="{Binding SelectOutputFilePathCommand}"
+        Content="Browse" />
     </Grid>
 
     <Label
@@ -118,12 +156,14 @@
         Width="60"
         Margin="32,4"
         HorizontalContentAlignment="Center"
-        d:Text="50" />
+        d:Text="50"
+        Text="{Binding CommitmentPeriod.Value}" />
       <ComboBox
         Grid.Column="1"
         Width="120"
         Margin="32,4"
-        ItemsSource="{Binding CommitmentPeriodUnits, Mode=OneTime}" />
+        ItemsSource="{Binding CommitmentPeriodUnits, Mode=OneTime}"
+        SelectedValue="{Binding SelectedCommitmentPeriodUnit.Value}" />
     </Grid>
 
     <Label
@@ -143,6 +183,7 @@
         Height="36"
         Margin="0,0,32,0"
         HorizontalAlignment="Right"
+        Command="{Binding RunCommand}"
         Content="Run" />
     </Grid>
   </Grid>

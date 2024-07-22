@@ -2,9 +2,12 @@
   x:Class="FlexID.App"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:prism="http://prismlibrary.com/">
+  xmlns:prism="http://prismlibrary.com/"
+  xmlns:vc="clr-namespace:FlexID.VIews.Converters">
 
   <prism:PrismApplication.Resources>
+    <vc:InvertedBooleanConverter x:Key="Inverted" />
+
     <Style TargetType="TabItem">
       <Setter Property="Padding" Value="8,2" />
     </Style>

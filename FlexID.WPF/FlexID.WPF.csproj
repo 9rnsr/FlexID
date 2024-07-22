@@ -25,4 +25,8 @@
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
+  </ItemGroup>
+
 </Project>
