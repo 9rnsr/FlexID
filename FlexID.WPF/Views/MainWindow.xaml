@@ -1,0 +1,33 @@
+﻿<Window
+  x:Class="FlexID.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:prism="http://prismlibrary.com/"
+  xmlns:v="clr-namespace:FlexID.Views"
+  Title="FlexID"
+  Width="600"
+  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+  FontSize="14"
+  SizeToContent="Height"
+  mc:Ignorable="d">
+
+  <TabControl
+    Margin="4"
+    Padding="32,12"
+    prism:RegionManager.RegionName="ContentRegion"
+    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+    Grid.IsSharedSizeScope="True">
+
+    <TabItem Header="OIR">
+      <v:InputOIRView />
+    </TabItem>
+
+    <TabItem Header="EIR">
+      <v:InputEIRView />
+    </TabItem>
+
+  </TabControl>
+
+</Window>
