@@ -13,7 +13,7 @@ I-129 Ingestion
 #-----+---------------------+---------------+---------------
   inp   input                     ---         ---
   acc   Oralcavity             7200.0         O-cavity
-  acc   OralcavityRe           7200.0         O-cavity
+  acc   OralcavityRe            720.0         O-cavity
   acc   Oesophagus-f          12343.0         Oesophagus-f
   acc   Oesophagus-s           2160.0         Oesophagus-s
   acc   Oesophagus-sRe         2160.0         Oesophagus-s

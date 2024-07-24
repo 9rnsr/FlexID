@@ -14,7 +14,7 @@ Zn-65 Inhalation:Type-S
   inp   input                     ---         ---
   acc   Oesophagus-S           2160.0         Oesophagus-s
   acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.03015     SI-cont
+  acc   SI-con                    6.030151    SI-cont
   acc   SI-conRe                 12.0         SI-cont
   acc   RC-con                    2.0         RC-cont
   acc   LC-con                    2.0         LC-cont

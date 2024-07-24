@@ -221,7 +221,7 @@ Cs-137 Inhalation:Type-F
   acc   INT-F                    20.00003     ALV
   acc   LNTH-F                   20.0         LN-Th
   exc   Environment               ---         ---
-  acc   Plasma                  263.79        Blood
+  acc   Plasma                  263.78        Blood
   acc   Ht-wall                  61.4         Ht-wall
   acc   Liver                    61.4         Liver
   acc   Kidneys                  61.4         Kidneys

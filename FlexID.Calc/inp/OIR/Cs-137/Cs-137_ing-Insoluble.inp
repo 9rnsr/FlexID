@@ -20,7 +20,7 @@ Cs-137 Ingestion:Insoluble
   acc   St-con                   20.57        St-cont
   acc   St-conRe                 20.57        St-cont
   acc   SI-wall                  10.599       SI-wall
-  acc   SI-con                    6.66667     SI-cont
+  acc   SI-con                    6.6666667   SI-cont
   acc   SI-conRe                600.0         SI-cont
   acc   RC-wall                   7.431       RC-wall
   acc   RC-con                    2.0         RC-cont
@@ -165,7 +165,7 @@ Cs-137 Ingestion:Insoluble
   acc   LC-con                    2.0         LC-cont
   acc   RS-con                    2.0         RS-cont
   exc   Faeces                    ---         ---
-  acc   Plasma                  263.79        Blood
+  acc   Plasma                  263.78        Blood
   acc   Ht-wall                  61.4         Ht-wall
   acc   Liver                    61.4         Liver
   acc   Kidneys                  61.4         Kidneys

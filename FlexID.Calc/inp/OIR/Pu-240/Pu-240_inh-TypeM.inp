@@ -64,7 +64,7 @@ Pu-240 Inhalation:Type-M
   acc   C-bone-V                  8.21E-5     C-bone-V
   acc   C-marrow                  0.0076      C-marrow
   acc   T-bone-S                  6.16E-4     T-bone-S
-  acc   T-bone-V                  1.23E-4     T-bone-V
+  acc   T-bone-V                  4.9300E-4   T-bone-V
   acc   T-marrow                  0.0076      T-marrow
   acc   Other-Kidneys             1.266E-4    Kidneys
   acc   Ovaries                   3.8E-4      Ovaries
