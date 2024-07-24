@@ -8,52 +8,52 @@ Tc-99 Inhalation:Type-F
 
 
 [Tc-99:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   OralcavityRe            720.0         O-cavity
-  acc   Oesophagus-s           2160.0         Oesophagus-s
-  acc   Oesophagus-sRe         2160.0         Oesophagus-s
-  acc   St-wall                  50.0         St-wall
-  acc   St-con                   20.57        St-cont
-  acc   St-conRe                 20.57        St-cont
-  acc   SI-con                   60.0         SI-cont
-  acc   SI-conRe                 60.0         SI-cont
-  acc   RC-wall                   1.39        RC-wall
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   ET1-F                     2.1         ET1-sur
-  acc   ET2-F                   200.0         ET2-sur
-  acc   ETseq-F                 100.001       ET2-seq
-  acc   LNET-F                  100.0         LN-ET
-  acc   BB-F                    110.0         Bronchi
-  acc   BBseq-F                 100.001       Bronchi-q
-  acc   bb-F                    100.2         Brchiole
-  acc   bbseq-F                 100.001       Brchiole-q
-  acc   ALV-F                   100.003       ALV
-  acc   INT-F                   100.00003     ALV
-  acc   LNTH-F                  100.0         LN-Th
-  exc   Environment               ---         ---
-  acc   Blood                   100.0         Blood
-  acc   Liver1                    8.3172      Liver
-  acc   Liver2                    0.0347      Liver
-  acc   Kidneys1                  8.32        Kidneys
-  acc   Kidneys2                  0.0347      Kidneys
-  acc   Thyroid1                101.0         Thyroid
-  acc   Thyroid2                  1.0         Thyroid
-  acc   S-glands                 50.0         S-glands
-  acc   T-bone-S                  0.46162     T-bone-S
-  acc   T-bone-V                  4.93E-4     T-bone-V
-  acc   C-bone-S                  0.46162     C-bone-S
-  acc   C-bone-V                  8.21E-5     C-bone-V
-  acc   ST0                      50.0         Other
-  acc   ST1                       0.462       Other
-  acc   ST2                       0.0347      Other
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-s          Oesophagus-s
+  acc   Oesophagus-sRe        Oesophagus-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  exc   Environment           ---
+  acc   Blood                 Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Tc-99:transfer]
 #-----------------------+---------------------+--------------

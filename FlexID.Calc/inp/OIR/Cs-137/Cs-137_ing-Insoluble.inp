@@ -9,47 +9,47 @@ Cs-137 Ingestion:Insoluble
 
 
 [Cs-137:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-wall                   4.589       St-wall
-  acc   St-con                   20.57        St-cont
-  acc   St-conRe                 20.57        St-cont
-  acc   SI-wall                  10.599       SI-wall
-  acc   SI-con                    6.6666667   SI-cont
-  acc   SI-conRe                600.0         SI-cont
-  acc   RC-wall                   7.431       RC-wall
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-wall                   7.431       LC-wall
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-wall                   7.431       RS-wall
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Plasma                  236.87753     Blood
-  acc   RBC                       0.257       Blood
-  acc   Liver                     2.253       Liver
-  acc   Kidneys                  33.58        Kidneys
-  acc   Spleen                    5.295       Spleen
-  acc   Pancreas                  1.7683      Pancreas
-  acc   SkeletalMuscle            0.0751      Muscle
-  acc   Skin                      0.8829      Skin
-  acc   Adipose                   1.77        Adipose
-  acc   Brain                     0.0848      Brain
-  acc   Ht-wall                   8.07        Ht-wall
-  acc   Lung-Tis                  1.47        Lung-Tis
-  acc   R-marrow                  0.706       R-marrow
-  acc   Cartilage                 0.2         Cartilage
-  acc   C-bone-S                  0.212       C-bone-S
-  acc   T-bone-S                  0.212       T-bone-S
-  acc   Other1                    0.762       Other
-  acc   Other2                    0.00141     Other
-  exc   Excreta(sweat)            ---         ---
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-wall               SI-wall
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-wall               LC-wall
+  acc   LC-con                LC-cont
+  acc   RS-wall               RS-wall
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Spleen                Spleen
+  acc   Pancreas              Pancreas
+  acc   SkeletalMuscle        Muscle
+  acc   Skin                  Skin
+  acc   Adipose               Adipose
+  acc   Brain                 Brain
+  acc   Ht-wall               Ht-wall
+  acc   Lung-Tis              Lung-Tis
+  acc   R-marrow              R-marrow
+  acc   Cartilage             Cartilage
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Other1                Other
+  acc   Other2                Other
+  exc   Excreta(sweat)        ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Cs-137:transfer]
 #-----------------------+---------------------+--------------
@@ -153,65 +153,65 @@ Cs-137 Ingestion:Insoluble
 
 
 [Ba-137m:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.00060006  SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Plasma                  263.78        Blood
-  acc   Ht-wall                  61.4         Ht-wall
-  acc   Liver                    61.4         Liver
-  acc   Kidneys                  61.4         Kidneys
-  acc   SkeletalMuscle           61.4         Muscle
-  acc   St-wall                  61.4         St-wall
-  acc   SI-wall                  61.4         SI-wall
-  acc   RC-wall                  61.4         RC-wall
-  acc   LC-wall                  61.4         LC-wall
-  acc   RS-wall                  61.4         RS-wall
-  acc   Spleen                   61.4         Spleen
-  acc   Pancreas                 61.4         Pancreas
-  acc   Brain                    61.4         Brain
-  acc   R-marrow                 61.4         R-marrow
-  acc   Skin                     61.4         Skin
-  acc   Lung-Tis                 61.4         Lung-Tis
-  acc   Adipose                  61.4         Adipose
-  acc   T-bone-S                  0.694       T-bone-S
-  acc   C-bone-S                  0.694       C-bone-S
-  acc   Other                    61.4         Other
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
-  acc   Cartilage                61.4         Cartilage
-  acc   Exch-T-bone-V             0.139       T-bone-V
-  acc   Exch-C-bone-V             0.139       C-bone-V
-  acc   Noch-T-bone-V             8.21E-5     T-bone-V
-  acc   Noch-C-bone-V             4.93E-4     C-bone-V
-  acc   Dec-RBC                1000.0         Blood
-  acc   Dec-Muscle             1000.0         Muscle
-  acc   Dec-St-wall             200.0         St-wall
-  acc   Dec-SI-wall             200.0         SI-wall
-  acc   Dec-RC-wall             200.0         RC-wall
-  acc   Dec-LC-wall             200.0         LC-wall
-  acc   Dec-RS-wall             200.0         RS-wall
-  acc   Dec-Liver               200.0         Liver
-  acc   Dec-Kidneys             200.0         Kidneys
-  acc   Dec-Spleen              200.0         Spleen
-  acc   Dec-Pancreas            200.0         Pancreas
-  acc   Dec-Skin                200.0         Skin
-  acc   Dec-Adipose             200.0         Adipose
-  acc   Dec-Brain               200.0         Brain
-  acc   Dec-Ht-wall             200.0         Ht-wall
-  acc   Dec-Lung-Tis            200.0         Lung-Tis
-  acc   Dec-R-marrow            200.0         R-marrow
-  acc   Dec-Cartilage           200.0         Cartilage
-  acc   Dec-Other1              200.0         Other
-  acc   Dec-Other2              200.0         Other
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Plasma                Blood
+  acc   Ht-wall               Ht-wall
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   SkeletalMuscle        Muscle
+  acc   St-wall               St-wall
+  acc   SI-wall               SI-wall
+  acc   RC-wall               RC-wall
+  acc   LC-wall               LC-wall
+  acc   RS-wall               RS-wall
+  acc   Spleen                Spleen
+  acc   Pancreas              Pancreas
+  acc   Brain                 Brain
+  acc   R-marrow              R-marrow
+  acc   Skin                  Skin
+  acc   Lung-Tis              Lung-Tis
+  acc   Adipose               Adipose
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-S              C-bone-S
+  acc   Other                 Other
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+  acc   Cartilage             Cartilage
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Dec-RBC               Blood
+  acc   Dec-Muscle            Muscle
+  acc   Dec-St-wall           St-wall
+  acc   Dec-SI-wall           SI-wall
+  acc   Dec-RC-wall           RC-wall
+  acc   Dec-LC-wall           LC-wall
+  acc   Dec-RS-wall           RS-wall
+  acc   Dec-Liver             Liver
+  acc   Dec-Kidneys           Kidneys
+  acc   Dec-Spleen            Spleen
+  acc   Dec-Pancreas          Pancreas
+  acc   Dec-Skin              Skin
+  acc   Dec-Adipose           Adipose
+  acc   Dec-Brain             Brain
+  acc   Dec-Ht-wall           Ht-wall
+  acc   Dec-Lung-Tis          Lung-Tis
+  acc   Dec-R-marrow          R-marrow
+  acc   Dec-Cartilage         Cartilage
+  acc   Dec-Other1            Other
+  acc   Dec-Other2            Other
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------

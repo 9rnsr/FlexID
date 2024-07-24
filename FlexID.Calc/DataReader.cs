@@ -545,13 +545,12 @@ namespace FlexID.Calc
 
                     var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (values.Length != 4)
-                        throw Program.Error($"Line {lineNum}: Compartment definition should have 4 values.");
+                    if (values.Length != 3)
+                        throw Program.Error($"Line {lineNum}: Compartment definition should have 3 values.");
 
                     var organFn = values[0];        // コンパートメント機能
                     var organName = values[1];      // コンパートメント名
-                    var bioDecayStr = values[2];    // 生物学的崩壊定数
-                    var sourceRegion = values[3];   // コンパートメントに対応する線源領域の名称
+                    var sourceRegion = values[2];   // コンパートメントに対応する線源領域の名称
 
                     var organFunc =
                         organFn == "inp" ? OrganFunc.inp :
@@ -560,19 +559,6 @@ namespace FlexID.Calc
                         organFn == "exc" ? OrganFunc.exc :
                         throw Program.Error($"Line {lineNum}: Unrecognized organ function '{organFn}'.");
 
-                    double bioDecay;
-                    if (organFunc == OrganFunc.acc)
-                    {
-                        if (!double.TryParse(bioDecayStr, out bioDecay))
-                            throw Program.Error($"Line {lineNum}: Bio-decay value for '{organFunc} shoule be a number, not '{bioDecayStr}'.");
-                    }
-                    else
-                    {
-                        if (!IsBar(bioDecayStr))
-                            throw Program.Error($"Line {lineNum}: Bio-decay value for '{organFunc}' should be '---', not '{bioDecayStr}'.");
-                        bioDecay = 1.0;
-                    }
-
                     var organ = new Organ
                     {
                         Nuclide = null,     // 後で設定する。
@@ -580,7 +566,6 @@ namespace FlexID.Calc
                         Index = -1,         // 後で設定する。
                         Name = organName,
                         Func = organFunc,
-                        BioDecay = bioDecay,
                         Inflows = new List<Inflow>(),
                     };
 
@@ -805,12 +790,6 @@ namespace FlexID.Calc
                     else
                     {
                         var sum = sumOfOutflowCoeff[organFrom];
-
-                        if (organFrom.Func == OrganFunc.acc)
-                        {
-                            if (Math.Round(sum, 6) != Math.Round(organFrom.BioDecay, 6))
-                                throw Program.Error($"{organFrom.Nuclide.Nuclide}/{organFrom.Name} misamtch BioDecay, {sum} != {organFrom.BioDecay}.");
-                        }
 
                         // fromにおける生物学的崩壊定数
                         organFrom.BioDecay = organFrom.Func == OrganFunc.acc ? sum : 1.0;

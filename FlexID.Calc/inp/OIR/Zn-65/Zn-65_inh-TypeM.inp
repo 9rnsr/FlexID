@@ -8,58 +8,58 @@ Zn-65 Inhalation:Type-M
 
 
 [Zn-65:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.6666667   SI-cont
-  acc   SI-conRe                 12.0         SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   ET1-F                     2.1         ET1-sur
-  acc   ET2-F                   103.0         ET2-sur
-  acc   ETseq-F                   3.001       ET2-seq
-  acc   LNET-F                    3.0         LN-ET
-  acc   BB-F                     13.0         Bronchi
-  acc   BBseq-F                   3.001       Bronchi-q
-  acc   bb-F                      3.2         Brchiole
-  acc   bbseq-F                   3.001       Brchiole-q
-  acc   ALV-F                     3.003       ALV
-  acc   INT-F                     3.00003     ALV
-  acc   LNTH-F                    3.0         LN-Th
-  acc   ET1-S                     2.1         ET1-sur
-  acc   ET2-S                   100.005       ET2-sur
-  acc   ETseq-S                   0.006       ET2-seq
-  acc   LNET-S                    0.005       LN-ET
-  acc   BB-S                     10.005       Bronchi
-  acc   BBseq-S                   0.006       Bronchi-q
-  acc   bb-S                      0.205       Brchiole
-  acc   bbseq-S                   0.006       Brchiole-q
-  acc   ALV-S                     0.008       ALV
-  acc   INT-S                     0.00503     ALV
-  acc   LNTH-S                    0.005       LN-Th
-  exc   Environment               ---         ---
-  acc   Plasma                  141.81        Blood
-  acc   ST0                      10.0         Other
-  acc   ST1                       3.0         Other
-  acc   ST2                       0.01        Other
-  acc   Liver1                   20.067       Liver
-  acc   Liver2                    0.6         Liver
-  acc   Pancreas                  2.5         Pancreas
-  acc   Muscle                    0.005       Muscle
-  acc   Kidneys                   0.7         Kidneys
-  acc   RBC                       0.14        Blood
-  acc   C-bone-S                  0.01053     C-bone-S
-  acc   C-bone-V                  0.0000821   C-bone-V
-  acc   T-bone-S                  0.01053     T-bone-S
-  acc   T-bone-V                  0.000493    T-bone-V
-  exc   Excreta                   ---         ---
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+  acc   Plasma                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   Muscle                Muscle
+  acc   Kidneys               Kidneys
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  exc   Excreta               ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Zn-65:transfer]
 #-----------------------+---------------------+--------------

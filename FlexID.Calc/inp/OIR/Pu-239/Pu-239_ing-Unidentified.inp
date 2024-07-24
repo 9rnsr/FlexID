@@ -8,39 +8,39 @@ Pu-239 Ingestion:Unidentified
 
 
 [Pu-239:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.0030015   SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood1                    0.7700002   Blood
-  acc   Blood2                  100.0         Blood
-  acc   ST0                       0.099       Other
-  acc   ST1                       0.001386    Other
-  acc   ST2                       1.266E-4    Other
-  acc   Liver0                    0.0462102   Liver
-  acc   Liver1                    0.0019      Liver
-  acc   Liver2                    1.266E-4    Liver
-  acc   C-bone-S                  1.026E-4    C-bone-S
-  acc   C-bone-V                  8.21E-5     C-bone-V
-  acc   C-marrow                  0.0076      C-marrow
-  acc   T-bone-S                  6.16E-4     T-bone-S
-  acc   T-bone-V                  4.9300E-4   T-bone-V
-  acc   T-marrow                  0.0076      T-marrow
-  acc   Other-Kidneys             1.266E-4    Kidneys
-  acc   Ovaries                   3.8E-4      Ovaries
-  acc   Testes                    3.8E-4      Testes
-  acc   Renal-tubules             0.017329    Ureters
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   T-marrow              T-marrow
+  acc   Other-Kidneys         Kidneys
+  acc   Ovaries               Ovaries
+  acc   Testes                Testes
+  acc   Renal-tubules         Ureters
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Pu-239:transfer]
 #-----------------------+---------------------+--------------

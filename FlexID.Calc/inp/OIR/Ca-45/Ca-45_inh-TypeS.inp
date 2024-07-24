@@ -8,52 +8,52 @@ Ca-45 Inhalation:Type-S
 
 
 [Ca-45:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.024096    SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   ET1-F                     2.1         ET1-sur
-  acc   ET2-F                   103.0         ET2-sur
-  acc   ETseq-F                   3.001       ET2-seq
-  acc   LNET-F                    3.0         LN-ET
-  acc   BB-F                     13.0         Bronchi
-  acc   BBseq-F                   3.001       Bronchi-q
-  acc   bb-F                      3.2         Brchiole
-  acc   bbseq-F                   3.001       Brchiole-q
-  acc   ALV-F                     3.003       ALV
-  acc   INT-F                     3.00003     ALV
-  acc   LNTH-F                    3.0         LN-Th
-  acc   ET1-S                     2.1         ET1-sur
-  acc   ET2-S                   100.0001      ET2-sur
-  acc   ETseq-S                   0.0011      ET2-seq
-  acc   LNET-S                    0.0001      LN-ET
-  acc   BB-S                     10.0001      Bronchi
-  acc   BBseq-S                   0.0011      Bronchi-q
-  acc   bb-S                      0.2001      Brchiole
-  acc   bbseq-S                   0.0011      Brchiole-q
-  acc   ALV-S                     0.0031      ALV
-  acc   INT-S                     0.00013     ALV
-  acc   LNTH-S                    0.0001      LN-Th
-  exc   Environment               ---         ---
-  acc   Blood                    15.00075     Blood
-  acc   ST0                       2.9         Other
-  acc   ST1                       0.1733      Other
-  acc   ST2                       0.00038     Other
-  acc   C-bone-S                  0.694       C-bone-S
-  acc   Exch-C-bone-V             0.006932    C-bone-V
-  acc   Noch-C-bone-V             8.21E-5     C-bone-V
-  acc   T-bone-S                  0.694       T-bone-S
-  acc   Exch-T-bone-V             0.006932    T-bone-V
-  acc   Noch-T-bone-V             4.93E-4     T-bone-V
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Ca-45:transfer]
 #-----------------------+---------------------+--------------

@@ -9,31 +9,31 @@ Sr-90 Ingestion:Other
 
 
 [Sr-90:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    8.0         SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood1                   15.008       Blood
-  acc   ST0                       2.5         Other
-  acc   ST1                       0.116       Other
-  acc   ST2                       0.00038     Other
-  acc   C-bone-S                  0.694       C-bone-S
-  acc   Exch-C-bone-V             0.0086      C-bone-V
-  acc   Noch-C-bone-V             8.21E-5     C-bone-V
-  acc   T-bone-S                  0.694       T-bone-S
-  acc   Exch-T-bone-V             0.0086      T-bone-V
-  acc   Noch-T-bone-V             4.93E-4     T-bone-V
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood1                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Sr-90:transfer]
 #-----------------------+---------------------+--------------
@@ -85,31 +85,31 @@ Sr-90 Ingestion:Other
 
 
 [Y-90:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.0006      SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood1                   16.6         Blood
-  acc   Blood2                    0.462       Blood
-  acc   ST0                       0.231       Other
-  acc   ST1                       0.0019      Other
-  acc   Liver0                    0.2315      Liver
-  acc   Liver1                    0.0019      Liver
-  acc   Kidneys                   0.0019      Kidneys
-  acc   C-bone-S                  1.232E-4    C-bone-S
-  acc   C-bone-V                  8.21E-5     C-bone-V
-  acc   T-bone-S                  7.4E-4      T-bone-S
-  acc   T-bone-V                  4.93E-4     T-bone-V
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Y-90:transfer]
 #-----------------------+---------------------+--------------

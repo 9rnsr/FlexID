@@ -8,27 +8,27 @@ H-3 Ingestion:Insoluble
 
 
 [H-3:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.6666667   SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood                   400.7         Blood
-  acc   ExtravasHTO              44.00068     Other
-  acc   OBT1                      0.01733     Other
-  acc   OBT2                      0.0019      Other
-  exc   Breath(discharge)         ---         ---
-  exc   Skin(discharge)           ---         ---
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood                 Blood
+  acc   ExtravasHTO           Other
+  acc   OBT1                  Other
+  acc   OBT2                  Other
+  exc   Breath(discharge)     ---
+  exc   Skin(discharge)       ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------

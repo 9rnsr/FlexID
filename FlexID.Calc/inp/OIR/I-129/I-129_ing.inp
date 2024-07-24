@@ -8,39 +8,39 @@ I-129 Ingestion
 
 
 [I-129:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   OralcavityRe            720.0         O-cavity
-  acc   Oesophagus-f          12343.0         Oesophagus-f
-  acc   Oesophagus-s           2160.0         Oesophagus-s
-  acc   Oesophagus-sRe         2160.0         Oesophagus-s
-  acc   St-wall                  50.0         St-wall
-  acc   St-con                   20.57        St-cont
-  acc   St-conRe                 20.57        St-cont
-  acc   SI-con                  600.0         SI-cont
-  acc   SI-conRe                600.0         SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood1                  672.86        Blood
-  acc   Blood2                   39.6         Blood
-  acc   Liver1                  100.0         Liver
-  acc   Liver2                   21.22        Liver
-  acc   Kidneys1                100.0         Kidneys
-  acc   Kidneys2                 21.14        Kidneys
-  acc   Thyroid1                131.0         Thyroid
-  acc   Thyroid2                  0.0077      Thyroid
-  acc   S-glands                 50.0         S-glands
-  acc   Other1                  365.0         Other
-  acc   Other2                   56.0         Other
-  acc   Other3                   22.2         Other
-  acc   Other4                    0.76        Other
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophagus-f
+  acc   Oesophagus-s          Oesophagus-s
+  acc   Oesophagus-sRe        Oesophagus-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   Other1                Other
+  acc   Other2                Other
+  acc   Other3                Other
+  acc   Other4                Other
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [I-129:transfer]
 #-----------------------+---------------------+--------------
