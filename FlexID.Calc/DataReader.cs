@@ -812,6 +812,9 @@ namespace FlexID.Calc
                                 throw Program.Error($"{organFrom.Nuclide.Nuclide}/{organFrom.Name} misamtch BioDecay, {sum} != {organFrom.BioDecay}.");
                         }
 
+                        // fromにおける生物学的崩壊定数
+                        organFrom.BioDecay = organFrom.Func == OrganFunc.acc ? sum : 1.0;
+
                         // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[/d]の総計
                         inflowRate = sum == 0 ? 0.0 : coeff / sum;
                     }
