@@ -761,6 +761,11 @@ namespace FlexID.Calc
                     if (coeff != null && coeff < 0.0)
                         throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
 
+                    if (isRate && organFrom.Func != OrganFunc.inp)
+                        throw Program.Error($"Line {lineNum}: Transfer coefficient[%] can be used only for initial distribution path.");
+                    if (!isRate && organFrom.Func == OrganFunc.inp)
+                        throw Program.Error($"Line {lineNum}: Transfer coefficient[/d] cannot be used for initial distribution path.");
+
                     transfersCorrect.Add((organFrom, organTo, coeff ?? 0.0, isRate));
 
                     if (coeff is double coeff_v)
