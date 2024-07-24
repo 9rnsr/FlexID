@@ -8,47 +8,47 @@ Cs-134 Ingestion:Insoluble
 
 
 [Cs-134:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-wall                   4.589       St-wall
-  acc   St-con                   20.57        St-cont
-  acc   St-conRe                 20.57        St-cont
-  acc   SI-wall                  10.599       SI-wall
-  acc   SI-con                    6.66667     SI-cont
-  acc   SI-conRe                600.0         SI-cont
-  acc   RC-wall                   7.431       RC-wall
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-wall                   7.431       LC-wall
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-wall                   7.431       RS-wall
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Plasma                  236.87753     Blood
-  acc   RBC                       0.257       Blood
-  acc   Liver                     2.253       Liver
-  acc   Kidneys                  33.58        Kidneys
-  acc   Spleen                    5.295       Spleen
-  acc   Pancreas                  1.7683      Pancreas
-  acc   SkeletalMuscle            0.0751      Muscle
-  acc   Skin                      0.8829      Skin
-  acc   Adipose                   1.77        Adipose
-  acc   Brain                     0.0848      Brain
-  acc   Ht-wall                   8.07        Ht-wall
-  acc   Lung-Tis                  1.47        Lung-Tis
-  acc   R-marrow                  0.706       R-marrow
-  acc   Cartilage                 0.2         Cartilage
-  acc   C-bone-S                  0.212       C-bone-S
-  acc   T-bone-S                  0.212       T-bone-S
-  acc   Other1                    0.762       Other
-  acc   Other2                    0.00141     Other
-  exc   Excreta(sweat)            ---         ---
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-wall               SI-wall
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-wall               LC-wall
+  acc   LC-con                LC-cont
+  acc   RS-wall               RS-wall
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Spleen                Spleen
+  acc   Pancreas              Pancreas
+  acc   SkeletalMuscle        Muscle
+  acc   Skin                  Skin
+  acc   Adipose               Adipose
+  acc   Brain                 Brain
+  acc   Ht-wall               Ht-wall
+  acc   Lung-Tis              Lung-Tis
+  acc   R-marrow              R-marrow
+  acc   Cartilage             Cartilage
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Other1                Other
+  acc   Other2                Other
+  exc   Excreta(sweat)        ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Cs-134:transfer]
 #-----------------------+---------------------+--------------
@@ -56,79 +56,96 @@ Cs-134 Ingestion:Insoluble
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
-  Oralcavity              Oesophagus-F             90.0%
-  Oralcavity              Oesophagus-S             10.0%
-  Plasma                  St-wall                   1.4902%
-  Oesophagus-F            St-con                  100.0%
-  Oesophagus-S            St-con                  100.0%
-  St-wall                 St-conRe                  4.5762%
-  Plasma                  St-conRe                  1.9082%
-  Plasma                  SI-wall                  14.9022%
-  St-con                  SI-con                  100.0%
-  St-conRe                SI-conRe                100.0%
-  SI-wall                 SI-conRe                  1.9813%
-  Plasma                  SI-conRe                  0.4433%
-  Liver                   SI-conRe                  5.0155%
-  Plasma                  RC-wall                   2.3852%
-  SI-con                  RC-con                   90.0%
-  SI-conRe                RC-con                    1.0%
-  RC-wall                 RC-con                    2.826%
-  Plasma                  RC-con                    0.0084%
-  Plasma                  LC-wall                   2.3852%
-  RC-con                  LC-con                  100.0%
-  LC-wall                 LC-con                    2.826%
-  Plasma                  RS-wall                   1.1947%
-  LC-con                  RS-con                  100.0%
-  RS-wall                 RS-con                    2.826%
-  RS-con                  Faeces                  100.0%
-  St-wall                 Plasma                   90.6516%
-  SI-wall                 Plasma                   93.122%
-  SI-con                  Plasma                   10.0%
-  SI-conRe                Plasma                   99.0%
-  RC-wall                 Plasma                   92.316%
-  LC-wall                 Plasma                   92.316%
-  RS-wall                 Plasma                   92.316%
-  RBC                     Plasma                  100.0%
-  Liver                   Plasma                   94.9845%
-  Kidneys                 Plasma                   94.997%
-  Spleen                  Plasma                   94.9953%
-  Pancreas                Plasma                   95.0065%
-  SkeletalMuscle          Plasma                  100.0%
-  Skin                    Plasma                   98.1991%
-  Adipose                 Plasma                  100.0%
-  Brain                   Plasma                  100.0%
-  Ht-wall                 Plasma                  100.0%
-  Lung-Tis                Plasma                  100.0%
-  R-marrow                Plasma                  100.0%
-  Cartilage               Plasma                  100.0%
-  C-bone-S                Plasma                  100.0%
-  T-bone-S                Plasma                  100.0%
-  Other1                  Plasma                  100.0%
-  Other2                  Plasma                  100.0%
-  Plasma                  RBC                       0.7599%
-  St-wall                 Liver                     4.7723%
-  SI-wall                 Liver                     4.8967%
-  RC-wall                 Liver                     4.858%
-  LC-wall                 Liver                     4.858%
-  RS-wall                 Liver                     4.858%
-  Plasma                  Liver                     8.2321%
-  Spleen                  Liver                     5.0047%
-  Pancreas                Liver                     4.9935%
-  Plasma                  Kidneys                  28.3269%
-  Plasma                  Spleen                    2.2374%
-  Plasma                  Pancreas                  0.7472%
-  Plasma                  SkeletalMuscle           12.6648%
-  Plasma                  Skin                      1.8659%
-  Plasma                  Adipose                   3.7277%
-  Plasma                  Brain                     0.179%
-  Plasma                  Ht-wall                   5.9524%
-  Plasma                  Lung-Tis                  1.8659%
-  Plasma                  R-marrow                  2.2374%
-  Plasma                  Cartilage                 1.2665%
-  Plasma                  C-bone-S                  0.4475%
-  Plasma                  T-bone-S                  0.6712%
-  Plasma                  Other1                    4.0992%
-  Plasma                  Other2                    0.0015%
-  Skin                    Excreta(sweat)            1.8009%
-  Kidneys                 UB-con                    5.003%
-  UB-con                  Urine                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480           #  90.0%
+  Oralcavity              Oesophagus-S            720           #  10.0%
+  Oesophagus-F            St-con                12343           # 100.0%
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  90.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.137 p.142 Table 6.2
+#   fA = 0.1   (Ingested materials, Relatively insoluble forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
+  SI-con                  Plasma                    6.666666666666667E-1        # 10.0%
+
+# ICRP Publ.137 p.146 Fig.6,1
+  St-conRe                SI-conRe                 20.57        # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.137 p.142 Table 6.2 footnote¶
+#   fA = 1≒0.99   (Ingested materials, All unspecified compounds)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
+  SI-conRe                RC-con                    6           #   1.0%
+  SI-conRe                Plasma                  594           #  99.0%
+
+# ICRP Publ.137 p.147 Table 6.3
+  Plasma                  RBC                       1.8         #   0.7599%
+  Plasma                  SkeletalMuscle           30.0         #  12.6648%
+  Plasma                  Liver                    19.5         #   8.2321%
+  Plasma                  Kidneys                  67.1         #  28.3269%
+  Plasma                  Spleen                    5.30        #   2.2374%
+  Plasma                  Pancreas                  1.77        #   0.7472%
+  Plasma                  Skin                      4.42        #   1.8659%
+  Plasma                  Adipose                   8.83        #   3.7277%
+  Plasma                  Brain                     0.424       #   0.179%
+  Plasma                  Ht-wall                  14.1         #   5.9524%
+  Plasma                  Lung-Tis                  4.42        #   1.8659%
+  Plasma                  R-marrow                  5.3         #   2.2374%
+  Plasma                  Cartilage                 3.0         #   1.2665%
+  Plasma                  T-bone-S                  1.59        #   0.6712%
+  Plasma                  C-bone-S                  1.06        #   0.4475%
+  Plasma                  St-wall                   3.53        #   1.4902%
+  Plasma                  St-conRe                  4.52        #   1.9082%
+  Plasma                  SI-wall                  35.3         #  14.9022%
+  Plasma                  SI-conRe                  1.05        #   0.4433%
+  Plasma                  RC-wall                   5.65        #   2.3852%
+  Plasma                  RC-con                    0.02        #   0.0084%
+  Plasma                  LC-wall                   5.65        #   2.3852%
+  Plasma                  RS-wall                   2.83        #   1.1947%
+  Plasma                  Other1                    9.71        #   4.0992%
+  Plasma                  Other2                    0.00353     #   0.0015%
+  RBC                     Plasma                    0.257       # 100.0%
+  SkeletalMuscle          Plasma                    0.0751      # 100.0%
+  Liver                   Plasma                    2.14        #  94.9845%
+  Liver                   SI-conRe                  0.113       #   5.0155%
+  Kidneys                 UB-con                    1.68        #   5.003%
+  Kidneys                 Plasma                   31.9         #  94.997%
+  Spleen                  Plasma                    5.03        #  94.9953%
+  Spleen                  Liver                     0.265       #   5.0047%
+  Pancreas                Plasma                    1.68        #  95.0065%
+  Pancreas                Liver                     0.0883      #   4.9935%
+  Skin                    Plasma                    0.867       #  98.1991%
+  Skin                    Excreta(sweat)            0.0159      #   1.8009%
+  Adipose                 Plasma                    1.77        # 100.0%
+  Brain                   Plasma                    0.0848      # 100.0%
+  Ht-wall                 Plasma                    8.07        # 100.0%
+  Lung-Tis                Plasma                    1.47        # 100.0%
+  R-marrow                Plasma                    0.706       # 100.0%
+  Cartilage               Plasma                    0.2         # 100.0%
+  T-bone-S                Plasma                    0.212       # 100.0%
+  C-bone-S                Plasma                    0.212       # 100.0%
+  St-wall                 Plasma                    4.16        #  90.6516%
+  St-wall                 Liver                     0.219       #   4.7723%
+  St-wall                 St-conRe                  0.21        #   4.5762%
+  SI-wall                 Plasma                    9.87        #  93.122%
+  SI-wall                 Liver                     0.519       #   4.8967%
+  SI-wall                 SI-conRe                  0.21        #   1.9813%
+  RC-wall                 Plasma                    6.86        #  92.316%
+  RC-wall                 Liver                     0.361       #   4.858%
+  RC-wall                 RC-con                    0.21        #   2.826%
+  LC-wall                 Plasma                    6.86        #  92.316%
+  LC-wall                 Liver                     0.361       #   4.858%
+  LC-wall                 LC-con                    0.21        #   2.826%
+  RS-wall                 Plasma                    6.86        #  92.316%
+  RS-wall                 Liver                     0.361       #   4.858%
+  RS-wall                 RS-con                    0.21        #   2.826%
+  Other1                  Plasma                    0.762       # 100.0%
+  Other2                  Plasma                    0.00141     # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%

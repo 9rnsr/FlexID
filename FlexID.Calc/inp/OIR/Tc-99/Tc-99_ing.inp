@@ -8,42 +8,42 @@ Tc-99 Ingestion
 
 
 [Tc-99:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   OralcavityRe           7200.0         O-cavity
-  acc   Oesophagus-f          12343.0         Oesophagus-f
-  acc   Oesophagus-s           2160.0         Oesophagus-s
-  acc   Oesophagus-sRe         2160.0         Oesophagus-s
-  acc   St-wall                  50.0         St-wall
-  acc   St-con                   20.57        St-cont
-  acc   St-conRe                 20.57        St-cont
-  acc   SI-con                   60.0         SI-cont
-  acc   SI-conRe                 60.0         SI-cont
-  acc   RC-wall                   1.39        RC-wall
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood                   100.0         Blood
-  acc   Liver1                    8.3172      Liver
-  acc   Liver2                    0.0347      Liver
-  acc   Kidneys1                  8.32        Kidneys
-  acc   Kidneys2                  0.0347      Kidneys
-  acc   Thyroid1                101.0         Thyroid
-  acc   Thyroid2                  1.0         Thyroid
-  acc   S-glands                 50.0         S-glands
-  acc   T-bone-S                  0.46162     T-bone-S
-  acc   T-bone-V                  4.93E-4     T-bone-V
-  acc   C-bone-S                  0.46162     C-bone-S
-  acc   C-bone-V                  8.21E-5     C-bone-V
-  acc   ST0                      50.0         Other
-  acc   ST1                       0.462       Other
-  acc   ST2                       0.0347      Other
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophagus-f
+  acc   Oesophagus-s          Oesophagus-s
+  acc   Oesophagus-sRe        Oesophagus-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood                 Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Tc-99:transfer]
 #-----------------------+---------------------+--------------
@@ -51,52 +51,69 @@ Tc-99 Ingestion
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
-  S-glands                OralcavityRe            100.0%
-  Oralcavity              Oesophagus-f             90.0%
-  Oralcavity              Oesophagus-s             10.0%
-  OralcavityRe            Oesophagus-sRe          100.0%
-  Blood                   St-wall                   4.3%
-  Oesophagus-f            St-con                  100.0%
-  Oesophagus-s            St-con                  100.0%
-  Oesophagus-sRe          St-conRe                100.0%
-  St-wall                 St-conRe                100.0%
-  St-con                  SI-con                  100.0%
-  St-conRe                SI-conRe                100.0%
-  Blood                   RC-wall                   3.4%
-  SI-con                  RC-con                   10.0%
-  SI-conRe                RC-con                   10.0%
-  RC-wall                 RC-con                  100.0%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  SI-con                  Blood                    90.0%
-  SI-conRe                Blood                    90.0%
-  Liver1                  Blood                    98.9997%
-  Liver2                  Blood                   100.0%
-  Kidneys2                Blood                   100.0%
-  Thyroid1                Blood                    99.0099%
-  Thyroid2                Blood                   100.0%
-  T-bone-S                Blood                    98.9992%
-  T-bone-V                Blood                   100.0%
-  C-bone-S                Blood                    98.9992%
-  C-bone-V                Blood                   100.0%
-  ST0                     Blood                   100.0%
-  ST1                     Blood                   100.0%
-  ST2                     Blood                   100.0%
-  Blood                   Liver1                    4.5%
-  Liver1                  Liver2                    1.0003%
-  Blood                   Kidneys1                  0.7%
-  Blood                   Kidneys2                  0.04%
-  Blood                   Thyroid1                  7.0%
-  Thyroid1                Thyroid2                  0.9901%
-  Blood                   S-glands                  2.6%
-  Blood                   T-bone-S                  0.35%
-  T-bone-S                T-bone-V                  1.0008%
-  Blood                   C-bone-S                  0.35%
-  C-bone-S                C-bone-V                  1.0008%
-  Blood                   ST0                      71.88%
-  Blood                   ST1                       3.0%
-  Blood                   ST2                       0.18%
-  Blood                   UB-con                    1.7%
-  Kidneys1                UB-con                  100.0%
-  UB-con                  Urine                   100.0%
+
+  Oralcavity              Oesophagus-f           6480           #  90.0%
+  Oralcavity              Oesophagus-s            720           #  10.0%
+  Oesophagus-f            St-con                12343           # 100.0%
+  Oesophagus-s            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  10.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.134 p.322 Table 15.2
+#   fA = 0.9   (Ingested materials, All forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.9 * 6 / (1 - 0.9) = 54
+  SI-con                  Blood                    54           #  90.0%
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.134 p.334 Fig.15.1
+  OralcavityRe            Oesophagus-sRe          720           # 100.0%
+  Oesophagus-sRe          St-conRe               2160           # 100.0%
+  St-conRe                SI-conRe                 20.57        # 100.0%
+  SI-conRe                RC-con                    6           #  10.0%
+
+# ICRP Publ.134 p.322 Table 15.2 footnote¶
+#   fA = 0.9   (re-absorption)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.9 * 6 / (1 - 0.9) = 54
+  SI-conRe                Blood                    54           #  90.0%
+
+# ICRP Publ.134 p.334 Table 15.3
+  Blood                   Thyroid1                  7.0         #   7.0%
+  Blood                   ST0                      71.88        #  71.88%
+  Blood                   ST1                       3.0         #   3.0%
+  Blood                   ST2                       0.18        #   0.18%
+  Blood                   UB-con                    1.7         #   1.7%
+  Blood                   S-glands                  2.6         #   2.6%
+  Blood                   St-wall                   4.3         #   4.3%
+  Blood                   Kidneys1                  0.7         #   0.7%
+  Blood                   Kidneys2                  0.04        #   0.04%
+  Blood                   Liver1                    4.5         #   4.5%
+  Blood                   RC-wall                   3.4         #   3.4%
+  Blood                   T-bone-S                  0.35        #   0.35%
+  Blood                   C-bone-S                  0.35        #   0.35%
+  Thyroid1                Blood                   100           #  99.0099%
+  Thyroid1                Thyroid2                  1.0         #   0.9901%
+  Thyroid2                Blood                     1.0         # 100.0%
+  ST0                     Blood                    50           # 100.0%
+  ST1                     Blood                     0.462       # 100.0%
+  ST2                     Blood                     0.0347      # 100.0%
+  S-glands                OralcavityRe             50           # 100.0%
+  St-wall                 St-conRe                 50           # 100.0%
+  Kidneys1                UB-con                    8.32        # 100.0%
+  Kidneys2                Blood                     0.0347      # 100.0%
+  Liver1                  Blood                     8.234       #  98.9997%
+  Liver1                  Liver2                    0.0832      #   1.0003%
+  Liver2                  Blood                     0.0347      # 100.0%
+  RC-wall                 RC-con                    1.39        # 100.0%
+  T-bone-S                Blood                     0.457       #  98.9992%
+  T-bone-S                T-bone-V                  0.00462     #   1.0008%
+  C-bone-S                Blood                     0.457       #  98.9992%
+  C-bone-S                C-bone-V                  0.00462     #   1.0008%
+  T-bone-V                Blood                     0.000493    # 100.0%
+  C-bone-V                Blood                     0.0000821   # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%

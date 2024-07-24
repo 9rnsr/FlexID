@@ -8,39 +8,39 @@ Pu-242 Ingestion:Unidentified
 
 
 [Pu-242:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.0030015   SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood1                    0.7700002   Blood
-  acc   Blood2                  100.0         Blood
-  acc   ST0                       0.099       Other
-  acc   ST1                       0.001386    Other
-  acc   ST2                       1.266E-4    Other
-  acc   Liver0                    0.0462102   Liver
-  acc   Liver1                    0.0019      Liver
-  acc   Liver2                    1.266E-4    Liver
-  acc   C-bone-S                  1.026E-4    C-bone-S
-  acc   C-bone-V                  8.21E-5     C-bone-V
-  acc   C-marrow                  0.0076      C-marrow
-  acc   T-bone-S                  6.16E-4     T-bone-S
-  acc   T-bone-V                  1.23E-4     T-bone-V
-  acc   T-marrow                  0.0076      T-marrow
-  acc   Other-Kidneys             1.266E-4    Kidneys
-  acc   Ovaries                   3.8E-4      Ovaries
-  acc   Testes                    3.8E-4      Testes
-  acc   Renal-tubules             0.017329    Ureters
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   T-marrow              T-marrow
+  acc   Other-Kidneys         Kidneys
+  acc   Ovaries               Ovaries
+  acc   Testes                Testes
+  acc   Renal-tubules         Ureters
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [Pu-242:transfer]
 #-----------------------+---------------------+--------------
@@ -48,50 +48,60 @@ Pu-242 Ingestion:Unidentified
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
-  Oralcavity              Oesophagus-F             90.0%
-  Oralcavity              Oesophagus-S             10.0%
-  Oesophagus-F            St-con                  100.0%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  Liver0                  SI-con                    2.0%
-  SI-con                  RC-con                   99.95%
-  Blood1                  RC-con                    1.5%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  SI-con                  Blood1                    0.05%
-  Blood2                  Blood1                   67.55%
-  ST0                     Blood1                  100.0%
-  ST1                     Blood2                  100.0%
-  ST2                     Blood2                  100.0%
-  Liver1                  Blood2                   80.0%
-  Liver2                  Blood2                  100.0%
-  C-marrow                Blood2                  100.0%
-  T-marrow                Blood2                  100.0%
-  Other-Kidneys           Blood2                  100.0%
-  Ovaries                 Blood2                  100.0%
-  Testes                  Blood2                  100.0%
-  Blood2                  ST0                      28.95%
-  Blood1                  ST1                       2.404%
-  Blood1                  ST2                       3.0%
-  Blood1                  Liver0                   60.0%
-  Liver0                  Liver1                   98.0%
-  Liver1                  Liver2                   20.0%
-  Blood1                  C-bone-S                 11.4%
-  Blood1                  C-bone-V                  0.6%
-  C-bone-S                C-bone-V                 19.9805%
-  C-bone-S                C-marrow                 80.0195%
-  C-bone-V                C-marrow                100.0%
-  Blood1                  T-bone-S                 16.2%
-  Blood1                  T-bone-V                  1.8%
-  T-bone-S                T-bone-V                 19.9675%
-  T-bone-S                T-marrow                 80.0325%
-  T-bone-V                T-marrow                100.0%
-  Blood1                  Other-Kidneys             0.05%
-  Blood1                  Ovaries                   0.011%
-  Blood1                  Testes                    0.035%
-  Blood1                  Renal-tubules             1.0%
-  Blood1                  UB-con                    2.0%
-  Blood2                  UB-con                    3.5%
-  Renal-tubules           UB-con                  100.0%
-  UB-con                  Urine                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480           #  90.0%
+  Oralcavity              Oesophagus-S            720           #  10.0%
+  Oesophagus-F            St-con                12343           # 100.0%
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  99.95%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.141 p.337 Table 22.11
+#   fA = 5E-4   (Ingested materials, All other unidentified chemical forms)
+#   ƒÉ(SI->Blood) = fA*ƒÉ(SI->RC)/(1-fA) = 5E-4 * 6 / (1 - 5E-4) = 3.001500750375188E-3
+  SI-con                  Blood1                    3.001500750375188E-3        # 0.05%
+
+# ICRP Publ.141 p.225 Table 18.6
+  Blood1                  Liver0                    4.6200E-1   #  60.0%
+  Blood1                  C-bone-S                  8.7780E-2   #  11.4%
+  Blood1                  C-bone-V                  4.6200E-3   #   0.6%
+  Blood1                  T-bone-S                  1.2474E-1   #  16.2%
+  Blood1                  T-bone-V                  1.3860E-2   #   1.8%
+  Blood1                  UB-con                    1.5400E-2   #   2.0%
+  Blood1                  Renal-tubules             7.7000E-3   #   1.0%
+  Blood1                  Other-Kidneys             3.8500E-4   #   0.05%
+  Blood1                  RC-con                    1.1550E-2   #   1.5%
+  Blood1                  Testes                    2.6950E-4   #   0.035%
+  Blood1                  Ovaries                   0.8470E-4   #   0.011%
+  Blood1                  ST1                       1.8511E-2   #   2.404%
+  Blood1                  ST2                       2.3100E-2   #   3.0%
+  ST0                     Blood1                    9.9000E-2   # 100.0%
+  Blood2                  UB-con                    3.5000E+0   #   3.5%
+  Blood2                  Blood1                    6.7550E+1   #  67.55%
+  Blood2                  ST0                       2.8950E+1   #  28.95%
+  Renal-tubules           UB-con                    1.7329E-2   # 100.0%
+  Other-Kidneys           Blood2                    1.2660E-4   # 100.0%
+  ST1                     Blood2                    1.3860E-3   # 100.0%
+  ST2                     Blood2                    1.2660E-4   # 100.0%
+  Liver0                  SI-con                    9.2420E-4   #   2.0%
+  Liver0                  Liver1                    4.5286E-2   #  98.0%
+  Liver1                  Blood2                    1.5200E-3   #  80.0%
+  Liver1                  Liver2                    3.8000E-4   #  20.0%
+  Liver2                  Blood2                    1.2660E-4   # 100.0%
+  Testes                  Blood2                    3.8000E-4   # 100.0%
+  Ovaries                 Blood2                    3.8000E-4   # 100.0%
+  C-bone-S                C-marrow                  8.2100E-5   #  80.0195%
+  C-bone-S                C-bone-V                  2.0500E-5   #  19.9805%
+  C-bone-V                C-marrow                  8.2100E-5   # 100.0%
+  T-bone-S                T-marrow                  4.9300E-4   #  80.0325%
+  T-bone-S                T-bone-V                  1.2300E-4   #  19.9675%
+  T-bone-V                T-marrow                  4.9300E-4   # 100.0%
+  C-marrow                Blood2                    7.6000E-3   # 100.0%
+  T-marrow                Blood2                    7.6000E-3   # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%

@@ -8,27 +8,27 @@ H-3 Ingestion:Insoluble
 
 
 [H-3:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oralcavity             7200.0         O-cavity
-  acc   Oesophagus-F          12343.0         Oesophagus-f
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                    6.6667      SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   Blood                   400.7         Blood
-  acc   ExtravasHTO              44.00068     Other
-  acc   OBT1                      0.01733     Other
-  acc   OBT2                      0.0019      Other
-  exc   Breath(discharge)         ---         ---
-  exc   Skin(discharge)           ---         ---
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophagus-f
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood                 Blood
+  acc   ExtravasHTO           Other
+  acc   OBT1                  Other
+  acc   OBT2                  Other
+  exc   Breath(discharge)     ---
+  exc   Skin(discharge)       ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------
@@ -36,24 +36,34 @@ H-3 Ingestion:Insoluble
 #-----------------------+---------------------+--------------
 
   input                   Oralcavity              100.0%
-  Oralcavity              Oesophagus-F             90.0%
-  Oralcavity              Oesophagus-S             10.0%
-  Oesophagus-F            St-con                  100.0%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  SI-con                  RC-con                   90.0%
-  Blood                   RC-con                    0.007%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  SI-con                  Blood                    10.0%
-  ExtravasHTO             Blood                    99.9985%
-  Blood                   ExtravasHTO              99.8253%
-  OBT1                    ExtravasHTO             100.0%
-  OBT2                    ExtravasHTO             100.0%
-  ExtravasHTO             OBT1                      0.0014%
-  ExtravasHTO             OBT2                      0.0002%
-  Blood                   Breath(discharge)         0.021%
-  Blood                   Skin(discharge)           0.0507%
-  Blood                   UB-con                    0.0961%
-  UB-con                  Urine                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480           #  90.0%
+  Oralcavity              Oesophagus-S            720           #  10.0%
+  Oesophagus-F            St-con                12343           # 100.0%
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #  90.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.134 p.21 Table 2.3
+#   fA = 0.1   (Ingested materials, Relatively insoluble forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
+  SI-con                  Blood                     6.666666666666667E-1        # 10.0%
+
+# ICRP Publ.134 p.35 Table 2.5 & footnote†
+  Blood                   ExtravasHTO             400           #  99.8253%
+  ExtravasHTO             OBT1                      0.0006      #   0.0014%
+  ExtravasHTO             OBT2                      0.00008     #   0.0002%
+  Blood                   UB-con                    0.385       #   0.0961%     # = 55% of 0.7/d
+  Blood                   RC-con                    0.028       #   0.007%      # =  4% of 0.7/d
+  Blood                   Breath(discharge)         0.084       #   0.021%      # = 12% of 0.7/d
+  Blood                   Skin(discharge)           0.203       #   0.0507%     # = 29% of 0.7/d
+  ExtravasHTO             Blood                    44           #  99.9985%
+  OBT1                    ExtravasHTO               0.01733     # 100.0%
+  OBT2                    ExtravasHTO               0.0019      # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%

@@ -8,88 +8,108 @@ H-3 Inhalation:Type-F_LaNiAlTritide
 
 
 [H-3:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   Oesophagus-S           2160.0         Oesophagus-s
-  acc   St-con                   20.57        St-cont
-  acc   SI-con                  600.0         SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   ET1-F                     2.1         ET1-sur
-  acc   ET2-F                   200.0         ET2-sur
-  acc   ETseq-F                 100.001       ET2-seq
-  acc   LNET-F                  100.0         LN-ET
-  acc   BB-F                    110.0         Bronchi
-  acc   BBseq-F                 100.001       Bronchi-q
-  acc   bb-F                    100.2         Brchiole
-  acc   bbseq-F                 100.001       Brchiole-q
-  acc   ALV-F                   100.003       ALV
-  acc   INT-F                   100.00003     ALV
-  acc   LNTH-F                  100.0         LN-Th
-  exc   Environment               ---         ---
-  acc   Blood                   400.7         Blood
-  acc   ExtravasHTO              44.00068     Other
-  acc   OBT1                      0.01733     Other
-  acc   OBT2                      0.0019      Other
-  exc   Breath(discharge)         ---         ---
-  exc   Skin(discharge)           ---         ---
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oesophagus-S          Oesophagus-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  exc   Environment           ---
+  acc   Blood                 Blood
+  acc   ExtravasHTO           Other
+  acc   OBT1                  Other
+  acc   OBT2                  Other
+  exc   Breath(discharge)     ---
+  exc   Skin(discharge)       ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-  ET2-F                   Oesophagus-S             50.0%
-  Oesophagus-S            St-con                  100.0%
-  St-con                  SI-con                  100.0%
-  SI-con                  RC-con                    1.0%
-  Blood                   RC-con                    0.007%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  input                   ET1-F                    47.94%
-  input                   ET2-F                    25.76836%
-  ET1-F                   ET2-F                    71.4286%
-  BB-F                    ET2-F                     9.0909%
-  input                   ETseq-F                   0.05164%
-  ETseq-F                 LNET-F                    0.001%
-  input                   BB-F                      1.77644%
-  bb-F                    BB-F                      0.1996%
-  input                   BBseq-F                   0.00356%
-  input                   bb-F                      1.0978%
-  ALV-F                   bb-F                      0.002%
-  input                   bbseq-F                   0.0022%
-  input                   ALV-F                     5.32%
-  ALV-F                   INT-F                     0.001%
-  BBseq-F                 LNTH-F                    0.001%
-  bbseq-F                 LNTH-F                    0.001%
-  INT-F                   LNTH-F                    3.E-5%
-  input                   Environment              18.04%
-  ET1-F                   Environment              28.5714%
-  ET2-F                   Blood                    50.0%
-  ETseq-F                 Blood                    99.999%
-  LNET-F                  Blood                   100.0%
-  BB-F                    Blood                    90.9091%
-  BBseq-F                 Blood                    99.999%
-  bb-F                    Blood                    99.8004%
-  bbseq-F                 Blood                    99.999%
-  ALV-F                   Blood                    99.997%
-  INT-F                   Blood                    99.99997%
-  LNTH-F                  Blood                   100.0%
-  SI-con                  Blood                    99.0%
-  ExtravasHTO             Blood                    99.9985%
-  Blood                   ExtravasHTO              99.8253%
-  OBT1                    ExtravasHTO             100.0%
-  OBT2                    ExtravasHTO             100.0%
-  ExtravasHTO             OBT1                      0.0014%
-  ExtravasHTO             OBT2                      0.0002%
-  Blood                   Breath(discharge)         0.021%
-  Blood                   Skin(discharge)           0.0507%
-  Blood                   UB-con                    0.0961%
-  UB-con                  Urine                   100.0%
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.134 p.21 Table 2.3
+#     f_r = 1 (100%)
+  input                   ET1-F                    47.94%       # =          47.94%
+  input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
+  input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
+  input                   BB-F                      1.77644%    # = 99.8% of  1.78%
+  input                   BBseq-F                   0.00356%    # =  0.2% of  1.78%
+  input                   bb-F                      1.0978%     # = 99.8% of  1.10%
+  input                   bbseq-F                   0.0022%     # =  0.2% of  1.10%
+  input                   ALV-F                     5.32%       # =           5.32%
+  input                   Environment              18.04%       # = 100% - 81.96%
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002       #   0.002%
+  ALV-F                   INT-F                     0.001       #   0.001%
+  INT-F                   LNTH-F                    0.00003     #   3.E-5%
+  bb-F                    BB-F                      0.2         #   0.1996%
+  bbseq-F                 LNTH-F                    0.001       #   0.001%
+  BB-F                    ET2-F                    10           #   9.0909%
+  BBseq-F                 LNTH-F                    0.001       #   0.001%
+  ET2-F                   Oesophagus-S            100           #  50.0%
+  ETseq-F                 LNET-F                    0.001       #   0.001%
+  ET1-F                   Environment               0.6         #  28.5714%
+  ET1-F                   ET2-F                     1.5         #  71.4286%
+
+# ICRP Publ.134 p.21 Table 2.3
+#   s_r[/d] = 100  (Inhaled particulate materials, Absorption type F)
+  ALV-F                   Blood                   100           #  99.997%
+  INT-F                   Blood                   100           #  99.99997%
+  bb-F                    Blood                   100           #  99.8004%
+  bbseq-F                 Blood                   100           #  99.999%
+  BB-F                    Blood                   100           #  90.9091%
+  BBseq-F                 Blood                   100           #  99.999%
+  ET2-F                   Blood                   100           #  50.0%
+  ETseq-F                 Blood                   100           #  99.999%
+  LNET-F                  Blood                   100           # 100.0%
+  LNTH-F                  Blood                   100           # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oesophagus-S            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #   1.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.134 p.21 Table 2.3
+#   fA = 1≒0.99   (Inhaled particulate materials, Absorption type F)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
+  SI-con                  Blood                   594           #  99.0%
+
+# ICRP Publ.134 p.35 Table 2.5 & footnote†
+  Blood                   ExtravasHTO             400           #  99.8253%
+  ExtravasHTO             OBT1                      0.0006      #   0.0014%
+  ExtravasHTO             OBT2                      0.00008     #   0.0002%
+  Blood                   UB-con                    0.385       #   0.0961%     # = 55% of 0.7/d
+  Blood                   RC-con                    0.028       #   0.007%      # =  4% of 0.7/d
+  Blood                   Breath(discharge)         0.084       #   0.021%      # = 12% of 0.7/d
+  Blood                   Skin(discharge)           0.203       #   0.0507%     # = 29% of 0.7/d
+  ExtravasHTO             Blood                    44           #  99.9985%
+  OBT1                    ExtravasHTO               0.01733     # 100.0%
+  OBT2                    ExtravasHTO               0.0019      # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%

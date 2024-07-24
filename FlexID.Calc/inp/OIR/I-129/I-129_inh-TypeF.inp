@@ -8,125 +8,153 @@ I-129 Inhalation:Type-F
 
 
 [I-129:compartment]
-#-----+---------------------+---------------| S-Coefficient
-# Func| Compartment         | BioDecay[/d]  | Source Region
-#-----+---------------------+---------------+---------------
-  inp   input                     ---         ---
-  acc   OralcavityRe           7200.0         O-cavity
-  acc   Oesophagus-s           2160.0         Oesophagus-s
-  acc   Oesophagus-sRe         2160.0         Oesophagus-s
-  acc   St-wall                  50.0         St-wall
-  acc   St-con                   20.57        St-cont
-  acc   St-conRe                 20.57        St-cont
-  acc   SI-con                  600.0         SI-cont
-  acc   SI-conRe                600.0         SI-cont
-  acc   RC-con                    2.0         RC-cont
-  acc   LC-con                    2.0         LC-cont
-  acc   RS-con                    2.0         RS-cont
-  exc   Faeces                    ---         ---
-  acc   ET1-F                     2.1         ET1-sur
-  acc   ET2-F                   200.0         ET2-sur
-  acc   ETseq-F                 100.001       ET2-seq
-  acc   LNET-F                  100.0         LN-ET
-  acc   BB-F                    110.0         Bronchi
-  acc   BBseq-F                 100.001       Bronchi-q
-  acc   bb-F                    100.2         Brchiole
-  acc   bbseq-F                 100.001       Brchiole-q
-  acc   ALV-F                   100.003       ALV
-  acc   INT-F                   100.00003     ALV
-  acc   LNTH-F                  100.0         LN-Th
-  exc   Environment               ---         ---
-  acc   Blood1                  672.86        Blood
-  acc   Blood2                   39.6         Blood
-  acc   Liver1                  100.0         Liver
-  acc   Liver2                   21.22        Liver
-  acc   Kidneys1                100.0         Kidneys
-  acc   Kidneys2                 21.14        Kidneys
-  acc   Thyroid1                131.0         Thyroid
-  acc   Thyroid2                  0.0077      Thyroid
-  acc   S-glands                 50.0         S-glands
-  acc   Other1                  365.0         Other
-  acc   Other2                   56.0         Other
-  acc   Other3                   22.2         Other
-  acc   Other4                    0.76        Other
-  acc   UB-con                   12.0         UB-cont
-  exc   Urine                     ---         ---
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-s          Oesophagus-s
+  acc   Oesophagus-sRe        Oesophagus-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  exc   Environment           ---
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   Other1                Other
+  acc   Other2                Other
+  acc   Other3                Other
+  acc   Other4                Other
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
 [I-129:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-  S-glands                OralcavityRe            100.0%
-  ET2-F                   Oesophagus-s             50.0%
-  OralcavityRe            Oesophagus-sRe          100.0%
-  Blood1                  St-wall                   1.2781%
-  Oesophagus-s            St-con                  100.0%
-  Oesophagus-sRe          St-conRe                100.0%
-  St-wall                 St-conRe                100.0%
-  St-con                  SI-con                  100.0%
-  St-conRe                SI-conRe                100.0%
-  SI-con                  RC-con                    1.0%
-  SI-conRe                RC-con                    1.0%
-  Liver2                  RC-con                    0.377%
-  RC-con                  LC-con                  100.0%
-  LC-con                  RS-con                  100.0%
-  RS-con                  Faeces                  100.0%
-  input                   ET1-F                    47.94%
-  input                   ET2-F                    25.76836%
-  ET1-F                   ET2-F                    71.4286%
-  BB-F                    ET2-F                     9.0909%
-  input                   ETseq-F                   0.05164%
-  ETseq-F                 LNET-F                    0.001%
-  input                   BB-F                      1.77644%
-  bb-F                    BB-F                      0.1996%
-  input                   BBseq-F                   0.00356%
-  input                   bb-F                      1.0978%
-  ALV-F                   bb-F                      0.002%
-  input                   bbseq-F                   0.0022%
-  input                   ALV-F                     5.32%
-  ALV-F                   INT-F                     0.001%
-  BBseq-F                 LNTH-F                    0.001%
-  bbseq-F                 LNTH-F                    0.001%
-  INT-F                   LNTH-F                    3.E-5%
-  input                   Environment              18.04%
-  ET1-F                   Environment              28.5714%
-  ET2-F                   Blood1                   50.0%
-  ETseq-F                 Blood1                   99.999%
-  LNET-F                  Blood1                  100.0%
-  BB-F                    Blood1                   90.9091%
-  BBseq-F                 Blood1                   99.999%
-  bb-F                    Blood1                   99.8004%
-  bbseq-F                 Blood1                   99.999%
-  ALV-F                   Blood1                   99.997%
-  INT-F                   Blood1                   99.99997%
-  LNTH-F                  Blood1                  100.0%
-  SI-con                  Blood1                   99.0%
-  SI-conRe                Blood1                   99.0%
-  Liver1                  Blood1                  100.0%
-  Liver2                  Blood1                    0.6598%
-  Kidneys1                Blood1                  100.0%
-  Kidneys2                Blood1                    0.6623%
-  Thyroid1                Blood1                   27.4809%
-  Thyroid2                Blood1                    0.0%
-  Other1                  Blood1                   90.411%
-  Other4                  Blood1                   18.4211%
-  Liver2                  Blood2                   98.9632%
-  Kidneys2                Blood2                   99.3377%
-  Thyroid2                Blood2                  100.0%
-  Other3                  Blood2                   94.5946%
-  Blood1                  Liver1                    2.2293%
-  Blood2                  Liver2                   53.0303%
-  Blood1                  Kidneys1                  3.7155%
-  Blood2                  Kidneys2                  9.0909%
-  Blood1                  Thyroid1                  1.079%
-  Thyroid1                Thyroid2                 72.5191%
-  Blood1                  S-glands                  0.7669%
-  Blood1                  Other1                   89.1716%
-  Other2                  Other1                  100.0%
-  Other1                  Other2                    9.589%
-  Blood2                  Other3                   37.8788%
-  Other4                  Other3                   81.5789%
-  Other3                  Other4                    5.4054%
-  Blood1                  UB-con                    1.7597%
-  UB-con                  Urine                   100.0%
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.137 p.97 Table 5.3
+#     f_r = 1 (100%)
+  input                   ET1-F                    47.94%       # =          47.94%
+  input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
+  input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
+  input                   BB-F                      1.77644%    # = 99.8% of  1.78%
+  input                   BBseq-F                   0.00356%    # =  0.2% of  1.78%
+  input                   bb-F                      1.0978%     # = 99.8% of  1.10%
+  input                   bbseq-F                   0.0022%     # =  0.2% of  1.10%
+  input                   ALV-F                     5.32%       # =           5.32%
+  input                   Environment              18.04%       # = 100% - 81.96%
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002       #   0.002%
+  ALV-F                   INT-F                     0.001       #   0.001%
+  INT-F                   LNTH-F                    0.00003     #   3.E-5%
+  bb-F                    BB-F                      0.2         #   0.1996%
+  bbseq-F                 LNTH-F                    0.001       #   0.001%
+  BB-F                    ET2-F                    10           #   9.0909%
+  BBseq-F                 LNTH-F                    0.001       #   0.001%
+  ET2-F                   Oesophagus-s            100           #  50.0%
+  ETseq-F                 LNET-F                    0.001       #   0.001%
+  ET1-F                   Environment               0.6         #  28.5714%
+  ET1-F                   ET2-F                     1.5         #  71.4286%
+
+# ICRP Publ.137 p.97 Table 5.3
+#   s_r[/d] = 100  (Inhaled particulate materials, Absorption type F)
+  ALV-F                   Blood1                  100           #  99.997%
+  INT-F                   Blood1                  100           #  99.99997%
+  bb-F                    Blood1                  100           #  99.8004%
+  bbseq-F                 Blood1                  100           #  99.999%
+  BB-F                    Blood1                  100           #  90.9091%
+  BBseq-F                 Blood1                  100           #  99.999%
+  ET2-F                   Blood1                  100           #  50.0%
+  ETseq-F                 Blood1                  100           #  99.999%
+  LNET-F                  Blood1                  100           # 100.0%
+  LNTH-F                  Blood1                  100           # 100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oesophagus-s            St-con                 2160           # 100.0%
+  St-con                  SI-con                   20.57        # 100.0%
+  SI-con                  RC-con                    6           #   1.0%
+  RC-con                  LC-con                    2           # 100.0%
+  LC-con                  RS-con                    2           # 100.0%
+  RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.137 p.97 Table 5.3
+#   fA = 1à0.99   (Inhaled particulate materials, Absorption type F)
+#   ƒÉ(SI->Blood) = fA*ƒÉ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
+  SI-con                  Blood1                  594           #  99.0%
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.137 p.106 Fig.5.2
+  OralcavityRe            Oesophagus-sRe          720           # 100.0%
+  Oesophagus-sRe          St-conRe               2160           # 100.0%
+  St-conRe                SI-conRe                 20.57        # 100.0%
+  SI-conRe                RC-con                    6           #   1.0%
+
+# ICRP Publ.137 p.97 Table 5.3 footnote÷
+#   fA = 1à0.99   (re-absorption)
+#   ƒÉ(SI->Blood) = fA*ƒÉ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
+  SI-conRe                Blood1                  594           #  99.0%
+
+# ICRP Publ.137 p.108 Table 5.4
+  Blood1                  Thyroid1                  7.26        #   1.079%
+  Blood1                  UB-con                   11.84        #   1.7597%
+  Blood1                  S-glands                  5.16        #   0.7669%
+  Blood1                  St-wall                   8.60        #   1.2781%
+  Blood1                  Other1                  600           #  89.1716%
+  Blood1                  Kidneys1                 25           #   3.7155%
+  Blood1                  Liver1                   15           #   2.2293%
+  S-glands                OralcavityRe             50           # 100.0%
+  St-wall                 St-conRe                 50           # 100.0%
+  Thyroid1                Thyroid2                 95           #  72.5191%
+  Thyroid1                Blood1                   36           #  27.4809%
+  Thyroid2                Blood2                    0.0077      # 100.0%
+  Thyroid2                Blood1                    0           #   0.0%
+  Other1                  Blood1                  330           #  90.411%
+  Other1                  Other2                   35           #   9.589%
+  Other2                  Other1                   56           # 100.0%
+  Kidneys1                Blood1                  100           # 100.0%
+  Liver1                  Blood1                  100           # 100.0%
+  Blood2                  Other3                   15           #  37.8788%
+  Other3                  Blood2                   21           #  94.5946%
+  Other3                  Other4                    1.2         #   5.4054%
+  Other4                  Other3                    0.62        #  81.5789%
+  Other4                  Blood1                    0.14        #  18.4211%
+  Blood2                  Kidneys2                  3.6         #   9.0909%
+  Kidneys2                Blood2                   21           #  99.3377%
+  Kidneys2                Blood1                    0.14        #   0.6623%
+  Blood2                  Liver2                   21           #  53.0303%
+  Liver2                  Blood2                   21           #  98.9632%
+  Liver2                  Blood1                    0.14        #   0.6598%
+  Liver2                  RC-con                    0.08        #   0.377%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12           # 100.0%
