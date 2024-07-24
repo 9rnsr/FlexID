@@ -806,6 +806,12 @@ namespace FlexID.Calc
                     {
                         var sum = sumOfOutflowCoeff[organFrom];
 
+                        if (organFrom.Func == OrganFunc.acc)
+                        {
+                            if (Math.Round(sum, 6) != Math.Round(organFrom.BioDecay, 6))
+                                throw Program.Error($"{organFrom.Nuclide.Nuclide}/{organFrom.Name} misamtch BioDecay, {sum} != {organFrom.BioDecay}.");
+                        }
+
                         // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[/d]の総計
                         inflowRate = sum == 0 ? 0.0 : coeff / sum;
                     }
