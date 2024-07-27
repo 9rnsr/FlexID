@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -437,7 +438,7 @@ namespace FlexID.Calc
             var nuclides = new List<NuclideData>();
             var nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
             var nuclideTransfers = new Dictionary<string,
-                    List<(int lineNum, string from, string to, double? coeff, bool isRate)>>();
+                    List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>>();
             var SCoeffTables = new List<Dictionary<string, double[]>>();
             int organId = 0;
 
@@ -583,7 +584,7 @@ namespace FlexID.Calc
                 if (nuclideTransfers.TryGetValue(nuc, out var transfers))
                     throw Program.Error($"Line {lineNum}: Duplicated [transfer] section for nuclide '{nuc}'.");
 
-                transfers = new List<(int, string, string, double?, bool)>();
+                transfers = new List<(int, string, string, decimal?, bool)>();
                 nuclideTransfers.Add(nuc, transfers);
 
                 while (true)
@@ -603,7 +604,7 @@ namespace FlexID.Calc
                     var organTo = values[1];
                     var coeffStr = values[2];    // 移行係数、[/d] or [%]
 
-                    double? coeff = null;
+                    decimal? coeff = null;
                     var isRate = false;
                     if (!IsBar(coeffStr))
                     {
@@ -612,7 +613,7 @@ namespace FlexID.Calc
                             isRate = true;
                             coeffStr = coeffStr.Substring(0, coeffStr.Length - 1);
                         }
-                        if (double.TryParse(coeffStr, out var v))
+                        if (decimal.TryParse(coeffStr, NumberStyles.Float, null, out var v))
                             coeff = v;
                         else
                             throw Program.Error($"Line {lineNum}: Transfer coefficient should be a number or '---', not '{coeffStr}'.");
@@ -694,8 +695,8 @@ namespace FlexID.Calc
                 // 移行経路の定義が正しいことの確認と、
                 // 各コンパートメントから流出する移行係数の総計を求める。
                 var definedTransfers = new HashSet<(string from, string to)>();
-                var transfersCorrect = new List<(Organ from, Organ to, double coeff, bool isRate)>();
-                var sumOfOutflowCoeff = new Dictionary<Organ, double>();
+                var transfersCorrect = new List<(Organ from, Organ to, decimal coeff, bool isRate)>();
+                var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
                 foreach (var (lineNum, from, to, coeff, isRate) in transfers)
                 {
                     var fromName = from;
@@ -775,7 +776,7 @@ namespace FlexID.Calc
                         if (fromFunc == OrganFunc.acc && !isCoeff)
                             throw Program.Error($"Line {lineNum}: Need to set transfer coefficient [/d] on path from '{fromFunc}'.");
                     }
-                    if (coeff is double coeff_v)
+                    if (coeff is decimal coeff_v)
                     {
                         // 移行係数が負の値でないことを確認する。
                         if (coeff_v < 0)
@@ -801,9 +802,19 @@ namespace FlexID.Calc
                     if (!outflows.All(t => t.isRate == isRate))
                         throw Program.Error($"Transfer paths from '{organFrom.Name}' have inconsistent coefficient units.");
 
-                    // fromにおける生物学的崩壊定数[/day]を設定する。
-                    if (organFrom.Func == OrganFunc.acc)
-                        organFrom.BioDecay = sumOfOutflowCoeff[organFrom];
+                    if (isRate)
+                    {
+                        // 流出放射能に対する移行割合[%]の合計が100%かどうかを確認する。
+                        var sum = sumOfOutflowCoeff[organFrom];
+                        if (sum != 100)
+                            throw Program.Error($"Total [%] of transfer paths from '{organFrom.Name}' is  not 100%, but {sum}%");
+                    }
+                    else
+                    {
+                        // fromにおける生物学的崩壊定数[/day]を設定する。
+                        if (organFrom.Func == OrganFunc.acc)
+                            organFrom.BioDecay = (double)sumOfOutflowCoeff[organFrom];
+                    }
                 }
 
                 // 各コンパートメントへの流入経路と、移行割合を設定する。
@@ -818,14 +829,14 @@ namespace FlexID.Calc
                     else if (isRate)
                     {
                         // fromからtoへの移行割合 = 移行係数[%] / 100
-                        inflowRate = coeff * 0.01;
+                        inflowRate = (double)(coeff / 100);
                     }
                     else
                     {
                         var sum = sumOfOutflowCoeff[organFrom];
 
                         // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[/d]の総計
-                        inflowRate = sum == 0 ? 0.0 : coeff / sum;
+                        inflowRate = sum == 0 ? 0.0 : (double)coeff / (double)sum;
                     }
 
                     organTo.Inflows.Add(new Inflow
