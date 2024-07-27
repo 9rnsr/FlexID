@@ -702,19 +702,27 @@ namespace FlexID.Calc
                     var fromNuclide = nuclide;
                     if (from.IndexOf('/') is int i && i != -1)
                     {
-                        // 親核種から探す。
-                        var parentNuc = from.Substring(0, i);
+                        var fromNuc = from.Substring(0, i);
                         fromName = from.Substring(i + 1);
-                        fromNuclide = nuclides.First(n => n.Nuclide == parentNuc);
+                        fromNuclide = nuclides.FirstOrDefault(n => n.Nuclide == fromNuc);
+                        if (fromNuclide is null)
+                            throw Program.Error($"Line {lineNum}: Undefined nuclide '{fromNuc}'.");
                     }
 
                     var toName = to;
                     var toNuclide = nuclide;
-                    if (to.IndexOf('/') != -1)
+                    if (to.IndexOf('/') is int j && j != -1)
                     {
-                        // 移行先は定義している核種に属するコンパートメントのみとする。
-                        throw Program.Error($"Line {lineNum}: Cannot define transfer path to a compartment which is not belong to '{nuc}'.");
+                        var toNuc = to.Substring(0, j);
+                        toName = to.Substring(j + 1);
+                        toNuclide = nuclides.FirstOrDefault(n => n.Nuclide == toNuc);
+                        if (toNuclide is null)
+                            throw Program.Error($"Line {lineNum}: Undefined nuclide '{toNuc}'.");
                     }
+
+                    // 移行先は定義している核種に属するコンパートメントのみとする。
+                    if (toNuclide != nuclide)
+                        throw Program.Error($"Line {lineNum}: Cannot set transfer path to a compartment which is not belong to '{nuc}'.");
 
                     var organFrom = data.Organs.FirstOrDefault(o => o.Name == fromName && o.Nuclide == fromNuclide);
                     var organTo = data.Organs.FirstOrDefault(o => o.Name == toName && o.Nuclide == toNuclide);
