@@ -757,6 +757,10 @@ namespace FlexID.Calc
 
                     if (isDecayPath)
                     {
+                        // inpやmixから娘核種への壊変経路は定義できない。
+                        if (fromFunc == OrganFunc.inp || fromFunc == OrganFunc.mix)
+                            throw Program.Error($"Line {lineNum}: Cannot set decay path from '{fromFunc}'.");
+
                         // 親核種からの壊変経路では、係数は指定できない。
                         if (coeff != null)
                             throw Program.Error($"Line {lineNum}: Cannot set transfer coefficient on decay path.");
