@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -437,7 +438,7 @@ namespace FlexID.Calc
             var nuclides = new List<NuclideData>();
             var nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
             var nuclideTransfers = new Dictionary<string,
-                    List<(int lineNum, string from, string to, double? coeff, bool isRate)>>();
+                    List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>>();
             var SCoeffTables = new List<Dictionary<string, double[]>>();
             int organId = 0;
 
@@ -566,6 +567,7 @@ namespace FlexID.Calc
                         Index = -1,         // 後で設定する。
                         Name = organName,
                         Func = organFunc,
+                        BioDecay = 1.0,     // accは後で設定する。
                         Inflows = new List<Inflow>(),
                     };
 
@@ -582,7 +584,7 @@ namespace FlexID.Calc
                 if (nuclideTransfers.TryGetValue(nuc, out var transfers))
                     throw Program.Error($"Line {lineNum}: Duplicated [transfer] section for nuclide '{nuc}'.");
 
-                transfers = new List<(int, string, string, double?, bool)>();
+                transfers = new List<(int, string, string, decimal?, bool)>();
                 nuclideTransfers.Add(nuc, transfers);
 
                 while (true)
@@ -602,7 +604,7 @@ namespace FlexID.Calc
                     var organTo = values[1];
                     var coeffStr = values[2];    // 移行係数、[/d] or [%]
 
-                    double? coeff = null;
+                    decimal? coeff = null;
                     var isRate = false;
                     if (!IsBar(coeffStr))
                     {
@@ -611,7 +613,7 @@ namespace FlexID.Calc
                             isRate = true;
                             coeffStr = coeffStr.Substring(0, coeffStr.Length - 1);
                         }
-                        if (double.TryParse(coeffStr, out var v))
+                        if (decimal.TryParse(coeffStr, NumberStyles.Float, null, out var v))
                             coeff = v;
                         else
                             throw Program.Error($"Line {lineNum}: Transfer coefficient should be a number or '---', not '{coeffStr}'.");
@@ -693,27 +695,35 @@ namespace FlexID.Calc
                 // 移行経路の定義が正しいことの確認と、
                 // 各コンパートメントから流出する移行係数の総計を求める。
                 var definedTransfers = new HashSet<(string from, string to)>();
-                var transfersCorrect = new List<(Organ from, Organ to, double coeff, bool isRate)>();
-                var sumOfOutflowCoeff = new Dictionary<Organ, double>();
+                var transfersCorrect = new List<(Organ from, Organ to, decimal coeff, bool isRate)>();
+                var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
                 foreach (var (lineNum, from, to, coeff, isRate) in transfers)
                 {
                     var fromName = from;
                     var fromNuclide = nuclide;
                     if (from.IndexOf('/') is int i && i != -1)
                     {
-                        // 親核種から探す。
-                        var parentNuc = from.Substring(0, i);
+                        var fromNuc = from.Substring(0, i);
                         fromName = from.Substring(i + 1);
-                        fromNuclide = nuclides.First(n => n.Nuclide == parentNuc);
+                        fromNuclide = nuclides.FirstOrDefault(n => n.Nuclide == fromNuc);
+                        if (fromNuclide is null)
+                            throw Program.Error($"Line {lineNum}: Undefined nuclide '{fromNuc}'.");
                     }
 
                     var toName = to;
                     var toNuclide = nuclide;
-                    if (to.IndexOf('/') != -1)
+                    if (to.IndexOf('/') is int j && j != -1)
                     {
-                        // 移行先は定義している核種に属するコンパートメントのみとする。
-                        throw Program.Error($"Line {lineNum}: Cannot define transfer path to a compartment which is not belong to '{nuc}'.");
+                        var toNuc = to.Substring(0, j);
+                        toName = to.Substring(j + 1);
+                        toNuclide = nuclides.FirstOrDefault(n => n.Nuclide == toNuc);
+                        if (toNuclide is null)
+                            throw Program.Error($"Line {lineNum}: Undefined nuclide '{toNuc}'.");
                     }
+
+                    // 移行先は定義している核種に属するコンパートメントのみとする。
+                    if (toNuclide != nuclide)
+                        throw Program.Error($"Line {lineNum}: Cannot set transfer path to a compartment which is not belong to '{nuc}'.");
 
                     var organFrom = data.Organs.FirstOrDefault(o => o.Name == fromName && o.Nuclide == fromNuclide);
                     var organTo = data.Organs.FirstOrDefault(o => o.Name == toName && o.Nuclide == toNuclide);
@@ -726,39 +736,58 @@ namespace FlexID.Calc
 
                     // 同じ移行経路が複数回定義されていないことを確認する。
                     if (!definedTransfers.Add((from, to)))
-                        throw Program.Error($"Line {lineNum}: Multiple transfer path from '{from}' to '{to}'.");
+                        throw Program.Error($"Line {lineNum}: Multiple definition of transfer path from '{from}' to '{to}'.");
 
                     // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
-                    if (organTo.Func == OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Transfer path to 'inp' is invalid.");
-                    //if (organFrom.Func == OrganFunc.exc)
-                    //    throw Program.Error($"Line {lineNum}: Transfer path from 'exc' is invalid.");
-                    //if (organFrom.Func == OrganFunc.mix && organTo.Func == OrganFunc.mix)
-                    //    throw Program.Error($"Line {lineNum}: Transfer path from 'mix' to 'inp' is invalid.");
+                    var fromFunc = organFrom.Func;
+                    var toFunc = organTo.Func;
+                    var isDecayPath = fromNuclide != toNuclide;
+                    var isCoeff = coeff != null && !isRate;
 
-                    // 移行係数を設定できない箇所に数値が入っていないことを確認する。
-                    if (fromNuclide != nuclide && coeff != null)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient from parent nuclide should be '---'.");
-                    //if (organFrom.Func == OrganFunc.inp && coeff != null)
-                    //    throw Program.Error($"Line {lineNum}: Transfer coefficient from 'inp' should be '---'.");
+                    // inpへの流入は定義できない。
+                    if (toFunc == OrganFunc.inp)
+                        throw Program.Error($"Line {lineNum}: Cannot set input path to 'inp'.");
 
-                    // 移行係数が負の値でないことを確認する。
-                    if (coeff != null && coeff < 0.0)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
+                    // excからの流出は(娘核種のexcへの壊変経路を除いて)定義できない。
+                    if (fromFunc == OrganFunc.exc && !(toFunc == OrganFunc.exc && isDecayPath))
+                        throw Program.Error($"Line {lineNum}: Cannot set output path from 'exc'.");
 
-                    if (isRate && organFrom.Func != OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient[%] can be used only for initial distribution path.");
-                    if (!isRate && organFrom.Func == OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient[/d] cannot be used for initial distribution path.");
+                    // TODO: mixからmixへの経路は定義できない。
+                    //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
+                    //    throw Program.Error($"Line {lineNum}: Cannot set transfer path from 'mix' to 'mix'.");
 
-                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0.0, isRate));
-
-                    if (coeff is double coeff_v)
+                    if (isDecayPath)
                     {
+                        // inpやmixから娘核種への壊変経路は定義できない。
+                        if (fromFunc == OrganFunc.inp || fromFunc == OrganFunc.mix)
+                            throw Program.Error($"Line {lineNum}: Cannot set decay path from '{fromFunc}'.");
+
+                        // 親核種からの壊変経路では、係数は指定できない。
+                        if (coeff != null)
+                            throw Program.Error($"Line {lineNum}: Cannot set transfer coefficient on decay path.");
+                    }
+                    else
+                    {
+                        // inpまたはmixからの配分経路では、[%]入力を要求する。
+                        if ((fromFunc == OrganFunc.inp || fromFunc == OrganFunc.mix) && !isRate)
+                            throw Program.Error($"Line {lineNum}: Need to set [%] of output activity on path from '{fromFunc}'.");
+
+                        // accからの流出経路では、[/d]入力を要求する。
+                        if (fromFunc == OrganFunc.acc && !isCoeff)
+                            throw Program.Error($"Line {lineNum}: Need to set transfer coefficient [/d] on path from '{fromFunc}'.");
+                    }
+                    if (coeff is decimal coeff_v)
+                    {
+                        // 移行係数が負の値でないことを確認する。
+                        if (coeff_v < 0)
+                            throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
+
                         if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
                             sum = 0;
                         sumOfOutflowCoeff[organFrom] = sum + coeff_v;
                     }
+
+                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0, isRate));
                 }
 
                 // あるコンパートメントから流出する全経路の移行係数が同じ単位であるかを確認する。
@@ -768,9 +797,24 @@ namespace FlexID.Calc
                 {
                     if (!outflows.Any())
                         continue;
-                    var first = outflows.First().isRate;
-                    if (!outflows.All(t => t.isRate == first))
-                        throw Program.Error($"Transfer paths from '{outflows.Key.Name}' have inconsistent coefficient units.");
+                    var organFrom = outflows.Key;
+                    var isRate = outflows.First().isRate;
+                    if (!outflows.All(t => t.isRate == isRate))
+                        throw Program.Error($"Transfer paths from '{organFrom.Name}' have inconsistent coefficient units.");
+
+                    if (isRate)
+                    {
+                        // 流出放射能に対する移行割合[%]の合計が100%かどうかを確認する。
+                        var sum = sumOfOutflowCoeff[organFrom];
+                        if (sum != 100)
+                            throw Program.Error($"Total [%] of transfer paths from '{organFrom.Name}' is  not 100%, but {sum}%");
+                    }
+                    else
+                    {
+                        // fromにおける生物学的崩壊定数[/day]を設定する。
+                        if (organFrom.Func == OrganFunc.acc)
+                            organFrom.BioDecay = (double)sumOfOutflowCoeff[organFrom];
+                    }
                 }
 
                 // 各コンパートメントへの流入経路と、移行割合を設定する。
@@ -785,17 +829,14 @@ namespace FlexID.Calc
                     else if (isRate)
                     {
                         // fromからtoへの移行割合 = 移行係数[%] / 100
-                        inflowRate = coeff * 0.01;
+                        inflowRate = (double)(coeff / 100);
                     }
                     else
                     {
                         var sum = sumOfOutflowCoeff[organFrom];
 
-                        // fromにおける生物学的崩壊定数
-                        organFrom.BioDecay = organFrom.Func == OrganFunc.acc ? sum : 1.0;
-
                         // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[/d]の総計
-                        inflowRate = sum == 0 ? 0.0 : coeff / sum;
+                        inflowRate = sum == 0 ? 0.0 : (double)coeff / (double)sum;
                     }
 
                     organTo.Inflows.Add(new Inflow
