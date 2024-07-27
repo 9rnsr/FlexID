@@ -747,9 +747,9 @@ namespace FlexID.Calc
                     if (toFunc == OrganFunc.inp)
                         throw Program.Error($"Line {lineNum}: Cannot set input path to 'inp'.");
 
-                    // TODO: excからの流出は定義できない。
-                    //if (fromFunc == OrganFunc.exc)
-                    //    throw Program.Error($"Line {lineNum}: Cannot set output path from 'exc'.");
+                    // excからの流出は(娘核種のexcへの壊変経路を除いて)定義できない。
+                    if (fromFunc == OrganFunc.exc && !(toFunc == OrganFunc.exc && isDecayPath))
+                        throw Program.Error($"Line {lineNum}: Cannot set output path from 'exc'.");
 
                     // TODO: mixからmixへの経路は定義できない。
                     //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
