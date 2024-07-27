@@ -767,12 +767,12 @@ namespace FlexID.Calc
                     }
                     else
                     {
-                        // inpからの初期配分経路では、[%]入力を要求する。
-                        if (fromFunc == OrganFunc.inp && !isRate)
+                        // inpまたはmixからの配分経路では、[%]入力を要求する。
+                        if ((fromFunc == OrganFunc.inp || fromFunc == OrganFunc.mix) && !isRate)
                             throw Program.Error($"Line {lineNum}: Need to set [%] of output activity on path from '{fromFunc}'.");
 
-                        // acc,mixからの流入経路では、[/d]入力を要求する。
-                        if ((fromFunc == OrganFunc.acc || fromFunc == OrganFunc.mix) && !isCoeff)
+                        // accからの流出経路では、[/d]入力を要求する。
+                        if (fromFunc == OrganFunc.acc && !isCoeff)
                             throw Program.Error($"Line {lineNum}: Need to set transfer coefficient [/d] on path from '{fromFunc}'.");
                     }
                     if (coeff is double coeff_v)
