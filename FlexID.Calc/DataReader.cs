@@ -735,39 +735,54 @@ namespace FlexID.Calc
 
                     // 同じ移行経路が複数回定義されていないことを確認する。
                     if (!definedTransfers.Add((from, to)))
-                        throw Program.Error($"Line {lineNum}: Multiple transfer path from '{from}' to '{to}'.");
+                        throw Program.Error($"Line {lineNum}: Multiple definition of transfer path from '{from}' to '{to}'.");
 
                     // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
-                    if (organTo.Func == OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Transfer path to 'inp' is invalid.");
-                    //if (organFrom.Func == OrganFunc.exc)
-                    //    throw Program.Error($"Line {lineNum}: Transfer path from 'exc' is invalid.");
-                    //if (organFrom.Func == OrganFunc.mix && organTo.Func == OrganFunc.mix)
-                    //    throw Program.Error($"Line {lineNum}: Transfer path from 'mix' to 'inp' is invalid.");
+                    var fromFunc = organFrom.Func;
+                    var toFunc = organTo.Func;
+                    var isDecayPath = fromNuclide != toNuclide;
+                    var isCoeff = coeff != null && !isRate;
 
-                    // 移行係数を設定できない箇所に数値が入っていないことを確認する。
-                    if (fromNuclide != nuclide && coeff != null)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient from parent nuclide should be '---'.");
-                    //if (organFrom.Func == OrganFunc.inp && coeff != null)
-                    //    throw Program.Error($"Line {lineNum}: Transfer coefficient from 'inp' should be '---'.");
+                    // inpへの流入は定義できない。
+                    if (toFunc == OrganFunc.inp)
+                        throw Program.Error($"Line {lineNum}: Cannot set input path to 'inp'.");
 
-                    // 移行係数が負の値でないことを確認する。
-                    if (coeff != null && coeff < 0.0)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
+                    // TODO: excからの流出は定義できない。
+                    //if (fromFunc == OrganFunc.exc)
+                    //    throw Program.Error($"Line {lineNum}: Cannot set output path from 'exc'.");
 
-                    if (isRate && organFrom.Func != OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient[%] can be used only for initial distribution path.");
-                    if (!isRate && organFrom.Func == OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Transfer coefficient[/d] cannot be used for initial distribution path.");
+                    // TODO: mixからmixへの経路は定義できない。
+                    //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
+                    //    throw Program.Error($"Line {lineNum}: Cannot set transfer path from 'mix' to 'mix'.");
 
-                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0.0, isRate));
+                    if (isDecayPath)
+                    {
+                        // 親核種からの壊変経路では、係数は指定できない。
+                        if (coeff != null)
+                            throw Program.Error($"Line {lineNum}: Cannot set transfer coefficient on decay path.");
+                    }
+                    else
+                    {
+                        // inpからの初期配分経路では、[%]入力を要求する。
+                        if (fromFunc == OrganFunc.inp && !isRate)
+                            throw Program.Error($"Line {lineNum}: Need to set [%] of output activity on path from '{fromFunc}'.");
 
+                        // acc,mixからの流入経路では、[/d]入力を要求する。
+                        if ((fromFunc == OrganFunc.acc || fromFunc == OrganFunc.mix) && !isCoeff)
+                            throw Program.Error($"Line {lineNum}: Need to set transfer coefficient [/d] on path from '{fromFunc}'.");
+                    }
                     if (coeff is double coeff_v)
                     {
+                        // 移行係数が負の値でないことを確認する。
+                        if (coeff_v < 0)
+                            throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
+
                         if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
                             sum = 0;
                         sumOfOutflowCoeff[organFrom] = sum + coeff_v;
                     }
+
+                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0, isRate));
                 }
 
                 // あるコンパートメントから流出する全経路の移行係数が同じ単位であるかを確認する。
