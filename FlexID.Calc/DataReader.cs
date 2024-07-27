@@ -566,6 +566,7 @@ namespace FlexID.Calc
                         Index = -1,         // 後で設定する。
                         Name = organName,
                         Func = organFunc,
+                        BioDecay = 1.0,     // accは後で設定する。
                         Inflows = new List<Inflow>(),
                     };
 
@@ -768,9 +769,14 @@ namespace FlexID.Calc
                 {
                     if (!outflows.Any())
                         continue;
-                    var first = outflows.First().isRate;
-                    if (!outflows.All(t => t.isRate == first))
-                        throw Program.Error($"Transfer paths from '{outflows.Key.Name}' have inconsistent coefficient units.");
+                    var organFrom = outflows.Key;
+                    var isRate = outflows.First().isRate;
+                    if (!outflows.All(t => t.isRate == isRate))
+                        throw Program.Error($"Transfer paths from '{organFrom.Name}' have inconsistent coefficient units.");
+
+                    // fromにおける生物学的崩壊定数[/day]を設定する。
+                    if (organFrom.Func == OrganFunc.acc)
+                        organFrom.BioDecay = sumOfOutflowCoeff[organFrom];
                 }
 
                 // 各コンパートメントへの流入経路と、移行割合を設定する。
@@ -790,9 +796,6 @@ namespace FlexID.Calc
                     else
                     {
                         var sum = sumOfOutflowCoeff[organFrom];
-
-                        // fromにおける生物学的崩壊定数
-                        organFrom.BioDecay = organFrom.Func == OrganFunc.acc ? sum : 1.0;
 
                         // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[/d]の総計
                         inflowRate = sum == 0 ? 0.0 : coeff / sum;
