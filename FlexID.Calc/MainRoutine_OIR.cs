@@ -241,11 +241,6 @@ namespace FlexID.Calc
                     {
                         Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
                         Act.OutNow[organ.Index].end = Act.CalcNow[organ.Index].end;
-
-                        if (organ.Func == OrganFunc.exc)
-                        {
-                            Act.OutTotalFromIntake[organ.Index] = 0; // TODO: for compatibility
-                        }
                     }
 
                     // 放射能をファイルに出力する。
