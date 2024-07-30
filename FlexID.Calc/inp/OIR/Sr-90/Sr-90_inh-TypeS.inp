@@ -2,64 +2,66 @@
 Sr-90 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Sr-90     Inhalation:Type-S                      6.596156E-05     0.0
+# Nuclide | Intake route                         | λ=ln(2)/T1/2[/d] | Branching Fractions
+#---------+--------------------------------------+-------------------+--------------------
+# Sr-90     Inhalation:Type-S                      6.591777E-05        0.0    # 1 y = 365.2425 days
+  Sr-90     Inhalation:Type-S                      6.596156E-05        0.0    # 1 y = 365.0000 days
   Y-90      Inhalation:Type-S                      2.595247E-01     1.0
 
-
 [Sr-90:compartment]
-#-----+---------------------| S-Coefficient
-# Func| Compartment         | Source Region
-#-----+---------------------+---------------
-  inp   input                 ---
-  acc   Oesophagus-S          Oesophagus-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  exc   Environment           ---
-  acc   Blood                 Blood
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   ST2                   Other
-  acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   Exch-T-bone-V         T-bone-V
-  acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+#-----+---------------------+------------------| S-Coefficient
+# Func| Compartment         | Bio-Halflife[/d] | Source Region
+#-----+---------------------+------------------+---------------
+  inp   input                     ---            ---
+  acc   Oesophagus-S           2160.0            Oesophagus-s
+  acc   St-con                   20.57           St-cont
+# acc   SI-con                    6.015037594    SI-cont  # λ(SI->Blood)
+  acc   SI-con                    6.015038       SI-cont
+  acc   RC-con                    2.0            RC-cont
+  acc   LC-con                    2.0            LC-cont
+  acc   RS-con                    2.0            RS-cont
+  exc   Faeces                    ---            ---
+
+  acc   ET1-F                     2.1            ET1-sur
+  acc   ET2-F                   103.0            ET2-sur
+  acc   ETseq-F                   3.001          ET2-seq
+  acc   LNET-F                    3.0            LN-ET
+  acc   BB-F                     13.0            Bronchi
+  acc   BBseq-F                   3.001          Bronchi-q
+  acc   bb-F                      3.2            Brchiole
+  acc   bbseq-F                   3.001          Brchiole-q
+  acc   ALV-F                     3.003          ALV
+  acc   INT-F                     3.00003        ALV
+  acc   LNTH-F                    3.0            LN-Th
+  acc   ET1-S                     2.1            ET1-sur
+  acc   ET2-S                   100.0001         ET2-sur
+  acc   ETseq-S                   0.0011         ET2-seq
+  acc   LNET-S                    0.0001         LN-ET
+  acc   BB-S                     10.0001         Bronchi
+  acc   BBseq-S                   0.0011         Bronchi-q
+  acc   bb-S                      0.2001         Brchiole
+  acc   bbseq-S                   0.0011         Brchiole-q
+  acc   ALV-S                     0.0031         ALV
+  acc   INT-S                     0.00013        ALV
+  acc   LNTH-S                    0.0001         LN-Th
+  exc   Environment               ---            ---
+  acc   Blood                    15.008          Blood
+  acc   ST0                       2.5            Other
+  acc   ST1                       0.116          Other
+  acc   ST2                       0.00038        Other
+  acc   C-bone-S                  0.694          C-bone-S
+  acc   Exch-C-bone-V             0.0086         C-bone-V
+  acc   Noch-C-bone-V             8.21E-5        C-bone-V
+  acc   T-bone-S                  0.694          T-bone-S
+  acc   Exch-T-bone-V             0.0086         T-bone-V
+  acc   Noch-T-bone-V             4.93E-4        T-bone-V
+  acc   UB-con                   12.0            UB-cont
+  exc   Urine                     ---            ---
 
 [Sr-90:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+------------------------
+# From                  | To                  | Transfer Coef.[/d or %]
+#-----------------------+---------------------+------------------------
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
@@ -111,8 +113,8 @@ Sr-90 Inhalation:Type-S
   ET1-S                   ET2-S                     1.5         #  71.4286%
 
 # ICRP Publ.134 p.215 Table 10.2
-#   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
-#   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
+#   s_r = 3[/d]     (Inhaled particulate materials, Absorption type S)
+#   s_s = 1E-4[/d]  (Inhaled particulate materials, Absorption type S)
   ALV-F                   Blood                     3           #  99.9001%
   INT-F                   Blood                     3           #  99.999%
   bb-F                    Blood                     3           #  93.75%
@@ -145,8 +147,8 @@ Sr-90 Inhalation:Type-S
 
 # ICRP Publ.134 p.215 Table 10.2
 #   fA = 0.0025   (Inhaled particulate materials, Absorption type S)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.0025 * 6 / (1 - 0.0025) = 1.503759398496241E-2
-  SI-con                  Blood                     1.503759398496241E-2        # 0.25%
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.0025 * 6 / (1 - 0.0025) = 1.50375940E-2
+  SI-con                  Blood                 1.50375940E-2   #   0.25%               ← 0.25% がICRPから確認し易い？
 
 # ICRP Publ.134 p.220 Table 10.3
   Blood                   UB-con                    1.73        #  11.5272%
@@ -175,52 +177,61 @@ Sr-90 Inhalation:Type-S
 
 
 [Y-90:compartment]
-#-----+---------------------| S-Coefficient
-# Func| Compartment         | Source Region
-#-----+---------------------+---------------
-  acc   Oesophagus-S          Oesophagus-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  exc   Environment           ---
-  acc   Blood1                Blood
-  acc   Blood2                Blood
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   Liver0                Liver
-  acc   Liver1                Liver
-  acc   Kidneys               Kidneys
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+#-----+---------------------+---------------| S-Coefficient
+# Func| Compartment         | BioDecay[/d]  | Source Region
+#-----+---------------------+---------------+---------------
+  acc   Oesophagus-S           2160.0         Oesophagus-s
+  acc   St-con                   20.57        St-cont
+  acc   SI-con                    6.000006    SI-cont
+  acc   RC-con                    2.0         RC-cont
+  acc   LC-con                    2.0         LC-cont
+  acc   RS-con                    2.0         RS-cont
+  exc   Faeces                    ---         ---
+  acc   ET1-F                     2.1         ET1-sur
+# acc   ET2-F                   101.0         ET2-sur
+  acc   ET2-F                   103.0         ET2-sur
+# acc   ETseq-F                   1.001       ET2-seq
+  acc   ETseq-F                   3.001       ET2-seq
+  acc   LNET-F                    1.0         LN-ET
+# acc   BB-F                     11.0         Bronchi
+  acc   BB-F                     13.0         Bronchi
+# acc   BBseq-F                   1.001       Bronchi-q
+  acc   BBseq-F                   3.001       Bronchi-q
+# acc   bb-F                      1.2         Brchiole
+  acc   bb-F                      3.2         Brchiole
+# acc   bbseq-F                   1.001       Brchiole-q
+  acc   bbseq-F                   3.001       Brchiole-q
+# acc   ALV-F                     1.003       ALV
+  acc   ALV-F                     3.003       ALV
+# acc   INT-F                     1.00003     ALV
+  acc   INT-F                     3.00003     ALV
+# acc   LNTH-F                    1.0         LN-Th
+  acc   LNTH-F                    3.0         LN-Th
+  acc   ET1-S                     2.1         ET1-sur
+  acc   ET2-S                   100.0001      ET2-sur
+  acc   ETseq-S                   0.0011      ET2-seq
+  acc   LNET-S                    0.0001      LN-ET
+  acc   BB-S                     10.0001      Bronchi
+  acc   BBseq-S                   0.0011      Bronchi-q
+  acc   bb-S                      0.2001      Brchiole
+  acc   bbseq-S                   0.0011      Brchiole-q
+  acc   ALV-S                     0.0031      ALV
+  acc   INT-S                     0.00013     ALV
+  acc   LNTH-S                    0.0001      LN-Th
+  exc   Environment               ---         ---
+  acc   Blood1                   16.6         Blood
+  acc   Blood2                    0.462       Blood
+  acc   ST0                       0.231       Other
+  acc   ST1                       0.0019      Other
+  acc   Liver0                    0.2315      Liver
+  acc   Liver1                    0.0019      Liver
+  acc   Kidneys                   0.0019      Kidneys
+  acc   C-bone-S                  1.232E-4    C-bone-S
+  acc   C-bone-V                  8.21E-5     C-bone-V
+  acc   T-bone-S                  7.4E-4      T-bone-S
+  acc   T-bone-V                  4.93E-4     T-bone-V
+  acc   UB-con                   12.0         UB-cont
+  exc   Urine                     ---         ---
 
 [Y-90:transfer]
 #-----------------------+---------------------+--------------
@@ -259,9 +270,12 @@ Sr-90 Inhalation:Type-S
   Sr-90/LNTH-S            LNTH-S                    ---
   Sr-90/Environment       Environment               ---
   Sr-90/Blood             Blood1                    ---
-  Sr-90/ST0               ST0                       ---
-  Sr-90/ST1               ST0                       ---
-  Sr-90/ST2               ST0                       ---
+# Sr-90/ST0               ST0                       ---
+# Sr-90/ST1               ST0                       ---
+# Sr-90/ST2               ST0                       ---
+  Sr-90/ST0               ST0-decay                 ---
+  Sr-90/ST1               ST1-decay                 ---
+  Sr-90/ST2               ST2-decay                 ---
   Sr-90/C-bone-S          C-bone-S                  ---
   Sr-90/Exch-C-bone-V     C-bone-V                  ---
   Sr-90/Noch-C-bone-V     C-bone-V                  ---
@@ -298,18 +312,44 @@ Sr-90 Inhalation:Type-S
   ET1-S                   ET2-S                     1.5         #  71.4286%
 
 # ICRP Publ.134 p.242 Table 11.2
-#   s_r[/d] = 1     (Inhaled particulate materials, Absorption type S)
-#   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
-  ALV-F                   Blood1                    1           #  99.7009%
-  INT-F                   Blood1                    1           #  99.997%
-  bb-F                    Blood1                    1           #  83.3333%
-  bbseq-F                 Blood1                    1           #  99.9001%
-  BB-F                    Blood1                    1           #   9.0909%
-  BBseq-F                 Blood1                    1           #  99.9001%
-  ET2-F                   Blood1                    1           #   0.9901%
-  ETseq-F                 Blood1                    1           #  99.9001%
-  LNET-F                  Blood1                    1           # 100.0%
-  LNTH-F                  Blood1                    1           # 100.0%
+#   s_r = 1[/d]     (Inhaled particulate materials, Absorption type S)
+#   s_s = 1E-4[/d]  (Inhaled particulate materials, Absorption type S)
+# ALV-F                   Blood1                    1           #  99.7009%
+# INT-F                   Blood1                    1           #  99.997%
+# bb-F                    Blood1                    1           #  83.3333%
+# bbseq-F                 Blood1                    1           #  99.9001%
+# BB-F                    Blood1                    1           #   9.0909%
+# BBseq-F                 Blood1                    1           #  99.9001%
+# ET2-F                   Blood1                    1           #   0.9901%
+# ETseq-F                 Blood1                    1           #  99.9001%
+# LNET-F                  Blood1                    1           # 100.0%
+# LNTH-F                  Blood1                    1           # 100.0%
+
+
+# ALV-S                   Blood1                    1E-4        #   3.2258%
+# INT-S                   Blood1                    1E-4        #  76.9231%
+# bb-S                    Blood1                    1E-4        #   0.05%
+# bbseq-S                 Blood1                    1E-4        #   9.0909%
+# BB-S                    Blood1                    1E-4        #   0.001%
+# BBseq-S                 Blood1                    1E-4        #   9.0909%
+# ET2-S                   Blood1                    1E-4        #   0.0001%
+# ETseq-S                 Blood1                    1E-4        #   9.0909%
+# LNET-S                  Blood1                    1E-4        # 100.0%
+# LNTH-S                  Blood1                    1E-4        # 100.0%
+
+# ICRP Publ.134 p.215 Table 10.2
+#   s_r = 3[/d]     (Inhaled particulate materials, Absorption type S)
+#   s_s = 1E-4[/d]  (Inhaled particulate materials, Absorption type S)
+  ALV-F                   Blood1                    3           #  99.7009%
+  INT-F                   Blood1                    3           #  99.997%
+  bb-F                    Blood1                    3           #  83.3333%
+  bbseq-F                 Blood1                    3           #  99.9001%
+  BB-F                    Blood1                    3           #   9.0909%
+  BBseq-F                 Blood1                    3           #  99.9001%
+  ET2-F                   Blood1                    3           #   0.9901%
+  ETseq-F                 Blood1                    3           #  99.9001%
+  LNET-F                  Blood1                    3           # 100.0%
+  LNTH-F                  Blood1                    3           # 100.0%
 
   ALV-S                   Blood1                    1E-4        #   3.2258%
   INT-S                   Blood1                    1E-4        #  76.9231%
@@ -332,8 +372,9 @@ Sr-90 Inhalation:Type-S
 
 # ICRP Publ.134 p.242 Table 11.2
 #   fA = 1E-6   (Inhaled particulate materials, Absorption type S)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-6 * 6 / (1 - 1E-6) = 6.000006000006000E-6
-  SI-con                  Blood1                    6.000006000006000E-6        # 0.0001%
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-6 * 6 / (1 - 1E-6) = 3.60000360E-5
+# SI-con                  Blood1                3.60000360E-5   #   0.0001%
+  SI-con                  Blood1                6.0000060E-06   #   0.0001%
 
 # ICRP Publ.134 p.252 Table 11.3
   Blood1                  Blood2                    0.498       #   3.0%
@@ -353,6 +394,11 @@ Sr-90 Inhalation:Type-S
   Kidneys                 Blood1                    0.0019      # 100.0%
   ST0                     Blood1                    0.231       # 100.0%
   ST1                     Blood1                    0.0019      # 100.0%
+
+  ST0-decay               Blood1                    0.23105     # = ln(2)/3
+  ST1-decay               Blood1                    0.23105     # = ln(2)/3
+  ST2-decay               Blood1                    0.23105     # = ln(2)/3
+
   T-bone-S                Blood1                    0.000493    #  66.6216%
   T-bone-S                T-bone-V                  0.000247    #  33.3784%
   T-bone-V                Blood1                    0.000493    # 100.0%
