@@ -1,6 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace FlexID.Calc.Tests
@@ -42,33 +40,6 @@ namespace FlexID.Calc.Tests
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Retention.out")),
                 File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Retention.out")));
-        }
-    }
-
-    [TestClass]
-    public class TestCalc_Sr90_ing
-    {
-        [Ignore("時間がかかるので普通はテストスキップする")]
-        [TestMethod]
-        [DataRow("Sr-90_ing-Other.inp")]
-        public void Test(string target)
-        {
-            var TargetDir = @"TestFiles\TestCalc_Sr-90_ing";
-            var ExpectDir = Path.Combine(TargetDir, "Expect");
-            var ResultDir = Path.Combine(TargetDir, "Result~");
-            var TargetName = Path.GetFileNameWithoutExtension(target);
-
-            Directory.CreateDirectory(ResultDir);
-
-            var main = new MainRoutine_OIR();
-            main.InputPath = Path.Combine(@"inp\OIR\Sr-90", target);
-            main.OutputPath = Path.Combine(ResultDir, TargetName);
-            main.CalcTimeMeshPath = @"lib\time.dat";
-            main.OutTimeMeshPath = @"lib\out-time.dat";
-            main.CommitmentPeriod = "50years";
-            main.CalcProgeny = true;
-
-            main.Main();
         }
     }
 }
