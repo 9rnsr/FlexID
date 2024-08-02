@@ -2,10 +2,11 @@
 Sr-90 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Sr-90     Inhalation:Type-S                      6.596156E-05     0.0
-  Y-90      Inhalation:Type-S                      2.595247E-01     1.0
+# Nuclide | Intake route                         | λ=ln(2)/T1/2[/d] | Branching Fractions
+#---------+--------------------------------------+-------------------+--------------------
+# Sr-90     Inhalation:Type-S                      6.591777E-05        0.0    # 1 y = 365.2425 days
+  Sr-90     Inhalation:Type-S                      6.596156E-05        0.0    # 1 y = 365.0000 days
+  Y-90      Inhalation:Type-S                      2.595247E-01        1.0
 
 
 [Sr-90:compartment]
@@ -57,9 +58,9 @@ Sr-90 Inhalation:Type-S
   exc   Urine                 ---
 
 [Sr-90:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+------------------------
+# From                  | To                  | Transfer Coef.[/d or %]
+#-----------------------+---------------------+------------------------
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
@@ -86,92 +87,94 @@ Sr-90 Inhalation:Type-S
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
-  ALV-F                   bb-F                      0.002       #   0.0666%
-  ALV-F                   INT-F                     0.001       #   0.0333%
-  INT-F                   LNTH-F                    0.00003     #   0.0001%
-  bb-F                    BB-F                      0.2         #   6.25%
-  bbseq-F                 LNTH-F                    0.001       #   0.0333%
-  BB-F                    ET2-F                    10           #  76.9231%
-  BBseq-F                 LNTH-F                    0.001       #   0.0333%
-  ET2-F                   Oesophagus-S            100           #  97.0874%
-  ETseq-F                 LNET-F                    0.001       #   0.0333%
-  ET1-F                   Environment               0.6         #  28.5714%
-  ET1-F                   ET2-F                     1.5         #  71.4286%
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-S            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
 
-  ALV-S                   bb-S                      0.002       #  64.5161%
-  ALV-S                   INT-S                     0.001       #  32.2581%
-  INT-S                   LNTH-S                    0.00003     #  23.0769%
-  bb-S                    BB-S                      0.2         #  99.95%
-  bbseq-S                 LNTH-S                    0.001       #  90.9091%
-  BB-S                    ET2-S                    10           #  99.999%
-  BBseq-S                 LNTH-S                    0.001       #  90.9091%
-  ET2-S                   Oesophagus-S            100           #  99.9999%
-  ETseq-S                 LNET-S                    0.001       #  90.9091%
-  ET1-S                   Environment               0.6         #  28.5714%
-  ET1-S                   ET2-S                     1.5         #  71.4286%
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
 
 # ICRP Publ.134 p.215 Table 10.2
 #   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
 #   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
-  ALV-F                   Blood                     3           #  99.9001%
-  INT-F                   Blood                     3           #  99.999%
-  bb-F                    Blood                     3           #  93.75%
-  bbseq-F                 Blood                     3           #  99.9667%
-  BB-F                    Blood                     3           #  23.0769%
-  BBseq-F                 Blood                     3           #  99.9667%
-  ET2-F                   Blood                     3           #   2.9126%
-  ETseq-F                 Blood                     3           #  99.9667%
-  LNET-F                  Blood                     3           # 100.0%
-  LNTH-F                  Blood                     3           # 100.0%
+  ALV-F                   Blood                     3
+  INT-F                   Blood                     3
+  bb-F                    Blood                     3
+  bbseq-F                 Blood                     3
+  BB-F                    Blood                     3
+  BBseq-F                 Blood                     3
+  ET2-F                   Blood                     3
+  ETseq-F                 Blood                     3
+  LNET-F                  Blood                     3
+  LNTH-F                  Blood                     3
 
-  ALV-S                   Blood                     1E-4        #   3.2258%
-  INT-S                   Blood                     1E-4        #  76.9231%
-  bb-S                    Blood                     1E-4        #   0.05%
-  bbseq-S                 Blood                     1E-4        #   9.0909%
-  BB-S                    Blood                     1E-4        #   0.001%
-  BBseq-S                 Blood                     1E-4        #   9.0909%
-  ET2-S                   Blood                     1E-4        #   0.0001%
-  ETseq-S                 Blood                     1E-4        #   9.0909%
-  LNET-S                  Blood                     1E-4        # 100.0%
-  LNTH-S                  Blood                     1E-4        # 100.0%
+  ALV-S                   Blood                     1E-4
+  INT-S                   Blood                     1E-4
+  bb-S                    Blood                     1E-4
+  bbseq-S                 Blood                     1E-4
+  BB-S                    Blood                     1E-4
+  BBseq-S                 Blood                     1E-4
+  ET2-S                   Blood                     1E-4
+  ETseq-S                 Blood                     1E-4
+  LNET-S                  Blood                     1E-4
+  LNTH-S                  Blood                     1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #  99.75%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.134 p.215 Table 10.2
 #   fA = 0.0025   (Inhaled particulate materials, Absorption type S)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.0025 * 6 / (1 - 0.0025) = 1.503759398496241E-2
-  SI-con                  Blood                     1.503759398496241E-2        # 0.25%
+#   λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+#                 = 0.0025 * 6 / (1 - 0.0025) = 1.503759398496241E-2
+#
+  SI-con                  Blood                     1.503759398496241E-2
 
 # ICRP Publ.134 p.220 Table 10.3
-  Blood                   UB-con                    1.73        #  11.5272%
-  Blood                   RC-con                    0.525       #   3.4981%
-  Blood                   T-bone-S                  2.08        #  13.8593%
-  Blood                   C-bone-S                  1.67        #  11.1274%
-  Blood                   ST0                       7.5         #  49.9733%
-  Blood                   ST1                       1.5         #   9.9947%
-  Blood                   ST2                       0.003       #   0.02%
-  T-bone-S                Blood                     0.578       #  83.2853%
-  T-bone-S                Exch-T-bone-V             0.116       #  16.7147%
-  C-bone-S                Blood                     0.578       #  83.2853%
-  C-bone-S                Exch-C-bone-V             0.116       #  16.7147%
-  ST0                     Blood                     2.50        # 100.0%
-  ST1                     Blood                     0.116       # 100.0%
-  ST2                     Blood                     0.00038     # 100.0%
-  Exch-T-bone-V           T-bone-S                  0.0043      #  50.0%
-  Exch-T-bone-V           Noch-T-bone-V             0.0043      #  50.0%
-  Exch-C-bone-V           C-bone-S                  0.0043      #  50.0%
-  Exch-C-bone-V           Noch-C-bone-V             0.0043      #  50.0%
-  Noch-C-bone-V           Blood                     0.0000821   # 100.0%
-  Noch-T-bone-V           Blood                     0.000493    # 100.0%
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+  Blood                   ST1                       1.5
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12
 
 
 [Y-90:compartment]
@@ -181,6 +184,10 @@ Sr-90 Inhalation:Type-S
   acc   Oesophagus-S          Oesophagus-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+
+# ICRP Publ.134 p.252 Table 11.3
+  acc   SI-conRe              SI-cont   # SI-con Re-Absorption
+
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -212,6 +219,15 @@ Sr-90 Inhalation:Type-S
   acc   Blood2                Blood
   acc   ST0                   Other
   acc   ST1                   Other
+
+# ICRP Publ.134 p.223-224 Para.483
+# Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
+# is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
+# from compartments of other soft tissue in the model for yttrium as a parent), and then
+# to follow the kinetics of yttrium as a parent radionuclide.
+#
+  acc   ST-decay              Other
+
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Kidneys               Kidneys
@@ -259,9 +275,17 @@ Sr-90 Inhalation:Type-S
   Sr-90/LNTH-S            LNTH-S                    ---
   Sr-90/Environment       Environment               ---
   Sr-90/Blood             Blood1                    ---
-  Sr-90/ST0               ST0                       ---
-  Sr-90/ST1               ST0                       ---
-  Sr-90/ST2               ST0                       ---
+
+# ICRP Publ.134 p.223-224 Para.483
+# Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
+# is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
+# from compartments of other soft tissue in the model for yttrium as a parent), and then
+# to follow the kinetics of yttrium as a parent radionuclide.
+#
+  Sr-90/ST0               ST-decay                  ---
+  Sr-90/ST1               ST-decay                  ---
+  Sr-90/ST2               ST-decay                  ---
+#
   Sr-90/C-bone-S          C-bone-S                  ---
   Sr-90/Exch-C-bone-V     C-bone-V                  ---
   Sr-90/Noch-C-bone-V     C-bone-V                  ---
@@ -273,92 +297,157 @@ Sr-90 Inhalation:Type-S
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
-  ALV-F                   bb-F                      0.002       #   0.1994%
-  ALV-F                   INT-F                     0.001       #   0.0997%
-  INT-F                   LNTH-F                    0.00003     #   0.003%
-  bb-F                    BB-F                      0.2         #  16.6667%
-  bbseq-F                 LNTH-F                    0.001       #   0.0999%
-  BB-F                    ET2-F                    10           #  90.9091%
-  BBseq-F                 LNTH-F                    0.001       #   0.0999%
-  ET2-F                   Oesophagus-S            100           #  99.0099%
-  ETseq-F                 LNET-F                    0.001       #   0.0999%
-  ET1-F                   Environment               0.6         #  28.5714%
-  ET1-F                   ET2-F                     1.5         #  71.4286%
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-S            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
 
-  ALV-S                   bb-S                      0.002       #  64.5161%
-  ALV-S                   INT-S                     0.001       #  32.2581%
-  INT-S                   LNTH-S                    0.00003     #  23.0769%
-  bb-S                    BB-S                      0.2         #  99.95%
-  bbseq-S                 LNTH-S                    0.001       #  90.9091%
-  BB-S                    ET2-S                    10           #  99.999%
-  BBseq-S                 LNTH-S                    0.001       #  90.9091%
-  ET2-S                   Oesophagus-S            100           #  99.9999%
-  ETseq-S                 LNET-S                    0.001       #  90.9091%
-  ET1-S                   Environment               0.6         #  28.5714%
-  ET1-S                   ET2-S                     1.5         #  71.4286%
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.134 p.242 Table 11.2
-#   s_r[/d] = 1     (Inhaled particulate materials, Absorption type S)
+# ICRP Publ.130 p.45 1.5.4._Rules for treatment of radioactive progeny, Para.37
+# (37) For all radionuclides with the exception of noble gases:
+#       The parameter values (s_r, s_s) describing absorption of the inhaled
+#       parent from the respiratory tract into blood are applied to all members
+#       of the decay chain formed in the respiratory tract.
+#
+# ICRP Publ.134 p.215 Table 10.2(Strontium)
+#   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
 #   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
-  ALV-F                   Blood1                    1           #  99.7009%
-  INT-F                   Blood1                    1           #  99.997%
-  bb-F                    Blood1                    1           #  83.3333%
-  bbseq-F                 Blood1                    1           #  99.9001%
-  BB-F                    Blood1                    1           #   9.0909%
-  BBseq-F                 Blood1                    1           #  99.9001%
-  ET2-F                   Blood1                    1           #   0.9901%
-  ETseq-F                 Blood1                    1           #  99.9001%
-  LNET-F                  Blood1                    1           # 100.0%
-  LNTH-F                  Blood1                    1           # 100.0%
+  ALV-F                   Blood1                    3
+  INT-F                   Blood1                    3
+  bb-F                    Blood1                    3
+  bbseq-F                 Blood1                    3
+  BB-F                    Blood1                    3
+  BBseq-F                 Blood1                    3
+  ET2-F                   Blood1                    3
+  ETseq-F                 Blood1                    3
+  LNET-F                  Blood1                    3
+  LNTH-F                  Blood1                    3
 
-  ALV-S                   Blood1                    1E-4        #   3.2258%
-  INT-S                   Blood1                    1E-4        #  76.9231%
-  bb-S                    Blood1                    1E-4        #   0.05%
-  bbseq-S                 Blood1                    1E-4        #   9.0909%
-  BB-S                    Blood1                    1E-4        #   0.001%
-  BBseq-S                 Blood1                    1E-4        #   9.0909%
-  ET2-S                   Blood1                    1E-4        #   0.0001%
-  ETseq-S                 Blood1                    1E-4        #   9.0909%
-  LNET-S                  Blood1                    1E-4        # 100.0%
-  LNTH-S                  Blood1                    1E-4        # 100.0%
+  ALV-S                   Blood1                    1E-4
+  INT-S                   Blood1                    1E-4
+  bb-S                    Blood1                    1E-4
+  bbseq-S                 Blood1                    1E-4
+  BB-S                    Blood1                    1E-4
+  BBseq-S                 Blood1                    1E-4
+  ET2-S                   Blood1                    1E-4
+  ETseq-S                 Blood1                    1E-4
+  LNET-S                  Blood1                    1E-4
+  LNTH-S                  Blood1                    1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #  99.9999%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
+# ICRP Publ.130 p.45 1.5.4._Rules for treatment of radioactive progeny, Para.37
+# (37) For all radionuclides with the exception of noble gases:
+#       The default absorption fraction,fA, for a progeny radionuclide produced
+#       in the respiratory tract following inhalation of a parent,or produced in
+#       the alimentary tract following transfer of activity from the respiratory
+#       tract to the alimentary tract,is the product of the fraction of inhaled
+#       material with rapid dissolution (fr) for the assigned absorption type,
+#       and the reference value of fA for the progeny radionuclide when ingested
+#       as a parent radionuclide. If the progeny radionuclide has multiple
+#       reference values of fA when ingested as a parent, corresponding to
+#       different chemical or physical forms, the default value of fA is the
+#       product of fr for the absorption type and the highest reference value provided.
+#
+# ICRP Publ.130 p.71 Table 3.2
+#  fr(Type-S) = 0.01
+#
 # ICRP Publ.134 p.242 Table 11.2
-#   fA = 1E-6   (Inhaled particulate materials, Absorption type S)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-6 * 6 / (1 - 1E-6) = 6.000006000006000E-6
-  SI-con                  Blood1                    6.000006000006000E-6        # 0.0001%
+#   fA(ing(Y)) = 1E-4   (Ingested material, All chemical forms)
+#
+#   fA(Y) = fr(Type-S) * fA(MaxValue of ing(Y)) = 0.01 * 1E-04 = 1E-06
+#
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+#       Other transfer coefficients not given here are assumed to be zero unless
+#       specified in the relevant element section. In most cases, uptake into blood
+#       from the alimentary tract is taken to occur from the small intestine (SI)
+#       contents, without retention in the SI wall. The corresponding transfer
+#       coefficient is: fA*λ(SI→RC)/(1-fA), whereλ(SI→RC) is the transfer
+#       coefficient from SI contents to right colon contents.
+#
+#   λ(SI->Blood1(Y)) = fA(Y) * λ(SI->RC) / (1 - fA(Y))
+#                     = 1E-6 * 6 / (1 - 1E-6) = 6.000006000006000E-6
+#
+  SI-con                  Blood1                    6.000006000006000E-6
+
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic
+#   compartments into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
+#   fA(Re-Absorption(Y)) = 1E-4   (Ingested material, All chemical forms)
+#
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+#
+#   λ(SI_Re-Absorption->Blood1(Y)) = fA(Re-Ab(Y)) * λ(SI->RC) / (1 - fA(Re-Ab(Y)))
+#                                   = 1E-4 * 6 / (1 - 1E-4) = 6.000600060006001E-4
+#
+  SI-conRe                Blood1                    6.000600060006001E-4
 
 # ICRP Publ.134 p.252 Table 11.3
-  Blood1                  Blood2                    0.498       #   3.0%
-  Blood1                  Liver0                    1.66        #  10.0%
-  Blood1                  Kidneys                   0.166       #   1.0%
-  Blood1                  ST0                       3.652       #  22.0%
-  Blood1                  ST1                       1.328       #   8.0%
-  Blood1                  UB-con                    2.49        #  15.0%
-  Blood1                  SI-con                    0.166       #   1.0%
-  Blood1                  T-bone-S                  3.32        #  20.0%
-  Blood1                  C-bone-S                  3.32        #  20.0%
-  Blood2                  Blood1                    0.462       # 100.0%
-  Liver0                  SI-con                    0.0231      #   9.9784%
-  Liver0                  Blood1                    0.0924      #  39.9136%
-  Liver0                  Liver1                    0.116       #  50.108%
-  Liver1                  Blood1                    0.0019      # 100.0%
-  Kidneys                 Blood1                    0.0019      # 100.0%
-  ST0                     Blood1                    0.231       # 100.0%
-  ST1                     Blood1                    0.0019      # 100.0%
-  T-bone-S                Blood1                    0.000493    #  66.6216%
-  T-bone-S                T-bone-V                  0.000247    #  33.3784%
-  T-bone-V                Blood1                    0.000493    # 100.0%
-  C-bone-S                Blood1                    0.0000821   #  66.6396%
-  C-bone-S                C-bone-V                  0.0000411   #  33.3604%
-  C-bone-V                Blood1                    0.0000821   # 100.0%
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-conRe                  0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+
+# ICRP Publ.134 p.223-224 Para.483
+# Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
+# is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
+# from compartments of other soft tissue in the model for yttrium as a parent), and then
+# to follow the kinetics of yttrium as a parent radionuclide.
+#
+  ST-decay                Blood1                    0.23105     # = ln(2)/3
+
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12
