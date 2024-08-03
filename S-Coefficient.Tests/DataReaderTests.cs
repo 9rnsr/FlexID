@@ -10,7 +10,7 @@ namespace S_Coefficient.Tests
         public void TestReadRAD()
         {
             var actual = DataReader.ReadRAD("Ca-45");
-            var expected = File.ReadAllLines(@"TestFiles\ReadRadExpected.txt");
+            var expected = File.ReadAllLines(TestFiles.Combine("ReadRadExpected.txt"));
 
             CollectionAssert.AreEqual(expected, actual);
         }
@@ -19,7 +19,7 @@ namespace S_Coefficient.Tests
         public void TestReadBET()
         {
             var actual = DataReader.ReadBET("Sr-90");
-            var expected = File.ReadAllLines(@"TestFiles\ReadBetExpected.txt");
+            var expected = File.ReadAllLines(TestFiles.Combine("ReadBetExpected.txt"));
 
             CollectionAssert.AreEqual(expected, actual);
         }

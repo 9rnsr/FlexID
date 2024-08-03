@@ -7,7 +7,7 @@ namespace FlexID.Calc.Tests
     [TestClass]
     public class TrialCalcTests
     {
-        private const string TestDir = @"TestFiles/TrialCalc";
+        private string TestDir => TestFiles.Combine("TrialCalc");
 
         [TestMethod]
         [DataRow("Ba-133_ing-Insoluble")]
@@ -107,7 +107,7 @@ namespace FlexID.Calc.Tests
             var outputPath = Path.Combine(resultDir, target);
 
             var cTimeMeshFile = @"lib\time.dat";
-            var oTimeMeshFile = @"TestFiles\TrialCalc\out-time.dat";
+            var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
 
             var commitmentPeriod = "50years";
 
@@ -136,12 +136,12 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        [DataRow(@"Sr-90_ing", "3months old")]
-        [DataRow(@"Sr-90_ing", "1years old")]
-        [DataRow(@"Sr-90_ing", "5years old")]
-        [DataRow(@"Sr-90_ing", "10years old")]
-        [DataRow(@"Sr-90_ing", "15years old")]
-        [DataRow(@"Sr-90_ing", "Adult")]
+        [DataRow("Sr-90_ing", "3months old")]
+        [DataRow("Sr-90_ing", "1years old")]
+        [DataRow("Sr-90_ing", "5years old")]
+        [DataRow("Sr-90_ing", "10years old")]
+        [DataRow("Sr-90_ing", "15years old")]
+        [DataRow("Sr-90_ing", "Adult")]
         public void Test_EIR(string target, string exposureAge)
         {
             var nuclide = target.Split('_')[0];
@@ -154,7 +154,7 @@ namespace FlexID.Calc.Tests
             var outputPath = Path.Combine(resultDir, target);
 
             var cTimeMeshFile = @"lib\time.dat";
-            var oTimeMeshFile = @"TestFiles\TrialCalc\out-time.dat";
+            var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
 
             var commitmentPeriod =
                 exposureAge == "3months old" /**/? "25450days" : // 70years - 100days = 25550days - 100days

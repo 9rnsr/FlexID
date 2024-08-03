@@ -75,13 +75,14 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        [DataRow("TestFiles/TimeMesh/calc-time.dat")]
-        [DataRow("TestFiles/TimeMesh/out-time.dat")]
+        [DataRow("$(TestFiles)/TimeMesh/calc-time.dat")]
+        [DataRow("$(TestFiles)/TimeMesh/out-time.dat")]
         [DataRow("lib/time.dat")]
         [DataRow("lib/out-time.dat")]
         [DataRow("lib/out-per-h.dat")]
         public void ReadTimeMeshFile(string filePath)
         {
+            filePath = TestFiles.ReplaceVar(filePath);
             var timeMesh = new TimeMesh(filePath);
         }
 

@@ -109,7 +109,7 @@ namespace FlexID.Calc.Tests
         [DataRow("OIR_old_Pu-241_inh-TypeS")]
         public void Test_OIR_old(string target)
         {
-            var inputPath = Path.Combine("TestFiles", "InputRead", target + ".inp");
+            var inputPath = TestFiles.Combine("InputRead", target + ".inp");
 
             var calcProgeny = true;
             var data = new DataReader(inputPath, calcProgeny).Read_OIR();
