@@ -8,7 +8,7 @@ namespace FlexID.Calc.Tests
     [TestClass]
     public class ParameterTests
     {
-        private const string ParamDir = @"TestFiles\parameter";
+        private string ParamDir => TestFiles.Combine("parameter");
 
         [TestMethod]
         [DynamicData(nameof(ValidCases), DynamicDataSourceType.Method)]

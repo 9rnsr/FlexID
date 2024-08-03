@@ -11,7 +11,7 @@ namespace FlexID.Calc.Tests
         [DataRow("test_ing.inp")]
         public void Test(string target)
         {
-            var TargetDir = @"TestFiles\TestCalc";
+            var TargetDir = TestFiles.Combine("TestCalc");
             var ExpectDir = Path.Combine(TargetDir, "Expect");
             var ResultDir = Path.Combine(TargetDir, "Result~");
             var TargetName = Path.GetFileNameWithoutExtension(target);

@@ -15,8 +15,19 @@
     <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not exist &quot;$(TargetDir)TestFiles&quot;  mklink /J &quot;$(TargetDir)TestFiles&quot;  &quot;$(ProjectDir)TestFiles&quot;" />
+  <Target Name="CreateTestFilesDir" AfterTargets="PostBuildEvent">
+    <!--  For old junction 'TestFiles' directory.  -->
+    <RemoveDir Directories="$(TargetDir)TestFiles" />
+
+    <Delete Files="$(TargetDir)TestFiles" />
+    <Exec Command="echo $(ProjectDir)TestFiles&gt; $(TargetDir)TestFiles" />
+  </Target>
+
+  <Target Name="RemoveTestFilesDir" AfterTargets="AfterClean">
+    <!--  For old junction 'TestFiles' directory.  -->
+    <RemoveDir Directories="$(TargetDir)TestFiles" />
+
+    <Delete Files="$(TargetDir)TestFiles" />
   </Target>
 
 </Project>

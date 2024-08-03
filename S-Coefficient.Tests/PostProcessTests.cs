@@ -10,15 +10,16 @@ namespace S_Coefficient.Tests
         [TestMethod]
         public void Test()
         {
-            var sourceLines = File.ReadAllLines(Path.Combine("TestFiles", "PostProcessing", "source.txt"));
+            var sourceFile = TestFiles.Combine("PostProcessing", "source.txt");
+            var sourceLines = File.ReadAllLines(sourceFile);
 
             var resultLines = PostProcessing.Program.FormatFile(sourceLines).ToArray();
 
             // 目視確認用。
-            //var resultFile = Path.Combine("TestFiles", "PostProcessing", "~result.txt");
+            //var resultFile = TestFiles.Combine("PostProcessing", "~result.txt");
             //File.WriteAllLines(resultFile, resultLines);
 
-            var expectFile = Path.Combine("TestFiles", "PostProcessing", "expect.txt");
+            var expectFile = TestFiles.Combine("PostProcessing", "expect.txt");
             var expectLines = File.ReadAllLines(expectFile).ToArray();
             CollectionAssert.AreEqual(expectLines, resultLines);
         }
