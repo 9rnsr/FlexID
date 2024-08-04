@@ -1,28 +1,31 @@
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
-using ClosedXML.Excel;
 using System.IO;
 using System.Windows.Forms;
 
 namespace S_Coefficient
 {
-    class Output
+    public class Output
     {
         // 出力Excelテンプレートのファイルパス
-        private const string OutExcel = @"lib\S-Coefficient_Tmp.xlsx";
+        private const string TemplateExcelFilePath = @"lib\S-Coefficient_Tmp.xlsx";
+
+        public string OutputExcelFilePath { get; set; }
+
+        public string OutputTextFilePath { get; set; }
 
         /// <summary>
         /// 計算結果をExcelファイルに書き出す
         /// </summary>
         /// <param name="nuclideName">計算対象となった核種名</param>
-        /// <param name="sex">計算対象となった性別</param>
         /// <param name="OutTotal">計算結果</param>
-        public static void WriteCalcResult(string nuclideName, Sex sex, List<double> OutTotal,
+        public void WriteCalcResult(string nuclideName, List<double> OutTotal,
             List<double> OutP, List<double> OutE, List<double> OutB, List<double> OutA, List<double> OutN)
         {
             try
             {
-                using (var Open = new XLWorkbook(OutExcel))
+                using (var Open = new XLWorkbook(TemplateExcelFilePath))
                 {
                     int outCount = 0;
                     var SheetT = Open.Worksheet("total");
@@ -93,22 +96,19 @@ namespace S_Coefficient
                         }
                     }
 
-                    if (sex == Sex.Male)
-                        Open.SaveAs(@"out\AdultMale\" + nuclideName + "_AdultMale.xlsx");
-                    else
-                        Open.SaveAs(@"out\AdultFemale\" + nuclideName + "_AdultFemale.xlsx");
+                    Open.SaveAs(OutputExcelFilePath);
 
                     // セルの値を読んでテキストに出力
                     var resultList = new List<string>();
-                    for (int i = 4; i < 48; i++)
+                    for (int row = 4; row < 48; row++)
                     {
                         string line = "";
-                        for (int j = 2; j < 83; j++)
+                        for (int col = 2; col < 83; col++)
                         {
-                            var text = SheetT.Cell(i, j).Value.ToString();
-                            if (i == 4)
+                            var text = SheetT.Cell(row, col).Value.ToString();
+                            if (row == 4)
                             {
-                                if (j == 2)
+                                if (col == 2)
                                 {
                                     text = "  T/S";
                                     line += $"{text,-11}";
@@ -118,7 +118,7 @@ namespace S_Coefficient
                             }
                             else
                             {
-                                if (j == 2)
+                                if (col == 2)
                                     line += $"{text,-11}";
                                 else
                                 {
@@ -130,10 +130,7 @@ namespace S_Coefficient
                         resultList.Add(line);
                     }
 
-                    if (sex == Sex.Male)
-                        File.WriteAllLines(@"out\AdultMale\" + nuclideName + "_AdultMale.txt", resultList, System.Text.Encoding.UTF8);
-                    else
-                        File.WriteAllLines(@"out\AdultFemale\" + nuclideName + "_AdultFemale.txt", resultList, System.Text.Encoding.UTF8);
+                    File.WriteAllLines(OutputTextFilePath, resultList, System.Text.Encoding.UTF8);
                 }
             }
             catch (Exception e)
