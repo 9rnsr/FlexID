@@ -7,14 +7,14 @@ namespace S_Coefficient
     public class CalcSfactor
     {
         // 光子と電子のエネルギービン
-        private readonly double[] PEenergy = new double[]
+        private readonly double[] EnergyPE = new double[]
         {
             0, 0.001, 0.005, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08,
             0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.5, 2, 3, 4, 5, 6, 8, 10
         };
 
         // αのエネルギービン
-        private readonly double[] Aenergy = new double[]
+        private readonly double[] EnergyA = new double[]
         {
             0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5,
             7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12
@@ -74,6 +74,9 @@ namespace S_Coefficient
             // 放射線データ取得
             var raddata = DataReader.ReadRAD(nuclideName);
 
+            // βスペクトル取得
+            var betdata = DataReader.ReadBET(nuclideName);
+
             for (int TScount = 0; TScount < safdata.photon.Count; TScount++)
             {
                 var SAFa = safdata.alpha[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -92,15 +95,37 @@ namespace S_Coefficient
 
                 // doubleに置き換える
                 double[] SAFalpha = new double[SAFa.Length - 4];
-                double[] SAFphaton = new double[SAFp.Length - 4];
+                double[] SAFphoton = new double[SAFp.Length - 4];
                 double[] SAFelectron = new double[SAFe.Length - 4];
 
                 for (int i = 0; i < SAFa.Length - 4; i++)
                     SAFalpha[i] = double.Parse(SAFa[i + 2]);
                 for (int i = 0; i < SAFp.Length - 4; i++)
-                    SAFphaton[i] = double.Parse(SAFp[i + 2]);
+                    SAFphoton[i] = double.Parse(SAFp[i + 2]);
                 for (int i = 0; i < SAFe.Length - 4; i++)
                     SAFelectron[i] = double.Parse(SAFe[i + 2]);
+
+                Func<double, double> InterpolationP;
+                Func<double, double> InterpolationE;
+                Func<double, double> InterpolationA;
+                if (InterpolationMethod == "PCHIP")
+                {
+                    var pchipP = CubicSpline.InterpolatePchip(EnergyPE, SAFphoton);
+                    var pchipE = CubicSpline.InterpolatePchip(EnergyPE, SAFelectron);
+                    var pchipA = CubicSpline.InterpolatePchip(EnergyA, SAFalpha);
+
+                    InterpolationP = Ei => pchipP.Interpolate(Ei);
+                    InterpolationE = Ei => pchipE.Interpolate(Ei);
+                    InterpolationA = Ei => pchipA.Interpolate(Ei);
+                }
+                else if (InterpolationMethod == "線形補間")
+                {
+                    InterpolationP = Ei => CalcSAF(Ei, EnergyPE, SAFphoton);
+                    InterpolationE = Ei => CalcSAF(Ei, EnergyPE, SAFelectron);
+                    InterpolationA = Ei => CalcSAF(Ei, EnergyA, SAFalpha);
+                }
+                else
+                    throw new InvalidOperationException(InterpolationMethod);
 
                 foreach (var rad in raddata)
                 {
@@ -118,72 +143,75 @@ namespace S_Coefficient
                     // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                     if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                     {
-                        if (InterpolationMethod == "PCHIP")
-                        {
-                            var pchip = CubicSpline.InterpolatePchip(PEenergy, SAFphaton);
-                            SfacP += Yi * Ei * pchip.Interpolate(Ei) * WRphoton * ToJoule;
-                        }
-                        else if (InterpolationMethod == "線形補間")
-                            SfacP += Yi * Ei * CalcSAF(Ei, PEenergy, SAFphaton) * WRphoton * ToJoule;
+                        SfacP += Yi * Ei * InterpolationP(Ei) * WRphoton * ToJoule;
                     }
                     // IE: 内部転換電子、AE: オージェ電子
                     else if (jcode == "AE" || jcode == "IE")
                     {
-                        if (InterpolationMethod == "PCHIP")
-                        {
-                            var pchip = CubicSpline.InterpolatePchip(PEenergy, SAFelectron);
-                            SfacE += Yi * Ei * pchip.Interpolate(Ei) * WRelectron * ToJoule;
-                        }
-                        else if (InterpolationMethod == "線形補間")
-                            SfacE += Yi * Ei * CalcSAF(Ei, PEenergy, SAFelectron) * WRelectron * ToJoule;
+                        SfacE += Yi * Ei * InterpolationE(Ei) * WRelectron * ToJoule;
                     }
-                    // β粒子(電子)、DB: 遅発β
+                    // B-:β粒子(電子)、B+: 陽電子、DB: 遅発β
                     else if (jcode == "B-" || jcode == "B+" || jcode == "DB")
                     {
                         if (finishBeta)
                             continue;
 
                         // RADファイルに定義されているエントリは単に無視し、BETファイルからS係数を計算する
-                        SfacB = CalcBeta(nuclideName, SAFelectron) * ToJoule;
+                        double beta = 0;
+                        for (int r = 1; r < betdata.Length; r++)
+                        {
+                            var betL = betdata[r - 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            var betH = betdata[r - 0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                            var ebinL = double.Parse(betL[0]); // エネルギー幅の下限(MeV)
+                            var ebinH = double.Parse(betH[0]); // エネルギー幅の上限(MeV)
+                            var nparL = double.Parse(betL[1]); // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数
+                            var nparH = double.Parse(betH[1]); // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数
+
+                            var yieldL = ebinL * nparL;
+                            var yieldH = ebinH * nparH;
+
+                            var lo = InterpolationE(ebinL);
+                            var hi = InterpolationE(ebinH);
+                            var safH = yieldH * hi;
+                            var safL = yieldL * lo;
+                            beta += (safH + safL) * (ebinH - ebinL) / 2 * WRelectron;
+                        }
+                        SfacB = beta * ToJoule;
 
                         finishBeta = true;
                     }
                     // α粒子
                     else if (jcode == "A")
                     {
-                        if (InterpolationMethod == "PCHIP")
-                        {
-                            var pchip = CubicSpline.InterpolatePchip(Aenergy, SAFalpha);
-                            SfacA += Yi * Ei * pchip.Interpolate(Ei) * WRalpha * ToJoule;
-                        }
-                        else if (InterpolationMethod == "線形補間")
-                            SfacA += Yi * Ei * CalcSAF(Ei, Aenergy, SAFalpha) * WRalpha * ToJoule;
+                        SfacA += Yi * Ei * InterpolationA(Ei) * WRalpha * ToJoule;
                     }
-                    // α反跳核、核分裂片
+                    // α反跳核
                     else if (jcode == "AR")
                     {
                         // 2MeVの値を取得
                         SfacA += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
                     }
+                    // 核分裂片
                     else if (jcode == "FF")
                     {
+                        // 2MeVの値を取得
                         SfacN += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
                     }
                     // 中性子
                     else if (jcode == "N")
                     {
                         // 放射線データに"N"を持つ＝中性子SAFが定義されていることとイコール
-                        int nuclideNo = Array.IndexOf(safdata.neutronNuclideNames, nuclideName);
+                        int ni = Array.IndexOf(safdata.neutronNuclideNames, nuclideName);
 
-                        var parts = safdata.neutron[TScount]
-                            .Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+                        var parts = safdata.neutron[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
 
-                        // nuclideNo + 2は、不要な列(線源領域と標的領域の名前の2列)を除去するために必要
-                        var SAFn = double.Parse(parts[nuclideNo + 2]);
+                        // ni + 2は、不要な列(線源領域と標的領域の名前の2列)を除去するために必要
+                        var SAFn = double.Parse(parts[ni + 2]);
 
-                        var WRneutron = double.Parse(safdata.neutronRadiationWeights[nuclideNo]);
+                        var WRneutron = double.Parse(safdata.neutronRadiationWeights[ni]);
 
-                        SfacN += CalcNeutron(Yi, Ei, SAFn, WRneutron) * ToJoule;
+                        SfacN += Yi * Ei * SAFn * WRneutron * ToJoule;
                     }
                     else
                     {
@@ -209,25 +237,25 @@ namespace S_Coefficient
         /// 指定エネルギー点におけるSAFを算出する
         /// </summary>
         /// <param name="energy">放射線のエネルギー(MeV)</param>
-        /// <param name="energyBin">放射線のエネルギーBinを定義した配列</param>
+        /// <param name="ebins">放射線のエネルギーBinを定義した配列</param>
         /// <param name="SAF">放射線のエネルギーBin毎のSAF値</param>
         /// <returns>SAF値</returns>
-        private double CalcSAF(double energy, double[] energyBin, double[] SAF)
+        private double CalcSAF(double energy, double[] ebins, double[] SAF)
         {
-            for (int i = 0; i < energyBin.Length; i++)
+            for (int i = 0; i < ebins.Length; i++)
             {
-                if (energy == energyBin[i])
+                if (energy == ebins[i])
                 {
                     // SAFを求めるエネルギー点がエネルギーBin境界上にある場合
                     return SAF[i];
                 }
-                if (energy < energyBin[i])
+                if (energy < ebins[i])
                 {
                     // SAFを求めるエネルギー点がエネルギーBinの間にある場合
-                    var ergBinL = energyBin[i - 1];
-                    var ergBinH = energyBin[i];
+                    var ergBinL = ebins[i - 1];
+                    var ergBinH = ebins[i - 0];
                     var SAFBinL = SAF[i - 1];
-                    var SAFBinH = SAF[i];
+                    var SAFBinH = SAF[i - 0];
 
                     return SAFBinL + (energy - ergBinL) * (SAFBinH - SAFBinL) / (ergBinH - ergBinL);
                 }
@@ -235,64 +263,6 @@ namespace S_Coefficient
 
             // エネルギービンを超えることはないはず
             throw new Exception("Assert(energyBin.Last < energy)");
-        }
-
-        /// <summary>
-        /// βスペクトルS-factor計算
-        /// </summary>
-        /// <param name="nuclideName">計算対象の核種名</param>
-        /// <param name="SAF">SAF値の配列</param>
-        /// <returns></returns>
-        private double CalcBeta(string nuclideName, double[] SAF)
-        {
-            // βスペクトル取得
-            var betdata = DataReader.ReadBET(nuclideName);
-
-            double beta = 0;
-            for (int j = 1; j < betdata.Length; j++)
-            {
-                string[] bet1 = betdata[j].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                string[] bet2 = betdata[j - 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                double ergBinH = double.Parse(bet1[0]); // エネルギー幅の上限(MeV)
-                double numParH = double.Parse(bet1[1]); // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数
-                double ergBinL = double.Parse(bet2[0]); // エネルギー幅の下限(MeV)
-                double numParL = double.Parse(bet2[1]); // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数
-
-                double BetaYieldH = ergBinH * numParH;
-                double BetaYieldL = ergBinL * numParL;
-
-                if (InterpolationMethod == "PCHIP")
-                {
-                    var pchip = CubicSpline.InterpolatePchip(PEenergy, SAF);
-                    var high = pchip.Interpolate(ergBinH);
-                    var low = pchip.Interpolate(ergBinL);
-                    var safH = BetaYieldH * high;
-                    var safL = BetaYieldL * low;
-                    beta += (safH + safL) * (ergBinH - ergBinL) / 2 * WRelectron;
-                }
-                else if (InterpolationMethod == "線形補間")
-                {
-                    var high = CalcSAF(ergBinH, PEenergy, SAF);
-                    var safH = BetaYieldH * high;
-                    var low = CalcSAF(ergBinL, PEenergy, SAF);
-                    var safL = BetaYieldL * low;
-                    beta += (safH + safL) * (ergBinH - ergBinL) / 2 * WRelectron;
-                }
-            }
-            return beta;
-        }
-
-        /// <summary>
-        /// 中性子S-factor計算
-        /// </summary>
-        /// <param name="nuclideNo">中性子SAFを持つ核種群の何番目かどうか</param>
-        /// <returns></returns>
-        private double CalcNeutron(double yield, double energy, double SAFn, double WRneutron)
-        {
-            double nS = yield * energy * SAFn * WRneutron;
-
-            return nS;
         }
     }
 }
