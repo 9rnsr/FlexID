@@ -18,83 +18,57 @@ namespace S_Coefficient
         /// <summary>
         /// 計算結果をExcelファイルに書き出す
         /// </summary>
-        /// <param name="nuclideName">計算対象となった核種名</param>
-        /// <param name="OutTotal">計算結果</param>
-        public void WriteCalcResult(string nuclideName, List<double> OutTotal,
-            List<double> OutP, List<double> OutE, List<double> OutB, List<double> OutA, List<double> OutN)
+        /// <param name="nuclide">計算対象となった核種名</param>
+        /// <param name="outTotal">計算結果</param>
+        public void WriteCalcResult(string nuclide, List<double> outTotal,
+            List<double> outP, List<double> outE, List<double> outB, List<double> outA, List<double> outN)
         {
             try
             {
                 using (var Open = new XLWorkbook(TemplateExcelFilePath))
                 {
-                    int outCount = 0;
-                    var SheetT = Open.Worksheet("total");
-                    for (int col = 3; col < 83; col++)
+                    void WriteTS(List<double> outValuesTS, IXLWorksheet sheet)
                     {
-                        for (int row = 5; row < 48; row++)
+                        const int offsetC = 3;
+                        const int offsetR = 5;
+
+                        int outTS = 0;
+                        for (int col = 0; col < 79; col++)
                         {
-                            if (col == 82)
-                                SheetT.Cell(row, col).Value = 0;
-                            else
-                                SheetT.Cell(row, col).Value = OutTotal[outCount];
-                            outCount++;
+                            for (int row = 0; row < 43; row++)
+                            {
+                                var r = row + offsetR;
+                                var c = col + offsetC;
+                                sheet.Cell(r, c).Value = outValuesTS[outTS++];
+                            }
                         }
                     }
 
-                    outCount = 0;
-                    var SheetP = Open.Worksheet("photon");
-                    for (int col = 3; col < 82; col++)
+                    var sheetT = Open.Worksheet("total");
+                    WriteTS(outTotal, sheetT);
                     {
+                        // 'Other'の列をゼロで埋める。
+                        var col = 82;
                         for (int row = 5; row < 48; row++)
                         {
-                            SheetP.Cell(row, col).Value = OutP[outCount];
-                            outCount++;
+                            sheetT.Cell(row, col).Value = 0;
                         }
                     }
 
-                    outCount = 0;
-                    var SheetE = Open.Worksheet("electron");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetE.Cell(row, col).Value = OutE[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetP = Open.Worksheet("photon");
+                    WriteTS(outP, sheetP);
 
-                    outCount = 0;
-                    var SheetB = Open.Worksheet("beta");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetB.Cell(row, col).Value = OutB[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetE = Open.Worksheet("electron");
+                    WriteTS(outE, sheetE);
 
-                    outCount = 0;
-                    var SheetA = Open.Worksheet("alpha");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetA.Cell(row, col).Value = OutA[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetB = Open.Worksheet("beta");
+                    WriteTS(outB, sheetB);
 
-                    outCount = 0;
-                    var SheetN = Open.Worksheet("neutron");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetN.Cell(row, col).Value = OutN[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetA = Open.Worksheet("alpha");
+                    WriteTS(outA, sheetA);
+
+                    var sheetN = Open.Worksheet("neutron");
+                    WriteTS(outN, sheetN);
 
                     Open.SaveAs(OutputExcelFilePath);
 
@@ -105,7 +79,7 @@ namespace S_Coefficient
                         string line = "";
                         for (int col = 2; col < 83; col++)
                         {
-                            var text = SheetT.Cell(row, col).Value.ToString();
+                            var text = sheetT.Cell(row, col).Value.ToString();
                             if (row == 4)
                             {
                                 if (col == 2)
