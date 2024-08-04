@@ -1,4 +1,3 @@
-using ClosedXML;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -18,7 +17,24 @@ namespace S_Coefficient.Tests
         }
 
         [TestMethod]
+        [DataRow("Ba-133")]
         [DataRow("C-14")]
+        [DataRow("Ca-45")]
+        [DataRow("Cs-134")]
+        [DataRow("Cs-137")]
+        [DataRow("Fe-59")]
+        [DataRow("H-3")]
+        [DataRow("I-129")]
+        [DataRow("Pu-238")]
+        [DataRow("Pu-239")]
+        [DataRow("Pu-240")]
+        [DataRow("Pu-241")]
+        [DataRow("Pu-242")]
+        [DataRow("Ra-223")]
+        [DataRow("Ra-226")]
+        [DataRow("Sr-90")]
+        [DataRow("Tc-99")]
+        [DataRow("Zn-65")]
         public void TestPCHIP(string nuclide)
         {
             CalcSfactor CalcS = new CalcSfactor();
@@ -44,7 +60,24 @@ namespace S_Coefficient.Tests
         }
 
         [TestMethod]
+        [DataRow("Ba-133")]
         [DataRow("C-14")]
+        [DataRow("Ca-45")]
+        [DataRow("Cs-134")]
+        [DataRow("Cs-137")]
+        [DataRow("Fe-59")]
+        [DataRow("H-3")]
+        [DataRow("I-129")]
+        [DataRow("Pu-238")]
+        [DataRow("Pu-239")]
+        [DataRow("Pu-240")]
+        [DataRow("Pu-241")]
+        [DataRow("Pu-242")]
+        [DataRow("Ra-223")]
+        [DataRow("Ra-226")]
+        [DataRow("Sr-90")]
+        [DataRow("Tc-99")]
+        [DataRow("Zn-65")]
         public void TestLinear(string nuclide)
         {
             CalcSfactor CalcS = new CalcSfactor();
