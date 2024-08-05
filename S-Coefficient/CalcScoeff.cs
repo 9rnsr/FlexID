@@ -45,12 +45,12 @@ namespace S_Coefficient
         public void CalcS(SAFData safdata, string nuclideName, Output output)
         {
             // 計算結果である、線源領域vs標的領域の組み合わせ毎のS係数値
-            var OutTotal = new List<double>();
-            var OutP = new List<double>();
-            var OutE = new List<double>();
-            var OutB = new List<double>();
-            var OutA = new List<double>();
-            var OutN = new List<double>();
+            var OutTotal = new double[safdata.Count];
+            var OutP = new double[safdata.Count];
+            var OutE = new double[safdata.Count];
+            var OutB = new double[safdata.Count];
+            var OutA = new double[safdata.Count];
+            var OutN = new double[safdata.Count];
 
             // 放射線データ取得
             var raddata = DataReader.ReadRAD(nuclideName);
@@ -191,12 +191,12 @@ namespace S_Coefficient
 
                 // 全ての放射線についてのS係数
                 var Scoeff = ScoeffP + ScoeffE + ScoeffB + ScoeffA + ScoeffN;
-                OutTotal.Add(Scoeff);
-                OutP.Add(ScoeffP);
-                OutE.Add(ScoeffE);
-                OutB.Add(ScoeffB);
-                OutA.Add(ScoeffA);
-                OutN.Add(ScoeffN);
+                OutTotal[TScount] = Scoeff;
+                OutP[TScount] = ScoeffP;
+                OutE[TScount] = ScoeffE;
+                OutB[TScount] = ScoeffB;
+                OutA[TScount] = ScoeffA;
+                OutN[TScount] = ScoeffN;
             }
 
             // 核種ごとの計算結果をExcelファイルに出力する
