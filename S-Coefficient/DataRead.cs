@@ -109,57 +109,26 @@ namespace S_Coefficient
         /// <returns>取得したSAFデータ</returns>
         public static SAFData ReadSAF(Sex sex)
         {
-            var data = new SAFData();
-            string alphaFilePath;
-            string photonFilePath;
-            string electronFilePath;
-            string neutronFilePath;
-            string current = Environment.CurrentDirectory;
-            if (sex == Sex.Male)
+            var libDir = Path.Combine(Environment.CurrentDirectory, "lib");
+
+            string GetSingleFile(string pattern)
             {
-                var file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-am_alpha_????-??-??.SAF").Where(x => x.Contains("rcp-am_alpha_")).ToList();
-                if (file.Count == 1)
-                    alphaFilePath = file[0];
-                else
-                    return data;
-                file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-am_photon_????-??-??.SAF").Where(x => x.Contains("rcp-am_photon_")).ToList();
-                if (file.Count == 1)
-                    photonFilePath = file[0];
-                else
-                    return data;
-                file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-am_electron_????-??-??.SAF").Where(x => x.Contains("rcp-am_electron_")).ToList();
-                if (file.Count == 1)
-                    electronFilePath = file[0];
-                else
-                    return data;
-                file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-am_neutron_????-??-??.SAF").Where(x => x.Contains("rcp-am_neutron_")).ToList();
-                if (file.Count == 1)
-                    neutronFilePath = file[0];
-                else
-                    return data;
+                var files = Directory.GetFiles(libDir, pattern);
+                return files.Length == 1 ? files[0] : null;
             }
-            else
+
+            var amaf = sex == Sex.Male ? "am" : "af";
+            var alphaFilePath    /**/= GetSingleFile($"rcp-{amaf}_alpha_????-??-??.SAF");
+            var photonFilePath   /**/= GetSingleFile($"rcp-{amaf}_photon_????-??-??.SAF");
+            var electronFilePath /**/= GetSingleFile($"rcp-{amaf}_electron_????-??-??.SAF");
+            var neutronFilePath  /**/= GetSingleFile($"rcp-{amaf}_neutron_????-??-??.SAF");
+
+            var data = new SAFData();
+
+            if (alphaFilePath is null || photonFilePath is null ||
+                electronFilePath is null || neutronFilePath is null)
             {
-                var file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-af_alpha_????-??-??.SAF").Where(x => x.Contains("rcp-af_alpha_")).ToList();
-                if (file.Count == 1)
-                    alphaFilePath = file[0];
-                else
-                    return data;
-                file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-af_photon_????-??-??.SAF").Where(x => x.Contains("rcp-af_photon_")).ToList();
-                if (file.Count == 1)
-                    photonFilePath = file[0];
-                else
-                    return data;
-                file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-af_electron_????-??-??.SAF").Where(x => x.Contains("rcp-af_electron_")).ToList();
-                if (file.Count == 1)
-                    electronFilePath = file[0];
-                else
-                    return data;
-                file = Directory.GetFiles(Path.Combine(current, "lib"), @"rcp-af_neutron_????-??-??.SAF").Where(x => x.Contains("rcp-af_neutron_")).ToList();
-                if (file.Count == 1)
-                    neutronFilePath = file[0];
-                else
-                    return data;
+                return data;
             }
 
             (int numT, int numS, double[] Energies) GetHeader(string line)
@@ -258,6 +227,7 @@ namespace S_Coefficient
                 while ((line = r.ReadLine()) != null)
                     data.neutron.Add(line);
             }
+
             data.Completion = true;
             return data;
         }
