@@ -4,12 +4,12 @@ using System.IO;
 namespace S_Coefficient.Tests
 {
     [TestClass]
-    public class CalcSfactorTests
+    public class CalcScoeffTests
     {
         static string ExpectDir;
         static string ResultDir;
 
-        static CalcSfactorTests()
+        static CalcScoeffTests()
         {
             ExpectDir = TestFiles.Combine("Expect");
             ResultDir = TestFiles.Combine("Result~");
@@ -37,7 +37,7 @@ namespace S_Coefficient.Tests
         [DataRow("Zn-65")]
         public void TestPCHIP(string nuclide)
         {
-            CalcSfactor CalcS = new CalcSfactor();
+            var CalcS = new CalcScoeff();
             CalcS.InterpolationMethod = "PCHIP";
 
             foreach (var sex in new[] { Sex.Male, Sex.Female })
@@ -80,7 +80,7 @@ namespace S_Coefficient.Tests
         [DataRow("Zn-65")]
         public void TestLinear(string nuclide)
         {
-            CalcSfactor CalcS = new CalcSfactor();
+            var CalcS = new CalcScoeff();
             CalcS.InterpolationMethod = "線形補間";
 
             foreach (var sex in new[] { Sex.Male, Sex.Female })
