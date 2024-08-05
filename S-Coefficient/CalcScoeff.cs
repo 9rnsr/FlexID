@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace S_Coefficient
 {
-    public class CalcSfactor
+    public class CalcScoeff
     {
         // 光子と電子のエネルギービン
         private readonly double[] EnergyPE = new double[]
@@ -37,7 +37,7 @@ namespace S_Coefficient
         public List<string> Nuclides { get; } = new List<string>();
 
         /// <summary>
-        /// S-factor計算
+        /// S係数の計算
         /// </summary>
         /// <param name="sex">計算対象の性別</param>
         public (string, string) CalcS(Sex sex)
@@ -87,11 +87,11 @@ namespace S_Coefficient
                 bool finishBeta = false;
 
                 // 放射線ごとのS係数計算値
-                double SfacP = 0;
-                double SfacE = 0;
-                double SfacB = 0;
-                double SfacA = 0;
-                double SfacN = 0;
+                double ScoeffP = 0;
+                double ScoeffE = 0;
+                double ScoeffB = 0;
+                double ScoeffA = 0;
+                double ScoeffN = 0;
 
                 // doubleに置き換える
                 double[] SAFalpha = new double[SAFa.Length - 4];
@@ -143,12 +143,12 @@ namespace S_Coefficient
                     // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                     if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                     {
-                        SfacP += Yi * Ei * InterpolationP(Ei) * WRphoton * ToJoule;
+                        ScoeffP += Yi * Ei * InterpolationP(Ei) * WRphoton * ToJoule;
                     }
                     // IE: 内部転換電子、AE: オージェ電子
                     else if (jcode == "AE" || jcode == "IE")
                     {
-                        SfacE += Yi * Ei * InterpolationE(Ei) * WRelectron * ToJoule;
+                        ScoeffE += Yi * Ei * InterpolationE(Ei) * WRelectron * ToJoule;
                     }
                     // B-:β粒子(電子)、B+: 陽電子、DB: 遅発β
                     else if (jcode == "B-" || jcode == "B+" || jcode == "DB")
@@ -177,26 +177,26 @@ namespace S_Coefficient
                             var safL = yieldL * lo;
                             beta += (safH + safL) * (ebinH - ebinL) / 2 * WRelectron;
                         }
-                        SfacB = beta * ToJoule;
+                        ScoeffB = beta * ToJoule;
 
                         finishBeta = true;
                     }
                     // α粒子
                     else if (jcode == "A")
                     {
-                        SfacA += Yi * Ei * InterpolationA(Ei) * WRalpha * ToJoule;
+                        ScoeffA += Yi * Ei * InterpolationA(Ei) * WRalpha * ToJoule;
                     }
                     // α反跳核
                     else if (jcode == "AR")
                     {
                         // 2MeVの値を取得
-                        SfacA += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
+                        ScoeffA += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
                     }
                     // 核分裂片
                     else if (jcode == "FF")
                     {
                         // 2MeVの値を取得
-                        SfacN += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
+                        ScoeffN += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
                     }
                     // 中性子
                     else if (jcode == "N")
@@ -211,7 +211,7 @@ namespace S_Coefficient
 
                         var WRneutron = double.Parse(safdata.neutronRadiationWeights[ni]);
 
-                        SfacN += Yi * Ei * SAFn * WRneutron * ToJoule;
+                        ScoeffN += Yi * Ei * SAFn * WRneutron * ToJoule;
                     }
                     else
                     {
@@ -220,13 +220,13 @@ namespace S_Coefficient
                 }
 
                 // 全ての放射線についてのS係数
-                double Sfactor = SfacP + SfacE + SfacB + SfacA + SfacN;
-                OutTotal.Add(Sfactor);
-                OutP.Add(SfacP);
-                OutE.Add(SfacE);
-                OutB.Add(SfacB);
-                OutA.Add(SfacA);
-                OutN.Add(SfacN);
+                double Scoeff = ScoeffP + ScoeffE + ScoeffB + ScoeffA + ScoeffN;
+                OutTotal.Add(Scoeff);
+                OutP.Add(ScoeffP);
+                OutE.Add(ScoeffE);
+                OutB.Add(ScoeffB);
+                OutA.Add(ScoeffA);
+                OutN.Add(ScoeffN);
             }
 
             // 核種ごとの計算結果をExcelファイルに出力する
