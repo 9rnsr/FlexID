@@ -16,6 +16,10 @@ namespace S_Coefficient
     /// </summary>
     public class SAFData
     {
+        public double[] EnergyA;
+        public double[] EnergyP;
+        public double[] EnergyE;
+
         public List<string> alpha = new List<string>();
         public List<string> photon = new List<string>();
         public List<string> electron = new List<string>();
@@ -158,6 +162,21 @@ namespace S_Coefficient
                     return data;
             }
 
+            (int numT, int numS, double[] Energies) GetHeader(string line)
+            {
+                var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var numT = int.Parse(parts[0]);
+                var numS = int.Parse(parts[1]);
+                var energies = new List<double>(parts.Length - 2);
+                for (int i = 2; i < parts.Length; i++)
+                {
+                    if (!double.TryParse(parts[i], out var erg))
+                        break;
+                    energies.Add(erg);
+                }
+                return (numT, numS, energies.ToArray());
+            }
+
             // α
             using (var r = new StreamReader(alphaFilePath))
             {
@@ -166,7 +185,11 @@ namespace S_Coefficient
                 r.ReadLine();
                 r.ReadLine();
                 r.ReadLine();
-                r.ReadLine();
+
+                line = r.ReadLine();
+                var (nT, nS, energies) = GetHeader(line);
+                data.EnergyA = energies;
+
                 r.ReadLine();
                 while ((line = r.ReadLine()) != null)
                     data.alpha.Add(line);
@@ -180,7 +203,11 @@ namespace S_Coefficient
                 r.ReadLine();
                 r.ReadLine();
                 r.ReadLine();
-                r.ReadLine();
+
+                line = r.ReadLine();
+                var (nT, nS, energies) = GetHeader(line);
+                data.EnergyP = energies;
+
                 r.ReadLine();
                 while ((line = r.ReadLine()) != null)
                     data.photon.Add(line);
@@ -194,7 +221,11 @@ namespace S_Coefficient
                 r.ReadLine();
                 r.ReadLine();
                 r.ReadLine();
-                r.ReadLine();
+
+                line = r.ReadLine();
+                var (nT, nS, energies) = GetHeader(line);
+                data.EnergyE = energies;
+
                 r.ReadLine();
                 while ((line = r.ReadLine()) != null)
                     data.electron.Add(line);
@@ -209,15 +240,18 @@ namespace S_Coefficient
                 r.ReadLine();
 
                 line = r.ReadLine();
-                data.neutronNuclideNames = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-                data.neutronNuclideNames = data.neutronNuclideNames.Skip(1).ToArray();          // 不要な列を除去
+                data.neutronNuclideNames = line
+                    .Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Skip(1).ToArray();     // 不要な列を除去
 
                 line = r.ReadLine();
-                data.neutronRadiationWeights = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-                data.neutronRadiationWeights = data.neutronRadiationWeights.Skip(4).ToArray();  // 不要な列を除去
+                data.neutronRadiationWeights = line
+                    .Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Skip(4).ToArray();     // 不要な列を除去
 
                 // SAFを持つ核種の名前と、放射線加重係数の数は必ず一致する
-                Debug.Assert(data.neutronNuclideNames.Length == data.neutronRadiationWeights.Length);
+                if (data.neutronNuclideNames.Length != data.neutronRadiationWeights.Length)
+                    throw new InvalidDataException(neutronFilePath);
 
                 r.ReadLine();
 
