@@ -1,114 +1,88 @@
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
-using ClosedXML.Excel;
 using System.IO;
 using System.Windows.Forms;
 
 namespace S_Coefficient
 {
-    class Output
+    public class Output
     {
         // 出力Excelテンプレートのファイルパス
-        private const string OutExcel = @"lib\S-Coefficient_Tmp.xlsx";
+        private const string TemplateExcelFilePath = @"lib\S-Coefficient_Tmp.xlsx";
+
+        public string OutputExcelFilePath { get; set; }
+
+        public string OutputTextFilePath { get; set; }
 
         /// <summary>
         /// 計算結果をExcelファイルに書き出す
         /// </summary>
-        /// <param name="nuclideName">計算対象となった核種名</param>
-        /// <param name="sex">計算対象となった性別</param>
-        /// <param name="OutTotal">計算結果</param>
-        public static void WriteCalcResult(string nuclideName, Sex sex, List<double> OutTotal,
-            List<double> OutP, List<double> OutE, List<double> OutB, List<double> OutA, List<double> OutN)
+        /// <param name="nuclide">計算対象となった核種名</param>
+        /// <param name="outTotal">計算結果</param>
+        public void WriteCalcResult(string nuclide, List<double> outTotal,
+            List<double> outP, List<double> outE, List<double> outB, List<double> outA, List<double> outN)
         {
             try
             {
-                using (var Open = new XLWorkbook(OutExcel))
+                using (var Open = new XLWorkbook(TemplateExcelFilePath))
                 {
-                    int outCount = 0;
-                    var SheetT = Open.Worksheet("total");
-                    for (int col = 3; col < 83; col++)
+                    void WriteTS(List<double> outValuesTS, IXLWorksheet sheet)
                     {
-                        for (int row = 5; row < 48; row++)
+                        const int offsetC = 3;
+                        const int offsetR = 5;
+
+                        int outTS = 0;
+                        for (int col = 0; col < 79; col++)
                         {
-                            if (col == 82)
-                                SheetT.Cell(row, col).Value = 0;
-                            else
-                                SheetT.Cell(row, col).Value = OutTotal[outCount];
-                            outCount++;
+                            for (int row = 0; row < 43; row++)
+                            {
+                                var r = row + offsetR;
+                                var c = col + offsetC;
+                                sheet.Cell(r, c).Value = outValuesTS[outTS++];
+                            }
                         }
                     }
 
-                    outCount = 0;
-                    var SheetP = Open.Worksheet("photon");
-                    for (int col = 3; col < 82; col++)
+                    var sheetT = Open.Worksheet("total");
+                    WriteTS(outTotal, sheetT);
                     {
+                        // 'Other'の列をゼロで埋める。
+                        var col = 82;
                         for (int row = 5; row < 48; row++)
                         {
-                            SheetP.Cell(row, col).Value = OutP[outCount];
-                            outCount++;
+                            sheetT.Cell(row, col).Value = 0;
                         }
                     }
 
-                    outCount = 0;
-                    var SheetE = Open.Worksheet("electron");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetE.Cell(row, col).Value = OutE[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetP = Open.Worksheet("photon");
+                    WriteTS(outP, sheetP);
 
-                    outCount = 0;
-                    var SheetB = Open.Worksheet("beta");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetB.Cell(row, col).Value = OutB[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetE = Open.Worksheet("electron");
+                    WriteTS(outE, sheetE);
 
-                    outCount = 0;
-                    var SheetA = Open.Worksheet("alpha");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetA.Cell(row, col).Value = OutA[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetB = Open.Worksheet("beta");
+                    WriteTS(outB, sheetB);
 
-                    outCount = 0;
-                    var SheetN = Open.Worksheet("neutron");
-                    for (int col = 3; col < 82; col++)
-                    {
-                        for (int row = 5; row < 48; row++)
-                        {
-                            SheetN.Cell(row, col).Value = OutN[outCount];
-                            outCount++;
-                        }
-                    }
+                    var sheetA = Open.Worksheet("alpha");
+                    WriteTS(outA, sheetA);
 
-                    if (sex == Sex.Male)
-                        Open.SaveAs(@"out\AdultMale\" + nuclideName + "_AdultMale.xlsx");
-                    else
-                        Open.SaveAs(@"out\AdultFemale\" + nuclideName + "_AdultFemale.xlsx");
+                    var sheetN = Open.Worksheet("neutron");
+                    WriteTS(outN, sheetN);
+
+                    Open.SaveAs(OutputExcelFilePath);
 
                     // セルの値を読んでテキストに出力
                     var resultList = new List<string>();
-                    for (int i = 4; i < 48; i++)
+                    for (int row = 4; row < 48; row++)
                     {
                         string line = "";
-                        for (int j = 2; j < 83; j++)
+                        for (int col = 2; col < 83; col++)
                         {
-                            var text = SheetT.Cell(i, j).Value.ToString();
-                            if (i == 4)
+                            var text = sheetT.Cell(row, col).Value.ToString();
+                            if (row == 4)
                             {
-                                if (j == 2)
+                                if (col == 2)
                                 {
                                     text = "  T/S";
                                     line += $"{text,-11}";
@@ -118,7 +92,7 @@ namespace S_Coefficient
                             }
                             else
                             {
-                                if (j == 2)
+                                if (col == 2)
                                     line += $"{text,-11}";
                                 else
                                 {
@@ -130,10 +104,7 @@ namespace S_Coefficient
                         resultList.Add(line);
                     }
 
-                    if (sex == Sex.Male)
-                        File.WriteAllLines(@"out\AdultMale\" + nuclideName + "_AdultMale.txt", resultList, System.Text.Encoding.UTF8);
-                    else
-                        File.WriteAllLines(@"out\AdultFemale\" + nuclideName + "_AdultFemale.txt", resultList, System.Text.Encoding.UTF8);
+                    File.WriteAllLines(OutputTextFilePath, resultList, System.Text.Encoding.UTF8);
                 }
             }
             catch (Exception e)

@@ -1,52 +1,105 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace S_Coefficient.Tests
 {
     [TestClass]
     public class CalcSfactorTests
     {
-        [TestMethod]
-        public void TestMalePCHIP()
-        {
-            var sex = Sex.Male;
+        static string ExpectDir;
+        static string ResultDir;
 
+        static CalcSfactorTests()
+        {
+            ExpectDir = TestFiles.Combine("Expect");
+            ResultDir = TestFiles.Combine("Result~");
+            Directory.CreateDirectory(ResultDir);
+        }
+
+        [TestMethod]
+        [DataRow("Ba-133")]
+        [DataRow("C-14")]
+        [DataRow("Ca-45")]
+        [DataRow("Cs-134")]
+        [DataRow("Cs-137")]
+        [DataRow("Fe-59")]
+        [DataRow("H-3")]
+        [DataRow("I-129")]
+        [DataRow("Pu-238")]
+        [DataRow("Pu-239")]
+        [DataRow("Pu-240")]
+        [DataRow("Pu-241")]
+        [DataRow("Pu-242")]
+        [DataRow("Ra-223")]
+        [DataRow("Ra-226")]
+        [DataRow("Sr-90")]
+        [DataRow("Tc-99")]
+        [DataRow("Zn-65")]
+        public void TestPCHIP(string nuclide)
+        {
             CalcSfactor CalcS = new CalcSfactor();
             CalcS.InterpolationMethod = "PCHIP";
 
-            CalcS.CalcS(sex);
+            foreach (var sex in new[] { Sex.Male, Sex.Female })
+            {
+                var target = $@"PCHIP_{nuclide}_Adult{sex}";
+
+                var safdata = DataReader.ReadSAF(sex);
+                Assert.IsTrue(safdata.Completion);
+
+                var output = new Output();
+                output.OutputExcelFilePath = Path.Combine(ResultDir, target + ".xlsx");
+                output.OutputTextFilePath = Path.Combine(ResultDir, target + ".txt");
+
+                CalcS.CalcS(safdata, nuclide, output);
+
+                CollectionAssert.AreEqual(
+                    File.ReadAllLines(Path.Combine(ExpectDir, target + ".txt")),
+                    File.ReadAllLines(Path.Combine(ResultDir, target + ".txt")));
+            }
         }
 
         [TestMethod]
-        public void TestMaleLinear()
+        [DataRow("Ba-133")]
+        [DataRow("C-14")]
+        [DataRow("Ca-45")]
+        [DataRow("Cs-134")]
+        [DataRow("Cs-137")]
+        [DataRow("Fe-59")]
+        [DataRow("H-3")]
+        [DataRow("I-129")]
+        [DataRow("Pu-238")]
+        [DataRow("Pu-239")]
+        [DataRow("Pu-240")]
+        [DataRow("Pu-241")]
+        [DataRow("Pu-242")]
+        [DataRow("Ra-223")]
+        [DataRow("Ra-226")]
+        [DataRow("Sr-90")]
+        [DataRow("Tc-99")]
+        [DataRow("Zn-65")]
+        public void TestLinear(string nuclide)
         {
-            var sex = Sex.Male;
-
             CalcSfactor CalcS = new CalcSfactor();
             CalcS.InterpolationMethod = "線形補間";
 
-            CalcS.CalcS(sex);
-        }
+            foreach (var sex in new[] { Sex.Male, Sex.Female })
+            {
+                var target = $@"Linear_{nuclide}_Adult{sex}";
 
-        [TestMethod]
-        public void TestFemalePCHIP()
-        {
-            var sex = Sex.Female;
+                var safdata = DataReader.ReadSAF(sex);
+                Assert.IsTrue(safdata.Completion);
 
-            CalcSfactor CalcS = new CalcSfactor();
-            CalcS.InterpolationMethod = "PCHIP";
+                var output = new Output();
+                output.OutputExcelFilePath = Path.Combine(ResultDir, target + ".xlsx");
+                output.OutputTextFilePath = Path.Combine(ResultDir, target + ".txt");
 
-            CalcS.CalcS(sex);
-        }
+                CalcS.CalcS(safdata, nuclide, output);
 
-        [TestMethod]
-        public void TestFemaleLinear()
-        {
-            var sex = Sex.Female;
-
-            CalcSfactor CalcS = new CalcSfactor();
-            CalcS.InterpolationMethod = "線形補間";
-
-            CalcS.CalcS(sex);
+                CollectionAssert.AreEqual(
+                    File.ReadAllLines(Path.Combine(ExpectDir, target + ".txt")),
+                    File.ReadAllLines(Path.Combine(ResultDir, target + ".txt")));
+            }
         }
     }
 }
