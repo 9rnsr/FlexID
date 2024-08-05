@@ -1,6 +1,7 @@
 using MathNet.Numerics.Interpolation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace S_Coefficient
 {
@@ -63,11 +64,14 @@ namespace S_Coefficient
             // βスペクトル取得
             var betdata = DataReader.ReadBET(nuclideName);
 
-            for (int TScount = 0; TScount < safdata.photon.Count; TScount++)
+            var (WRneutron, SAFneutron) =
+                safdata.SAFneutron.TryGetValue(nuclideName, out var n) ? n : (0.0, null);
+
+            for (int TScount = 0; TScount < safdata.Count; TScount++)
             {
-                var SAFa = safdata.alpha[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-                var SAFp = safdata.photon[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-                var SAFe = safdata.electron[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+                var SAFalpha = safdata.SAFalpha[TScount];
+                var SAFphoton = safdata.SAFphoton[TScount];
+                var SAFelectron = safdata.SAFelectron[TScount];
 
                 // β線計算の終了判定フラグ
                 bool finishBeta = false;
@@ -78,18 +82,6 @@ namespace S_Coefficient
                 double ScoeffB = 0;
                 double ScoeffA = 0;
                 double ScoeffN = 0;
-
-                // doubleに置き換える
-                double[] SAFalpha = new double[SAFa.Length - 4];
-                double[] SAFphoton = new double[SAFp.Length - 4];
-                double[] SAFelectron = new double[SAFe.Length - 4];
-
-                for (int i = 0; i < SAFa.Length - 4; i++)
-                    SAFalpha[i] = double.Parse(SAFa[i + 2]);
-                for (int i = 0; i < SAFp.Length - 4; i++)
-                    SAFphoton[i] = double.Parse(SAFp[i + 2]);
-                for (int i = 0; i < SAFe.Length - 4; i++)
-                    SAFelectron[i] = double.Parse(SAFe[i + 2]);
 
                 // 指定のエネルギー位置におけるSAF値を算出する処理。
                 Func<double, double> CalcSAFa;
@@ -188,15 +180,8 @@ namespace S_Coefficient
                     // 中性子
                     else if (jcode == "N")
                     {
-                        // 放射線データに"N"を持つ＝中性子SAFが定義されていることとイコール
-                        int ni = Array.IndexOf(safdata.neutronNuclideNames, nuclideName);
-
-                        var parts = safdata.neutron[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                        // ni + 2は、不要な列(線源領域と標的領域の名前の2列)を除去するために必要
-                        var SAFn = double.Parse(parts[ni + 2]);
-
-                        var WRneutron = double.Parse(safdata.neutronRadiationWeights[ni]);
+                        var SAFn = SAFneutron?[TScount] ??
+                            throw new InvalidDataException("neutron SAF");
 
                         ScoeffN += Yi * Ei * SAFn * WRneutron * ToJoule;
                     }
