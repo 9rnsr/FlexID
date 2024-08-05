@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -16,18 +15,21 @@ namespace S_Coefficient
     /// </summary>
     public class SAFData
     {
+        public int Count;
+
         public double[] EnergyA;
         public double[] EnergyP;
         public double[] EnergyE;
 
-        public List<string> alpha = new List<string>();
-        public List<string> photon = new List<string>();
-        public List<string> electron = new List<string>();
+        public double[][] SAFalpha;
+        public double[][] SAFphoton;
+        public double[][] SAFelectron;
 
-        // 中性子はSAFを持つ核種と持たない核種がある
-        public string[] neutronNuclideNames;        // 中性子SAFを持つ核種名の配列
-        public string[] neutronRadiationWeights;    // 中性子SAFを持つ核種毎の放射線荷重係数(W_R)
-        public List<string> neutron = new List<string>();
+        /// <summary>
+        /// 中性子の放射線加重係数。SAFデータが定義された核種名をキーにして、
+        /// 当該核種の中性子スペクトル平均であるW_Rと中性子SAFの配列の組を値とした辞書とする。
+        /// </summary>
+        public Dictionary<string, (double WR, double[] SAFs)> SAFneutron;
 
         public bool Completion = false; // SAFデータの取得が正常に終了したかの判定
     }
@@ -131,105 +133,202 @@ namespace S_Coefficient
                 return data;
             }
 
-            (int numT, int numS, double[] Energies) GetHeader(string line)
-            {
-                var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                var numT = int.Parse(parts[0]);
-                var numS = int.Parse(parts[1]);
-                var energies = new List<double>(parts.Length - 2);
-                for (int i = 2; i < parts.Length; i++)
-                {
-                    if (!double.TryParse(parts[i], out var erg))
-                        break;
-                    energies.Add(erg);
-                }
-                return (numT, numS, energies.ToArray());
-            }
-
             // α
-            using (var r = new StreamReader(alphaFilePath))
-            {
-                string line;
-
-                r.ReadLine();
-                r.ReadLine();
-                r.ReadLine();
-
-                line = r.ReadLine();
-                var (nT, nS, energies) = GetHeader(line);
-                data.EnergyA = energies;
-
-                r.ReadLine();
-                while ((line = r.ReadLine()) != null)
-                    data.alpha.Add(line);
-            }
+            ReadAlphaSAF(data, alphaFilePath, out var nTA, out var nSA);
 
             // 光子
-            using (var r = new StreamReader(photonFilePath))
-            {
-                string line;
-
-                r.ReadLine();
-                r.ReadLine();
-                r.ReadLine();
-
-                line = r.ReadLine();
-                var (nT, nS, energies) = GetHeader(line);
-                data.EnergyP = energies;
-
-                r.ReadLine();
-                while ((line = r.ReadLine()) != null)
-                    data.photon.Add(line);
-            }
+            ReadPhotonSAF(data, photonFilePath, out var nTP, out var nSP);
 
             // 電子
-            using (var r = new StreamReader(electronFilePath))
-            {
-                string line;
-
-                r.ReadLine();
-                r.ReadLine();
-                r.ReadLine();
-
-                line = r.ReadLine();
-                var (nT, nS, energies) = GetHeader(line);
-                data.EnergyE = energies;
-
-                r.ReadLine();
-                while ((line = r.ReadLine()) != null)
-                    data.electron.Add(line);
-            }
+            ReadElectronSAF(data, electronFilePath, out var nTE, out var nSE);
 
             // 中性子
-            using (var r = new StreamReader(neutronFilePath))
-            {
-                string line;
+            ReadNeutronSAF(data, neutronFilePath, out var nTN, out var nSN);
 
-                r.ReadLine();
-                r.ReadLine();
+            if (new[] { nTA, nTP, nTE, nTN }.Distinct().Count() != 1)
+                throw new InvalidDataException("Target tissue counts are different");
+            if (new[] { nSA, nSP, nSE, nSN }.Distinct().Count() != 1)
+                throw new InvalidDataException("Source region counts are different");
 
-                line = r.ReadLine();
-                data.neutronNuclideNames = line
-                    .Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries)
-                    .Skip(1).ToArray();     // 不要な列を除去
-
-                line = r.ReadLine();
-                data.neutronRadiationWeights = line
-                    .Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries)
-                    .Skip(4).ToArray();     // 不要な列を除去
-
-                // SAFを持つ核種の名前と、放射線加重係数の数は必ず一致する
-                if (data.neutronNuclideNames.Length != data.neutronRadiationWeights.Length)
-                    throw new InvalidDataException(neutronFilePath);
-
-                r.ReadLine();
-
-                while ((line = r.ReadLine()) != null)
-                    data.neutron.Add(line);
-            }
+            data.Count = nTA * nSA;
 
             data.Completion = true;
             return data;
+        }
+
+        private static (int numT, int numS, double[] Energies) GetHeader(string line)
+        {
+            var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var numT = int.Parse(parts[0]);
+            var numS = int.Parse(parts[1]);
+            var energies = new List<double>(parts.Length - 2);
+            for (int i = 2; i < parts.Length; i++)
+            {
+                if (!double.TryParse(parts[i], out var erg))
+                {
+                    if (energies.Count == 0)
+                        continue;
+                    else
+                        break;
+                }
+                energies.Add(erg);
+            }
+            return (numT, numS, energies.ToArray());
+        }
+
+        private static void ReadAlphaSAF(SAFData data, string filePath, out int nT, out int nS)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                string line;
+
+                reader.ReadLine();
+                reader.ReadLine();
+                reader.ReadLine();
+
+                line = reader.ReadLine();
+                (nT, nS, data.EnergyA) = GetHeader(line);
+
+                var nrows = nT * nS;
+                var ncols = data.EnergyA.Length;
+
+                data.SAFalpha = new double[nrows][];
+
+                reader.ReadLine();
+                for (int r = 0; r < nrows; r++)
+                {
+                    if ((line = reader.ReadLine()) is null)
+                        throw new InvalidDataException(filePath);
+
+                    var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length != ncols + 4)
+                        throw new InvalidDataException(filePath);
+
+                    var values = parts.Skip(2).Take(ncols).Select(v => double.Parse(v));
+                    data.SAFalpha[r] = values.ToArray();
+                }
+            }
+        }
+
+        private static void ReadPhotonSAF(SAFData data, string filePath, out int nT, out int nS)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                string line;
+
+                reader.ReadLine();
+                reader.ReadLine();
+                reader.ReadLine();
+
+                line = reader.ReadLine();
+                (nT, nS, data.EnergyP) = GetHeader(line);
+
+                var nrows = nT * nS;
+                var ncols = data.EnergyP.Length;
+
+                data.SAFphoton = new double[nrows][];
+
+                reader.ReadLine();
+                for (int r = 0; r < nrows; r++)
+                {
+                    if ((line = reader.ReadLine()) is null)
+                        throw new InvalidDataException(filePath);
+
+                    var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length != ncols + 4)
+                        throw new InvalidDataException(filePath);
+
+                    var values = parts.Skip(2).Take(ncols).Select(v => double.Parse(v));
+                    data.SAFphoton[r] = values.ToArray();
+                }
+            }
+        }
+
+        private static void ReadElectronSAF(SAFData data, string filePath, out int nT, out int nS)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                string line;
+
+                reader.ReadLine();
+                reader.ReadLine();
+                reader.ReadLine();
+
+                line = reader.ReadLine();
+                (nT, nS, data.EnergyE) = GetHeader(line);
+
+                var nrows = nT * nS;
+                var ncols = data.EnergyE.Length;
+
+                data.SAFelectron = new double[nrows][];
+
+                reader.ReadLine();
+                for (int r = 0; r < nrows; r++)
+                {
+                    if ((line = reader.ReadLine()) is null)
+                        throw new InvalidDataException(filePath);
+
+                    var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length != ncols + 4)
+                        throw new InvalidDataException(filePath);
+
+                    var values = parts.Skip(2).Take(ncols).Select(v => double.Parse(v));
+                    data.SAFelectron[r] = values.ToArray();
+                }
+            }
+        }
+
+        private static void ReadNeutronSAF(SAFData data, string filePath, out int nT, out int nS)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                string line;
+
+                reader.ReadLine();
+                reader.ReadLine();
+
+                line = reader.ReadLine();
+                var nuclides = line
+                    .Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Skip(1).ToArray();     // 不要な列を除去
+
+                line = reader.ReadLine();
+                double[] radiationWeights;
+                (nT, nS, radiationWeights) = GetHeader(line);
+
+                // SAFを持つ核種の名前と、放射線加重係数の数は必ず一致する
+                if (nuclides.Length != radiationWeights.Length)
+                    throw new InvalidDataException(filePath);
+
+                var nrows = nT * nS;
+                var ncols = nuclides.Length;
+
+                var SAFs = new double[ncols][];
+                data.SAFneutron = new Dictionary<string, (double, double[])>();
+                for (int c = 0; c < ncols; c++)
+                {
+                    SAFs[c] = new double[nrows];
+                    data.SAFneutron.Add(nuclides[c], (radiationWeights[c], SAFs[c]));
+                }
+
+                reader.ReadLine();
+                for (int r = 0; r < nrows; r++)
+                {
+                    if ((line = reader.ReadLine()) is null)
+                        throw new InvalidDataException(filePath);
+
+                    var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length != ncols + 2)
+                        throw new InvalidDataException(filePath);
+
+                    var values = parts.Skip(2).Select(v => double.Parse(v)).ToArray();
+
+                    for (int c = 0; c < ncols; c++)
+                    {
+                        SAFs[c][r] = values[c];
+                    }
+                }
+            }
         }
     }
 }
