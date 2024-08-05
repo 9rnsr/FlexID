@@ -105,24 +105,25 @@ namespace S_Coefficient
                 for (int i = 0; i < SAFe.Length - 4; i++)
                     SAFelectron[i] = double.Parse(SAFe[i + 2]);
 
-                Func<double, double> InterpolationP;
-                Func<double, double> InterpolationE;
-                Func<double, double> InterpolationA;
+                // 指定のエネルギー位置におけるSAF値を算出する処理。
+                Func<double, double> CalcSAFa;
+                Func<double, double> CalcSAFp;
+                Func<double, double> CalcSAFe;
                 if (InterpolationMethod == "PCHIP")
                 {
+                    var pchipA = CubicSpline.InterpolatePchip(EnergyA, SAFalpha);
                     var pchipP = CubicSpline.InterpolatePchip(EnergyPE, SAFphoton);
                     var pchipE = CubicSpline.InterpolatePchip(EnergyPE, SAFelectron);
-                    var pchipA = CubicSpline.InterpolatePchip(EnergyA, SAFalpha);
 
-                    InterpolationP = Ei => pchipP.Interpolate(Ei);
-                    InterpolationE = Ei => pchipE.Interpolate(Ei);
-                    InterpolationA = Ei => pchipA.Interpolate(Ei);
+                    CalcSAFa = Ei => pchipA.Interpolate(Ei);
+                    CalcSAFp = Ei => pchipP.Interpolate(Ei);
+                    CalcSAFe = Ei => pchipE.Interpolate(Ei);
                 }
                 else if (InterpolationMethod == "線形補間")
                 {
-                    InterpolationP = Ei => CalcSAF(Ei, EnergyPE, SAFphoton);
-                    InterpolationE = Ei => CalcSAF(Ei, EnergyPE, SAFelectron);
-                    InterpolationA = Ei => CalcSAF(Ei, EnergyA, SAFalpha);
+                    CalcSAFa = Ei => InterpolateLinearSAF(Ei, EnergyA, SAFalpha);
+                    CalcSAFp = Ei => InterpolateLinearSAF(Ei, EnergyPE, SAFphoton);
+                    CalcSAFe = Ei => InterpolateLinearSAF(Ei, EnergyPE, SAFelectron);
                 }
                 else
                     throw new InvalidOperationException(InterpolationMethod);
@@ -143,12 +144,12 @@ namespace S_Coefficient
                     // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                     if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                     {
-                        ScoeffP += Yi * Ei * InterpolationP(Ei) * WRphoton * ToJoule;
+                        ScoeffP += Yi * Ei * CalcSAFp(Ei) * WRphoton * ToJoule;
                     }
                     // IE: 内部転換電子、AE: オージェ電子
                     else if (jcode == "AE" || jcode == "IE")
                     {
-                        ScoeffE += Yi * Ei * InterpolationE(Ei) * WRelectron * ToJoule;
+                        ScoeffE += Yi * Ei * CalcSAFe(Ei) * WRelectron * ToJoule;
                     }
                     // B-:β粒子(電子)、B+: 陽電子、DB: 遅発β
                     else if (jcode == "B-" || jcode == "B+" || jcode == "DB")
@@ -171,8 +172,8 @@ namespace S_Coefficient
                             var yieldL = ebinL * nparL;
                             var yieldH = ebinH * nparH;
 
-                            var lo = InterpolationE(ebinL);
-                            var hi = InterpolationE(ebinH);
+                            var lo = CalcSAFe(ebinL);
+                            var hi = CalcSAFe(ebinH);
                             var safH = yieldH * hi;
                             var safL = yieldL * lo;
                             beta += (safH + safL) * (ebinH - ebinL) / 2 * WRelectron;
@@ -184,7 +185,7 @@ namespace S_Coefficient
                     // α粒子
                     else if (jcode == "A")
                     {
-                        ScoeffA += Yi * Ei * InterpolationA(Ei) * WRalpha * ToJoule;
+                        ScoeffA += Yi * Ei * CalcSAFa(Ei) * WRalpha * ToJoule;
                     }
                     // α反跳核
                     else if (jcode == "AR")
@@ -220,7 +221,7 @@ namespace S_Coefficient
                 }
 
                 // 全ての放射線についてのS係数
-                double Scoeff = ScoeffP + ScoeffE + ScoeffB + ScoeffA + ScoeffN;
+                var Scoeff = ScoeffP + ScoeffE + ScoeffB + ScoeffA + ScoeffN;
                 OutTotal.Add(Scoeff);
                 OutP.Add(ScoeffP);
                 OutE.Add(ScoeffE);
@@ -234,13 +235,13 @@ namespace S_Coefficient
         }
 
         /// <summary>
-        /// 指定エネルギー点におけるSAFを算出する
+        /// 指定エネルギー点におけるSAFを線形補間で算出する。
         /// </summary>
         /// <param name="energy">放射線のエネルギー(MeV)</param>
         /// <param name="ebins">放射線のエネルギーBinを定義した配列</param>
         /// <param name="SAF">放射線のエネルギーBin毎のSAF値</param>
         /// <returns>SAF値</returns>
-        private double CalcSAF(double energy, double[] ebins, double[] SAF)
+        private double InterpolateLinearSAF(double energy, double[] ebins, double[] SAF)
         {
             for (int i = 0; i < ebins.Length; i++)
             {
