@@ -6,20 +6,6 @@ namespace S_Coefficient
 {
     public class CalcScoeff
     {
-        // 光子と電子のエネルギービン
-        private readonly double[] EnergyPE = new double[]
-        {
-            0, 0.001, 0.005, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08,
-            0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.5, 2, 3, 4, 5, 6, 8, 10
-        };
-
-        // αのエネルギービン
-        private readonly double[] EnergyA = new double[]
-        {
-            0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5,
-            7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12
-        };
-
         // 放射線加重係数
         // 中性子の放射線加重係数は、SAFファイルに記載されている中性子スペクトル平均であるW_Rを使う
         private const double WRalpha = 20.0;
@@ -111,9 +97,9 @@ namespace S_Coefficient
                 Func<double, double> CalcSAFe;
                 if (InterpolationMethod == "PCHIP")
                 {
-                    var pchipA = CubicSpline.InterpolatePchip(EnergyA, SAFalpha);
-                    var pchipP = CubicSpline.InterpolatePchip(EnergyPE, SAFphoton);
-                    var pchipE = CubicSpline.InterpolatePchip(EnergyPE, SAFelectron);
+                    var pchipA = CubicSpline.InterpolatePchip(safdata.EnergyA, SAFalpha);
+                    var pchipP = CubicSpline.InterpolatePchip(safdata.EnergyP, SAFphoton);
+                    var pchipE = CubicSpline.InterpolatePchip(safdata.EnergyE, SAFelectron);
 
                     CalcSAFa = Ei => pchipA.Interpolate(Ei);
                     CalcSAFp = Ei => pchipP.Interpolate(Ei);
@@ -121,9 +107,9 @@ namespace S_Coefficient
                 }
                 else if (InterpolationMethod == "線形補間")
                 {
-                    CalcSAFa = Ei => InterpolateLinearSAF(Ei, EnergyA, SAFalpha);
-                    CalcSAFp = Ei => InterpolateLinearSAF(Ei, EnergyPE, SAFphoton);
-                    CalcSAFe = Ei => InterpolateLinearSAF(Ei, EnergyPE, SAFelectron);
+                    CalcSAFa = Ei => InterpolateLinearSAF(Ei, safdata.EnergyA, SAFalpha);
+                    CalcSAFp = Ei => InterpolateLinearSAF(Ei, safdata.EnergyP, SAFphoton);
+                    CalcSAFe = Ei => InterpolateLinearSAF(Ei, safdata.EnergyE, SAFelectron);
                 }
                 else
                     throw new InvalidOperationException(InterpolationMethod);
