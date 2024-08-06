@@ -26,6 +26,21 @@ namespace S_Coefficient
         public double[][] SAFelectron;
 
         /// <summary>
+        /// α粒子の放射線加重係数。
+        /// </summary>
+        public readonly double WRalpha = 20.0;
+
+        /// <summary>
+        /// 光子の放射線加重係数。
+        /// </summary>
+        public readonly double WRphoton = 1.0;
+
+        /// <summary>
+        /// 電子の放射線加重係数。
+        /// </summary>
+        public readonly double WRelectron = 1.0;
+
+        /// <summary>
         /// 中性子の放射線加重係数。SAFデータが定義された核種名をキーにして、
         /// 当該核種の中性子スペクトル平均であるW_Rと中性子SAFの配列の組を値とした辞書とする。
         /// </summary>

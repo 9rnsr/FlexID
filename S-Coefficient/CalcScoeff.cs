@@ -7,12 +7,6 @@ namespace S_Coefficient
 {
     public class CalcScoeff
     {
-        // 放射線加重係数
-        // 中性子の放射線加重係数は、SAFファイルに記載されている中性子スペクトル平均であるW_Rを使う
-        private const double WRalpha = 20.0;
-        private const double WRphoton = 1.0;
-        private const double WRelectron = 1.0;
-
         public string InterpolationMethod = "";
 
         // J/MeVへの変換
@@ -63,6 +57,10 @@ namespace S_Coefficient
 
             // βスペクトル取得
             var betdata = DataReader.ReadBET(nuclideName);
+
+            var WRalpha = safdata.WRalpha;
+            var WRphoton = safdata.WRphoton;
+            var WRelectron = safdata.WRelectron;
 
             var (WRneutron, SAFneutron) =
                 safdata.SAFneutron.TryGetValue(nuclideName, out var n) ? n : (0.0, null);
