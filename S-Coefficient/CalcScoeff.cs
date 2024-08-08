@@ -104,6 +104,24 @@ namespace S_Coefficient
                 else
                     throw new InvalidOperationException(InterpolationMethod);
 
+                // α反跳核と核分裂片のS係数計算では、α粒子の2MeVにおけるSAFを使用する。
+                //
+                // ICRP Publ.133 p.73 Para.78
+                //   (78) The available kinetic energy of alpha transitions is shared between the alpha
+                // particle and the recoiling nucleus.Similarly, the kinetic energy in spontaneous fission
+                // is shared between the fission fragments.The yield and kinetic energies of these
+                // radiations are included in the decay data tabulations of Publication 107(ICRP,
+                // 2008).The range of the alpha recoil nuclei and that of the fission fragments is limited
+                // and thus their contribution to absorbed dose in the target tissues is evaluated using
+                // the SAF for a 2.0 MeV alpha particle.
+                //   (78) アルファ遷移の利用可能な運動エネルギーは、アルファ粒子と反跳核の間で
+                // 共有されます。同様に、自発核分裂の運動エネルギーは、核分裂片の間で
+                // 共有されます。これらの放射線の収量と運動エネルギーは、Publication 107(ICRP,
+                // 2008)の崩壊データ表に記載されています。アルファ反跳核と核分裂片の飛程は限られて
+                // いるため、標的組織の吸収線量への寄与は、2.0 MeVアルファ粒子のSAFを使用して
+                // 評価されます。
+                var SAFa_2MeV = CalcSAFa(2.0);
+
                 foreach (var rad in raddata)
                 {
                     // エネルギー毎のSAF算出
@@ -166,14 +184,12 @@ namespace S_Coefficient
                     // α反跳核
                     else if (jcode == "AR")
                     {
-                        // 2MeVの値を取得
-                        ScoeffA += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
+                        ScoeffA += Yi * Ei * SAFa_2MeV * WRalpha * ToJoule;
                     }
                     // 核分裂片
                     else if (jcode == "FF")
                     {
-                        // 2MeVの値を取得
-                        ScoeffN += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
+                        ScoeffN += Yi * Ei * SAFa_2MeV * WRalpha * ToJoule;
                     }
                     // 中性子
                     else if (jcode == "N")
