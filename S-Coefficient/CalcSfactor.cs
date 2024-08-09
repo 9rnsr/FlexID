@@ -140,19 +140,19 @@ namespace S_Coefficient
                     double Yi = double.Parse(yield);
                     double Ei = double.Parse(energy);
 
-                    // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                     if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                     {
+                        // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                         SfacP += Yi * Ei * InterpolationP(Ei) * WRphoton * ToJoule;
                     }
-                    // IE: 内部転換電子、AE: オージェ電子
                     else if (jcode == "AE" || jcode == "IE")
                     {
+                        // IE: 内部転換電子、AE: オージェ電子
                         SfacE += Yi * Ei * InterpolationE(Ei) * WRelectron * ToJoule;
                     }
-                    // B-:β-粒子(電子)、B+: β+粒子(陽電子)、DB: 遅発β粒子
                     else if (jcode == "B-" || jcode == "B+" || jcode == "DB")
                     {
+                        // B-:β-粒子(電子)、B+: β+粒子(陽電子)、DB: 遅発β粒子
                         if (finishBeta)
                             continue;
 
@@ -181,26 +181,26 @@ namespace S_Coefficient
 
                         finishBeta = true;
                     }
-                    // α粒子
                     else if (jcode == "A")
                     {
+                        // α粒子
                         SfacA += Yi * Ei * InterpolationA(Ei) * WRalpha * ToJoule;
                     }
-                    // α反跳核
                     else if (jcode == "AR")
                     {
+                        // α反跳核
                         // 2MeVの値を取得
                         SfacA += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
                     }
-                    // 核分裂片
                     else if (jcode == "FF")
                     {
+                        // 核分裂片
                         // 2MeVの値を取得
                         SfacN += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
                     }
-                    // 中性子
                     else if (jcode == "N")
                     {
+                        // 中性子
                         // 放射線データに"N"を持つ＝中性子SAFが定義されていることとイコール
                         int ni = Array.IndexOf(safdata.neutronNuclideNames, nuclideName);
 
