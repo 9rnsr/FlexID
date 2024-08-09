@@ -150,7 +150,7 @@ namespace S_Coefficient
                     {
                         SfacE += Yi * Ei * InterpolationE(Ei) * WRelectron * ToJoule;
                     }
-                    // B-:β粒子(電子)、B+: 陽電子、DB: 遅発β
+                    // B-:β-粒子(電子)、B+: β+粒子(陽電子)、DB: 遅発β粒子
                     else if (jcode == "B-" || jcode == "B+" || jcode == "DB")
                     {
                         if (finishBeta)
