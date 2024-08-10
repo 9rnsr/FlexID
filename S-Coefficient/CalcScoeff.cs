@@ -135,19 +135,19 @@ namespace S_Coefficient
                     double Yi = double.Parse(yield);
                     double Ei = double.Parse(energy);
 
-                    // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                     if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                     {
+                        // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                         ScoeffP += Yi * Ei * CalcSAFp(Ei) * WRphoton * ToJoule;
                     }
-                    // IE: 内部転換電子、AE: オージェ電子
                     else if (jcode == "AE" || jcode == "IE")
                     {
+                        // IE: 内部転換電子、AE: オージェ電子
                         ScoeffE += Yi * Ei * CalcSAFe(Ei) * WRelectron * ToJoule;
                     }
-                    // B-:β粒子(電子)、B+: 陽電子、DB: 遅発β
                     else if (jcode == "B-" || jcode == "B+" || jcode == "DB")
                     {
+                        // B-:β粒子(電子)、B+: β+粒子(陽電子)、DB: 遅発β粒子
                         if (finishBeta)
                             continue;
 
@@ -176,24 +176,24 @@ namespace S_Coefficient
 
                         finishBeta = true;
                     }
-                    // α粒子
                     else if (jcode == "A")
                     {
+                        // α粒子
                         ScoeffA += Yi * Ei * CalcSAFa(Ei) * WRalpha * ToJoule;
                     }
-                    // α反跳核
                     else if (jcode == "AR")
                     {
+                        // α反跳核
                         ScoeffA += Yi * Ei * SAFa_2MeV * WRalpha * ToJoule;
                     }
-                    // 核分裂片
                     else if (jcode == "FF")
                     {
+                        // 核分裂片
                         ScoeffN += Yi * Ei * SAFa_2MeV * WRalpha * ToJoule;
                     }
-                    // 中性子
                     else if (jcode == "N")
                     {
+                        // 中性子
                         var SAFn = SAFneutron?[TScount] ??
                             throw new InvalidDataException("neutron SAF");
 
