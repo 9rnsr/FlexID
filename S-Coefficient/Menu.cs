@@ -23,7 +23,7 @@ namespace S_Coefficient
             Debug.Assert(AMbutton.Checked != AFbutton.Checked);
             var sex = (AMbutton.Checked ? Sex.Male : Sex.Female);
 
-            CalcSfactor CalcS = new CalcSfactor();
+            var CalcS = new CalcScoeff();
 
             // 1行＝計算対象の核種名としてファイルから読み出す。
             CalcS.Nuclides.AddRange(File.ReadLines(NuclideListFilePath));

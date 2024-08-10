@@ -20,14 +20,14 @@ namespace S_Coefficient
         /// </summary>
         /// <param name="nuclide">計算対象となった核種名</param>
         /// <param name="outTotal">計算結果</param>
-        public void WriteCalcResult(string nuclide, List<double> outTotal,
-            List<double> outP, List<double> outE, List<double> outB, List<double> outA, List<double> outN)
+        public void WriteCalcResult(string nuclide, double[] outTotal,
+            double[] outP, double[] outE, double[] outB, double[] outA, double[] outN)
         {
             try
             {
                 using (var Open = new XLWorkbook(TemplateExcelFilePath))
                 {
-                    void WriteTS(List<double> outValuesTS, IXLWorksheet sheet)
+                    void WriteTS(double[] outValuesTS, IXLWorksheet sheet)
                     {
                         const int offsetC = 3;
                         const int offsetR = 5;

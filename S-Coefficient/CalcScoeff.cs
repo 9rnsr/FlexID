@@ -1,31 +1,12 @@
 using MathNet.Numerics.Interpolation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace S_Coefficient
 {
-    public class CalcSfactor
+    public class CalcScoeff
     {
-        // 光子と電子のエネルギービン
-        private readonly double[] EnergyPE = new double[]
-        {
-            0, 0.001, 0.005, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08,
-            0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.5, 2, 3, 4, 5, 6, 8, 10
-        };
-
-        // αのエネルギービン
-        private readonly double[] EnergyA = new double[]
-        {
-            0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5,
-            7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12
-        };
-
-        // 放射線加重係数
-        // 中性子の放射線加重係数は、SAFファイルに記載されている中性子スペクトル平均であるW_Rを使う
-        private const double WRalpha = 20.0;
-        private const double WRphoton = 1.0;
-        private const double WRelectron = 1.0;
-
         public string InterpolationMethod = "";
 
         // J/MeVへの変換
@@ -37,7 +18,7 @@ namespace S_Coefficient
         public List<string> Nuclides { get; } = new List<string>();
 
         /// <summary>
-        /// S-factor計算
+        /// S係数の計算
         /// </summary>
         /// <param name="sex">計算対象の性別</param>
         public (string, string) CalcS(Sex sex)
@@ -64,12 +45,12 @@ namespace S_Coefficient
         public void CalcS(SAFData safdata, string nuclideName, Output output)
         {
             // 計算結果である、線源領域vs標的領域の組み合わせ毎のS係数値
-            var OutTotal = new List<double>();
-            var OutP = new List<double>();
-            var OutE = new List<double>();
-            var OutB = new List<double>();
-            var OutA = new List<double>();
-            var OutN = new List<double>();
+            var OutTotal = new double[safdata.Count];
+            var OutP = new double[safdata.Count];
+            var OutE = new double[safdata.Count];
+            var OutB = new double[safdata.Count];
+            var OutA = new double[safdata.Count];
+            var OutN = new double[safdata.Count];
 
             // 放射線データ取得
             var raddata = DataReader.ReadRAD(nuclideName);
@@ -77,55 +58,69 @@ namespace S_Coefficient
             // βスペクトル取得
             var betdata = DataReader.ReadBET(nuclideName);
 
-            for (int TScount = 0; TScount < safdata.photon.Count; TScount++)
+            var WRalpha = safdata.WRalpha;
+            var WRphoton = safdata.WRphoton;
+            var WRelectron = safdata.WRelectron;
+
+            var (WRneutron, SAFneutron) =
+                safdata.SAFneutron.TryGetValue(nuclideName, out var n) ? n : (0.0, null);
+
+            for (int TScount = 0; TScount < safdata.Count; TScount++)
             {
-                var SAFa = safdata.alpha[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-                var SAFp = safdata.photon[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-                var SAFe = safdata.electron[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+                var SAFalpha = safdata.SAFalpha[TScount];
+                var SAFphoton = safdata.SAFphoton[TScount];
+                var SAFelectron = safdata.SAFelectron[TScount];
 
                 // β線計算の終了判定フラグ
                 bool finishBeta = false;
 
                 // 放射線ごとのS係数計算値
-                double SfacP = 0;
-                double SfacE = 0;
-                double SfacB = 0;
-                double SfacA = 0;
-                double SfacN = 0;
+                double ScoeffP = 0;
+                double ScoeffE = 0;
+                double ScoeffB = 0;
+                double ScoeffA = 0;
+                double ScoeffN = 0;
 
-                // doubleに置き換える
-                double[] SAFalpha = new double[SAFa.Length - 4];
-                double[] SAFphoton = new double[SAFp.Length - 4];
-                double[] SAFelectron = new double[SAFe.Length - 4];
-
-                for (int i = 0; i < SAFa.Length - 4; i++)
-                    SAFalpha[i] = double.Parse(SAFa[i + 2]);
-                for (int i = 0; i < SAFp.Length - 4; i++)
-                    SAFphoton[i] = double.Parse(SAFp[i + 2]);
-                for (int i = 0; i < SAFe.Length - 4; i++)
-                    SAFelectron[i] = double.Parse(SAFe[i + 2]);
-
-                Func<double, double> InterpolationP;
-                Func<double, double> InterpolationE;
-                Func<double, double> InterpolationA;
+                // 指定のエネルギー位置におけるSAF値を算出する処理。
+                Func<double, double> CalcSAFa;
+                Func<double, double> CalcSAFp;
+                Func<double, double> CalcSAFe;
                 if (InterpolationMethod == "PCHIP")
                 {
-                    var pchipP = CubicSpline.InterpolatePchip(EnergyPE, SAFphoton);
-                    var pchipE = CubicSpline.InterpolatePchip(EnergyPE, SAFelectron);
-                    var pchipA = CubicSpline.InterpolatePchip(EnergyA, SAFalpha);
+                    var pchipA = CubicSpline.InterpolatePchip(safdata.EnergyA, SAFalpha);
+                    var pchipP = CubicSpline.InterpolatePchip(safdata.EnergyP, SAFphoton);
+                    var pchipE = CubicSpline.InterpolatePchip(safdata.EnergyE, SAFelectron);
 
-                    InterpolationP = Ei => pchipP.Interpolate(Ei);
-                    InterpolationE = Ei => pchipE.Interpolate(Ei);
-                    InterpolationA = Ei => pchipA.Interpolate(Ei);
+                    CalcSAFa = Ei => pchipA.Interpolate(Ei);
+                    CalcSAFp = Ei => pchipP.Interpolate(Ei);
+                    CalcSAFe = Ei => pchipE.Interpolate(Ei);
                 }
                 else if (InterpolationMethod == "線形補間")
                 {
-                    InterpolationP = Ei => CalcSAF(Ei, EnergyPE, SAFphoton);
-                    InterpolationE = Ei => CalcSAF(Ei, EnergyPE, SAFelectron);
-                    InterpolationA = Ei => CalcSAF(Ei, EnergyA, SAFalpha);
+                    CalcSAFa = Ei => InterpolateLinearSAF(Ei, safdata.EnergyA, SAFalpha);
+                    CalcSAFp = Ei => InterpolateLinearSAF(Ei, safdata.EnergyP, SAFphoton);
+                    CalcSAFe = Ei => InterpolateLinearSAF(Ei, safdata.EnergyE, SAFelectron);
                 }
                 else
                     throw new InvalidOperationException(InterpolationMethod);
+
+                // α反跳核と核分裂片のS係数計算では、α粒子の2MeVにおけるSAFを使用する。
+                //
+                // ICRP Publ.133 p.73 Para.78
+                //   (78) The available kinetic energy of alpha transitions is shared between the alpha
+                // particle and the recoiling nucleus.Similarly, the kinetic energy in spontaneous fission
+                // is shared between the fission fragments.The yield and kinetic energies of these
+                // radiations are included in the decay data tabulations of Publication 107(ICRP,
+                // 2008).The range of the alpha recoil nuclei and that of the fission fragments is limited
+                // and thus their contribution to absorbed dose in the target tissues is evaluated using
+                // the SAF for a 2.0 MeV alpha particle.
+                //   (78) アルファ遷移の利用可能な運動エネルギーは、アルファ粒子と反跳核の間で
+                // 共有されます。同様に、自発核分裂の運動エネルギーは、核分裂片の間で
+                // 共有されます。これらの放射線の収量と運動エネルギーは、Publication 107(ICRP,
+                // 2008)の崩壊データ表に記載されています。アルファ反跳核と核分裂片の飛程は限られて
+                // いるため、標的組織の吸収線量への寄与は、2.0 MeVアルファ粒子のSAFを使用して
+                // 評価されます。
+                var SAFa_2MeV = CalcSAFa(2.0);
 
                 foreach (var rad in raddata)
                 {
@@ -140,19 +135,19 @@ namespace S_Coefficient
                     double Yi = double.Parse(yield);
                     double Ei = double.Parse(energy);
 
-                    // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
                     if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                     {
-                        SfacP += Yi * Ei * InterpolationP(Ei) * WRphoton * ToJoule;
+                        // X:X線、G:γ線、PG:遅発γ線、DG:即発γ線、AQ:消滅光子
+                        ScoeffP += Yi * Ei * CalcSAFp(Ei) * WRphoton * ToJoule;
                     }
-                    // IE: 内部転換電子、AE: オージェ電子
                     else if (jcode == "AE" || jcode == "IE")
                     {
-                        SfacE += Yi * Ei * InterpolationE(Ei) * WRelectron * ToJoule;
+                        // IE: 内部転換電子、AE: オージェ電子
+                        ScoeffE += Yi * Ei * CalcSAFe(Ei) * WRelectron * ToJoule;
                     }
-                    // B-:β粒子(電子)、B+: 陽電子、DB: 遅発β
                     else if (jcode == "B-" || jcode == "B+" || jcode == "DB")
                     {
+                        // B-:β粒子(電子)、B+: β+粒子(陽電子)、DB: 遅発β粒子
                         if (finishBeta)
                             continue;
 
@@ -171,47 +166,38 @@ namespace S_Coefficient
                             var yieldL = ebinL * nparL;
                             var yieldH = ebinH * nparH;
 
-                            var lo = InterpolationE(ebinL);
-                            var hi = InterpolationE(ebinH);
+                            var lo = CalcSAFe(ebinL);
+                            var hi = CalcSAFe(ebinH);
                             var safH = yieldH * hi;
                             var safL = yieldL * lo;
                             beta += (safH + safL) * (ebinH - ebinL) / 2 * WRelectron;
                         }
-                        SfacB = beta * ToJoule;
+                        ScoeffB = beta * ToJoule;
 
                         finishBeta = true;
                     }
-                    // α粒子
                     else if (jcode == "A")
                     {
-                        SfacA += Yi * Ei * InterpolationA(Ei) * WRalpha * ToJoule;
+                        // α粒子
+                        ScoeffA += Yi * Ei * CalcSAFa(Ei) * WRalpha * ToJoule;
                     }
-                    // α反跳核
                     else if (jcode == "AR")
                     {
-                        // 2MeVの値を取得
-                        SfacA += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
+                        // α反跳核
+                        ScoeffA += Yi * Ei * SAFa_2MeV * WRalpha * ToJoule;
                     }
-                    // 核分裂片
                     else if (jcode == "FF")
                     {
-                        // 2MeVの値を取得
-                        SfacN += SAFalpha[3] * Yi * Ei * WRalpha * ToJoule;
+                        // 核分裂片
+                        ScoeffN += Yi * Ei * SAFa_2MeV * WRalpha * ToJoule;
                     }
-                    // 中性子
                     else if (jcode == "N")
                     {
-                        // 放射線データに"N"を持つ＝中性子SAFが定義されていることとイコール
-                        int ni = Array.IndexOf(safdata.neutronNuclideNames, nuclideName);
+                        // 中性子
+                        var SAFn = SAFneutron?[TScount] ??
+                            throw new InvalidDataException("neutron SAF");
 
-                        var parts = safdata.neutron[TScount].Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                        // ni + 2は、不要な列(線源領域と標的領域の名前の2列)を除去するために必要
-                        var SAFn = double.Parse(parts[ni + 2]);
-
-                        var WRneutron = double.Parse(safdata.neutronRadiationWeights[ni]);
-
-                        SfacN += Yi * Ei * SAFn * WRneutron * ToJoule;
+                        ScoeffN += Yi * Ei * SAFn * WRneutron * ToJoule;
                     }
                     else
                     {
@@ -220,13 +206,13 @@ namespace S_Coefficient
                 }
 
                 // 全ての放射線についてのS係数
-                double Sfactor = SfacP + SfacE + SfacB + SfacA + SfacN;
-                OutTotal.Add(Sfactor);
-                OutP.Add(SfacP);
-                OutE.Add(SfacE);
-                OutB.Add(SfacB);
-                OutA.Add(SfacA);
-                OutN.Add(SfacN);
+                var Scoeff = ScoeffP + ScoeffE + ScoeffB + ScoeffA + ScoeffN;
+                OutTotal[TScount] = Scoeff;
+                OutP[TScount] = ScoeffP;
+                OutE[TScount] = ScoeffE;
+                OutB[TScount] = ScoeffB;
+                OutA[TScount] = ScoeffA;
+                OutN[TScount] = ScoeffN;
             }
 
             // 核種ごとの計算結果をExcelファイルに出力する
@@ -234,13 +220,13 @@ namespace S_Coefficient
         }
 
         /// <summary>
-        /// 指定エネルギー点におけるSAFを算出する
+        /// 指定エネルギー点におけるSAFを線形補間で算出する。
         /// </summary>
         /// <param name="energy">放射線のエネルギー(MeV)</param>
         /// <param name="ebins">放射線のエネルギーBinを定義した配列</param>
         /// <param name="SAF">放射線のエネルギーBin毎のSAF値</param>
         /// <returns>SAF値</returns>
-        private double CalcSAF(double energy, double[] ebins, double[] SAF)
+        private double InterpolateLinearSAF(double energy, double[] ebins, double[] SAF)
         {
             for (int i = 0; i < ebins.Length; i++)
             {
