@@ -1,0 +1,39 @@
+Electronic Annex / OIR Data Viewer Ver. 4.01.04.19 
+Copyright © ICRP, 2017-2019 All Rights Reserved. 
+
+Permission is hereby granted to any person legally obtained a copy of ICRP Publication 134, 
+ICRP Publication 137 or ICRP Publication 141, accompanying of the electronic annex /
+OIR Data Viewer software, and the associated documentation to use, these materials 
+without a signed licensing agreement provided that the file LICENSE_OIR_DViewer.TXT 
+containing the above copyright notice, this paragraph and the following four paragraphs 
+appears in all copies, modifications, and distributions. 
+
+No part of ICRP Publication 134, ICRP Publication 137, and ICRP Publication 141 
+may be reproduced, stored in a retrieval system or transmitted in any form or 
+by any means electronic, electrostatic, magnetic tape, mechanical photocopying, 
+recording or otherwise or republished in any form, without permission in writing 
+from the copyright owner. In order to obtain permission, or for other general 
+inquiries regarding the Annals of the ICRP, please contact ICRP, 
+280 Slater St., Ottawa, Canada K1P 5S9, email: annals@icrp.org. 
+
+No responsibility is assumed by the ICRP or authors for any injury and/or damage to persons 
+or property as a matter of products liability, negligence, or otherwise, or from any 
+use or operation of any methods, products, instructions, or ideas contained in the 
+material herein. The recommendations and advice of ICRP reflect understanding and 
+evaluation of the current scientific evidence as given in this report. If and when 
+further relevant information becomes available, ICRP may review its recommendations. 
+Because of rapid advances in the medical sciences, in particular, diagnoses and 
+administered amounts of radiopharmaceuticals should be independently verified. 
+Although all advertising material is expected to conform to ethical (medical) standards, 
+inclusion in this publication does not constitute a guarantee or endorsement 
+of the quality or value of such product or of the claims made by its manufacturer. 
+
+IN NO EVENT SHALL THE ICRP OR AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, 
+SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, 
+ARISING OUT OF THE USE OF THE SOFTWARE, ITS DATA FILES, AND THE DOCUMENTATION. 
+
+THE ICRP AND AUTHORS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT 
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE. THE SOFTWARE, DATA FILES AND ACCOMPANYING DOCUMENTATION PROVIDED HEREUNDER 
+IS PROVIDED "AS IS". THE ICRP AND AUTHORS HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, 
+SUPPORT, FUTURE UPDATES, ENHANCEMENTS, OR MODIFICATIONS TO THE SOFTWARE. 
