@@ -38,7 +38,7 @@ namespace FlexID.Calc
         /// </summary>
         public bool CalcProgeny { get; set; }
 
-        private Activity Act { get; } = new Activity();
+        public Activity Act { get; } = new Activity();
 
         private CalcOut CalcOut { get; set; }
 
@@ -265,8 +265,12 @@ namespace FlexID.Calc
                 }
             }
 
+            this.WholeBodyEffectiveDose = wholeBodyNow;
+
             // 計算完了の出力を行う。
             CalcOut.FinishOut();
         }
+
+        public double WholeBodyEffectiveDose { get; private set; }
     }
 }
