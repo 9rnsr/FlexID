@@ -10,7 +10,7 @@ namespace S_Coefficient
         public string InterpolationMethod = "";
 
         // J/MeVへの変換
-        private double ToJoule = 1.602176487E-13;
+        private double ToJoule = 1.602176634E-13;
 
         /// <summary>
         /// 計算対象となる核種のリスト。
