@@ -153,19 +153,19 @@ namespace FlexID.Calc
 
                             var ebinL = double.Parse(betL[0]); // エネルギー幅の下限(MeV)
                             var ebinH = double.Parse(betH[0]); // エネルギー幅の上限(MeV)
-                            var nparL = double.Parse(betL[1]); // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数
-                            var nparH = double.Parse(betH[1]); // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数
+                            var nparL = double.Parse(betL[1]); // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
+                            var nparH = double.Parse(betH[1]); // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
 
-                            var yieldL = ebinL * nparL;
-                            var yieldH = ebinH * nparH;
+                            var yieldL = ebinL * nparL; // 下限側のエネルギー点における放射線の収率(/nt)
+                            var yieldH = ebinH * nparH; // 上限側のエネルギー点における放射線の収率(/nt)
 
-                            var lo = CalcSAFe(ebinL);
-                            var hi = CalcSAFe(ebinH);
-                            var safH = yieldH * hi;
-                            var safL = yieldL * lo;
-                            beta += (safH + safL) * (ebinH - ebinL) / 2 * WRelectron;
+                            var safL = CalcSAFe(ebinL); // 下限側のエネルギー点におけるS係数
+                            var safH = CalcSAFe(ebinH); // 上限側のエネルギー点におけるS係数
+
+                            // 台形積分でエネルギー区間のY * Eを算出する。
+                            beta += (yieldL * safL + yieldH * safH) * (ebinH - ebinL) / 2;
                         }
-                        ScoeffB = beta * ToJoule;
+                        ScoeffB = beta * WRelectron * ToJoule;
 
                         finishBeta = true;
                     }
