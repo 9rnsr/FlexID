@@ -391,13 +391,22 @@ namespace ResultChecker
         /// <returns></returns>
         static List<Retention> GetResultRetentions(string target)
         {
+            var nuclide = target.Split('_')[0];
             var filePath = $"out/{target}_Retention.out";
 
             var retentions = new List<Retention>();
 
+            string line;
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, Encoding.UTF8))
             {
+                if (nuclide == "Cs-137")
+                {
+                    // 子孫核種であるBa-137mの結果を読み出す。
+                    while ((line = reader.ReadLine()) != "")
+                        continue;
+                }
+
                 reader.ReadLine();
 
                 var compartments = reader.ReadLine()
@@ -414,7 +423,6 @@ namespace ResultChecker
 
                 var startTime = 0.0;
 
-                string line;
                 while ((line = reader.ReadLine()) != null)
                 {
                     if (line.Length == 0)
