@@ -40,8 +40,8 @@ namespace ResultChecker
             {
                 "Summary",
                 "",
-                "Target,Whole Body Effective Dose,,,Retention Activity",
-                ",OIR,FlexID,Diff (FlexID/OIR),,Diff (min),Diff (max)",
+                "Target,Whole Body Effective Dose,,,,Whole Body,,Urine,,Faeces",
+                ",OIR,FlexID,Diff (FlexID/OIR),,Diff (min),Diff (max),Diff (min),Diff (max),Diff (min),Diff (max)",
             };
             var summaryLines = results.OrderBy(r => r.Target).Select(res =>
             {
@@ -54,7 +54,11 @@ namespace ResultChecker
                             $",{res.ActualEffectiveDose}" +
                             $",{res.FractionEffectiveDose:0.00%},";
                     line += $",{res.WholeBodyActivityFractionMin:0.00%}" +
-                            $",{res.WholeBodyActivityFractionMax:0.00%}";
+                            $",{res.WholeBodyActivityFractionMax:0.00%}" +
+                            $",{res.UrineActivityFractionMin:0.00%}" +
+                            $",{res.UrineActivityFractionMax:0.00%}" +
+                            $",{res.FaecesActivityFractionMin:0.00%}" +
+                            $",{res.FaecesActivityFractionMax:0.00%}";
                 }
                 return line;
             });
@@ -74,6 +78,12 @@ namespace ResultChecker
 
             public double WholeBodyActivityFractionMin;
             public double WholeBodyActivityFractionMax;
+
+            public double UrineActivityFractionMin;
+            public double UrineActivityFractionMax;
+
+            public double FaecesActivityFractionMin;
+            public double FaecesActivityFractionMax;
         }
 
         static Result CalcAndSummary(string target, string material)
@@ -115,19 +125,68 @@ namespace ResultChecker
 
             // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
-            var actualWholeBodyActs = GetResultWholeBodyRetention(target);
-            var expectWholeBodyActs = GetExpectWholeBodyRetention(target, material);
-            var minActFrac = double.PositiveInfinity;
-            var maxActFrac = double.NegativeInfinity;
+            var actualActs = GetResultRetentions(target);
+            var expectActs = GetExpectRetentions(target, material);
+            var minWholeBodyFrac = double.PositiveInfinity;
+            var maxWholeBodyFrac = double.NegativeInfinity;
+            var oneDayActualUrine = 0.0;
+            var oneDayActualFaeces = 0.0;
+            var minUrineFrac = double.PositiveInfinity;
+            var maxUrineFrac = double.NegativeInfinity;
+            var minFaecesFrac = double.PositiveInfinity;
+            var maxFaecesFrac = double.NegativeInfinity;
             foreach (var (actualAct, expectAct) in
-                actualWholeBodyActs.Zip(expectWholeBodyActs, (a, b) => (a, b)))
+                actualActs.Zip(expectActs, (a, b) => (a, b)))
             {
-                var fraction = actualAct / expectAct;
-                minActFrac = Math.Min(minActFrac, fraction);
-                maxActFrac = Math.Max(maxActFrac, fraction);
+                var fractionWholeBody = actualAct.WholeBody / expectAct.WholeBody;
+                minWholeBodyFrac = Math.Min(minWholeBodyFrac, fractionWholeBody);
+                maxWholeBodyFrac = Math.Max(maxWholeBodyFrac, fractionWholeBody);
+
+                var duration = expectAct.EndTime - expectAct.StartTime;
+                if (duration < 1.0)
+                {
+                    // 時間メッシュ幅が1日未満の場合は、1日分の積算放射能を計算する。
+                    oneDayActualUrine += actualAct.Urine.Value * duration;
+                    oneDayActualFaeces += actualAct.Faeces.Value * duration;
+
+                    // OIR側は24-hour sample値なので、時間メッシュの終了時刻が
+                    // 1日の倍数になった位置で比較を行う。
+                    if (expectAct.EndTime % 1.0 == 0)
+                    {
+                        var fractionUrine = oneDayActualUrine / expectAct.Urine.Value;
+                        minUrineFrac = Math.Min(minUrineFrac, fractionUrine);
+                        maxUrineFrac = Math.Max(maxUrineFrac, fractionUrine);
+
+                        var fractionFaeces = oneDayActualFaeces / expectAct.Faeces.Value;
+                        minFaecesFrac = Math.Min(minFaecesFrac, fractionFaeces);
+                        maxFaecesFrac = Math.Max(maxFaecesFrac, fractionFaeces);
+
+                        oneDayActualUrine = 0;
+                        oneDayActualFaeces = 0;
+                    }
+                }
+                else
+                {
+                    if (expectAct.Urine is double expectUrine)
+                    {
+                        var fractionUrine = actualAct.Urine.Value / expectUrine;
+                        minUrineFrac = Math.Min(minUrineFrac, fractionUrine);
+                        maxUrineFrac = Math.Max(maxUrineFrac, fractionUrine);
+                    }
+                    if (expectAct.Faeces is double expectFaeces)
+                    {
+                        var fractionFaeces = actualAct.Faeces.Value / expectFaeces;
+                        minFaecesFrac = Math.Min(minFaecesFrac, fractionFaeces);
+                        maxFaecesFrac = Math.Max(maxFaecesFrac, fractionFaeces);
+                    }
+                }
             }
-            result.WholeBodyActivityFractionMin = minActFrac;
-            result.WholeBodyActivityFractionMax = maxActFrac;
+            result./**/ WholeBodyActivityFractionMin = minWholeBodyFrac;
+            result./**/ WholeBodyActivityFractionMax = maxWholeBodyFrac;
+            result./**/     UrineActivityFractionMin = minUrineFrac;
+            result./**/     UrineActivityFractionMax = maxUrineFrac;
+            result./**/    FaecesActivityFractionMin = minFaecesFrac;
+            result./**/    FaecesActivityFractionMax = maxFaecesFrac;
 
             return result;
         }
@@ -313,27 +372,47 @@ namespace ResultChecker
             return null;
         }
 
+        // 残留放射能の取得結果。
+        struct Retention
+        {
+            public double StartTime;
+            public double EndTime;
+
+            public double WholeBody;
+            public double? Urine;
+            public double? Faeces;
+        }
+
         /// <summary>
         /// FlexIDが出力した各出力時間メッシュにおける残留放射能の出力ファイル
         /// *_Retention.outから、Whole Bodyの数値列を読み込む。
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        static List<double> GetResultWholeBodyRetention(string target)
+        static List<Retention> GetResultRetentions(string target)
         {
             var filePath = $"out/{target}_Retention.out";
 
-            var wholeBody = new List<double>();
+            var retentions = new List<Retention>();
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, Encoding.UTF8))
             {
                 reader.ReadLine();
-                reader.ReadLine();
+
+                var compartments = reader.ReadLine()
+                    .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var indexUrine = Array.IndexOf(compartments, "Urine");
+                var indexFaeces = Array.IndexOf(compartments, "Faeces");
+                if (indexUrine == -1) throw new InvalidDataException();
+                if (indexFaeces == -1) throw new InvalidDataException();
+
                 reader.ReadLine();
 
                 // 経過時間ゼロでの残留放射能＝初期配分の結果を読み飛ばす。
                 reader.ReadLine();
+
+                var startTime = 0.0;
 
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -341,12 +420,25 @@ namespace ResultChecker
                     if (line.Length == 0)
                         break;
 
-                    var columns = line.Split(new[] { ' ' }, 3, StringSplitOptions.RemoveEmptyEntries);
-                    wholeBody.Add(double.Parse(columns[1]));
+                    var columns = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var endTime = double.Parse(columns[0]);
+                    var wholeBody /**/= double.Parse(columns[1]);
+                    var urine     /**/= double.Parse(columns[indexUrine]);
+                    var faeces    /**/= double.Parse(columns[indexFaeces]);
+                    retentions.Add(new Retention
+                    {
+                        StartTime /**/= startTime,
+                        EndTime   /**/= endTime,
+                        WholeBody /**/= wholeBody,
+                        Urine     /**/= urine,
+                        Faeces    /**/= faeces,
+                    });
+
+                    startTime = endTime;
                 }
             }
 
-            return wholeBody;
+            return retentions;
         }
 
         /// <summary>
@@ -358,14 +450,14 @@ namespace ResultChecker
         /// <param name="mat"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static List<double> GetExpectWholeBodyRetention(string target, string mat)
+        static List<Retention> GetExpectRetentions(string target, string mat)
         {
             var nuclide = target.Split('_')[0];
             var filePath = $"Expect/{target}.dat";
 
             var (routeOfIntake, material, particleSize) = DecomposeMaterial(mat);
 
-            var wholeBody = new List<double>();
+            var retentions = new List<Retention>();
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, Encoding.UTF8))
@@ -401,15 +493,30 @@ namespace ResultChecker
 
                 reader.ReadLine();  // (table header)
 
+                var startTime = 0.0;
+
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
                     columns = line.Split('\t');
-                    wholeBody.Add(double.Parse(columns[1]));
+                    var endTime   /**/= double.Parse(columns[0]);
+                    var wholeBody /**/= double.Parse(columns[1]);
+                    var urine     /**/= columns[2] == "-" ? default(double?) : double.Parse(columns[2]);
+                    var faeces    /**/= columns[3] == "-" ? default(double?) : double.Parse(columns[3]);
+                    retentions.Add(new Retention
+                    {
+                        StartTime /**/= startTime,
+                        EndTime   /**/= endTime,
+                        WholeBody /**/= wholeBody,
+                        Urine     /**/= urine,
+                        Faeces    /**/= faeces,
+                    });
+
+                    startTime = endTime;
                 }
             }
 
-            return wholeBody;
+            return retentions;
         }
     }
 }
