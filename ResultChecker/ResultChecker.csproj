@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net462</TargetFramework>
+
+    <OutputPath>$(SolutionDir)$(Configuration)\bin\ResultChecker\</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</IntermediateOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="out-OIR.dat" CopyToOutputDirectory="PreserveNewest" />
+
+    <None Update="Expect/*.dat" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
