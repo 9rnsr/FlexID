@@ -25,51 +25,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="lib\ICRP-07.BET">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\ICRP-07.RAD">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\NuclideList.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-af_alpha_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-af_electron_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-af_neutron_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-af_photon_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-am_alpha_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-am_electron_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-am_neutron_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\rcp-am_photon_2017-03-07.SAF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\S-Coefficient_Tmp.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="$(SolutionDir)resources/lib/ICRP-07.BET" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/ICRP-07.RAD" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/rcp-a?_*_2017-03-07.SAF" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+
+    <None Include="$(SolutionDir)resources/lib/NuclideList.txt" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/S-Coefficient_Tmp.xlsx" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(PublishProtocol)' != ''">
-    <None Update="S-Coefficient計算.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="S係数ソート.xlsm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="S-Coefficient計算.xlsx" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="S係数ソート.xlsm" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
