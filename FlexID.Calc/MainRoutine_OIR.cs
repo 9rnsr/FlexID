@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace FlexID.Calc
 {
@@ -51,9 +54,41 @@ namespace FlexID.Calc
 
             var data = new InputDataReader(InputPath, CalcProgeny).Read_OIR();
 
+            WriteOutLog(data);
+
             using (CalcOut = new CalcOut(data, OutputPath))
             {
                 MainCalc(calcTimeMesh, outTimeMesh, data);
+            }
+        }
+
+        private void WriteOutLog(InputData data)
+        {
+            var logPath = OutputPath + ".log";
+
+            using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8))
+            {
+                var otherSourceRegion = "Other";
+
+                foreach (var (nuclide, scoeffTable) in data.Nuclides.Zip(data.SCoeffTables))
+                {
+                    writer.WriteLine();
+                    writer.WriteLine($"Nuclide: {nuclide.Nuclide}");
+                    writer.WriteLine();
+                    writer.WriteLine($"Source regions those are part of '{otherSourceRegion}':");
+                    writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));
+                    writer.WriteLine();
+                    writer.WriteLine($"S-Coefficient values from '{otherSourceRegion}' to each target regions:");
+                    writer.WriteLine($"{"  T/S",-10} {otherSourceRegion,-14}");
+
+                    var scoeffOther = scoeffTable[otherSourceRegion];
+
+                    foreach (var (targetRegion, scoeff) in data.TargetRegions.Zip(scoeffOther))
+                    {
+                        writer.WriteLine($"{targetRegion,-10} {scoeff:0.00000000E+00}");
+                    }
+                }
             }
         }
 

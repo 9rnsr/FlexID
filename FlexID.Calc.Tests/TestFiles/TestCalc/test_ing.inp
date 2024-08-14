@@ -12,8 +12,8 @@ test1
 #-----+-----------------+---------------
   inp   input             -
   acc   Oralcavity        O-cavity
-  acc   Oesophagus-F      Oesophagus-f
-  acc   Oesophagus-S      Oesophagus-s
+  acc   Oesophagus-F      Oesophag-f
+  acc   Oesophagus-S      Oesophag-s
   acc   Stomach-con       St-cont
   acc   SI-con            SI-cont
   acc   SI-wall           SI-wall

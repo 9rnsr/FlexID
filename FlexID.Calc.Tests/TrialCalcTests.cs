@@ -106,7 +106,7 @@ namespace FlexID.Calc.Tests
 
             var outputPath = Path.Combine(resultDir, target);
 
-            var cTimeMeshFile = @"lib\time.dat";
+            var cTimeMeshFile = @"lib\TimeMesh\time.dat";
             var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
 
             var commitmentPeriod = "50years";
@@ -153,7 +153,7 @@ namespace FlexID.Calc.Tests
 
             var outputPath = Path.Combine(resultDir, target);
 
-            var cTimeMeshFile = @"lib\time.dat";
+            var cTimeMeshFile = @"lib\TimeMesh\time.dat";
             var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
 
             var commitmentPeriod =

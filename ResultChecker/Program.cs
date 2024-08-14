@@ -97,7 +97,7 @@ namespace ResultChecker
             var outputPath = Path.Combine(outputDir, target);
 
             // 計算時間メッシュはFlexID.Calcに付属のものを使用する。
-            var cTimeMeshFile = @"lib\time.dat";
+            var cTimeMeshFile = @"lib\TimeMesh\time.dat";
 
             // 出力時間メッシュは、OIRの残留放射能データと同じになるように設定する。
             var oTimeMeshFile = Path.Combine("out-OIR.dat");

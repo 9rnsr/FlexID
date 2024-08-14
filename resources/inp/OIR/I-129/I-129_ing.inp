@@ -14,9 +14,9 @@ I-129 Ingestion
   inp   input                 ---
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
-  acc   Oesophagus-f          Oesophagus-f
-  acc   Oesophagus-s          Oesophagus-s
-  acc   Oesophagus-sRe        Oesophagus-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
   acc   St-wall               St-wall
   acc   St-con                St-cont
   acc   St-conRe              St-cont

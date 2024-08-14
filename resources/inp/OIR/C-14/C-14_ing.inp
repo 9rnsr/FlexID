@@ -13,8 +13,8 @@ C-14 Ingestion
 #-----+---------------------+---------------
   inp   input                 ---
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophagus-f
-  acc   Oesophagus-S          Oesophagus-s
+  acc   Oesophagus-F          Oesophag-f
+  acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont

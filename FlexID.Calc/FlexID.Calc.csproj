@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.100.3" />
     <PackageReference Include="Costura.Fody" Version="5.7.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,18 +27,17 @@
     <None Include="$(SolutionDir)resources/lib/ICRP-07.RAD" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/lib/rcp-a?_*_2017-03-07.SAF" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/lib/NuclideList.txt" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="$(SolutionDir)resources/lib/S-Coefficient_Tmp.xlsx" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
 
     <None Include="$(SolutionDir)resources/inp/OIR/**/*.inp" LinkBase="inp/OIR" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/inp/EIR/**/*.inp" LinkBase="inp/EIR" CopyToOutputDirectory="PreserveNewest" />
 
-    <None Include="$(SolutionDir)resources/lib/OIR/Scoeff/*.txt" LinkBase="lib/OIR" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/OIR/Scoeff/*.txt" LinkBase="lib/OIR/Scoeff" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/lib/OIR/wT.txt" LinkBase="lib/OIR" CopyToOutputDirectory="PreserveNewest" />
 
-    <None Include="$(SolutionDir)resources/lib/EIR/SEE/*.txt" LinkBase="lib/EIR" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/EIR/SEE/*.txt" LinkBase="lib/EIR/SEE" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/lib/EIR/wT.txt" LinkBase="lib/EIR" CopyToOutputDirectory="PreserveNewest" />
 
-    <None Include="$(SolutionDir)resources/lib/TimeMesh/*.dat" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/TimeMesh/*.dat" LinkBase="lib/TimeMesh" CopyToOutputDirectory="PreserveNewest" />
 
     <None Include="$(SolutionDir)resources/lib/FixList.txt" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

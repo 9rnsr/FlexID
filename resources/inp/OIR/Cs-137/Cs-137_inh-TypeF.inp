@@ -13,7 +13,7 @@ Cs-137 Inhalation:Type-F
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   Oesophagus-S          Oesophagus-s
+  acc   Oesophagus-S          Oesophag-s
   acc   St-wall               St-wall
   acc   St-con                St-cont
   acc   St-conRe              St-cont
@@ -202,7 +202,7 @@ Cs-137 Inhalation:Type-F
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oesophagus-S          Oesophagus-s
+  acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont

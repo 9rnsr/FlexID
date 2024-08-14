@@ -143,6 +143,12 @@ namespace FlexID.Calc
         /// S係数データにおける各線源領域の名称。
         /// </summary>
         public string[] SourceRegions;
+
+        /// <summary>
+        /// 動態モデルでコンパートメントとして定義されておらず線源領域Otherの一部として取り扱う
+        /// 各線源領域の名称。
+        /// </summary>
+        public string[] OtherSourceRegions;
     }
 
     public class InputData
@@ -513,11 +519,30 @@ namespace FlexID.Calc
 
                 data.Nuclides.Add(nuclide);
 
-                // 核種に対応するS係数データを読み込む。
-                var tableSCoeff = ReadSCoeff(data, nuclide);
-                data.SCoeffTables.Add(tableSCoeff);
-
                 Organ input = null;
+
+                var sourceRegions = new[]
+                {
+                    "O-cavity",    "O-mucosa",    "Teeth-S",     "Teeth-V",     "Tongue",
+                    "Tonsils",     "Oesophag-s",  "Oesophag-f",  "Oesophag-w",  "St-cont",
+                    "St-mucosa",   "St-wall",     "SI-cont",     "SI-mucosa",   "SI-wall",
+                    "SI-villi",    "RC-cont",     "RC-mucosa",   "RC-wall",     "LC-cont",
+                    "LC-mucosa",   "LC-wall",     "RS-cont",     "RS-mucosa",   "RS-wall",
+                    "ET1-sur",     "ET2-sur",     "ET2-bnd",     "ET2-seq",     "LN-ET",
+                    "Bronchi",     "Bronchi-b",   "Bronchi-q",   "Brchiole",    "Brchiole-b",
+                    "Brchiole-q",  "ALV",         "LN-Th",       "Lungs",       "Adrenals",
+                    "Blood",       "C-bone-S",    "C-bone-V",    "T-bone-S",    "T-bone-V",
+                    "C-marrow",    "T-marrow",    "R-marrow",    "Y-marrow",    "Brain",
+                    "Breast",      "Eye-lens",    "GB-wall",     "GB-cont",     "Ht-wall",
+                    "Kidneys",     "Liver",       "LN-Sys",      "Ovaries",     "Pancreas",
+                    "P-gland",     "Prostate",    "S-glands",    "Skin",        "Spleen",
+                    "Testes",      "Thymus",      "Thyroid",     "Ureters",     "UB-wall",
+                    "UB-cont",     "Uterus",      "Adipose",     "Cartilage",   "Muscle",
+                    "ET1-wall",    "ET2-wall",    "Lung-Tis",    "RT-air",
+                    "Other",    // 線源領域「その他の組織」に関連付ける際の名称
+                };
+
+                var otherSourceRegions = OtherSourceRegions.ToList();
 
                 foreach (var (lineNum, organ) in organs)
                 {
@@ -539,13 +564,13 @@ namespace FlexID.Calc
                     var sourceRegion = organ.SourceRegion;
                     if (!IsBar(sourceRegion))
                     {
-                        // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
-                        var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
+                        // コンパートメントに対応する線源領域の名称が有効であることを確認する。
+                        var indexS = Array.IndexOf(sourceRegions, sourceRegion);
                         if (indexS == -1)
                             throw Program.Error($"Line {lineNum}: Unknown source region name '{sourceRegion}'.");
 
-                        // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
-                        organ.S_Coefficients = tableSCoeff[sourceRegion];
+                        // インプットで明示された線源領域をOtherの内訳から除く。
+                        otherSourceRegions.Remove(sourceRegion);
                     }
                     else
                     {
@@ -555,6 +580,22 @@ namespace FlexID.Calc
 
                 if (!nuclide.IsProgeny && input is null)
                     throw Program.Error($"Missing 'inp' compartment.");
+
+                nuclide.OtherSourceRegions = otherSourceRegions.ToArray();
+
+                // 核種に対応するS係数データを読み込む。
+                var tableSCoeff = ReadSCoeff(data, nuclide);
+                data.SCoeffTables.Add(tableSCoeff);
+
+                foreach (var (lineNum, organ) in organs)
+                {
+                    var sourceRegion = organ.SourceRegion;
+                    if (sourceRegion != null)
+                    {
+                        // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
+                        organ.S_Coefficients = tableSCoeff[sourceRegion];
+                    }
+                }
             }
 
             // コンパートメント間の移行経路を定義する。
@@ -736,6 +777,58 @@ namespace FlexID.Calc
             return data;
         }
 
+        private static string[] OtherSourceRegions = new[]
+        {
+            "O-mucosa",    "Teeth-V",     "Tonsils",     "Oesophag-w",  "St-wall",
+            "SI-wall",     "RC-wall",     "LC-wall",     "RS-wall",     "LN-ET",
+            "LN-Th",       "Adrenals",    "C-bone-V",    "T-bone-V",    "R-marrow",
+            "Y-marrow",    "Brain",       "Breast",      "Eye-lens",    "GB-wall",
+            "Ht-wall",     "Kidneys",     "Liver",       "LN-Sys",      "Ovaries",
+            "Pancreas",    "P-gland",     "Prostate",    "S-glands",    "Skin",
+            "Spleen",      "Testes",      "Thymus",      "Thyroid",     "Ureters",
+            "UB-wall",     "Uterus",      "Adipose",     "Cartilage",   "Muscle",
+            "ET1-wall",    "ET2-wall",    "Lung-Tis",
+        };
+
+        private static double[] AdultMaleSourceRegionsMass = new[]
+        {
+            0.0      , 3.583E-02, 0.000E+00, 5.000E-02, 7.300E-02,
+            3.000E-03, 0.000E+00, 0.000E+00, 4.000E-02, 2.500E-01,
+            4.639E-03, 1.500E-01, 3.500E-01, 3.696E-02, 6.500E-01,
+            1.252E-02, 1.500E-01, 2.010E-02, 1.500E-01, 7.500E-02,
+            1.875E-02, 1.500E-01, 7.500E-02, 1.128E-02, 7.000E-02,
+            0.000E+00, 0.000E+00, 2.472E-03, 4.504E-04, 1.500E-02,
+            0.000E+00, 1.727E-03, 2.918E-04, 0.000E+00, 4.891E-03,
+            1.252E-03, 1.100E+00, 1.500E-02, 1.200E+00, 1.400E-02,
+            5.600E+00, 0.000E+00, 4.400E+00, 0.000E+00, 1.100E+00,
+            2.790E-01, 3.371E+00, 1.170E+00, 2.480E+00, 1.450E+00,
+            2.500E-02, 4.000E-04, 1.000E-02, 5.800E-02, 3.300E-01,
+            3.100E-01, 1.800E+00, 1.484E-01, 0.000E+00, 1.400E-01,
+            6.000E-04, 1.700E-02, 8.500E-02, 3.300E+00, 1.500E-01,
+            3.500E-02, 2.500E-02, 2.000E-02, 1.600E-02, 5.000E-02,
+            2.000E-01, 0.000E+00, 1.723E+01, 1.100E+00, 2.900E+01,
+            2.923E-03, 2.923E-03, 5.000E-01, 0.000E+00,
+        };
+        private static double[] AdultFemaleSourceRegionsMass = new[]
+        {
+            0.0      ,  2.245E-02,  0.000E+00,  4.000E-02,  6.000E-02,
+            3.000E-03,  0.000E+00,  0.000E+00,  3.500E-02,  2.300E-01,
+            4.639E-03,  1.400E-01,  2.800E-01,  3.432E-02,  6.000E-01,
+            1.252E-02,  1.600E-01,  1.773E-02,  1.450E-01,  8.000E-02,
+            1.726E-02,  1.450E-01,  8.000E-02,  1.039E-02,  7.000E-02,
+            0.000E+00,  0.000E+00,  2.137E-03,  3.894E-04,  1.200E-02,
+            0.000E+00,  1.552E-03,  2.622E-04,  0.000E+00,  4.703E-03,
+            1.204E-03,  9.000E-01,  1.200E-02,  9.500E-01,  1.300E-02,
+            4.100E+00,  0.000E+00,  3.200E+00,  0.000E+00,  8.000E-01,
+            2.580E-01,  2.442E+00,  9.000E-01,  1.800E+00,  1.300E+00,
+            5.000E-01,  4.000E-04,  8.000E-03,  4.800E-02,  2.500E-01,
+            2.750E-01,  1.400E+00,  1.187E-01,  1.100E-02,  1.200E-01,
+            6.000E-04,  0.000E+00,  7.000E-02,  2.300E+00,  1.300E-01,
+            0.000E+00,  2.000E-02,  1.700E-02,  1.500E-02,  4.000E-02,
+            2.000E-01,  8.000E-02,  2.141E+01,  9.000E-01,  1.750E+01,
+            2.526E-03,  2.526E-03,  4.200E-01,  0.000E+00,
+        };
+
         /// <summary>
         /// S係数データを読み込む。
         /// </summary>
@@ -745,12 +838,11 @@ namespace FlexID.Calc
         private static Dictionary<string, double[]> ReadSCoeff(InputData data, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
-            var prg = nuclide.IsProgeny ? "prg_" : "";
 
-            var fileAM = $"{nuc}_AM_{prg}S-Coefficient.txt";
-            var fileAF = $"{nuc}_AF_{prg}S-Coefficient.txt";
-            using (var readerAM = new StreamReader(Path.Combine("lib", "OIR", fileAM)))
-            using (var readerAF = new StreamReader(Path.Combine("lib", "OIR", fileAF)))
+            var fileAM = $"{nuc}_AM.txt";
+            var fileAF = $"{nuc}_AF.txt";
+            using (var readerAM = new StreamReader(Path.Combine("lib", "OIR", "Scoeff", fileAM)))
+            using (var readerAF = new StreamReader(Path.Combine("lib", "OIR", "Scoeff", fileAF)))
             {
                 // 1行目から線源領域の名称を配列で取得。
                 var sourcesAM = readerAM.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
@@ -767,32 +859,66 @@ namespace FlexID.Calc
 
                 var table = sources.ToDictionary(s => s, s => new double[43]);
 
+                var columnOther = new double[43];
+                var indexOtherSources = nuclide.OtherSourceRegions.Select(s => Array.IndexOf(sources, s)).ToArray();
+
                 for (int indexT = 0; indexT < 43; indexT++)
                 {
-                    var valuesAM = readerAM.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    var valuesAF = readerAF.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (valuesAM?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {fileAM}");
-                    if (valuesAF?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {fileAF}");
+                    var columnsAM = readerAM.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var columnsAF = readerAF.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (columnsAM?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {fileAM}");
+                    if (columnsAF?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {fileAF}");
 
                     // 各行の1列目から標的領域の名称を取得。
-                    var targetAM = valuesAM[0];
-                    var targetAF = valuesAF[0];
+                    var targetAM = columnsAM[0];
+                    var targetAF = columnsAF[0];
                     if (targetAM != targetAF)
                         throw Program.Error($"Found mismatch of target region names in S-Coefficient data for nuclide {nuc}.");
                     targets[indexT] = targetAM;
 
+                    // 各線源領域からのS係数を取得する。
+                    var valuesAM = columnsAM.Skip(1).Select(v => double.Parse(v)).ToArray();
+                    var valuesAF = columnsAF.Skip(1).Select(v => double.Parse(v)).ToArray();
+
                     for (int indexS = 0; indexS < sourcesCount; indexS++)
                     {
                         var sourceRegion = sources[indexS];
+                        var scoeffAM = valuesAM[indexS];
+                        var scoeffAF = valuesAF[indexS];
 
                         // ここでS係数の男女平均を取る。
-                        var scoeffAM = double.Parse(valuesAM[1 + indexS]);
-                        var scoeffAF = double.Parse(valuesAF[1 + indexS]);
                         var scoeff = (scoeffAM + scoeffAF) / 2;
-
                         table[sourceRegion][indexT] = scoeff;
                     }
+
+                    // 線源領域'Other'のS係数を計算する。
+                    var massOtherAM = 0.0;
+                    var massOtherAF = 0.0;
+                    var scoeffOtherAM = 0.0;
+                    var scoeffOtherAF = 0.0;
+                    foreach (var indexS in indexOtherSources)
+                    {
+                        var sourceRegion = sources[indexS];
+                        var massAM = AdultMaleSourceRegionsMass[indexS];
+                        var massAF = AdultFemaleSourceRegionsMass[indexS];
+                        var scoeffAM = valuesAM[indexS];
+                        var scoeffAF = valuesAF[indexS];
+
+                        massOtherAM += massAM;
+                        massOtherAF += massAF;
+                        scoeffOtherAM += massAM * scoeffAM;
+                        scoeffOtherAF += massAF * scoeffAF;
+                    }
+                    if (massOtherAM != 0) scoeffOtherAM /= massOtherAM;
+                    if (massOtherAF != 0) scoeffOtherAF /= massOtherAF;
+
+                    // ここでS係数の男女平均を取る。
+                    var scoeffOther = (scoeffOtherAM + scoeffOtherAF) / 2;
+                    columnOther[indexT] = scoeffOther;
                 }
+
+                // S係数データに'Other'列を追加する
+                table["Other"] = columnOther;
 
                 // 核種が考慮する線源領域の名称を設定する。
                 nuclide.SourceRegions = sources;
@@ -1023,9 +1149,9 @@ namespace FlexID.Calc
         private static Dictionary<string, double[]> ReadSee(InputData data, string age, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
-            var file = $"{nuc}SEE.txt";
+            var file = $"{nuc}.txt";
 
-            using (var reader = new StreamReader(Path.Combine("lib", "EIR", file)))
+            using (var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file)))
             {
                 while (reader.ReadLine() != age)
                 { }
@@ -1033,9 +1159,9 @@ namespace FlexID.Calc
                 // 2行目から線源領域の名称を配列で取得。
                 var sources = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
                 if (sources is null)
-                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+                    throw Program.Error($"Incorrect SEE file format: {file}");
                 if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
-                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+                    throw Program.Error($"Incorrect SEE file format: {file}");
                 var sourcesCount = sources.Length;
 
                 var targets = new string[31];

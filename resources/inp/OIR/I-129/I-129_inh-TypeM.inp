@@ -13,8 +13,8 @@ I-129 Inhalation:Type-M
 #-----+---------------------+---------------
   inp   input                 ---
   acc   OralcavityRe          O-cavity
-  acc   Oesophagus-s          Oesophagus-s
-  acc   Oesophagus-sRe        Oesophagus-s
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
   acc   St-wall               St-wall
   acc   St-con                St-cont
   acc   St-conRe              St-cont
