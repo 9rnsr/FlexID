@@ -1,4 +1,3 @@
-using ClosedXML.Excel;
 using MathNet.Numerics.Interpolation;
 using System;
 using System.Collections.Generic;
@@ -240,64 +239,6 @@ namespace FlexID.Calc
 
             // エネルギービンを超えることはないはず
             throw new Exception("Assert(energyBin.Last < energy)");
-        }
-
-        // 出力Excelテンプレートのファイルパス
-        private const string TemplateExcelFilePath = @"lib\S-Coefficient_Tmp.xlsx";
-
-        /// <summary>
-        /// 計算結果をExcelファイルに書き出す。
-        /// </summary>
-        /// <param name="filePath">計算結果。</param>
-        public void WriteCalcResult(string filePath)
-        {
-            using (var workbook = new XLWorkbook(TemplateExcelFilePath))
-            {
-                void WriteTS(double[] outValuesTS, IXLWorksheet sheet)
-                {
-                    const int offsetC = 3;
-                    const int offsetR = 5;
-
-                    int outTS = 0;
-                    for (int col = 0; col < 79; col++)
-                    {
-                        for (int row = 0; row < 43; row++)
-                        {
-                            var r = row + offsetR;
-                            var c = col + offsetC;
-                            sheet.Cell(r, c).Value = outValuesTS[outTS++];
-                        }
-                    }
-                }
-
-                var sheetT = workbook.Worksheet("total");
-                WriteTS(OutTotal, sheetT);
-                {
-                    // 'Other'の列をゼロで埋める。
-                    var col = 82;
-                    for (int row = 5; row < 48; row++)
-                    {
-                        sheetT.Cell(row, col).Value = 0;
-                    }
-                }
-
-                var sheetP = workbook.Worksheet("photon");
-                WriteTS(OutP, sheetP);
-
-                var sheetE = workbook.Worksheet("electron");
-                WriteTS(OutE, sheetE);
-
-                var sheetB = workbook.Worksheet("beta");
-                WriteTS(OutB, sheetB);
-
-                var sheetA = workbook.Worksheet("alpha");
-                WriteTS(OutA, sheetA);
-
-                var sheetN = workbook.Worksheet("neutron");
-                WriteTS(OutN, sheetN);
-
-                workbook.SaveAs(filePath);
-            }
         }
 
         /// <summary>

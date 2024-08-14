@@ -68,12 +68,8 @@ namespace FlexID.ViewModels
                 calcS.CalcS(nuc);
 
                 var target = $@"{nuc}_{(sex == Sex.Male ? "AM" : "AF")}";
-
-                var scoeffExcelFilePath = Path.Combine("out", target + ".xlsx");
-                calcS.WriteCalcResult(scoeffExcelFilePath);
-
-                var scoeffTextFilePath = Path.Combine("out", target + ".txt");
-                calcS.WriteOutTotalResult(scoeffTextFilePath);
+                var scoeffFilePath = Path.Combine("out", target + ".txt");
+                calcS.WriteOutTotalResult(scoeffFilePath);
             })).ToArray());
         }
     }

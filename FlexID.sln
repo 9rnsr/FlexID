@@ -11,10 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlexID.Calc.Tests", "FlexID
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlexID.Viewer", "FlexID.Viewer\FlexID.Viewer.csproj", "{045F26DF-DC16-4473-83BD-9A85BE497B8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostProcessing", "PostProcessing\PostProcessing.csproj", "{0B0AC6CE-1CCA-4A5D-9D63-C9D8E7E3715E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostProcessing.Tests", "PostProcessing.Tests\PostProcessing.Tests.csproj", "{F1D1C60C-EAB9-472C-928A-E49D62B2EE86}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResultChecker", "ResultChecker\ResultChecker.csproj", "{65F37A75-FCB9-4333-9A02-478FF039DABA}"
 EndProject
 Global
@@ -39,14 +35,6 @@ Global
 		{045F26DF-DC16-4473-83BD-9A85BE497B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{045F26DF-DC16-4473-83BD-9A85BE497B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{045F26DF-DC16-4473-83BD-9A85BE497B8C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B0AC6CE-1CCA-4A5D-9D63-C9D8E7E3715E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B0AC6CE-1CCA-4A5D-9D63-C9D8E7E3715E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B0AC6CE-1CCA-4A5D-9D63-C9D8E7E3715E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B0AC6CE-1CCA-4A5D-9D63-C9D8E7E3715E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1D1C60C-EAB9-472C-928A-E49D62B2EE86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1D1C60C-EAB9-472C-928A-E49D62B2EE86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1D1C60C-EAB9-472C-928A-E49D62B2EE86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1D1C60C-EAB9-472C-928A-E49D62B2EE86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65F37A75-FCB9-4333-9A02-478FF039DABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{65F37A75-FCB9-4333-9A02-478FF039DABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65F37A75-FCB9-4333-9A02-478FF039DABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
