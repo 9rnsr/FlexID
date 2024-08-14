@@ -1044,13 +1044,13 @@ namespace FlexID.Calc.Tests
 
     class InputErrorTestHelpers
     {
-        public static DataReader CreateReader(string[] inputLines)
+        public static InputDataReader CreateReader(string[] inputLines)
         {
             var inputFileBytes = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, inputLines));
 
             var stream = new MemoryStream(inputFileBytes);
             var reader = new StreamReader(stream);
-            return new DataReader(reader, calcProgeny: true);
+            return new InputDataReader(reader, calcProgeny: true);
         }
     }
 }

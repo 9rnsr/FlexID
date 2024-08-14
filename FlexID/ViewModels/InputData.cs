@@ -81,7 +81,7 @@ namespace FlexID.ViewModels
             {
                 try
                 {
-                    var reader = new DataReader(inputFile, calcProgeny: true);
+                    var reader = new InputDataReader(inputFile, calcProgeny: true);
                     var data = reader.Read_OIR();
 
                     var parentNuclide = data.Nuclides.FirstOrDefault();
@@ -119,7 +119,7 @@ namespace FlexID.ViewModels
             {
                 try
                 {
-                    var reader = new DataReader(inputFile, calcProgeny: true);
+                    var reader = new InputDataReader(inputFile, calcProgeny: true);
                     var data = reader.Read_EIR().FirstOrDefault();
 
                     var parentNuclide = data?.Nuclides.FirstOrDefault();

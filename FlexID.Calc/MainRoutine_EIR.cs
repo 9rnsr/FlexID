@@ -64,7 +64,7 @@ namespace FlexID.Calc
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-            var dataList = new DataReader(InputPath, CalcProgeny).Read_EIR();
+            var dataList = new InputDataReader(InputPath, CalcProgeny).Read_EIR();
 
             using (CalcOut = new CalcOut(dataList[0], OutputPath))
             {
@@ -72,10 +72,10 @@ namespace FlexID.Calc
             }
         }
 
-        private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, List<DataClass> dataList)
+        private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, List<InputData> dataList)
         {
-            DataClass dataLo;
-            DataClass dataHi;
+            InputData dataLo;
+            InputData dataHi;
 
             // 移行係数以外は変わらないので、とりあえず3monthのデータを入れる
             dataLo = dataList[0];
@@ -103,7 +103,7 @@ namespace FlexID.Calc
                 ExposureAge == /**/"Adult" ? ageAdultT :
                 throw Program.Error("Please select the age at the time of exposure.");
 
-            DataClass dataLoInterp = null;  // 年齢区間の切り替わり検出用。
+            InputData dataLoInterp = null;  // 年齢区間の切り替わり検出用。
             double[][] sourcesSee = null;
             double[][] organsSee = null;
 

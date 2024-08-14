@@ -98,7 +98,7 @@ namespace FlexID.Calc.Tests
             var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
 
             var calcProgeny = true;
-            var data = new DataReader(inputPath, calcProgeny).Read_OIR();
+            var data = new InputDataReader(inputPath, calcProgeny).Read_OIR();
             Assert.IsNotNull(data);
         }
 
@@ -110,7 +110,7 @@ namespace FlexID.Calc.Tests
             var inputPath = Path.Combine("inp", "EIR", nuclide, target + ".inp");
 
             var calcProgeny = true;
-            var data = new DataReader(inputPath, calcProgeny).Read_EIR();
+            var data = new InputDataReader(inputPath, calcProgeny).Read_EIR();
             Assert.IsNotNull(data);
         }
     }

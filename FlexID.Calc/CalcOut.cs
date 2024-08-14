@@ -8,7 +8,7 @@ namespace FlexID.Calc
 {
     class CalcOut : IDisposable
     {
-        private readonly DataClass data;
+        private readonly InputData data;
 
         public string DosePath { get; }
         public string DoseRatePath { get; }
@@ -40,7 +40,7 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="data"></param>
         /// <param name="outputPath"></param>
-        public CalcOut(DataClass data, string outputPath)
+        public CalcOut(InputData data, string outputPath)
         {
             this.data = data;
 
