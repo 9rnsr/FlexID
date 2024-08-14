@@ -67,7 +67,7 @@ namespace FlexID.ViewModels
             {
                 calcS.CalcS(nuc);
 
-                var target = $@"{nuc}_{(sex == Sex.Male ? "AM" : "AF")}_S-Coefficient";
+                var target = $@"{nuc}_{(sex == Sex.Male ? "AM" : "AF")}";
 
                 var scoeffExcelFilePath = Path.Combine("out", target + ".xlsx");
                 calcS.WriteCalcResult(scoeffExcelFilePath);

@@ -63,8 +63,8 @@ namespace FlexID.ViewModels
         public InputOIRViewModel(CalcState calcStatus)
         {
             OutputFilePath.Value = @"out\";
-            CalcTimeMeshFilePath.Value = @"lib\time.dat";
-            OutTimeMeshFilePath.Value = @"lib\out-time.dat";
+            CalcTimeMeshFilePath.Value = @"lib\TimeMesh\time.dat";
+            OutTimeMeshFilePath.Value = @"lib\TimeMesh\out-time.dat";
             CommitmentPeriod.Value = "50";
 
             const string InputDirPath = @"inp\OIR";

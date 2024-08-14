@@ -745,12 +745,12 @@ namespace FlexID.Calc
         private static Dictionary<string, double[]> ReadSCoeff(InputData data, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
-            var prg = nuclide.IsProgeny ? "prg_" : "";
+            var prg = nuclide.IsProgeny ? "_prg" : "";
 
-            var fileAM = $"{nuc}_AM_{prg}S-Coefficient.txt";
-            var fileAF = $"{nuc}_AF_{prg}S-Coefficient.txt";
-            using (var readerAM = new StreamReader(Path.Combine("lib", "OIR", fileAM)))
-            using (var readerAF = new StreamReader(Path.Combine("lib", "OIR", fileAF)))
+            var fileAM = $"{nuc}_AM{prg}.txt";
+            var fileAF = $"{nuc}_AF{prg}.txt";
+            using (var readerAM = new StreamReader(Path.Combine("lib", "OIR", "Scoeff", fileAM)))
+            using (var readerAF = new StreamReader(Path.Combine("lib", "OIR", "Scoeff", fileAF)))
             {
                 // 1行目から線源領域の名称を配列で取得。
                 var sourcesAM = readerAM.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
@@ -1023,9 +1023,9 @@ namespace FlexID.Calc
         private static Dictionary<string, double[]> ReadSee(InputData data, string age, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
-            var file = $"{nuc}SEE.txt";
+            var file = $"{nuc}.txt";
 
-            using (var reader = new StreamReader(Path.Combine("lib", "EIR", file)))
+            using (var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file)))
             {
                 while (reader.ReadLine() != age)
                 { }
@@ -1033,9 +1033,9 @@ namespace FlexID.Calc
                 // 2行目から線源領域の名称を配列で取得。
                 var sources = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
                 if (sources is null)
-                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+                    throw Program.Error($"Incorrect SEE file format: {file}");
                 if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
-                    throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+                    throw Program.Error($"Incorrect SEE file format: {file}");
                 var sourcesCount = sources.Length;
 
                 var targets = new string[31];
