@@ -145,7 +145,7 @@ namespace FlexID.Calc
         public string[] SourceRegions;
     }
 
-    public class DataClass
+    public class InputData
     {
         /// <summary>
         /// インプットのタイトル文字列。
@@ -184,7 +184,7 @@ namespace FlexID.Calc
     /// <summary>
     /// インプットファイルの読み取り処理。
     /// </summary>
-    public class DataReader : IDisposable
+    public class InputDataReader : IDisposable
     {
         /// <summary>
         /// インプットファイルの読み出し用TextReader。
@@ -206,7 +206,7 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="inputPath">インプットファイルのパス文字列。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
-        public DataReader(string inputPath, bool calcProgeny)
+        public InputDataReader(string inputPath, bool calcProgeny)
         {
             var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             var reader = new StreamReader(stream);
@@ -220,7 +220,7 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="reader">インプットの読み込み元。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
-        public DataReader(StreamReader reader, bool calcProgeny)
+        public InputDataReader(StreamReader reader, bool calcProgeny)
         {
             this.reader = reader;
             this.calcProgeny = calcProgeny;
@@ -256,7 +256,7 @@ namespace FlexID.Calc
         /// OIR用のインプットファイルを読み込む。
         /// </summary>
         /// <returns></returns>
-        public DataClass Read_OIR()
+        public InputData Read_OIR()
         {
             var line = GetNextLine();
             if (line is null)
@@ -478,7 +478,7 @@ namespace FlexID.Calc
                 }
             }
 
-            var data = new DataClass();
+            var data = new InputData();
 
             if (inputTitle is null)
                 throw Program.Error($"Missing [title] section.");
@@ -739,9 +739,10 @@ namespace FlexID.Calc
         /// <summary>
         /// S係数データを読み込む。
         /// </summary>
+        /// <param name="data"></param>
         /// <param name="nuclide">対象核種。線源領域の名称が設定される。</param>
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
-        private static Dictionary<string, double[]> ReadSCoeff(DataClass data, NuclideData nuclide)
+        private static Dictionary<string, double[]> ReadSCoeff(InputData data, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
             var prg = nuclide.IsProgeny ? "prg_" : "";
@@ -807,9 +808,9 @@ namespace FlexID.Calc
         /// EIR用のインプットファイルを読み込む。
         /// </summary>
         /// <returns></returns>
-        public List<DataClass> Read_EIR()
+        public List<InputData> Read_EIR()
         {
-            var dataList = new List<DataClass>();
+            var dataList = new List<InputData>();
             dataList.Add(Read_EIR("Age:3month"));
             dataList.Add(Read_EIR("Age:1year"));
             dataList.Add(Read_EIR("Age:5year"));
@@ -819,7 +820,7 @@ namespace FlexID.Calc
             return dataList;
         }
 
-        public DataClass Read_EIR(string age)
+        public InputData Read_EIR(string age)
         {
             // 読み取り位置をファイル先頭に戻す。
             reader.BaseStream.Position = 0;
@@ -830,7 +831,7 @@ namespace FlexID.Calc
             if (firstLine is null)
                 throw Program.Error("Reach to EOF while reading input file.");
 
-            var data = new DataClass();
+            var data = new InputData();
 
             data.StartAge =
                 age == "Age:3month" /**/? 100 :
@@ -1015,10 +1016,11 @@ namespace FlexID.Calc
         /// <summary>
         /// SEEデータを読み込む。
         /// </summary>
+        /// <param name="data"></param>
         /// <param name="age">被ばく評価期間の開始年齢</param>
         /// <param name="nuclide">対象核種。線源領域の名称が設定される。</param>
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
-        private static Dictionary<string, double[]> ReadSee(DataClass data, string age, NuclideData nuclide)
+        private static Dictionary<string, double[]> ReadSee(InputData data, string age, NuclideData nuclide)
         {
             var nuc = nuclide.Nuclide;
             var file = $"{nuc}SEE.txt";

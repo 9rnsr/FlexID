@@ -13,7 +13,7 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="Act"></param>
         /// <param name="data"></param>
-        public static void Init(Activity Act, DataClass data)
+        public static void Init(Activity Act, InputData data)
         {
             Act.CalcPre = new OrganActivity[data.Organs.Count];
             Act.CalcNow = new OrganActivity[data.Organs.Count];

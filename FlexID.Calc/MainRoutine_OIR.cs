@@ -49,7 +49,7 @@ namespace FlexID.Calc
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-            var data = new DataReader(InputPath, CalcProgeny).Read_OIR();
+            var data = new InputDataReader(InputPath, CalcProgeny).Read_OIR();
 
             using (CalcOut = new CalcOut(data, OutputPath))
             {
@@ -57,7 +57,7 @@ namespace FlexID.Calc
             }
         }
 
-        private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, DataClass data)
+        private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, InputData data)
         {
             const double convergence = 1E-8; // 収束値
             const int iterMax = 1500;  // iterationの最大回数

@@ -62,7 +62,7 @@ namespace FlexID.Calc
         /// 次の計算時間メッシュのための準備を行う。
         /// </summary>
         /// <param name="data"></param>
-        public void NextCalc(DataClass data)
+        public void NextCalc(InputData data)
         {
             Swap(ref CalcPre, ref CalcNow);
 
@@ -79,7 +79,7 @@ namespace FlexID.Calc
         /// 次の収束計算回のための準備を行う。
         /// </summary>
         /// <param name="data"></param>
-        public void NextIter(DataClass data)
+        public void NextIter(InputData data)
         {
             Swap(ref IterPre, ref IterNow);
 
@@ -96,7 +96,7 @@ namespace FlexID.Calc
         /// 次の出力時間メッシュのための準備を行う。
         /// </summary>
         /// <param name="data"></param>
-        public void NextOut(DataClass data)
+        public void NextOut(InputData data)
         {
             foreach (var o in data.Organs)
             {
