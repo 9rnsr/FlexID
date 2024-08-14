@@ -103,20 +103,6 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        [DataRow("OIR_old_Sr-90_ing-Other")]
-        [DataRow("OIR_old_Ba-133_ing-Insoluble")]
-        [DataRow("OIR_old_Cs-137_inh-TypeF")]
-        [DataRow("OIR_old_Pu-241_inh-TypeS")]
-        public void Test_OIR_old(string target)
-        {
-            var inputPath = TestFiles.Combine("InputRead", target + ".inp");
-
-            var calcProgeny = true;
-            var data = new DataReader(inputPath, calcProgeny).Read_OIR();
-            Assert.IsNotNull(data);
-        }
-
-        [TestMethod]
         [DataRow("Sr-90_ing")]
         public void Test_EIR(string target)
         {

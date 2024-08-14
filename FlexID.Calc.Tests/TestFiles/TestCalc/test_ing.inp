@@ -1,12 +1,34 @@
- Cs-134 test1                                0.23104906     0.0
-   1 input              inp      0.0        0     0    100.0   -
-   2 Oralcavity         acc      2.0        1     1    100.0   O-cavity
-   3 Oesophagus-F       acc      2.0        1     2     90.0   Oesophagus-f
-   4 Oesophagus-S       acc      3.0        1     2     10.0   Oesophagus-s
-   5 Stomach-con        acc      5.0        2     3    100.0   St-cont
-                                                  4    100.0
-   6 SI-con             acc      4.0        2     5    100.0   SI-cont
-                                                  7    100.0
-   7 SI-wall            acc      2.0        1     6     50.0   SI-wall
-   8 Faeces             exc      0.0        1     6     50.0   -
-end
+[title]
+test1
+
+[nuclide]
+# Nuclide | Intake route        | Ramd           | DecayRate
+#---------+---------------------+----------------+---------------
+  Cs-134    test1                 0.23104906       0.0
+
+[Cs-134:compartment]
+#-----+-----------------| S-Coefficient
+# Func| Compartment     | Source Region
+#-----+-----------------+---------------
+  inp   input             -
+  acc   Oralcavity        O-cavity
+  acc   Oesophagus-F      Oesophagus-f
+  acc   Oesophagus-S      Oesophagus-s
+  acc   Stomach-con       St-cont
+  acc   SI-con            SI-cont
+  acc   SI-wall           SI-wall
+  exc   Faeces            -
+
+[Cs-134:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+  input                   Oralcavity            100%
+  Oralcavity              Oesophagus-F          1.8
+  Oralcavity              Oesophagus-S          0.2
+  Oesophagus-F            Stomach-con           2.0
+  Oesophagus-S            Stomach-con           3.0
+  Stomach-con             SI-con                5.0
+  SI-wall                 SI-con                2.0
+  SI-con                  SI-wall               2.0
+  SI-con                  Faeces                2.0
