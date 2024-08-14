@@ -4,8 +4,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
 
-    <DisableFody Condition="'$(Configuration)' == 'Debug'">true</DisableFody>
-
     <OutputPath>$(SolutionDir)$(Configuration)\bin\FlexID\</OutputPath>
     <IntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</IntermediateOutputPath>
   </PropertyGroup>
@@ -15,15 +13,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.100.3" />
     <PackageReference Include="Costura.Fody" Version="5.7.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="$(SolutionDir)resources/lib/ICRP-07.BET" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/ICRP-07.RAD" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/rcp-a?_*_2017-03-07.SAF" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/NuclideList.txt" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/S-Coefficient_Tmp.xlsx" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+
     <None Include="$(SolutionDir)resources/inp/OIR/**/*.inp" LinkBase="inp/OIR" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/inp/EIR/**/*.inp" LinkBase="inp/EIR" CopyToOutputDirectory="PreserveNewest" />
 
