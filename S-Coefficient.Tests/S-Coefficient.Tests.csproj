@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PostProcessing\PostProcessing.csproj" />
-    <ProjectReference Include="..\S-coefficient\S-Coefficient.csproj" />
   </ItemGroup>
 
   <Target Name="CreateTestFilesDir" AfterTargets="PostBuildEvent">
