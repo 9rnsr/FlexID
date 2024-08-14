@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
 
-namespace S_Coefficient.Tests
+namespace PostProcessing.Tests
 {
     [TestClass]
     public class PostProcessTests

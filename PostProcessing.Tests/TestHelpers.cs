@@ -2,7 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace S_Coefficient.Tests
+namespace PostProcessing.Tests
 {
     class TestFiles
     {
