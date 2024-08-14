@@ -12,7 +12,7 @@ Cs-134 Inhalation:Type-M
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   Oesophagus-S          Oesophagus-s
+  acc   Oesophagus-S          Oesophag-s
   acc   St-wall               St-wall
   acc   St-con                St-cont
   acc   St-conRe              St-cont
