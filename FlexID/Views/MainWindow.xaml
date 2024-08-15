@@ -10,7 +10,6 @@
   Width="600"
   Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
   FontSize="14"
-  SizeToContent="Height"
   mc:Ignorable="d">
 
   <TabControl
