@@ -56,6 +56,27 @@ namespace FlexID.Calc
         private const string BetFilePath = @"lib\ICRP-07.BET";
 
         /// <summary>
+        /// 放射線データに定義されている核種を列挙する。
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> ReadRadNuclides()
+        {
+            using (var r = new StreamReader(RadFilePath))
+            {
+                string line;
+                while ((line = r.ReadLine()) != null)
+                {
+                    string[] fields = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    yield return fields[0];
+
+                    var dataCount = int.Parse(fields[2]);
+                    for (int dataNo = 0; dataNo < dataCount; dataNo++)
+                        r.ReadLine();
+                }
+            }
+        }
+
+        /// <summary>
         /// 放射線データ取得
         /// </summary>
         /// <param name="nuclideName">取得対象の核種名</param>
@@ -64,12 +85,12 @@ namespace FlexID.Calc
         {
             using (var r = new StreamReader(RadFilePath))
             {
-                string line;        // review:処理対象はRADファイルと判っているので、名前にRADと付ける必要はない
+                string line;
                 while ((line = r.ReadLine()) != null)
                 {
                     string[] fields = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     if (fields[0] != nuclideName)
-                        continue;   // review:メインの処理のインデントが深くなるのを避けるため、早期のcontinueを使う
+                        continue;
 
                     var dataCount = int.Parse(fields[2]);
                     var data = new string[dataCount];
@@ -95,12 +116,12 @@ namespace FlexID.Calc
         {
             using (var r = new StreamReader(BetFilePath))
             {
-                string line;        // review:処理対象はRADファイルと判っているので、名前にBETと付ける必要はない
+                string line;
                 while ((line = r.ReadLine()) != null)
                 {
                     string[] fields = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     if (fields[0] != nuclideName)
-                        continue;   // review:メインの処理のインデントが深くなるのを避けるため、早期のcontinueを使う
+                        continue;
 
                     var dataCount = int.Parse(fields[1]);
                     var data = new string[dataCount];

@@ -15,7 +15,7 @@
 
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" SharedSizeGroup="L" />
       <ColumnDefinition />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>

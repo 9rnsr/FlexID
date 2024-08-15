@@ -9,7 +9,17 @@ namespace FlexID
     {
         public MainWindow()
         {
+            SizeToContent = SizeToContent.Height;
+
             InitializeComponent();
+
+            ContentRendered += MainWindow_ContentRendered;
+
+            void MainWindow_ContentRendered(object sender, System.EventArgs e)
+            {
+                ContentRendered -= MainWindow_ContentRendered;
+                SizeToContent = SizeToContent.Manual;
+            }
         }
     }
 }
