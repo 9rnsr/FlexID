@@ -364,48 +364,21 @@ SI-con からBlood への移行割合は、f<sub>A</sub>=0.1 より10%となり�
 
 # 2. S-Coefficientファイルの作成
 
-## 2.1 事前準備
+1. `FlexID\FlexID.exe`をダブルクリックして起動。
 
-1. `S-Coefficient`フォルダを任意のフォルダにコピーする。
+1. `OIR S-Coeff`タブを選択する。
+1. 計算結果の出力フォルダを設定する。既定では`FlexID\out\`が設定されている。
+1. 計算対象とする性別にチェックを入れる。
+1. SAF値の補間方法を選択する。
+1. 計算対象とする核種名にチェックを入れる。なお、複数核種の計算を一度に実施することも可能（下図参照）。
 
-1. `S-Coefficient\ S-Coefficient.exe`をダブルクリックして起動。
+    ![img](images/Figure_A4-2.png)
 
-1. `S-Coefficient\lib\NuclideList.txt`を開き、計算対象とする核種名（例：Sr-90、計算対象とする核種は`ICRP-07.RAD`ファイルに記載されている核種のみ）を入力後、保存して閉じる。なお、複数核種の計算を実施する場合は、1核種毎に改行して入力する（図1参照）。
+1. `Run`ボタンを押すと、出力フォルダに 核種名 + `_` + {`AM` | `AF`} + `.txt` というファイル名で計算結果が出力される。
 
-    ![img](images/Figure_A4-4.png)
+    ![img](images/Figure_A4-3.png)
 
-1. 計算方法を選択し、男性と女性の2回の計算を実行する。
-
-1. `S-Coefficient\out`に計算結果が出力される。※ S-Coefficientプログラム（`S-Coefficient.exe`）の詳細仕様については[添付資料4](UserManual_Appendix-4.md)を参照。
-
-## 2.2 S-Coefficientの算出
-
-Sr-90を例に説明する：
-
-1. `S-Coefficient計算.xlsx`を開く。このとき、Excel内のG29:CI72の表を表1、CL29:FL72の表を表2、FO29:IQ72の表を表3、IT29:LT72の表を表4とする。
-
-1. 2.1節で計算した`Sr-90_AdultMale.xlsx`の「total」シートの値部分のみを表2に、`Sr-90_AdultFemale. xlsx`の「total」シートの値部分のみを表4に貼り付ける。
-
-1. 表1の「Other」列を基準にSr-90のコンパートメントモデルに明示されている臓器の列を「Other」列よりも左側に、コンパートメントモデルにない臓器を右側に列ごと移動（Excel列の「切り取り」→「切り取ったセルの挿入」）させる（図 2を参照）。この時、「骨（T-bone-S, T-bone-S, C-bone-V, C-bone-V）」が右側に移動した場合は対象外とする（「Other」列のセルの計算から除く）。
-
-    ![img](images/Figure_A4-5.png)
-
-1. G:29からOtherの最終行までをテキストファイルに貼り付け、`Sr-90_AM_S-Coefficient.txt`（`<核種名>_<性別>_S-Coefficient.txt`, 子孫核種の場合：`<核種名>_<性別>_prg_S-Coefficient.txt`）として保存。
-
-1. 表3にも同様の処理をして`Sr-90_AF_S-Coefficient.txt`として保存。
-
-2.3 S-Coefficientの後処理
-
-1. 2章で作成したテキストファイルを`PostProcessing¥file`フォルダに移動する。
-
-1. `PostProcessing\PostProcessing.exe`をダブルクリックすると`PostProcessing\file`フォルダにあるテキストファイルがFlexIDで使用できるフォーマットに変換される（※元々あったテキストファイルは上書きされるため要注意）。成型前のテキストを図3、成型後のテキストを図4に示す。
-
-    ![img](images/Figure_A4-6.png "図3 成型前ファイル")
-
-    ![img](images/Figure_A4-7.png "図4 成型後ファイル")
-
-1. 変換後のファイルを`FlexID\lib\OIR`フォルダに移動してS-Coefficientファイルの作成は完了となる。
-
+1. 出力されたファイルを`FlexID\lib\OIR\Scoeff`フォルダに移動してS-Coefficientファイルの作成は完了となる。
 
 # 3. タイムメッシュファイルの作成
 
