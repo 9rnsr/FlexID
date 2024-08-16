@@ -13,7 +13,7 @@
 プログラムの開発環境を以下に示す。
 
 - OS：Windows 10
-- IDE：Microsoft Visual Studio 2019
+- IDE：Microsoft Visual Studio 2022
 - 使用言語：C#
 - 対象フレームワーク：.NET Framework 4.6.2
 
@@ -28,12 +28,15 @@ FlexID
   ┃  ┃  ┗ 元素ごとの公衆の構成員（EIR）に対するインプットファイル
   ┃  ┗ OIR
   ┃     ┗ 元素ごとの職業人（OIR）に対するインプットファイル
+  ┃
   ┣ lib
   ┃  ┣ EIR
   ┃  ┃  ┗ 元素ごとのEIRに対するSEEファイル
   ┃  ┗ OIR
   ┃     ┗ 元素ごとのOIRに対するS-Coefficientファイル
+  ┃
   ┣ FlexID.Calc.exe（残留放射能・線量計算プログラム：ユーザーは使用しない）
+  ┃
   ┣ FlexID.exe（入力画面プログラム）
   ┗ FlexID.Viewer.exe（出力画面プログラム）
 ```
