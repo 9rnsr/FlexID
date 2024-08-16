@@ -86,13 +86,14 @@ FlexID の主な機能を以下に示す。
 
 - ① 出力フォルダパスおよび出力ファイルの先頭につく共通ファイル名を記載する。
 
-  例：`C:\AAA\BBB\CCC\Sr-90_ing`と入力した場合、`C:\AAA\BBB\CCC`フォルダに以下の4つのファイルが出力される（[添付資料5](UserManual_Appendix-5.md) 参照）。
+  例：`C:\AAA\BBB\CCC\Sr-90_ing`と入力した場合、`C:\AAA\BBB\CCC`フォルダに以下の5つのファイルが出力される（[添付資料5](UserManual_Appendix-5.md) 参照）。
 
     ```
     Sr-90_ing _Cumulative.out
     Sr-90_ing _Dose.out
     Sr-90_ing _DoseRate.out
     Sr-90_ing _Retention.out
+    Sr-90_ing .log
     ```
 
   拡張子は自動で設定されるため設定は不要。
