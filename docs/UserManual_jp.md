@@ -41,24 +41,20 @@ FlexID
   ┗ FlexID.Viewer.exe（出力画面プログラム）
 ```
 
-以下にFlexIDプログラムで使用するS-Coefficientファイル作成に必要となるS-Coefficient.exeプログラムのフォルダの構成を示す。
-
-```
-S-Coefficient
-  ┣ lib（S-Coefficient計算に使用するライブラリデータ（※））
-  ┃   ┣ NuclideList.txt（計算対象核種名リスト）
-  ┃   ┗ S-Coefficient_Tmp.xlsx（計算出力のテンプレートファイル）
-  ┣ S-Coefficient.exe（S-Coefficient計算プログラム）
-  ┣ S-Coefficient計算.xlsx（その他の組織のS-Coefficient計算用Excelファイル）
-  ┣ S係数ソート.xlsm（IDCA Dose2.1プログラムと同じ臓器順に計算した
-  ┃                    S-Coefficientを並び替えるExcelマクロファイル）
-  ┗ out（計算結果出力フォルダ）
-```
-
 ※ 以下のファイルは、ユーザーの責任において入手してlibフォルダ直下に配置して使用する。
 
-- ICRP-07.BET, ICRP-07.RAD：ICRP Publication 107 Supplemental Materialから入手
-- rcp-af_alpha_2017-03-07.SAF, rcp-af_electron_2017-03-07.SAF, rcp-af_neutron_2017-03-07.SAF, rcp-af_photon_2017-03-07.SAF, rcp-am_alpha_2017-03-07.SAF, rcp-am_electron_2017-03-07.SAF, rcp-am_neutron_2017-03-07.SAF, rcp-am_photon_2017-03-07.SAF ： ICRP Publication 133 Supplemental Material から入手
+- ICRP Publication 107 Supplemental Materialから入手
+  - ICRP-07.RAD
+  - ICRP-07.BET
+- ICRP Publication 133 Supplemental Material から入手
+  - rcp-am_alpha_2017-03-07.SAF
+  - rcp-af_alpha_2017-03-07.SAF
+  - rcp-am_electron_2017-03-07.SAF
+  - rcp-af_electron_2017-03-07.SAF
+  - rcp-am_neutron_2017-03-07.SAF
+  - rcp-af_neutron_2017-03-07.SAF
+  - rcp-am_photon_2017-03-07.SAF
+  - rcp-af_photon_2017-03-07.SAF
 
 # 5. 主な機能
 
@@ -67,6 +63,7 @@ FlexID の主な機能を以下に示す。
 - 臓器／組織ごとの残留・積算放射能量の計算（[添付資料1](UserManual_Appendix-1.md) 参照）
 - 臓器／組織ごとの等価線量、積算線量、及び線量率の計算（[添付資料2](UserManual_Appendix-2.md) 参照）
 - 預託実効線量、積算線量、及び線量率の計算（[添付資料2](UserManual_Appendix-2.md) 参照）
+- 核種ごとのS-Coefficientの計算（[添付資料3](UserManual_Appendix-3.md) 参照）
 
 # 6. 入力画面の操作方法
 
@@ -79,11 +76,11 @@ FlexID の主な機能を以下に示す。
    - OIR：職業人の内部被ばく（Occupational Intakes of Radionuclides）
    - EIR：公衆の構成員の内部被ばく（Environmental Intakes of Radionuclides）
 
-# 7. OIRの場合
+# 7. OIR計算実行画面
 
 ![img](images/Figure_1.png)
 
-新しい核種を追加するためのインプットファイル作成方法（S-Coefficientファイル作成方法を含む）は、[添付資料3](UserManual_Appendix-3.md)、[添付資料4](UserManual_Appendix-4.md)を参照。
+新しい核種を追加するためのインプットファイル作成方法は、[添付資料4](UserManual_Appendix-4.md)を参照。
 
 - ① 出力フォルダパスおよび出力ファイルの先頭につく共通ファイル名を記載する。
 
@@ -110,11 +107,11 @@ FlexID の主な機能を以下に示す。
 
 - ⑦ 預託期間を整数で入力後、コンボボックスの中から預託期間の単位を選択する
 
-    計算タイムメッシュファイルの作成方法：[添付資料3](UserManual_Appendix-3.md)参照
+    計算タイムメッシュファイルの作成方法：[添付資料4](UserManual_Appendix-4.md)参照
 
-    出力タイムメッシュファイルの作成方法：[添付資料3](UserManual_Appendix-3.md)参照
+    出力タイムメッシュファイルの作成方法：[添付資料4](UserManual_Appendix-4.md)参照
 
-# 8. EIRの場合
+# 8. EIR計算実行画面
 
 ![img](images/Figure_2.png)
 
@@ -145,9 +142,21 @@ FlexID の主な機能を以下に示す。
 
 - ⑧ コンボボックスの中から被ばく時の年齢（摂取時年齢）を選択する。
 
-# 9. 結果表示画面(Model)の説明
+# 9. S係数作成画面
 
 ![img](images/Figure_3.png)
+
+- ① 出力フォルダパスを記載する。
+
+- ② 出力対象の性別として、男性、女性を選択する。
+
+- ③ SAF値の補間方法として、PCHIP（区分的3次エルミート内挿多項式）による補間、または線形補間を選択する。
+
+- ④ 出力対象の核種にチェックを入れて選択する。
+
+# 10. 結果表示画面(Model)の説明
+
+![img](images/Figure_4.png)
 
 - ① 結果表示のために読み込むファイルを選択する。
 
@@ -170,9 +179,9 @@ FlexID の主な機能を以下に示す。
 
 なお、計算済みの結果を表示する場合は、`FlexID\FlexID.Viewer.exe`をダブルクリックする。
 
-# 10. 結果表示画面(Graph)の説明
+# 11. 結果表示画面(Graph)の説明
 
-![img](images/Figure_4.png)
+![img](images/Figure_5.png)
 
 - ① コンボボックスの中から表示するデータを選択する。
     
