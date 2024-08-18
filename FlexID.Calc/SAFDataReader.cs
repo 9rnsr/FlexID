@@ -11,11 +11,43 @@ namespace FlexID.Calc
     public enum Sex { Male, Female }
 
     /// <summary>
+    /// 'sregions_2016-08-12.NDX'から読み込んだ線源領域の情報。
+    /// </summary>
+    public class SourceRegionData
+    {
+        public string Name;
+
+        public double MaleMass;
+
+        public int MaleID;
+
+        public double FemaleMass;
+
+        public int FemaleID;
+    }
+
+    /// <summary>
+    /// 'torgans_2016-08-12.NDX'から読み込んだ標的領域の情報。
+    /// </summary>
+    public class TargetRegionData
+    {
+        public string Name;
+
+        public double MaleMass;
+
+        public double FemaleMass;
+    }
+
+    /// <summary>
     /// SAFデータを表現するクラス
     /// </summary>
     public class SAFData
     {
-        public int Count;
+        public SourceRegionData[] SourceRegions;
+
+        public TargetRegionData[] TargetRegions;
+
+        public int Count => SourceRegions.Length * TargetRegions.Length;
 
         public double[] EnergyA;
         public double[] EnergyP;
@@ -138,6 +170,77 @@ namespace FlexID.Calc
             return null;
         }
 
+        private static string GetSingleFile(string pattern)
+        {
+            var libDir = Path.Combine(Environment.CurrentDirectory, "lib");
+
+            var files = Directory.GetFiles(libDir, pattern);
+            return files.Length == 1 ? files[0] : null;
+        }
+
+        public static SourceRegionData[] ReadSourceRegions()
+        {
+            var sregionsFilePath = GetSingleFile($"sregions_????-??-??.NDX");
+
+            using (var reader = new StreamReader(sregionsFilePath))
+            {
+                reader.ReadLine();
+                reader.ReadLine();
+                reader.ReadLine();
+
+                var parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var count = int.Parse(parts[0]);
+
+                reader.ReadLine();
+
+                var results = new SourceRegionData[count];
+                for (int i = 0; i < count; i++)
+                {
+                    parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    results[i] = new SourceRegionData
+                    {
+                        Name = parts[0],
+                        MaleMass = double.Parse(parts[1]),
+                        MaleID = int.Parse(parts[2]),
+                        FemaleMass = double.Parse(parts[3]),
+                        FemaleID = int.Parse(parts[4]),
+                    };
+                }
+
+                return results;
+            }
+        }
+
+        public static TargetRegionData[] ReadTargetRegions()
+        {
+            var torgansFilePath = GetSingleFile($"torgans_????-??-??.NDX");
+
+            using (var reader = new StreamReader(torgansFilePath))
+            {
+                reader.ReadLine();
+                reader.ReadLine();
+
+                var parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var count = int.Parse(parts[0]);
+
+                reader.ReadLine();
+
+                var results = new TargetRegionData[count];
+                for (int i = 0; i < count; i++)
+                {
+                    parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    results[i] = new TargetRegionData
+                    {
+                        Name = parts[0],
+                        MaleMass = double.Parse(parts[1]),
+                        FemaleMass = double.Parse(parts[2]),
+                    };
+                }
+
+                return results;
+            }
+        }
+
         /// <summary>
         /// SAFデータ取得
         /// </summary>
@@ -145,13 +248,8 @@ namespace FlexID.Calc
         /// <returns>取得したSAFデータ</returns>
         public static SAFData ReadSAF(Sex sex)
         {
-            var libDir = Path.Combine(Environment.CurrentDirectory, "lib");
-
-            string GetSingleFile(string pattern)
-            {
-                var files = Directory.GetFiles(libDir, pattern);
-                return files.Length == 1 ? files[0] : null;
-            }
+            var sourceRegions = ReadSourceRegions();
+            var targetRegions = ReadTargetRegions();
 
             var amaf = sex == Sex.Male ? "am" : "af";
             var alphaFilePath    /**/= GetSingleFile($"rcp-{amaf}_alpha_????-??-??.SAF");
@@ -167,24 +265,20 @@ namespace FlexID.Calc
                 return null;
             }
 
+            data.SourceRegions = sourceRegions;
+            data.TargetRegions = targetRegions;
+
             // α
-            ReadAlphaSAF(data, alphaFilePath, out var nTA, out var nSA);
+            ReadAlphaSAF(data, alphaFilePath);
 
             // 光子
-            ReadPhotonSAF(data, photonFilePath, out var nTP, out var nSP);
+            ReadPhotonSAF(data, photonFilePath);
 
             // 電子
-            ReadElectronSAF(data, electronFilePath, out var nTE, out var nSE);
+            ReadElectronSAF(data, electronFilePath);
 
             // 中性子
-            ReadNeutronSAF(data, neutronFilePath, out var nTN, out var nSN);
-
-            if (new[] { nTA, nTP, nTE, nTN }.Distinct().Count() != 1)
-                throw new InvalidDataException("Target tissue counts are different");
-            if (new[] { nSA, nSP, nSE, nSN }.Distinct().Count() != 1)
-                throw new InvalidDataException("Source region counts are different");
-
-            data.Count = nTA * nSA;
+            ReadNeutronSAF(data, neutronFilePath);
 
             return data;
         }
@@ -209,7 +303,7 @@ namespace FlexID.Calc
             return (numT, numS, energies.ToArray());
         }
 
-        private static void ReadAlphaSAF(SAFData data, string filePath, out int nT, out int nS)
+        private static void ReadAlphaSAF(SAFData data, string filePath)
         {
             using (var reader = new StreamReader(filePath))
             {
@@ -220,11 +314,17 @@ namespace FlexID.Calc
                 reader.ReadLine();
 
                 line = reader.ReadLine();
-                (nT, nS, data.EnergyA) = GetHeader(line);
+                var (nT, nS, energies) = GetHeader(line);
+
+                if (data.TargetRegions.Length != nT)
+                    throw new InvalidDataException("Target tissue counts are different");
+                if (data.SourceRegions.Length != nS)
+                    throw new InvalidDataException("Source region counts are different");
+
+                data.EnergyA = energies;
 
                 var nrows = nT * nS;
                 var ncols = data.EnergyA.Length;
-
                 data.SAFalpha = new double[nrows][];
 
                 reader.ReadLine();
@@ -243,7 +343,7 @@ namespace FlexID.Calc
             }
         }
 
-        private static void ReadPhotonSAF(SAFData data, string filePath, out int nT, out int nS)
+        private static void ReadPhotonSAF(SAFData data, string filePath)
         {
             using (var reader = new StreamReader(filePath))
             {
@@ -254,11 +354,17 @@ namespace FlexID.Calc
                 reader.ReadLine();
 
                 line = reader.ReadLine();
-                (nT, nS, data.EnergyP) = GetHeader(line);
+                var (nT, nS, energies) = GetHeader(line);
+
+                if (data.TargetRegions.Length != nT)
+                    throw new InvalidDataException("Target tissue counts are different");
+                if (data.SourceRegions.Length != nS)
+                    throw new InvalidDataException("Source region counts are different");
+
+                data.EnergyP = energies;
 
                 var nrows = nT * nS;
                 var ncols = data.EnergyP.Length;
-
                 data.SAFphoton = new double[nrows][];
 
                 reader.ReadLine();
@@ -277,7 +383,7 @@ namespace FlexID.Calc
             }
         }
 
-        private static void ReadElectronSAF(SAFData data, string filePath, out int nT, out int nS)
+        private static void ReadElectronSAF(SAFData data, string filePath)
         {
             using (var reader = new StreamReader(filePath))
             {
@@ -288,11 +394,17 @@ namespace FlexID.Calc
                 reader.ReadLine();
 
                 line = reader.ReadLine();
-                (nT, nS, data.EnergyE) = GetHeader(line);
+                var (nT, nS, energies) = GetHeader(line);
+
+                if (data.TargetRegions.Length != nT)
+                    throw new InvalidDataException("Target tissue counts are different");
+                if (data.SourceRegions.Length != nS)
+                    throw new InvalidDataException("Source region counts are different");
+
+                data.EnergyE = energies;
 
                 var nrows = nT * nS;
                 var ncols = data.EnergyE.Length;
-
                 data.SAFelectron = new double[nrows][];
 
                 reader.ReadLine();
@@ -311,7 +423,7 @@ namespace FlexID.Calc
             }
         }
 
-        private static void ReadNeutronSAF(SAFData data, string filePath, out int nT, out int nS)
+        private static void ReadNeutronSAF(SAFData data, string filePath)
         {
             using (var reader = new StreamReader(filePath))
             {
@@ -326,8 +438,12 @@ namespace FlexID.Calc
                     .Skip(1).ToArray();     // 不要な列を除去
 
                 line = reader.ReadLine();
-                double[] radiationWeights;
-                (nT, nS, radiationWeights) = GetHeader(line);
+                var (nT, nS, radiationWeights) = GetHeader(line);
+
+                if (data.TargetRegions.Length != nT)
+                    throw new InvalidDataException("Target tissue counts are different");
+                if (data.SourceRegions.Length != nS)
+                    throw new InvalidDataException("Source region counts are different");
 
                 // SAFを持つ核種の名前と、放射線加重係数の数は必ず一致する
                 if (nuclides.Length != radiationWeights.Length)

@@ -2,6 +2,7 @@ using MathNet.Numerics.Interpolation;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace FlexID.Calc
 {
@@ -303,41 +304,10 @@ namespace FlexID.Calc
 
         private IEnumerable<string> GenerateScoeffFileContent(double[] outData)
         {
-            var sourceRegions = new[]
-            {
-                "O-cavity",     "O-mucosa",     "Teeth-S",      "Teeth-V",      "Tongue",
-                "Tonsils",      "Oesophag-s",   "Oesophag-f",   "Oesophag-w",   "St-cont",
-                "St-mucosa",    "St-wall",      "SI-cont",      "SI-mucosa",    "SI-wall",
-                "SI-villi",     "RC-cont",      "RC-mucosa",    "RC-wall",      "LC-cont",
-                "LC-mucosa",    "LC-wall",      "RS-cont",      "RS-mucosa",    "RS-wall",
-                "ET1-sur",      "ET2-sur",      "ET2-bnd",      "ET2-seq",      "LN-ET",
-                "Bronchi",      "Bronchi-b",    "Bronchi-q",    "Brchiole",     "Brchiole-b",
-                "Brchiole-q",   "ALV",          "LN-Th",        "Lungs",        "Adrenals",
-                "Blood",        "C-bone-S",     "C-bone-V",     "T-bone-S",     "T-bone-V",
-                "C-marrow",     "T-marrow",     "R-marrow",     "Y-marrow",     "Brain",
-                "Breast",       "Eye-lens",     "GB-wall",      "GB-cont",      "Ht-wall",
-                "Kidneys",      "Liver",        "LN-Sys",       "Ovaries",      "Pancreas",
-                "P-gland",      "Prostate",     "S-glands",     "Skin",         "Spleen",
-                "Testes",       "Thymus",       "Thyroid",      "Ureters",      "UB-wall",
-                "UB-cont",      "Uterus",       "Adipose",      "Cartilage",    "Muscle",
-                "ET1-wall",     "ET2-wall",     "Lung-Tis",     "RT-air",
-            };
-
-            var targetTissues = new[]
-            {
-                "O-mucosa",     "Oesophagus",   "St-stem",      "SI-stem",      "RC-stem",
-                "LC-stem",      "RS-stem",      "ET1-bas",      "ET2-bas",      "LN-ET",
-                "Bronch-bas",   "Bronch-sec",   "Bchiol-sec",   "AI",           "LN-Th",
-                "R-marrow",     "Endost-BS",    "Brain",        "Eye-lens",     "P-gland",
-                "Tongue",       "Tonsils",      "S-glands",     "Thyroid",      "Breast",
-                "Thymus",       "Ht-wall",      "Adrenals",     "Liver",        "Pancreas",
-                "Kidneys",      "Spleen",       "GB-wall",      "Ureters",      "UB-wall",
-                "Ovaries",      "Testes",       "Prostate",     "Uterus",       "LN-Sys",
-                "Skin",         "Adipose",      "Muscle",
-            };
-
-            var nT = targetTissues.Length;
+            var sourceRegions = safdata.SourceRegions.Select(s => s.Name).ToArray();
+            var targetRegions = safdata.TargetRegions.Select(t => t.Name).ToArray();
             var nS = sourceRegions.Length;
+            var nT = targetRegions.Length;
 
             {
                 var line = $"{"  T/S",-10}";
@@ -350,9 +320,9 @@ namespace FlexID.Calc
             }
             for (var iT = 0; iT < nT; iT++)
             {
-                var targetTissue = targetTissues[iT];
+                var targetRegion = targetRegions[iT];
 
-                var line = $"{targetTissue,-10}";
+                var line = $"{targetRegion,-10}";
 
                 for (var iS = 0; iS < nS; iS++)
                 {

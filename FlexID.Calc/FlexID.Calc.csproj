@@ -25,7 +25,9 @@
   <ItemGroup>
     <None Include="$(SolutionDir)resources/lib/ICRP-07.BET" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/lib/ICRP-07.RAD" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="$(SolutionDir)resources/lib/rcp-a?_*_2017-03-07.SAF" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/rcp-a?_*_????-??-??.SAF" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/sregions_????-??-??.NDX" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/lib/torgans_????-??-??.NDX" LinkBase="lib" CopyToOutputDirectory="PreserveNewest" />
 
     <None Include="$(SolutionDir)resources/inp/OIR/**/*.inp" LinkBase="inp/OIR" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/inp/EIR/**/*.inp" LinkBase="inp/EIR" CopyToOutputDirectory="PreserveNewest" />
