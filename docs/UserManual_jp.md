@@ -55,6 +55,8 @@ FlexID
   - rcp-af_neutron_2017-03-07.SAF
   - rcp-am_photon_2017-03-07.SAF
   - rcp-af_photon_2017-03-07.SAF
+  - sregions_2016-08-12.NDX
+  - torgans_2016-08-12.NDX
 
 # 5. 主な機能
 
