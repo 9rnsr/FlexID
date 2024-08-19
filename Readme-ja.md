@@ -61,10 +61,6 @@ Sr-90(Y-90)
 
   FlexIDの計算結果を可視化する。
 
-### _S-Coefficient_
-
-ICRP Publication 133 で公開されているSAFデータファイルからS係数データを作成する。
-
 ## ドキュメント
 
 [ユーザーマニュアル (日本語)](./docs/UserManual_jp.pdf).
