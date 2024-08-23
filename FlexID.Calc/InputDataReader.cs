@@ -149,6 +149,16 @@ namespace FlexID.Calc
         /// 各線源領域の名称。
         /// </summary>
         public string[] OtherSourceRegions;
+
+        /// <summary>
+        /// パラメータ定義。
+        /// </summary>
+        public Dictionary<string, string> Parameters;
+
+        /// <summary>
+        /// 有効なパラメータ名の配列。
+        /// </summary>
+        public static readonly string[] ParameterNames = Array.Empty<string>();
     }
 
     public class InputData
@@ -190,6 +200,16 @@ namespace FlexID.Calc
         /// 全ての臓器。
         /// </summary>
         public List<Organ> Organs = new List<Organ>();
+
+        /// <summary>
+        /// パラメータ定義。
+        /// </summary>
+        public Dictionary<string, string> Parameters;
+
+        /// <summary>
+        /// 有効なパラメータ名の配列。
+        /// </summary>
+        public static readonly string[] ParameterNames = Array.Empty<string>();
     }
 
     /// <summary>
@@ -286,6 +306,8 @@ namespace FlexID.Calc
             }
 
             var inputTitle = default(string);
+            var inputParameters = default(Dictionary<string, string>);
+            var nuclideParameters = new Dictionary<string, Dictionary<string, string>>();
             var nuclides = default(List<NuclideData>);
             var nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
             var nuclideTransfers = new Dictionary<string,
@@ -304,6 +326,16 @@ namespace FlexID.Calc
                 if (buffer.SequenceEqual("title".AsSpan()))
                 {
                     GetTitle(out line);
+                }
+                else if (buffer.SequenceEqual("parameter".AsSpan()))
+                {
+                    GetParameters("", out line);
+                }
+                else if (buffer.EndsWith(":parameter".AsSpan()))
+                {
+                    var i = header.IndexOf(':');
+                    var nuc = header.Slice(0, i).ToString();
+                    GetParameters(nuc, out line);
                 }
                 else if (buffer.SequenceEqual("nuclide".AsSpan()))
                 {
@@ -342,6 +374,52 @@ namespace FlexID.Calc
                 nextLine = GetNextLine();
                 if (!CheckSectionHeader(nextLine))
                     throw Program.Error($"Line {lineNum}: Unrecognized line in [title] section.");
+            }
+
+            void GetParameters(string nuc, out string nextLine)
+            {
+                Dictionary<string, string> parameters;
+                string[] parameterNames;
+                if (nuc == "")
+                {
+                    if (inputParameters != null)
+                        throw Program.Error($"Line {lineNum}: Duplicated [parameter] section.");
+                    parameters = new Dictionary<string, string>();
+                    parameterNames = InputData.ParameterNames;
+                    inputParameters = parameters;
+                }
+                else
+                {
+                    if (nuclideParameters.ContainsKey(nuc))
+                        throw Program.Error($"Line {lineNum}: Duplicated [{nuc}:parameter] section.");
+                    parameters = new Dictionary<string, string>();
+                    parameterNames = NuclideData.ParameterNames;
+                    nuclideParameters.Add(nuc, parameters);
+                }
+
+
+                while (true)
+                {
+                    nextLine = GetNextLine();
+                    if (nextLine is null)
+                        break;
+                    if (CheckSectionHeader(nextLine))
+                        break;
+
+                    var values = nextLine.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
+                    if (values.Length != 2)
+                        throw Program.Error($"Line {lineNum}: Parameter definition should have 2 values.");
+
+                    var paramName = values[0].Trim();
+                    var paramValue = values[1].Trim();
+
+                    if (!parameterNames.Contains(paramName))
+                        throw Program.Error($"Line {lineNum}: Unrecognized parameter '{paramName}' definition.");
+                    if (parameters.ContainsKey(paramName))
+                        throw Program.Error($"Line {lineNum}: Duplicated parameter '{paramName}' definition.");
+
+                    parameters.Add(paramName, paramValue);
+                }
             }
 
             // 核種の定義セクションを読み込む。
@@ -495,6 +573,8 @@ namespace FlexID.Calc
                 throw Program.Error($"Missing [title] section.");
             data.Title = inputTitle;
 
+            data.Parameters = inputParameters ?? new Dictionary<string, string>();
+
             // 線源領域と標的領域のデータを読み込む。
             var sourceRegions = SAFDataReader.ReadSourceRegions();
             var targetRegions = SAFDataReader.ReadTargetRegions().Select(t => t.Name).ToArray();
@@ -528,6 +608,8 @@ namespace FlexID.Calc
                     throw Program.Error($"Missing [{nuc}:transfer] section.");
                 if (!transfers.Any())
                     throw Program.Error($"None of transfers defined for nuclide '{nuc}'.");
+
+                nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? new Dictionary<string, string>();
 
                 data.Nuclides.Add(nuclide);
 

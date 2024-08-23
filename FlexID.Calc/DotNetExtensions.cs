@@ -1,8 +1,27 @@
 using System.Collections.Generic;
 
+namespace System.Collections.Generic
+{
+    internal static class Extensions
+    {
+        public static V GetValueOrDefault<K, V>(this IReadOnlyDictionary<K, V> dictionary, K key)
+        {
+            if (dictionary.TryGetValue(key, out var value))
+                return value;
+            return default;
+        }
+
+        public static V GetValueOrDefault<K, V>(this IReadOnlyDictionary<K, V> dictionary, K key, V value)
+        {
+            if (dictionary.TryGetValue(key, out var val))
+                return val;
+            return value;
+        }
+    }
+}
 namespace System.Linq
 {
-    internal static class LinqExtension
+    internal static class Extensions
     {
         private static (T1, T2) ZipSelector2<T1, T2>(T1 v1, T2 v2) => (v1, v2);
 
