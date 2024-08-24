@@ -149,6 +149,20 @@ namespace FlexID.Calc
         /// 各線源領域の名称。
         /// </summary>
         public string[] OtherSourceRegions;
+
+        /// <summary>
+        /// パラメータ定義。
+        /// </summary>
+        public Dictionary<string, string> Parameters;
+
+        /// <summary>
+        /// 有効なパラメータ名の配列。
+        /// </summary>
+        public static readonly string[] ParameterNames = new[]
+        {
+            "ExcludeOtherSourceRegions",
+            "IncludeOtherSourceRegions"
+        };
     }
 
     public class InputData
@@ -190,6 +204,20 @@ namespace FlexID.Calc
         /// 全ての臓器。
         /// </summary>
         public List<Organ> Organs = new List<Organ>();
+
+        /// <summary>
+        /// パラメータ定義。
+        /// </summary>
+        public Dictionary<string, string> Parameters;
+
+        /// <summary>
+        /// 有効なパラメータ名の配列。
+        /// </summary>
+        public static readonly string[] ParameterNames = new[]
+        {
+            "ExcludeOtherSourceRegions",
+            "IncludeOtherSourceRegions"
+        };
     }
 
     /// <summary>
@@ -286,6 +314,8 @@ namespace FlexID.Calc
             }
 
             var inputTitle = default(string);
+            var inputParameters = default(Dictionary<string, string>);
+            var nuclideParameters = new Dictionary<string, Dictionary<string, string>>();
             var nuclides = default(List<NuclideData>);
             var nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
             var nuclideTransfers = new Dictionary<string,
@@ -304,6 +334,16 @@ namespace FlexID.Calc
                 if (buffer.SequenceEqual("title".AsSpan()))
                 {
                     GetTitle(out line);
+                }
+                else if (buffer.SequenceEqual("parameter".AsSpan()))
+                {
+                    GetParameters("", out line);
+                }
+                else if (buffer.EndsWith(":parameter".AsSpan()))
+                {
+                    var i = header.IndexOf(':');
+                    var nuc = header.Slice(0, i).ToString();
+                    GetParameters(nuc, out line);
                 }
                 else if (buffer.SequenceEqual("nuclide".AsSpan()))
                 {
@@ -342,6 +382,52 @@ namespace FlexID.Calc
                 nextLine = GetNextLine();
                 if (!CheckSectionHeader(nextLine))
                     throw Program.Error($"Line {lineNum}: Unrecognized line in [title] section.");
+            }
+
+            void GetParameters(string nuc, out string nextLine)
+            {
+                Dictionary<string, string> parameters;
+                string[] parameterNames;
+                if (nuc == "")
+                {
+                    if (inputParameters != null)
+                        throw Program.Error($"Line {lineNum}: Duplicated [parameter] section.");
+                    parameters = new Dictionary<string, string>();
+                    parameterNames = InputData.ParameterNames;
+                    inputParameters = parameters;
+                }
+                else
+                {
+                    if (nuclideParameters.ContainsKey(nuc))
+                        throw Program.Error($"Line {lineNum}: Duplicated [{nuc}:parameter] section.");
+                    parameters = new Dictionary<string, string>();
+                    parameterNames = NuclideData.ParameterNames;
+                    nuclideParameters.Add(nuc, parameters);
+                }
+
+
+                while (true)
+                {
+                    nextLine = GetNextLine();
+                    if (nextLine is null)
+                        break;
+                    if (CheckSectionHeader(nextLine))
+                        break;
+
+                    var values = nextLine.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
+                    if (values.Length != 2)
+                        throw Program.Error($"Line {lineNum}: Parameter definition should have 2 values.");
+
+                    var paramName = values[0].Trim();
+                    var paramValue = values[1].Trim();
+
+                    if (!parameterNames.Contains(paramName))
+                        throw Program.Error($"Line {lineNum}: Unrecognized parameter '{paramName}' definition.");
+                    if (parameters.ContainsKey(paramName))
+                        throw Program.Error($"Line {lineNum}: Duplicated parameter '{paramName}' definition.");
+
+                    parameters.Add(paramName, paramValue);
+                }
             }
 
             // 核種の定義セクションを読み込む。
@@ -495,6 +581,8 @@ namespace FlexID.Calc
                 throw Program.Error($"Missing [title] section.");
             data.Title = inputTitle;
 
+            data.Parameters = inputParameters ?? new Dictionary<string, string>();
+
             // 線源領域と標的領域のデータを読み込む。
             var sourceRegions = SAFDataReader.ReadSourceRegions();
             var targetRegions = SAFDataReader.ReadTargetRegions().Select(t => t.Name).ToArray();
@@ -529,6 +617,8 @@ namespace FlexID.Calc
                 if (!transfers.Any())
                     throw Program.Error($"None of transfers defined for nuclide '{nuc}'.");
 
+                nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? new Dictionary<string, string>();
+
                 data.Nuclides.Add(nuclide);
 
                 Organ input = null;
@@ -540,6 +630,24 @@ namespace FlexID.Calc
                 var otherSourceRegions = data.SourceRegions
                     .Where(s => s.MaleID != 0 || s.FemaleID != 0)
                     .Select(s => s.Name).ToList();
+
+                var inpParams = data.Parameters;
+                var inpIncludes = (inpParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var inpExcludes = (inpParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                var nucParams = nuclide.Parameters;
+                var nucExcludes = (nucParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var nucIncludes = (nucParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                // Otherについて、以下の優先度で包含・除外指定された線源領域を追加・削除する：
+                //  優先度低：インプット全体に共通設定として包含指定されたもの
+                //  ↓        インプット全体に共通設定として除外指定されたもの
+                //  ↓        特定の核種に対して包含指定されたもの
+                //  優先度高：特定の核種に対して除外指定されたもの
+                otherSourceRegions.AddRange(inpIncludes.Except(otherSourceRegions).ToArray());
+                otherSourceRegions.RemoveAll(reg => inpExcludes.Contains(reg));
+                otherSourceRegions.AddRange(nucIncludes.Except(otherSourceRegions).ToArray());
+                otherSourceRegions.RemoveAll(reg => nucExcludes.Contains(reg));
 
                 foreach (var (lineNum, organ) in organs)
                 {
