@@ -61,10 +61,6 @@ It consists of the following programs.
 
   Visualize FlexID calculation results.
 
-### _S-Coefficient_
-
-Create S-coefficients data from the SAF data files published in ICRP Publication 133.
-
 ## Documentataion
 
 [User manual (Japanese)](./docs/UserManual_jp.pdf).

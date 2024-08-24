@@ -77,3 +77,84 @@ FlexIDの各出力ファイルの仕様を示す。
 ![img](images/Figure_A5-4.png)
 
 図4 出力サンプル(積算放射能出力ファイル)
+
+## ⑤ 計算ログ出力
+
+FlexIDによる計算処理に伴う各種のエコーバックを出力する。
+
+現在は、核種毎に計算された線源領域`Other`の内訳と、計算されたS-Coefficientを出力する。
+
+以下に出力サンプルを示す。
+
+```
+
+Nuclide: Sr-90
+
+Source regions those are part of 'Other':
+O-mucosa,Teeth-V,Tonsils,Oesophag-w,St-wall,SI-wall,RC-wall,LC-wall,RS-wall,LN-ET,LN-Th,Adrenals,R-marrow,Y-marrow,Brain,Breast,Eye-lens,GB-wall,Ht-wall,Kidneys,Liver,LN-Sys,Ovaries,Pancreas,P-gland,Prostate,S-glands,Skin,Spleen,Testes,Thymus,Thyroid,Ureters,UB-wall,Uterus,Adipose,Cartilage,Muscle,ET1-wall,ET2-wall,Lung-Tis
+
+S-Coefficient values from 'Other' to each target regions:
+  T/S      Other         
+O-mucosa   5.40667026E-16
+Oesophagus 3.93365274E-16
+St-stem    3.42421736E-16
+SI-stem    3.61799914E-16
+RC-stem    4.08234108E-16
+LC-stem    4.07251755E-16
+RS-stem    4.11499551E-16
+ET1-bas    2.05206024E-16
+ET2-bas    2.14196799E-16
+LN-ET      5.48730668E-16
+Bronch-bas 5.20567632E-16
+Bronch-sec 5.15159528E-16
+Bchiol-sec 2.96787210E-16
+AI         2.55230789E-16
+LN-Th      5.27250549E-16
+R-marrow   4.69758514E-16
+Endost-BS  3.54034776E-16
+Brain      5.40737088E-16
+Eye-lens   4.98164264E-16
+P-gland    5.29974474E-16
+Tongue     2.02031997E-16
+Tonsils    5.38824508E-16
+S-glands   5.42443915E-16
+Thyroid    4.91326661E-16
+Breast     5.44104124E-16
+Thymus     5.39109327E-16
+Ht-wall    4.72151852E-16
+Adrenals   4.67745713E-16
+Liver      4.35406867E-16
+Pancreas   4.63272887E-16
+Kidneys    4.27901835E-16
+Spleen     3.84599919E-16
+GB-wall    5.04373337E-16
+Ureters    5.37783369E-16
+UB-wall    5.25767723E-16
+Ovaries    2.85852696E-16
+Testes     2.41107030E-16
+Prostate   2.45051184E-16
+Uterus     2.98032379E-16
+LN-Sys     5.20995556E-16
+Skin       5.05265549E-16
+Adipose    5.58775095E-16
+Muscle     5.48787657E-16
+
+Nuclide: Y-90
+
+Source regions those are part of 'Other':
+O-mucosa,Teeth-V,Tonsils,Oesophag-w,St-wall,SI-wall,RC-wall,LC-wall,RS-wall,LN-ET,LN-Th,Adrenals,R-marrow,Y-marrow,Brain,Breast,Eye-lens,GB-wall,Ht-wall,LN-Sys,Ovaries,Pancreas,P-gland,Prostate,S-glands,Skin,Spleen,Testes,Thymus,Thyroid,Ureters,UB-wall,Uterus,Adipose,Cartilage,Muscle,ET1-wall,ET2-wall,Lung-Tis
+
+S-Coefficient values from 'Other' to each target regions:
+  T/S      Other         
+O-mucosa   2.24052886E-15
+Oesophagus 1.76919334E-15
+St-stem    1.65973540E-15
+SI-stem    1.65667159E-15
+RC-stem    1.54914759E-15
+LC-stem    1.56213668E-15
+RS-stem    1.51783686E-15
+ET1-bas    1.05905441E-15
+ET2-bas    1.29614873E-15
+LN-ET      2.93642189E-15
+...
+```

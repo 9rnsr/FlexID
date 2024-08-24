@@ -1,423 +1,456 @@
-# 添付資料4 「S-Coefficientプログラム詳細仕様書」
+# 添付資料4 「インプットファイル等の作成方法」
 
-# 1. はじめに
+# 1. インプットファイルの作成
 
-本資料は、ICRP Publ.133 SAFデータ及びICRP Publ.107核崩壊（放出放射線）データを用いて、S係数（S-Coefficient）を算出するための計算方法とその計算プログラムS-Coefficientの設計書である。
+インプットファイルは作成対象の核種が記載されているICRP OIR のf<sub>A</sub> 値および移行係数を参考とする。
 
-# 2. 動作環境
+作成したインプットは以下のように保存する。
 
-S-Coefficientプログラムの動作環境を以下に示す。
+- （例：Sr-90 の場合）
 
-- .NET Framework 4.6.2以降がインストール済みのWindows OSパソコン
+    `FlexID\inp\OIR\Sr-90`フォルダ内にインプットファイルを置く。
 
-# 3. 開発環境
+## 1.1 入力フォーマット
 
-S-Coefficientプログラムの開発環境を以下に示す。
+以下に入力フォーマットを示す。
 
-- OS：Windows 10
-- IDE：Microsoft Visual Studio 2019
-- 使用言語：C#
-- 対象フレームワーク：.NET Framework 4.6.2
+インプットにおいて空行は意味を持たず、単に無視される。
 
-# 4. システム概要
+行内に`#`文字が出現する場合、それ以降の文字列はコメントとして扱われ、無視される。
 
-## 4.1 計算の流れ
+インプットはセクションによる区分けが行われ、`[` + *セクション名* + `]`という行がその始まりとなる。
 
-1. 各パラメータ（放射線加重係数、放出放射線データ、SAFデータ）を読み込む。
-1. 各パラメータを用いて、式(1)により線源器官から1つの標的器官へのS-Coefficientを計算する。
-1. （2）を線源器官から標的器官の全てのパターン（79*43通り）について実施する。
+| セクション名            | 内容                                                                 |
+| ----------------------- | -------------------------------------------------------------------- |
+| `title`                 | インプットのタイトルテキストを設定する。                             |
+| `nuclide`               | インプットで計算対象とする核種を設定する。                           |
+| `parameter`             | インプット全体に対するパラメータを設定する。                         |
+| 核種名 + `:parameter`   | 当該核種に対するパラメータを設定する。                               |
+| 核種名 + `:compartment` | 当該核種の体内動態モデルにおいて使用するコンパートメントを設定する。 |
+| 核種名 + `:transfer`    | 当該核種の体内動態モデルにおけるコンパートメント間の移行を設定する。 |
 
-図1にS-Coefficientプログラムの概略フローを示す。
+### 1.1.1 `nuclide`セクション
+
+インプットで計算対象とする核種を設定する。親核種は1行目に記述し、存在する場合は子孫核種を2行目以降に記述できる。
+
+各行は次表で示す4つの列で構成される。
+
+| 列番号 | 内容                    | 備考                                                      |
+| ------ | ----------------------- | --------------------------------------------------------- |
+| 1      | 核種名                  | 線量計算のためのS係数データと対応する。例：`Cs-137`       |
+| 2      | 摂取経路/化学形態等     | 入力画面の「Route/Chemical Form」に表示され、識別される。 |
+| 3      | 崩壊定数 \[/day]        | =ln(2)/半減期 \[day]                                      |
+| 4      | 親核種からの分岐比 \[-] | 親核種の場合は0 を入力する。                              |
+
+### 1.1.2 `parameter`セクション
+
+計算処理に関する各種のパラメータを指定する。セクション名に核種名を含める場合は当該核種を対象として、
+そうでない場合はインプット全体を対象としてパラメータ設定を行う。
+
+| パラメータ名                | 対象       | 内容                                                             |
+| --------------------------- | ---------- | ---------------------------------------------------------------- |
+| `ExcludeOtherSourceRegions` | 全体, 核種 | 線源領域`Other`の内訳から除外する線源領域を空白区切りで並べる。  |
+| `IncludeOtherSourceRegions` | 全体, 核種 | 線源領域`Other`の内訳として含める線源領域を空白区切りで並べる。  |
+
+### 1.1.3 `compartment`セクション
+
+当該核種の体内動態モデルにおいて使用するコンパートメントを設定する。
+
+1行につき1個のコンパートメントを設定でき、各行は次表で示す3つの列で構成される。
+
+| 列番号 | 内容                   | 備考                                                  |
+| ------ | ---------------------- | ----------------------------------------------------- |
+| 1      | コンパートメント機能   | `inp`：入力、 `acc`：蓄積、 `mix`：混合、 `exc`：排泄 |
+| 2      | コンパートメント名     |                                                       |
+| 3      | 対応する線源領域の名称 | 線源領域に対応しない場合は「-」を入力する。           |
+
+コンパートメント機能の詳細は以下の通り。
+
+- `inp`：摂取した放射能を初期配分するための移行元として、親核種に1つだけ定義する。
+- `acc`：流入した放射能の蓄積と、時間経過による流出および壊変による減衰を計算する。
+- `mix`：流入した放射能の割合による再配分を行う。流出は瞬時に行われるものとして計算される。
+- `exc`：体外への排泄、即ち、尿や糞などの排泄量を計算する。
+
+対応する線源領域の名称は、当該コンパートメントの残留放射能から線量を計算する際に使用されるため、
+`lib/OIR/Scoeff`フォルダに置く対象核種のS-Coefficientファイルに列挙された線源領域の名称である必要がある。
+OIRで「その他の組織」として線量を計算する場合は、名称として「Other」を設定する。
+コンパートメントが線源領域に対応しない場合は「-」を入力する。
+                                                                                                 
+### 1.1.4 `transfer`セクション
+
+当該核種の体内動態モデルにおけるコンパートメント間の移行を設定する。
+
+1行につき1個の移行経路を設定でき、各行は次表で示す3つの列で構成される。
+
+| 列番号 | 内容                                            | 備考                                                               |
+| ------ | ----------------------------------------------- | ------------------------------------------------------------------ |
+| 1      | 移行元のコンパートメント名                      | 親核種にあるコンパートメントは、先頭に「核種名 + `/`」を付加する。 |
+| 2      | 移行先のコンパートメント名                      |                                                                    |
+| 3      | 移行係数：<br>移行速度\[/d] または 移行割合\[%] | 壊変による移行経路の場合は「-」を入力する。                        |
+
+時間経過を伴う移行には移行速度\[/d]を設定し、これは一般的に、OIRに定義された数値をそのまま入力することができる。
+蓄積計算を行う`acc`からの流出には、移行速度での設定が必要となる。
+
+時間経過を伴わない瞬時に行われる移行には、移行元から流出する放射能に対する移行割合\[%]を設定する。この時、数値の末尾には百分率であることを示す`%`を付加する。初期配分である`inp`からの流出、および合算と再配分を行う`mix`からの流出には、移行割合での設定が必要となる。
+
+親核種からの壊変による移行は、体内の同一領域にて放射性物質が移動せずに瞬時に行われるものとして計算されるため。移行係数として「-」を設定する。
+
+移行元と移行先の両方が一致する複数の同一経路、移行先が移行元と同じ経路、`inp`への流入経路、`exc`からの流出経路、といった、不正な経路の定義はエラーとなる。
+
+### 1.1.5 インプットのサンプル
+
+```
+[title]
+Sr-90 Ingestion:Other
+
+[nuclide]
+# Nuclide | Intake route           | Ramd           | DecayRate
+#---------+------------------------+----------------+---------------
+  Sr-90     Ingestion:Other          6.596156E-05     0.0
+  Y-90      Ingestion                2.595247E-01     1.0
+
+
+[Sr-90:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood1                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+[Sr-90:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.134 p.215 Table 10.2
+#   fA = 0.25   (Ingested material, All other chemical forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.25 * 6 / (1 - 0.25) = 2
+  SI-con                  Blood1                    2
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood1                  UB-con                    1.73
+  Blood1                  RC-con                    0.525
+  Blood1                  T-bone-S                  2.08
+  Blood1                  C-bone-S                  1.67
+  Blood1                  ST0                       7.5
+  Blood1                  ST1                       1.5
+  Blood1                  ST2                       0.003
+  T-bone-S                Blood1                    0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood1                    0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood1                    2.50
+  ST1                     Blood1                    0.116
+  ST2                     Blood1                    0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood1                    0.0000821
+  Noch-T-bone-V           Blood1                    0.000493
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+
+[Y-90:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+[Y-90:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Sr-90/Oralcavity        Oralcavity                ---
+  Sr-90/Oesophagus-F      Oesophagus-F              ---
+  Sr-90/Oesophagus-S      Oesophagus-S              ---
+  Sr-90/St-con            St-con                    ---
+  Sr-90/SI-con            SI-con                    ---
+  Sr-90/RC-con            RC-con                    ---
+  Sr-90/LC-con            LC-con                    ---
+  Sr-90/RS-con            RS-con                    ---
+  Sr-90/Faeces            Faeces                    ---
+  Sr-90/Blood1            Blood1                    ---
+  Sr-90/ST0               ST0                       ---
+  Sr-90/ST1               ST0                       ---
+  Sr-90/ST2               ST0                       ---
+  Sr-90/C-bone-S          C-bone-S                  ---
+  Sr-90/Exch-C-bone-V     C-bone-V                  ---
+  Sr-90/Noch-C-bone-V     C-bone-V                  ---
+  Sr-90/T-bone-S          T-bone-S                  ---
+  Sr-90/Exch-T-bone-V     T-bone-V                  ---
+  Sr-90/Noch-T-bone-V     T-bone-V                  ---
+  Sr-90/UB-con            UB-con                    ---
+  Sr-90/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.134 p.242 Table 11.2
+#   fA = 1E-4   (Ingested material, All chemical forms)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-4 * 6 / (1 - 1E-4) = 6.000600060006001E-4
+  SI-con                  Blood1                    6.000600060006001E-4
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-con                    0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-con                    0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+```
+
+## 1.2 移行係数の設定方法
+
+吸入摂取における呼吸器への初期配分割合と、これをインプットとして設定する例を示す。
+
+| Region         | Deposition (%) |
+| -------------- | -------------- |
+| ET<sub>1</sub> | 47.94          |
+| ET<sub>2</sub> | 25.82          |
+| BB             | 1.78           |
+| bb             | 1.10           |
+| AI             | 5.32           |
+| Total          | 81.96          |
+
+```
+[Sr-90:transfer]
+...
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.64 Para.98
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.134 p.215 Table 10.2
+# f_r = 1 (100%)
+  input       ET1-F            47.94%       # =          47.94%
+  input       ET2-F            25.76836%    # = 99.8% of 25.82%
+  input       ETseq-F           0.05164%    # =  0.2% of 25.82%
+  input       BB-F              1.77644%    # = 99.8% of  1.78%
+  input       BBseq-F           0.00356%    # =  0.2% of  1.78%
+  input       bb-F              1.0978%     # = 99.8% of  1.10%
+  input       bbseq-F           0.0022%     # =  0.2% of  1.10%
+  input       ALV-F             5.32%       # =           5.32%
+  input       Environment      18.04%       # = 100% - 81.96%
+```
+
+コンパートメント間の移行係数の例と、これをインプットとして設定する例を示す。
+
+|     From     |      To      | 移行速度\[/d] |
+| :----------: | :----------: | :-----------: |
+|  Oralcavity  | Oesophagus-F |     6480      |
+|  Oralcavity  | Oesophagus-S |      720      |
+| Oesophagus-F | Stomach-con  |     12343     |
+| Oesophagus-S | Stomach-con  |     2160      |
+
+```
+[Sr-90/transfer]
+...
+Oralcavity      Oesophagus-F     6480
+Oralcavity      Oesophagus-S      720
+Oesophagus-F    Stomach-con     12343
+Oesophagus-S    Stomach-con      2160
+```
+
+消化管から血液への吸収を伴う場合の生物学的半減期及び移行割合を導出する場合は、消化管から血液への吸収割合を示すf<sub>A</sub>値を考慮する必要がある。
+
+次表に消化管から血液への吸収割合を示すf<sub>A</sub>値の例を示す。
+
+<table>
+<tr><th rowspan="2">Inhaled particulate materials</th><th colspan="3">Absorption parameter values</th><th>Absorption from<br>the alimentary</th></tr>
+<tr><th>f<sub>r</sub></th><th>s<sub>r</sub> (/d)</th><th>s<sub>s</sub> (/d)</th><th>tract (f<sub>A</sub>)</th></tr>
+<tr><th>F</th> <td>1</td>    <td>100</td> <td></td>       <td>1</td></tr>
+<tr><th>M</th> <td>0.2</td>  <td>3</td>   <td>0.005</td>  <td>0.2</td></tr>
+<tr><th>S</th> <td>0.01</td> <td>3</td>   <td>0.0001</td> <td>0.01</td></tr>
+<tr><th colspan="5">Ingested materials</td></tr>
+<tr><th>All forms</th><td>-</td><td>-</td><td>-</td><td>0.1</td></tr>
+</table>
+
+f<sub>A</sub>値（SI からBlood への吸収値）を伴う場合の生物学的半減期及び移行割合の計算方法
 
 ![img](images/Figure_A4-1.png)
 
-図1 概略フロー図
+SI-con からBlood への移行割合は、f<sub>A</sub>=0.1 より10%となり、「SI-con」から「Blood」への移行係数は、下記の方法で導出する。
 
-## 4.2 使用データ
+- SI-con の生物学的半減期
 
-- ICRP Publ.103の放射線加重データ <sup>1)</sup>
-- ICRP Publ.107の核崩壊（放出放射線）データ <sup>2)</sup>
-- ICRP Publ.133のSAFデータ <sup>3)</sup>
+   ＝ Blood を除くSI-con からの全ての流出 + （f<sub>A</sub> 値 × SI-con → R-colon への流出）／（1－f<sub>A</sub> 値）
 
-# 5. S-Coefficientの計算方法
+   ＝ 6 +（0.1×6）／（1-0.1）
 
-## 5.1 光子・単一エネルギー電子・α線
+   ＝ 6 + 0.6／0.9
 
-光子、単一エネルギー電子、及びα線の$`Y_i`$、$`E_i`$、及び$`w_{R_i}`$を用いて、次式(1)から核種毎のS-Coefficientを計算する。
+   ＝ 6.6667 /d
 
-$$ S–coefficient(T ← S) = \sum_i ( Y_i * E_i * SAF(T ← S)\_i * w\_{R_i} )\ \mathrm{[MeV/kg/nt]} $$
+- SI-con からBlood への移行割合
 
-ここで、
+   ＝ Blood への流出 ／ SI-con からの全ての流出
 
-|式|意味|
-|:--:|---|
-|$`Y_i`$|壊変あたりの放射線iの放出割合 \[/nt]|
-|$`E_i`$|放射線iの平均または単一エネルギー \[MeV]|
-|$`SAF(T←S)_i`$|放射線iの比吸収割合 \[/kg]|
-|$`w_{R_i}`$|放射線iの放射線加重係数 \[-]|
+   ＝ 0.6667 ／ 6.6667
 
-## 5.2 β<sup>－</sup>・β<sup>＋</sup>線スペクトル
+   ＝ 0.1 ＝ 10％
 
-β<sup>－</sup>、及びβ<sup>＋</sup>線スペクトルのS-Coefficientは、スペクトル全体で積分して、次式(2)から計算される。
+# 2. S-Coefficientファイルの作成
 
-$$ S–coefficient(T ← S) = w_R * \int_0^{E_{max}} Y(E) * E * SAF(T ← S,E) dE\ \mathrm{[MeV/kg/nt]} $$
+1. `FlexID\FlexID.exe`をダブルクリックして起動。
 
-ここで、
+1. `OIR S-Coeff`タブを選択する。
+1. 計算結果の出力フォルダを設定する。既定では`FlexID\out\`が設定されている。
+1. 計算対象とする性別にチェックを入れる。
+1. SAF値の補間方法を選択する。
+1. 計算対象とする核種名にチェックを入れる。なお、複数核種の計算を一度に実施することも可能（下図参照）。
 
-|式|意味|
-|:--:|---|
-|$`E`$|スペクトルデータ点のエネルギー \[MeV]|
-|$`Y(E)`$|スペクトルデータ点E\[MeV]における壊変あたりのβ粒子の放出割合 \[/nt]|
-|$`SAF(T ← S,E)`$|E\[MeV]における比吸収割合 \[/kg]|
-|$`w_R`$|放射線R（電子、陽電）の放射線加重係数 \[-]|
+    ![img](images/Figure_A4-2.png)
 
-## 5.3 自発核分裂中性子スペクトル
+1. `Run`ボタンを押すと、出力フォルダに 核種名 + `_` + {`AM` | `AF`} + `.txt` というファイル名で計算結果が出力される。
 
-ICRP Publ.133では、自発核分裂中性子放出核種（28核種）については、核種毎に核分裂中性子スペクトルの平均エネルギーで正規化されたスペクトル平均のSAFが記載されている。従って、以下の方法により、核種毎のS-Coefficient (T←S)を計算することができる。
+    ![img](images/Figure_A4-3.png)
 
-$$ S–coefficient(T ← S) = \overline{SAF(T ← S)} * \overline{W_R} \mathrm{[MeV/kg/nt]} $$
+1. 出力されたファイルを`FlexID\lib\OIR\Scoeff`フォルダに移動してS-Coefficientファイルの作成は完了となる。
 
-ここで、
+# 3. タイムメッシュファイルの作成
 
-|式|意味|
-|:--:|---|
-|$`\overline{SAF(T ← S)}`$|スペクトル平均の比吸収割合 \[/kg]|
-|$`\overline{w_R}`$|対象核種におけるスペクトル平均の中性子の放射線加重係数 \[-]|
+タイムメッシュファイルのフォーマットを以下に示す。
 
-# 6. ICRP Publication 103 放射線加重係数データ
+空行は意味を持たず、単に無視される。
 
-ICRP Publication 103 に示されている放射線加重係数（W<sub>R</sub>）を表1 に示す。
+行内に`#`文字が出現する場合、それ以降の文字列はコメントとして扱われ、無視される。
 
-表1 放射線加重係数
+最初の行はヘッダー行として無視される。
 
-|放射タイプ|W<sub>R</sub>|
-|--|--|
-|光子|1|
-|電子|1|
-|α粒子|20|
-|中性子|図2参照|
+2行目以降は、カンマ区切りの2列で構成され、1列目は時間メッシュ分割区間の終端時刻を、2列目は区間を実際の時間メッシュに分割する時間幅を示す。
 
-S-Coefficient計算の為の光子、電子及びα粒子のW<sub>R</sub>は表1に示す値を用いる。しかし、中性子については、ICRP Publ.133 のSAFデータにおいて、中性子スペクトル平均のW<sub>R</sub>が用いられている為、その値からS-Coefficientを計算する。
+時刻及び時間幅は、数値 + 単位で入力する。単位の大文字小文字は無視される。
 
-![img](images/Figure_A4-2.png)
+| 単位                                    | 意味                        |
+| --------------------------------------- | --------------------------- |
+| `s`, `sec`, `secs`, `second`, `seconds` | 秒                          |
+| `m`, `min`, `mins`, `minute`, `minutes` | 分 (1分 = 60秒)             |
+| `h`, `hour`, `hours`                    | 時間 (1時間 = 60分)         |
+| `d`, `day`, `days`                      | 日 (1日 = 24時間 = 1440分)  |
+| `y`, `year`, `year`                     | 年 (1年 = 365日 = 8760時間) |
 
-図2 中性子スペクトル平均の放射線加重係数
+タイムメッシュファイルのサンプルをいかに示す。
 
-# 7. ICRP Publication 107 核崩壊データファイルの仕様
+```
+#----------------------------------------------------------------
+# 計算用のタイムメッシュファイル。
+# 評価の開始直後は細かく、時間の経過に応じて徐々に粗くなるよう
+# 時間メッシュを定義している。
+#----------------------------------------------------------------
+until     , step
+   30 mins,    1 min
+   50 days,    3 mins
+  100 days,    5 mins
+  250 days,   10 mins
+  365 days,   30 mins      # 1 year
+ 1000 days,    1 hour
+ 2000 days,    4 hours
+ 3650 days,   12 hours     # 10 year
+27375 days,   24 hours     # 75 year
+```
 
-## 7.1 ICRP-07.RAD ファイル
+```
+#----------------------------------------------------------------
+# 出力用のタイムメッシュファイル。
+# 預託期間75年まで、1日刻みの時間メッシュを定義している。
+#----------------------------------------------------------------
+until   , step
+75 years, 1 day
+```
 
-`ICRP-07.RAD`ファイル（以下RADファイルと呼ぶ）には、放射性核種の壊変で放出された各放射線
-のエネルギーと収率に関するデータが含まれている。このファイルの放射線にはカットオフエネルギー
-が適用されていない。RADファイルのデータフィールドを表2 に示す。
+出力タイムメッシュを作成する際は、出力タイムメッシュが計算タイムメッシュに含まれていることを確認する。（含まれていない場合は計算エラーとなる。）
 
-表2 ICRP-07.RAD ファイルの構造
+# 4. 臓器名称統一ファイルの編集
 
-|フィールド|フォーマット|説明|
-|---|---|---|
-|_核種フィールド_|
-|核種|A7|核種名 例：Tc-99m|
-|半減期|E11.0|核種の物理的半減期|
-|時間単位|A2|半減期の時間単位：μs-マイクロ秒、ms-ミリ秒、s-秒、m-分、d-日、y-年|
-|N|I9|放射線データの数|
-|_データフィールド_|
-|ICODE|A2|放射線のタイプ（表 3 参照）|
-|収率|E12.0|放射線の収率（/nt）|
-|エネルギー|E12.0|放射線のエネルギー（MeV）|
-|JCODE|A3|放射線のタイプ（表 3 参照）|
+臓器名称統一ファイルである`lib\FixList.txt`のフォーマットを以下に示す。
 
-表2に示す核種フィールドには核種名、半減期、放射線データの数が記載されている。データフィールドは、放射線タイプを識別する整数コード（ICODE）、壊変あたりの放射線収率、放射線の固有エネルギーまたは平均エネルギー、放射線の種類を示す2 文字の簡易標記（JCODE）が記載されている。
+このファイルを参照し、「FlexID結果表示画面(Model)」に結果が出力される。
 
-- 光子-ICODE1-3 ：X線、γ線、消滅光子、即発及び遅発光子
-- β粒子-ICODE4-5 ：各β遷移の平均エネルギー
-- 電子-ICODE6-7 ：内部転換電子、オージェ電子
-- α粒子-ICODE8
-- α反跳核-ICODE9
-- 核分裂片-ICODE10
-- 中性子-ICODE11
-
-表3 ICODE変数の説明
-
-|ICODE|JCODE|説明|
-|----|----|--|
-| 1  | G  | γ線 |
-|    | PG | 遅発γ線 |
-|    | DG | 即発γ線 |
-| 2  | X  | X線 |
-| 3  | AQ | 消滅光子 |
-| 4  | B+ | β+粒子 |
-| 5  | B  | β粒子 |
-|    | DB | 遅発β粒子 |
-| 6  | IE | 内部転換電子 |
-| 7  | AE | オージェ電子 |
-| 8  | A  | α粒子 |
-| 9  | AR | α反跳核 |
-| 10 | FF | 核分裂断片 |
-| 11 | N  | 中性子 |
-
-Tc-99m の一部の核崩壊データのサンプルを図3 に示す。データフォーマットは表2 に従っており、データはエネルギーの小さい順に並んでいる。
-
-![img](images/Figure_A4-3.png)
-
-図3 ICRP-07.RAD サンプル
-
-## 7.2 ICRP-07.BET ファイル
-`ICRP-07.BET`（以下、BETファイルと呼ぶ）には、RADファイルに含まれるβ粒子のスペクトルデータが含まれている。スペクトルデータは任意のエネルギー幅毎の積算値で示されている。核種フィールドには、核種毎に核種名とその核種の全放射線データが記録されている。データフィールドには、このエネルギー幅で放出される1壊変当たり、1MeV当たりの電子エネルギーE（MeV）とβ粒子の数が含まれている。BETファイルのデータフィールドを表4に示す。
-
-表4 ICRP-07.BET ファイルの構造
-
-|フィールド|フォーマット|説明|
-|---|---|---|
-|_核種フィールド_|
-|核種|A7|核種名 例：Tc-99m|
-|N|I10|データレコード数|
-|_データフィールド（1…n）_|
-|エネルギー|F7.0|エネルギーグリッドポイント（MeV）|
-|β粒子数|E10.0|エネルギーにおける壊変1MeVあたりのβ粒子数|
+赤枠内に記載された名称が統一後の名称、青枠内に記載された名称が統一前の名称であり、これらの積算値が赤枠内の統一名称の結果として出力される。
 
 ![img](images/Figure_A4-4.png)
-
-図4 ICRP-07.BET サンプル
-
-# 8. ICRP Publication 133 比吸収割合（SAF）データファイルの仕様
-
-## 8.1 α粒子、電子および光子のSAF ファイル
-
-α粒子、電子及び光子のSAFファイル名を表5に示す。
-
-表5 α粒子、電子及び光子のSAFファイル名
-
-|粒子|ファイル名|
-|--|--|
-|_女性_|
-|α|rcp-af_alpha_2016-08-12.SAF|
-|β|rcp-af_electron_2016-08-12.SAF|
-|Γ|rcp-af_photon_2016-08-12.SAF|
-|_男性_|
-|α|rcp-am_alpha_2016-08-12.SAF|
-|β|rcp-am_electron_2016-08-12.SAF|
-|Γ|rcp-am_photon_2016-08-12.SAF|
-
-ここで、AFは標準成人女性（Adult Female）、AMは標準成人男性（Adult Male）を表わす。それぞれのファイルには5つの見出しレコードがあり、6番目以降のレコードが対象となる全ての線源器官と標的器官に対応する全てのSAFレコードとなる。これらのファイルは、79の線源器官から43の標的器官に対するSAFが示されており、レコードの総数は43×79+5の3402である。ファイル内のレコードはすべて同じ長さである。電子と光子のレコードの長さは315で、αのSAFレコードの長さは270である。それに伴うキャリッジリターンとラインフィード（CrLf）は、これらの値に含まれていない。SAFファイルのデータフィールドを表6に示す。
-
-表6 SAFファイル（α粒子、電子及び光子）の構造
-
-|フィールド|フォーマット|説明|
-|--|--|--|
-|_1～3行目_||ファイルの説明|
-|_4行目_|
-|標的の数|I4|標的器官の数|
-|線源の数|I4|線源器官の数|
-|空白|空白14文字||
-|放射線エネルギー|F10.5|SAF値に対する放射線エネルギー（1～n 個）|
-|_5行目_||区切り線|
-|_6行目以降_|
-|標的器官|10文字|標的頭字語；例えばUB-wall|
-|ダミー|2文字|記号「<-」|
-|線源器官|10文字|線源頭字語；例えばUB-cont|
-|SAF（１…n）|E10.0|n個のSAF値（kg<sup>-1</sup>）|
-|Ecut|E10.0|ゼロでないSAFの最低エネルギー|
-|Icut|I3|Ecutのエネルギー指数|
-|CrLf|2文字|改行|
-
-電子と光子のSAFファイルのエネルギー数nは28であり、αのSAFファイルは24のエネルギーについて示されている。前述のとおり、αのSAFファイルのEcutパラメータは長さが5（F5.0）である。
-
-各ファイルの4番目のレコードは、SAFの値に対応する放射線エネルギーを表示するものである。エネルギーの単位はMeVである。
-
-Icutフィールドには、ゼロでないSAF（T←S）値が示されているエネルギーの低エネルギー側からの順番が示されている。SAFがすべてゼロであれば、Icutは0に設定される。Icutがjであれば、レコードにはE（j）からE（n）までの範囲のエネルギーのゼロでないSAF値が含まれている。ここで、nは電子と光子のSAFファイルで28、αのSAFファイルで24である。つまりゼロでないSAF値の数は、n-j+1である。
-
-![img](images/Figure_A4-5.png)
-
-図5 rcp-af_photon_2016-08-12.SAFサンプル
-
-## 8.2 中性子のSAFファイル
-
-中性子のSAFファイル名を表7に示す。
-
-表7 中性子のSAFファイル名
-
-|粒子|ファイル名|
-|--|--|
-|_女性_|
-|N|rcp-af_neutron_2016-08-12.SAF|
-|_男性_|
-|N|rcp-am_neutron_2016-08-12.SAF|
-
-ここで、AFは標準成人女性、AM標準成人男性を表わす。中性子のSAFファイルは、Publ.107（ICRP、2008年）にある自発核分裂崩壊モードの放射性核種に関する、43の標的器官と79の線源器官について、核分裂中性子スペクトルの平均エネルギーで正規化されたスペクトル平均のSAFを表示するものである。中性子のSAFファイルに示されている28の核種はU-238、Pu-236、Pu-238、Pu-240、Pu-242、Pu-244、Cm-240、Cm-242、Cm-244、Cm-245、Cm-246、Cm-248、Cm-250、Cf-246、Cf-248、Cf-249、Cf-250、Cf-252、Cf-254、Es-253、Es-254、Es-254m、Es-255、Fm-252、Fm-254、Fm-255、Fm-256、およびFm-257である。
-
-これらのファイルの4番目のレコードは、Publ.103（ICRP、2007年）に示すスペクトル平均の中性子のW<sub>R</sub>を表示するものである。長さ302のSAFレコードのデータフィールドを表8に示す。
-
-表8 SAFファイル（中性子）の構造
-
-|フィールド|フォーマット|説明|
-|--|--|--|
-|_1～2行目_||ファイルの説明|
-|_3行目_|
-|線種|10文字|線種名（Neutron）|
-|空白|空白14文字||
-|核種|10文字|核種名；例えばU-238|
-|_4行目_|
-|標的の数|I4|標的器官の数（43）|
-|線源の数|I4|線源器官の数（79）|
-|W<sub>R</sub>記号|14文字|「W_R=」|
-|放射線加重係数|F10.5|スペクトル平均の放射線加重係数|
-|_5行目_||区切り線|
-|_6行目以降_|
-|標的器官|10文字|標的頭字語；例えばUB-wall|
-|ダミー|2文字|記号「<-」|
-|線源器官|10文字|線源頭字語；例えばUB-cont|
-|SAF（1…28）|E10.0|28個のSAF値（kg<sup>-1</sup>）|
-|CrLf|2文字|改行|
-
-![img](images/Figure_A4-6.png)
-
-図6 rcp-am_neutron_2016-08-12.SAFサンプル
-
-## 8.3 標的器官と線源器官の索引ファイル
-
-ファイルtorgans_2016-08-12.NDXとsregions_2016-08-12.NDXにそれぞれ、SAFデータファイルと同じ順序で線源器官と標的器官が示されている。これらのSAFファイルには79の線源器官によって照射される43の標的器官のSAFデータが示されている。i番目の標的器官とj番目の線源器官のSAFファイルのレコードは、次式のとおりである。
-
-ここで、43はこれらのファイルの中に記録されている標的器官の数の合計量である。例えば、脳はtorgans_2016-08-12.NDXファイルの18番目の標的器官であり、胃の内容物はsregions_2016-08-12.NDXファイルの10番目の線源領域である。したがって、SAF（Brain←St-cont）のレコード番号は43×9+23の410番目のレコードである。sregions_2016-08-12.NDXファイルのレコードには、線源器官の実質組織質量とその他の組織の線源器官の一部の領域を識別する「ID」フィールドがある（ID=1：「その他の組織の線源器官の一部」の対象、ID=0：対象外）。torgans_2016-0812.NDXファイルには、様々な標的器官の質量がある（図7参照）。
-
-![img](images/Figure_A4-7.png)
-
-図7 sregions_2016-08-12.NDX及びtorgans_2016-08-12.NDXサンプル
-
-表9 標的器官の名称
-
-|略称|器官名|英名|
-|--|--|--|
-|O-mucosa|口腔粘膜|Oral mucosa|
-|Oesophagus|食道|Oesophagus|
-|St-stem|胃|Stomach|
-|SI-stem|小腸|Small intestine|
-|RC-stem|右結腸|Right colon|
-|LC-stem|左結腸|Left colon|
-|RS-stem|直腸S|状結腸 Rectosigmoid colon|
-|ET1-bas|胸郭外領域1（ET1）基底細胞|Extrathoracic region1 basal cells|
-|ET2-bas|胸郭外領域2（ET2）基底細胞|Extrathoracic region2 basal cells|
-|LN-ET|胸郭外のリンパ節|Extrathoracic lymph nodes|
-|Bronch-bas|気管支基底細胞|Bronchi basal cells|
-|Bronch-sec|気管支分泌細胞|Bronchi secretory cells|
-|Bchiol-sec|細気管支分泌細胞|Broncholar secretory cells|
-|AI|肺胞間質|Alveolar-interstitial|
-|LN-Th|胸部リンパ節|Thoracic lymph nodes|
-|R-marrow|赤色（活性）骨髄|Red（active）marrow|
-|Endost-BS|骨内膜の細胞|Endosteal cells|
-|Brain|脳|Brain|
-|Eye-lens|水晶体|Lens of eyes|
-|P-gland|下垂体|Pituitary glang|
-|Tongue|舌|Tongue|
-|Tonsils|扁桃腺|Tonsils|
-|S-glands|唾液腺|Salivary glands|
-|Thyroid|甲状腺|Thyroid|
-|Breast|乳房|Breast|
-|Thymus|胸腺|Thymus|
-|Ht-wall|心臓壁|Heart wall|
-|Adrenals|副腎|Adrenals|
-|Liver|肝臓|Liver|
-|Pancreas|膵臓|Pancreas|
-|Kidneys|腎臓|Kidneys|
-|Spleen|脾臓|Spleen|
-|GB-wall|胆嚢|Gall bladder|
-|Ureters|尿管|Ureters|
-|UB-wall|膀胱|Urinary bladder|
-|Ovaries|卵巣|Ovaries|
-|Testes|精巣|Testes|
-|Prostate|前立腺|Prostate|
-|Uterus|子宮|Uterus|
-|LN-Sys|全身リンパ節|Systemic lymph nodes|
-|Skin|皮膚|Skin|
-|Adipose|脂肪組織|Adipose tissue|
-|Muscle|筋肉|Muscle|
-
-表10 線源器官の名称
-
-|略称|器官名|英名|
-|--|--|--|
-|O-cavity|口腔|Oral cavity|
-|O-mucosa|口腔粘膜|Oral mucosa|
-|Teeth-S|歯表面|Teeth surface|
-|Teeth-V|歯体積|Teeth volume|
-|Tongue|舌|Tongue|
-|Tonsils|扁桃腺|Tonsils|
-|Oesophag-s|食道|slow Oesophagus – slow|
-|Oesophag-f|食道|fast Oesophagus – fast|
-|Oesophag-w|食道|Oesophagus|
-|St-cont|胃内容物|Stomach contents|
-|St-mucosa|胃粘膜|Stomach contents|
-|St-wall|胃壁|Stomach wall|
-|SI-cont|小腸内容物|Small intestine contents|
-|SI-mucosa|小腸粘膜|Small intestine mucosa|
-|SI-wall|小腸壁|Small intestine wall|
-|SI-villi|小腸絨毛|Small intestine villi|
-|RC-cont|右結腸内容物|Right colon content|
-|RC-mucosa|右結腸粘膜|Right colon mucosa|
-|RC-wall|右結腸壁|Right colon wall|
-|LC-cont|左結腸内容物|Left colon content|
-|LC-mucosa|左結腸粘膜|Left colon mucosa|
-|LC-wall|左結腸壁|Left colon wall|
-|RS-cont|直腸S|状内容物 Rectosigmoid colon content|
-|RS-mucosa|直腸S|状粘膜 Rectosigmoid colon mucosa|
-|RS-wall|直腸S|状壁 Rectosigmoid colon wall|
-|ET1-sur|胸郭外領域1（ET1）表面|Extrathoracic region1 surface|
-|ET2-sur|胸郭外領域2（ET2）表面|Extrathoracic region2 surface|
-|ET2-bnd|胸郭外領域2（ET2）境界領域|Extrathoracic region2 bound region|
-|ET2-seq|胸郭外領域2（ET2）隔離領域|Extrathoracic region2 sequestered region|
-|LN-ET|胸郭外のリンパ節|Extrathoracic lymph nodes|
-|Bronchi|気管支表面|Bronchial surface|
-|Bronchi-b|気管支境界領域|Bronchial bound region|
-|Bronchi-q|気管支隔離領域|Bronchial sequestered region|
-|Brchiole|細気管支表面|Bronchiolar surface|
-|Brchiole-b|細気管支境界領域|Bronchiolar bound region|
-|Brchiole-q|細気管支隔離領域|Bronchiolar sequestered region|
-|ALV|肺胞間質|Alveolar-interstitial|
-|LN-Th|胸部リンパ節|Thoracic lymph nodes|
-|Lungs|肺|Lungs|
-|Adrenals|副腎|Adrenals|
-|Blood|血液|Blood|
-|C-bone-S|皮質骨表面|Cortical bone surface|
-|C-bone-V|皮質骨|Cortical bone|
-|T-bone-S|骨梁表面|Trabecular bone surface|
-|T-bone-V|骨梁|Trabecular bone|
-|C-marrow|皮質骨髄|Cortical bone marrow|
-|T-marrow|骨梁骨髄|Trabecular bone marrow|
-|R-marrow|赤色（活性）骨髄|Red（active）marrow|
-|Y-marrow|黄色（非活性）骨髄|Yellow（inactive）marrow|
-|Brain|脳|Brain|
-|Breast|乳房|Breast|
-|Eye-lens|水晶体|Lens of eye|
-|GB-wall|胆嚢壁|Gall bladder|
-|GB-cont|胆嚢内容物|Gall bladder content|
-|Ht-wall|心臓壁|Heart wall|
-|Kidneys|腎臓|Kidneys|
-|Liver|肝臓|Liver|
-|LN-Sys|全身リンパ節|Systemic lymph nodes|
-|Ovaries|卵巣|Ovaries|
-|Pancreas|膵臓|Pancreas|
-|P-gland|下垂体|Pituitary gland|
-|Prostate|前立腺|Prostate|
-|S-glands|唾液腺|Salivary glands|
-|Skin|皮膚|Skin|
-|Spleen|脾臓|Spleen|
-|Testes|精巣|Testes|
-|Thymus|胸腺|Thymus|
-|Thyroid|甲状腺|Thyroid|
-|Ureters|尿管|Ureters|
-|UB-wall|膀胱壁|Urinary bladder|
-|UB-cont|膀胱内容物|Urinary bladder content|
-|Uterus|子宮|Uterus|
-|Adipose|脂肪|Adipose|
-|Cartilage|軟骨|Cartilage|
-|Muscle|筋肉|Muscle|
-|ET1-wall|胸郭外領域1（ET1）壁|Extrathoracic region1 wall|
-|ET2-wall|胸郭外領域2（ET2）壁|Extrathoracic region2 wall|
-|Lung-Tis|肺組織|Lung tissue|
-|RT-air|呼吸器の空気|Respiratory tract air|
-
-## 9. 参考文献
-
-1) ICRP: ”The 2007 Recommendations of the International Commission on Radiological Protection”
-ICRP Publication 103 (2007)
-2) ICRP: ”Nuclear Decay Data for Dosimetric Calculations” ICRP Publication 107 (2008)
-3) ICRP: ”The ICRP computational framework for internal dose assessment for reference adults: specific absorbed fractions” ICRP Publication 133 (2016)
