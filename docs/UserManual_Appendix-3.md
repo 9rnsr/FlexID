@@ -91,6 +91,10 @@ $$ S–coefficient(T ← Other) = \frac{1}{M_{Other}} \cdot \sum_S M_\mathrm{S} 
 |$`M_{Other}`$|コンパートメントモデルで明確にされていない組織の合計質量（ICRP Publ.133 TableA3.3 ※1）|
 |$`M_\mathrm{S}`$|コンパートメントモデル図で明確にされていない個々の線源領域の質量|
 
+核種によっては、コンパートメントとして明示されておらずとも`Other`の内訳から除外するよう指定される線源領域も存在する。
+このためFlexIDでは、`Other`の内訳をインプットにて調整するための機能を提供する。
+詳細は[添付資料4](UserManual_Appendix-4.md) の1.1.2を参照。
+
 # 5. ICRP Publication 103 放射線加重係数データ
 
 ICRP Publication 103 に示されている放射線加重係数（W<sub>R</sub>）を表1 に示す。
