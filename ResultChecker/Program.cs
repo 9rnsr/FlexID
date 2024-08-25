@@ -129,58 +129,40 @@ namespace ResultChecker
             var expectActs = GetExpectRetentions(target, material);
             var minWholeBodyFrac = double.PositiveInfinity;
             var maxWholeBodyFrac = double.NegativeInfinity;
-            var oneDayActualUrine = 0.0;
-            var oneDayActualFaeces = 0.0;
             var minUrineFrac = double.PositiveInfinity;
             var maxUrineFrac = double.NegativeInfinity;
             var minFaecesFrac = double.PositiveInfinity;
             var maxFaecesFrac = double.NegativeInfinity;
-            foreach (var (actualAct, expectAct) in
-                actualActs.Zip(expectActs, (a, b) => (a, b)))
+
+            foreach (var (actualAct, expectAct) in CompareRetentions(actualActs, expectActs))
             {
+                //Console.WriteLine(
+                //    $"{expectAct.EndTime,8}," +
+                //    $"{expectAct.WholeBody:0.0E+00}," +
+                //    $"{(expectAct.Urine != null ? $"{expectAct.Urine:0.0E+00}" : "-"),-7}," +
+                //    $"{(expectAct.Faeces != null ? $"{expectAct.Faeces:0.0E+00}" : "-"),-7}," +
+                //    $"{actualAct.WholeBody:0.00000000E+00}," +
+                //    $"{(actualAct.Urine != null ? $"{actualAct.Urine:0.00000000E+00}" : "-"),-14}," +
+                //    $"{(actualAct.Faeces != null ? $"{actualAct.Faeces:0.00000000E+00}" : "-"),-14}");
+
                 var fractionWholeBody = actualAct.WholeBody / expectAct.WholeBody;
                 minWholeBodyFrac = Math.Min(minWholeBodyFrac, fractionWholeBody);
                 maxWholeBodyFrac = Math.Max(maxWholeBodyFrac, fractionWholeBody);
 
-                var duration = expectAct.EndTime - expectAct.StartTime;
-                if (duration < 1.0)
+                if (expectAct.Urine is double expectUrine)
                 {
-                    // 時間メッシュ幅が1日未満の場合は、1日分の積算放射能を計算する。
-                    oneDayActualUrine += actualAct.Urine.Value * duration;
-                    oneDayActualFaeces += actualAct.Faeces.Value * duration;
-
-                    // OIR側は24-hour sample値なので、時間メッシュの終了時刻が
-                    // 1日の倍数になった位置で比較を行う。
-                    if (expectAct.EndTime % 1.0 == 0)
-                    {
-                        var fractionUrine = oneDayActualUrine / expectAct.Urine.Value;
-                        minUrineFrac = Math.Min(minUrineFrac, fractionUrine);
-                        maxUrineFrac = Math.Max(maxUrineFrac, fractionUrine);
-
-                        var fractionFaeces = oneDayActualFaeces / expectAct.Faeces.Value;
-                        minFaecesFrac = Math.Min(minFaecesFrac, fractionFaeces);
-                        maxFaecesFrac = Math.Max(maxFaecesFrac, fractionFaeces);
-
-                        oneDayActualUrine = 0;
-                        oneDayActualFaeces = 0;
-                    }
+                    var fractionUrine = actualAct.Urine.Value / expectUrine;
+                    minUrineFrac = Math.Min(minUrineFrac, fractionUrine);
+                    maxUrineFrac = Math.Max(maxUrineFrac, fractionUrine);
                 }
-                else
+                if (expectAct.Faeces is double expectFaeces)
                 {
-                    if (expectAct.Urine is double expectUrine)
-                    {
-                        var fractionUrine = actualAct.Urine.Value / expectUrine;
-                        minUrineFrac = Math.Min(minUrineFrac, fractionUrine);
-                        maxUrineFrac = Math.Max(maxUrineFrac, fractionUrine);
-                    }
-                    if (expectAct.Faeces is double expectFaeces)
-                    {
-                        var fractionFaeces = actualAct.Faeces.Value / expectFaeces;
-                        minFaecesFrac = Math.Min(minFaecesFrac, fractionFaeces);
-                        maxFaecesFrac = Math.Max(maxFaecesFrac, fractionFaeces);
-                    }
+                    var fractionFaeces = actualAct.Faeces.Value / expectFaeces;
+                    minFaecesFrac = Math.Min(minFaecesFrac, fractionFaeces);
+                    maxFaecesFrac = Math.Max(maxFaecesFrac, fractionFaeces);
                 }
             }
+
             result./**/ WholeBodyActivityFractionMin = minWholeBodyFrac;
             result./**/ WholeBodyActivityFractionMax = maxWholeBodyFrac;
             result./**/     UrineActivityFractionMin = minUrineFrac;
@@ -525,6 +507,93 @@ namespace ResultChecker
             }
 
             return retentions;
+        }
+
+        /// <summary>
+        /// OIRデータとFlexIDデータを比較可能な状態で時間メッシュ毎に列挙する。
+        /// </summary>
+        /// <param name="actuals"></param>
+        /// <param name="expects"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidDataException"></exception>
+        static IEnumerable<(Retention Actual, Retention Expect)>
+            CompareRetentions(List<Retention> actuals, List<Retention> expects)
+        {
+            var iActual = 0;
+            var oneDayActualUrine = 0.0;
+            var oneDayActualFaeces = 0.0;
+
+            foreach (var expectAct in expects)
+            {
+                var duration = expectAct.EndTime - expectAct.StartTime;
+
+                if (duration == 1.0)
+                {
+                    // OIRとFlexIDで時間メッシュ幅が同じ箇所では、
+                    // そのまま比較する。
+                    var actualAct = actuals[iActual++];
+                    yield return (actualAct, expectAct);
+                }
+                else if (duration < 1.0)
+                {
+                    // OIRの時間メッシュ幅が1日未満の場合は、FlexID側も
+                    // 同じ時間メッシュ幅で出力しているものとする。
+                    var actualAct = actuals[iActual++];
+
+                    var expectDuration = expectAct.EndTime - expectAct.StartTime;
+                    var actualDuration = actualAct.EndTime - actualAct.StartTime;
+                    if (Math.Abs(actualDuration - expectDuration) > 0.001)
+                        throw new InvalidDataException("FlexID out mesh does not fit to OIR data mesh");
+
+                    // 時間メッシュ幅が1日未満の場合は、1日分の積算放射能を計算する。
+                    oneDayActualUrine += actualAct.Urine.Value * duration;
+                    oneDayActualFaeces += actualAct.Faeces.Value * duration;
+
+                    // OIR側は24-hour sample値なので、時間メッシュの終了時刻が
+                    // 1日の倍数になった位置で比較を行う。
+                    if (expectAct.EndTime % 1.0 == 0)
+                    {
+                        actualAct.Urine = oneDayActualUrine;
+                        actualAct.Faeces = oneDayActualFaeces;
+                        oneDayActualUrine = 0;
+                        oneDayActualFaeces = 0;
+                    }
+                    else
+                    {
+                        actualAct.Urine = null;
+                        actualAct.Faeces = null;
+                    }
+
+                    yield return (actualAct, expectAct);
+                }
+                else
+                {
+                    // OIR側の時間メッシュ幅が1日を超える場合は、
+                    // FlexID側は時間メッシュ幅を1日で出力しているものとする。
+                    if (duration % 1.0 != 0)
+                        throw new InvalidDataException("OIR data mesh width is n days");
+
+                    while (true)
+                    {
+                        var actualAct = actuals[iActual++];
+
+                        if ((actualAct.EndTime - actualAct.StartTime) != 1.0)
+                            throw new InvalidDataException("FlexID out mesh with is not 1 day");
+
+                        if (actualAct.EndTime != expectAct.EndTime)
+                            continue;
+
+                        // WholeBodyについて、FlexIDは時間メッシュ期間の末期における
+                        // 残留放射能を出力するため、最後の出力時間メッシュにおける数値を
+                        // そのまま出力する。
+                        // UrineとFaecesは、最後の時間メッシュ(時間幅は1日)の計算値を
+                        // 24-hour sample値として出力する。
+                        yield return (actualAct, expectAct);
+
+                        break;
+                    }
+                }
+            }
         }
     }
 }
