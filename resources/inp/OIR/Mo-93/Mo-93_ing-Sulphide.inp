@@ -4,7 +4,8 @@ Mo-93 Ingestion:Sulphide
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
 #---------+-------------------+---------------------
-  Mo-93     4.747583E-07        0.0
+  Mo-93     4.747583E-07        0.0             # ln(2)/(365 * 4.0E+3 y)
+  Nb-93m    1.177330E-04        1.0             # ln(2)/(365 * 16.13 y)
 
 
 [Mo-93:compartment]
@@ -71,3 +72,172 @@ Mo-93 Ingestion:Sulphide
   KidneyOtherTissue       Blood2                    0.0474
   OtherTissue             Blood2                    0.0323
   KidneyUrinaryPath       UB-con                    1.40
+
+
+[Nb-93m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  # Mo-93のコンパートメントで生成されたNb-93mを受ける
+  acc   decay-Blood2          Blood
+  acc   decay-Liver           Liver
+  acc   decay-Kidneys         Kidneys
+  acc   decay-OtherTissue     Other
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+
+[Nb-93m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Mo-93/Oralcavity        Oralcavity                ---
+  Mo-93/Oesophagus-F      Oesophagus-F              ---
+  Mo-93/Oesophagus-S      Oesophagus-S              ---
+  Mo-93/St-con            St-con                    ---
+  Mo-93/SI-con            SI-con                    ---
+  Mo-93/RC-con            RC-con                    ---
+  Mo-93/LC-con            LC-con                    ---
+  Mo-93/RS-con            RS-con                    ---
+  Mo-93/Faeces            Faeces                    ---
+
+  Mo-93/UB-con            UB-con                    ---
+  Mo-93/Urine             Urine                     ---
+
+# ICRP Publ.134 p.314 Para.655
+  # > For modelling convenience, the compartment
+  #   of the molybdenum model called Blood 1 is identified with the central blood
+  #   compartment of the characteristic model for niobium (also named Blood 1; see
+  #   Fig. 13.1).
+  # > モデリングの便宜上、モリブデンモデルの Blood 1 と呼ばれる
+  #   コンパートメントは、ニオブの特性モデル（Blood 1 とも呼ばれます。図 13.1 を参照）の
+  #   中央血液コンパートメントと同一視されます。
+  Mo-93/Blood1            Blood1                    ---
+
+  # > It is assumed that niobium produced in Blood 2 of the molybdenum
+  #   model transfers to Blood 1 of the niobium model at a rate of 1000 d⁻¹.
+  # > モリブデンモデルの Blood 2 で生成された
+  #   ニオブは、1000 d⁻¹ の速度でニオブモデルの Blood 1 に移動すると考えられます。
+  Mo-93/Blood2            decay-Blood2              ---
+  decay-Blood2            Blood1                    1000
+
+  # > Niobium produced in a tissue compartment of the molybdenum model is assumed to transfer
+  #   to Blood 1 in the niobium model at a rate of 1.39 d⁻¹; the highest rate of transfer to
+  #   blood from an ‘other tissue’ compartment of the niobium model. After reaching
+  #   Blood 1 in the niobium model, niobium is assumed to follow its characteristic systemic
+  #   model.
+  # > モリブデンモデルの組織コンパートメントで生成されたニオブは、ニオブモデルの Blood 1 に
+  #   1.39 d⁻¹ の速度で移動すると考えられます。これは、ニオブモデルの「他の組織」コンパートメントから
+  #   血液に移動する最高速度です。ニオブモデルで Blood 1 に到達した後、ニオブはその
+  #   特性全身モデルに従うと考えられます。
+  Mo-93/Liver             decay-Liver               ---
+  Mo-93/KidneyUrinaryPath decay-Kidneys             ---
+  Mo-93/KidneyOtherTissue decay-Kidneys             ---
+  Mo-93/OtherTissue       decay-OtherTissue         ---
+  decay-Liver             Blood1                    1.39
+  decay-Kidneys           Blood1                    1.39
+  decay-OtherTissue       Blood1                    1.39
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#
+#   • The default absorption fraction, fA, for a progeny radionuclide produced by
+#     decay in the contents of the alimentary tract (in the small intestine or a higher
+#     compartment) following ingestion of a parent radionuclide, or produced in a
+#     systemic compartment and subsequently transferred into the alimentary tract
+#     content, is the reference value of fA for the progeny radionuclide when ingested
+#     as a parent. If the radionuclide has multiple reference values corresponding to
+#     different chemical or physical forms, the default value of fA is the highest reference
+#     value provided.
+#
+# ICRP Publ.134 p.288 Table 13.2
+#   fA(Max value of ing(Nb)) = 0.01   (Ingested material, All forms)
+#
+#   fA(Nb) = fA(Max value of ing(Nb)) = 0.01
+#   λ(SI->Blood1(Nb)) = fA(Nb) * λ(SI->RC) / (1 - fA(Nb))
+#                      = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-01
+#
+  SI-con                  Blood1                    6.060606060606061E-01
+
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic
+#   compartments into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
+# ICRP Publ.134 p.288 Table 13.2
+#   fA(Re-Absorption(Nb)) = 0.01   (Ingested material, All forms)
+#
+#   λ(SI_Re-Absorption->Blood1(Nb)) = fA(Re-Ab(Nb)) * λ(SI->RC) / (1 - fA(Re-Ab(Nb)))
+#                                    = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-01
+#
+  SI-conRe                Blood1                    6.060606060606061E-01
+
+# ICRP Publ.134 p.294 Table 13.3
+  Blood1                  Blood2                    3.2
+  Blood1                  Liver0                    0.24
+  Blood1                  Kidneys                   0.04
+  Blood1                  ST0                       3.2
+  Blood1                  ST1                       0.12
+  Blood1                  UB-con                    0.88
+  Blood1                  SI-conRe                  0.08
+  Blood1                  T-bone-S                  0.12
+  Blood1                  C-bone-S                  0.12
+  Blood2                  Blood1                    1.39
+  Liver0                  SI-conRe                  0.0578
+  Liver0                  Blood1                    0.0578
+  Liver0                  Liver1                    0.231
+  Liver1                  Blood1                    0.005
+  Kidneys                 Blood1                    0.005
+  ST0                     Blood1                    1.39
+  ST1                     Blood1                    0.01
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
