@@ -1,0 +1,73 @@
+[title]
+Mo-93 Ingestion:Sulphide
+
+[nuclide]
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Mo-93     4.747583E-07        0.0
+
+
+[Mo-93:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver                 Liver
+  acc   KidneyUrinaryPath     Kidneys
+  acc   KidneyOtherTissue     Kidneys
+  acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
+
+[Mo-93:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.305 Table 14.2
+#   fA = 0.05   (Ingested material, Sulphide)
+#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.05 * 6 / (1 - 0.05) = 3.157894736842105E-01
+  SI-con                  Blood1                    3.157894736842105E-01
+
+# ICRP Publ.134 p.310 Table 14.3
+  Blood1                  Blood2                   12.5
+  Blood1                  Liver                    14.2
+  Blood1                  UB-con                    6.5
+  Blood2                  KidneyUrinaryPath         1.7
+  Blood2                  KidneyOtherTissue         0.115
+  Blood2                  OtherTissue               1.73
+  Liver                   RC-con                    0.0048
+  Liver                   Blood2                    0.0122
+  KidneyOtherTissue       Blood2                    0.0474
+  OtherTissue             Blood2                    0.0323
+  KidneyUrinaryPath       UB-con                    1.40
