@@ -45,58 +45,58 @@ Fe-59 Ingestion:Unspecified
 
   input                   Oralcavity              100.0%
 
-  Oralcavity              Oesophagus-F           6480           #  90.0%
-  Oralcavity              Oesophagus-S            720           #  10.0%
-  Oesophagus-F            St-con                12343           # 100.0%
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #  90.0%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.134 p.136 Table 7.2
 #   fA = 0.1   (Ingested materials, All unspecified forms)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
-  SI-con                  OtherPlasma               6.666666666666667E-1        # 10.0%
+  SI-con                  OtherPlasma               6.666666666666667E-1
 
 # ICRP Publ.130 p.76 Table 3.4
-  SI-conRe                RC-con                    6           #  90.0%
+  SI-conRe                RC-con                    6
 
 # ICRP Publ.134 p.136 Table 7.2 footnote¶
 #   fA = 0.1   (re-absorption)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
-  SI-conRe                OtherPlasma               6.666666666666667E-1        #  10.0%
+  SI-conRe                OtherPlasma               6.666666666666667E-1
 
 # ICRP Publ.134 p.143 Table 7.3
-  OtherPlasma             PlasmaTrans              70           #  99.8431%
-  OtherPlasma             UB-con                    0.01        #   0.0143%
-  OtherPlasma             RC-con                    0.1         #   0.1426%
-  PlasmaTrans             MarrowSynthe              9.43        #  84.9932%
-  PlasmaTrans             Liver1(Hepato)            0.555       #   5.0023%
-  PlasmaTrans             Other1(Trans)             1.11        #  10.0045%
-  RBC                     OtherPlasma               0.000833    #   9.9904%
-  RBC                     MarrowTransit             0.00729     #  87.4310%
-  RBC                     RC-con                    0.0002      #   2.3987%
-  RBC                     UB-con                    0.000015    #   0.1799%
-  MarrowSynthe            RBC                       0.243       #  70.0288%
-  MarrowSynthe            MarrowTransit             0.104       #  29.9712%
-  MarrowTransit           OtherPlasma               1.39        #  89.9909%
-  MarrowTransit           MarrowStorage             0.0635      #   4.1111%
-  MarrowTransit           Liver2(RE)                0.0106      #   0.6863%
-  MarrowTransit           Spleen                    0.017       #   1.1006%
-  MarrowTransit           Other3(RE)                0.0635      #   4.1111%
-  MarrowStorage           MarrowTransit             0.0038      # 100.0%
-  Liver2(RE)              MarrowTransit             0.0038      # 100.0%
-  Spleen                  MarrowTransit             0.0038      # 100.0%
-  Other3(RE)              MarrowTransit             0.0038      # 100.0%
-  Liver1(Hepato)          PlasmaTrans               0.00364     #  90.7731%
-  Liver1(Hepato)          SI-conRe                  0.00037     #   9.2269%
-  Other1(Trans)           PlasmaTrans               0.888       #  80.0%
-  Other1(Trans)           Other2(Parenc)            0.222       #  20.0%
-  Other2(Parenc)          Other1(Trans)             0.00127     #  67.9144%
-  Other2(Parenc)          Excreta                   0.00057     #  30.4813%
-  Other2(Parenc)          UB-con                    0.00003     #   1.6043%
+  OtherPlasma             PlasmaTrans              70
+  OtherPlasma             UB-con                    0.01
+  OtherPlasma             RC-con                    0.1
+  PlasmaTrans             MarrowSynthe              9.43
+  PlasmaTrans             Liver1(Hepato)            0.555
+  PlasmaTrans             Other1(Trans)             1.11
+  RBC                     OtherPlasma               0.000833
+  RBC                     MarrowTransit             0.00729
+  RBC                     RC-con                    0.0002
+  RBC                     UB-con                    0.000015
+  MarrowSynthe            RBC                       0.243
+  MarrowSynthe            MarrowTransit             0.104
+  MarrowTransit           OtherPlasma               1.39
+  MarrowTransit           MarrowStorage             0.0635
+  MarrowTransit           Liver2(RE)                0.0106
+  MarrowTransit           Spleen                    0.017
+  MarrowTransit           Other3(RE)                0.0635
+  MarrowStorage           MarrowTransit             0.0038
+  Liver2(RE)              MarrowTransit             0.0038
+  Spleen                  MarrowTransit             0.0038
+  Other3(RE)              MarrowTransit             0.0038
+  Liver1(Hepato)          PlasmaTrans               0.00364
+  Liver1(Hepato)          SI-conRe                  0.00037
+  Other1(Trans)           PlasmaTrans               0.888
+  Other1(Trans)           Other2(Parenc)            0.222
+  Other2(Parenc)          Other1(Trans)             0.00127
+  Other2(Parenc)          Excreta                   0.00057
+  Other2(Parenc)          UB-con                    0.00003
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12

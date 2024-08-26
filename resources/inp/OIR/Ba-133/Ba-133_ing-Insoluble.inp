@@ -42,42 +42,42 @@ Ba-133 Ingestion:Insoluble
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480           #  90.0%
-  Oralcavity              Oesophagus-S            720           #  10.0%
-  Oesophagus-F            St-con                12343           # 100.0%
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #  99.99%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.137 p.168 Table 7.2
 #   fA = 1E-4   (Ingested materials, Insoluble forms)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-4 * 6 / (1 - 1E-4) = 6.000600060006001E-4
-  SI-con                  Plasma                    6.000600060006001E-4        # 0.01%
+  SI-con                  Plasma                    6.000600060006001E-4
 
 # ICRP Publ.137 p.175 Table 7.3
-  Plasma                  UB-con                    2.24        #   3.1982%
-  Plasma                  RC-con                   20.16        #  28.7836%
-  Plasma                  T-bone-S                  9.72        #  13.8778%
-  Plasma                  C-bone-S                  7.78        #  11.1079%
-  Plasma                  ST0                      23.0         #  32.8384%
-  Plasma                  ST1                       7.0         #   9.9943%
-  Plasma                  ST2                       0.14        #   0.1999%
-  T-bone-S                Plasma                    0.578       #  83.2853%
-  T-bone-S                Exch-T-bone-V             0.116       #  16.7147%
-  C-bone-S                Plasma                    0.578       #  83.2853%
-  C-bone-S                Exch-C-bone-V             0.116       #  16.7147%
-  ST0                     Plasma                    7.67        # 100.0%
-  ST1                     Plasma                    0.693       # 100.0%
-  ST2                     Plasma                    0.00038     # 100.0%
-  Exch-T-bone-V           T-bone-S                  0.0097      #  69.7842%
-  Exch-T-bone-V           Noch-T-bone-V             0.0042      #  30.2158%
-  Exch-C-bone-V           C-bone-S                  0.0097      #  69.7842%
-  Exch-C-bone-V           Noch-C-bone-V             0.0042      #  30.2158%
-  Noch-C-bone-V           Plasma                    0.0000821   # 100.0%
-  Noch-T-bone-V           Plasma                    0.000493    # 100.0%
+  Plasma                  UB-con                    2.24
+  Plasma                  RC-con                   20.16
+  Plasma                  T-bone-S                  9.72
+  Plasma                  C-bone-S                  7.78
+  Plasma                  ST0                      23.0
+  Plasma                  ST1                       7.0
+  Plasma                  ST2                       0.14
+  T-bone-S                Plasma                    0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Plasma                    0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Plasma                    7.67
+  ST1                     Plasma                    0.693
+  ST2                     Plasma                    0.00038
+  Exch-T-bone-V           T-bone-S                  0.0097
+  Exch-T-bone-V           Noch-T-bone-V             0.0042
+  Exch-C-bone-V           C-bone-S                  0.0097
+  Exch-C-bone-V           Noch-C-bone-V             0.0042
+  Noch-C-bone-V           Plasma                    0.0000821
+  Noch-T-bone-V           Plasma                    0.000493
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12

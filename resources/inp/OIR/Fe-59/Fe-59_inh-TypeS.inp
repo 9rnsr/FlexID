@@ -89,105 +89,105 @@ Fe-59 Inhalation:Type-S
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
-  ALV-F                   bb-F                      0.002       #   0.0666%
-  ALV-F                   INT-F                     0.001       #   0.0333%
-  INT-F                   LNTH-F                    0.00003     #   0.001%
-  bb-F                    BB-F                      0.2         #   6.25%
-  bbseq-F                 LNTH-F                    0.001       #   0.0333%
-  BB-F                    ET2-F                    10           #  76.9231%
-  BBseq-F                 LNTH-F                    0.001       #   0.0333%
-  ET2-F                   Oesophagus-S            100           #  97.0874%
-  ETseq-F                 LNET-F                    0.001       #   0.0333%
-  ET1-F                   Environment               0.6         #  28.5714%
-  ET1-F                   ET2-F                     1.5         #  71.4286%
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-S            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
 
-  ALV-S                   bb-S                      0.002       #  64.5161%
-  ALV-S                   INT-S                     0.001       #  32.2581%
-  INT-S                   LNTH-S                    0.00003     #  23.0769%
-  bb-S                    BB-S                      0.2         #  99.95%
-  bbseq-S                 LNTH-S                    0.001       #  90.9091%
-  BB-S                    ET2-S                    10           #  99.999%
-  BBseq-S                 LNTH-S                    0.001       #  90.9091%
-  ET2-S                   Oesophagus-S            100           #  99.9999%
-  ETseq-S                 LNET-S                    0.001       #  90.9091%
-  ET1-S                   Environment               0.6         #  28.5714%
-  ET1-S                   ET2-S                     1.5         #  71.4286%
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
 
 # ICRP Publ.134 p.136 Table 7.2
 #   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
 #   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
-  ALV-F                   OtherPlasma               3           #  99.9001%
-  INT-F                   OtherPlasma               3           #  99.999%
-  bb-F                    OtherPlasma               3           #  93.75%
-  bbseq-F                 OtherPlasma               3           #  99.9667%
-  BB-F                    OtherPlasma               3           #  23.0769%
-  BBseq-F                 OtherPlasma               3           #  99.9667%
-  ET2-F                   OtherPlasma               3           #   2.9126%
-  ETseq-F                 OtherPlasma               3           #  99.9667%
-  LNET-F                  OtherPlasma               3           # 100.0%
-  LNTH-F                  OtherPlasma               3           # 100.0%
+  ALV-F                   OtherPlasma               3
+  INT-F                   OtherPlasma               3
+  bb-F                    OtherPlasma               3
+  bbseq-F                 OtherPlasma               3
+  BB-F                    OtherPlasma               3
+  BBseq-F                 OtherPlasma               3
+  ET2-F                   OtherPlasma               3
+  ETseq-F                 OtherPlasma               3
+  LNET-F                  OtherPlasma               3
+  LNTH-F                  OtherPlasma               3
 
-  ALV-S                   OtherPlasma               1E-4        #   3.2258%
-  INT-S                   OtherPlasma               1E-4        #  76.9231%
-  bb-S                    OtherPlasma               1E-4        #   0.05%
-  bbseq-S                 OtherPlasma               1E-4        #   9.0909%
-  BB-S                    OtherPlasma               1E-4        #   0.001%
-  BBseq-S                 OtherPlasma               1E-4        #   9.0909%
-  ET2-S                   OtherPlasma               1E-4        #   0.0001%
-  ETseq-S                 OtherPlasma               1E-4        #   9.0909%
-  LNET-S                  OtherPlasma               1E-4        # 100.0%
-  LNTH-S                  OtherPlasma               1E-4        # 100.0%
+  ALV-S                   OtherPlasma               1E-4
+  INT-S                   OtherPlasma               1E-4
+  bb-S                    OtherPlasma               1E-4
+  bbseq-S                 OtherPlasma               1E-4
+  BB-S                    OtherPlasma               1E-4
+  BBseq-S                 OtherPlasma               1E-4
+  ET2-S                   OtherPlasma               1E-4
+  ETseq-S                 OtherPlasma               1E-4
+  LNET-S                  OtherPlasma               1E-4
+  LNTH-S                  OtherPlasma               1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #  99.9%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.134 p.136 Table 7.2
 #   fA = 0.001   (Inhaled particulate materials, Absorption type S)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.001 * 6 / (1 - 0.001) = 6.006006006006006E-3
-  SI-con                  OtherPlasma               6.006006006006006E-3        # 0.1%
+  SI-con                  OtherPlasma               6.006006006006006E-3
 
 # ICRP Publ.130 p.76 Table 3.4
-  SI-conRe                RC-con                    6           #  90.0%
+  SI-conRe                RC-con                    6
 
 # ICRP Publ.134 p.136 Table 7.2 footnote¶
 #   fA = 0.1   (re-absorption)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
-  SI-conRe                OtherPlasma               6.666666666666667E-1        #  10.0%
+  SI-conRe                OtherPlasma               6.666666666666667E-1
 
 # ICRP Publ.134 p.143 Table 7.3
-  OtherPlasma             PlasmaTrans              70           #  99.8431%
-  OtherPlasma             UB-con                    0.01        #   0.0143%
-  OtherPlasma             RC-con                    0.1         #   0.1426%
-  PlasmaTrans             MarrowSynthe              9.43        #  84.9932%
-  PlasmaTrans             Liver1(Hepato)            0.555       #   5.0023%
-  PlasmaTrans             Other1(Trans)             1.11        #  10.0045%
-  RBC                     OtherPlasma               0.000833    #   9.9904%
-  RBC                     MarrowTransit             0.00729     #  87.4310%
-  RBC                     RC-con                    0.0002      #   2.3987%
-  RBC                     UB-con                    0.000015    #   0.1799%
-  MarrowSynthe            RBC                       0.243       #  70.0288%
-  MarrowSynthe            MarrowTransit             0.104       #  29.9712%
-  MarrowTransit           OtherPlasma               1.39        #  89.9909%
-  MarrowTransit           MarrowStorage             0.0635      #   4.1111%
-  MarrowTransit           Liver2(RE)                0.0106      #   0.6863%
-  MarrowTransit           Spleen                    0.017       #   1.1006%
-  MarrowTransit           Other3(RE)                0.0635      #   4.1111%
-  MarrowStorage           MarrowTransit             0.0038      # 100.0%
-  Liver2(RE)              MarrowTransit             0.0038      # 100.0%
-  Spleen                  MarrowTransit             0.0038      # 100.0%
-  Other3(RE)              MarrowTransit             0.0038      # 100.0%
-  Liver1(Hepato)          PlasmaTrans               0.00364     #  90.7731%
-  Liver1(Hepato)          SI-conRe                  0.00037     #   9.2269%
-  Other1(Trans)           PlasmaTrans               0.888       #  80.0%
-  Other1(Trans)           Other2(Parenc)            0.222       #  20.0%
-  Other2(Parenc)          Other1(Trans)             0.00127     #  67.9144%
-  Other2(Parenc)          Excreta                   0.00057     #  30.4813%
-  Other2(Parenc)          UB-con                    0.00003     #   1.6043%
+  OtherPlasma             PlasmaTrans              70
+  OtherPlasma             UB-con                    0.01
+  OtherPlasma             RC-con                    0.1
+  PlasmaTrans             MarrowSynthe              9.43
+  PlasmaTrans             Liver1(Hepato)            0.555
+  PlasmaTrans             Other1(Trans)             1.11
+  RBC                     OtherPlasma               0.000833
+  RBC                     MarrowTransit             0.00729
+  RBC                     RC-con                    0.0002
+  RBC                     UB-con                    0.000015
+  MarrowSynthe            RBC                       0.243
+  MarrowSynthe            MarrowTransit             0.104
+  MarrowTransit           OtherPlasma               1.39
+  MarrowTransit           MarrowStorage             0.0635
+  MarrowTransit           Liver2(RE)                0.0106
+  MarrowTransit           Spleen                    0.017
+  MarrowTransit           Other3(RE)                0.0635
+  MarrowStorage           MarrowTransit             0.0038
+  Liver2(RE)              MarrowTransit             0.0038
+  Spleen                  MarrowTransit             0.0038
+  Other3(RE)              MarrowTransit             0.0038
+  Liver1(Hepato)          PlasmaTrans               0.00364
+  Liver1(Hepato)          SI-conRe                  0.00037
+  Other1(Trans)           PlasmaTrans               0.888
+  Other1(Trans)           Other2(Parenc)            0.222
+  Other2(Parenc)          Other1(Trans)             0.00127
+  Other2(Parenc)          Excreta                   0.00057
+  Other2(Parenc)          UB-con                    0.00003
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12

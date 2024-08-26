@@ -65,76 +65,76 @@ C-14 Inhalation:Type-F_UnspecifiedGas
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
 # ICRP Publ.134 p.56 Para.97
-  ALV-F                   bb-F                      0.002       #   0.002%
-  ALV-F                   INT-F                     0.001       #   0.001%
-  INT-F                   LNTH-F                    0.00003     #   0.00003%
-  bb-F                    BB-F                      0.2         #   0.1996%
-  bbseq-F                 LNTH-F                    0.001       #   0.001%
-  BB-F                    ET2-F                    10           #   9.0909%
-  BBseq-F                 LNTH-F                    0.001       #   0.001%
-  ET2-F                   Oesophagus-S            100           #  50.0%
-  ETseq-F                 LNET-F                    0.001       #   0.001%
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-S            100
+  ETseq-F                 LNET-F                    0.001
 
 # ICRP Publ.134 p.53 Table 3.3
 #   s_r[/d] = 100  (Inhaled particulate materials, Absorption type F)
-  ALV-F                   Blood0                  100           #  99.997%
-  INT-F                   Blood0                  100           #  99.99997%
-  bb-F                    Blood0                  100           #  99.8004%
-  bbseq-F                 Blood0                  100           #  99.999%
-  BB-F                    Blood0                  100           #  90.9091%
-  BBseq-F                 Blood0                  100           #  99.999%
-  ET2-F                   Blood0                  100           #  50.0%
-  ETseq-F                 Blood0                  100           #  99.999%
-  LNET-F                  Blood0                  100           # 100.0%
-  LNTH-F                  Blood0                  100           # 100.0%
+  ALV-F                   Blood0                  100
+  INT-F                   Blood0                  100
+  bb-F                    Blood0                  100
+  bbseq-F                 Blood0                  100
+  BB-F                    Blood0                  100
+  BBseq-F                 Blood0                  100
+  ET2-F                   Blood0                  100
+  ETseq-F                 Blood0                  100
+  LNET-F                  Blood0                  100
+  LNTH-F                  Blood0                  100
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #   1.0%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.134 p.53 Table 3.3
 #   fA = 1≒0.99   (Inhaled particulate materials, Absorption type F)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-con                  Blood0                  594           #  99.0%
+  SI-con                  Blood0                  594
 
 # ICRP Publ.134 p.66 Table 3.5
-  Blood1                  Exhalation               36.2         #  36.2%
-  Blood1                  Excreta(skin)             0.3         #   0.3%
-  Blood1                  UB-con                    0.65        #   0.65%
-  Blood1                  RC-con                    0.15        #   0.15%
-  Blood1                  ST0                      60           #  60.0%
-  Blood1                  ST1                       1.8         #   1.8%
-  Blood1                  ST2                       0.3         #   0.3%
-  Blood1                  ST3                       0.44        #   0.44%
-  Blood1                  T-bone-S                  0.09        #   0.09%
-  Blood1                  C-bone-S                  0.06        #   0.06%
-  Blood1                  T-bone-V                  0.006       #   0.006%
-  Blood1                  C-bone-V                  0.004       #   0.004%
-  ST0                     Blood1                   49.91        # 100.0%
-  ST1                     Blood1                    1.331       #  96.0006%
-  ST2                     Blood1                    0.2218      #  95.9999%
-  ST3                     Blood1                    0.01664     #  96.0013%
-  ST1                     Blood2                    0.05545     #   3.9994%
-  ST2                     Blood2                    0.009242    #   4.0001%
-  ST3                     Blood2                    0.0006931   #   3.9987%
-  Blood2                  UB-con                 1000           # 100.0%
-  T-bone-S                Blood1                    0.01733     # 100.0%
-  C-bone-S                Blood1                    0.01733     # 100.0%
-  T-bone-V                Blood1                    0.000493    # 100.0%
-  C-bone-V                Blood1                    0.0000821   # 100.0%
+  Blood1                  Exhalation               36.2
+  Blood1                  Excreta(skin)             0.3
+  Blood1                  UB-con                    0.65
+  Blood1                  RC-con                    0.15
+  Blood1                  ST0                      60
+  Blood1                  ST1                       1.8
+  Blood1                  ST2                       0.3
+  Blood1                  ST3                       0.44
+  Blood1                  T-bone-S                  0.09
+  Blood1                  C-bone-S                  0.06
+  Blood1                  T-bone-V                  0.006
+  Blood1                  C-bone-V                  0.004
+  ST0                     Blood1                   49.91
+  ST1                     Blood1                    1.331
+  ST2                     Blood1                    0.2218
+  ST3                     Blood1                    0.01664
+  ST1                     Blood2                    0.05545
+  ST2                     Blood2                    0.009242
+  ST3                     Blood2                    0.0006931
+  Blood2                  UB-con                 1000
+  T-bone-S                Blood1                    0.01733
+  C-bone-S                Blood1                    0.01733
+  T-bone-V                Blood1                    0.000493
+  C-bone-V                Blood1                    0.0000821
 
 # ICRP Publ.134 p.68 Table 3.6
-  Blood0                  Sys-Tis(short)            1.2         #  40.0%
-  Blood0                  Sys-Tis(long)             0.3         #  10.0%
-  Blood0                  UB-con                    1.5         #  50.0%
-  Sys-Tis(short)          Blood1                    0.0693      #  30.0%
-  Sys-Tis(short)          Blood0                    0.0924      #  40.0%
-  Sys-Tis(short)          RC-con                    0.0693      #  30.0%
-  Sys-Tis(long)           Blood1                    0.0099      # 100.0%
+  Blood0                  Sys-Tis(short)            1.2
+  Blood0                  Sys-Tis(long)             0.3
+  Blood0                  UB-con                    1.5
+  Sys-Tis(short)          Blood1                    0.0693
+  Sys-Tis(short)          Blood0                    0.0924
+  Sys-Tis(short)          RC-con                    0.0693
+  Sys-Tis(long)           Blood1                    0.0099
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12
