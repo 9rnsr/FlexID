@@ -35,39 +35,18 @@ namespace ResultChecker
                 }
             });
 
-            var summaryHeaders = new[]
-            {
-                "Summary",
-                "",
-                "Target,Whole Body Effective Dose,,,,Whole Body,,Urine,,Faeces",
-                ",OIR,FlexID,Diff (FlexID/OIR),,Diff (min),Diff (max),Diff (min),Diff (max),Diff (min),Diff (max)",
-            };
-            var summaryLines = results.OrderBy(r => r.Target).Select(res =>
-            {
-                var line = $"{res.Target}";
-                if (res.HasErrors)
-                    line += ",-,-,-,-,-";
-                else
-                {
-                    line += $",{res.ExpectEffectiveDose}" +
-                            $",{res.ActualEffectiveDose}" +
-                            $",{res.FractionEffectiveDose:0.00%},";
-                    line += $",{res.WholeBodyActivityFractionMin:0.00%}" +
-                            $",{res.WholeBodyActivityFractionMax:0.00%}" +
-                            $",{res.UrineActivityFractionMin:0.00%}" +
-                            $",{res.UrineActivityFractionMax:0.00%}" +
-                            $",{res.FaecesActivityFractionMin:0.00%}" +
-                            $",{res.FaecesActivityFractionMax:0.00%}";
-                }
-                return line;
-            });
-            File.WriteAllLines("summary.csv", summaryHeaders.Concat(summaryLines));
+            var sortedResults = results.OrderBy(r => r.Target).ToArray();
+
+            //WriteSummaryCsv(sortedResults);
+
+            WriteSummaryExcel("summary.xlsx", sortedResults);
         }
 
         // 計算および比較の結果。
         struct Result
         {
             public string Target;
+            public string Material;
 
             public bool HasErrors;
 
@@ -113,7 +92,7 @@ namespace ResultChecker
 
             main.Main();
 
-            var result = new Result() { Target = target };
+            var result = new Result() { Target = target, Material = material };
 
             // 50年預託実行線量の比較。
             var actualDose = main.WholeBodyEffectiveDose;
