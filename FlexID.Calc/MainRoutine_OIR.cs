@@ -183,7 +183,6 @@ namespace FlexID.Calc
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
-                    if (calcIter > 1)
                     {
                         var converged = true;
                         foreach (var o in data.Organs)
@@ -191,6 +190,8 @@ namespace FlexID.Calc
                             ref var iterNow = ref Act.IterNow[o.Index];
                             ref var iterPre = ref Act.IterPre[o.Index];
 
+                            // 収束計算の初回はIterPreがゼロのため、
+                            // IterNowがゼロにならない限り常に収束未達と判定される。
                             var s1 = iterNow.ini != 0 ? Math.Abs((iterNow.ini - iterPre.ini) / iterNow.ini) : 0;
                             var s2 = iterNow.ave != 0 ? Math.Abs((iterNow.ave - iterPre.ave) / iterNow.ave) : 0;
                             var s3 = iterNow.end != 0 ? Math.Abs((iterNow.end - iterPre.end) / iterNow.end) : 0;

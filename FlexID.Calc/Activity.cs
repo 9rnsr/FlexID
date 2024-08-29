@@ -72,6 +72,11 @@ namespace FlexID.Calc
                 CalcNow[o.Index].ave = 0;
                 CalcNow[o.Index].end = 0;
                 CalcNow[o.Index].total = 0;
+
+                IterPre[o.Index].ini = 0;
+                IterPre[o.Index].ave = 0;
+                IterPre[o.Index].end = 0;
+                IterPre[o.Index].total = 0;
             }
         }
 
