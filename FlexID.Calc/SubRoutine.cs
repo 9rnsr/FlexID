@@ -95,9 +95,9 @@ namespace FlexID.Calc
                 var beforeBio = inflow.Organ.BioDecay;
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-                ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-                ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-                end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+                ini += Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
+                ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
+                end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
             }
             Act.IterNow[organ.Index].ini = ini;
             Act.IterNow[organ.Index].ave = ave;
@@ -122,9 +122,9 @@ namespace FlexID.Calc
                 var beforeBio = inflow.Organ.BioDecay;
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-                ini += Act.IterNow[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-                ave += Act.IterNow[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-                end += Act.IterNow[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+                ini += Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
+                ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
+                end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
             }
             Act.IterNow[organ.Index].ini = ini;
             Act.IterNow[organ.Index].ave = ave;
@@ -142,9 +142,7 @@ namespace FlexID.Calc
         /// <param name="Act">計算結果</param>
         public static void Input(Organ organ, Activity Act)
         {
-            // 初期振り分けはしたので0を設定するだけ？
-            // todo: 機能3の区画にID=0以外の区画からの流入がある場合はその前提が崩れるため、
-            // 入力ファイルを読み取った時点でそのような経路をエラーとする必要がある
+            // 初期振り分けはしたので0を設定するだけ。
             Act.IterNow[organ.Index].ini = 0;
             Act.IterNow[organ.Index].ave = 0;
             Act.IterNow[organ.Index].end = 0;
@@ -181,7 +179,7 @@ namespace FlexID.Calc
                     beforeBio = 1;
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-                ave += Act.CalcNow[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+                ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
             }
             #endregion
 
@@ -248,7 +246,7 @@ namespace FlexID.Calc
                     beforeBio = 1 * organLo.Inflows[i].Rate;
 
                 // 放射能[Bq/day] = 流入元臓器の放射能[Bq/day] * 流入元臓器の生物学的崩壊定数 * 流入割合
-                ave += Act.CalcNow[organLo.Inflows[i].Organ.Index].ave * beforeBio;
+                ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio;
             }
             #endregion
 

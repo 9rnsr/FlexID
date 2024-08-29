@@ -64,7 +64,9 @@ namespace FlexID.Calc
         /// <param name="data"></param>
         public void NextCalc(InputData data)
         {
-            Swap(ref CalcPre, ref CalcNow);
+            // 最新の計算結果を格納したCalcNowを、
+            // 前回計算時間メッシュの結果であるCalcPreへ移動する。
+            Swap(ref CalcNow, ref CalcPre);
 
             foreach (var o in data.Organs)
             {
@@ -72,7 +74,11 @@ namespace FlexID.Calc
                 CalcNow[o.Index].ave = 0;
                 CalcNow[o.Index].end = 0;
                 CalcNow[o.Index].total = 0;
+            }
 
+            // 収束計算における各コンパートメントの初期値としてゼロを設定する。
+            foreach (var o in data.Organs)
+            {
                 IterPre[o.Index].ini = 0;
                 IterPre[o.Index].ave = 0;
                 IterPre[o.Index].end = 0;
@@ -86,15 +92,19 @@ namespace FlexID.Calc
         /// <param name="data"></param>
         public void NextIter(InputData data)
         {
-            Swap(ref IterPre, ref IterNow);
+            // IterNowに格納された今回収束計算の結果を、前回収束計算の結果として
+            // IterPreが指すよう移動する。
+            Swap(ref IterNow, ref IterPre);
+        }
 
-            foreach (var o in data.Organs)
-            {
-                IterNow[o.Index].ini = 0;
-                IterNow[o.Index].ave = 0;
-                IterNow[o.Index].end = 0;
-                IterNow[o.Index].total = 0;
-            }
+        /// <summary>
+        /// 収束計算が完了した時点の処理を行う。
+        /// </summary>
+        public void FinishIter()
+        {
+            // 最後の収束計算回の結果(IterNowからIterPreへ移動済み)を
+            // CalcNowに移動する。
+            Swap(ref IterPre, ref CalcNow);
         }
 
         /// <summary>

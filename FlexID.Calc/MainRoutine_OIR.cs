@@ -142,13 +142,13 @@ namespace FlexID.Calc
                 if (commitmentPeriod < calcNowT)
                     break;
 
-                Act.NextCalc(data);
-
                 var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
 
                 // ΔT[sec]
                 var calcDeltaT = calcNowT - calcPreT;
                 var calcDeltaDay = TimeMesh.SecondsToDays(calcDeltaT);
+
+                Act.NextCalc(data);
 
                 #region 1つの計算時間メッシュ内で収束計算を繰り返す
                 for (calcIter = 1; calcIter <= iterMax; calcIter++)
@@ -202,6 +202,10 @@ namespace FlexID.Calc
                                 break;
                             }
                         }
+
+                        // 収束判定の成否にかかわらず次回の準備を行う。
+                        Act.NextIter(data);
+
                         // 前回との差が全ての臓器で収束した場合
                         if (converged)
                         {
@@ -213,10 +217,10 @@ namespace FlexID.Calc
                             break;
                         }
                     }
-
-                    Act.NextIter(data);
                 }
                 #endregion
+
+                Act.FinishIter();
 
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in data.Organs)
