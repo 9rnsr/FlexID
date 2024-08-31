@@ -94,7 +94,7 @@ namespace FlexID.Calc
 
         private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, InputData data)
         {
-            const double convergence = 1E-8; // 収束値
+            const double convergence = 1E-10; // 収束値
             const int iterMax = 1500;  // iterationの最大回数
 
             // 預託期間[sec]を取得。
