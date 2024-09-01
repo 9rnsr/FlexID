@@ -70,14 +70,6 @@ namespace FlexID.Calc
             // 前回計算時間メッシュの結果であるCalcPreへ移動する。
             Swap(ref CalcNow, ref CalcPre);
 
-            foreach (var o in data.Organs)
-            {
-                CalcNow[o.Index].ini = 0;
-                CalcNow[o.Index].ave = 0;
-                CalcNow[o.Index].end = 0;
-                CalcNow[o.Index].total = 0;
-            }
-
             // 収束計算における各コンパートメントの初期値としてゼロを設定する。
             foreach (var o in data.Organs)
             {

@@ -320,12 +320,6 @@ namespace FlexID.Calc
                         {
                             SubRoutine.Excretion(organLo, Act, calcDeltaDay);
                         }
-
-                        Act.CalcNow[organLo.Index].ini = Act.IterNow[organLo.Index].ini;
-                        Act.CalcNow[organLo.Index].ave = Act.IterNow[organLo.Index].ave;
-                        Act.CalcNow[organLo.Index].end = Act.IterNow[organLo.Index].end;
-
-                        Act.CalcNow[organLo.Index].total = Act.IterNow[organLo.Index].total;
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
