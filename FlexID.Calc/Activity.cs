@@ -1,3 +1,5 @@
+using System;
+
 namespace FlexID.Calc
 {
     /// <summary>
@@ -90,11 +92,36 @@ namespace FlexID.Calc
         /// 次の収束計算回のための準備を行う。
         /// </summary>
         /// <param name="data"></param>
-        public void NextIter(InputData data)
+        /// <param name="convergence"></param>
+        /// <returns>次の収束計算回へ継続する場合は <see langword="true"/>、
+        /// 結果が収束し次の計算回が必要ない場合は <see langword="false"/>。</returns>
+        public bool NextIter(InputData data, double convergence)
         {
+            var next = false;
+
+            foreach (var o in data.Organs)
+            {
+                ref var iterNow = ref IterNow[o.Index];
+                ref var iterPre = ref IterPre[o.Index];
+
+                // 収束計算の初回はIterPreがゼロのため、
+                // IterNowがゼロにならない限り常に収束未達と判定される。
+                var s1 = iterNow.ini != 0 ? Math.Abs((iterNow.ini - iterPre.ini) / iterNow.ini) : 0;
+                var s2 = iterNow.ave != 0 ? Math.Abs((iterNow.ave - iterPre.ave) / iterNow.ave) : 0;
+                var s3 = iterNow.end != 0 ? Math.Abs((iterNow.end - iterPre.end) / iterNow.end) : 0;
+
+                if (s1 > convergence || s2 > convergence || s3 > convergence)
+                {
+                    next = true;
+                    break;
+                }
+            }
+
             // IterNowに格納された今回収束計算の結果を、前回収束計算の結果として
             // IterPreが指すよう移動する。
             Swap(ref IterNow, ref IterPre);
+
+            return next;
         }
 
         /// <summary>
