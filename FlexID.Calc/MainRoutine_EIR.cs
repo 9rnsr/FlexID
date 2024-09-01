@@ -249,8 +249,6 @@ namespace FlexID.Calc
                 if (commitmentPeriod < calcNowT)
                     break;
 
-                Act.NextCalc(dataLo);
-
                 var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
 
                 // ΔT[sec]
@@ -293,6 +291,8 @@ namespace FlexID.Calc
                 int daysLo = dataLo.StartAge;
                 int daysHi = dataHi.StartAge;
 
+                Act.NextCalc(dataLo);
+
                 #region 1つの計算時間メッシュ内で収束計算を繰り返す
                 for (calcIter = 1; calcIter <= iterMax; calcIter++)
                 {
@@ -320,48 +320,22 @@ namespace FlexID.Calc
                         {
                             SubRoutine.Excretion(organLo, Act, calcDeltaDay);
                         }
-
-                        Act.CalcNow[organLo.Index].ini = Act.IterNow[organLo.Index].ini;
-                        Act.CalcNow[organLo.Index].ave = Act.IterNow[organLo.Index].ave;
-                        Act.CalcNow[organLo.Index].end = Act.IterNow[organLo.Index].end;
-
-                        Act.CalcNow[organLo.Index].total = Act.IterNow[organLo.Index].total;
                     }
 
                     // 前回との差が収束するまで計算を繰り返す
-                    if (calcIter > 1)
-                    {
-                        var converged = true;
-                        foreach (var o in dataLo.Organs)
-                        {
-                            ref var iterNow = ref Act.IterNow[o.Index];
-                            ref var iterPre = ref Act.IterPre[o.Index];
+                    if (Act.NextIter(dataLo, convergence))
+                        continue;
 
-                            var s1 = iterNow.ini != 0 ? Math.Abs((iterNow.ini - iterPre.ini) / iterNow.ini) : 0;
-                            var s2 = iterNow.ave != 0 ? Math.Abs((iterNow.ave - iterPre.ave) / iterNow.ave) : 0;
-                            var s3 = iterNow.end != 0 ? Math.Abs((iterNow.end - iterPre.end) / iterNow.end) : 0;
+                    // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
+                    outIter = calcIter;
 
-                            if (s1 > convergence || s2 > convergence || s3 > convergence)
-                            {
-                                converged = false;
-                                break;
-                            }
-                        }
-                        // 前回との差が全ての臓器で収束した場合
-                        if (converged)
-                        {
-                            // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
-                            outIter = calcIter;
-
-                            // // 出力メッシュ内での総反復回数を保存する。
-                            // outIter += iter;
-                            break;
-                        }
-                    }
-
-                    Act.NextIter(dataLo);
+                    // // 出力メッシュ内での総反復回数を保存する。
+                    // outIter += calcIter;
+                    break;
                 }
                 #endregion
+
+                Act.FinishIter();
 
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in dataLo.Organs)
