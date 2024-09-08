@@ -1,1250 +1,1249 @@
 ﻿<Controls:MetroWindow
-    x:Class="FlexID.Viewer.Views.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:oxy="http://oxyplot.org/wpf"
-    xmlns:prism="http://prismlibrary.com/"
-    xmlns:vm="clr-namespace:FlexID.Viewer.ViewModels"
-    Title="FlexID_Viewer"
-    Width="1200"
-    Height="800"
-    MinWidth="1200"
-    MinHeight="800"
-    d:DataContext="{d:DesignInstance Type={x:Type vm:MainWindowViewModel}}"
-    prism:ViewModelLocator.AutoWireViewModel="True"
-    TitleCharacterCasing="Normal"
-    WindowStartupLocation="CenterScreen"
-    mc:Ignorable="d">
-    <Controls:MetroWindow.Resources>
-        <Style
-            x:Key="MyColumnHeader"
-            BasedOn="{StaticResource MetroDataGridColumnHeader}"
-            TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Controls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
-        </Style>
-    </Controls:MetroWindow.Resources>
-    <TabControl>
-        <TabItem Header="Model">
-            <Grid>
-                <Grid.Resources>
-                    <FrameworkElement x:Key="GridHeader" />
-                </Grid.Resources>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="170" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="120" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="450" />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="160" />
-                </Grid.ColumnDefinitions>
-                <ContentControl Content="{StaticResource GridHeader}" />
+  x:Class="FlexID.Viewer.Views.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:oxy="http://oxyplot.org/wpf"
+  xmlns:prism="http://prismlibrary.com/"
+  xmlns:vm="clr-namespace:FlexID.Viewer.ViewModels"
+  Title="FlexID_Viewer"
+  Width="1200"
+  Height="800"
+  MinWidth="1200"
+  MinHeight="800"
+  d:DataContext="{d:DesignInstance Type={x:Type vm:MainWindowViewModel}}"
+  prism:ViewModelLocator.AutoWireViewModel="True"
+  TitleCharacterCasing="Normal"
+  WindowStartupLocation="CenterScreen"
+  mc:Ignorable="d">
+  <Controls:MetroWindow.Resources>
+    <Style
+      x:Key="MyColumnHeader"
+      BasedOn="{StaticResource MetroDataGridColumnHeader}"
+      TargetType="{x:Type DataGridColumnHeader}">
+      <Setter Property="Controls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
+    </Style>
+  </Controls:MetroWindow.Resources>
+  <TabControl>
+    <TabItem Header="Model">
+      <Grid>
+        <Grid.Resources>
+          <FrameworkElement x:Key="GridHeader" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="170" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="120" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="450" />
+          <ColumnDefinition />
+          <ColumnDefinition Width="160" />
+        </Grid.ColumnDefinitions>
+        <ContentControl Content="{StaticResource GridHeader}" />
 
-                <Viewbox
-                    Grid.RowSpan="2"
-                    Grid.Column="1"
-                    Stretch="Uniform">
-                    <Canvas
-                        Width="495"
-                        Height="515"
-                        Margin="0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                        <Path
-                            x:Name="Body1"
-                            Canvas.Left="198"
-                            Canvas.Top="106"
-                            Width="95"
-                            Height="373"
-                            Data="M129.96091,97.999825 C129.96091,97.999825 129.91793,118.39995 129.23965,119.13476 127.73965,120.75976 83.186719,119.90793 68.186719,131.90793 53.186719,143.90793 44.157497,164.77301 41.157497,183.77301 38.157497,202.77301 39.157497,288.77301 39.157497,288.77301 39.157497,288.77301 40.157497,348.77301 40.157497,355.77301 40.157497,362.77301 43.157497,465.77301 43.157497,465.77301"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5" />
-                        <Path
-                            x:Name="Body2"
-                            Canvas.Left="326"
-                            Canvas.Top="106"
-                            Width="92.25"
-                            Height="374"
-                            Data="M159.07965,101.26344 C159.07965,101.26344 161.2205,121.17485 162.31633,121.16346 182.04779,120.95835 230.40277,128.39928 239.73863,147.06624 249.07449,165.7332 251.56704,236.37256 251.56704,236.37256 251.56704,236.37256 252.06294,366.1876 252.39627,367.18762 252.72959,368.18764 252.90042,465.39638 252.90042,465.39638"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5" />
-                        <Path
-                            x:Name="Head"
-                            Canvas.Left="245"
-                            Width="110.973"
-                            Height="114.124"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Data="M72.231609,155.24134 C100.00848,155.12034 104.87864,168.40388 104.053,201.29871 103.37094,228.47315 89.145947,237.17779 74.565106,237.59288 61.649224,237.96057 47.431692,232.2476 46.294714,229.47971 44.951332,226.20934 60.506818,217.14983 60.506818,217.14983 60.506818,217.14983 43.049069,217.06551 40.382429,216.89885 37.347003,216.70913 42.706097,209.11188 42.706097,209.11188 42.706097,209.11188 30.486194,209.57634 31.968793,205.8278 34.988195,198.19368 42.721424,191.79705&#xA;44.702916,186.51475 44.702916,186.51475 44.068819,155.36402 72.231609,155.24134 z"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="5" />
-                        <Path
-                            x:Name="Brain"
-                            Canvas.Left="273"
-                            Canvas.Top="8"
-                            Width="73"
-                            Height="30"
-                            Data="M24.99366,2.5 C37.225903,2.5 47.178288,12.261252 47.486313,24.419266 L47.48732,24.499001 2.5,24.499001 2.501009,24.419266 C2.8090341,12.261252 12.761415,2.5 24.99366,2.5 z"
-                            Fill="{Binding OrganColors.Value[Brain]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Brain" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Brain], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="ET1"
-                            Canvas.Left="256"
-                            Canvas.Top="50.01"
-                            Width="26"
-                            Height="19"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Data="M14.333333,276.82303 L27.749845,257.356 40.778408,257.35561 40.78121,276.83391 z"
-                            Fill="{Binding OrganColors.Value[ET1]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="ET1" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[ET1], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="ET2"
-                            Canvas.Left="279"
-                            Canvas.Top="50"
-                            Width="45"
-                            Height="62"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Data="M1115.4962,34.219722 L1140.1875,34.219722 1140.1875,86.5 1167.5,86.5 1167.5,14.757928 1115.4962,14.757928 z"
-                            Fill="{Binding OrganColors.Value[ET2]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="ET2" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[ET2], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="Trachea"
-                            Canvas.Left="300"
-                            Canvas.Top="109.054"
-                            Width="15.167"
-                            Height="83.892"
-                            Data="M138,110.52671 L150,110.52671 150,183.17969 138,188.17969 z"
-                            Fill="{Binding OrganColors.Value[Lung]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Trachea" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="Oesophagus"
-                            Canvas.Left="310"
-                            Canvas.Top="109"
-                            Width="42.409"
-                            Height="154.381"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Data="M1032.4574,259.41698 C1032.3669,259.32203 1024.9679,246.97464 1023.1191,242.29447 1019.9828,234.35522 1008.1996,169.87081 1008.1996,169.87081 L1003.667,115.57125 995.00149,115.57106 999.43879,175.66809 C999.43879,175.66809 1009.9362,238.69772 1013.8577,247.14591 1017.1232,254.18098 1024.733,265.882 1024.733,265.882 z"
-                            Fill="{Binding OrganColors.Value[Oesophagus]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Oesophagus" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Oesophagus], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="RightLung"
-                            Canvas.Left="216"
-                            Canvas.Top="141"
-                            Width="50"
-                            Height="90"
-                            Data="M55.035555,30.970968 L54.535554,67.970968 34.035554,69.470968 34.535554,47.470968 C34.535554,47.470968 34.62899,33.995479 38.341378,29.151083 42.472523,23.760241 41.697494,23.515412 47.085661,18.995528 52.945369,14.08009 56.035534,14.470968 56.035534,14.470968 z"
-                            Fill="{Binding OrganColors.Value[Lung]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Lung" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lung], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="RightBronchi"
-                            Canvas.Left="259"
-                            Canvas.Top="152"
-                            Width="45.001"
-                            Height="40"
-                            Data="M69.140366,74 L69.140369,88.5 28.102681,108.16667 27.974036,93.833138 z"
-                            Fill="{Binding OrganColors.Value[Lung]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5" />
-                        <Path
-                            x:Name="LeftLung"
-                            Canvas.Left="348"
-                            Canvas.Top="141"
-                            Width="50"
-                            Height="90"
-                            Data="M55.370445,30.970968 L54.870444,67.970968 34.370444,69.470968 34.870444,47.470968 C34.870444,47.470968 34.96388,33.995479 38.676268,29.151083 42.807413,23.760241 42.032384,23.515412 47.420551,18.995528 53.280259,14.08009 56.370424,14.470968 56.370424,14.470968 z"
-                            Fill="{Binding OrganColors.Value[Lung]}"
-                            RenderTransformOrigin="0.5,0.5"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="5">
-                            <Path.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="-1" />
-                                    <SkewTransform />
-                                    <RotateTransform />
-                                    <TranslateTransform />
-                                </TransformGroup>
-                            </Path.RenderTransform>
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Lung" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lung], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="LeftBronchi"
-                            Canvas.Left="310"
-                            Canvas.Top="152"
-                            Width="45"
-                            Height="40"
-                            Data="M225,84.375 L225,99.875 265,119.375 265,103.25 z"
-                            Fill="{Binding OrganColors.Value[Lung]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5" />
-                        <Ellipse
-                            x:Name="Heart"
-                            Canvas.Left="291"
-                            Canvas.Top="184"
-                            Width="50"
-                            Height="60"
-                            Fill="{Binding OrganColors.Value[Heart]}"
-                            RenderTransformOrigin="0.5,0.5"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <Ellipse.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform />
-                                    <SkewTransform />
-                                    <RotateTransform Angle="-4.15" />
-                                    <TranslateTransform />
-                                </TransformGroup>
-                            </Ellipse.RenderTransform>
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Heart" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Heart], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Ellipse>
-                        <Path
-                            x:Name="Pancreas"
-                            Canvas.Left="272"
-                            Canvas.Top="307"
-                            Width="73"
-                            Height="22"
-                            Data="M63.167634,442.92835 C66.38681,440.79696 94.012124,441.28304 107.87082,441.92189 121.13996,442.53356 150.94713,451.64901 107.20415,459.92151 75.921832,465.83749 63.612045,464.0238 61.33397,458.76184 59.037265,453.45684 60.070006,444.97926 63.167634,442.92835 z"
-                            Fill="{Binding OrganColors.Value[Pancreas]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Pancreas" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Pancreas], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="Stomach"
-                            Canvas.Left="273"
-                            Canvas.Top="248"
-                            Width="100"
-                            Height="67"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            prism:ViewModelLocator.AutoWireViewModel="True"
-                            Data="M789.22863,303.99254 C792.34236,299.99771 801.74444,287.85523 804.97141,284.45605 808.52751,280.71016 813.29322,278.11619 816.25491,280.31463 820.47088,283.44412 820.66935,292.29724 820.81387,294.20348 821.42416,302.25355 820.01708,321.64727 812.03683,334.19218 803.82299,347.10429 788.98984,345.05399 780.47182,344.74095 770.44682,344.37252 758.29785,341.85064 753.29785,338.85064 748.29785,335.85064 745.30782,329.08941 749.09791,324.83086 751.40682,322.23656 766.21421,318.01404&#xA;777.8568,311.74128 777.8568,311.74128 785.03802,309.36898 789.22863,303.99254 z"
-                            Fill="{Binding OrganColors.Value[Stomach]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Stomach" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Stomach], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="Spleen"
-                            Canvas.Left="367"
-                            Canvas.Top="248"
-                            Width="20"
-                            Height="50"
-                            Data="M196.62012,259.06077 C196.27107,261.81171 193.5579,287.91036 191.70153,293.07294 190.19536,297.26162 187.57498,304.17924 209.00878,299.00158 216.91284,297.09224 226.65937,273.17415 222.3801,261.69479 216.39965,245.65194 197.19636,254.51936 196.62012,259.06077 z"
-                            Fill="{Binding OrganColors.Value[Spleen]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Spleen" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Spleen], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="Duodenum"
-                            Canvas.Left="241.204"
-                            Canvas.Top="295"
-                            Width="40.592"
-                            Height="36"
-                            Data="M134.67694,300.52278 C129.62993,303.32247 112.73508,307.76983 108.68949,313.39785 105.74966,317.4876 106.55246,325.73599 106.55246,325.73599 L97.207862,325.73598 C97.207862,325.73598 96.952963,316.32305 99.841099,310.23182 104.15681,301.12975 129.14657,292.69785 129.14657,292.69785 z"
-                            Fill="{Binding OrganColors.Value[SI]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Duodenum" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="RightColon"
-                            Canvas.Left="222"
-                            Canvas.Top="326"
-                            Width="88.52"
-                            Height="101.869"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Data="M148.47559,332.10456 L75.220763,332.10456 75.346063,419.62545 65.471233,419.63067 65.471133,322.76077 148.48279,322.77556 z"
-                            Fill="{Binding OrganColors.Value[RC]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Right Colon" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[RC], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="LeftColon"
-                            Canvas.Left="306.177"
-                            Canvas.Top="326"
-                            Width="86.646"
-                            Height="102.22"
-                            Data="M155.85362,335.12059 L237.49965,335.11916 237.49967,432.33234 226.08298,432.33234 226.08298,344.42605 155.85362,344.44262 z"
-                            Fill="{Binding OrganColors.Value[LC]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Left Colon" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[LC], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="RectosigmoidColon"
-                            Canvas.Left="331.25"
-                            Canvas.Top="424.105"
-                            Width="61.5"
-                            Height="37.791"
-                            Data="M228.79167,438.20751 L228.79167,456.99901 182.95811,456.99901 182.95811,470.99962 172.29193,470.99962 172.29193,447.99921 217.37994,447.99921 217.37994,438.20718 z"
-                            Fill="{Binding OrganColors.Value[RS]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Rectosigmoid Colon" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[RS], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="Liver"
-                            Canvas.Left="217"
-                            Canvas.Top="240"
-                            Width="105"
-                            Height="55"
-                            Data="M124.65055,249.09364 C138.70685,249.53867 171.39682,250.9168 147.39695,264.41727 123.39709,277.91774 82.624756,302.48363 72.788607,299.74782 66.00415,297.86081 50.517067,267.45032 55.01248,260.83744 60.412261,252.89421 110.86051,248.65704 124.65055,249.09364 z"
-                            Fill="{Binding OrganColors.Value[Liver]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Liver" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Liver], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="GB"
-                            Canvas.Left="272"
-                            Canvas.Top="270"
-                            Width="25"
-                            Height="18"
-                            Data="M224.79474,278.26504 C213.62168,285.06457 208.88838,289.89235 209.10769,293.65284 209.31072,297.13404 210.54186,302.19609 213.91255,301.87838 220.55427,301.25237 229.56488,286.67526 232.25651,282.79008 234.84512,279.05361 232.97859,273.28463 224.79474,278.26504 z"
-                            Fill="{Binding OrganColors.Value[GB]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Gall Bladder" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[GB], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="RightKidneys"
-                            Canvas.Left="261"
-                            Canvas.Top="343"
-                            Width="25"
-                            Height="50"
-                            Data="M198.72987,355.95179 C198.32332,350.22274 187.63968,344.86222 183.75135,354.6661 180.56328,362.70438 180.2109,372.84412 181.50163,376.04053 184.73778,384.05465 193.95024,383.0005 196.62661,377.54055 198.45523,373.81006 192.43888,368.04675 192.37694,366.04079 192.32074,364.22067 199.0183,360.01631 198.72987,355.95179 z"
-                            Fill="{Binding OrganColors.Value[Kidneys]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Kidneys" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="RightUreter"
-                            Canvas.Left="276"
-                            Canvas.Top="364"
-                            Width="20"
-                            Height="80"
-                            Data="M744.45859,531.5928 C753.24108,537.98482 754.89054,538.48833 756.2042,551.49238 757.48665,564.18757 757.31136,580.08283 757.31136,580.08283 L758.06141,604.83284 753.69045,604.83901 753.1451,580.04385 C753.1451,580.04385 752.7483,556.3159 752.14826,552.54184 751.72244,549.86359 752.02734,541.14539 742.72323,538.18503"
-                            Fill="{Binding OrganColors.Value[Ureters]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Ureter" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Ureters], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="LeftKidneys"
-                            Canvas.Left="313"
-                            Canvas.Top="343"
-                            Width="25"
-                            Height="50"
-                            Data="M160.43149,352.84999 C159.80691,343.73015 175.30711,340.98045 179.4542,352.97452 183.96127,366.00971 183.57949,370.93532 179.33647,379.6487 174.85682,388.848 163.20015,387.97421 161.37847,379.56531 159.7537,372.06534 167.56667,369.51722 167.43852,366.31824 167.31334,363.19323 160.99623,361.09615 160.43149,352.84999 z"
-                            Fill="{Binding OrganColors.Value[Kidneys]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Kidneys" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="LeftUreter"
-                            Canvas.Left="302"
-                            Canvas.Top="364"
-                            Width="20"
-                            Height="80"
-                            Data="M176.79114,360.73404 C176.79114,360.73404 161.76277,366.07618 160.84598,374.07638 160.0617,380.92033 160.16038,406.47212 160.28538,407.22214 160.41038,407.97216 160.07641,436.56308 160.07641,436.56308 L165.4097,436.50058 C165.4097,436.50058 165.39321,408.87817 165.26821,406.94062 165.22717,406.30454 165.41916,379.46472 166.41915,375.67295 167.62622,371.096 176.95601,367.85618 178.206,367.85595"
-                            Fill="{Binding OrganColors.Value[Ureters]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Ureter" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Ureters], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="SI"
-                            Canvas.Left="232"
-                            Canvas.Top="336"
-                            Width="132.25"
-                            Height="92"
-                            Data="M82.545883,336.71849 L92.245444,336.71849 92.245444,396.23101 199.65784,396.23101 199.65784,424.23155 71.911811,424.23155 71.911811,415.35741 191.24851,415.35741 191.24851,404.77233 82.04524,404.77233 z"
-                            Fill="{Binding OrganColors.Value[SI]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Small Intestine" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[SI], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <Path
-                            x:Name="UB"
-                            Canvas.Left="276"
-                            Canvas.Top="440"
-                            Width="45"
-                            Height="35"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Data="M675.23599,617.30662 C668.15772,611.45967 671.81281,596.26637 676.56281,595.76637 681.31281,595.26637 696.66586,595.39514 701.10417,595.94276 705.99893,596.5467 710.12991,610.25751 702.27362,617.57411 697.1649,622.33188 689.10341,629.22764 689.10341,629.22764 z"
-                            Fill="{Binding OrganColors.Value[UB]}"
-                            Stretch="Fill"
-                            Stroke="Black"
-                            StrokeThickness="5">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="Urine Bladder" />
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[UB], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Path>
-                        <TextBlock
-                            x:Name="Rmarrow_text"
-                            Canvas.Left="102"
-                            Canvas.Top="33"
-                            Width="100"
-                            Height="22"
-                            FontSize="14"
-                            Text="Red-Marrow"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Rmarrow"
-                            Canvas.Left="102"
-                            Canvas.Top="53"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Red-marrow]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Red-marrow], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Bone_text"
-                            Canvas.Left="102"
-                            Canvas.Top="103"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Bone"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Bone"
-                            Canvas.Left="102"
-                            Canvas.Top="123"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Bone]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Bone], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="EyeLens_text"
-                            Canvas.Left="102"
-                            Canvas.Top="173"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Eye-lens"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="EyeLens"
-                            Canvas.Left="102"
-                            Canvas.Top="193"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Eye-lens]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Eye-lens], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Thyroid_text"
-                            Canvas.Left="102"
-                            Canvas.Top="243"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Thyroid"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Thyroid"
-                            Canvas.Left="102"
-                            Canvas.Top="263"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Thyroid]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Thyroid], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Breast_text"
-                            Canvas.Left="102"
-                            Canvas.Top="313"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Breast"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Breast"
-                            Canvas.Left="102"
-                            Canvas.Top="333"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Breast]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Breast], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Blood_text"
-                            Canvas.Left="102"
-                            Canvas.Top="383"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Blood"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Blood"
-                            Canvas.Left="102"
-                            Canvas.Top="403"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Blood]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Blood], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
+        <Viewbox
+          Grid.RowSpan="2"
+          Grid.Column="1"
+          Stretch="Uniform">
+          <Canvas
+            Width="495"
+            Height="515"
+            Margin="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <Path
+              x:Name="Body1"
+              Canvas.Left="198"
+              Canvas.Top="106"
+              Width="95"
+              Height="373"
+              Data="M129.96091,97.999825 C129.96091,97.999825 129.91793,118.39995 129.23965,119.13476 127.73965,120.75976 83.186719,119.90793 68.186719,131.90793 53.186719,143.90793 44.157497,164.77301 41.157497,183.77301 38.157497,202.77301 39.157497,288.77301 39.157497,288.77301 39.157497,288.77301 40.157497,348.77301 40.157497,355.77301 40.157497,362.77301 43.157497,465.77301 43.157497,465.77301"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5" />
+            <Path
+              x:Name="Body2"
+              Canvas.Left="326"
+              Canvas.Top="106"
+              Width="92.25"
+              Height="374"
+              Data="M159.07965,101.26344 C159.07965,101.26344 161.2205,121.17485 162.31633,121.16346 182.04779,120.95835 230.40277,128.39928 239.73863,147.06624 249.07449,165.7332 251.56704,236.37256 251.56704,236.37256 251.56704,236.37256 252.06294,366.1876 252.39627,367.18762 252.72959,368.18764 252.90042,465.39638 252.90042,465.39638"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5" />
+            <Path
+              x:Name="Head"
+              Canvas.Left="245"
+              Width="110.973"
+              Height="114.124"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Data="M72.231609,155.24134 C100.00848,155.12034 104.87864,168.40388 104.053,201.29871 103.37094,228.47315 89.145947,237.17779 74.565106,237.59288 61.649224,237.96057 47.431692,232.2476 46.294714,229.47971 44.951332,226.20934 60.506818,217.14983 60.506818,217.14983 60.506818,217.14983 43.049069,217.06551 40.382429,216.89885 37.347003,216.70913 42.706097,209.11188 42.706097,209.11188 42.706097,209.11188 30.486194,209.57634 31.968793,205.8278 34.988195,198.19368 42.721424,191.79705&#xA;44.702916,186.51475 44.702916,186.51475 44.068819,155.36402 72.231609,155.24134 z"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="5" />
+            <Path
+              x:Name="Brain"
+              Canvas.Left="273"
+              Canvas.Top="8"
+              Width="73"
+              Height="30"
+              Data="M24.99366,2.5 C37.225903,2.5 47.178288,12.261252 47.486313,24.419266 L47.48732,24.499001 2.5,24.499001 2.501009,24.419266 C2.8090341,12.261252 12.761415,2.5 24.99366,2.5 z"
+              Fill="{Binding OrganColors.Value[Brain]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Brain" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Brain], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="ET1"
+              Canvas.Left="256"
+              Canvas.Top="50.01"
+              Width="26"
+              Height="19"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Data="M14.333333,276.82303 L27.749845,257.356 40.778408,257.35561 40.78121,276.83391 z"
+              Fill="{Binding OrganColors.Value[ET1]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="ET1" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[ET1], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="ET2"
+              Canvas.Left="279"
+              Canvas.Top="50"
+              Width="45"
+              Height="62"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Data="M1115.4962,34.219722 L1140.1875,34.219722 1140.1875,86.5 1167.5,86.5 1167.5,14.757928 1115.4962,14.757928 z"
+              Fill="{Binding OrganColors.Value[ET2]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="ET2" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[ET2], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="Trachea"
+              Canvas.Left="300"
+              Canvas.Top="109.054"
+              Width="15.167"
+              Height="83.892"
+              Data="M138,110.52671 L150,110.52671 150,183.17969 138,188.17969 z"
+              Fill="{Binding OrganColors.Value[Lung]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Trachea" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="Oesophagus"
+              Canvas.Left="310"
+              Canvas.Top="109"
+              Width="42.409"
+              Height="154.381"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Data="M1032.4574,259.41698 C1032.3669,259.32203 1024.9679,246.97464 1023.1191,242.29447 1019.9828,234.35522 1008.1996,169.87081 1008.1996,169.87081 L1003.667,115.57125 995.00149,115.57106 999.43879,175.66809 C999.43879,175.66809 1009.9362,238.69772 1013.8577,247.14591 1017.1232,254.18098 1024.733,265.882 1024.733,265.882 z"
+              Fill="{Binding OrganColors.Value[Oesophagus]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Oesophagus" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Oesophagus], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="RightLung"
+              Canvas.Left="216"
+              Canvas.Top="141"
+              Width="50"
+              Height="90"
+              Data="M55.035555,30.970968 L54.535554,67.970968 34.035554,69.470968 34.535554,47.470968 C34.535554,47.470968 34.62899,33.995479 38.341378,29.151083 42.472523,23.760241 41.697494,23.515412 47.085661,18.995528 52.945369,14.08009 56.035534,14.470968 56.035534,14.470968 z"
+              Fill="{Binding OrganColors.Value[Lung]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Lung" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lung], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="RightBronchi"
+              Canvas.Left="259"
+              Canvas.Top="152"
+              Width="45.001"
+              Height="40"
+              Data="M69.140366,74 L69.140369,88.5 28.102681,108.16667 27.974036,93.833138 z"
+              Fill="{Binding OrganColors.Value[Lung]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5" />
+            <Path
+              x:Name="LeftLung"
+              Canvas.Left="348"
+              Canvas.Top="141"
+              Width="50"
+              Height="90"
+              Data="M55.370445,30.970968 L54.870444,67.970968 34.370444,69.470968 34.870444,47.470968 C34.870444,47.470968 34.96388,33.995479 38.676268,29.151083 42.807413,23.760241 42.032384,23.515412 47.420551,18.995528 53.280259,14.08009 56.370424,14.470968 56.370424,14.470968 z"
+              Fill="{Binding OrganColors.Value[Lung]}"
+              RenderTransformOrigin="0.5,0.5"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="5">
+              <Path.RenderTransform>
+                <TransformGroup>
+                  <ScaleTransform ScaleX="-1" />
+                  <SkewTransform />
+                  <RotateTransform />
+                  <TranslateTransform />
+                </TransformGroup>
+              </Path.RenderTransform>
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Lung" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lung], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="LeftBronchi"
+              Canvas.Left="310"
+              Canvas.Top="152"
+              Width="45"
+              Height="40"
+              Data="M225,84.375 L225,99.875 265,119.375 265,103.25 z"
+              Fill="{Binding OrganColors.Value[Lung]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5" />
+            <Ellipse
+              x:Name="Heart"
+              Canvas.Left="291"
+              Canvas.Top="184"
+              Width="50"
+              Height="60"
+              Fill="{Binding OrganColors.Value[Heart]}"
+              RenderTransformOrigin="0.5,0.5"
+              Stroke="Black"
+              StrokeThickness="5">
+              <Ellipse.RenderTransform>
+                <TransformGroup>
+                  <ScaleTransform />
+                  <SkewTransform />
+                  <RotateTransform Angle="-4.15" />
+                  <TranslateTransform />
+                </TransformGroup>
+              </Ellipse.RenderTransform>
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Heart" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Heart], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Ellipse>
+            <Path
+              x:Name="Pancreas"
+              Canvas.Left="272"
+              Canvas.Top="307"
+              Width="73"
+              Height="22"
+              Data="M63.167634,442.92835 C66.38681,440.79696 94.012124,441.28304 107.87082,441.92189 121.13996,442.53356 150.94713,451.64901 107.20415,459.92151 75.921832,465.83749 63.612045,464.0238 61.33397,458.76184 59.037265,453.45684 60.070006,444.97926 63.167634,442.92835 z"
+              Fill="{Binding OrganColors.Value[Pancreas]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Pancreas" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Pancreas], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="Stomach"
+              Canvas.Left="273"
+              Canvas.Top="248"
+              Width="100"
+              Height="67"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              prism:ViewModelLocator.AutoWireViewModel="True"
+              Data="M789.22863,303.99254 C792.34236,299.99771 801.74444,287.85523 804.97141,284.45605 808.52751,280.71016 813.29322,278.11619 816.25491,280.31463 820.47088,283.44412 820.66935,292.29724 820.81387,294.20348 821.42416,302.25355 820.01708,321.64727 812.03683,334.19218 803.82299,347.10429 788.98984,345.05399 780.47182,344.74095 770.44682,344.37252 758.29785,341.85064 753.29785,338.85064 748.29785,335.85064 745.30782,329.08941 749.09791,324.83086 751.40682,322.23656 766.21421,318.01404&#xA;777.8568,311.74128 777.8568,311.74128 785.03802,309.36898 789.22863,303.99254 z"
+              Fill="{Binding OrganColors.Value[Stomach]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Stomach" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Stomach], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="Spleen"
+              Canvas.Left="367"
+              Canvas.Top="248"
+              Width="20"
+              Height="50"
+              Data="M196.62012,259.06077 C196.27107,261.81171 193.5579,287.91036 191.70153,293.07294 190.19536,297.26162 187.57498,304.17924 209.00878,299.00158 216.91284,297.09224 226.65937,273.17415 222.3801,261.69479 216.39965,245.65194 197.19636,254.51936 196.62012,259.06077 z"
+              Fill="{Binding OrganColors.Value[Spleen]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Spleen" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Spleen], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="Duodenum"
+              Canvas.Left="241.204"
+              Canvas.Top="295"
+              Width="40.592"
+              Height="36"
+              Data="M134.67694,300.52278 C129.62993,303.32247 112.73508,307.76983 108.68949,313.39785 105.74966,317.4876 106.55246,325.73599 106.55246,325.73599 L97.207862,325.73598 C97.207862,325.73598 96.952963,316.32305 99.841099,310.23182 104.15681,301.12975 129.14657,292.69785 129.14657,292.69785 z"
+              Fill="{Binding OrganColors.Value[SI]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Duodenum" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="RightColon"
+              Canvas.Left="222"
+              Canvas.Top="326"
+              Width="88.52"
+              Height="101.869"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Data="M148.47559,332.10456 L75.220763,332.10456 75.346063,419.62545 65.471233,419.63067 65.471133,322.76077 148.48279,322.77556 z"
+              Fill="{Binding OrganColors.Value[RC]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Right Colon" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[RC], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="LeftColon"
+              Canvas.Left="306.177"
+              Canvas.Top="326"
+              Width="86.646"
+              Height="102.22"
+              Data="M155.85362,335.12059 L237.49965,335.11916 237.49967,432.33234 226.08298,432.33234 226.08298,344.42605 155.85362,344.44262 z"
+              Fill="{Binding OrganColors.Value[LC]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Left Colon" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[LC], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="RectosigmoidColon"
+              Canvas.Left="331.25"
+              Canvas.Top="424.105"
+              Width="61.5"
+              Height="37.791"
+              Data="M228.79167,438.20751 L228.79167,456.99901 182.95811,456.99901 182.95811,470.99962 172.29193,470.99962 172.29193,447.99921 217.37994,447.99921 217.37994,438.20718 z"
+              Fill="{Binding OrganColors.Value[RS]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Rectosigmoid Colon" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[RS], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="Liver"
+              Canvas.Left="217"
+              Canvas.Top="240"
+              Width="105"
+              Height="55"
+              Data="M124.65055,249.09364 C138.70685,249.53867 171.39682,250.9168 147.39695,264.41727 123.39709,277.91774 82.624756,302.48363 72.788607,299.74782 66.00415,297.86081 50.517067,267.45032 55.01248,260.83744 60.412261,252.89421 110.86051,248.65704 124.65055,249.09364 z"
+              Fill="{Binding OrganColors.Value[Liver]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Liver" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Liver], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="GB"
+              Canvas.Left="272"
+              Canvas.Top="270"
+              Width="25"
+              Height="18"
+              Data="M224.79474,278.26504 C213.62168,285.06457 208.88838,289.89235 209.10769,293.65284 209.31072,297.13404 210.54186,302.19609 213.91255,301.87838 220.55427,301.25237 229.56488,286.67526 232.25651,282.79008 234.84512,279.05361 232.97859,273.28463 224.79474,278.26504 z"
+              Fill="{Binding OrganColors.Value[GB]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Gall Bladder" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[GB], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="RightKidneys"
+              Canvas.Left="261"
+              Canvas.Top="343"
+              Width="25"
+              Height="50"
+              Data="M198.72987,355.95179 C198.32332,350.22274 187.63968,344.86222 183.75135,354.6661 180.56328,362.70438 180.2109,372.84412 181.50163,376.04053 184.73778,384.05465 193.95024,383.0005 196.62661,377.54055 198.45523,373.81006 192.43888,368.04675 192.37694,366.04079 192.32074,364.22067 199.0183,360.01631 198.72987,355.95179 z"
+              Fill="{Binding OrganColors.Value[Kidneys]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Kidneys" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="RightUreter"
+              Canvas.Left="276"
+              Canvas.Top="364"
+              Width="20"
+              Height="80"
+              Data="M744.45859,531.5928 C753.24108,537.98482 754.89054,538.48833 756.2042,551.49238 757.48665,564.18757 757.31136,580.08283 757.31136,580.08283 L758.06141,604.83284 753.69045,604.83901 753.1451,580.04385 C753.1451,580.04385 752.7483,556.3159 752.14826,552.54184 751.72244,549.86359 752.02734,541.14539 742.72323,538.18503"
+              Fill="{Binding OrganColors.Value[Ureters]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Ureter" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Ureters], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="LeftKidneys"
+              Canvas.Left="313"
+              Canvas.Top="343"
+              Width="25"
+              Height="50"
+              Data="M160.43149,352.84999 C159.80691,343.73015 175.30711,340.98045 179.4542,352.97452 183.96127,366.00971 183.57949,370.93532 179.33647,379.6487 174.85682,388.848 163.20015,387.97421 161.37847,379.56531 159.7537,372.06534 167.56667,369.51722 167.43852,366.31824 167.31334,363.19323 160.99623,361.09615 160.43149,352.84999 z"
+              Fill="{Binding OrganColors.Value[Kidneys]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Kidneys" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="LeftUreter"
+              Canvas.Left="302"
+              Canvas.Top="364"
+              Width="20"
+              Height="80"
+              Data="M176.79114,360.73404 C176.79114,360.73404 161.76277,366.07618 160.84598,374.07638 160.0617,380.92033 160.16038,406.47212 160.28538,407.22214 160.41038,407.97216 160.07641,436.56308 160.07641,436.56308 L165.4097,436.50058 C165.4097,436.50058 165.39321,408.87817 165.26821,406.94062 165.22717,406.30454 165.41916,379.46472 166.41915,375.67295 167.62622,371.096 176.95601,367.85618 178.206,367.85595"
+              Fill="{Binding OrganColors.Value[Ureters]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Ureter" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Ureters], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="SI"
+              Canvas.Left="232"
+              Canvas.Top="336"
+              Width="132.25"
+              Height="92"
+              Data="M82.545883,336.71849 L92.245444,336.71849 92.245444,396.23101 199.65784,396.23101 199.65784,424.23155 71.911811,424.23155 71.911811,415.35741 191.24851,415.35741 191.24851,404.77233 82.04524,404.77233 z"
+              Fill="{Binding OrganColors.Value[SI]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Small Intestine" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[SI], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <Path
+              x:Name="UB"
+              Canvas.Left="276"
+              Canvas.Top="440"
+              Width="45"
+              Height="35"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Data="M675.23599,617.30662 C668.15772,611.45967 671.81281,596.26637 676.56281,595.76637 681.31281,595.26637 696.66586,595.39514 701.10417,595.94276 705.99893,596.5467 710.12991,610.25751 702.27362,617.57411 697.1649,622.33188 689.10341,629.22764 689.10341,629.22764 z"
+              Fill="{Binding OrganColors.Value[UB]}"
+              Stretch="Fill"
+              Stroke="Black"
+              StrokeThickness="5">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="Urine Bladder" />
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[UB], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Path>
+            <TextBlock
+              x:Name="Rmarrow_text"
+              Canvas.Left="102"
+              Canvas.Top="33"
+              Width="100"
+              Height="22"
+              FontSize="14"
+              Text="Red-Marrow"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Rmarrow"
+              Canvas.Left="102"
+              Canvas.Top="53"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Red-marrow]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Red-marrow], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Bone_text"
+              Canvas.Left="102"
+              Canvas.Top="103"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Bone"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Bone"
+              Canvas.Left="102"
+              Canvas.Top="123"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Bone]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Bone], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="EyeLens_text"
+              Canvas.Left="102"
+              Canvas.Top="173"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Eye-lens"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="EyeLens"
+              Canvas.Left="102"
+              Canvas.Top="193"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Eye-lens]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Eye-lens], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Thyroid_text"
+              Canvas.Left="102"
+              Canvas.Top="243"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Thyroid"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Thyroid"
+              Canvas.Left="102"
+              Canvas.Top="263"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Thyroid]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Thyroid], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Breast_text"
+              Canvas.Left="102"
+              Canvas.Top="313"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Breast"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Breast"
+              Canvas.Left="102"
+              Canvas.Top="333"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Breast]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Breast], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Blood_text"
+              Canvas.Left="102"
+              Canvas.Top="383"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Blood"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Blood"
+              Canvas.Left="102"
+              Canvas.Top="403"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Blood]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Blood], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
 
-                        <TextBlock
-                            x:Name="Genital_text"
-                            Canvas.Left="22"
-                            Canvas.Top="33"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Genital"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Genital"
-                            Canvas.Left="22"
-                            Canvas.Top="53"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Genital]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Genital], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Lymph_text"
-                            Canvas.Left="22"
-                            Canvas.Top="103"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Lymph"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Lymph"
-                            Canvas.Left="22"
-                            Canvas.Top="123"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Lymph]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lymph], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Skin_text"
-                            Canvas.Left="22"
-                            Canvas.Top="173"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Skin"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Skin"
-                            Canvas.Left="22"
-                            Canvas.Top="193"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Skin]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Skin], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Adipose_text"
-                            Canvas.Left="22"
-                            Canvas.Top="243"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Adipose"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Adipose"
-                            Canvas.Left="22"
-                            Canvas.Top="263"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Adipose]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Adipose], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Muscle_text"
-                            Canvas.Left="22"
-                            Canvas.Top="313"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Muscle"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Muscle"
-                            Canvas.Left="22"
-                            Canvas.Top="333"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Muscle]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Muscle], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                        <TextBlock
-                            x:Name="Other_text"
-                            Canvas.Left="22"
-                            Canvas.Top="383"
-                            Width="70"
-                            Height="22"
-                            FontSize="14"
-                            Text="Other"
-                            TextWrapping="Wrap" />
-                        <Rectangle
-                            x:Name="Other"
-                            Canvas.Left="22"
-                            Canvas.Top="403"
-                            Width="40"
-                            Height="30"
-                            Fill="{Binding OrganColors.Value[Other]}"
-                            Stroke="Black"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="3">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Other], StringFormat=\{0:0.0000E+00\}}" />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
-                        </Rectangle>
-                    </Canvas>
-                </Viewbox>
-                <Grid
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    Margin="0,20,0,60">
-                    <Rectangle
-                        Width="30"
-                        Height="250"
-                        Margin="0,38,91,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top">
-                        <Rectangle.Fill>
-                            <LinearGradientBrush>
-                                <GradientStop Color="#FF0000" />
-                                <GradientStop Offset="0.25" Color="#FFA500" />
-                                <GradientStop Offset="0.5" Color="#FFFF00" />
-                                <GradientStop Offset="0.75" Color="#00FF00" />
-                                <GradientStop Offset="1" Color="#0000FF" />
-                            </LinearGradientBrush>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                    <TextBox
-                        x:Name="ContourMax"
-                        Width="80"
-                        Height="20"
-                        Margin="0,12,75,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="{Binding ContourMax.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-                        TextAlignment="Center" />
-                    <TextBlock
-                        x:Name="MaxUnit"
-                        Width="50"
-                        Height="22"
-                        Margin="0,14,25,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="{Binding Unit.Value}"
-                        TextWrapping="Wrap" />
-                    <TextBox
-                        x:Name="ContourMin"
-                        Width="80"
-                        Height="20"
-                        Margin="0,288,75,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="{Binding ContourMin.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-                        TextAlignment="Center" />
-                    <TextBlock
-                        x:Name="MinUnit"
-                        Width="50"
-                        Height="22"
-                        Margin="0,290,25,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="{Binding Unit.Value}"
-                        TextWrapping="Wrap" />
-                </Grid>
-                <Viewbox
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    Margin="50,0,70,0"
-                    Stretch="None">
-                    <Grid Width="450" Height="100">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0*" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Slider
-                            x:Name="slider"
-                            Grid.ColumnSpan="2"
-                            Width="400"
-                            Height="25"
-                            Margin="25,0,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            AutoToolTipPlacement="BottomRight"
-                            FontSize="14"
-                            IsMoveToPointEnabled="True"
-                            IsSnapToTickEnabled="True"
-                            Maximum="{Binding EndStep.Value}"
-                            Minimum="{Binding StartStep.Value}"
-                            Ticks="{Binding TimeStep.Value}"
-                            Value="{Binding OnValue.Value}" />
-                        <TextBlock
-                            x:Name="ProgressDays"
-                            Grid.ColumnSpan="2"
-                            Width="100"
-                            Height="22"
-                            Margin="175,60,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            FontSize="14"
-                            Text="{Binding Value, ElementName=slider}"
-                            TextAlignment="Center" />
-                        <TextBlock
-                            x:Name="Day"
-                            Grid.ColumnSpan="2"
-                            Height="22"
-                            Margin="210,75,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            FontSize="14"
-                            Text="[Day]" />
-                        <Button
-                            x:Name="PlayButton"
-                            Grid.ColumnSpan="2"
-                            Width="30"
-                            Height="30"
-                            Margin="210,25,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Command="{Binding PlayCommand}"
-                            FontSize="12"
-                            ToolTip="Play/Pause">
-                            <icons:PackIconMaterial>
-                                <icons:PackIconMaterial.Style>
-                                    <Style TargetType="{x:Type icons:PackIconMaterial}">
-                                        <Setter Property="Kind" Value="Play" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsPlaying.Value}" Value="False">
-                                                <Setter Property="Kind" Value="Play" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsPlaying.Value}" Value="True">
-                                                <Setter Property="Kind" Value="Pause" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </icons:PackIconMaterial.Style>
-                            </icons:PackIconMaterial>
-                        </Button>
-                        <RepeatButton
-                            Grid.ColumnSpan="2"
-                            Width="30"
-                            Height="30"
-                            Margin="280,25,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Command="{Binding NextStepCommand}"
-                            ToolTip="Next step">
-                            <icons:PackIconMaterial Kind="SkipNext" />
-                        </RepeatButton>
-                        <RepeatButton
-                            Grid.ColumnSpan="2"
-                            Width="28"
-                            Height="30"
-                            Margin="140,25,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Command="{Binding PreviousStepCommand}"
-                            ToolTip="Previous step">
-                            <icons:PackIconMaterial Kind="SkipPrevious" />
-                        </RepeatButton>
-                    </Grid>
-                </Viewbox>
+            <TextBlock
+              x:Name="Genital_text"
+              Canvas.Left="22"
+              Canvas.Top="33"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Genital"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Genital"
+              Canvas.Left="22"
+              Canvas.Top="53"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Genital]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Genital], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Lymph_text"
+              Canvas.Left="22"
+              Canvas.Top="103"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Lymph"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Lymph"
+              Canvas.Left="22"
+              Canvas.Top="123"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Lymph]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lymph], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Skin_text"
+              Canvas.Left="22"
+              Canvas.Top="173"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Skin"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Skin"
+              Canvas.Left="22"
+              Canvas.Top="193"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Skin]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Skin], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Adipose_text"
+              Canvas.Left="22"
+              Canvas.Top="243"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Adipose"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Adipose"
+              Canvas.Left="22"
+              Canvas.Top="263"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Adipose]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Adipose], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Muscle_text"
+              Canvas.Left="22"
+              Canvas.Top="313"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Muscle"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Muscle"
+              Canvas.Left="22"
+              Canvas.Top="333"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Muscle]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Muscle], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+            <TextBlock
+              x:Name="Other_text"
+              Canvas.Left="22"
+              Canvas.Top="383"
+              Width="70"
+              Height="22"
+              FontSize="14"
+              Text="Other"
+              TextWrapping="Wrap" />
+            <Rectangle
+              x:Name="Other"
+              Canvas.Left="22"
+              Canvas.Top="403"
+              Width="40"
+              Height="30"
+              Fill="{Binding OrganColors.Value[Other]}"
+              Stroke="Black"
+              StrokeLineJoin="Round"
+              StrokeThickness="3">
+              <ToolTipService.ToolTip>
+                <StackPanel>
+                  <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Other], StringFormat=\{0:0.0000E+00\}}" />
+                </StackPanel>
+              </ToolTipService.ToolTip>
+            </Rectangle>
+          </Canvas>
+        </Viewbox>
+        <Grid
+          Grid.Row="1"
+          Grid.Column="2"
+          Margin="0,20,0,60">
+          <Rectangle
+            Width="30"
+            Height="250"
+            Margin="0,38,91,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top">
+            <Rectangle.Fill>
+              <LinearGradientBrush>
+                <GradientStop Color="#FF0000" />
+                <GradientStop Offset="0.25" Color="#FFA500" />
+                <GradientStop Offset="0.5" Color="#FFFF00" />
+                <GradientStop Offset="0.75" Color="#00FF00" />
+                <GradientStop Offset="1" Color="#0000FF" />
+              </LinearGradientBrush>
+            </Rectangle.Fill>
+          </Rectangle>
+          <TextBox
+            x:Name="ContourMax"
+            Width="80"
+            Height="20"
+            Margin="0,12,75,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="{Binding ContourMax.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+            TextAlignment="Center" />
+          <TextBlock
+            x:Name="MaxUnit"
+            Width="50"
+            Height="22"
+            Margin="0,14,25,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="{Binding Unit.Value}"
+            TextWrapping="Wrap" />
+          <TextBox
+            x:Name="ContourMin"
+            Width="80"
+            Height="20"
+            Margin="0,288,75,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="{Binding ContourMin.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+            TextAlignment="Center" />
+          <TextBlock
+            x:Name="MinUnit"
+            Width="50"
+            Height="22"
+            Margin="0,290,25,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="{Binding Unit.Value}"
+            TextWrapping="Wrap" />
+        </Grid>
+        <Viewbox
+          Grid.Row="2"
+          Grid.Column="1"
+          Margin="50,0,70,0"
+          Stretch="None">
+          <Grid Width="450" Height="100">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0*" />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Slider
+              x:Name="slider"
+              Grid.ColumnSpan="2"
+              Width="400"
+              Height="25"
+              Margin="25,0,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              AutoToolTipPlacement="BottomRight"
+              FontSize="14"
+              IsMoveToPointEnabled="True"
+              IsSnapToTickEnabled="True"
+              Maximum="{Binding EndStep.Value}"
+              Minimum="{Binding StartStep.Value}"
+              Ticks="{Binding TimeStep.Value}"
+              Value="{Binding OnValue.Value}" />
+            <TextBlock
+              x:Name="ProgressDays"
+              Grid.ColumnSpan="2"
+              Width="100"
+              Height="22"
+              Margin="175,60,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              FontSize="14"
+              Text="{Binding Value, ElementName=slider}"
+              TextAlignment="Center" />
+            <TextBlock
+              x:Name="Day"
+              Grid.ColumnSpan="2"
+              Height="22"
+              Margin="210,75,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              FontSize="14"
+              Text="[Day]" />
+            <Button
+              x:Name="PlayButton"
+              Grid.ColumnSpan="2"
+              Width="30"
+              Height="30"
+              Margin="210,25,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Command="{Binding PlayCommand}"
+              FontSize="12"
+              ToolTip="Play/Pause">
+              <icons:PackIconMaterial>
+                <icons:PackIconMaterial.Style>
+                  <Style TargetType="{x:Type icons:PackIconMaterial}">
+                    <Setter Property="Kind" Value="Play" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding IsPlaying.Value}" Value="False">
+                        <Setter Property="Kind" Value="Play" />
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding IsPlaying.Value}" Value="True">
+                        <Setter Property="Kind" Value="Pause" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </icons:PackIconMaterial.Style>
+              </icons:PackIconMaterial>
+            </Button>
+            <RepeatButton
+              Grid.ColumnSpan="2"
+              Width="30"
+              Height="30"
+              Margin="280,25,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Command="{Binding NextStepCommand}"
+              ToolTip="Next step">
+              <icons:PackIconMaterial Kind="SkipNext" />
+            </RepeatButton>
+            <RepeatButton
+              Grid.ColumnSpan="2"
+              Width="28"
+              Height="30"
+              Margin="140,25,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Command="{Binding PreviousStepCommand}"
+              ToolTip="Previous step">
+              <icons:PackIconMaterial Kind="SkipPrevious" />
+            </RepeatButton>
+          </Grid>
+        </Viewbox>
 
-                <DataGrid
-                    x:Name="dataGrid"
-                    Grid.Row="1"
-                    Grid.RowSpan="2"
-                    Width="305"
-                    Margin="70,0,0,70"
-                    HorizontalAlignment="Left"
-                    AutoGenerateColumns="False"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    CanUserReorderColumns="False"
-                    CanUserResizeColumns="False"
-                    CanUserSortColumns="False"
-                    ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
-                    FontSize="14"
-                    ItemsSource="{Binding DataValues, UpdateSourceTrigger=PropertyChanged}"
-                    SelectionUnit="Cell">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding OrganName, UpdateSourceTrigger=PropertyChanged}"
-                            Header="Organ"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="100"
-                            Binding="{Binding Value, StringFormat=\{0:0.000000E+00\}, UpdateSourceTrigger=PropertyChanged}"
-                            Header="Value"
-                            IsReadOnly="True" />
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Grid
-                    Width="430"
-                    Height="150"
-                    Margin="20,10,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top">
-                    <TextBox
-                        x:Name="FilePath"
-                        Width="340"
-                        Height="30"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="{Binding SelectPath.Value, UpdateSourceTrigger=PropertyChanged}" />
-                    <Button
-                        x:Name="OpenDiaLog"
-                        Width="80"
-                        Height="30"
-                        Margin="345,0,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Controls:ControlsHelper.ContentCharacterCasing="Normal"
-                        Command="{Binding OpenDiaLogCommand}"
-                        Content="Browse"
-                        FontSize="14"
-                        FontWeight="Normal" />
-                    <TextBlock
-                        x:Name="Dsiplay"
-                        Width="180"
-                        Height="20"
-                        Margin="0,50,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="Result Type" />
-                    <ComboBox
-                        x:Name="comboBox"
-                        Width="180"
-                        Height="30"
-                        Margin="200,0,0,75"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Bottom"
-                        FontSize="14"
-                        ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectCombo.Value}" />
-                    <TextBlock
-                        x:Name="RadioNuclide"
-                        Width="160"
-                        Height="20"
-                        Margin="0,85,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="Nuclide" />
-                    <TextBlock
-                        x:Name="IntakeRoute"
-                        Width="160"
-                        Height="20"
-                        Margin="0,120,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        Text="Route / Chemical Form" />
-                    <TextBox
-                        x:Name="NucName"
-                        Width="180"
-                        Height="30"
-                        Margin="200,80,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        IsReadOnly="True"
-                        Text="{Binding RadioNuclide.Value}" />
-                    <TextBox
-                        x:Name="Route"
-                        Width="180"
-                        Height="30"
-                        Margin="200,115,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontSize="14"
-                        IsReadOnly="True"
-                        Text="{Binding IntakeRoute.Value}" />
-                </Grid>
-            </Grid>
-        </TabItem>
+        <DataGrid
+          x:Name="dataGrid"
+          Grid.Row="1"
+          Grid.RowSpan="2"
+          Width="305"
+          Margin="70,0,0,70"
+          HorizontalAlignment="Left"
+          AutoGenerateColumns="False"
+          BorderBrush="Black"
+          BorderThickness="1"
+          CanUserReorderColumns="False"
+          CanUserResizeColumns="False"
+          CanUserSortColumns="False"
+          ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
+          FontSize="14"
+          ItemsSource="{Binding DataValues, UpdateSourceTrigger=PropertyChanged}"
+          SelectionUnit="Cell">
+          <DataGrid.Columns>
+            <DataGridTextColumn
+              Width="120"
+              Binding="{Binding OrganName, UpdateSourceTrigger=PropertyChanged}"
+              Header="Organ"
+              IsReadOnly="True" />
+            <DataGridTextColumn
+              Width="100"
+              Binding="{Binding Value, StringFormat=\{0:0.000000E+00\}, UpdateSourceTrigger=PropertyChanged}"
+              Header="Value"
+              IsReadOnly="True" />
+          </DataGrid.Columns>
+        </DataGrid>
+        <Grid
+          Width="430"
+          Height="150"
+          Margin="20,10,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top">
+          <TextBox
+            x:Name="FilePath"
+            Width="340"
+            Height="30"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="{Binding SelectPath.Value, UpdateSourceTrigger=PropertyChanged}" />
+          <Button
+            x:Name="OpenDiaLog"
+            Width="80"
+            Height="30"
+            Margin="345,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Controls:ControlsHelper.ContentCharacterCasing="Normal"
+            Command="{Binding OpenDiaLogCommand}"
+            Content="Browse"
+            FontSize="14"
+            FontWeight="Normal" />
+          <TextBlock
+            x:Name="Dsiplay"
+            Width="180"
+            Height="20"
+            Margin="0,50,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="Result Type" />
+          <ComboBox
+            x:Name="comboBox"
+            Width="180"
+            Height="30"
+            Margin="200,0,0,75"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            FontSize="14"
+            ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectCombo.Value}" />
+          <TextBlock
+            x:Name="RadioNuclide"
+            Width="160"
+            Height="20"
+            Margin="0,85,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="Nuclide" />
+          <TextBlock
+            x:Name="IntakeRoute"
+            Width="160"
+            Height="20"
+            Margin="0,120,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Text="Route / Chemical Form" />
+          <TextBox
+            x:Name="NucName"
+            Width="180"
+            Height="30"
+            Margin="200,80,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="14"
+            IsReadOnly="True"
+            Text="{Binding RadioNuclide.Value}" />
+          <TextBox
+            x:Name="Route"
+            Width="180"
+            Height="30"
+            Margin="200,115,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="14"
+            IsReadOnly="True"
+            Text="{Binding IntakeRoute.Value}" />
+        </Grid>
+      </Grid>
+    </TabItem>
 
-        <TabItem Header="Graph">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="220" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <DataGrid
-                    Grid.Row="1"
-                    Width="200"
-                    Margin="15,80,5,60"
-                    AutoGenerateColumns="False"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    CanUserAddRows="False"
-                    CanUserReorderColumns="False"
-                    CanUserResizeColumns="False"
-                    CanUserSortColumns="False"
-                    ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
-                    FontSize="14"
-                    ItemsSource="{Binding GraphList, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding IsChecked, Mode=OneWay}">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="40" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding OrganName, UpdateSourceTrigger=PropertyChanged}"
-                            Header="Organ"
-                            IsReadOnly="True" />
-                    </DataGrid.Columns>
-                </DataGrid>
+    <TabItem Header="Graph">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="50" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="220" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <DataGrid
+          Grid.Row="1"
+          Width="200"
+          Margin="15,80,5,60"
+          AutoGenerateColumns="False"
+          BorderBrush="Black"
+          BorderThickness="1"
+          CanUserAddRows="False"
+          CanUserReorderColumns="False"
+          CanUserResizeColumns="False"
+          CanUserSortColumns="False"
+          ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
+          FontSize="14"
+          ItemsSource="{Binding GraphList, UpdateSourceTrigger=PropertyChanged}"
+          SelectedItem="{Binding IsChecked, Mode=OneWay}">
+          <DataGrid.Columns>
+            <DataGridTemplateColumn Width="40" IsReadOnly="True">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTextColumn
+              Width="120"
+              Binding="{Binding OrganName, UpdateSourceTrigger=PropertyChanged}"
+              Header="Organ"
+              IsReadOnly="True" />
+          </DataGrid.Columns>
+        </DataGrid>
 
-                <oxy:PlotView
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="0,0,10,0"
-                    FontSize="14"
-                    Model="{Binding PlotModel.Value}" 
-                    />
-                <TextBox
-                    x:Name="NucName_Copy"
-                    Width="140"
-                    Height="30"
-                    Margin="0,10,70,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    FontSize="14"
-                    IsReadOnly="True"
-                    Text="{Binding RadioNuclide.Value}" />
-                <TextBox
-                    x:Name="Route_Copy"
-                    Grid.ColumnSpan="2"
-                    Width="140                     "
-                    Height="30"
-                    Margin="160,10,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    FontSize="14"
-                    IsReadOnly="True"
-                    Text="{Binding IntakeRoute.Value}" />
-                <ComboBox
-                    x:Name="comboBox_Copy"
-                    Grid.Column="1"
-                    Width="160"
-                    Height="30"
-                    Margin="90,10,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    FontSize="14"
-                    ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectCombo.Value}" />
-                <Button
-                    Grid.Row="1"
-                    Width="80"
-                    Height="30"
-                    Margin="30,25,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Controls:ControlsHelper.ContentCharacterCasing="Normal"
-                    Command="{Binding PlotRun}"
-                    Content="Plot"
-                    FontFamily="Segoe UI, Lucida Sans Unicode, Verdana"
-                    FontSize="14"
-                    FontWeight="Normal" />
-                <CheckBox
-                    Grid.Column="1"
-                    Height="18"
-                    Margin="0,18,180,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Content="Log(Vertical)"
-                    IsChecked="{Binding AxisY.Value}" />
-                <CheckBox
-                    Grid.Column="1"
-                    Height="18"
-                    Margin="0,18,40,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Content="Log(Horizontal)"
-                    IsChecked="{Binding AxisX.Value}" />
-            </Grid>
-        </TabItem>
+        <oxy:PlotView
+          Grid.Row="1"
+          Grid.Column="1"
+          Margin="0,0,10,0"
+          FontSize="14"
+          Model="{Binding PlotModel.Value}" />
+        <TextBox
+          x:Name="NucName_Copy"
+          Width="140"
+          Height="30"
+          Margin="0,10,70,0"
+          HorizontalAlignment="Right"
+          VerticalAlignment="Top"
+          FontSize="14"
+          IsReadOnly="True"
+          Text="{Binding RadioNuclide.Value}" />
+        <TextBox
+          x:Name="Route_Copy"
+          Grid.ColumnSpan="2"
+          Width="140                     "
+          Height="30"
+          Margin="160,10,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          FontSize="14"
+          IsReadOnly="True"
+          Text="{Binding IntakeRoute.Value}" />
+        <ComboBox
+          x:Name="comboBox_Copy"
+          Grid.Column="1"
+          Width="160"
+          Height="30"
+          Margin="90,10,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          FontSize="14"
+          ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
+          SelectedItem="{Binding SelectCombo.Value}" />
+        <Button
+          Grid.Row="1"
+          Width="80"
+          Height="30"
+          Margin="30,25,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          Controls:ControlsHelper.ContentCharacterCasing="Normal"
+          Command="{Binding PlotRun}"
+          Content="Plot"
+          FontFamily="Segoe UI, Lucida Sans Unicode, Verdana"
+          FontSize="14"
+          FontWeight="Normal" />
+        <CheckBox
+          Grid.Column="1"
+          Height="18"
+          Margin="0,18,180,0"
+          HorizontalAlignment="Right"
+          VerticalAlignment="Top"
+          Content="Log(Vertical)"
+          IsChecked="{Binding AxisY.Value}" />
+        <CheckBox
+          Grid.Column="1"
+          Height="18"
+          Margin="0,18,40,0"
+          HorizontalAlignment="Right"
+          VerticalAlignment="Top"
+          Content="Log(Horizontal)"
+          IsChecked="{Binding AxisX.Value}" />
+      </Grid>
+    </TabItem>
 
-    </TabControl>
+  </TabControl>
 </Controls:MetroWindow>
