@@ -1152,53 +1152,50 @@
     </TabItem>
 
     <TabItem Header="Graph">
-      <Grid>
+      <Grid Margin="20,8,20,20">
         <Grid.RowDefinitions>
           <RowDefinition Height="50" />
+          <RowDefinition Height="Auto" />
           <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="220" />
+          <ColumnDefinition Width="Auto" />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <TextBox
-          x:Name="NucName_Copy"
-          Width="140"
-          Height="30"
-          Margin="0,10,70,0"
-          HorizontalAlignment="Right"
-          VerticalAlignment="Top"
-          FontSize="14"
-          IsReadOnly="True"
-          Text="{Binding RadioNuclide.Value}" />
-        <TextBox
-          x:Name="Route_Copy"
-          Grid.ColumnSpan="2"
-          Width="140                     "
-          Height="30"
-          Margin="160,10,0,0"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Top"
-          FontSize="14"
-          IsReadOnly="True"
-          Text="{Binding IntakeRoute.Value}" />
-        <ComboBox
-          x:Name="comboBox_Copy"
-          Grid.Column="1"
-          Width="160"
-          Height="30"
-          Margin="90,10,0,0"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Top"
-          FontSize="14"
-          ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
-          SelectedItem="{Binding SelectCombo.Value}" />
+        <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal">
+          <TextBox
+            x:Name="NucName_Copy"
+            Width="140"
+            Height="30"
+            Margin="0,0,20,0"
+            FontSize="14"
+            IsReadOnly="True"
+            Text="{Binding RadioNuclide.Value}" />
+          <TextBox
+            x:Name="Route_Copy"
+            Grid.Column="1"
+            Width="140"
+            Height="30"
+            Margin="0,0,20,0"
+            FontSize="14"
+            IsReadOnly="True"
+            Text="{Binding IntakeRoute.Value}" />
+          <ComboBox
+            x:Name="comboBox_Copy"
+            Grid.Column="2"
+            Width="160"
+            Height="30"
+            Margin="0,0,20,0"
+            FontSize="14"
+            ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectCombo.Value}" />
+        </StackPanel>
 
         <DataGrid
-          Grid.Row="1"
+          Grid.Row="2"
           Width="200"
-          Margin="15,80,5,60"
+          Margin="15,0,5,60"
           AutoGenerateColumns="False"
           BorderBrush="Black"
           BorderThickness="1"
@@ -1230,9 +1227,8 @@
           Grid.Row="1"
           Width="80"
           Height="30"
-          Margin="30,25,0,0"
+          Margin="30,25,0,25"
           HorizontalAlignment="Left"
-          VerticalAlignment="Top"
           Controls:ControlsHelper.ContentCharacterCasing="Normal"
           Command="{Binding PlotRun}"
           Content="Plot"
@@ -1240,27 +1236,28 @@
           FontSize="14"
           FontWeight="Normal" />
 
-        <CheckBox
+        <StackPanel
           Grid.Column="1"
-          Height="18"
-          Margin="0,18,180,0"
           HorizontalAlignment="Right"
-          VerticalAlignment="Top"
-          Content="Log(Vertical)"
-          IsChecked="{Binding AxisY.Value}" />
-        <CheckBox
-          Grid.Column="1"
-          Height="18"
-          Margin="0,18,40,0"
-          HorizontalAlignment="Right"
-          VerticalAlignment="Top"
-          Content="Log(Horizontal)"
-          IsChecked="{Binding AxisX.Value}" />
+          Orientation="Horizontal">
+          <CheckBox
+            Height="18"
+            Margin="0,0,40,0"
+            VerticalAlignment="Center"
+            Content="Log(Vertical)"
+            IsChecked="{Binding AxisY.Value}" />
+          <CheckBox
+            Height="18"
+            Margin="0,0,40,0"
+            VerticalAlignment="Center"
+            Content="Log(Horizontal)"
+            IsChecked="{Binding AxisX.Value}" />
+        </StackPanel>
 
         <oxy:PlotView
           Grid.Row="1"
+          Grid.RowSpan="2"
           Grid.Column="1"
-          Margin="0,0,10,0"
           FontSize="14"
           Model="{Binding PlotModel.Value}" />
       </Grid>
