@@ -224,6 +224,8 @@
             Grid.ColumnSpan="5"
             Height="32"
             Margin="70,0"
+            d:Maximum="18250"
+            d:Minimum="0"
             AutoToolTipPlacement="BottomRight"
             FontSize="14"
             IsMoveToPointEnabled="True"
@@ -232,6 +234,17 @@
             Minimum="{Binding StartTimeStep.Value}"
             Ticks="{Binding TimeSteps.Value}"
             Value="{Binding CurrentTimeStep.Value}" />
+
+          <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            Content="{Binding Minimum, ElementName=TimeStepSlider}" />
+          <Label
+            Grid.Row="1"
+            Grid.Column="4"
+            HorizontalAlignment="Center"
+            Content="{Binding Maximum, ElementName=TimeStepSlider}" />
 
           <RepeatButton
             Grid.Row="1"
@@ -287,7 +300,6 @@
             Grid.Column="2"
             Orientation="Vertical">
             <TextBlock
-              Grid.ColumnSpan="2"
               Height="22"
               MinWidth="100"
               HorizontalAlignment="Center"
@@ -295,7 +307,6 @@
               Text="{Binding Value, ElementName=TimeStepSlider}"
               TextAlignment="Center" />
             <TextBlock
-              Grid.ColumnSpan="2"
               Height="22"
               HorizontalAlignment="Center"
               FontSize="14"
