@@ -79,29 +79,39 @@ namespace FlexID.Viewer
             set => SetProperty(ref onValue, value);
         }
 
-        // コンターの上限値
-        double contourMax;
+        #region コンター表示
+
+        /// <summary>
+        /// コンターの上限値。
+        /// </summary>
         public double ContourMax
         {
             get => contourMax;
             set => SetProperty(ref contourMax, value);
         }
+        private double contourMax;
 
-        // コンターの下限値
-        double contourMin;
+        /// <summary>
+        /// コンターの下限値。
+        /// </summary>
         public double ContourMin
         {
             get => contourMin;
             set => SetProperty(ref contourMin, value);
         }
+        private double contourMin;
 
-        // コンターに表示される単位
-        string unit;
-        public string Unit
+        /// <summary>
+        /// コンターに表示される単位。
+        /// </summary>
+        public string ContourUnit
         {
-            get => unit;
-            set => SetProperty(ref unit, value);
+            get => contourUnit;
+            set => SetProperty(ref contourUnit, value);
         }
+        private string contourUnit;
+
+        #endregion
 
         #region 出力タイムステップスライダー
         DoubleCollection timeStep;
@@ -264,7 +274,7 @@ namespace FlexID.Viewer
             IntakeRoute = "";
             ContourMax = 0;
             ContourMin = 0;
-            Unit = "";
+            ContourUnit = "-";
             OnValue = 0;
             TimeStep = null;
             StartStep = 0;
@@ -333,19 +343,19 @@ namespace FlexID.Viewer
                 switch (selectCombo)
                 {
                     case "Dose":
-                        Unit = "[Sv/Bq]";
+                        ContourUnit = "Sv/Bq";
                         break;
 
                     case "DoseRate":
-                        Unit = "[Sv/h]";
+                        ContourUnit = "Sv/h";
                         break;
 
                     case "Retention":
-                        Unit = "[Bq/Bq]";
+                        ContourUnit = "Bq/Bq";
                         break;
 
                     case "CumulativeActivity":
-                        Unit = "[Bq]";
+                        ContourUnit = "Bq";
                         break;
                 }
 

@@ -20,14 +20,24 @@ namespace FlexID.Viewer.ViewModels
         // 現在スライダーが示している時間
         public ReactiveProperty<double> OnValue { get; }
 
-        // コンターの上限値
-        public ReactiveProperty<double> ContourMax { get; }
+        #region コンター表示
 
-        // コンターの下限値
-        public ReactiveProperty<double> ContourMin { get; }
+        /// <summary>
+        /// コンターの上限値。
+        /// </summary>
+        public ReactivePropertySlim<double> ContourMax { get; }
 
-        // コンターに表示される単位
-        public ReactiveProperty<string> Unit { get; } = new ReactiveProperty<string>("[-]");
+        /// <summary>
+        /// コンターの下限値。
+        /// </summary>
+        public ReactivePropertySlim<double> ContourMin { get; }
+
+        /// <summary>
+        /// コンターに表示される単位。
+        /// </summary>
+        public ReadOnlyReactivePropertySlim<string> ContourUnit { get; }
+
+        #endregion
 
         // データグリッドに表示する生の計算値
         public ReadOnlyReactiveCollection<CalcData> DataValues { get; }
@@ -89,9 +99,15 @@ namespace FlexID.Viewer.ViewModels
 
             SelectPath = this.model.ToReactivePropertyAsSynchronized(x => x.SelectPath);
             OnValue = this.model.ToReactivePropertyAsSynchronized(x => x.OnValue);
-            ContourMax = this.model.ToReactivePropertyAsSynchronized(x => x.ContourMax);
-            ContourMin = this.model.ToReactivePropertyAsSynchronized(x => x.ContourMin);
-            Unit = this.model.ObserveProperty(x => x.Unit).ToReactiveProperty();
+
+            #region コンター表示
+
+            ContourMax = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMax);
+            ContourMin = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMin);
+            ContourUnit = this.model.ObserveProperty(x => x.ContourUnit).ToReadOnlyReactivePropertySlim();
+
+            #endregion
+
             AxisX = this.model.ToReactivePropertyAsSynchronized(x => x.AxisX);
             AxisY = this.model.ToReactivePropertyAsSynchronized(x => x.AxisY);
 

@@ -10,28 +10,33 @@
 
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
+      <RowDefinition Height="30" />
+      <RowDefinition Height="250" />
+      <RowDefinition Height="30" />
     </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="50" />
+      <ColumnDefinition Width="30" />
+      <ColumnDefinition MinWidth="60" />
+    </Grid.ColumnDefinitions>
 
-    <StackPanel Grid.Row="0" Orientation="Horizontal">
-      <TextBox
-        Width="80"
-        Height="30"
-        VerticalContentAlignment="Center"
-        FontSize="{Binding FontSize, ElementName=Root}"
-        Text="{Binding ContourMax, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-        TextAlignment="Center" />
-      <Label MinWidth="50" Content="{Binding ContourUnit, ElementName=Root}" />
-    </StackPanel>
+    <TextBox
+      Grid.Row="0"
+      Grid.Column="0"
+      Grid.ColumnSpan="2"
+      FontSize="{Binding FontSize, ElementName=Root}"
+      Text="{Binding ContourMax, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+      TextAlignment="Center" />
+    <Label
+      Grid.Row="0"
+      Grid.Column="2"
+      d:Content="[Bq/Bq]">
+      <TextBlock>
+        <Run Text="[" /><Run Text="{Binding ContourUnit, ElementName=Root, Mode=OneWay}" /><Run Text="]" />
+      </TextBlock>
+    </Label>
 
-    <Rectangle
-      Grid.Row="1"
-      Width="30"
-      Height="250"
-      HorizontalAlignment="Center"
-      VerticalAlignment="Top">
+    <Rectangle Grid.Row="1" Grid.Column="1">
       <Rectangle.Fill>
         <LinearGradientBrush>
           <GradientStop Offset="0.00" Color="#FF0000" />
@@ -43,16 +48,21 @@
       </Rectangle.Fill>
     </Rectangle>
 
-    <StackPanel Grid.Row="2" Orientation="Horizontal">
-      <TextBox
-        Width="80"
-        Height="30"
-        VerticalContentAlignment="Center"
-        FontSize="{Binding FontSize, ElementName=Root}"
-        Text="{Binding ContourMin, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-        TextAlignment="Center" />
-      <Label MinWidth="50" Content="{Binding ContourUnit, ElementName=Root}" />
-    </StackPanel>
+    <TextBox
+      Grid.Row="2"
+      Grid.Column="0"
+      Grid.ColumnSpan="2"
+      FontSize="{Binding FontSize, ElementName=Root}"
+      Text="{Binding ContourMin, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+      TextAlignment="Center" />
+    <Label
+      Grid.Row="2"
+      Grid.Column="2"
+      d:Content="[Sv/h]">
+      <TextBlock>
+        <Run Text="[" /><Run Text="{Binding ContourUnit, ElementName=Root, Mode=OneWay}" /><Run Text="]" />
+      </TextBlock>
+    </Label>
   </Grid>
 
 </UserControl>

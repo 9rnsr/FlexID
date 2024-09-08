@@ -192,7 +192,7 @@
           VerticalAlignment="Center"
           ContourMax="{Binding ContourMax.Value}"
           ContourMin="{Binding ContourMin.Value}"
-          ContourUnit="{Binding Unit.Value}"
+          ContourUnit="{Binding ContourUnit.Value}"
           FontSize="14" />
 
         <Grid
