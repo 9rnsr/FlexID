@@ -228,10 +228,10 @@
             FontSize="14"
             IsMoveToPointEnabled="True"
             IsSnapToTickEnabled="True"
-            Maximum="{Binding EndStep.Value}"
-            Minimum="{Binding StartStep.Value}"
-            Ticks="{Binding TimeStep.Value}"
-            Value="{Binding OnValue.Value}" />
+            Maximum="{Binding EndTimeStep.Value}"
+            Minimum="{Binding StartTimeStep.Value}"
+            Ticks="{Binding TimeSteps.Value}"
+            Value="{Binding CurrentTimeStep.Value}" />
 
           <RepeatButton
             Grid.Row="1"

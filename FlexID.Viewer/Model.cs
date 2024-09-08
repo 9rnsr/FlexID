@@ -164,26 +164,26 @@ namespace FlexID.Viewer
         /// <summary>
         /// 出力タイムステップ。
         /// </summary>
-        public IReadOnlyList<double> TimeStep
+        public IReadOnlyList<double> TimeSteps
         {
-            get => timeStep;
-            private set => SetProperty(ref timeStep, value);
+            get => timeSteps;
+            private set => SetProperty(ref timeSteps, value);
         }
-        private IReadOnlyList<double> timeStep = Array.Empty<double>();
+        private IReadOnlyList<double> timeSteps = Array.Empty<double>();
 
-        private double StartStep => TimeStep.Count == 0 ? 0 : TimeStep[0];
+        private double StartTimeStep => TimeSteps.Count == 0 ? 0 : TimeSteps[0];
 
-        private double EndStep => TimeStep.Count == 0 ? 0 : TimeStep[TimeStep.Count - 1];
+        private double EndTimeStep => TimeSteps.Count == 0 ? 0 : TimeSteps[TimeSteps.Count - 1];
 
         /// <summary>
         /// 現在スライダーが示している時間。
         /// </summary>
-        public double OnValue
+        public double CurrentTimeStep
         {
-            get => onValue;
-            set => SetProperty(ref onValue, value);
+            get => currentTimeStep;
+            set => SetProperty(ref currentTimeStep, value);
         }
-        private double onValue = 0;
+        private double currentTimeStep = 0;
 
         /// <summary>
         /// アニメーション再生状態を示す。<see langword="true"/>：再生中、<see langword="false"/>：停止中。
@@ -274,19 +274,19 @@ namespace FlexID.Viewer
         /// </summary>
         public async void Playing()
         {
-            if (TimeStep.Count == 0)
+            if (TimeSteps.Count == 0)
                 return;
 
             if (!IsPlaying)
             {
                 // 停止時の処理。
                 IsPlaying = true;
-                foreach (var x in TimeStep)
+                foreach (var x in TimeSteps)
                 {
-                    if (OnValue >= x)
+                    if (CurrentTimeStep >= x)
                         continue;
 
-                    OnValue = x;
+                    CurrentTimeStep = x;
                     await Task.Delay(200);
 
                     if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
@@ -307,17 +307,17 @@ namespace FlexID.Viewer
         /// </summary>
         public void NextStep()
         {
-            if (TimeStep.Count == 0)
+            if (TimeSteps.Count == 0)
                 return;
-            if (OnValue == EndStep)
+            if (CurrentTimeStep == EndTimeStep)
                 return;
 
             IsPlaying = false;
-            for (int i = 0; i < TimeStep.Count; i++)
+            for (int i = 0; i < TimeSteps.Count; i++)
             {
-                if (OnValue == TimeStep[i])
+                if (CurrentTimeStep == TimeSteps[i])
                 {
-                    OnValue = TimeStep[i + 1];
+                    CurrentTimeStep = TimeSteps[i + 1];
                     break;
                 }
             }
@@ -328,17 +328,17 @@ namespace FlexID.Viewer
         /// </summary>
         public void PreviousStep()
         {
-            if (TimeStep.Count == 0)
+            if (TimeSteps.Count == 0)
                 return;
-            if (OnValue == StartStep)
+            if (CurrentTimeStep == StartTimeStep)
                 return;
 
             IsPlaying = false;
-            for (int i = 0; i < TimeStep.Count; i++)
+            for (int i = 0; i < TimeSteps.Count; i++)
             {
-                if (OnValue == TimeStep[i])
+                if (CurrentTimeStep == TimeSteps[i])
                 {
-                    OnValue = TimeStep[i - 1];
+                    CurrentTimeStep = TimeSteps[i - 1];
                     break;
                 }
             }
@@ -356,8 +356,8 @@ namespace FlexID.Viewer
             ContourMin = 0;
             ContourUnit = "-";
 
-            TimeStep = Array.Empty<double>();
-            OnValue = 0;
+            TimeSteps = Array.Empty<double>();
+            CurrentTimeStep = 0;
 
             _dataValues.Clear();
             _graphList.Clear();
@@ -527,9 +527,9 @@ namespace FlexID.Viewer
                     continue;
                 steps.Add(double.Parse(line[0]));
             }
-            TimeStep = steps.AsReadOnly();
+            TimeSteps = steps.AsReadOnly();
 
-            OnValue = TimeStep.First();
+            CurrentTimeStep = TimeSteps.First();
         }
 
         /// <summary>
@@ -545,7 +545,7 @@ namespace FlexID.Viewer
                 var line = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 if (line.Length < 1)
                     continue;
-                if (OnValue == double.Parse(line[0]))
+                if (CurrentTimeStep == double.Parse(line[0]))
                 {
                     _dataValues.Clear();
                     _graphList.Clear();

@@ -57,14 +57,14 @@ namespace FlexID.Viewer.ViewModels
 
         #region 出力タイムステップスライダー
 
-        public ReadOnlyReactivePropertySlim<IReadOnlyList<double>> TimeStep { get; }
-        public ReadOnlyReactivePropertySlim<double> StartStep { get; }
-        public ReadOnlyReactivePropertySlim<double> EndStep { get; }
+        public ReadOnlyReactivePropertySlim<IReadOnlyList<double>> TimeSteps { get; }
+        public ReadOnlyReactivePropertySlim<double> StartTimeStep { get; }
+        public ReadOnlyReactivePropertySlim<double> EndTimeStep { get; }
 
         /// <summary>
         /// 現在スライダーが示している時間。
         /// </summary>
-        public ReactiveProperty<double> OnValue { get; }
+        public ReactiveProperty<double> CurrentTimeStep { get; }
 
         /// <summary>
         /// アニメーション再生状態を示す。<see langword="true"/>：再生中、<see langword="false"/>：停止中。
@@ -146,13 +146,13 @@ namespace FlexID.Viewer.ViewModels
 
             #region 出力タイムステップスライダー
 
-            TimeStep = this.model.ObserveProperty(x => x.TimeStep).ToReadOnlyReactivePropertySlim();
-            StartStep = TimeStep.Select(ts => ts.Count == 0 ? 0 : ts[0]).ToReadOnlyReactivePropertySlim();
-            EndStep = TimeStep.Select(ts => ts.Count == 0 ? 0 : ts[ts.Count - 1]).ToReadOnlyReactivePropertySlim();
+            TimeSteps = this.model.ObserveProperty(x => x.TimeSteps).ToReadOnlyReactivePropertySlim();
+            StartTimeStep = TimeSteps.Select(ts => ts.Count == 0 ? 0 : ts[0]).ToReadOnlyReactivePropertySlim();
+            EndTimeStep = TimeSteps.Select(ts => ts.Count == 0 ? 0 : ts[ts.Count - 1]).ToReadOnlyReactivePropertySlim();
 
-            OnValue = this.model.ToReactivePropertyAsSynchronized(x => x.OnValue);
+            CurrentTimeStep = this.model.ToReactivePropertyAsSynchronized(x => x.CurrentTimeStep);
 
-            OnValue.Subscribe(_ => this.model.GetValues());
+            CurrentTimeStep.Subscribe(_ => this.model.GetValues());
 
             IsPlaying = this.model.ObserveProperty(x => x.IsPlaying).ToReadOnlyReactiveProperty();
 
