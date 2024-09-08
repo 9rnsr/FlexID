@@ -396,13 +396,13 @@
             Margin="0,0,40,0"
             VerticalAlignment="Center"
             Content="Log(Vertical)"
-            IsChecked="{Binding AxisY.Value}" />
+            IsChecked="{Binding IsLogAxisY.Value}" />
           <CheckBox
             Height="18"
             Margin="0,0,40,0"
             VerticalAlignment="Center"
             Content="Log(Horizontal)"
-            IsChecked="{Binding AxisX.Value}" />
+            IsChecked="{Binding IsLogAxisX.Value}" />
         </StackPanel>
 
         <oxy:PlotView
@@ -410,7 +410,7 @@
           Grid.RowSpan="2"
           Grid.Column="1"
           FontSize="14"
-          Model="{Binding PlotModel.Value}" />
+          Model="{Binding PlotModel}" />
       </Grid>
     </TabItem>
   </TabControl>

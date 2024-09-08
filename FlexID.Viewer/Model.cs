@@ -35,6 +35,55 @@ namespace FlexID.Viewer
                     FixList.Add(Lines[i], Lines[0]);
                 }
             }
+
+            #region グラフ表示
+
+            LogAxisX = new LogarithmicAxis()
+            {
+                Position = AxisPosition.Bottom,
+                MajorGridlineStyle = LineStyle.Automatic,
+                MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
+                MinorGridlineStyle = LineStyle.Dot,
+                MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
+                TitleFontSize = 14,
+                Title = "Days after Intake"
+            };
+            LogAxisY = new LogarithmicAxis()
+            {
+                Position = AxisPosition.Left,
+                MajorGridlineStyle = LineStyle.Automatic,
+                MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
+                MinorGridlineStyle = LineStyle.Dot,
+                MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
+                TitleFontSize = 14,
+                AxisTitleDistance = 10,
+            };
+
+            LinAxisX = new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                MajorGridlineStyle = LineStyle.Automatic,
+                MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
+                MinorGridlineStyle = LineStyle.Dot,
+                MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
+                TitleFontSize = 14,
+                Title = "Days after Intake"
+            };
+            LinAxisY = new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                MajorGridlineStyle = LineStyle.Automatic,
+                MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
+                MinorGridlineStyle = LineStyle.Dot,
+                MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
+                TitleFontSize = 14,
+                AxisTitleDistance = 10,
+            };
+
+            PlotModel.Axes.Add(LogAxisX);
+            PlotModel.Axes.Add(LogAxisY);
+
+            #endregion
         }
 
         // 表示する出力ファイル
@@ -170,33 +219,55 @@ namespace FlexID.Viewer
             set => SetProperty(ref organColors, value);
         }
 
+        #region グラフ表示
+
         string graphLabel;
         public string GraphLabel
         {
             get => graphLabel;
-            set => SetProperty(ref graphLabel, value);
+            set
+            {
+                if (value == "Dose[Sv/Bq]")
+                    value = "Effective/Equivalent Dose[Sv/Bq]";
+                LogAxisY.Title = value;
+                LinAxisY.Title = value;
+                PlotModel.InvalidatePlot(false);
+                SetProperty(ref graphLabel, value);
+            }
         }
 
-        PlotModel plotModel;
-        public PlotModel PlotModel
-        {
-            get => plotModel;
-            set => SetProperty(ref plotModel, value);
-        }
+        public PlotModel PlotModel { get; } = new PlotModel();
 
-        bool axisX = true;
-        public bool AxisX
-        {
-            get => axisX;
-            set => SetProperty(ref axisX, value);
-        }
-        bool axisY = true;
-        public bool AxisY
-        {
-            get => axisY;
-            set => SetProperty(ref axisY, value);
-        }
+        private LogarithmicAxis LogAxisX { get; }
+        private LogarithmicAxis LogAxisY { get; }
+        private LinearAxis LinAxisX { get; }
+        private LinearAxis LinAxisY { get; }
 
+        public bool IsLogAxisX
+        {
+            get => isLogAxisX;
+            set
+            {
+                PlotModel.Axes[0] = (value ? (Axis)LogAxisX : LinAxisX);
+                PlotModel.InvalidatePlot(false);
+                SetProperty(ref isLogAxisX, value);
+            }
+        }
+        private bool isLogAxisX = true;
+
+        public bool IsLogAxisY
+        {
+            get => isLogAxisY;
+            set
+            {
+                PlotModel.Axes[1] = (value ? (Axis)LogAxisY : LinAxisY);
+                PlotModel.InvalidatePlot(false);
+                SetProperty(ref isLogAxisY, value);
+            }
+        }
+        private bool isLogAxisY = true;
+
+        #endregion
 
         /// <summary>
         /// 再生・停止制御
@@ -288,7 +359,7 @@ namespace FlexID.Viewer
             _comboList.Clear();
             OrganValues = new Dictionary<string, double>();
             OrganColors = new Dictionary<string, string>();
-            PlotModel = new PlotModel();
+            PlotModel.Series.Clear();
 
             if (ResultFilePath != "")
             {
@@ -336,7 +407,7 @@ namespace FlexID.Viewer
         /// </summary>
         public void SelectPattern(string selectCombo)
         {
-            PlotModel = new PlotModel();
+            PlotModel.Series.Clear();
             GraphLabel = "";
             pattern = selectCombo;
 
@@ -613,7 +684,10 @@ namespace FlexID.Viewer
                 return;
 
             var Time = _calcResults[0];
-            PlotModel = new PlotModel();
+
+            GraphLabel = pattern + _calcResults[1].Unit;
+
+            PlotModel.Series.Clear();
             foreach (var name in plotlist)
             {
                 var scatter = new ScatterSeries();
@@ -621,9 +695,6 @@ namespace FlexID.Viewer
                 {
                     if (name == _calcResults[i].Name)
                     {
-                        GraphLabel = pattern + _calcResults[i].Unit;
-                        if (GraphLabel == "Dose[Sv/Bq]")
-                            GraphLabel = "Effective/Equivalent Dose[Sv/Bq]";
                         scatter.Title = name;
                         for (int j = 0; j < Time.Values.Length; j++)
                         {
@@ -637,65 +708,7 @@ namespace FlexID.Viewer
                 }
             }
 
-            if (AxisX)
-            {
-                var x = new LogarithmicAxis()
-                {
-                    Position = AxisPosition.Bottom,
-                    MajorGridlineStyle = LineStyle.Automatic,
-                    MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-                    MinorGridlineStyle = LineStyle.Dot,
-                    MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-                    TitleFontSize = 14,
-                    Title = "Days after Intake"
-                };
-                PlotModel.Axes.Add(x);
-            }
-            else
-            {
-                var x = new LinearAxis()
-                {
-                    Position = AxisPosition.Bottom,
-                    MajorGridlineStyle = LineStyle.Automatic,
-                    MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-                    MinorGridlineStyle = LineStyle.Dot,
-                    MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-                    TitleFontSize = 14,
-                    Title = "Days after Intake"
-                };
-                PlotModel.Axes.Add(x);
-            }
-
-            if (AxisY)
-            {
-                var y = new LogarithmicAxis()
-                {
-                    Position = AxisPosition.Left,
-                    MajorGridlineStyle = LineStyle.Automatic,
-                    MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-                    MinorGridlineStyle = LineStyle.Dot,
-                    MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-                    TitleFontSize = 14,
-                    AxisTitleDistance = 10,
-                    Title = GraphLabel
-                };
-                PlotModel.Axes.Add(y);
-            }
-            else
-            {
-                var y = new LinearAxis()
-                {
-                    Position = AxisPosition.Left,
-                    MajorGridlineStyle = LineStyle.Automatic,
-                    MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-                    MinorGridlineStyle = LineStyle.Dot,
-                    MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-                    TitleFontSize = 14,
-                    AxisTitleDistance = 10,
-                    Title = GraphLabel
-                };
-                PlotModel.Axes.Add(y);
-            }
+            PlotModel.InvalidatePlot(true);
         }
     }
 

@@ -77,11 +77,20 @@ namespace FlexID.Viewer.ViewModels
         public ReactiveProperty<string> IntakeRoute { get; }
         public ReadOnlyReactiveProperty<string> GraphLabel { get; }
         public ReadOnlyReactiveCollection<GraphList> GraphList { get; }
-        public ReadOnlyReactiveProperty<PlotModel> PlotModel { get; }
 
-        public ReactiveProperty<bool> AxisX { get; }
-        public ReactiveProperty<bool> AxisY { get; }
+        #region グラフ表示
 
+        public PlotModel PlotModel => this.model.PlotModel;
+
+        public ReactivePropertySlim<bool> IsLogAxisX { get; }
+        public ReactivePropertySlim<bool> IsLogAxisY { get; }
+
+        #endregion
+
+        /// <summary>
+        /// コンストラクタ。
+        /// </summary>
+        /// <param name="model"></param>
         public MainWindowViewModel(Model model)
         {
             this.model = model;
@@ -100,7 +109,6 @@ namespace FlexID.Viewer.ViewModels
             StartStep = this.model.ObserveProperty(x => x.StartStep).ToReadOnlyReactiveProperty();
             EndStep = this.model.ObserveProperty(x => x.EndStep).ToReadOnlyReactiveProperty();
             GraphLabel = this.model.ObserveProperty(x => x.GraphLabel).ToReadOnlyReactiveProperty();
-            PlotModel = this.model.ObserveProperty(x => x.PlotModel).ToReadOnlyReactiveProperty();
 
             #region 出力ファイル情報
 
@@ -135,8 +143,12 @@ namespace FlexID.Viewer.ViewModels
 
             #endregion
 
-            AxisX = this.model.ToReactivePropertyAsSynchronized(x => x.AxisX);
-            AxisY = this.model.ToReactivePropertyAsSynchronized(x => x.AxisY);
+            #region グラフ表示
+
+            IsLogAxisX = this.model.ToReactivePropertySlimAsSynchronized(m => m.IsLogAxisX);
+            IsLogAxisY = this.model.ToReactivePropertySlimAsSynchronized(m => m.IsLogAxisY);
+
+            #endregion
 
             PlayCommand.Subscribe(() => this.model.Playing());
             NextStepCommand.Subscribe(() => this.model.NextStep());
@@ -168,23 +180,6 @@ namespace FlexID.Viewer.ViewModels
             {
                 if (DataValues.Count != 0)
                     this.model.SetColor();
-            });
-
-            AxisX.Subscribe(_ =>
-            {
-                if (PlotModel.Value == null)
-                    return;
-                if (PlotModel.Value.Series.Count < 1)
-                    return;
-                this.model.Graph();
-            });
-            AxisY.Subscribe(_ =>
-            {
-                if (PlotModel.Value == null)
-                    return;
-                if (PlotModel.Value.Series.Count < 1)
-                    return;
-                this.model.Graph();
             });
         }
 
