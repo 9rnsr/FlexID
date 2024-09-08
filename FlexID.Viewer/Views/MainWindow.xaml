@@ -31,40 +31,49 @@
 
   <TabControl Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}">
     <TabItem Header="Model">
-      <Grid>
+      <Grid Margin="20,8,20,20">
         <Grid.RowDefinitions>
-          <RowDefinition Height="170" />
+          <RowDefinition Height="Auto" />
           <RowDefinition Height="*" />
-          <RowDefinition Height="120" />
+          <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="450" />
           <ColumnDefinition />
-          <ColumnDefinition Width="160" />
+          <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Grid
-          Width="430"
-          Height="150"
-          Margin="20,10,0,0"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Top">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="2*" />
+          </Grid.ColumnDefinitions>
 
           <TextBox
             x:Name="FilePath"
-            Width="340"
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
             Height="30"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             FontSize="14"
             Text="{Binding SelectPath.Value, UpdateSourceTrigger=PropertyChanged}" />
           <Button
             x:Name="OpenDiaLog"
-            Width="80"
+            Grid.Row="0"
+            Grid.Column="3"
             Height="30"
-            Margin="345,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             Controls:ControlsHelper.ContentCharacterCasing="Normal"
             Command="{Binding OpenDiaLogCommand}"
             Content="Browse"
@@ -73,60 +82,60 @@
 
           <TextBlock
             x:Name="Dsiplay"
-            Width="180"
-            Height="20"
-            Margin="0,50,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            Grid.Row="2"
+            Grid.Column="0"
+            VerticalAlignment="Center"
             FontSize="14"
             Text="Result Type" />
           <ComboBox
             x:Name="comboBox"
+            Grid.Row="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
             Width="180"
             Height="30"
-            Margin="200,0,0,75"
             HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
+            VerticalAlignment="Center"
             FontSize="14"
             ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectCombo.Value}" />
 
           <TextBlock
             x:Name="RadioNuclide"
-            Width="160"
-            Height="20"
-            Margin="0,85,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            Grid.Row="4"
+            Grid.Column="0"
+            VerticalAlignment="Center"
             FontSize="14"
             Text="Nuclide" />
           <TextBox
             x:Name="NucName"
+            Grid.Row="4"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
             Width="180"
             Height="30"
-            Margin="200,80,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             FontSize="14"
             IsReadOnly="True"
             Text="{Binding RadioNuclide.Value}" />
 
           <TextBlock
             x:Name="IntakeRoute"
-            Width="160"
-            Height="20"
-            Margin="0,120,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            Grid.Row="6"
+            Grid.Column="0"
+            VerticalAlignment="Center"
             FontSize="14"
             Text="Route / Chemical Form" />
           <TextBox
             x:Name="Route"
+            Grid.Row="6"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
             Width="180"
             Height="30"
-            Margin="200,115,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             FontSize="14"
             IsReadOnly="True"
             Text="{Binding IntakeRoute.Value}" />
@@ -136,9 +145,7 @@
           x:Name="dataGrid"
           Grid.Row="1"
           Grid.RowSpan="2"
-          Width="305"
-          Margin="70,0,0,70"
-          HorizontalAlignment="Left"
+          Margin="70,16,70,70"
           AutoGenerateColumns="False"
           BorderBrush="Black"
           BorderThickness="1"
