@@ -14,6 +14,29 @@ namespace FlexID.Viewer
 {
     public class Model : BindableBase
     {
+        /// <summary>
+        /// コンストラクタ。
+        /// </summary>
+        public Model()
+        {
+            // モデル図に表示するための統一臓器名リスト
+            var FixListLines = File.ReadAllLines(@"lib/FixList.txt");
+
+            IntegratedOrgans = new List<string>();
+
+            FixList = new Dictionary<string, string>();
+
+            foreach (var x in FixListLines)
+            {
+                var Lines = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                IntegratedOrgans.Add(Lines[0]);
+                for (int i = 1; i < Lines.Length; i++)
+                {
+                    FixList.Add(Lines[i], Lines[0]);
+                }
+            }
+        }
+
         // 表示する出力ファイル
         private IEnumerable<string> TargetFile;
 
@@ -21,10 +44,10 @@ namespace FlexID.Viewer
         string[] Organs;
 
         // モデル図に表示するための統一臓器名リスト
-        readonly string[] FixFile = File.ReadAllLines(@"lib/FixList.txt");
+        private List<string> IntegratedOrgans { get; }
 
         // 臓器名をfixするためにテキストから読込んだリスト 
-        private Dictionary<string, string> FixList = new Dictionary<string, string>();
+        private Dictionary<string, string> FixList { get; }
 
         public ObservableCollection<CalcData> _dataValues = new ObservableCollection<CalcData>();
         public ObservableCollection<GraphList> _graphList = new ObservableCollection<GraphList>();
@@ -482,12 +505,16 @@ namespace FlexID.Viewer
         /// </summary>
         public void SetColor()
         {
-            NameFix();
+            OrganValues = new Dictionary<string, double>();
+            foreach (var x in IntegratedOrgans)
+            {
+                OrganValues.Add(x, 0);
+            }
 
             foreach (var x in _dataValues)
             {
-                if (FixList.ContainsKey(x.OrganName))
-                    OrganValues[FixList[x.OrganName]] += x.Value;
+                if (FixList.TryGetValue(x.OrganName, out var integratedOrgan))
+                    OrganValues[integratedOrgan] += x.Value;
             }
 
             OrganColors = new Dictionary<string, string>();
@@ -654,24 +681,6 @@ namespace FlexID.Viewer
                     Title = GraphLabel
                 };
                 PlotModel.Axes.Add(y);
-            }
-        }
-
-        /// <summary>
-        /// 放射能の臓器名と線量の臓器名を統一する処理
-        /// </summary>
-        private void NameFix()
-        {
-            OrganValues = new Dictionary<string, double>();
-            FixList = new Dictionary<string, string>();
-            foreach (var x in FixFile)
-            {
-                var Lines = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                OrganValues.Add(Lines[0], 0);
-                for (int i = 1; i < Lines.Length; i++)
-                {
-                    FixList.Add(Lines[i], Lines[0]);
-                }
             }
         }
     }
