@@ -99,7 +99,6 @@ namespace FlexID.Viewer
         private Dictionary<string, string> FixList { get; }
 
         public ObservableCollection<CalcData> _dataValues = new ObservableCollection<CalcData>();
-        public ObservableCollection<GraphList> _graphList = new ObservableCollection<GraphList>();
         public ObservableCollection<string> _comboList = new ObservableCollection<string>();
 
         private string pattern = "";
@@ -270,6 +269,8 @@ namespace FlexID.Viewer
             }
         }
 
+        public ObservableCollection<RegionData> Regions { get; } = new ObservableCollection<RegionData>();
+
         public PlotModel PlotModel { get; } = new PlotModel();
 
         private LogarithmicAxis LogAxisX { get; }
@@ -381,10 +382,11 @@ namespace FlexID.Viewer
             CurrentTimeStep = 0;
 
             _dataValues.Clear();
-            _graphList.Clear();
             _comboList.Clear();
             OrganValues = new Dictionary<string, double>();
             OrganColors = new Dictionary<string, string>();
+
+            Regions.Clear();
             PlotModel.Series.Clear();
 
             if (ResultFilePath != "")
@@ -433,7 +435,9 @@ namespace FlexID.Viewer
         /// </summary>
         public void SelectPattern(string selectCombo)
         {
+            Regions.Clear();
             PlotModel.Series.Clear();
+
             GraphLabel = "";
             pattern = selectCombo;
 
@@ -571,11 +575,8 @@ namespace FlexID.Viewer
             var values = valuesLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
             _dataValues.Clear();
-            _graphList.Clear();
             for (int i = 2; i < Organs.Length; i++)
                 _dataValues.Add(new CalcData(Organs[i], double.Parse(values[i])));
-            for (int i = 1; i < Organs.Length; i++) // グラフタブに表示するリストはWholeBodyを入れるため別処理
-                _graphList.Add(new GraphList(Organs[i], false));
 
             SetColor();
         }
@@ -596,6 +597,7 @@ namespace FlexID.Viewer
 
             patternUnit = units[1];
 
+            Regions.Clear();
             PlotModel.Series.Clear();
 
             for (int i = 0; i < regions.Count; i++)
@@ -618,6 +620,7 @@ namespace FlexID.Viewer
                 var serie = new ScatterSeries()
                 {
                     Title = regions[i],
+                    IsVisible = false,  // 初期状態は非表示。
                 };
                 for (int j = 0; j < calcTimes.Count; j++)
                 {
@@ -625,8 +628,15 @@ namespace FlexID.Viewer
                         continue;
                     serie.Points.Add(new ScatterPoint(calcTimes[j], values[j]));
                 }
+
+                Regions.Add(new RegionData(serie, regions[i]));
                 PlotModel.Series.Add(serie);
             }
+
+            GraphLabel = pattern + patternUnit;
+
+            // グラフがFitする範囲などを更新するためにupdateData: trueが必要。
+            PlotModel.InvalidatePlot(updateData: true);
         }
 
         /// <summary>
@@ -711,23 +721,6 @@ namespace FlexID.Viewer
                 OrganColors.Add(x.Key, ColorCode.ToString());
             }
         }
-
-        /// <summary>
-        /// プロットデータ取得
-        /// </summary>
-        public void Graph()
-        {
-            GraphLabel = pattern + patternUnit;
-
-            foreach (var serie in PlotModel.Series)
-            {
-                var region = _graphList.First(n => n.OrganName == serie.Title);
-                serie.IsVisible = region.IsChecked;
-            }
-
-            // グラフがFitする範囲などを更新するためにupdateData: trueが必要。
-            PlotModel.InvalidatePlot(updateData: true);
-        }
     }
 
     public class CalcData
@@ -741,14 +734,28 @@ namespace FlexID.Viewer
         public double Value { get; set; }
     }
 
-    public class GraphList
+    public class RegionData : BindableBase
     {
-        public GraphList(string organName, bool isChecked)
+        public RegionData(ScatterSeries serie, string name)
         {
-            OrganName = organName;
-            IsChecked = isChecked;
+            this.serie = serie;
+            Name = name;
         }
-        public string OrganName { get; set; }
-        public bool IsChecked { get; set; }
+
+        private readonly ScatterSeries serie;
+
+        public string Name { get; }
+
+        public bool IsVisible
+        {
+            get => serie.IsVisible;
+            set
+            {
+                if (serie.IsVisible == value)
+                    return;
+                serie.IsVisible = value;
+                serie.PlotModel.InvalidatePlot(true);
+            }
+        }
     }
 }

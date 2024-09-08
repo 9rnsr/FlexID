@@ -77,14 +77,13 @@ namespace FlexID.Viewer.ViewModels
 
         #endregion
 
-        public ReactiveCommand PlotRun { get; } = new ReactiveCommand();
-
         public ReactiveProperty<string> RadioNuclide { get; }
         public ReactiveProperty<string> IntakeRoute { get; }
         public ReadOnlyReactiveProperty<string> GraphLabel { get; }
-        public ReadOnlyReactiveCollection<GraphList> GraphList { get; }
 
         #region グラフ表示
+
+        public ReadOnlyReactiveCollection<RegionData> Regions { get; }
 
         public PlotModel PlotModel => this.model.PlotModel;
 
@@ -104,7 +103,6 @@ namespace FlexID.Viewer.ViewModels
 
             DataValues = this.model._dataValues.ToReadOnlyReactiveCollection();
             ComboList = this.model._comboList.ToReadOnlyReactiveCollection();
-            GraphList = this.model._graphList.ToReadOnlyReactiveCollection();
 
             OrganValues = this.model.ObserveProperty(x => x.OrganValues).ToReactiveProperty();
             OrganColors = this.model.ObserveProperty(x => x.OrganColors).ToReactiveProperty();
@@ -164,12 +162,12 @@ namespace FlexID.Viewer.ViewModels
 
             #region グラフ表示
 
+            Regions = this.model.Regions.ToReadOnlyReactiveCollection();
+
             IsLogAxisX = this.model.ToReactivePropertySlimAsSynchronized(m => m.IsLogAxisX);
             IsLogAxisY = this.model.ToReactivePropertySlimAsSynchronized(m => m.IsLogAxisY);
 
             #endregion
-
-            PlotRun.Subscribe(() => this.model.Graph());
 
             // コンボボックスでパターンを選択
             SelectCombo.Subscribe(str =>
