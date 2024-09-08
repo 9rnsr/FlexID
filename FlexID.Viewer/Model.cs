@@ -113,6 +113,26 @@ namespace FlexID.Viewer
         }
         private string resultFilePath;
 
+        /// <summary>
+        /// 核種。
+        /// </summary>
+        public string Nuclide
+        {
+            get => nuclide;
+            set => SetProperty(ref nuclide, value);
+        }
+        private string nuclide = "";
+
+        /// <summary>
+        /// 摂取経路。
+        /// </summary>
+        public string IntakeRoute
+        {
+            get => intakeRoute;
+            set => SetProperty(ref intakeRoute, value);
+        }
+        private string intakeRoute = "";
+
         #endregion
 
         // モデル図に表示するために合算された値
@@ -229,20 +249,6 @@ namespace FlexID.Viewer
 
         #endregion
 
-        string radioNuclide = "";
-        public string RadioNuclide
-        {
-            get => radioNuclide;
-            set => SetProperty(ref radioNuclide, value);
-        }
-
-        string intakeRoute = "";
-        public string IntakeRoute
-        {
-            get => intakeRoute;
-            set => SetProperty(ref intakeRoute, value);
-        }
-
         // 臓器ごとの色情報
         Dictionary<string, string> organColors = new Dictionary<string, string>();
         public Dictionary<string, string> OrganColors
@@ -354,7 +360,7 @@ namespace FlexID.Viewer
         /// </summary>
         public void Reader()
         {
-            RadioNuclide = "";
+            Nuclide = "";
             IntakeRoute = "";
 
             ContourMax = 0;
@@ -408,7 +414,7 @@ namespace FlexID.Viewer
             foreach (var x in file)
             {
                 var line = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                RadioNuclide = line[1];
+                Nuclide = line[1];
                 IntakeRoute = line[2];
                 break;
             }

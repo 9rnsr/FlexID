@@ -53,6 +53,9 @@ namespace FlexID.Viewer.ViewModels
 
         public ReactiveCommandSlim<string[]> SelectResultFilePathCommand { get; }
 
+        public ReadOnlyReactivePropertySlim<string> Nuclide { get; }
+        public ReadOnlyReactivePropertySlim<string> IntakeRoute { get; }
+
         #endregion
 
         #region 出力タイムステップスライダー
@@ -76,9 +79,6 @@ namespace FlexID.Viewer.ViewModels
         public ReactiveCommand PreviousStepCommand { get; } = new ReactiveCommand();
 
         #endregion
-
-        public ReactiveProperty<string> RadioNuclide { get; }
-        public ReactiveProperty<string> IntakeRoute { get; }
 
         #region グラフ表示
 
@@ -105,8 +105,6 @@ namespace FlexID.Viewer.ViewModels
 
             OrganValues = this.model.ObserveProperty(x => x.OrganValues).ToReactiveProperty();
             OrganColors = this.model.ObserveProperty(x => x.OrganColors).ToReactiveProperty();
-            RadioNuclide = this.model.ObserveProperty(x => x.RadioNuclide).ToReactiveProperty();
-            IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReactiveProperty();
 
             #region 出力ファイル情報
 
@@ -128,6 +126,9 @@ namespace FlexID.Viewer.ViewModels
                 }
                 catch { }
             });
+
+            Nuclide = this.model.ObserveProperty(x => x.Nuclide).ToReadOnlyReactivePropertySlim();
+            IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReadOnlyReactivePropertySlim();
 
             #endregion
 
