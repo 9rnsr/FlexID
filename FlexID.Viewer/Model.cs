@@ -182,7 +182,40 @@ namespace FlexID.Viewer
         public double CurrentTimeStep
         {
             get => currentTimeStep;
-            set => SetProperty(ref currentTimeStep, value);
+            set
+            {
+                if (TimeSteps.Count == 0)
+                {
+                    currentTimeIndex = -1;
+                    value = 0;
+                }
+                else if ((TimeSteps[0] is var start) && value < start)
+                {
+                    // 下限側の範囲外。
+                    currentTimeIndex = 0;
+                    value = start;
+                }
+                else if ((TimeSteps[TimeSteps.Count - 1] is var end) && end <= value)
+                {
+                    // 上限側の範囲外。
+                    currentTimeIndex = TimeSteps.Count - 1;
+                    value = end;
+                }
+                else
+                {
+                    // [s, e) の区間内にある時間が設定された場合は、sの時間に設定する。
+                    for (int i = 1; i < TimeSteps.Count; i++)
+                    {
+                        if (value < TimeSteps[i])
+                        {
+                            currentTimeIndex = i - 1;
+                            value = TimeSteps[i - 1];
+                            break;
+                        }
+                    }
+                }
+                SetProperty(ref currentTimeStep, value);
+            }
         }
         private double currentTimeStep = 0;
 
