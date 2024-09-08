@@ -1161,43 +1161,7 @@
           <ColumnDefinition Width="220" />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <DataGrid
-          Grid.Row="1"
-          Width="200"
-          Margin="15,80,5,60"
-          AutoGenerateColumns="False"
-          BorderBrush="Black"
-          BorderThickness="1"
-          CanUserAddRows="False"
-          CanUserReorderColumns="False"
-          CanUserResizeColumns="False"
-          CanUserSortColumns="False"
-          ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
-          FontSize="14"
-          ItemsSource="{Binding GraphList, UpdateSourceTrigger=PropertyChanged}"
-          SelectedItem="{Binding IsChecked, Mode=OneWay}">
-          <DataGrid.Columns>
-            <DataGridTemplateColumn Width="40" IsReadOnly="True">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTextColumn
-              Width="120"
-              Binding="{Binding OrganName, UpdateSourceTrigger=PropertyChanged}"
-              Header="Organ"
-              IsReadOnly="True" />
-          </DataGrid.Columns>
-        </DataGrid>
 
-        <oxy:PlotView
-          Grid.Row="1"
-          Grid.Column="1"
-          Margin="0,0,10,0"
-          FontSize="14"
-          Model="{Binding PlotModel.Value}" />
         <TextBox
           x:Name="NucName_Copy"
           Width="140"
@@ -1230,6 +1194,38 @@
           FontSize="14"
           ItemsSource="{Binding ComboList, UpdateSourceTrigger=PropertyChanged}"
           SelectedItem="{Binding SelectCombo.Value}" />
+
+        <DataGrid
+          Grid.Row="1"
+          Width="200"
+          Margin="15,80,5,60"
+          AutoGenerateColumns="False"
+          BorderBrush="Black"
+          BorderThickness="1"
+          CanUserAddRows="False"
+          CanUserReorderColumns="False"
+          CanUserResizeColumns="False"
+          CanUserSortColumns="False"
+          ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
+          FontSize="14"
+          ItemsSource="{Binding GraphList, UpdateSourceTrigger=PropertyChanged}"
+          SelectedItem="{Binding IsChecked, Mode=OneWay}">
+          <DataGrid.Columns>
+            <DataGridTemplateColumn Width="40" IsReadOnly="True">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTextColumn
+              Width="120"
+              Binding="{Binding OrganName, UpdateSourceTrigger=PropertyChanged}"
+              Header="Organ"
+              IsReadOnly="True" />
+          </DataGrid.Columns>
+        </DataGrid>
+
         <Button
           Grid.Row="1"
           Width="80"
@@ -1243,6 +1239,7 @@
           FontFamily="Segoe UI, Lucida Sans Unicode, Verdana"
           FontSize="14"
           FontWeight="Normal" />
+
         <CheckBox
           Grid.Column="1"
           Height="18"
@@ -1259,6 +1256,13 @@
           VerticalAlignment="Top"
           Content="Log(Horizontal)"
           IsChecked="{Binding AxisX.Value}" />
+
+        <oxy:PlotView
+          Grid.Row="1"
+          Grid.Column="1"
+          Margin="0,0,10,0"
+          FontSize="14"
+          Model="{Binding PlotModel.Value}" />
       </Grid>
     </TabItem>
   </TabControl>
