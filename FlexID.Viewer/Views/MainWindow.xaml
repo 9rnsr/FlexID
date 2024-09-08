@@ -366,8 +366,7 @@
           CanUserSortColumns="False"
           ColumnHeaderStyle="{StaticResource MyColumnHeader}"
           FontSize="14"
-          ItemsSource="{Binding Regions}"
-          SelectedItem="{Binding IsChecked, Mode=OneWay}">
+          ItemsSource="{Binding Regions}">
           <DataGrid.Columns>
             <DataGridTemplateColumn
               Width="1*"
