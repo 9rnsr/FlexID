@@ -1044,92 +1044,98 @@
           </StackPanel>
         </Grid>
 
-        <Viewbox
+        <Grid
           Grid.Row="2"
           Grid.Column="1"
-          Margin="50,0,70,0"
-          Stretch="None">
-          <Grid Width="450" Height="100">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="0*" />
-              <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+          HorizontalAlignment="Stretch">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="2*" />
+          </Grid.ColumnDefinitions>
 
-            <Slider
-              x:Name="slider"
-              Grid.ColumnSpan="2"
-              Width="400"
-              Height="25"
-              Margin="25,0,0,0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Top"
-              AutoToolTipPlacement="BottomRight"
-              FontSize="14"
-              IsMoveToPointEnabled="True"
-              IsSnapToTickEnabled="True"
-              Maximum="{Binding EndStep.Value}"
-              Minimum="{Binding StartStep.Value}"
-              Ticks="{Binding TimeStep.Value}"
-              Value="{Binding OnValue.Value}" />
+          <Slider
+            x:Name="slider"
+            Grid.Row="0"
+            Grid.ColumnSpan="5"
+            Height="32"
+            Margin="70,0"
+            AutoToolTipPlacement="BottomRight"
+            FontSize="14"
+            IsMoveToPointEnabled="True"
+            IsSnapToTickEnabled="True"
+            Maximum="{Binding EndStep.Value}"
+            Minimum="{Binding StartStep.Value}"
+            Ticks="{Binding TimeStep.Value}"
+            Value="{Binding OnValue.Value}" />
 
-            <RepeatButton
-              Grid.ColumnSpan="2"
-              Width="28"
-              Height="30"
-              Margin="140,25,0,0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Top"
-              Command="{Binding PreviousStepCommand}"
-              ToolTip="Previous step">
-              <icons:PackIconMaterial Kind="SkipPrevious" />
-            </RepeatButton>
-            <Button
-              x:Name="PlayButton"
-              Grid.ColumnSpan="2"
-              Width="30"
-              Height="30"
-              Margin="210,25,0,0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Top"
-              Command="{Binding PlayCommand}"
-              FontSize="12"
-              ToolTip="Play/Pause">
-              <icons:PackIconMaterial>
-                <icons:PackIconMaterial.Style>
-                  <Style TargetType="{x:Type icons:PackIconMaterial}">
-                    <Setter Property="Kind" Value="Play" />
-                    <Style.Triggers>
-                      <DataTrigger Binding="{Binding IsPlaying.Value}" Value="False">
-                        <Setter Property="Kind" Value="Play" />
-                      </DataTrigger>
-                      <DataTrigger Binding="{Binding IsPlaying.Value}" Value="True">
-                        <Setter Property="Kind" Value="Pause" />
-                      </DataTrigger>
-                    </Style.Triggers>
-                  </Style>
-                </icons:PackIconMaterial.Style>
-              </icons:PackIconMaterial>
-            </Button>
-            <RepeatButton
-              Grid.ColumnSpan="2"
-              Width="30"
-              Height="30"
-              Margin="280,25,0,0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Top"
-              Command="{Binding NextStepCommand}"
-              ToolTip="Next step">
-              <icons:PackIconMaterial Kind="SkipNext" />
-            </RepeatButton>
+          <RepeatButton
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="40"
+            Height="32"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Command="{Binding PreviousStepCommand}"
+            ToolTip="Previous step">
+            <icons:PackIconMaterial Kind="SkipPrevious" />
+          </RepeatButton>
+          <Button
+            x:Name="PlayButton"
+            Grid.Row="1"
+            Grid.Column="2"
+            Width="40"
+            Height="32"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Command="{Binding PlayCommand}"
+            FontSize="12"
+            ToolTip="Play/Pause">
+            <icons:PackIconMaterial>
+              <icons:PackIconMaterial.Style>
+                <Style TargetType="{x:Type icons:PackIconMaterial}">
+                  <Setter Property="Kind" Value="Play" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsPlaying.Value}" Value="False">
+                      <Setter Property="Kind" Value="Play" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsPlaying.Value}" Value="True">
+                      <Setter Property="Kind" Value="Pause" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </icons:PackIconMaterial.Style>
+            </icons:PackIconMaterial>
+          </Button>
+          <RepeatButton
+            Grid.Row="1"
+            Grid.Column="3"
+            Width="40"
+            Height="32"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Command="{Binding NextStepCommand}"
+            ToolTip="Next step">
+            <icons:PackIconMaterial Kind="SkipNext" />
+          </RepeatButton>
 
+          <StackPanel
+            Grid.Row="2"
+            Grid.Column="2"
+            Orientation="Vertical">
             <TextBlock
               x:Name="ProgressDays"
               Grid.ColumnSpan="2"
-              Width="100"
               Height="22"
-              Margin="175,60,0,0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Top"
+              MinWidth="100"
+              HorizontalAlignment="Center"
               FontSize="14"
               Text="{Binding Value, ElementName=slider}"
               TextAlignment="Center" />
@@ -1137,13 +1143,11 @@
               x:Name="Day"
               Grid.ColumnSpan="2"
               Height="22"
-              Margin="210,75,0,0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Top"
+              HorizontalAlignment="Center"
               FontSize="14"
               Text="[Day]" />
-          </Grid>
-        </Viewbox>
+          </StackPanel>
+        </Grid>
       </Grid>
     </TabItem>
 
