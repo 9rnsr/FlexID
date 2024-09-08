@@ -102,7 +102,6 @@ namespace FlexID.Viewer
         public ObservableCollection<string> _comboList = new ObservableCollection<string>();
 
         private string pattern = "";
-        private string patternUnit = "";
 
         #region 出力ファイル情報
 
@@ -253,21 +252,6 @@ namespace FlexID.Viewer
         }
 
         #region グラフ表示
-
-        string graphLabel;
-        public string GraphLabel
-        {
-            get => graphLabel;
-            set
-            {
-                if (value == "Dose[Sv/Bq]")
-                    value = "Effective/Equivalent Dose[Sv/Bq]";
-                LogAxisY.Title = value;
-                LinAxisY.Title = value;
-                PlotModel.InvalidatePlot(false);
-                SetProperty(ref graphLabel, value);
-            }
-        }
 
         public ObservableCollection<RegionData> Regions { get; } = new ObservableCollection<RegionData>();
 
@@ -438,7 +422,6 @@ namespace FlexID.Viewer
             Regions.Clear();
             PlotModel.Series.Clear();
 
-            GraphLabel = "";
             pattern = selectCombo;
 
             if (selectCombo != null)
@@ -595,7 +578,7 @@ namespace FlexID.Viewer
 
             var calcTimes = default(List<double>);
 
-            patternUnit = units[1];
+            var unit = units[1];
 
             Regions.Clear();
             PlotModel.Series.Clear();
@@ -633,7 +616,12 @@ namespace FlexID.Viewer
                 PlotModel.Series.Add(serie);
             }
 
-            GraphLabel = pattern + patternUnit;
+            var graphLabel = pattern;
+            if (graphLabel == "Dose")
+                graphLabel = "Effective/Equivalent Dose";
+            graphLabel += unit;
+            LogAxisY.Title = graphLabel;
+            LinAxisY.Title = graphLabel;
 
             // グラフがFitする範囲などを更新するためにupdateData: trueが必要。
             PlotModel.InvalidatePlot(updateData: true);

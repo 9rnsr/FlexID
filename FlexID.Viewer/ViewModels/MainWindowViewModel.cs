@@ -79,7 +79,6 @@ namespace FlexID.Viewer.ViewModels
 
         public ReactiveProperty<string> RadioNuclide { get; }
         public ReactiveProperty<string> IntakeRoute { get; }
-        public ReadOnlyReactiveProperty<string> GraphLabel { get; }
 
         #region グラフ表示
 
@@ -108,8 +107,6 @@ namespace FlexID.Viewer.ViewModels
             OrganColors = this.model.ObserveProperty(x => x.OrganColors).ToReactiveProperty();
             RadioNuclide = this.model.ObserveProperty(x => x.RadioNuclide).ToReactiveProperty();
             IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReactiveProperty();
-
-            GraphLabel = this.model.ObserveProperty(x => x.GraphLabel).ToReadOnlyReactiveProperty();
 
             #region 出力ファイル情報
 
