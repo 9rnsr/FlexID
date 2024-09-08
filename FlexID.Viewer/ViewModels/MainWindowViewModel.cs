@@ -6,7 +6,6 @@ using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using System.Windows.Media;
 
 namespace FlexID.Viewer.ViewModels
 {
@@ -16,9 +15,6 @@ namespace FlexID.Viewer.ViewModels
 
         // 入力GUIから受け取るファイルパス
         public static string OutPath = "";
-
-        // 現在スライダーが示している時間
-        public ReactiveProperty<double> OnValue { get; }
 
         #region コンター表示
 
@@ -60,19 +56,29 @@ namespace FlexID.Viewer.ViewModels
         #endregion
 
         #region 出力タイムステップスライダー
-        public ReactiveProperty<DoubleCollection> TimeStep { get; }
-        public ReadOnlyReactiveProperty<double> StartStep { get; }
-        public ReadOnlyReactiveProperty<double> EndStep { get; }
-        #endregion
+
+        public ReadOnlyReactivePropertySlim<IReadOnlyList<double>> TimeStep { get; }
+        public ReadOnlyReactivePropertySlim<double> StartStep { get; }
+        public ReadOnlyReactivePropertySlim<double> EndStep { get; }
+
+        /// <summary>
+        /// 現在スライダーが示している時間。
+        /// </summary>
+        public ReactiveProperty<double> OnValue { get; }
+
+        /// <summary>
+        /// アニメーション再生状態を示す。<see langword="true"/>：再生中、<see langword="false"/>：停止中。
+        /// </summary>
+        public ReadOnlyReactiveProperty<bool> IsPlaying { get; }
 
         public ReactiveCommand PlayCommand { get; } = new ReactiveCommand();
         public ReactiveCommand NextStepCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PreviousStepCommand { get; } = new ReactiveCommand();
 
+        #endregion
+
         public ReactiveCommand PlotRun { get; } = new ReactiveCommand();
 
-        // True：再生中　False：停止中
-        public ReadOnlyReactiveProperty<bool> IsPlaying { get; }
         public ReactiveProperty<string> RadioNuclide { get; }
         public ReactiveProperty<string> IntakeRoute { get; }
         public ReadOnlyReactiveProperty<string> GraphLabel { get; }
@@ -104,10 +110,7 @@ namespace FlexID.Viewer.ViewModels
             OrganColors = this.model.ObserveProperty(x => x.OrganColors).ToReactiveProperty();
             RadioNuclide = this.model.ObserveProperty(x => x.RadioNuclide).ToReactiveProperty();
             IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReactiveProperty();
-            TimeStep = this.model.ObserveProperty(x => x.TimeStep).ToReactiveProperty();
-            IsPlaying = this.model.ObserveProperty(x => x.IsPlaying).ToReadOnlyReactiveProperty();
-            StartStep = this.model.ObserveProperty(x => x.StartStep).ToReadOnlyReactiveProperty();
-            EndStep = this.model.ObserveProperty(x => x.EndStep).ToReadOnlyReactiveProperty();
+
             GraphLabel = this.model.ObserveProperty(x => x.GraphLabel).ToReadOnlyReactiveProperty();
 
             #region 出力ファイル情報
@@ -133,13 +136,29 @@ namespace FlexID.Viewer.ViewModels
 
             #endregion
 
-            OnValue = this.model.ToReactivePropertyAsSynchronized(x => x.OnValue);
-
             #region コンター表示
 
             ContourMax = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMax);
             ContourMin = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMin);
             ContourUnit = this.model.ObserveProperty(x => x.ContourUnit).ToReadOnlyReactivePropertySlim();
+
+            #endregion
+
+            #region 出力タイムステップスライダー
+
+            TimeStep = this.model.ObserveProperty(x => x.TimeStep).ToReadOnlyReactivePropertySlim();
+            StartStep = TimeStep.Select(ts => ts.Count == 0 ? 0 : ts[0]).ToReadOnlyReactivePropertySlim();
+            EndStep = TimeStep.Select(ts => ts.Count == 0 ? 0 : ts[ts.Count - 1]).ToReadOnlyReactivePropertySlim();
+
+            OnValue = this.model.ToReactivePropertyAsSynchronized(x => x.OnValue);
+
+            OnValue.Subscribe(_ => this.model.GetValues());
+
+            IsPlaying = this.model.ObserveProperty(x => x.IsPlaying).ToReadOnlyReactiveProperty();
+
+            PlayCommand.Subscribe(() => this.model.Playing());
+            NextStepCommand.Subscribe(() => this.model.NextStep());
+            PreviousStepCommand.Subscribe(() => this.model.PreviousStep());
 
             #endregion
 
@@ -150,16 +169,7 @@ namespace FlexID.Viewer.ViewModels
 
             #endregion
 
-            PlayCommand.Subscribe(() => this.model.Playing());
-            NextStepCommand.Subscribe(() => this.model.NextStep());
-            PreviousStepCommand.Subscribe(() => this.model.PreviousStep());
             PlotRun.Subscribe(() => this.model.Graph());
-
-            // OnValueの値が変更されたらイベント発生
-            OnValue.Subscribe(_ =>
-            {
-                this.model.GetValues();
-            });
 
             // コンボボックスでパターンを選択
             SelectCombo.Subscribe(str =>

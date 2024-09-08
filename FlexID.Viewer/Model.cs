@@ -125,14 +125,6 @@ namespace FlexID.Viewer
             set => SetProperty(ref organValues, value);
         }
 
-        // 現在スライダーが示している時間
-        double onValue = 0;
-        public double OnValue
-        {
-            get => onValue;
-            set => SetProperty(ref onValue, value);
-        }
-
         #region コンター表示
 
         /// <summary>
@@ -168,35 +160,42 @@ namespace FlexID.Viewer
         #endregion
 
         #region 出力タイムステップスライダー
-        DoubleCollection timeStep;
-        public DoubleCollection TimeStep
+
+        /// <summary>
+        /// 出力タイムステップ。
+        /// </summary>
+        public IReadOnlyList<double> TimeStep
         {
             get => timeStep;
-            set => SetProperty(ref timeStep, value);
+            private set => SetProperty(ref timeStep, value);
         }
+        private IReadOnlyList<double> timeStep = Array.Empty<double>();
 
-        double startStep;
-        public double StartStep
+        private double StartStep => TimeStep.Count == 0 ? 0 : TimeStep[0];
+
+        private double EndStep => TimeStep.Count == 0 ? 0 : TimeStep[TimeStep.Count - 1];
+
+        /// <summary>
+        /// 現在スライダーが示している時間。
+        /// </summary>
+        public double OnValue
         {
-            get => startStep;
-            set => SetProperty(ref startStep, value);
+            get => onValue;
+            set => SetProperty(ref onValue, value);
         }
+        private double onValue = 0;
 
-        double endStep;
-        public double EndStep
-        {
-            get => endStep;
-            set => SetProperty(ref endStep, value);
-        }
-        #endregion
-
-        // True：再生中　False：停止中
-        bool isPlaying;
+        /// <summary>
+        /// アニメーション再生状態を示す。<see langword="true"/>：再生中、<see langword="false"/>：停止中。
+        /// </summary>
         public bool IsPlaying
         {
             get => isPlaying;
             set => SetProperty(ref isPlaying, value);
         }
+        private bool isPlaying;
+
+        #endregion
 
         string radioNuclide = "";
         public string RadioNuclide
@@ -275,11 +274,12 @@ namespace FlexID.Viewer
         /// </summary>
         public async void Playing()
         {
-            if (TimeStep == null)
+            if (TimeStep.Count == 0)
                 return;
 
-            if (!IsPlaying) // false＝停止時のみ処理される
+            if (!IsPlaying)
             {
+                // 停止時の処理。
                 IsPlaying = true;
                 foreach (var x in TimeStep)
                 {
@@ -293,8 +293,11 @@ namespace FlexID.Viewer
                         break;
                 }
             }
-            else if (IsPlaying) // true＝再生時のみ処理される
+            else
+            {
+                // 再生時の処理。
                 IsPlaying = false;
+            }
 
             IsPlaying = false;
         }
@@ -304,7 +307,7 @@ namespace FlexID.Viewer
         /// </summary>
         public void NextStep()
         {
-            if (TimeStep == null)
+            if (TimeStep.Count == 0)
                 return;
             if (OnValue == EndStep)
                 return;
@@ -325,7 +328,7 @@ namespace FlexID.Viewer
         /// </summary>
         public void PreviousStep()
         {
-            if (TimeStep == null)
+            if (TimeStep.Count == 0)
                 return;
             if (OnValue == StartStep)
                 return;
@@ -348,13 +351,14 @@ namespace FlexID.Viewer
         {
             RadioNuclide = "";
             IntakeRoute = "";
+
             ContourMax = 0;
             ContourMin = 0;
             ContourUnit = "-";
+
+            TimeStep = Array.Empty<double>();
             OnValue = 0;
-            TimeStep = null;
-            StartStep = 0;
-            EndStep = 0;
+
             _dataValues.Clear();
             _graphList.Clear();
             _comboList.Clear();
@@ -513,7 +517,7 @@ namespace FlexID.Viewer
         /// </summary>
         private void GetStep()
         {
-            TimeStep = new DoubleCollection();
+            var steps = new List<double>();
             foreach (var x in TargetFile.Skip(3))
             {
                 if (x == "")
@@ -521,11 +525,11 @@ namespace FlexID.Viewer
                 var line = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 if (line.Length < 1)
                     continue;
-                TimeStep.Add(double.Parse(line[0]));
+                steps.Add(double.Parse(line[0]));
             }
+            TimeStep = steps.AsReadOnly();
+
             OnValue = TimeStep.First();
-            StartStep = TimeStep.First();
-            EndStep = TimeStep.Last();
         }
 
         /// <summary>
