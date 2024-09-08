@@ -101,8 +101,9 @@ namespace FlexID.Viewer
         public ObservableCollection<CalcData> _dataValues = new ObservableCollection<CalcData>();
         public ObservableCollection<GraphList> _graphList = new ObservableCollection<GraphList>();
         public ObservableCollection<string> _comboList = new ObservableCollection<string>();
-        readonly List<CalcResults> _calcResults = new List<CalcResults>();
+
         private string pattern = "";
+        private string patternUnit = "";
 
         #region 出力ファイル情報
 
@@ -559,29 +560,47 @@ namespace FlexID.Viewer
         /// </summary>
         private void ReadResults()
         {
-            var organLine = TargetFile.Skip(1).Take(1)
+            var regions = TargetFile.Skip(1).Take(1)
                 .SelectMany(x => x.Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)))
                 .ToList();
-            var unitLine = TargetFile.Skip(2).Take(1)
+            var units = TargetFile.Skip(2).Take(1)
                 .SelectMany(x => x.Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)))
                 .ToList();
 
-            _calcResults.Clear();
-            for (int i = 0; i < organLine.Count; i++)
+            var calcTimes = default(List<double>);
+
+            patternUnit = units[1];
+
+            PlotModel.Series.Clear();
+
+            for (int i = 0; i < regions.Count; i++)
             {
-                var Organ = organLine[i];
-                var unit = unitLine[i];
-                List<double> resultCalc = new List<double>();
-
+                var values = new List<double>();
                 foreach (var y in TargetFile.Skip(3))
                 {
                     if (y == "")
                         break;
                     var value = y.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    resultCalc.Add(double.Parse(value[i]));
+                    values.Add(double.Parse(value[i]));
                 }
-                var res = new CalcResults(Organ, unit, resultCalc);
-                _calcResults.Add(res);
+
+                if (i == 0)
+                {
+                    calcTimes = values;
+                    continue;
+                }
+
+                var serie = new ScatterSeries()
+                {
+                    Title = regions[i],
+                };
+                for (int j = 0; j < calcTimes.Count; j++)
+                {
+                    if (calcTimes[j] == 0)
+                        continue;
+                    serie.Points.Add(new ScatterPoint(calcTimes[j], values[j]));
+                }
+                PlotModel.Series.Add(serie);
             }
         }
 
@@ -673,42 +692,16 @@ namespace FlexID.Viewer
         /// </summary>
         public void Graph()
         {
-            List<string> plotlist = new List<string>();
-            foreach (var n in _graphList)
+            GraphLabel = pattern + patternUnit;
+
+            foreach (var serie in PlotModel.Series)
             {
-                if (n.IsChecked)
-                    plotlist.Add(n.OrganName);
+                var region = _graphList.First(n => n.OrganName == serie.Title);
+                serie.IsVisible = region.IsChecked;
             }
 
-            if (plotlist.Count < 1)
-                return;
-
-            var Time = _calcResults[0];
-
-            GraphLabel = pattern + _calcResults[1].Unit;
-
-            PlotModel.Series.Clear();
-            foreach (var name in plotlist)
-            {
-                var scatter = new ScatterSeries();
-                for (int i = 0; i < _calcResults.Count; i++)
-                {
-                    if (name == _calcResults[i].Name)
-                    {
-                        scatter.Title = name;
-                        for (int j = 0; j < Time.Values.Length; j++)
-                        {
-                            if (Time.Values[j] == 0)
-                                continue;
-                            scatter.Points.Add(new ScatterPoint(Time.Values[j], _calcResults[i].Values[j]));
-                        }
-                        PlotModel.Series.Add(scatter);
-                        break;
-                    }
-                }
-            }
-
-            PlotModel.InvalidatePlot(true);
+            // グラフがFitする範囲などを更新するためにupdateData: trueが必要。
+            PlotModel.InvalidatePlot(updateData: true);
         }
     }
 
@@ -721,19 +714,6 @@ namespace FlexID.Viewer
         }
         public string OrganName { get; set; }
         public double Value { get; set; }
-    }
-
-    public class CalcResults
-    {
-        public CalcResults(string name, string unit, IEnumerable<double> values)
-        {
-            Name = name;
-            Unit = unit;
-            Values = values.ToArray();
-        }
-        public string Name { get; }
-        public string Unit { get; }
-        public double[] Values { get; }
     }
 
     public class GraphList
