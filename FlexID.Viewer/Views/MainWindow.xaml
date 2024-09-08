@@ -175,8 +175,8 @@
           Grid.Column="1"
           Stretch="Uniform">
           <Canvas
-            Width="495"
-            Height="515"
+            Width="440"
+            Height="480"
             Margin="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
@@ -985,36 +985,36 @@
         </Viewbox>
 
         <Grid
-          Grid.Row="1"
+          Grid.RowSpan="3"
           Grid.Column="2"
-          Margin="0,20,0,60">
+          VerticalAlignment="Center">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
 
-          <TextBox
-            x:Name="ContourMax"
-            Width="80"
-            Height="20"
-            Margin="0,12,75,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            FontSize="14"
-            Text="{Binding ContourMax.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-            TextAlignment="Center" />
-          <TextBlock
-            x:Name="MaxUnit"
-            Width="50"
-            Height="22"
-            Margin="0,14,25,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            FontSize="14"
-            Text="{Binding Unit.Value}"
-            TextWrapping="Wrap" />
+          <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBox
+              x:Name="ContourMax"
+              Width="80"
+              Height="30"
+              VerticalContentAlignment="Center"
+              FontSize="14"
+              Text="{Binding ContourMax.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+              TextAlignment="Center" />
+            <Label
+              x:Name="MaxUnit"
+              MinWidth="50"
+              Content="{Binding Unit.Value}"
+              FontSize="14" />
+          </StackPanel>
 
           <Rectangle
+            Grid.Row="1"
             Width="30"
             Height="250"
-            Margin="0,38,91,0"
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Center"
             VerticalAlignment="Top">
             <Rectangle.Fill>
               <LinearGradientBrush>
@@ -1027,26 +1027,21 @@
             </Rectangle.Fill>
           </Rectangle>
 
-          <TextBox
-            x:Name="ContourMin"
-            Width="80"
-            Height="20"
-            Margin="0,288,75,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            FontSize="14"
-            Text="{Binding ContourMin.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-            TextAlignment="Center" />
-          <TextBlock
-            x:Name="MinUnit"
-            Width="50"
-            Height="22"
-            Margin="0,290,25,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            FontSize="14"
-            Text="{Binding Unit.Value}"
-            TextWrapping="Wrap" />
+          <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBox
+              x:Name="ContourMin"
+              Width="80"
+              Height="30"
+              VerticalContentAlignment="Center"
+              FontSize="14"
+              Text="{Binding ContourMin.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+              TextAlignment="Center" />
+            <Label
+              x:Name="MinUnit"
+              MinWidth="50"
+              Content="{Binding Unit.Value}"
+              FontSize="14" />
+          </StackPanel>
         </Grid>
 
         <Viewbox
