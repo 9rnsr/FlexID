@@ -171,12 +171,13 @@ namespace FlexID.Viewer
         }
         private IReadOnlyList<double> timeSteps = Array.Empty<double>();
 
-        private double StartTimeStep => TimeSteps.Count == 0 ? 0 : TimeSteps[0];
-
-        private double EndTimeStep => TimeSteps.Count == 0 ? 0 : TimeSteps[TimeSteps.Count - 1];
+        /// <summary>
+        /// 現在スライダーが示している出力タイムステップのインデックス。
+        /// </summary>
+        private int currentTimeIndex = -1;
 
         /// <summary>
-        /// 現在スライダーが示している時間。
+        /// 現在スライダーが示している出力タイムステップ。
         /// </summary>
         public double CurrentTimeStep
         {
@@ -281,12 +282,10 @@ namespace FlexID.Viewer
             {
                 // 停止時の処理。
                 IsPlaying = true;
-                foreach (var x in TimeSteps)
+                for (var i = currentTimeIndex + 1; i < TimeSteps.Count; i++)
                 {
-                    if (CurrentTimeStep >= x)
-                        continue;
-
-                    CurrentTimeStep = x;
+                    currentTimeIndex = i + 1;
+                    CurrentTimeStep = TimeSteps[currentTimeIndex];
                     await Task.Delay(200);
 
                     if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
@@ -309,18 +308,12 @@ namespace FlexID.Viewer
         {
             if (TimeSteps.Count == 0)
                 return;
-            if (CurrentTimeStep == EndTimeStep)
+            if (currentTimeIndex == TimeSteps.Count - 1)
                 return;
 
             IsPlaying = false;
-            for (int i = 0; i < TimeSteps.Count; i++)
-            {
-                if (CurrentTimeStep == TimeSteps[i])
-                {
-                    CurrentTimeStep = TimeSteps[i + 1];
-                    break;
-                }
-            }
+            currentTimeIndex++;
+            CurrentTimeStep = TimeSteps[currentTimeIndex];
         }
 
         /// <summary>
@@ -330,18 +323,12 @@ namespace FlexID.Viewer
         {
             if (TimeSteps.Count == 0)
                 return;
-            if (CurrentTimeStep == StartTimeStep)
+            if (currentTimeIndex == 0)
                 return;
 
             IsPlaying = false;
-            for (int i = 0; i < TimeSteps.Count; i++)
-            {
-                if (CurrentTimeStep == TimeSteps[i])
-                {
-                    CurrentTimeStep = TimeSteps[i - 1];
-                    break;
-                }
-            }
+            currentTimeIndex--;
+            CurrentTimeStep = TimeSteps[currentTimeIndex];
         }
 
         /// <summary>
@@ -357,6 +344,7 @@ namespace FlexID.Viewer
             ContourUnit = "-";
 
             TimeSteps = Array.Empty<double>();
+            currentTimeIndex = -1;
             CurrentTimeStep = 0;
 
             _dataValues.Clear();
@@ -529,7 +517,11 @@ namespace FlexID.Viewer
             }
             TimeSteps = steps.AsReadOnly();
 
-            CurrentTimeStep = TimeSteps.First();
+            if (TimeSteps.Count != 0)
+            {
+                currentTimeIndex = 0;
+                CurrentTimeStep = TimeSteps[currentTimeIndex];
+            }
         }
 
         /// <summary>
@@ -539,23 +531,19 @@ namespace FlexID.Viewer
         {
             if (TargetFile == null)
                 return;
+            if (TimeSteps.Count == 0)
+                return;
 
-            foreach (var x in TargetFile.Skip(3))
-            {
-                var line = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (line.Length < 1)
-                    continue;
-                if (CurrentTimeStep == double.Parse(line[0]))
-                {
-                    _dataValues.Clear();
-                    _graphList.Clear();
-                    for (int i = 2; i < Organs.Length; i++)
-                        _dataValues.Add(new CalcData(Organs[i], double.Parse(line[i])));
-                    for (int i = 1; i < Organs.Length; i++) // グラフタブに表示するリストはWholeBodyを入れるため別処理
-                        _graphList.Add(new GraphList(Organs[i], false));
-                    break;
-                }
-            }
+            var valuesLine = TargetFile.Skip(3 + currentTimeIndex).First();
+            var values = valuesLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+            _dataValues.Clear();
+            _graphList.Clear();
+            for (int i = 2; i < Organs.Length; i++)
+                _dataValues.Add(new CalcData(Organs[i], double.Parse(values[i])));
+            for (int i = 1; i < Organs.Length; i++) // グラフタブに表示するリストはWholeBodyを入れるため別処理
+                _graphList.Add(new GraphList(Organs[i], false));
+
             SetColor();
         }
 
