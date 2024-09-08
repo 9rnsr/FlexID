@@ -151,7 +151,7 @@
           CanUserReorderColumns="False"
           CanUserResizeColumns="False"
           CanUserSortColumns="False"
-          ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
+          ColumnHeaderStyle="{StaticResource MyColumnHeader}"
           FontSize="14"
           ItemsSource="{Binding DataValues, UpdateSourceTrigger=PropertyChanged}"
           SelectionUnit="Cell">
@@ -364,22 +364,29 @@
           CanUserReorderColumns="False"
           CanUserResizeColumns="False"
           CanUserSortColumns="False"
-          ColumnHeaderStyle="{DynamicResource MyColumnHeader}"
+          ColumnHeaderStyle="{StaticResource MyColumnHeader}"
           FontSize="14"
           ItemsSource="{Binding Regions}"
           SelectedItem="{Binding IsChecked, Mode=OneWay}">
           <DataGrid.Columns>
-            <DataGridTemplateColumn Width="40" IsReadOnly="True">
+            <DataGridTemplateColumn
+              Width="1*"
+              Header="Organ"
+              IsReadOnly="True">
+              <DataGridTemplateColumn.HeaderStyle>
+                <Style BasedOn="{StaticResource MyColumnHeader}" TargetType="DataGridColumnHeader">
+                  <Setter Property="Padding" Value="40,0,0,0" />
+                </Style>
+              </DataGridTemplateColumn.HeaderStyle>
               <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
-                  <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
+                  <CheckBox
+                    Margin="4,0,0,2"
+                    Content="{Binding Name}"
+                    IsChecked="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
                 </DataTemplate>
               </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTextColumn
-              Binding="{Binding Name}"
-              Header="Organ"
-              IsReadOnly="True" />
           </DataGrid.Columns>
         </DataGrid>
 
