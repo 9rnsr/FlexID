@@ -4,11 +4,13 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:oxy="http://oxyplot.org/wpf"
   xmlns:prism="http://prismlibrary.com/"
   xmlns:v="clr-namespace:FlexID.Viewer.Views"
+  xmlns:vb="clr-namespace:FlexID.Viewer.Views.Behaviors"
   xmlns:vm="clr-namespace:FlexID.Viewer.ViewModels"
   Title="FlexID_Viewer"
   Width="1200"
@@ -62,20 +64,24 @@
           </Grid.ColumnDefinitions>
 
           <TextBox
-            x:Name="FilePath"
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Height="30"
             VerticalAlignment="Center"
             FontSize="14"
-            Text="{Binding SelectPath.Value, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding ResultFilePath.Value}">
+            <i:Interaction.Behaviors>
+              <vb:PathDropBehavior AllowDropPath="SingleFile" DropCommand="{Binding SelectResultFilePathCommand}" />
+              <vb:PathPasteBehavior />
+            </i:Interaction.Behaviors>
+          </TextBox>
           <Button
             Grid.Row="0"
             Grid.Column="3"
             Height="30"
             VerticalAlignment="Center"
             Controls:ControlsHelper.ContentCharacterCasing="Normal"
-            Command="{Binding OpenDiaLogCommand}"
+            Command="{Binding SelectResultFilePathCommand}"
             Content="Browse"
             FontSize="14"
             FontWeight="Normal" />

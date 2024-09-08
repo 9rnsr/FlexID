@@ -55,13 +55,17 @@ namespace FlexID.Viewer
         readonly List<CalcResults> _calcResults = new List<CalcResults>();
         private string pattern = "";
 
+        #region 出力ファイル情報
+
         //　解析結果のファイルパス
-        string selectPath;
-        public string SelectPath
+        public string ResultFilePath
         {
-            get => selectPath;
-            set => SetProperty(ref selectPath, value);
+            get => resultFilePath;
+            set => SetProperty(ref resultFilePath, value);
         }
+        private string resultFilePath;
+
+        #endregion
 
         // モデル図に表示するために合算された値
         Dictionary<string, double> organValues = new Dictionary<string, double>();
@@ -286,9 +290,9 @@ namespace FlexID.Viewer
             OrganColors = new Dictionary<string, string>();
             PlotModel = new PlotModel();
 
-            if (SelectPath != "")
+            if (ResultFilePath != "")
             {
-                var path = SelectPath.Replace("_Retention.out", "");
+                var path = ResultFilePath.Replace("_Retention.out", "");
                 path = path.Replace("_Cumulative.out", "");
                 path = path.Replace("_Dose.out", "");
                 path = path.Replace("_DoseRate.out", "");
@@ -338,7 +342,7 @@ namespace FlexID.Viewer
 
             if (selectCombo != null)
             {
-                var SePa = SelectPath;
+                var path = ResultFilePath;
 
                 switch (selectCombo)
                 {
@@ -360,12 +364,12 @@ namespace FlexID.Viewer
                 }
 
                 // ファイル名を固定していいならハードコーディングでいい？
-                SePa = SePa.Replace("_Retention.out", "");
-                SePa = SePa.Replace("_Cumulative.out", "");
-                SePa = SePa.Replace("_Dose.out", "");
-                SePa = SePa.Replace("_DoseRate.out", "");
+                path = path.Replace("_Retention.out", "");
+                path = path.Replace("_Cumulative.out", "");
+                path = path.Replace("_Dose.out", "");
+                path = path.Replace("_DoseRate.out", "");
 
-                var Target = SePa + "_" + selectCombo.Replace("Activity", "") + ".out";
+                var Target = path + "_" + selectCombo.Replace("Activity", "") + ".out";
                 TargetFile = File.ReadLines(Target);
 
                 foreach (var x in TargetFile.Skip(1))

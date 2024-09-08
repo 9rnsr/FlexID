@@ -49,9 +49,14 @@ namespace FlexID.Viewer.ViewModels
         public ReactiveProperty<Dictionary<string, double>> OrganValues { get; set; } = new ReactiveProperty<Dictionary<string, double>>();
 
         #region 出力ファイル情報
+
         public ReadOnlyReactiveCollection<string> ComboList { get; }
         public ReactiveProperty<string> SelectCombo { get; } = new ReactiveProperty<string>();
-        public ReactiveProperty<string> SelectPath { get; }
+
+        public ReactivePropertySlim<string> ResultFilePath { get; }
+
+        public ReactiveCommandSlim<string[]> SelectResultFilePathCommand { get; }
+
         #endregion
 
         #region 出力タイムステップスライダー
@@ -63,7 +68,7 @@ namespace FlexID.Viewer.ViewModels
         public ReactiveCommand PlayCommand { get; } = new ReactiveCommand();
         public ReactiveCommand NextStepCommand { get; } = new ReactiveCommand();
         public ReactiveCommand PreviousStepCommand { get; } = new ReactiveCommand();
-        public ReactiveCommand OpenDiaLogCommand { get; } = new ReactiveCommand();
+
         public ReactiveCommand PlotRun { get; } = new ReactiveCommand();
 
         // True：再生中　False：停止中
@@ -80,7 +85,7 @@ namespace FlexID.Viewer.ViewModels
         public MainWindowViewModel(Model model)
         {
             this.model = model;
-            this.model.SelectPath = OutPath;
+            this.model.ResultFilePath = OutPath;
 
             DataValues = this.model._dataValues.ToReadOnlyReactiveCollection();
             ComboList = this.model._comboList.ToReadOnlyReactiveCollection();
@@ -97,7 +102,29 @@ namespace FlexID.Viewer.ViewModels
             GraphLabel = this.model.ObserveProperty(x => x.GraphLabel).ToReadOnlyReactiveProperty();
             PlotModel = this.model.ObserveProperty(x => x.PlotModel).ToReadOnlyReactiveProperty();
 
-            SelectPath = this.model.ToReactivePropertyAsSynchronized(x => x.SelectPath);
+            #region 出力ファイル情報
+
+            ResultFilePath = this.model.ToReactivePropertySlimAsSynchronized(x => x.ResultFilePath);
+
+            SelectResultFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
+            {
+                var selected = paths?[0] ?? SelectResultFile();
+                if (selected is string path)
+                    ResultFilePath.Value = path;
+            });
+
+            // テキストボックスの内容を変更後0.5秒後にイベント発生
+            ResultFilePath.Throttle(TimeSpan.FromSeconds(0.5)).Subscribe(_ =>
+            {
+                try
+                {
+                    this.model.Reader();
+                }
+                catch { }
+            });
+
+            #endregion
+
             OnValue = this.model.ToReactivePropertyAsSynchronized(x => x.OnValue);
 
             #region コンター表示
@@ -114,23 +141,12 @@ namespace FlexID.Viewer.ViewModels
             PlayCommand.Subscribe(() => this.model.Playing());
             NextStepCommand.Subscribe(() => this.model.NextStep());
             PreviousStepCommand.Subscribe(() => this.model.PreviousStep());
-            OpenDiaLogCommand.Subscribe(() => OpenDiaLog());
             PlotRun.Subscribe(() => this.model.Graph());
 
             // OnValueの値が変更されたらイベント発生
             OnValue.Subscribe(_ =>
             {
                 this.model.GetValues();
-            });
-
-            // テキストボックスの内容を変更後0.5秒後にイベント発生
-            SelectPath.Throttle(TimeSpan.FromSeconds(0.5)).Subscribe(_ =>
-            {
-                try
-                {
-                    this.model.Reader();
-                }
-                catch { }
             });
 
             // コンボボックスでパターンを選択
@@ -175,13 +191,15 @@ namespace FlexID.Viewer.ViewModels
         /// <summary>
         /// ファイルダイアログ操作
         /// </summary>
-        private void OpenDiaLog()
+        private string SelectResultFile()
         {
             var dialog = new OpenFileDialog();
             dialog.ShowDialog();
 
             if (dialog.FileName != "")
-                SelectPath.Value = dialog.FileName;
+                return dialog.FileName;
+
+            return null;
         }
     }
 }
