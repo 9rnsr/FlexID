@@ -8,6 +8,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:oxy="http://oxyplot.org/wpf"
   xmlns:prism="http://prismlibrary.com/"
+  xmlns:v="clr-namespace:FlexID.Viewer.Views"
   xmlns:vm="clr-namespace:FlexID.Viewer.ViewModels"
   Title="FlexID_Viewer"
   Width="1200"
@@ -984,65 +985,14 @@
           </Canvas>
         </Viewbox>
 
-        <Grid
+        <v:ColorScaleBar
           Grid.RowSpan="3"
           Grid.Column="2"
-          VerticalAlignment="Center">
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-
-          <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBox
-              x:Name="ContourMax"
-              Width="80"
-              Height="30"
-              VerticalContentAlignment="Center"
-              FontSize="14"
-              Text="{Binding ContourMax.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-              TextAlignment="Center" />
-            <Label
-              x:Name="MaxUnit"
-              MinWidth="50"
-              Content="{Binding Unit.Value}"
-              FontSize="14" />
-          </StackPanel>
-
-          <Rectangle
-            Grid.Row="1"
-            Width="30"
-            Height="250"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top">
-            <Rectangle.Fill>
-              <LinearGradientBrush>
-                <GradientStop Color="#FF0000" />
-                <GradientStop Offset="0.25" Color="#FFA500" />
-                <GradientStop Offset="0.5" Color="#FFFF00" />
-                <GradientStop Offset="0.75" Color="#00FF00" />
-                <GradientStop Offset="1" Color="#0000FF" />
-              </LinearGradientBrush>
-            </Rectangle.Fill>
-          </Rectangle>
-
-          <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBox
-              x:Name="ContourMin"
-              Width="80"
-              Height="30"
-              VerticalContentAlignment="Center"
-              FontSize="14"
-              Text="{Binding ContourMin.Value, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-              TextAlignment="Center" />
-            <Label
-              x:Name="MinUnit"
-              MinWidth="50"
-              Content="{Binding Unit.Value}"
-              FontSize="14" />
-          </StackPanel>
-        </Grid>
+          VerticalAlignment="Center"
+          ContourMax="{Binding ContourMax.Value}"
+          ContourMin="{Binding ContourMin.Value}"
+          ContourUnit="{Binding Unit.Value}"
+          FontSize="14" />
 
         <Grid
           Grid.Row="2"

@@ -1,12 +1,12 @@
+using Microsoft.Win32;
+using OxyPlot;
 using Prism.Mvvm;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Windows.Media;
-using Reactive.Bindings;
 using System.Reactive.Linq;
-using Microsoft.Win32;
-using Reactive.Bindings.Extensions;
-using OxyPlot;
+using System.Windows.Media;
 
 namespace FlexID.Viewer.ViewModels
 {
@@ -81,7 +81,6 @@ namespace FlexID.Viewer.ViewModels
             RadioNuclide = this.model.ObserveProperty(x => x.RadioNuclide).ToReactiveProperty();
             IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReactiveProperty();
             TimeStep = this.model.ObserveProperty(x => x.TimeStep).ToReactiveProperty();
-            Unit = this.model.ObserveProperty(x => x.Unit).ToReactiveProperty();
             IsPlaying = this.model.ObserveProperty(x => x.IsPlaying).ToReadOnlyReactiveProperty();
             StartStep = this.model.ObserveProperty(x => x.StartStep).ToReadOnlyReactiveProperty();
             EndStep = this.model.ObserveProperty(x => x.EndStep).ToReadOnlyReactiveProperty();
@@ -92,6 +91,7 @@ namespace FlexID.Viewer.ViewModels
             OnValue = this.model.ToReactivePropertyAsSynchronized(x => x.OnValue);
             ContourMax = this.model.ToReactivePropertyAsSynchronized(x => x.ContourMax);
             ContourMin = this.model.ToReactivePropertyAsSynchronized(x => x.ContourMin);
+            Unit = this.model.ObserveProperty(x => x.Unit).ToReactiveProperty();
             AxisX = this.model.ToReactivePropertyAsSynchronized(x => x.AxisX);
             AxisY = this.model.ToReactivePropertyAsSynchronized(x => x.AxisY);
 
