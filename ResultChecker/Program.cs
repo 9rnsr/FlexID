@@ -5,15 +5,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ResultChecker
 {
     internal partial class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            var targets = GetTargets().ToArray();
+            Regex pattern = null;
+            if (args.Length == 1)
+            {
+                try
+                {
+                    pattern = new Regex(args[0], RegexOptions.IgnoreCase);
+                }
+                catch
+                {
+                    Console.WriteLine("target pattern is not correct.");
+                    return -1;
+                }
+            }
+
+            var targets = GetTargets().Where(t => pattern?.IsMatch(t.Target) ?? true).ToArray();
             var results = new ConcurrentBag<Result>();
 
             // 並列に計算を実施する。
@@ -40,6 +55,8 @@ namespace ResultChecker
             //WriteSummaryCsv(sortedResults);
 
             WriteSummaryExcel("summary.xlsx", sortedResults);
+
+            return 0;
         }
 
         // 計算および比較の結果。
