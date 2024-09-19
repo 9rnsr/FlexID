@@ -55,6 +55,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="8" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
           </Grid.RowDefinitions>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
@@ -139,6 +141,24 @@
             FontSize="14"
             IsReadOnly="True"
             Text="{Binding IntakeRoute.Value, Mode=OneWay}" />
+
+          <TextBlock
+            Grid.Row="8"
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            FontSize="14"
+            Text="Nuclide" />
+          <ComboBox
+            Grid.Row="8"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Width="180"
+            Height="30"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontSize="14"
+            ItemsSource="{Binding Nuclides}"
+            SelectedItem="{Binding SelectedNuclide.Value}" />
         </Grid>
 
         <DataGrid
@@ -351,6 +371,13 @@
             FontSize="14"
             ItemsSource="{Binding OutputTypes}"
             SelectedItem="{Binding SelectedOutputType.Value}" />
+          <ComboBox
+            Width="140"
+            Height="30"
+            Margin="0,0,20,0"
+            FontSize="14"
+            ItemsSource="{Binding Nuclides}"
+            SelectedItem="{Binding SelectedNuclide.Value}" />
         </StackPanel>
 
         <DataGrid

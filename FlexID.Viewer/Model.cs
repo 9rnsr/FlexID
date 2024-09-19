@@ -119,7 +119,7 @@ namespace FlexID.Viewer
         /// <summary>
         /// 表示中の核種のデータ。
         /// </summary>
-        private OutputNuclideData CurrentNuclide => CurrentOutput?.Nuclides[0];
+        private OutputNuclideData CurrentNuclide { get; set; }
 
         /// <summary>
         /// 核種。
@@ -140,6 +140,11 @@ namespace FlexID.Viewer
             set => SetProperty(ref intakeRoute, value);
         }
         private string intakeRoute = "";
+
+        /// <summary>
+        /// 核種リスト。
+        /// </summary>
+        public ObservableCollection<string> Nuclides { get; } = new ObservableCollection<string>();
 
         #endregion
 
@@ -439,6 +444,15 @@ namespace FlexID.Viewer
 
             Nuclide = "";
             IntakeRoute = "";
+            Nuclides.Clear();
+            ClearNuclide();
+        }
+
+        private void ClearNuclide()
+        {
+            if (CurrentNuclide is null)
+                return;
+            CurrentNuclide = null;
 
             ContourMax = 0;
             ContourMin = 0;
@@ -518,6 +532,25 @@ namespace FlexID.Viewer
 
             Nuclide = CurrentOutput.Nuclide;
             IntakeRoute = CurrentOutput.IntakeRoute;
+            Nuclides.AddRange(CurrentOutput.Nuclides.Select(n => n.Nuclide));
+        }
+
+        /// <summary>
+        /// 崩壊系列を構成する核種から描画対象を設定する。
+        /// </summary>
+        public void SetNuclide(string nuc)
+        {
+            if (CurrentNuclide?.Nuclide == nuc)
+                return;
+
+            var index = Nuclides.IndexOf(nuc);
+            if (index == -1)
+            {
+                ClearNuclide();
+                return;
+            }
+
+            CurrentNuclide = CurrentOutput.Nuclides[index];
 
             SetMinMax();
             SetSteps();
