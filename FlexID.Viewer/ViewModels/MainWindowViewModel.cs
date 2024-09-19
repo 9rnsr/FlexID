@@ -29,9 +29,7 @@ namespace FlexID.Viewer.ViewModels
 
         public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new ReactivePropertySlim<OutputType?>();
 
-        public ReadOnlyReactivePropertySlim<string> Nuclide { get; }
-
-        public ReadOnlyReactivePropertySlim<string> IntakeRoute { get; }
+        public ReadOnlyReactivePropertySlim<string> Title { get; }
 
         public ObservableCollection<string> Nuclides => this.model.Nuclides;
 
@@ -146,9 +144,7 @@ namespace FlexID.Viewer.ViewModels
                 }
             });
 
-            Nuclide = this.model.ObserveProperty(x => x.Nuclide).ToReadOnlyReactivePropertySlim();
-
-            IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReadOnlyReactivePropertySlim();
+            Title = this.model.ObserveProperty(x => x.Title).ToReadOnlyReactivePropertySlim();
 
             SelectedNuclide.Subscribe(nuc => this.model.SetNuclide(nuc));
 

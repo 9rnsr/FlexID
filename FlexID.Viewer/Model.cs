@@ -112,6 +112,16 @@ namespace FlexID.Viewer
         public ObservableCollection<OutputType> OutputTypes { get; } = new ObservableCollection<OutputType>();
 
         /// <summary>
+        /// インプットのタイトル。
+        /// </summary>
+        public string Title
+        {
+            get => title;
+            set => SetProperty(ref title, value);
+        }
+        private string title = "";
+
+        /// <summary>
         /// 表示中の出力ファイルのデータ。
         /// </summary>
         private OutputData CurrentOutput { get; set; }
@@ -120,26 +130,6 @@ namespace FlexID.Viewer
         /// 表示中の核種のデータ。
         /// </summary>
         private OutputNuclideData CurrentNuclide { get; set; }
-
-        /// <summary>
-        /// 核種。
-        /// </summary>
-        public string Nuclide
-        {
-            get => nuclide;
-            set => SetProperty(ref nuclide, value);
-        }
-        private string nuclide = "";
-
-        /// <summary>
-        /// 摂取経路。
-        /// </summary>
-        public string IntakeRoute
-        {
-            get => intakeRoute;
-            set => SetProperty(ref intakeRoute, value);
-        }
-        private string intakeRoute = "";
 
         /// <summary>
         /// 核種リスト。
@@ -442,8 +432,7 @@ namespace FlexID.Viewer
                 return;
             CurrentOutput = null;
 
-            Nuclide = "";
-            IntakeRoute = "";
+            Title = "";
             Nuclides.Clear();
             ClearNuclide();
         }
@@ -530,8 +519,7 @@ namespace FlexID.Viewer
 
             CurrentOutput = newOutput;
 
-            Nuclide = CurrentOutput.Nuclide;
-            IntakeRoute = CurrentOutput.IntakeRoute;
+            Title = $"{CurrentOutput.Nuclide}, {CurrentOutput.IntakeRoute}";
             Nuclides.AddRange(CurrentOutput.Nuclides.Select(n => n.Nuclide));
         }
 
