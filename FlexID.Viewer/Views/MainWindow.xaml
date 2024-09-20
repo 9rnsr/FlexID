@@ -19,6 +19,7 @@
   MinHeight="800"
   d:DataContext="{d:DesignInstance Type={x:Type vm:MainWindowViewModel}}"
   prism:ViewModelLocator.AutoWireViewModel="True"
+  PreviewKeyDown="MetroWindow_PreviewKeyDown"
   TitleCharacterCasing="Normal"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
