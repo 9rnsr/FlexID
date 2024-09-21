@@ -32,6 +32,13 @@
     </Style>
   </Controls:MetroWindow.Resources>
 
+  <Controls:MetroWindow.InputBindings>
+    <KeyBinding
+      Key="O"
+      Command="{Binding SelectOutputFilePathCommand}"
+      Modifiers="Ctrl" />
+  </Controls:MetroWindow.InputBindings>
+
   <Grid
     Grid.Row="0"
     Grid.Column="0"
@@ -102,8 +109,9 @@
       VerticalAlignment="Center"
       Controls:ControlsHelper.ContentCharacterCasing="Normal"
       Command="{Binding SelectOutputFilePathCommand}"
-      Content="Open"
-      FontSize="14" />
+      Content="_Open"
+      FontSize="14"
+      ToolTip="Open Output file (Ctrl+O)" />
 
     <Grid Grid.Column="2" Grid.ColumnSpan="3">
       <Grid.ColumnDefinitions>
@@ -138,9 +146,11 @@
     <Label
       Grid.Row="2"
       Grid.Column="0"
-      Content="Title"
-      FontSize="14" />
+      Content="_Title"
+      FontSize="14"
+      Target="{Binding ElementName=TitleTextBox}" />
     <TextBox
+      x:Name="TitleTextBox"
       Grid.Row="2"
       Grid.Column="2"
       Grid.ColumnSpan="2"
@@ -150,9 +160,11 @@
     <Label
       Grid.Row="4"
       Grid.Column="0"
-      Content="Output Type"
-      FontSize="14" />
+      Content="_Output Type"
+      FontSize="14"
+      Target="{Binding ElementName=OutputTypeComboBox}" />
     <ComboBox
+      x:Name="OutputTypeComboBox"
       Grid.Row="4"
       Grid.Column="2"
       ItemsSource="{Binding OutputTypes}"
@@ -163,9 +175,11 @@
       Grid.Row="6"
       Grid.Column="0"
       VerticalAlignment="Center"
-      Content="Nuclides"
-      FontSize="14" />
+      Content="_Nuclides"
+      FontSize="14"
+      Target="{Binding ElementName=NuclidesComboBox}" />
     <ComboBox
+      x:Name="NuclidesComboBox"
       Grid.Row="6"
       Grid.Column="2"
       ItemsSource="{Binding Nuclides}"
@@ -419,13 +433,13 @@
               Height="18"
               Margin="0,0,40,0"
               VerticalAlignment="Center"
-              Content="Log(Vertical)"
+              Content="Log(_Vertical)"
               IsChecked="{Binding IsLogAxisY.Value}" />
             <CheckBox
               Height="18"
               Margin="0,0,40,0"
               VerticalAlignment="Center"
-              Content="Log(Horizontal)"
+              Content="Log(_Horizontal)"
               IsChecked="{Binding IsLogAxisX.Value}" />
           </StackPanel>
 
