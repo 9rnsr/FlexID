@@ -579,35 +579,61 @@ namespace FlexID.Viewer
         /// </summary>
         private void SetPlot()
         {
-            var calcTimes = CurrentOutput.TimeSteps;
-
+            var timeSteps = CurrentOutput.TimeSteps;
             var compartments = CurrentNuclide.Compartments;
-            for (int i = 0; i < compartments.Length; i++)
+
+            void AddSeries(string name, OxyColor? color = null)
             {
-                var compartment = compartments[i];
-                var values = compartment.Values;
+                var compartment = compartments.FirstOrDefault(c => c.Name == name);
+                if (compartment is null)
+                    return;
+
+                if (PlotModel.Series.Any(ser => ser.Title == name))
+                    return;
 
                 var serie = new ScatterSeries()
                 {
-                    Title = compartment.Name,
-                    IsVisible = false,  // 初期状態は非表示。
+                    Title = name,
+                    IsVisible = color != null,
+                    MarkerFill = color ?? OxyColors.Automatic,
                 };
-                for (int j = 0; j < calcTimes.Count; j++)
+
+                var values = compartment.Values;
+                for (int j = 0; j < timeSteps.Count; j++)
                 {
-                    if (calcTimes[j] == 0)
+                    if (timeSteps[j] == 0)
                         continue;
-                    serie.Points.Add(new ScatterPoint(calcTimes[j], values[j]));
+                    serie.Points.Add(new ScatterPoint(timeSteps[j], values[j]));
                 }
 
                 Regions.Add(new RegionData(serie, compartment.Name));
                 PlotModel.Series.Add(serie);
             }
 
+            var type = CurrentOutput.Type;
+
+            AddSeries("WholeBody", OxyColor.FromUInt32(0xFF4466A3));
+
+            if (type == OutputType.RetentionActivity ||
+                type == OutputType.CumulativeActivity)
+            {
+                AddSeries("Urine",            /**/OxyColor.FromUInt32(0xFFF39C35));
+                AddSeries("Faeces",           /**/OxyColor.FromUInt32(0xFFF14C14));
+                AddSeries("AlimentaryTract*", /**/OxyColor.FromUInt32(0xFF4E97A8));
+                AddSeries("Lungs*",           /**/OxyColor.FromUInt32(0xFF2B406B));
+                AddSeries("Skeleton*",        /**/OxyColor.FromUInt32(0xFFB3080E));
+                AddSeries("Liver*",           /**/OxyColor.FromUInt32(0xFFF2C05D));
+                AddSeries("Thyroid*",         /**/OxyColor.FromUInt32(0xFF1D7B63));
+            }
+
+            foreach (var compartment in compartments)
+                AddSeries(compartment.Name);
+
             var graphLabel =
-                CurrentOutput.Type == OutputType.RetentionActivity ? "Retention" :
-                CurrentOutput.Type == OutputType.CumulativeActivity ? "CumulativeActivity" :
-                CurrentOutput.Type == OutputType.Dose ? "Effective/Equivalent Dose" :
-                CurrentOutput.Type == OutputType.DoseRate ? "DoseRate" :
+                type == OutputType.RetentionActivity ? "Retention" :
+                type == OutputType.CumulativeActivity ? "CumulativeActivity" :
+                type == OutputType.Dose ? "Effective/Equivalent Dose" :
+                type == OutputType.DoseRate ? "DoseRate" :
                 throw new NotSupportedException();
             graphLabel += $"[{ContourUnit}]";
 
