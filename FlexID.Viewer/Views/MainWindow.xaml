@@ -124,7 +124,8 @@
         Padding="6"
         VerticalAlignment="Center"
         FontSize="14"
-        Text="{Binding OutputFilePath.Value}">
+        KeyDown="OutputFilePathTextBox_KeyDown"
+        Text="{Binding OutputFilePath.Value, UpdateSourceTrigger=Explicit}">
         <i:Interaction.Behaviors>
           <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
           <vb:PathPasteBehavior />

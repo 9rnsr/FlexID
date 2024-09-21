@@ -1,3 +1,6 @@
+using System.Windows.Controls;
+using System.Windows.Input;
+
 namespace FlexID.Viewer.Views
 {
     /// <summary>
@@ -8,6 +11,15 @@ namespace FlexID.Viewer.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void OutputFilePathTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None)
+            {
+                var binding = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
+                binding?.UpdateSource();
+            }
         }
     }
 }
