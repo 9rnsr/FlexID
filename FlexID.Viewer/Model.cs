@@ -1,3 +1,4 @@
+using FlexID.Calc;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -19,22 +20,34 @@ namespace FlexID.Viewer
         /// </summary>
         public Model()
         {
-            // モデル図に表示するための統一臓器名リスト
-            var FixListLines = File.ReadAllLines(@"lib/FixList.txt");
+            #region コンター表示
 
-            IntegratedOrgans = new List<string>();
+            organs = new List<string>();
+            organMap = new Dictionary<string, string>();
 
-            FixList = new Dictionary<string, string>();
+            unsetOrganValues = new Dictionary<string, double>();
+            unsetOrganColors = new Dictionary<string, string>();
 
-            foreach (var x in FixListLines)
+            foreach (var line in File.ReadLines(@"lib/FixList.txt"))
             {
-                var Lines = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                IntegratedOrgans.Add(Lines[0]);
-                for (int i = 1; i < Lines.Length; i++)
-                {
-                    FixList.Add(Lines[i], Lines[0]);
-                }
+                var parts = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var organ = parts[0];
+
+                organs.Add(organ);
+                for (int i = 1; i < parts.Length; i++)
+                    organMap.Add(parts[i], organ);
+
+                unsetOrganValues.Add(organ, 0);
+                unsetOrganColors.Add(organ, unsetColorCode);
             }
+
+            actualOrganValues = new Dictionary<string, double>(unsetOrganValues);
+            actualOrganColors = new Dictionary<string, string>(unsetOrganColors);
+
+            OrganValues = unsetOrganValues;
+            OrganColors = unsetOrganColors;
+
+            #endregion
 
             #region グラフ表示
 
@@ -86,32 +99,27 @@ namespace FlexID.Viewer
             #endregion
         }
 
-        // 表示する出力ファイル
-        private IEnumerable<string> TargetFile;
-
-        // 対象臓器
-        string[] Organs;
-
-        // モデル図に表示するための統一臓器名リスト
-        private List<string> IntegratedOrgans { get; }
-
-        // 臓器名をfixするためにテキストから読込んだリスト 
-        private Dictionary<string, string> FixList { get; }
-
-        public ObservableCollection<CalcData> _dataValues = new ObservableCollection<CalcData>();
-        public ObservableCollection<string> _comboList = new ObservableCollection<string>();
-
-        private string pattern = "";
-
         #region 出力ファイル情報
 
-        //　解析結果のファイルパス
-        public string ResultFilePath
-        {
-            get => resultFilePath;
-            set => SetProperty(ref resultFilePath, value);
-        }
-        private string resultFilePath;
+        /// <summary>
+        /// 出力ファイルリストのベースとなるパス文字列。
+        /// </summary>
+        private string BasePath { get; set; }
+
+        /// <summary>
+        /// 検出された出力ファイル種別のリスト。
+        /// </summary>
+        public ObservableCollection<OutputType> OutputTypes { get; } = new ObservableCollection<OutputType>();
+
+        /// <summary>
+        /// 表示中の出力ファイルのデータ。
+        /// </summary>
+        private OutputData CurrentOutput { get; set; }
+
+        /// <summary>
+        /// 表示中の核種のデータ。
+        /// </summary>
+        private OutputNuclideData CurrentNuclide => CurrentOutput?.Nuclides[0];
 
         /// <summary>
         /// 核種。
@@ -135,15 +143,51 @@ namespace FlexID.Viewer
 
         #endregion
 
-        // モデル図に表示するために合算された値
-        Dictionary<string, double> organValues = new Dictionary<string, double>();
+        #region コンター表示
+
+        /// <summary>
+        /// モデル図に表示するための、統一臓器名のリスト。
+        /// </summary>
+        private readonly List<string> organs;
+
+        /// <summary>
+        /// コンパートメント名をキーに、対応する統一臓器名を値にした辞書。
+        /// </summary>
+        private readonly Dictionary<string, string> organMap;
+
+        private readonly Dictionary<string, double> unsetOrganValues;
+        private readonly Dictionary<string, string> unsetOrganColors;
+
+        private readonly Dictionary<string, double> actualOrganValues;
+        private readonly Dictionary<string, string> actualOrganColors;
+
+        // モデル図で値が未設定の場合の色情報。
+        private readonly string unsetColorCode = Color.FromRgb(211, 211, 211).ToString();
+
+        /// <summary>
+        /// 現在の出力タイムステップにおける各コンパートメントの数値。
+        /// </summary>
+        public ObservableCollection<CalcData> DataValues { get; } = new ObservableCollection<CalcData>();
+
+        /// <summary>
+        /// モデル図に表示するための、統一臓器名とその合算された数値。
+        /// </summary>
         public Dictionary<string, double> OrganValues
         {
             get => organValues;
             set => SetProperty(ref organValues, value);
         }
+        private Dictionary<string, double> organValues;
 
-        #region コンター表示
+        /// <summary>
+        /// モデル図に表示するための、統一臓器名とその色情報。
+        /// </summary>
+        public Dictionary<string, string> OrganColors
+        {
+            get => organColors;
+            set => SetProperty(ref organColors, value);
+        }
+        private Dictionary<string, string> organColors;
 
         /// <summary>
         /// コンターの上限値。
@@ -192,7 +236,7 @@ namespace FlexID.Viewer
         /// <summary>
         /// 現在スライダーが示している出力タイムステップのインデックス。
         /// </summary>
-        private int currentTimeIndex = -1;
+        private int CurrentTimeIndex { get; set; } = -1;
 
         /// <summary>
         /// 現在スライダーが示している出力タイムステップ。
@@ -204,19 +248,19 @@ namespace FlexID.Viewer
             {
                 if (TimeSteps.Count == 0)
                 {
-                    currentTimeIndex = -1;
+                    CurrentTimeIndex = -1;
                     value = 0;
                 }
                 else if ((TimeSteps[0] is var start) && value < start)
                 {
                     // 下限側の範囲外。
-                    currentTimeIndex = 0;
+                    CurrentTimeIndex = 0;
                     value = start;
                 }
                 else if ((TimeSteps[TimeSteps.Count - 1] is var end) && end <= value)
                 {
                     // 上限側の範囲外。
-                    currentTimeIndex = TimeSteps.Count - 1;
+                    CurrentTimeIndex = TimeSteps.Count - 1;
                     value = end;
                 }
                 else
@@ -226,7 +270,7 @@ namespace FlexID.Viewer
                     {
                         if (value < TimeSteps[i])
                         {
-                            currentTimeIndex = i - 1;
+                            CurrentTimeIndex = i - 1;
                             value = TimeSteps[i - 1];
                             break;
                         }
@@ -248,14 +292,6 @@ namespace FlexID.Viewer
         private bool isPlaying;
 
         #endregion
-
-        // 臓器ごとの色情報
-        Dictionary<string, string> organColors = new Dictionary<string, string>();
-        public Dictionary<string, string> OrganColors
-        {
-            get => organColors;
-            set => SetProperty(ref organColors, value);
-        }
 
         #region グラフ表示
 
@@ -306,10 +342,10 @@ namespace FlexID.Viewer
             {
                 // 停止時の処理。
                 IsPlaying = true;
-                for (var i = currentTimeIndex + 1; i < TimeSteps.Count; i++)
+                for (var i = CurrentTimeIndex + 1; i < TimeSteps.Count; i++)
                 {
-                    currentTimeIndex = i + 1;
-                    CurrentTimeStep = TimeSteps[currentTimeIndex];
+                    CurrentTimeIndex = i;
+                    CurrentTimeStep = TimeSteps[CurrentTimeIndex];
                     await Task.Delay(200);
 
                     if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
@@ -332,12 +368,12 @@ namespace FlexID.Viewer
         {
             if (TimeSteps.Count == 0)
                 return;
-            if (currentTimeIndex == TimeSteps.Count - 1)
+            if (CurrentTimeIndex == TimeSteps.Count - 1)
                 return;
 
             IsPlaying = false;
-            currentTimeIndex++;
-            CurrentTimeStep = TimeSteps[currentTimeIndex];
+            CurrentTimeIndex++;
+            CurrentTimeStep = TimeSteps[CurrentTimeIndex];
         }
 
         /// <summary>
@@ -347,19 +383,60 @@ namespace FlexID.Viewer
         {
             if (TimeSteps.Count == 0)
                 return;
-            if (currentTimeIndex == 0)
+            if (CurrentTimeIndex == 0)
                 return;
 
             IsPlaying = false;
-            currentTimeIndex--;
-            CurrentTimeStep = TimeSteps[currentTimeIndex];
+            CurrentTimeIndex--;
+            CurrentTimeStep = TimeSteps[CurrentTimeIndex];
         }
 
-        /// <summary>
-        /// ファイル名から表示可能なパターンを検索
-        /// </summary>
-        public void Reader()
+        private string GetBasePath(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            path = path.Replace("_Retention.out", "");
+            path = path.Replace("_Cumulative.out", "");
+            path = path.Replace("_Dose.out", "");
+            path = path.Replace("_DoseRate.out", "");
+            try
+            {
+                return Path.GetFullPath(path);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static string GetSuffix(OutputType type)
+        {
+            switch (type)
+            {
+                case OutputType.RetentionActivity: return "Retention";
+                case OutputType.CumulativeActivity: return "Cumulative";
+                case OutputType.Dose: return "Dose";
+                case OutputType.DoseRate: return "DoseRate";
+
+                default:
+                case OutputType.Unknown:
+                    throw new NotSupportedException();
+            }
+        }
+
+        private void ClearTypes()
+        {
+            OutputTypes.Clear();
+            ClearOutput();
+        }
+
+        private void ClearOutput()
+        {
+            if (CurrentOutput is null)
+                return;
+            CurrentOutput = null;
+
             Nuclide = "";
             IntakeRoute = "";
 
@@ -368,247 +445,130 @@ namespace FlexID.Viewer
             ContourUnit = "-";
 
             TimeSteps = Array.Empty<double>();
-            currentTimeIndex = -1;
+            CurrentTimeIndex = -1;
             CurrentTimeStep = 0;
 
-            _dataValues.Clear();
-            _comboList.Clear();
-            OrganValues = new Dictionary<string, double>();
-            OrganColors = new Dictionary<string, string>();
+            ClearValues();
 
             Regions.Clear();
             PlotModel.Series.Clear();
+        }
 
-            if (ResultFilePath != "")
-            {
-                var path = ResultFilePath.Replace("_Retention.out", "");
-                path = path.Replace("_Cumulative.out", "");
-                path = path.Replace("_Dose.out", "");
-                path = path.Replace("_DoseRate.out", "");
-                path = Path.GetFullPath(path);
-
-                _comboList.Clear();
-                if (File.Exists(path + "_Retention.out"))
-                    _comboList.Add("Retention");
-                if (File.Exists(path + "_Cumulative.out"))
-                    _comboList.Add("CumulativeActivity");
-                if (File.Exists(path + "_Dose.out"))
-                    _comboList.Add("Dose");
-                if (File.Exists(path + "_DoseRate.out"))
-                    _comboList.Add("DoseRate");
-                if (_comboList.Count > 0)
-                    ReadHeader(path);
-            }
+        private void ClearValues()
+        {
+            DataValues.Clear();
+            OrganValues = unsetOrganValues;
+            OrganColors = unsetOrganColors;
         }
 
         /// <summary>
-        /// 選択されたファイルのヘッダー読み取り
+        /// ファイル名から描画可能な出力データ群を検索する。
         /// </summary>
-        /// <param name="Path"></param>
-        private void ReadHeader(string Path)
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public OutputType? SetTypes(string path)
         {
-            var Extension = "_" + _comboList[0].Replace("Activity", "") + ".out";
-
-            Path += Extension;
-            var file = File.ReadLines(Path);
-            foreach (var x in file)
+            var newBasePath = GetBasePath(path);
+            if (newBasePath != BasePath)
             {
-                var line = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                Nuclide = line[1];
-                IntakeRoute = line[2];
-                break;
+                BasePath = newBasePath;
+                ClearTypes();
+
+                if (BasePath != null)
+                {
+                    if (File.Exists(BasePath + "_Retention.out"))
+                        OutputTypes.Add(OutputType.RetentionActivity);
+                    if (File.Exists(BasePath + "_Cumulative.out"))
+                        OutputTypes.Add(OutputType.CumulativeActivity);
+                    if (File.Exists(BasePath + "_Dose.out"))
+                        OutputTypes.Add(OutputType.Dose);
+                    if (File.Exists(BasePath + "_DoseRate.out"))
+                        OutputTypes.Add(OutputType.DoseRate);
+                }
             }
+            return OutputTypes.FirstOrDefault(type =>
+                path.EndsWith($"_{GetSuffix(type)}.out", StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
-        /// 4つの中から描画するパターンを設定
+        /// 見つかっている出力データ群から描画対象を設定する。
         /// </summary>
-        public void SelectPattern(string selectCombo)
+        public void SetOutput(OutputType type)
         {
-            Regions.Clear();
-            PlotModel.Series.Clear();
+            if (CurrentOutput?.Type == type)
+                return;
 
-            pattern = selectCombo;
-
-            if (selectCombo != null)
+            OutputData newOutput = null;
+            if (OutputTypes.Contains(type))
             {
-                var path = ResultFilePath;
-
-                switch (selectCombo)
+                var targetPath = $"{BasePath}_{GetSuffix(type)}.out";
+                try
                 {
-                    case "Dose":
-                        ContourUnit = "Sv/Bq";
-                        break;
-
-                    case "DoseRate":
-                        ContourUnit = "Sv/h";
-                        break;
-
-                    case "Retention":
-                        ContourUnit = "Bq/Bq";
-                        break;
-
-                    case "CumulativeActivity":
-                        ContourUnit = "Bq";
-                        break;
+                    using (var reader = new OutputDataReader(targetPath))
+                        newOutput = reader.Read();
                 }
-
-                // ファイル名を固定していいならハードコーディングでいい？
-                path = path.Replace("_Retention.out", "");
-                path = path.Replace("_Cumulative.out", "");
-                path = path.Replace("_Dose.out", "");
-                path = path.Replace("_DoseRate.out", "");
-
-                var Target = path + "_" + selectCombo.Replace("Activity", "") + ".out";
-                TargetFile = File.ReadLines(Target);
-
-                foreach (var x in TargetFile.Skip(1))
-                {
-                    Organs = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    break;
-                }
-                Contour();
-                GetStep();
-                GetValues();
-                ReadResults();
+                catch (InvalidDataException) { }
             }
+
+            ClearOutput();
+            if (newOutput is null)
+                return;
+
+            CurrentOutput = newOutput;
+
+            Nuclide = CurrentOutput.Nuclide;
+            IntakeRoute = CurrentOutput.IntakeRoute;
+
+            SetMinMax();
+            SetSteps();
+            SetPlot();
+
+            SetValues();
         }
 
         /// <summary>
-        /// コンターの上限・下限値取得
+        /// 出力データからコンターの上限・下限値を設定する。
         /// </summary>
-        private void Contour()
+        private void SetMinMax()
         {
-            double max = 0;
-            double min = 0;
-
-            foreach (var x in TargetFile.Skip(3)) // ヘッダーを飛ばすために3行飛ばす
-            {
-                var line = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (line.Length < 6)
-                    continue;
-
-                List<double> values = new List<double>();
-                for (int i = 2; i < line.Length; i++) // 最初の2つを除くので2からスタート
-                {
-                    if (double.TryParse(line[i], out double num))
-                    {
-                        if (num > 0)
-                            values.Add(num);
-                    }
-                    else
-                        break;
-                }
-                if (values.Count < 1)
-                    continue;
-                if (max == 0)
-                {
-                    max = values.Max();
-                    min = values.Min();
-                }
-                else
-                {
-                    if (max < values.Max())
-                        max = values.Max();
-
-                    if (min > values.Min())
-                        min = values.Min();
-                }
-            }
+            var max = CurrentNuclide.Compartments.SelectMany(c => c.Values).Max();
+            var min = CurrentNuclide.Compartments.SelectMany(c => c.Values).Min();
 
             // 1E**に合わせる
-            max = Math.Log10(max);
-            max = Math.Ceiling(max);
-            ContourMax = Math.Pow(10, max);
+            ContourMax = Math.Pow(10, Math.Ceiling(Math.Log10(max)));
+            ContourMin = Math.Pow(10, Math.Floor(Math.Log10(min)));
 
-            min = Math.Log10(min);
-            min = Math.Floor(min);
-            ContourMin = Math.Pow(10, min);
+            ContourUnit = CurrentOutput.DataValueUnit;
         }
 
         /// <summary>
-        /// 選択されたファイルのタイムステップ取得
+        /// 出力データからタイムステップを設定する。
         /// </summary>
-        private void GetStep()
+        private void SetSteps()
         {
-            var steps = new List<double>();
-            foreach (var x in TargetFile.Skip(3))
-            {
-                if (x == "")
-                    break;
-                var line = x.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (line.Length < 1)
-                    continue;
-                steps.Add(double.Parse(line[0]));
-            }
-            TimeSteps = steps.AsReadOnly();
+            TimeSteps = CurrentOutput.TimeSteps;
 
-            if (TimeSteps.Count != 0)
-            {
-                currentTimeIndex = 0;
-                CurrentTimeStep = TimeSteps[currentTimeIndex];
-            }
+            var anySteps = TimeSteps.Count != 0;
+            CurrentTimeIndex = anySteps ? 0 : -1;
+            CurrentTimeStep = anySteps ? TimeSteps[CurrentTimeIndex] : 0;
         }
 
         /// <summary>
-        /// ファイルから臓器名および計算値取得
+        /// 出力データから全タイムステップにおけるコンパートメント毎の計算値をグラフ設定する。
         /// </summary>
-        public void GetValues()
+        private void SetPlot()
         {
-            if (TargetFile == null)
-                return;
-            if (TimeSteps.Count == 0)
-                return;
+            var calcTimes = CurrentOutput.TimeSteps;
 
-            var valuesLine = TargetFile.Skip(3 + currentTimeIndex).First();
-            var values = valuesLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-            _dataValues.Clear();
-            for (int i = 2; i < Organs.Length; i++)
-                _dataValues.Add(new CalcData(Organs[i], double.Parse(values[i])));
-
-            SetColor();
-        }
-
-        /// <summary>
-        /// 臓器ごとに全ステップの計算値取得
-        /// </summary>
-        private void ReadResults()
-        {
-            var regions = TargetFile.Skip(1).Take(1)
-                .SelectMany(x => x.Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)))
-                .ToList();
-            var units = TargetFile.Skip(2).Take(1)
-                .SelectMany(x => x.Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)))
-                .ToList();
-
-            var calcTimes = default(List<double>);
-
-            var unit = units[1];
-
-            Regions.Clear();
-            PlotModel.Series.Clear();
-
-            for (int i = 0; i < regions.Count; i++)
+            var compartments = CurrentNuclide.Compartments;
+            for (int i = 0; i < compartments.Length; i++)
             {
-                var values = new List<double>();
-                foreach (var y in TargetFile.Skip(3))
-                {
-                    if (y == "")
-                        break;
-                    var value = y.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    values.Add(double.Parse(value[i]));
-                }
-
-                if (i == 0)
-                {
-                    calcTimes = values;
-                    continue;
-                }
+                var compartment = compartments[i];
+                var values = compartment.Values;
 
                 var serie = new ScatterSeries()
                 {
-                    Title = regions[i],
+                    Title = compartment.Name,
                     IsVisible = false,  // 初期状態は非表示。
                 };
                 for (int j = 0; j < calcTimes.Count; j++)
@@ -618,14 +578,18 @@ namespace FlexID.Viewer
                     serie.Points.Add(new ScatterPoint(calcTimes[j], values[j]));
                 }
 
-                Regions.Add(new RegionData(serie, regions[i]));
+                Regions.Add(new RegionData(serie, compartment.Name));
                 PlotModel.Series.Add(serie);
             }
 
-            var graphLabel = pattern;
-            if (graphLabel == "Dose")
-                graphLabel = "Effective/Equivalent Dose";
-            graphLabel += unit;
+            var graphLabel =
+                CurrentOutput.Type == OutputType.RetentionActivity ? "Retention" :
+                CurrentOutput.Type == OutputType.CumulativeActivity ? "CumulativeActivity" :
+                CurrentOutput.Type == OutputType.Dose ? "Effective/Equivalent Dose" :
+                CurrentOutput.Type == OutputType.DoseRate ? "DoseRate" :
+                throw new NotSupportedException();
+            graphLabel += $"[{ContourUnit}]";
+
             LogAxisY.Title = graphLabel;
             LinAxisY.Title = graphLabel;
 
@@ -634,27 +598,68 @@ namespace FlexID.Viewer
         }
 
         /// <summary>
-        /// コンターの上限下限から計算値の割合を算出し、モデル図の色を設定する
+        /// 現在の出力タイムステップにおける計算値を取得し、モデルの図の値を設定する。
         /// </summary>
-        public void SetColor()
+        public void SetValues()
         {
-            OrganValues = new Dictionary<string, double>();
-            foreach (var x in IntegratedOrgans)
+            if (CurrentNuclide is null)
+                return;
+            if (TimeSteps.Count == 0)
+                return;
+
+            DataValues.Clear();
+            OrganValues = unsetOrganValues;
+
+            foreach (var organ in organs)
             {
-                OrganValues.Add(x, 0);
+                actualOrganValues[organ] = 0;
             }
 
-            foreach (var x in _dataValues)
+            var compartments = CurrentNuclide.Compartments;
+            for (int i = 0; i < compartments.Length; i++)
             {
-                if (FixList.TryGetValue(x.OrganName, out var integratedOrgan))
-                    OrganValues[integratedOrgan] += x.Value;
+                var compartment = compartments[i];
+                var value = compartment.Values[CurrentTimeIndex];
+
+                DataValues.Add(new CalcData(compartment.Name, value));
+
+                if (organMap.TryGetValue(compartment.Name, out var organ))
+                    actualOrganValues[organ] += value;
             }
 
-            OrganColors = new Dictionary<string, string>();
-            foreach (var x in OrganValues)
+            OrganValues = actualOrganValues;
+
+            // 数値が変わるので、色も再設定が必要。
+            SetColors();
+        }
+
+        /// <summary>
+        /// 現在の出力タイムステップにおける計算値の割合をコンターの上限下限から算出し、モデル図の色を設定する。
+        /// </summary>
+        public void SetColors()
+        {
+            if (CurrentNuclide is null)
+                return;
+            if (TimeSteps.Count == 0)
+                return;
+
+            OrganColors = unsetOrganColors;
+
+            foreach (var organ in organs)
             {
-                Color ColorCode;
-                byte R, G, B = 0;
+                var contourVal = OrganValues[organ];
+
+                if (contourVal == 0) // 計算値が0の時は別処理をする
+                {
+                    actualOrganColors[organ] = unsetColorCode;
+                    continue;
+                }
+
+                var frac = (Math.Log(contourVal) - Math.Log(ContourMin))
+                         / (Math.Log(ContourMax) - Math.Log(ContourMin));
+
+                Color color;
+                byte R, G, B;
 
                 //          R    G    B
                 // Red     255   0    0
@@ -663,19 +668,9 @@ namespace FlexID.Viewer
                 // Lime     0   255   0
                 // Blue     0    0   255
 
-                if (x.Value == 0) // 計算値が0の時は別処理をする
-                {
-                    ColorCode = Color.FromRgb(211, 211, 211);
-
-                    OrganColors.Add(x.Key, ColorCode.ToString());
-                    continue;
-                }
-
-                double frac = (Math.Log(x.Value) - Math.Log(ContourMin)) / (Math.Log(ContourMax) - Math.Log(ContourMin));
-
                 if (frac > 1) // コンターの上限を超える
                 {
-                    ColorCode = Color.FromRgb(255, 0, 0);
+                    color = Color.FromRgb(255, 0, 0);
                 }
                 else if (frac > 0.75) // Red～Orangeの間
                 {
@@ -683,7 +678,7 @@ namespace FlexID.Viewer
                     //R = (byte)(255 + (0 * frac));
                     G = (byte)(165 - (165 * frac));
                     //B = (byte)(0 + (0 * frac));
-                    ColorCode = Color.FromRgb(255, G, 0);
+                    color = Color.FromRgb(255, G, 0);
                 }
                 else if (frac > 0.5) // Orange～Yellowの間
                 {
@@ -691,7 +686,7 @@ namespace FlexID.Viewer
                     //R = (byte)(255 + (0 * frac));
                     G = (byte)(255 - (90 * frac));
                     //B = (byte)(0 + (0 * frac));
-                    ColorCode = Color.FromRgb(255, G, 0);
+                    color = Color.FromRgb(255, G, 0);
                 }
                 else if (frac > 0.25) // Yellow～Limeの間
                 {
@@ -699,7 +694,7 @@ namespace FlexID.Viewer
                     R = (byte)(0 + (255 * frac));
                     //G = (byte)(255 + (0 * frac));
                     //B = (byte)(0 + (0 * frac));
-                    ColorCode = Color.FromRgb(R, 255, 0);
+                    color = Color.FromRgb(R, 255, 0);
                 }
                 else if (frac > 0) // Lime～Blueの間
                 {
@@ -707,13 +702,17 @@ namespace FlexID.Viewer
                     //R = (byte)(0 + (0 * frac));
                     G = (byte)(0 + (255 * frac));
                     B = (byte)(255 - (255 * frac));
-                    ColorCode = Color.FromRgb(0, G, B);
+                    color = Color.FromRgb(0, G, B);
                 }
                 else  // コンターの下限を下回る
-                    ColorCode = Color.FromRgb(0, 0, 255);
+                {
+                    color = Color.FromRgb(0, 0, 255);
+                }
 
-                OrganColors.Add(x.Key, ColorCode.ToString());
+                actualOrganColors[organ] = color.ToString();
             }
+
+            OrganColors = actualOrganColors;
         }
     }
 

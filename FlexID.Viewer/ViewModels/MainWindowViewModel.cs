@@ -1,3 +1,4 @@
+using FlexID.Calc;
 using Microsoft.Win32;
 using OxyPlot;
 using Prism.Mvvm;
@@ -5,6 +6,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 
 namespace FlexID.Viewer.ViewModels
@@ -16,7 +18,38 @@ namespace FlexID.Viewer.ViewModels
         // 入力GUIから受け取るファイルパス
         public static string OutPath = "";
 
+        #region 出力ファイル情報
+
+        public ReactivePropertySlim<string> OutputFilePath { get; }
+
+        public ReactiveCommandSlim<string[]> SelectOutputFilePathCommand { get; }
+
+        public ObservableCollection<OutputType> OutputTypes => this.model.OutputTypes;
+
+        public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new ReactivePropertySlim<OutputType?>();
+
+        public ReadOnlyReactivePropertySlim<string> Nuclide { get; }
+
+        public ReadOnlyReactivePropertySlim<string> IntakeRoute { get; }
+
+        #endregion
+
         #region コンター表示
+
+        /// <summary>
+        /// DataGridに表示するコンパートメント毎の計算値。
+        /// </summary>
+        public ReadOnlyReactiveCollection<CalcData> DataValues { get; }
+
+        /// <summary>
+        /// モデル図に表示するための、統一臓器名とその合算された数値。
+        /// </summary>
+        public ReadOnlyReactivePropertySlim<Dictionary<string, double>> OrganValues { get; }
+
+        /// <summary>
+        /// モデル図に表示するための、統一臓器名とその色情報。
+        /// </summary>
+        public ReadOnlyReactivePropertySlim<Dictionary<string, string>> OrganColors { get; }
 
         /// <summary>
         /// コンターの上限値。
@@ -32,29 +65,6 @@ namespace FlexID.Viewer.ViewModels
         /// コンターに表示される単位。
         /// </summary>
         public ReadOnlyReactivePropertySlim<string> ContourUnit { get; }
-
-        #endregion
-
-        // データグリッドに表示する生の計算値
-        public ReadOnlyReactiveCollection<CalcData> DataValues { get; }
-
-        // 臓器ごとの色情報
-        public ReactiveProperty<Dictionary<string, string>> OrganColors { get; } = new ReactiveProperty<Dictionary<string, string>>();
-
-        // モデル図に表示するために合算された値
-        public ReactiveProperty<Dictionary<string, double>> OrganValues { get; set; } = new ReactiveProperty<Dictionary<string, double>>();
-
-        #region 出力ファイル情報
-
-        public ReadOnlyReactiveCollection<string> ComboList { get; }
-        public ReactiveProperty<string> SelectCombo { get; } = new ReactiveProperty<string>();
-
-        public ReactivePropertySlim<string> ResultFilePath { get; }
-
-        public ReactiveCommandSlim<string[]> SelectResultFilePathCommand { get; }
-
-        public ReadOnlyReactivePropertySlim<string> Nuclide { get; }
-        public ReadOnlyReactivePropertySlim<string> IntakeRoute { get; }
 
         #endregion
 
@@ -98,45 +108,48 @@ namespace FlexID.Viewer.ViewModels
         public MainWindowViewModel(Model model)
         {
             this.model = model;
-            this.model.ResultFilePath = OutPath;
-
-            DataValues = this.model._dataValues.ToReadOnlyReactiveCollection();
-            ComboList = this.model._comboList.ToReadOnlyReactiveCollection();
-
-            OrganValues = this.model.ObserveProperty(x => x.OrganValues).ToReactiveProperty();
-            OrganColors = this.model.ObserveProperty(x => x.OrganColors).ToReactiveProperty();
 
             #region 出力ファイル情報
 
-            ResultFilePath = this.model.ToReactivePropertySlimAsSynchronized(x => x.ResultFilePath);
+            OutputFilePath = new ReactivePropertySlim<string>("");
 
-            SelectResultFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
+            SelectOutputFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
             {
-                var selected = paths?[0] ?? SelectResultFile();
+                var selected = paths?[0] ?? SelectOutputFile();
                 if (selected is string path)
-                    ResultFilePath.Value = path;
+                    OutputFilePath.Value = path;
             });
 
-            // テキストボックスの内容を変更後0.5秒後にイベント発生
-            ResultFilePath.Throttle(TimeSpan.FromSeconds(0.5)).Subscribe(_ =>
+            OutputFilePath
+                .Select(path => this.model.SetTypes(path))
+                .ObserveOnUIDispatcher()
+                .Subscribe(type => SelectedOutputType.Value = type);
+
+            SelectedOutputType.Subscribe(type =>
             {
-                try
-                {
-                    this.model.Reader();
-                }
-                catch { }
+                if (type is OutputType t)
+                    this.model.SetOutput(t);
             });
 
             Nuclide = this.model.ObserveProperty(x => x.Nuclide).ToReadOnlyReactivePropertySlim();
+
             IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReadOnlyReactivePropertySlim();
 
             #endregion
 
             #region コンター表示
 
+            DataValues = this.model.DataValues.ToReadOnlyReactiveCollection();
+
+            OrganValues = this.model.ObserveProperty(x => x.OrganValues).ToReadOnlyReactivePropertySlim();
+            OrganColors = this.model.ObserveProperty(x => x.OrganColors).ToReadOnlyReactivePropertySlim();
+
             ContourMax = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMax);
             ContourMin = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMin);
             ContourUnit = this.model.ObserveProperty(x => x.ContourUnit).ToReadOnlyReactivePropertySlim();
+
+            ContourMax.Subscribe(_ => this.model.SetColors());
+            ContourMin.Subscribe(_ => this.model.SetColors());
 
             #endregion
 
@@ -148,7 +161,7 @@ namespace FlexID.Viewer.ViewModels
 
             CurrentTimeStep = this.model.ToReactivePropertyAsSynchronized(x => x.CurrentTimeStep);
 
-            CurrentTimeStep.Subscribe(_ => this.model.GetValues());
+            CurrentTimeStep.Subscribe(_ => this.model.SetValues());
 
             IsPlaying = this.model.ObserveProperty(x => x.IsPlaying).ToReadOnlyReactiveProperty();
 
@@ -167,32 +180,14 @@ namespace FlexID.Viewer.ViewModels
 
             #endregion
 
-            // コンボボックスでパターンを選択
-            SelectCombo.Subscribe(str =>
-            {
-                if (str == null)
-                    return;
-
-                this.model.SelectPattern(SelectCombo.Value);
-            });
-
-            // コンターの上限・下限設定
-            ContourMax.Subscribe(_ =>
-            {
-                if (DataValues.Count != 0)
-                    this.model.SetColor();
-            });
-            ContourMin.Subscribe(_ =>
-            {
-                if (DataValues.Count != 0)
-                    this.model.SetColor();
-            });
+            if (!string.IsNullOrEmpty(OutPath))
+                OutputFilePath.Value = OutPath;
         }
 
         /// <summary>
         /// ファイルダイアログ操作
         /// </summary>
-        private string SelectResultFile()
+        private string SelectOutputFile()
         {
             var dialog = new OpenFileDialog();
             dialog.ShowDialog();
