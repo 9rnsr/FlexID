@@ -227,53 +227,45 @@ namespace ResultChecker
 
             var retentions = new List<Retention>();
 
-            string line;
-            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            using (var reader = new OutputDataReader(filePath))
             {
+                var data = reader.Read();
+                var result = data.Nuclides[0];
+
                 if (nuclide == "Cs-137")
                 {
                     // 子孫核種であるBa-137mの結果を読み出す。
-                    while ((line = reader.ReadLine()) != "")
-                        continue;
+                    result = data.Nuclides[1];
                 }
 
-                reader.ReadLine();
+                var compartments = result.Compartments.Select(c => c.Name).ToArray();
 
-                var compartments = reader.ReadLine()
-                    .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                var indexUrine = Array.IndexOf(compartments, "Urine");
-                var indexFaeces = Array.IndexOf(compartments, "Faeces");
-                if (indexUrine == -1) throw new InvalidDataException();
-                if (indexFaeces == -1) throw new InvalidDataException();
+                OutputCompartmentData GetCompartmentData(string name)
+                {
+                    var index = Array.IndexOf(compartments, name);
+                    return index != -1 ? result.Compartments[index] : null;
+                }
 
-                reader.ReadLine();
+                var resultWholeBody /**/= GetCompartmentData("WholeBody");
+                var resultUrine     /**/= GetCompartmentData("Urine");
+                var resultFaeces    /**/= GetCompartmentData("Faeces");
+
+                if (resultWholeBody is null)
+                    throw new InvalidDataException();
 
                 // 経過時間ゼロでの残留放射能＝初期配分の結果を読み飛ばす。
-                reader.ReadLine();
-
-                var startTime = 0.0;
-
-                while ((line = reader.ReadLine()) != null)
+                for (int istep = 1; istep < data.TimeSteps.Count; istep++)
                 {
-                    if (line.Length == 0)
-                        break;
+                    double? GetValue(OutputCompartmentData res) => res?.Values[istep];
 
-                    var columns = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    var endTime = double.Parse(columns[0]);
-                    var wholeBody /**/= double.Parse(columns[1]);
-                    var urine     /**/= double.Parse(columns[indexUrine]);
-                    var faeces    /**/= double.Parse(columns[indexFaeces]);
                     retentions.Add(new Retention
                     {
-                        StartTime /**/= startTime,
-                        EndTime   /**/= endTime,
-                        WholeBody /**/= wholeBody,
-                        Urine     /**/= urine,
-                        Faeces    /**/= faeces,
+                        StartTime /**/= data.TimeSteps[istep - 1],
+                        EndTime   /**/= data.TimeSteps[istep],
+                        WholeBody /**/= GetValue(resultWholeBody).Value,
+                        Urine     /**/= GetValue(resultUrine),
+                        Faeces    /**/= GetValue(resultFaeces),
                     });
-
-                    startTime = endTime;
                 }
             }
 
