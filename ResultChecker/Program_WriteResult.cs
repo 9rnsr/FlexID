@@ -26,6 +26,9 @@ namespace ResultChecker
                 // 対象毎の残留放射能の確認シートを作成。
                 foreach (var res in sortedResults)
                 {
+                    if (res.HasErrors)
+                        continue;
+
                     var sheetRes = package.Workbook.Worksheets.Add(res.Target);
                     WriteResultSheet(sheetRes, res);
                 }
@@ -38,100 +41,105 @@ namespace ResultChecker
         {
             sheet.Cells[1, 1].Value = "Summary";
 
-            sheet.Cells[3, 1].Value = "Target";
-            sheet.Cells[3, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[3, 1, 4, 1].Merge = true;
+            const int rowH = 3;
+            const int rowV = rowH + 2;
+            const int colT = 1;
+            const int colD = 2;
+            const int colA = 6;
 
-            sheet.Cells[3, 2].Value = "Whole Body Effective Dose";
-            sheet.Cells[3, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[3, 2, 3, 4].Merge = true;
-            sheet.Cells[4, 2].Value = "OIR";
-            sheet.Cells[4, 3].Value = "FlexID";
-            sheet.Cells[4, 4].Value = "Diff";
-            sheet.Cells[4, 2, 4, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[4, 2, 4, 4].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[4, 2, 4, 4].Style.WrapText = true;
+            // Target
+            {
+                sheet.Cells[rowH + 0, colT].Value = "Target";
+                sheet.Cells[rowH + 0, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[rowH + 0, colT, rowH + 1, colT].Merge = true;
+            }
 
-            sheet.Cells[3, 6].Value = "Whole Body";
-            sheet.Cells[3, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[3, 6, 3, 7].Merge = true;
-            sheet.Cells[4, 6].Value = "Diff (min)";
-            sheet.Cells[4, 7].Value = "Diff (max)";
-            sheet.Cells[4, 6, 4, 7].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[4, 6, 4, 7].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[4, 6, 4, 7].Style.WrapText = true;
+            // Dose
+            {
+                var (r0, r1) = (rowH + 0, rowH + 1);
+                var (c0, c1, c2) = (colD + 0, colD + 1, colD + 2);
+                sheet.Cells[r0, c0].Value = "Whole Body Effective Dose";
+                sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r0, c0, r0, c2].Merge = true;
+                sheet.Cells[r1, c0].Value = "OIR";
+                sheet.Cells[r1, c1].Value = "FlexID";
+                sheet.Cells[r1, c2].Value = "Diff";
+                sheet.Cells[r1, c0, r1, c2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c2].Style.WrapText = true;
+            }
 
-            sheet.Cells[3, 8].Value = "Urine";
-            sheet.Cells[3, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[3, 8, 3, 9].Merge = true;
-            sheet.Cells[4, 8].Value = "Diff (min)";
-            sheet.Cells[4, 9].Value = "Diff (max)";
-            sheet.Cells[4, 8, 4, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[4, 8, 4, 9].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[4, 8, 4, 9].Style.WrapText = true;
+            // Activity
+            void WriteActivityHeader(int c, string header)
+            {
+                var (r0, r1) = (rowH + 0, rowH + 1);
+                var (c0, c1) = (c + 0, c + 1);
+                sheet.Cells[r0, c0].Value = header;
+                sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r0, c0, r0, c1].Merge = true;
+                sheet.Cells[r1, c0].Value = "Diff (min)";
+                sheet.Cells[r1, c1].Value = "Diff (max)";
+                sheet.Cells[r1, c0, r1, c1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c1].Style.WrapText = true;
+            }
+            WriteActivityHeader(colA + 0, "Whole Body");
+            WriteActivityHeader(colA + 2, "Urine");
+            WriteActivityHeader(colA + 4, "Faeces");
 
-            sheet.Cells[3, 10].Value = "Faeces";
-            sheet.Cells[3, 10].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[3, 10, 3, 11].Merge = true;
-            sheet.Cells[4, 10].Value = "Diff (min)";
-            sheet.Cells[4, 11].Value = "Diff (max)";
-            sheet.Cells[4, 10, 4, 11].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[4, 10, 4, 11].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[4, 10, 4, 11].Style.WrapText = true;
-
-            var r = 5;
+            var r = rowV;
             foreach (var res in results)
             {
+                // Target
                 sheet.Cells[r, 1].Value = res.Target;
 
                 if (res.HasErrors)
                 {
                     sheet.Cells[r, 2, r, 4].Value = "-";
                     sheet.Cells[r, 6, r, 11].Value = "-";
+                    r++;
+                    continue;
                 }
-                else
+
+                // Dose
                 {
-                    var cellEffDoseE = sheet.Cells[r, 2];
-                    var cellEffDoseA = sheet.Cells[r, 3];
-                    var cellEffDoseR = sheet.Cells[r, 4];
+                    var cellEffDoseE = sheet.Cells[r, colD + 0];
+                    var cellEffDoseA = sheet.Cells[r, colD + 1];
+                    var cellEffDoseR = sheet.Cells[r, colD + 2];
                     cellEffDoseE.Value = double.Parse(res.ExpectEffectiveDose);
                     cellEffDoseA.Value = double.Parse(res.ActualEffectiveDose);
                     cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
                     cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                     cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
                     cellEffDoseR.Style.Numberformat.Format = "0.0%";
-
-                    var cellWholeBody1 = sheet.Cells[r, 6];
-                    var cellWholeBody2 = sheet.Cells[r, 7];
-                    cellWholeBody1.Value = res.WholeBodyActivityFractionMin;
-                    cellWholeBody2.Value = res.WholeBodyActivityFractionMax;
-                    cellWholeBody1.Style.Numberformat.Format = "0.0%";
-                    cellWholeBody2.Style.Numberformat.Format = "0.0%";
-
-                    var cellUrine1 = sheet.Cells[r, 8];
-                    var cellUrine2 = sheet.Cells[r, 9];
-                    cellUrine1.Value = res.UrineActivityFractionMin;
-                    cellUrine2.Value = res.UrineActivityFractionMax;
-                    cellUrine1.Style.Numberformat.Format = "0.0%";
-                    cellUrine2.Style.Numberformat.Format = "0.0%";
-
-                    var cellFaeces1 = sheet.Cells[r, 10];
-                    var cellFaeces2 = sheet.Cells[r, 11];
-                    cellFaeces1.Value = res.FaecesActivityFractionMin;
-                    cellFaeces2.Value = res.FaecesActivityFractionMax;
-                    cellFaeces1.Style.Numberformat.Format = "0.0%";
-                    cellFaeces2.Style.Numberformat.Format = "0.0%";
                 }
+
+                // Activity
+                void WriteActivityValue(int c, (double Min, double Max) minmax)
+                {
+                    object GetValue(double value) =>
+                        double.IsInfinity(value) ? (object)"-" : value;
+
+                    var cell1 = sheet.Cells[r, c + 0];
+                    var cell2 = sheet.Cells[r, c + 1];
+                    cell1.Value = GetValue(minmax.Min);
+                    cell2.Value = GetValue(minmax.Max);
+                    cell1.Style.Numberformat.Format = "0.0%";
+                    cell2.Style.Numberformat.Format = "0.0%";
+                }
+                WriteActivityValue(colA + 0, res.FractionsWholeBody);
+                WriteActivityValue(colA + 2, res.FractionsUrine);
+                WriteActivityValue(colA + 4, res.FractionsFaeces);
 
                 r++;
             }
 
             // 預託実効線量のFlexID/OIR比にカラースケールを設定。
-            var cellsDose = sheet.Cells[5, 4, r - 1, 4];
+            var cellsDose = sheet.Cells[rowV, colD + 2, r - 1, colD + 2];
             SetPercentColorScale(cellsDose);
 
             // 残留放射能のFlexID/OIR比にカラースケールを設定。
-            var cellsActivity = sheet.Cells[5, 6, r - 1, 11];
+            var cellsActivity = sheet.Cells[rowV, colA, r - 1, colA + 5];
             SetPercentColorScale(cellsActivity);
 
             sheet.Column(1).AutoFit();
@@ -256,29 +264,29 @@ namespace ResultChecker
             var urineA     /**/= sheet.Cells[sr, colA + 2, er, colA + 2];
             var faecesA    /**/= sheet.Cells[sr, colA + 3, er, colA + 3];
 
-            var chartW = sheet.Drawings.AddScatterChart("ChartWholeBody", eScatterChartType.XYScatter);
-            var chartU = sheet.Drawings.AddScatterChart("ChartUrine", eScatterChartType.XYScatter);
-            var chartF = sheet.Drawings.AddScatterChart("ChartFaeces", eScatterChartType.XYScatter);
-            chartW.Title.Text = "Whole Body";
-            chartU.Title.Text = "Urine";
-            chartF.Title.Text = "Faeces";
+            var chartWholeBody /**/= sheet.Drawings.AddScatterChart("ChartWholeBody", /**/eScatterChartType.XYScatter);
+            var chartUrine     /**/= sheet.Drawings.AddScatterChart("ChartUrine",     /**/eScatterChartType.XYScatter);
+            var chartFaeces    /**/= sheet.Drawings.AddScatterChart("ChartFaeces",    /**/eScatterChartType.XYScatter);
+            chartWholeBody/**/.Title.Text = "Whole Body";
+            chartUrine    /**/.Title.Text = "Urine";
+            chartFaeces   /**/.Title.Text = "Faeces";
 
-            SetActivityChartStyle(chartW, rowT/*         */, colC, 22, 12);
-            SetActivityChartStyle(chartU, chartW.To.Row + 2, colC, 22, 12);
-            SetActivityChartStyle(chartF, chartU.To.Row + 2, colC, 22, 12);
+            SetActivityChartStyle(chartWholeBody, /**/rowT/*                     */, colC, 22, 12);
+            SetActivityChartStyle(chartUrine,     /**/chartWholeBody/**/.To.Row + 2, colC, 22, 12);
+            SetActivityChartStyle(chartFaeces,    /**/chartUrine    /**/.To.Row + 2, colC, 22, 12);
 
-            var serieWholeBodyE = chartW.Series.Add(wholeBodyE, timesE);
-            var serieWholeBodyA = chartW.Series.Add(wholeBodyA, timesA);
+            var serieWholeBodyE = chartWholeBody.Series.Add(wholeBodyE, timesE);
+            var serieWholeBodyA = chartWholeBody.Series.Add(wholeBodyA, timesA);
             SetExpectSerieStyle(serieWholeBodyE, "Whole Body");
             SetActualSerieStyle(serieWholeBodyA, "Whole Body");
 
-            var serieUrineE = chartU.Series.Add(urineE, timesE);
-            var serieUrineA = chartU.Series.Add(urineA, timesA);
+            var serieUrineE = chartUrine.Series.Add(urineE, timesE);
+            var serieUrineA = chartUrine.Series.Add(urineA, timesA);
             SetExpectSerieStyle(serieUrineE, "Urine");
             SetActualSerieStyle(serieUrineA, "Urine");
 
-            var serieFaecesE = chartF.Series.Add(faecesE, timesE);
-            var serieFaecesA = chartF.Series.Add(faecesA, timesA);
+            var serieFaecesE = chartFaeces.Series.Add(faecesE, timesE);
+            var serieFaecesA = chartFaeces.Series.Add(faecesA, timesA);
             SetExpectSerieStyle(serieFaecesE, "Faeces");
             SetActualSerieStyle(serieFaecesA, "Faeces");
         }
@@ -373,12 +381,12 @@ namespace ResultChecker
                     line += $",{res.ExpectEffectiveDose}" +
                             $",{res.ActualEffectiveDose}" +
                             $",{res.FractionEffectiveDose:0.00%},";
-                    line += $",{res.WholeBodyActivityFractionMin:0.00%}" +
-                            $",{res.WholeBodyActivityFractionMax:0.00%}" +
-                            $",{res.UrineActivityFractionMin:0.00%}" +
-                            $",{res.UrineActivityFractionMax:0.00%}" +
-                            $",{res.FaecesActivityFractionMin:0.00%}" +
-                            $",{res.FaecesActivityFractionMax:0.00%}";
+                    line += $",{res.FractionsWholeBody.Min:0.00%}" +
+                            $",{res.FractionsWholeBody.Max:0.00%}" +
+                            $",{res.FractionsUrine.Min:0.00%}" +
+                            $",{res.FractionsUrine.Max:0.00%}" +
+                            $",{res.FractionsFaeces.Min:0.00%}" +
+                            $",{res.FractionsFaeces.Max:0.00%}";
                 }
                 return line;
             });

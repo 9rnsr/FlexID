@@ -5,15 +5,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ResultChecker
 {
     internal partial class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            var targets = GetTargets().ToArray();
+            Regex pattern = null;
+            if (args.Length == 1)
+            {
+                try
+                {
+                    pattern = new Regex(args[0], RegexOptions.IgnoreCase);
+                }
+                catch
+                {
+                    Console.WriteLine("target pattern is not correct.");
+                    return -1;
+                }
+            }
+
+            var targets = GetTargets().Where(t => pattern?.IsMatch(t.Target) ?? true).ToArray();
             var results = new ConcurrentBag<Result>();
 
             // 並列に計算を実施する。
@@ -40,6 +55,8 @@ namespace ResultChecker
             //WriteSummaryCsv(sortedResults);
 
             WriteSummaryExcel("summary.xlsx", sortedResults);
+
+            return 0;
         }
 
         // 計算および比較の結果。
@@ -54,14 +71,9 @@ namespace ResultChecker
             public string ActualEffectiveDose;
             public double FractionEffectiveDose;
 
-            public double WholeBodyActivityFractionMin;
-            public double WholeBodyActivityFractionMax;
-
-            public double UrineActivityFractionMin;
-            public double UrineActivityFractionMax;
-
-            public double FaecesActivityFractionMin;
-            public double FaecesActivityFractionMax;
+            public (double Min, double Max) FractionsWholeBody;
+            public (double Min, double Max) FractionsUrine;
+            public (double Min, double Max) FractionsFaeces;
         }
 
         static Result CalcAndSummary(string target, string material)
@@ -105,12 +117,9 @@ namespace ResultChecker
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
             var actualActs = GetResultRetentions(target);
             var expectActs = GetExpectRetentions(target, material);
-            var minWholeBodyFrac = double.PositiveInfinity;
-            var maxWholeBodyFrac = double.NegativeInfinity;
-            var minUrineFrac = double.PositiveInfinity;
-            var maxUrineFrac = double.NegativeInfinity;
-            var minFaecesFrac = double.PositiveInfinity;
-            var maxFaecesFrac = double.NegativeInfinity;
+            var fractionsWholeBody /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
+            var fractionsUrine     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
+            var fractionsFaeces    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
 
             foreach (var (actualAct, expectAct) in CompareRetentions(actualActs, expectActs))
             {
@@ -123,30 +132,29 @@ namespace ResultChecker
                 //    $"{(actualAct.Urine != null ? $"{actualAct.Urine:0.00000000E+00}" : "-"),-14}," +
                 //    $"{(actualAct.Faeces != null ? $"{actualAct.Faeces:0.00000000E+00}" : "-"),-14}");
 
-                var fractionWholeBody = actualAct.WholeBody / expectAct.WholeBody;
-                minWholeBodyFrac = Math.Min(minWholeBodyFrac, fractionWholeBody);
-                maxWholeBodyFrac = Math.Max(maxWholeBodyFrac, fractionWholeBody);
+                var fracWholeBody = actualAct.WholeBody / expectAct.WholeBody;
+                fractionsWholeBody = (Math.Min(fractionsWholeBody.min, fracWholeBody),
+                                      Math.Max(fractionsWholeBody.max, fracWholeBody));
 
-                if (expectAct.Urine is double expectUrine)
+                if (expectAct.Urine is double expectUrine &&
+                    actualAct.Urine is double actualUrine)
                 {
-                    var fractionUrine = actualAct.Urine.Value / expectUrine;
-                    minUrineFrac = Math.Min(minUrineFrac, fractionUrine);
-                    maxUrineFrac = Math.Max(maxUrineFrac, fractionUrine);
+                    var fracUrine = actualUrine / expectUrine;
+                    fractionsUrine = (Math.Min(fractionsUrine.min, fracUrine),
+                                      Math.Max(fractionsUrine.max, fracUrine));
                 }
-                if (expectAct.Faeces is double expectFaeces)
+                if (expectAct.Faeces is double expectFaeces &&
+                    actualAct.Faeces is double actualFaeces)
                 {
-                    var fractionFaeces = actualAct.Faeces.Value / expectFaeces;
-                    minFaecesFrac = Math.Min(minFaecesFrac, fractionFaeces);
-                    maxFaecesFrac = Math.Max(maxFaecesFrac, fractionFaeces);
+                    var fracFaeces = actualFaeces / expectFaeces;
+                    fractionsFaeces = (Math.Min(fractionsFaeces.min, fracFaeces),
+                                       Math.Max(fractionsFaeces.max, fracFaeces));
                 }
             }
 
-            result./**/ WholeBodyActivityFractionMin = minWholeBodyFrac;
-            result./**/ WholeBodyActivityFractionMax = maxWholeBodyFrac;
-            result./**/     UrineActivityFractionMin = minUrineFrac;
-            result./**/     UrineActivityFractionMax = maxUrineFrac;
-            result./**/    FaecesActivityFractionMin = minFaecesFrac;
-            result./**/    FaecesActivityFractionMax = maxFaecesFrac;
+            result.FractionsWholeBody /**/= fractionsWholeBody;
+            result.FractionsUrine     /**/= fractionsUrine;
+            result.FractionsFaeces    /**/= fractionsFaeces;
 
             return result;
         }
@@ -322,7 +330,10 @@ namespace ResultChecker
                 if (reader.ReadLine() != "Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq")
                     throw new InvalidDataException();
 
-                reader.ReadLine();  // (table header)
+                columns = reader.ReadLine().Split('\t');  // (table header)
+                var indexWholeBody /**/= columns.IndexOf(s => s.Contains("Whole Body"));
+                var indexUrine     /**/= columns.IndexOf(s => s.Contains("Urine"));
+                var indexFaeces    /**/= columns.IndexOf(s => s.Contains("Faeces"));
 
                 var startTime = 0.0;
 
@@ -330,17 +341,19 @@ namespace ResultChecker
                 while ((line = reader.ReadLine()) != null)
                 {
                     columns = line.Split('\t');
+
                     var endTime   /**/= double.Parse(columns[0]);
-                    var wholeBody /**/= double.Parse(columns[1]);
-                    var urine     /**/= columns[2] == "-" ? default(double?) : double.Parse(columns[2]);
-                    var faeces    /**/= columns[3] == "-" ? default(double?) : double.Parse(columns[3]);
+
+                    double? GetValue(int index) =>
+                        index == -1 || columns[index] == "-" ? default(double?) : double.Parse(columns[index]);
+
                     retentions.Add(new Retention
                     {
                         StartTime /**/= startTime,
                         EndTime   /**/= endTime,
-                        WholeBody /**/= wholeBody,
-                        Urine     /**/= urine,
-                        Faeces    /**/= faeces,
+                        WholeBody /**/= GetValue(indexWholeBody).Value,
+                        Urine     /**/= GetValue(indexUrine),
+                        Faeces    /**/= GetValue(indexFaeces),
                     });
 
                     startTime = endTime;
@@ -435,6 +448,21 @@ namespace ResultChecker
                     }
                 }
             }
+        }
+    }
+
+    static class LinqExtensions
+    {
+        public static int IndexOf<T>(this IEnumerable<T> sources, Func<T, bool> predicate)
+        {
+            int index = 0;
+            foreach (var value in sources)
+            {
+                if (predicate(value))
+                    return index;
+                index++;
+            }
+            return -1;
         }
     }
 }
