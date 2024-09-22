@@ -38,32 +38,32 @@ H-3 Ingestion:Soluble
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480           #  90.0%
-  Oralcavity              Oesophagus-S            720           #  10.0%
-  Oesophagus-F            St-con                12343           # 100.0%
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #   1.0%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.134 p.21 Table 2.3
 #   fA = 1≒0.99   (Ingested materials, Soluble forms)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-con                  Blood                   594           #  99.0%
+  SI-con                  Blood                   594
 
 # ICRP Publ.134 p.35 Table 2.5 & footnote†
-  Blood                   ExtravasHTO             400           #  99.8253%
-  ExtravasHTO             OBT1                      0.0006      #   0.0014%
-  ExtravasHTO             OBT2                      0.00008     #   0.0002%
-  Blood                   UB-con                    0.385       #   0.0961%     # = 55% of 0.7/d
-  Blood                   RC-con                    0.028       #   0.007%      # =  4% of 0.7/d
-  Blood                   Breath(discharge)         0.084       #   0.021%      # = 12% of 0.7/d
-  Blood                   Skin(discharge)           0.203       #   0.0507%     # = 29% of 0.7/d
-  ExtravasHTO             Blood                    44           #  99.9985%
-  OBT1                    ExtravasHTO               0.01733     # 100.0%
-  OBT2                    ExtravasHTO               0.0019      # 100.0%
+  Blood                   ExtravasHTO             400
+  ExtravasHTO             OBT1                      0.0006
+  ExtravasHTO             OBT2                      0.00008
+  Blood                   UB-con                    0.385       # = 55% of 0.7/d
+  Blood                   RC-con                    0.028       # =  4% of 0.7/d
+  Blood                   Breath(discharge)         0.084       # = 12% of 0.7/d
+  Blood                   Skin(discharge)           0.203       # = 29% of 0.7/d
+  ExtravasHTO             Blood                    44
+  OBT1                    ExtravasHTO               0.01733
+  OBT2                    ExtravasHTO               0.0019
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12

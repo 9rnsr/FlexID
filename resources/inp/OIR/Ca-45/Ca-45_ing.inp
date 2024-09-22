@@ -55,29 +55,29 @@ Ca-45 Ingestion
 # ICRP Publ.134 p.118 Table 6.2
 #   fA = 0.4  (Ingested materials, All unspecified forms)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.4 * 6 / (1 - 0.4) = 4
-  SI-con                  Blood                     4           #  40.0%
+  SI-con                  Blood                     4
 
 # ICRP Publ.134 p.121 Table 6.3
-  Blood                   UB-con                    0.60        #   3.9998%
-  Blood                   RC-con                    0.45        #   2.9999%
-  Blood                   T-bone-S                  2.08        #  13.866%
-  Blood                   C-bone-S                  1.67        #  11.1328%
-  Blood                   ST0                       8.70        #  57.9971%
-  Blood                   ST1                       1.50        #   9.9995%
-  Blood                   ST2                       0.00075     #   0.005%
-  T-bone-S                Blood                     0.578       #  83.2853%
-  T-bone-S                Exch-T-bone-V             0.116       #  16.7147%
-  C-bone-S                Blood                     0.578       #  83.2853%
-  C-bone-S                Exch-C-bone-V             0.116       #  16.7147%
-  ST0                     Blood                     2.9         # 100.0%
-  ST1                     Blood                     0.1733      # 100.0%
-  ST2                     Blood                     0.00038     # 100.0%
-  Exch-T-bone-V           T-bone-S                  0.002773    #  40.0029%
-  Exch-T-bone-V           Noch-T-bone-V             0.004159    #  59.9971%
-  Exch-C-bone-V           C-bone-S                  0.002773    #  40.0029%
-  Exch-C-bone-V           Noch-C-bone-V             0.004159    #  59.9971%
-  Noch-C-bone-V           Blood                     0.0000821   # 100.0%
-  Noch-T-bone-V           Blood                     0.000493    # 100.0%
+  Blood                   UB-con                    0.60
+  Blood                   RC-con                    0.45
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       8.70
+  Blood                   ST1                       1.50
+  Blood                   ST2                       0.00075
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.9
+  ST1                     Blood                     0.1733
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.002773
+  Exch-T-bone-V           Noch-T-bone-V             0.004159
+  Exch-C-bone-V           C-bone-S                  0.002773
+  Exch-C-bone-V           Noch-C-bone-V             0.004159
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12

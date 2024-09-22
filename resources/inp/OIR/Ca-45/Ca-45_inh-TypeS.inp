@@ -85,89 +85,89 @@ Ca-45 Inhalation:Type-S
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
-  ALV-F                   bb-F                      0.002       #   0.0666%
-  ALV-F                   INT-F                     0.001       #   0.0333%
-  INT-F                   LNTH-F                    0.00003     #   0.001%
-  bb-F                    BB-F                      0.2         #   6.25%
-  bbseq-F                 LNTH-F                    0.001       #   0.0333%
-  BB-F                    ET2-F                    10           #  76.9231%
-  BBseq-F                 LNTH-F                    0.001       #   0.0333%
-  ET2-F                   Oesophagus-S            100           #  97.0874%
-  ETseq-F                 LNET-F                    0.001       #   0.0333%
-  ET1-F                   Environment               0.6         #  28.5714%
-  ET1-F                   ET2-F                     1.5         #  71.4286%
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-S            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
 
-  ALV-S                   bb-S                      0.002       #  64.5161%
-  ALV-S                   INT-S                     0.001       #  32.2581%
-  INT-S                   LNTH-S                    0.00003     #  23.0769%
-  bb-S                    BB-S                      0.2         #  99.95%
-  bbseq-S                 LNTH-S                    0.001       #  90.9091%
-  BB-S                    ET2-S                    10           #  99.999%
-  BBseq-S                 LNTH-S                    0.001       #  90.9091%
-  ET2-S                   Oesophagus-S            100           #  99.9999%
-  ETseq-S                 LNET-S                    0.001       #  90.9091%
-  ET1-S                   Environment               0.6         #  28.5714%
-  ET1-S                   ET2-S                     1.5         #  71.4286%
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
 
 # ICRP Publ.134 p.118 Table 6.2
 #   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
 #   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
-  ET2-F                   Blood                     3           #   2.9126%
-  ETseq-F                 Blood                     3           #  99.9667%
-  LNET-F                  Blood                     3           # 100.0%
-  BB-F                    Blood                     3           #  23.0769%
-  BBseq-F                 Blood                     3           #  99.9667%
-  bb-F                    Blood                     3           #  93.75%
-  bbseq-F                 Blood                     3           #  99.9667%
-  ALV-F                   Blood                     3           #  99.9001%
-  INT-F                   Blood                     3           #  99.999%
-  LNTH-F                  Blood                     3           # 100.0%
+  ET2-F                   Blood                     3
+  ETseq-F                 Blood                     3
+  LNET-F                  Blood                     3
+  BB-F                    Blood                     3
+  BBseq-F                 Blood                     3
+  bb-F                    Blood                     3
+  bbseq-F                 Blood                     3
+  ALV-F                   Blood                     3
+  INT-F                   Blood                     3
+  LNTH-F                  Blood                     3
 
-  ET2-S                   Blood                     1E-4        #   0.0001%
-  ETseq-S                 Blood                     1E-4        #   9.0909%
-  LNET-S                  Blood                     1E-4        # 100.0%
-  BB-S                    Blood                     1E-4        #   0.001%
-  BBseq-S                 Blood                     1E-4        #   9.0909%
-  bb-S                    Blood                     1E-4        #   0.05%
-  bbseq-S                 Blood                     1E-4        #   9.0909%
-  ALV-S                   Blood                     1E-4        #   3.2258%
-  INT-S                   Blood                     1E-4        #  76.9231%
-  LNTH-S                  Blood                     1E-4        # 100.0%
+  ET2-S                   Blood                     1E-4
+  ETseq-S                 Blood                     1E-4
+  LNET-S                  Blood                     1E-4
+  BB-S                    Blood                     1E-4
+  BBseq-S                 Blood                     1E-4
+  bb-S                    Blood                     1E-4
+  bbseq-S                 Blood                     1E-4
+  ALV-S                   Blood                     1E-4
+  INT-S                   Blood                     1E-4
+  LNTH-S                  Blood                     1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #  99.6%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.134 p.118 Table 6.2
 #   fA = 0.004   (Inhaled particulate materials, Absorption type S)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.004 * 6 / (1 - 0.004) = 2.409638554216867E-2
-  SI-con                  Blood                     2.409638554216867E-2        # 0.4%
+  SI-con                  Blood                     2.409638554216867E-2
 
 # ICRP Publ.134 p.121 Table 6.3
-  Blood                   UB-con                    0.60        #   3.9998%
-  Blood                   RC-con                    0.45        #   2.9999%
-  Blood                   T-bone-S                  2.08        #  13.866%
-  Blood                   C-bone-S                  1.67        #  11.1328%
-  Blood                   ST0                       8.70        #  57.9971%
-  Blood                   ST1                       1.50        #   9.9995%
-  Blood                   ST2                       0.00075     #   0.005%
-  T-bone-S                Blood                     0.578       #  83.2853%
-  T-bone-S                Exch-T-bone-V             0.116       #  16.7147%
-  C-bone-S                Blood                     0.578       #  83.2853%
-  C-bone-S                Exch-C-bone-V             0.116       #  16.7147%
-  ST0                     Blood                     2.9         # 100.0%
-  ST1                     Blood                     0.1733      # 100.0%
-  ST2                     Blood                     0.00038     # 100.0%
-  Exch-T-bone-V           T-bone-S                  0.002773    #  40.0029%
-  Exch-T-bone-V           Noch-T-bone-V             0.004159    #  59.9971%
-  Exch-C-bone-V           C-bone-S                  0.002773    #  40.0029%
-  Exch-C-bone-V           Noch-C-bone-V             0.004159    #  59.9971%
-  Noch-C-bone-V           Blood                     0.0000821   # 100.0%
-  Noch-T-bone-V           Blood                     0.000493    # 100.0%
+  Blood                   UB-con                    0.60
+  Blood                   RC-con                    0.45
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       8.70
+  Blood                   ST1                       1.50
+  Blood                   ST2                       0.00075
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.9
+  ST1                     Blood                     0.1733
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.002773
+  Exch-T-bone-V           Noch-T-bone-V             0.004159
+  Exch-C-bone-V           C-bone-S                  0.002773
+  Exch-C-bone-V           Noch-C-bone-V             0.004159
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
 
 # ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12           # 100.0%
+  UB-con                  Urine                    12
