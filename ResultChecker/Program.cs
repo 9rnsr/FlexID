@@ -121,7 +121,7 @@ namespace ResultChecker
             var fractionsUrine     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsFaeces    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
 
-            foreach (var (actualAct, expectAct) in CompareRetentions(actualActs, expectActs))
+            foreach (var (actualAct, expectAct) in actualActs.Zip(expectActs, (a, e) => (a, e)))
             {
                 //Console.WriteLine(
                 //    $"{expectAct.EndTime,8}," +
@@ -264,7 +264,8 @@ namespace ResultChecker
                 // 経過時間ゼロでの残留放射能＝初期配分の結果を読み飛ばす。
                 for (int istep = 1; istep < data.TimeSteps.Count; istep++)
                 {
-                    double? GetValue(OutputCompartmentData res) => res?.Values[istep];
+                    double? GetValue(OutputCompartmentData res) =>
+                        res?.Values[istep] is double v && !double.IsNaN(v) ? v : default(double?);
 
                     retentions.Add(new Retention
                     {
@@ -361,93 +362,6 @@ namespace ResultChecker
             }
 
             return retentions;
-        }
-
-        /// <summary>
-        /// OIRデータとFlexIDデータを比較可能な状態で時間メッシュ毎に列挙する。
-        /// </summary>
-        /// <param name="actuals"></param>
-        /// <param name="expects"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidDataException"></exception>
-        static IEnumerable<(Retention Actual, Retention Expect)>
-            CompareRetentions(List<Retention> actuals, List<Retention> expects)
-        {
-            var iActual = 0;
-            var oneDayActualUrine = 0.0;
-            var oneDayActualFaeces = 0.0;
-
-            foreach (var expectAct in expects)
-            {
-                var duration = expectAct.EndTime - expectAct.StartTime;
-
-                if (duration == 1.0)
-                {
-                    // OIRとFlexIDで時間メッシュ幅が同じ箇所では、
-                    // そのまま比較する。
-                    var actualAct = actuals[iActual++];
-                    yield return (actualAct, expectAct);
-                }
-                else if (duration < 1.0)
-                {
-                    // OIRの時間メッシュ幅が1日未満の場合は、FlexID側も
-                    // 同じ時間メッシュ幅で出力しているものとする。
-                    var actualAct = actuals[iActual++];
-
-                    var expectDuration = expectAct.EndTime - expectAct.StartTime;
-                    var actualDuration = actualAct.EndTime - actualAct.StartTime;
-                    if (Math.Abs(actualDuration - expectDuration) > 0.001)
-                        throw new InvalidDataException("FlexID out mesh does not fit to OIR data mesh");
-
-                    // 時間メッシュ幅が1日未満の場合は、1日分の積算放射能を計算する。
-                    oneDayActualUrine += actualAct.Urine.Value * duration;
-                    oneDayActualFaeces += actualAct.Faeces.Value * duration;
-
-                    // OIR側は24-hour sample値なので、時間メッシュの終了時刻が
-                    // 1日の倍数になった位置で比較を行う。
-                    if (expectAct.EndTime % 1.0 == 0)
-                    {
-                        actualAct.Urine = oneDayActualUrine;
-                        actualAct.Faeces = oneDayActualFaeces;
-                        oneDayActualUrine = 0;
-                        oneDayActualFaeces = 0;
-                    }
-                    else
-                    {
-                        actualAct.Urine = null;
-                        actualAct.Faeces = null;
-                    }
-
-                    yield return (actualAct, expectAct);
-                }
-                else
-                {
-                    // OIR側の時間メッシュ幅が1日を超える場合は、
-                    // FlexID側は時間メッシュ幅を1日で出力しているものとする。
-                    if (duration % 1.0 != 0)
-                        throw new InvalidDataException("OIR data mesh width is n days");
-
-                    while (true)
-                    {
-                        var actualAct = actuals[iActual++];
-
-                        if ((actualAct.EndTime - actualAct.StartTime) != 1.0)
-                            throw new InvalidDataException("FlexID out mesh with is not 1 day");
-
-                        if (actualAct.EndTime != expectAct.EndTime)
-                            continue;
-
-                        // WholeBodyについて、FlexIDは時間メッシュ期間の末期における
-                        // 残留放射能を出力するため、最後の出力時間メッシュにおける数値を
-                        // そのまま出力する。
-                        // UrineとFaecesは、最後の時間メッシュ(時間幅は1日)の計算値を
-                        // 24-hour sample値として出力する。
-                        yield return (actualAct, expectAct);
-
-                        break;
-                    }
-                }
-            }
         }
     }
 
