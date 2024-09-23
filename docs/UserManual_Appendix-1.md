@@ -81,6 +81,44 @@ FlexIDの計算処理フローチャートを下図に示す。
 
 ![img](images/Figure_A1-4.png)
 
+# 2. 集合した臓器・組織の残留放射能の計算
+
+ICRP Electronic Annex OIR Data Viewerで出力される「Whole Body」(全身)、「Alimentaryt Tract」(消化管)、「Lungs」(肺)、「Skeleton」(骨格)、「Liver」(肝臓)、「Thyroid」(甲状腺)の残留放射能データと比較可能な値を算出するための手法について示す。
+なおここ示した "Blood fraction" については、OIR Data ViewerのHelpに記載されている。
+
+- 「Whole Body」(全身)
+
+    核種毎に、機能として`acc`が設定された各コンパートメンの残留放射能を合算した数値を出力する。
+
+- 「Blood」(血液、輸送コンパートメント)
+
+    核種毎に、線源領域として`Blood`が設定されたコンパートメントの残留放射能を合算した数値を出力する。
+
+- 「Alimentary Tract」(消化管)
+
+    核種毎に、線源領域として`St-cont`、`St-wall`、`SI-cont`、`SI-wall`、`RC-cont`、`RC-wall`、`LC-cont`、`LC-wall`、`RS-cont`、`RS-wall`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.07`を掛けたものを加算した数値を出力する。
+
+- 「Lungs」(肺)
+
+    核種毎に、線源領域として`Bronchi`、`Bronchi-b`、`Bronchi-q`、`Brchiole`、`Brchiole-b`、`Brchiole-q`、`ALV`、`LN-Th`、`Lung-Tis`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.125`を掛けたものを加算した数値を出力する。
+
+- 「Skeleton」(骨格)
+
+    核種毎に、線源領域として`C-bone-S`、`C-bone-V`、`T-bone-S`、`T-bone-V`、`C-marrow`、`T-marrow`、`R-marrow`、`Y-marrow`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.07`を掛けたものを加算した数値を出力する。
+
+- 「Liver」(肝臓)
+
+    核種毎に、線源領域として`Liver`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.1`を掛けたものを加算した数値を出力する。
+
+- 「Thyroid」(甲状腺)
+
+    核種毎に、線源領域として`Thyroid`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.0006`を掛けたものを加算した数値を出力する。
+
 # 2. 組織ごとの重量比の算出
 
 ICRP Electronic Annex OIR Data Viewerで出力される「Lungs」と「Alimentary Tract」の残留放射能のデータと、ノード・ジャンクション法で算出したコンパートメント毎の放射能を比較するため、肺と消化管における放射能を計算するため、組織ごとの質量比を導出した。
