@@ -91,6 +91,12 @@ namespace FlexID.Calc
         public OrganFunc Func;
 
         /// <summary>
+        /// excコンパートメントにおいて、OIRにおける24-hour smaple値を模擬した
+        /// 残留放射能を出力する場合に <see langword="true"/>。
+        /// </summary>
+        public bool ExcretaCompatibleWithOIR;
+
+        /// <summary>
         /// 生物学的崩壊定数[/day]。
         /// 蓄積コンパートメントのみで意味を持ち、それ以外では1.0となる。
         /// </summary>
