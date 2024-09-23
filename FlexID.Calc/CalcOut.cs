@@ -237,10 +237,7 @@ namespace FlexID.Calc
 
                     var nucDecay = organ.NuclideDecay;
 
-                    var retention = organ.Func == OrganFunc.exc
-                        ? Act.OutNow[organ.Index].ave * nucDecay    // TODO: for ICRP OIR data compatibility?
-                        : Act.OutNow[organ.Index].end * nucDecay;
-
+                    var retention = Act.OutNow[organ.Index].end * nucDecay;
                     var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
 
                     wholeBodyRete += retention;
@@ -258,16 +255,29 @@ namespace FlexID.Calc
 
                 var nucDecay = organ.NuclideDecay;
 
-                var retention = organ.Func == OrganFunc.exc
-                    ? Act.OutNow[organ.Index].ave * nucDecay    // TODO: for ICRP OIR data compatibility?
-                    : Act.OutNow[organ.Index].end * nucDecay;
-
+                var retention = Act.OutNow[organ.Index].end * nucDecay;
                 var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
+
+                if (organ.ExcretaCompatibleWithOIR)
+                {
+                    // OIR互換出力を行うexcコンパートメントでは、24-hour sample出力値を模擬して
+                    // 出力時間メッシュから24-hour前までの各計算時間メッシュにおけるtotalの総計、
+                    // その一日あたりの平均値(これはtotalと等しい)を残留放射能として出力する。
+                    retention = Act.OutNow[organ.Index].ave * nucDecay;
+                }
 
                 var wrRete = wsOrgansRete[organ.Index];
                 var wrCumu = wsOrgansCumu[organ.Index];
-                wrRete.Write("  {0:0.00000000E+00}", retention);
-                wrCumu.Write("  {0:0.00000000E+00}", cumulative);
+
+                if (double.IsNaN(retention))
+                    wrRete.Write("       ----     ");
+                else
+                    wrRete.Write("  {0:0.00000000E+00}", retention);
+
+                if (double.IsNaN(cumulative))
+                    wrCumu.Write("       ----     ");
+                else
+                    wrCumu.Write("  {0:0.00000000E+00}", cumulative);
             }
 
             foreach (var w in wsRete) w.WriteLine();

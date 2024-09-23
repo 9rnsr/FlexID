@@ -132,6 +132,10 @@ namespace FlexID.Calc
             outNowT = outTimes.Current;
             outIter = 0;
 
+            const long delta24hourT = 24 * 60 * 60;
+            long outExcLastT = outPreT; // excコンパートメントで最後に数値を出力した時間メッシュ
+            long outBefore24hourT = outNowT - delta24hourT;
+
             // 計算時間メッシュを進める。
             while (calcTimes.MoveNext())
             {
@@ -194,11 +198,24 @@ namespace FlexID.Calc
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in data.Organs)
                 {
+                    var calcNowTotal = Act.CalcNow[organ.Index].total;
+
                     // 今回の出力時間メッシュにおける積算放射能。
-                    Act.OutNow[organ.Index].total += Act.CalcNow[organ.Index].total;
+                    if (organ.ExcretaCompatibleWithOIR && calcPreT < outBefore24hourT)
+                    {
+                        // 計算時間メッシュが、次回の出力時間メッシュから24-hour前の位置を跨いでいる場合。
+                        if (outBefore24hourT < calcNowT)
+                        {
+                            // 24-hourの範囲内となる分だけを加算する。
+                            var rate = (double)(calcNowT - outBefore24hourT) / calcDeltaT;
+                            Act.OutNow[organ.Index].total += calcNowTotal * rate;
+                        }
+                    }
+                    else
+                        Act.OutNow[organ.Index].total += calcNowTotal;
 
                     // 摂取時からの積算放射能。
-                    Act.OutTotalFromIntake[organ.Index] += Act.CalcNow[organ.Index].total;
+                    Act.OutTotalFromIntake[organ.Index] += calcNowTotal;
                 }
 
                 foreach (var organ in data.Organs)
@@ -245,10 +262,41 @@ namespace FlexID.Calc
                     var outPreDay = TimeMesh.SecondsToDays(outPreT);
                     var outDeltaDay = TimeMesh.SecondsToDays(outDeltaT);
 
+                    if (outDeltaT < delta24hourT)
+                    {
+                        // 24時間より小さい幅を持つ出力時間メッシュは、それらを合わせた時間幅が
+                        // 前回の'exc'コンパートメントに対する数値出力から24-hour経過した時間と一致することをここで確認する。
+                        // - 'exc'の残留放射能の出力に寄与しない出力時間メッシュがないことを保証する。
+                        // - これを許した場合、excの積算放射能を構成する複数の出力時間メッシュのうち、24-hourを超える古い側の
+                        //   メッシュの寄与を後から減算しなければならず、この面倒な処理を避けるという理由もある。
+                        // - 本来は計算開始前にTimeMesh入力検証で確認すべきだが、現在はOIRの'exc'に特有の処理であるためここで確認している。
+                        if ((outNowT - outExcLastT) > delta24hourT)
+                            throw new Exception("sum of out time meshes those are smaller than 24-hour delta should match to 24-hour, "
+                                              + "for the 'exc' compartment output compatibility with OIR.");
+                    }
+
+                    // excにおける今回の出力時間が、前回の出力時間から24-hour以上経過しているか。
+                    var outExc = outExcLastT <= outBefore24hourT;
+
                     // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                     foreach (var organ in data.Organs)
                     {
-                        Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
+                        if (organ.ExcretaCompatibleWithOIR)
+                        {
+                            if (outExc)
+                            {
+                                // excのtotalは24-hourの時間幅で計算するため、total=aveとなる。
+                                Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total;
+                            }
+                            else
+                            {
+                                // excにおける残留放射能の出力処理を特別扱いするためのフラグとしてNaNを使う。
+                                Act.OutNow[organ.Index].ave = double.NaN;
+                            }
+                        }
+                        else
+                            Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
+
                         Act.OutNow[organ.Index].end = Act.CalcNow[organ.Index].end;
                     }
 
@@ -266,6 +314,10 @@ namespace FlexID.Calc
                     outPreT = outNowT;
                     outNowT = outTimes.Current;
                     outIter = 0;
+
+                    if (outExc)
+                        outExcLastT = outPreT;
+                    outBefore24hourT = outNowT - delta24hourT;
 
                     Act.NextOut(data);
 

@@ -687,6 +687,14 @@ namespace FlexID.Calc
                     {
                         organ.SourceRegion = null;
                     }
+
+                    if (organ.Func == OrganFunc.exc)
+                    {
+                        if (organ.Name == "Urine" || organ.Name == "Faeces")
+                        {
+                            organ.ExcretaCompatibleWithOIR = true;
+                        }
+                    }
                 }
 
                 if (!nuclide.IsProgeny && input is null)
@@ -1125,6 +1133,14 @@ namespace FlexID.Calc
                         // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
                         organ.SourceRegion = sourceRegion;
                         organ.S_Coefficients = tableSCoeff[sourceRegion];
+                    }
+
+                    if (organ.Func == OrganFunc.exc)
+                    {
+                        if (organ.Name == "Urine" || organ.Name == "Faeces")
+                        {
+                            organ.ExcretaCompatibleWithOIR = true;
+                        }
                     }
 
                     // コンパートメントへの流入経路の記述を読み込む。
