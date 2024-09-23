@@ -58,6 +58,9 @@ namespace FlexID.Calc
 
             using (CalcOut = new CalcOut(data, OutputPath))
             {
+                // OIRでは、集合コンパートメントを処理するための準備を行う。
+                CalcOut.PrepareCompositeCompartments();
+
                 // コンパートメントの名称をヘッダ―として出力。
                 CalcOut.ActivityHeader();
 
