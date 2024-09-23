@@ -74,6 +74,11 @@ namespace ResultChecker
             public (double Min, double Max) FractionsWholeBody;
             public (double Min, double Max) FractionsUrine;
             public (double Min, double Max) FractionsFaeces;
+            public (double Min, double Max) FractionsAtract;
+            public (double Min, double Max) FractionsLungs;
+            public (double Min, double Max) FractionsSkeleton;
+            public (double Min, double Max) FractionsLiver;
+            public (double Min, double Max) FractionsThyroid;
         }
 
         static Result CalcAndSummary(string target, string material)
@@ -120,6 +125,11 @@ namespace ResultChecker
             var fractionsWholeBody /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsUrine     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsFaeces    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
+            var fractionsAtract    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
+            var fractionsLungs     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
+            var fractionsSkeleton  /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
+            var fractionsLiver     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
+            var fractionsThyroid   /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
 
             foreach (var (actualAct, expectAct) in actualActs.Zip(expectActs, (a, e) => (a, e)))
             {
@@ -150,11 +160,51 @@ namespace ResultChecker
                     fractionsFaeces = (Math.Min(fractionsFaeces.min, fracFaeces),
                                        Math.Max(fractionsFaeces.max, fracFaeces));
                 }
+                if (expectAct.Atract is double expectAtract &&
+                    actualAct.Atract is double actualAtract)
+                {
+                    var fracAtract = actualAtract / expectAtract;
+                    fractionsAtract = (Math.Min(fractionsAtract.min, fracAtract),
+                                       Math.Max(fractionsAtract.max, fracAtract));
+                }
+                if (expectAct.Lungs is double expectLungs &&
+                    actualAct.Lungs is double actualLungs)
+                {
+                    var fracLungs = actualLungs / expectLungs;
+                    fractionsLungs = (Math.Min(fractionsLungs.min, fracLungs),
+                                      Math.Max(fractionsLungs.max, fracLungs));
+                }
+                if (expectAct.Skeleton is double expectSkeleton &&
+                    actualAct.Skeleton is double actualSkeleton)
+                {
+                    var fracSkeleton = actualSkeleton / expectSkeleton;
+                    fractionsSkeleton = (Math.Min(fractionsSkeleton.min, fracSkeleton),
+                                         Math.Max(fractionsSkeleton.max, fracSkeleton));
+                }
+                if (expectAct.Liver is double expectLiver &&
+                    actualAct.Liver is double actualLiver)
+                {
+                    var fracLiver = actualLiver / expectLiver;
+                    fractionsLiver = (Math.Min(fractionsLiver.min, fracLiver),
+                                      Math.Max(fractionsLiver.max, fracLiver));
+                }
+                if (expectAct.Thyroid is double expectThyroid &&
+                    actualAct.Thyroid is double actualThyroid)
+                {
+                    var fracThyroid = actualThyroid / expectThyroid;
+                    fractionsThyroid = (Math.Min(fractionsThyroid.min, fracThyroid),
+                                        Math.Max(fractionsThyroid.max, fracThyroid));
+                }
             }
 
             result.FractionsWholeBody /**/= fractionsWholeBody;
             result.FractionsUrine     /**/= fractionsUrine;
             result.FractionsFaeces    /**/= fractionsFaeces;
+            result.FractionsAtract    /**/= fractionsAtract;
+            result.FractionsLungs     /**/= fractionsLungs;
+            result.FractionsSkeleton  /**/= fractionsSkeleton;
+            result.FractionsLiver     /**/= fractionsLiver;
+            result.FractionsThyroid   /**/= fractionsThyroid;
 
             return result;
         }
@@ -220,6 +270,11 @@ namespace ResultChecker
             public double WholeBody;
             public double? Urine;
             public double? Faeces;
+            public double? Atract;
+            public double? Lungs;
+            public double? Skeleton;
+            public double? Liver;
+            public double? Thyroid;
         }
 
         /// <summary>
@@ -257,6 +312,11 @@ namespace ResultChecker
                 var resultWholeBody /**/= GetCompartmentData("WholeBody");
                 var resultUrine     /**/= GetCompartmentData("Urine");
                 var resultFaeces    /**/= GetCompartmentData("Faeces");
+                var resultAtract    /**/= GetCompartmentData("AlimentaryTract*");
+                var resultLungs     /**/= GetCompartmentData("Lungs*");
+                var resultSkeleton  /**/= GetCompartmentData("Skeleton*");
+                var resultLiver     /**/= GetCompartmentData("Liver*");
+                var resultThyroid   /**/= GetCompartmentData("Thyroid*");
 
                 if (resultWholeBody is null)
                     throw new InvalidDataException();
@@ -274,6 +334,11 @@ namespace ResultChecker
                         WholeBody /**/= GetValue(resultWholeBody).Value,
                         Urine     /**/= GetValue(resultUrine),
                         Faeces    /**/= GetValue(resultFaeces),
+                        Atract    /**/= GetValue(resultAtract),
+                        Lungs     /**/= GetValue(resultLungs),
+                        Skeleton  /**/= GetValue(resultSkeleton),
+                        Liver     /**/= GetValue(resultLiver),
+                        Thyroid   /**/= GetValue(resultThyroid),
                     });
                 }
             }
@@ -335,6 +400,11 @@ namespace ResultChecker
                 var indexWholeBody /**/= columns.IndexOf(s => s.Contains("Whole Body"));
                 var indexUrine     /**/= columns.IndexOf(s => s.Contains("Urine"));
                 var indexFaeces    /**/= columns.IndexOf(s => s.Contains("Faeces"));
+                var indexAtract    /**/= columns.IndexOf(s => s.Contains("Alimentary Tract"));
+                var indexLungs     /**/= columns.IndexOf(s => s.Contains("Lungs"));
+                var indexSkeleton  /**/= columns.IndexOf(s => s.Contains("Skeleton"));
+                var indexLiver     /**/= columns.IndexOf(s => s.Contains("Liver"));
+                var indexThyroid   /**/= columns.IndexOf(s => s.Contains("Thyroid"));
 
                 var startTime = 0.0;
 
@@ -355,6 +425,11 @@ namespace ResultChecker
                         WholeBody /**/= GetValue(indexWholeBody).Value,
                         Urine     /**/= GetValue(indexUrine),
                         Faeces    /**/= GetValue(indexFaeces),
+                        Atract    /**/= GetValue(indexAtract),
+                        Lungs     /**/= GetValue(indexLungs),
+                        Skeleton  /**/= GetValue(indexSkeleton),
+                        Liver     /**/= GetValue(indexLiver),
+                        Thyroid   /**/= GetValue(indexThyroid),
                     });
 
                     startTime = endTime;
