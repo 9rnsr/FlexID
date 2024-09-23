@@ -97,18 +97,12 @@ namespace FlexID.Calc
                     yield return ws[indexN];
                 }
             }
-
-            // コンパートメントの名称をヘッダ―として出力。
-            ActivityHeader();
-
-            // 標的領域の名称をヘッダーとして出力。
-            CommitmentHeader();
         }
 
         /// <summary>
         /// 残留放射能の出力ファイルにヘッダーを書き出す。
         /// </summary>
-        private void ActivityHeader()
+        public void ActivityHeader()
         {
             // Retention
             foreach (var nuclide in data.Nuclides)
