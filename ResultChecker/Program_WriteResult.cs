@@ -205,7 +205,7 @@ namespace ResultChecker
             //sheet.Cells[rowH, colD, rowH, colD + 3].AutoFitColumns(0);
 
             var nrow = 0;
-            foreach (var (actualAct, expectAct) in CompareRetentions(actualActs, expectActs))
+            foreach (var (actualAct, expectAct) in actualActs.Zip(expectActs, (a, e) => (a, e)))
             {
                 var r = rowT + nrow;
 

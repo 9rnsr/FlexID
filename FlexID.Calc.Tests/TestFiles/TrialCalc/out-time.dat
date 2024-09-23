@@ -1,5 +1,8 @@
 until     , step
-    5 days,    1 day
+    3 h,       1 h
+   48 h,       3 h     #     2d
+  120 h,       6 h     #     5d
+  240 h,      12 h     #    10d
    35 days,    5 days
   365 days,   30 days
 27375 days,  365 days

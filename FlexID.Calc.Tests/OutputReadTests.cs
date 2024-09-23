@@ -1,53 +1,47 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Linq;
 
 namespace FlexID.Calc.Tests
 {
     [TestClass]
     public class OutputReadTests
     {
-        [TestMethod]
-        public void Test()
+        static readonly (OutputType type, string suffix)[] types = new[]
         {
+            (OutputType.RetentionActivity,   "Retention"),
+            (OutputType.CumulativeActivity,  "Cumulative"),
+            (OutputType.Dose,                "Dose"),
+            (OutputType.DoseRate,            "DoseRate"),
+        };
+
+        [TestMethod]
+        [DataRow("Ba-133_ing-Insoluble")]
+        [DataRow("Sr-90_ing-Other", "Y-90")]
+        public void Test(string target, params string[] progeny)
+        {
+            var nuclide = target.Split('_')[0];
+
             var TestDir = TestFiles.Combine("TrialCalc");
             var expectDir = Path.Combine(TestDir, "Expect_OIR");
 
-            var nuclide = "Ba-133";
-            var target = "Ba-133_ing-Insoluble";
+            foreach (var (type, suffix) in types)
+            {
+                var path = Path.Combine(expectDir, nuclide, $"{target}_{suffix}.out");
+                var data = new OutputDataReader(path).Read();
 
-            var cumu = Path.Combine(expectDir, nuclide, target + "_Cumulative.out");
-            var data = new OutputDataReader(cumu).Read();
-
-            Assert.AreEqual(1, data.Nuclides.Length);
-            Assert.AreEqual("Ba-133", data.Nuclides[0].Nuclide);
-
-            //File.ReadAllLines(cumu);
-            //File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out"));
-            //File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out"));
-            //File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out"));
-        }
-
-        [TestMethod]
-        public void TestWithProgeny()
-        {
-            var TestDir = TestFiles.Combine("TrialCalc");
-            var expectDir = Path.Combine(TestDir, "Expect_OIR");
-
-            var nuclide = "Sr-90";
-            var target = "Sr-90_ing-Other";
-
-            var cumu = Path.Combine(expectDir, nuclide, target + "_Cumulative.out");
-            var data = new OutputDataReader(cumu).Read();
-
-            Assert.AreEqual(2, data.Nuclides.Length);
-            Assert.AreEqual("Sr-90", data.Nuclides[0].Nuclide);
-            Assert.AreEqual("Y-90", data.Nuclides[1].Nuclide);
-
-            //File.ReadAllLines(cumu);
-            //File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out"));
-            //File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out"));
-            //File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out"));
-
+                Assert.AreEqual(nuclide, data.Nuclides[0].Nuclide);
+                if (type == OutputType.Dose || type == OutputType.DoseRate)
+                {
+                    Assert.AreEqual(1, data.Nuclides.Length);
+                }
+                else
+                {
+                    Assert.AreEqual(1 + progeny.Length, data.Nuclides.Length);
+                    Assert.AreEqual(nuclide, data.Nuclides[0].Nuclide);
+                    CollectionAssert.AreEqual(progeny, data.Nuclides.Skip(1).Select(n => n.Nuclide).ToArray());
+                }
+            }
         }
     }
 }

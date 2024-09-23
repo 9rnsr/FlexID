@@ -229,7 +229,7 @@ namespace FlexID.Calc
                 for (int i = 1; i < expectColumns; i++)
                 {
                     if (!double.TryParse(values[i], out var value))
-                        throw new InvalidDataException("incorrect data column value");
+                        value = double.NaN;
                     compartmentValues[i - 1].Add(value);
                 }
             }

@@ -91,6 +91,12 @@ namespace FlexID.Calc
         public OrganFunc Func;
 
         /// <summary>
+        /// excコンパートメントにおいて、OIRにおける24-hour smaple値を模擬した
+        /// 残留放射能を出力する場合に <see langword="true"/>。
+        /// </summary>
+        public bool ExcretaCompatibleWithOIR;
+
+        /// <summary>
         /// 生物学的崩壊定数[/day]。
         /// 蓄積コンパートメントのみで意味を持ち、それ以外では1.0となる。
         /// </summary>
@@ -681,6 +687,14 @@ namespace FlexID.Calc
                     {
                         organ.SourceRegion = null;
                     }
+
+                    if (organ.Func == OrganFunc.exc)
+                    {
+                        if (organ.Name == "Urine" || organ.Name == "Faeces")
+                        {
+                            organ.ExcretaCompatibleWithOIR = true;
+                        }
+                    }
                 }
 
                 if (!nuclide.IsProgeny && input is null)
@@ -1119,6 +1133,14 @@ namespace FlexID.Calc
                         // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
                         organ.SourceRegion = sourceRegion;
                         organ.S_Coefficients = tableSCoeff[sourceRegion];
+                    }
+
+                    if (organ.Func == OrganFunc.exc)
+                    {
+                        if (organ.Name == "Urine" || organ.Name == "Faeces")
+                        {
+                            organ.ExcretaCompatibleWithOIR = true;
+                        }
                     }
 
                     // コンパートメントへの流入経路の記述を読み込む。

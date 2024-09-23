@@ -134,11 +134,18 @@ namespace FlexID.Calc
         {
             foreach (var o in data.Organs)
             {
+                // excコンパートメントにおいてOIR互換出力を行う場合、
+                // aveがNaNならば、今回の出力時間メッシュが24-hour位置ではないことを示している。
+                // このときtotalは24-hour分の残留放射能の合算に使用されるため、その内容を保持する必要がある。
+                var retainTotal = o.ExcretaCompatibleWithOIR && double.IsNaN(OutNow[o.Index].ave);
+
                 // 前回の末期放射能を今回の初期放射能とする。
                 OutNow[o.Index].ini = OutNow[o.Index].end;
                 OutNow[o.Index].ave = 0;
                 OutNow[o.Index].end = 0;
-                OutNow[o.Index].total = 0;
+
+                if (!retainTotal)
+                    OutNow[o.Index].total = 0;
             }
         }
 
