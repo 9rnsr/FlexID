@@ -157,6 +157,36 @@ namespace FlexID.Calc
         public string[] OtherSourceRegions;
 
         /// <summary>
+        /// 消化管に対応するコンパートメント群のインデックス。
+        /// </summary>
+        public int[] AtractIndexes = Array.Empty<int>();
+
+        /// <summary>
+        /// 肺に対応するコンパートメント群のインデックス。
+        /// </summary>
+        public int[] LungsIndexes = Array.Empty<int>();
+
+        /// <summary>
+        /// 骨格に対応するコンパートメント群のインデックス。
+        /// </summary>
+        public int[] SkeletonIndexes = Array.Empty<int>();
+
+        /// <summary>
+        /// 肝臓に対応するコンパートメント群のインデックス。
+        /// </summary>
+        public int[] LiverIndexes = Array.Empty<int>();
+
+        /// <summary>
+        /// 甲状腺に対応するコンパートメント群のインデックス。
+        /// </summary>
+        public int[] ThyroidIndexes = Array.Empty<int>();
+
+        /// <summary>
+        /// 血液(輸送コンパートメント)に対応するコンパートメント群のインデックス。
+        /// </summary>
+        public int[] BloodIndexes = Array.Empty<int>();
+
+        /// <summary>
         /// パラメータ定義。
         /// </summary>
         public Dictionary<string, string> Parameters;

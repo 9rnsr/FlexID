@@ -68,6 +68,12 @@ namespace FlexID.Calc
 
             using (CalcOut = new CalcOut(dataList[0], OutputPath))
             {
+                // コンパートメントの名称をヘッダ―として出力。
+                CalcOut.ActivityHeader();
+
+                // 標的領域の名称をヘッダーとして出力。
+                CalcOut.CommitmentHeader();
+
                 MainCalc(calcTimeMesh, outTimeMesh, dataList);
             }
         }

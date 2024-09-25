@@ -86,6 +86,11 @@ namespace ResultChecker
             WriteActivityHeader(colA + 0, "Whole Body");
             WriteActivityHeader(colA + 2, "Urine");
             WriteActivityHeader(colA + 4, "Faeces");
+            WriteActivityHeader(colA + 6, "Alimentary Tract");
+            WriteActivityHeader(colA + 8, "Lungs");
+            WriteActivityHeader(colA + 10, "Skeleton");
+            WriteActivityHeader(colA + 12, "Liver");
+            WriteActivityHeader(colA + 14, "Thyroid");
 
             var r = rowV;
             foreach (var res in results)
@@ -130,6 +135,11 @@ namespace ResultChecker
                 WriteActivityValue(colA + 0, res.FractionsWholeBody);
                 WriteActivityValue(colA + 2, res.FractionsUrine);
                 WriteActivityValue(colA + 4, res.FractionsFaeces);
+                WriteActivityValue(colA + 6, res.FractionsAtract);
+                WriteActivityValue(colA + 8, res.FractionsLungs);
+                WriteActivityValue(colA + 10, res.FractionsSkeleton);
+                WriteActivityValue(colA + 12, res.FractionsLiver);
+                WriteActivityValue(colA + 14, res.FractionsThyroid);
 
                 r++;
             }
@@ -139,7 +149,7 @@ namespace ResultChecker
             SetPercentColorScale(cellsDose);
 
             // 残留放射能のFlexID/OIR比にカラースケールを設定。
-            var cellsActivity = sheet.Cells[rowV, colA, r - 1, colA + 5];
+            var cellsActivity = sheet.Cells[rowV, colA, r - 1, colA + 15];
             SetPercentColorScale(cellsActivity);
 
             sheet.Column(1).AutoFit();
@@ -171,33 +181,48 @@ namespace ResultChecker
 
             const int rowH = 4;
             const int rowT = rowH + 1;
-            const int colE = 1;
-            const int colA = 6;
-            const int colD = 11;
-            const int colC = 16;
+            const int colE = 23;  // 1;
+            const int colA = 33;  // 11;
+            const int colD = 14;  // 21;
+            const int colC = 1;   // 30;
 
             sheet.Cells[rowH - 1, colE + 0].Value = "OIR";
             sheet.Cells[rowH, colE + 0].Value = "Time, days";
             sheet.Cells[rowH, colE + 1].Value = "Whole Body";
             sheet.Cells[rowH, colE + 2].Value = "Urine\n(24-hour sample)";
             sheet.Cells[rowH, colE + 3].Value = "Faeces\n(24-hour sample)";
-            sheet.Cells[rowH, colE + 0, rowH, colE + 3].Style.WrapText = true;
-            sheet.Cells[rowH, colE + 0, rowH, colE + 3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colE + 4].Value = "Alimentary Tract";
+            sheet.Cells[rowH, colE + 5].Value = "Lungs";
+            sheet.Cells[rowH, colE + 6].Value = "Skeleton";
+            sheet.Cells[rowH, colE + 7].Value = "Liver";
+            sheet.Cells[rowH, colE + 8].Value = "Thyroid";
+            sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.WrapText = true;
+            sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
             sheet.Cells[rowH - 1, colA + 0].Value = "FlexID";
             sheet.Cells[rowH, colA + 0].Value = "Time, days";
             sheet.Cells[rowH, colA + 1].Value = "Whole Body";
             sheet.Cells[rowH, colA + 2].Value = "Urine\n(24-hour)";
             sheet.Cells[rowH, colA + 3].Value = "Faeces\n(24-hour)";
-            sheet.Cells[rowH, colA + 0, rowH, colA + 3].Style.WrapText = true;
-            sheet.Cells[rowH, colA + 0, rowH, colA + 3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colA + 4].Value = "Alimentary Tract";
+            sheet.Cells[rowH, colA + 5].Value = "Lungs";
+            sheet.Cells[rowH, colA + 6].Value = "Skeleton";
+            sheet.Cells[rowH, colA + 7].Value = "Liver";
+            sheet.Cells[rowH, colA + 8].Value = "Thyroid";
+            sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.WrapText = true;
+            sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
             sheet.Cells[rowH - 1, colD + 0].Value = "Difference";
             sheet.Cells[rowH, colD + 0].Value = "Whole Body";
             sheet.Cells[rowH, colD + 1].Value = "Urine";
             sheet.Cells[rowH, colD + 2].Value = "Faeces";
-            sheet.Cells[rowH, colD + 0, rowH, colD + 2].Style.WrapText = true;
-            sheet.Cells[rowH, colD + 0, rowH, colD + 2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colD + 3].Value = "Alimentary Tract";
+            sheet.Cells[rowH, colD + 4].Value = "Lungs";
+            sheet.Cells[rowH, colD + 5].Value = "Skeleton";
+            sheet.Cells[rowH, colD + 6].Value = "Liver";
+            sheet.Cells[rowH, colD + 7].Value = "Thyroid";
+            sheet.Cells[rowH, colD + 0, rowH, colD + 7].Style.WrapText = true;
+            sheet.Cells[rowH, colD + 0, rowH, colD + 7].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
             sheet.Row(rowH).Height *= 3;
             //sheet.Cells[rowH, colE, rowH, colE + 3].AutoFitColumns(0);
@@ -213,26 +238,56 @@ namespace ResultChecker
                 var cellWholeBodyE /**/= sheet.Cells[r, colE + 1];
                 var cellUrineE     /**/= sheet.Cells[r, colE + 2];
                 var cellFaecesE    /**/= sheet.Cells[r, colE + 3];
+                var cellAtractE    /**/= sheet.Cells[r, colE + 4];
+                var cellLungsE     /**/= sheet.Cells[r, colE + 5];
+                var cellSkeletonE  /**/= sheet.Cells[r, colE + 6];
+                var cellLiverE     /**/= sheet.Cells[r, colE + 7];
+                var cellThyroidE   /**/= sheet.Cells[r, colE + 8];
                 cellTimeE      /**/.Value = expectAct.EndTime;
                 cellWholeBodyE /**/.Value = expectAct.WholeBody;
-                cellUrineE     /**/.Value = expectAct.Urine ?? (object)"-";
-                cellFaecesE    /**/.Value = expectAct.Faeces ?? (object)"-";
+                cellUrineE     /**/.Value = expectAct.Urine    /**/?? (object)"-";
+                cellFaecesE    /**/.Value = expectAct.Faeces   /**/?? (object)"-";
+                cellAtractE    /**/.Value = expectAct.Atract   /**/?? (object)"-";
+                cellLungsE     /**/.Value = expectAct.Lungs    /**/?? (object)"-";
+                cellSkeletonE  /**/.Value = expectAct.Skeleton /**/?? (object)"-";
+                cellLiverE     /**/.Value = expectAct.Liver    /**/?? (object)"-";
+                cellThyroidE   /**/.Value = expectAct.Thyroid  /**/?? (object)"-";
 
                 var cellTimeA      /**/= sheet.Cells[r, colA + 0];
                 var cellWholeBodyA /**/= sheet.Cells[r, colA + 1];
                 var cellUrineA     /**/= sheet.Cells[r, colA + 2];
                 var cellFaecesA    /**/= sheet.Cells[r, colA + 3];
+                var cellAtractA    /**/= sheet.Cells[r, colA + 4];
+                var cellLungsA     /**/= sheet.Cells[r, colA + 5];
+                var cellSkeletonA  /**/= sheet.Cells[r, colA + 6];
+                var cellLiverA     /**/= sheet.Cells[r, colA + 7];
+                var cellThyroidA   /**/= sheet.Cells[r, colA + 8];
                 cellTimeA      /**/.Value = actualAct.EndTime;
                 cellWholeBodyA /**/.Value = actualAct.WholeBody;
-                cellUrineA     /**/.Value = actualAct.Urine ?? (object)"-";
-                cellFaecesA    /**/.Value = actualAct.Faeces ?? (object)"-";
+                cellUrineA     /**/.Value = actualAct.Urine    /**/?? (object)"-";
+                cellFaecesA    /**/.Value = actualAct.Faeces   /**/?? (object)"-";
+                cellAtractA    /**/.Value = actualAct.Atract   /**/?? (object)"-";
+                cellLungsA     /**/.Value = actualAct.Lungs    /**/?? (object)"-";
+                cellSkeletonA  /**/.Value = actualAct.Skeleton /**/?? (object)"-";
+                cellLiverA     /**/.Value = actualAct.Liver    /**/?? (object)"-";
+                cellThyroidA   /**/.Value = actualAct.Thyroid  /**/?? (object)"-";
 
                 var cellWholeBodyR /**/= sheet.Cells[r, colD + 0];
                 var cellUrineR     /**/= sheet.Cells[r, colD + 1];
                 var cellFaecesR    /**/= sheet.Cells[r, colD + 2];
+                var cellAtractR    /**/= sheet.Cells[r, colD + 3];
+                var cellLungsR     /**/= sheet.Cells[r, colD + 4];
+                var cellSkeletonR  /**/= sheet.Cells[r, colD + 5];
+                var cellLiverR     /**/= sheet.Cells[r, colD + 6];
+                var cellThyroidR   /**/= sheet.Cells[r, colD + 7];
                 cellWholeBodyR/**/.Formula = $"{cellWholeBodyA.Address}/{cellWholeBodyE.Address}";
-                cellUrineR    /**/.Formula = $"IFERROR({cellUrineA.Address}/{cellUrineE.Address},\"-\")";
-                cellFaecesR   /**/.Formula = $"IFERROR({cellFaecesA.Address}/{cellFaecesE.Address},\"-\")";
+                cellUrineR    /**/.Formula = $"IFERROR({cellUrineA    /**/.Address}/{cellUrineE    /**/.Address},\"-\")";
+                cellFaecesR   /**/.Formula = $"IFERROR({cellFaecesA   /**/.Address}/{cellFaecesE   /**/.Address},\"-\")";
+                cellAtractR   /**/.Formula = $"IFERROR({cellAtractA   /**/.Address}/{cellAtractE   /**/.Address},\"-\")";
+                cellLungsR    /**/.Formula = $"IFERROR({cellLungsA    /**/.Address}/{cellLungsE    /**/.Address},\"-\")";
+                cellSkeletonR /**/.Formula = $"IFERROR({cellSkeletonA /**/.Address}/{cellSkeletonE /**/.Address},\"-\")";
+                cellLiverR    /**/.Formula = $"IFERROR({cellLiverA    /**/.Address}/{cellLiverE    /**/.Address},\"-\")";
+                cellThyroidR  /**/.Formula = $"IFERROR({cellThyroidA  /**/.Address}/{cellThyroidE  /**/.Address},\"-\")";
 
                 nrow++;
             }
@@ -240,9 +295,9 @@ namespace ResultChecker
             var sr = rowT;
             var er = rowT + nrow - 1;
 
-            var cellsE = sheet.Cells[sr, colE + 1, er, colE + 3];
-            var cellsA = sheet.Cells[sr, colA + 1, er, colA + 3];
-            var cellsD = sheet.Cells[sr, colD, er, colD + 2];
+            var cellsE = sheet.Cells[sr, colE + 1, er, colE + 8];
+            var cellsA = sheet.Cells[sr, colA + 1, er, colA + 8];
+            var cellsD = sheet.Cells[sr, colD, er, colD + 7];
             cellsE.Style.Numberformat.Format = "0.0E+00";
             cellsA.Style.Numberformat.Format = "0.0E+00";
             cellsD.Style.Numberformat.Format = "0.0%";
@@ -258,22 +313,47 @@ namespace ResultChecker
             var wholeBodyE /**/= sheet.Cells[sr, colE + 1, er, colE + 1];
             var urineE     /**/= sheet.Cells[sr, colE + 2, er, colE + 2];
             var faecesE    /**/= sheet.Cells[sr, colE + 3, er, colE + 3];
+            var atractE    /**/= sheet.Cells[sr, colE + 4, er, colE + 4];
+            var lungsE     /**/= sheet.Cells[sr, colE + 5, er, colE + 5];
+            var skeletonE  /**/= sheet.Cells[sr, colE + 6, er, colE + 6];
+            var liverE     /**/= sheet.Cells[sr, colE + 7, er, colE + 7];
+            var thyroidE   /**/= sheet.Cells[sr, colE + 8, er, colE + 8];
 
             var timesA     /**/= sheet.Cells[sr, colA + 0, er, colA + 0];
             var wholeBodyA /**/= sheet.Cells[sr, colA + 1, er, colA + 1];
             var urineA     /**/= sheet.Cells[sr, colA + 2, er, colA + 2];
             var faecesA    /**/= sheet.Cells[sr, colA + 3, er, colA + 3];
+            var aractA     /**/= sheet.Cells[sr, colA + 4, er, colA + 4];
+            var lungsA     /**/= sheet.Cells[sr, colA + 5, er, colA + 5];
+            var skeletonA  /**/= sheet.Cells[sr, colA + 6, er, colA + 6];
+            var liverA     /**/= sheet.Cells[sr, colA + 7, er, colA + 7];
+            var thyroidA   /**/= sheet.Cells[sr, colA + 8, er, colA + 8];
 
             var chartWholeBody /**/= sheet.Drawings.AddScatterChart("ChartWholeBody", /**/eScatterChartType.XYScatter);
             var chartUrine     /**/= sheet.Drawings.AddScatterChart("ChartUrine",     /**/eScatterChartType.XYScatter);
             var chartFaeces    /**/= sheet.Drawings.AddScatterChart("ChartFaeces",    /**/eScatterChartType.XYScatter);
+            var chartAtract    /**/= sheet.Drawings.AddScatterChart("ChartAtract",    /**/eScatterChartType.XYScatter);
+            var chartLungs     /**/= sheet.Drawings.AddScatterChart("ChartLungs",     /**/eScatterChartType.XYScatter);
+            var chartSkeleton  /**/= sheet.Drawings.AddScatterChart("ChartSkeleton",  /**/eScatterChartType.XYScatter);
+            var chartLiver     /**/= sheet.Drawings.AddScatterChart("ChartLiver",     /**/eScatterChartType.XYScatter);
+            var chartThyroid   /**/= sheet.Drawings.AddScatterChart("ChartThyroid",   /**/eScatterChartType.XYScatter);
             chartWholeBody/**/.Title.Text = "Whole Body";
             chartUrine    /**/.Title.Text = "Urine";
             chartFaeces   /**/.Title.Text = "Faeces";
+            chartAtract   /**/.Title.Text = "Alimentary Tract";
+            chartLungs    /**/.Title.Text = "Lungs";
+            chartSkeleton /**/.Title.Text = "Skeleton";
+            chartLiver    /**/.Title.Text = "Liver";
+            chartThyroid  /**/.Title.Text = "Thyroid";
 
             SetActivityChartStyle(chartWholeBody, /**/rowT/*                     */, colC, 22, 12);
             SetActivityChartStyle(chartUrine,     /**/chartWholeBody/**/.To.Row + 2, colC, 22, 12);
             SetActivityChartStyle(chartFaeces,    /**/chartUrine    /**/.To.Row + 2, colC, 22, 12);
+            SetActivityChartStyle(chartAtract,    /**/chartFaeces   /**/.To.Row + 2, colC, 22, 12);
+            SetActivityChartStyle(chartLungs,     /**/chartAtract   /**/.To.Row + 2, colC, 22, 12);
+            SetActivityChartStyle(chartSkeleton,  /**/chartLungs    /**/.To.Row + 2, colC, 22, 12);
+            SetActivityChartStyle(chartLiver,     /**/chartSkeleton /**/.To.Row + 2, colC, 22, 12);
+            SetActivityChartStyle(chartThyroid,   /**/chartLiver    /**/.To.Row + 2, colC, 22, 12);
 
             var serieWholeBodyE = chartWholeBody.Series.Add(wholeBodyE, timesE);
             var serieWholeBodyA = chartWholeBody.Series.Add(wholeBodyA, timesA);
@@ -289,6 +369,31 @@ namespace ResultChecker
             var serieFaecesA = chartFaeces.Series.Add(faecesA, timesA);
             SetExpectSerieStyle(serieFaecesE, "Faeces");
             SetActualSerieStyle(serieFaecesA, "Faeces");
+
+            var serieAtractE = chartAtract.Series.Add(atractE, timesE);
+            var serieAtractA = chartAtract.Series.Add(aractA, timesA);
+            SetExpectSerieStyle(serieAtractE, "Aimentary Tract");
+            SetActualSerieStyle(serieAtractA, "Aimentary Tract");
+
+            var serieLungsE = chartLungs.Series.Add(lungsE, timesE);
+            var serieLungsA = chartLungs.Series.Add(lungsA, timesA);
+            SetExpectSerieStyle(serieLungsE, "Lungs");
+            SetActualSerieStyle(serieLungsA, "Lungs");
+
+            var serieSkeletonE = chartSkeleton.Series.Add(skeletonE, timesE);
+            var serieSkeletonA = chartSkeleton.Series.Add(skeletonA, timesA);
+            SetExpectSerieStyle(serieSkeletonE, "Skeleton");
+            SetActualSerieStyle(serieSkeletonA, "Skeleton");
+
+            var serieLiverE = chartLiver.Series.Add(liverE, timesE);
+            var serieLiverA = chartLiver.Series.Add(liverA, timesA);
+            SetExpectSerieStyle(serieLiverE, "Liver");
+            SetActualSerieStyle(serieLiverA, "Liver");
+
+            var serieThyroidE = chartThyroid.Series.Add(thyroidE, timesE);
+            var serieThyroidA = chartThyroid.Series.Add(thyroidA, timesA);
+            SetExpectSerieStyle(serieThyroidE, "Thyroid");
+            SetActualSerieStyle(serieThyroidA, "Thyroid");
         }
 
         static ExcelScatterChart SetActivityChartStyle(ExcelScatterChart chart, int row, int col, int nrow, int ncol)

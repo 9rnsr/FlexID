@@ -97,18 +97,80 @@ namespace FlexID.Calc
                     yield return ws[indexN];
                 }
             }
+        }
 
-            // コンパートメントの名称をヘッダ―として出力。
-            ActivityHeader();
+        /// <summary>
+        /// 集合コンパートメントについての準備を行う。
+        /// </summary>
+        public void PrepareCompositeCompartments()
+        {
+            // 消化管を構成する、OIRの線源領域の名称リスト。
+            var sregionsAtract = new[]
+            {
+                "St-cont", "St-wall",
+                "SI-cont", "SI-wall",
+                "RC-cont", "RC-wall",
+                "LC-cont", "LC-wall",
+                "RS-cont", "RS-wall",
+            };
 
-            // 標的領域の名称をヘッダーとして出力。
-            CommitmentHeader();
+            // 肺を構成する、OIRにおける線源領域の名称リスト。
+            var sregionsLungs = new[]
+            {
+                // Extrathoracic region
+                // "ET1-sur",  "ET2-sur",  "ET2-bnd",  "ET2-seq",
+
+                // Thoracic region (Lung)
+                "Bronchi",  "Bronchi-b",  "Bronchi-q",
+                "Brchiole", "Brchiole-b", "Brchiole-q",
+                "ALV", "LN-Th", "Lung-Tis",
+            };
+
+            // 骨格を構成する、OIRにおける線源領域の名称リスト。
+            var sregionsSkeleton = new[]
+            {
+                "C-bone-S", "C-bone-V", "T-bone-S", "T-bone-V",
+                "C-marrow", "T-marrow", "R-marrow", "Y-marrow",
+            };
+
+            // 肝臓を構成する、OIRにおける線源領域の名称リスト。
+            var sregionsLiver = new[] { "Liver" };
+
+            // 甲状腺を構成する、OIRにおける線源領域の名称リスト。
+            var sregionsThyroid = new[] { "Thyroid" };
+
+            // 血液(輸送コンパートメント)を構成する、OIRにおける線源領域の名称リスト。
+            var sregionsBlood = new[] { "Blood" };
+
+            foreach (var nuclide in data.Nuclides)
+            {
+                var compartmentsAcc = data.Organs
+                    .Where(o => o.Func == OrganFunc.acc && o.Nuclide == nuclide && o.SourceRegion != null);
+
+                nuclide.AtractIndexes = compartmentsAcc
+                    .Where(o => sregionsAtract.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+
+                nuclide.LungsIndexes = compartmentsAcc
+                    .Where(o => sregionsLungs.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+
+                nuclide.SkeletonIndexes = compartmentsAcc
+                    .Where(o => sregionsSkeleton.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+
+                nuclide.LiverIndexes = compartmentsAcc
+                    .Where(o => sregionsLiver.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+
+                nuclide.ThyroidIndexes = compartmentsAcc
+                    .Where(o => sregionsThyroid.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+
+                nuclide.BloodIndexes = compartmentsAcc
+                    .Where(o => sregionsBlood.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+            }
         }
 
         /// <summary>
         /// 残留放射能の出力ファイルにヘッダーを書き出す。
         /// </summary>
-        private void ActivityHeader()
+        public void ActivityHeader()
         {
             // Retention
             foreach (var nuclide in data.Nuclides)
@@ -120,6 +182,13 @@ namespace FlexID.Calc
 
                 wRete.Write("     Time      ");
                 wRete.Write("  {0,-14}", "WholeBody");
+
+                if (nuclide.AtractIndexes  /**/.Length != 0) wRete.Write("{0,-16}", "AlimentaryTract*");
+                if (nuclide.LungsIndexes   /**/.Length != 0) wRete.Write("  {0,-14}", "Lungs*");
+                if (nuclide.SkeletonIndexes/**/.Length != 0) wRete.Write("  {0,-14}", "Skeleton*");
+                if (nuclide.LiverIndexes   /**/.Length != 0) wRete.Write("  {0,-14}", "Liver*");
+                if (nuclide.ThyroidIndexes /**/.Length != 0) wRete.Write("  {0,-14}", "Thyroid*");
+
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -131,6 +200,13 @@ namespace FlexID.Calc
 
                 wRete.Write("     [day]       ");
                 wRete.Write("  [Bq/Bq]       ");
+
+                if (nuclide.AtractIndexes  /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
+                if (nuclide.LungsIndexes   /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
+                if (nuclide.SkeletonIndexes/**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
+                if (nuclide.LiverIndexes   /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
+                if (nuclide.ThyroidIndexes /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
+
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -150,6 +226,13 @@ namespace FlexID.Calc
                 wCumu.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuclide.Nuclide, nuclide.IntakeRoute);
                 wCumu.Write("     Time      ");
                 wCumu.Write("  {0,-14}", "WholeBody");
+
+                if (nuclide.AtractIndexes  /**/.Length != 0) wCumu.Write("{0,-16}", "AlimentaryTract*");
+                if (nuclide.LungsIndexes   /**/.Length != 0) wCumu.Write("  {0,-14}", "Lungs*");
+                if (nuclide.SkeletonIndexes/**/.Length != 0) wCumu.Write("  {0,-14}", "Skeleton*");
+                if (nuclide.LiverIndexes   /**/.Length != 0) wCumu.Write("  {0,-14}", "Liver*");
+                if (nuclide.ThyroidIndexes /**/.Length != 0) wCumu.Write("  {0,-14}", "Thyroid*");
+
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -161,6 +244,13 @@ namespace FlexID.Calc
 
                 wCumu.Write("     [day]       ");
                 wCumu.Write("     [Bq]       ");
+
+                if (nuclide.AtractIndexes  /**/.Length != 0) wCumu.Write("     [Bq]       ");
+                if (nuclide.LungsIndexes   /**/.Length != 0) wCumu.Write("     [Bq]       ");
+                if (nuclide.SkeletonIndexes/**/.Length != 0) wCumu.Write("     [Bq]       ");
+                if (nuclide.LiverIndexes   /**/.Length != 0) wCumu.Write("     [Bq]       ");
+                if (nuclide.ThyroidIndexes /**/.Length != 0) wCumu.Write("     [Bq]       ");
+
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
                     if (organ.Func == OrganFunc.inp)
@@ -227,8 +317,8 @@ namespace FlexID.Calc
             for (int i = 0; i < data.Nuclides.Count; i++)
             {
                 var nuclide = data.Nuclides[i];
-                var wholeBodyRete = 0.0;
-                var wholeBodyCumu = 0.0;
+                var reteWholeBody = 0.0;
+                var cumuWholeBody = 0.0;
 
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
@@ -240,12 +330,32 @@ namespace FlexID.Calc
                     var retention = Act.OutNow[organ.Index].end * nucDecay;
                     var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
 
-                    wholeBodyRete += retention;
-                    wholeBodyCumu += cumulative;
+                    reteWholeBody += retention;
+                    cumuWholeBody += cumulative;
                 }
 
-                wsRete[i].Write("  {0:0.00000000E+00}", wholeBodyRete);
-                wsCumu[i].Write("  {0:0.00000000E+00}", wholeBodyCumu);
+                wsRete[i].Write("  {0:0.00000000E+00}", reteWholeBody);
+                wsCumu[i].Write("  {0:0.00000000E+00}", cumuWholeBody);
+
+                var reteBlood = nuclide.BloodIndexes.Select(oi => Act.OutNow[oi].end * data.Organs[oi].NuclideDecay).Sum();
+                var cumuBlood = nuclide.BloodIndexes.Select(oi => Act.OutTotalFromIntake[oi] * data.Organs[oi].NuclideDecay).Sum();
+
+                void WriteOutSum(int[] indexes, double bloodFraction)
+                {
+                    if (indexes.Length == 0)
+                        return;
+                    var rete = indexes.Select(oi => Act.OutNow[oi].end * data.Organs[oi].NuclideDecay).Sum();
+                    var cumu = indexes.Select(oi => Act.OutTotalFromIntake[oi] * data.Organs[oi].NuclideDecay).Sum();
+
+                    wsRete[i].Write("  {0:0.00000000E+00}", rete + reteBlood * bloodFraction);
+                    wsCumu[i].Write("  {0:0.00000000E+00}", cumu + cumuBlood * bloodFraction);
+                }
+
+                WriteOutSum(nuclide.AtractIndexes, 0.07);
+                WriteOutSum(nuclide.LungsIndexes, 0.125);
+                WriteOutSum(nuclide.SkeletonIndexes, 0.07);
+                WriteOutSum(nuclide.LiverIndexes, 0.1);
+                WriteOutSum(nuclide.ThyroidIndexes, 0.0006);
             }
 
             foreach (var organ in data.Organs)
