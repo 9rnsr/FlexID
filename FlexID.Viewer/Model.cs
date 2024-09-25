@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace FlexID.Viewer
@@ -286,6 +288,8 @@ namespace FlexID.Viewer
         }
         private bool isPlaying;
 
+        private CancellationTokenSource cancellationPlaying;
+
         #endregion
 
         #region グラフ表示
@@ -333,26 +337,42 @@ namespace FlexID.Viewer
             if (TimeSteps.Count == 0)
                 return;
 
-            if (!IsPlaying)
+            if (cancellationPlaying != null)
             {
-                // 停止時の処理。
-                IsPlaying = true;
-                for (var i = CurrentTimeIndex + 1; i < TimeSteps.Count; i++)
-                {
-                    CurrentTimeIndex = i;
-                    CurrentTimeStep = TimeSteps[CurrentTimeIndex];
-                    await Task.Delay(200);
+                cancellationPlaying.Cancel();
+                return;
+            }
 
-                    if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
-                        break;
+            IsPlaying = true;
+            try
+            {
+                using (cancellationPlaying = new CancellationTokenSource())
+                {
+                    var cancellationToken = cancellationPlaying.Token;
+
+                    await Task.Run(async () =>
+                    {
+                        // 停止時の処理。
+                        for (var i = CurrentTimeIndex + 1; i < TimeSteps.Count; i++)
+                        {
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                CurrentTimeIndex = i;
+                                CurrentTimeStep = TimeSteps[CurrentTimeIndex];
+                            }));
+                            await Task.Delay(200, cancellationToken);
+                        }
+                    }, cancellationToken);
                 }
             }
-            else
+            catch (TaskCanceledException)
             {
-                // 再生時の処理。
-                IsPlaying = false;
+                // 再生中にボタンが押された。
             }
-
+            finally
+            {
+                cancellationPlaying = null;
+            }
             IsPlaying = false;
         }
 

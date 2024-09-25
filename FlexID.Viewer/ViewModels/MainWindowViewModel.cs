@@ -80,16 +80,16 @@ namespace FlexID.Viewer.ViewModels
         /// <summary>
         /// 現在スライダーが示している時間。
         /// </summary>
-        public ReactiveProperty<double> CurrentTimeStep { get; }
+        public ReactivePropertySlim<double> CurrentTimeStep { get; }
 
         /// <summary>
         /// アニメーション再生状態を示す。<see langword="true"/>：再生中、<see langword="false"/>：停止中。
         /// </summary>
         public ReadOnlyReactiveProperty<bool> IsPlaying { get; }
 
-        public ReactiveCommand PlayCommand { get; } = new ReactiveCommand();
-        public ReactiveCommand NextStepCommand { get; } = new ReactiveCommand();
-        public ReactiveCommand PreviousStepCommand { get; } = new ReactiveCommand();
+        public ReactiveCommandSlim PlayCommand { get; } = new ReactiveCommandSlim();
+        public ReactiveCommandSlim NextStepCommand { get; } = new ReactiveCommandSlim();
+        public ReactiveCommandSlim PreviousStepCommand { get; } = new ReactiveCommandSlim();
 
         #endregion
 
@@ -172,7 +172,7 @@ namespace FlexID.Viewer.ViewModels
             StartTimeStep = TimeSteps.Select(ts => ts.Count == 0 ? 0 : ts[0]).ToReadOnlyReactivePropertySlim();
             EndTimeStep = TimeSteps.Select(ts => ts.Count == 0 ? 0 : ts[ts.Count - 1]).ToReadOnlyReactivePropertySlim();
 
-            CurrentTimeStep = this.model.ToReactivePropertyAsSynchronized(x => x.CurrentTimeStep);
+            CurrentTimeStep = this.model.ToReactivePropertySlimAsSynchronized(x => x.CurrentTimeStep);
 
             CurrentTimeStep.Subscribe(_ => this.model.SetValues());
 
