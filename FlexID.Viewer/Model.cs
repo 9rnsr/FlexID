@@ -531,8 +531,8 @@ namespace FlexID.Viewer
         /// </summary>
         private void SetMinMax()
         {
-            var max = CurrentNuclide.Compartments.SelectMany(c => c.Values).Max();
-            var min = CurrentNuclide.Compartments.SelectMany(c => c.Values).Min();
+            var max = CurrentNuclide.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Max();
+            var min = CurrentNuclide.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Min();
 
             // 1E**に合わせる
             ContourMax = Math.Pow(10, Math.Ceiling(Math.Log10(max)));
