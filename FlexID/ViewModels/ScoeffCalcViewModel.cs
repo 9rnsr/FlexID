@@ -62,6 +62,16 @@ namespace FlexID.ViewModels
 
             Nuclides.AddRange(SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideItem { Nuclide = nuc }));
 
+#if true
+            Nuclides.First(n => n.Nuclide == "Co-60").IsChecked = true;
+            Nuclides.First(n => n.Nuclide == "Y-90").IsChecked = true;
+            Nuclides.First(n => n.Nuclide == "Pu-239").IsChecked = true;
+            Nuclides.First(n => n.Nuclide == "Cf-252").IsChecked = true;
+            Nuclides.First(n => n.Nuclide == "F-18").IsChecked = true;
+            Nuclides.First(n => n.Nuclide == "As-74").IsChecked = true;
+            Nuclides.First(n => n.Nuclide == "Mo-99").IsChecked = true;
+#endif
+
             SelectOutputFilePathCommand = new ReactiveCommandSlim().WithSubscribe(() =>
             {
                 var dialog = new SaveFileDialog();
@@ -117,8 +127,12 @@ namespace FlexID.ViewModels
                 calcS.CalcS(nuc);
 
                 var target = $@"{nuc}_{(sex == Sex.Male ? "AM" : "AF")}";
-                var scoeffFilePath = Path.Combine(outPath, target + ".txt");
-                calcS.WriteOutTotalResult(scoeffFilePath);
+                //var scoeffFilePath = Path.Combine(outPath, target + ".txt");
+                //calcS.WriteOutTotalResult(scoeffFilePath);
+
+                var scoeffFilePath = Path.Combine(outPath, target + ".csv");
+                calcS.WriteOutIdacDoseCompatibleResult(scoeffFilePath);
+
             })).ToArray());
         }
     }
