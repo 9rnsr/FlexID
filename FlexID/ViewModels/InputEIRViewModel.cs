@@ -29,9 +29,9 @@ namespace FlexID.ViewModels
 
         public ReactivePropertySlim<bool> CalcProgeny { get; } = new ReactivePropertySlim<bool>();
 
-        public ObservableCollection<string> ModelTypes { get; } = new ObservableCollection<string>();
+        public ObservableCollection<InputData> Inputs { get; } = new ObservableCollection<InputData>();
 
-        public ReactivePropertySlim<string> SelectedModelType { get; } = new ReactivePropertySlim<string>();
+        public ReactivePropertySlim<InputData> SelectedInput { get; } = new ReactivePropertySlim<InputData>();
 
         public ReactivePropertySlim<string> CalcTimeMeshFilePath { get; } = new ReactivePropertySlim<string>();
 
@@ -105,21 +105,15 @@ namespace FlexID.ViewModels
 
             selectedInputs.Subscribe(inputs =>
             {
-                // インプットの種別(被ばく経路/化学形態)の一覧を更新する。
-                var types = inputs.Select(inp => inp.ModelType);
-                ModelTypes.Clear();
-                ModelTypes.AddRange(types);
+                // インプットの一覧を更新する。
+                Inputs.Clear();
+                Inputs.AddRange(inputs);
 
-                SelectedModelType.Value = types.FirstOrDefault();
+                SelectedInput.Value = inputs.FirstOrDefault();
             }).AddTo(Disposables);
 
-            // 核種とインプットの種別(被ばく経路/化学形態)に対応する、選択されたインプット情報。
-            var selectedInput = selectedInputs.CombineLatest(SelectedModelType,
-                (inputs, type) => inputs?.FirstOrDefault(inp => inp.ModelType == type))
-                .ToReadOnlyReactivePropertySlim().AddTo(Disposables);
-
             // 子孫核種を持つインプットに対してのみ、子孫核種の計算を選択可能にする。
-            HasProgeny = selectedInput.Select(inp => inp?.HasProgeny ?? false)
+            HasProgeny = SelectedInput.Select(inp => inp?.HasProgeny ?? false)
                 .ToReadOnlyReactivePropertySlim().AddTo(Disposables);
 
             // 子孫核種の有無が切り替わった場合に、これを子孫核種の計算有無に反映する。
@@ -157,12 +151,13 @@ namespace FlexID.ViewModels
 
             }).AddTo(Disposables);
 
-            RunCommand = calcStatus.CanExecute.ToAsyncReactiveCommand().WithSubscribe(async () =>
+            var canRun = calcStatus.CanExecute.CombineLatest(SelectedInput, (b, inp) => b && inp != null);
+            RunCommand = canRun.ToAsyncReactiveCommand().WithSubscribe(async () =>
             {
                 try
                 {
                     CheckParam();
-                    await RunAndView(selectedInput.Value);
+                    await RunAndView(SelectedInput.Value);
                 }
                 catch (Exception error)
                 {
@@ -204,7 +199,7 @@ namespace FlexID.ViewModels
             {
                 throw new Exception("Please select Nuclide.");
             }
-            if (SelectedModelType.Value is null)
+            if (SelectedInput.Value is null)
             {
                 throw new Exception("Please select Route of Intake.");
             }

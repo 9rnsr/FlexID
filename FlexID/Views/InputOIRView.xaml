@@ -89,12 +89,13 @@
     <Label
       Grid.Row="3"
       Grid.Column="0"
-      Content="Route / &#xA;Chemical Form" />
+      Content="Input Title &#xA;(Route, Form, etc)" />
     <ComboBox
       Grid.Row="3"
       Grid.Column="1"
-      ItemsSource="{Binding ModelTypes}"
-      SelectedValue="{Binding SelectedModelType.Value}" />
+      DisplayMemberPath="Title"
+      ItemsSource="{Binding Inputs}"
+      SelectedValue="{Binding SelectedInput.Value}" />
 
     <Label
       Grid.Row="4"

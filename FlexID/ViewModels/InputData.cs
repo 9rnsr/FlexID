@@ -17,9 +17,9 @@ namespace FlexID.ViewModels
         public string FilePath { get; }
 
         /// <summary>
-        /// 計算モデルの種別(被ばく経路/化学形態)。
+        /// 計算モデルのタイトル(被ばく経路, 化学形態, etc.)。
         /// </summary>
-        public string ModelType { get; }
+        public string Title { get; }
 
         /// <summary>
         /// 計算モデルの親核種。
@@ -35,13 +35,13 @@ namespace FlexID.ViewModels
         /// コンストラクタ
         /// </summary>
         /// <param name="filePath"></param>
-        /// <param name="modelType"></param>
+        /// <param name="title"></param>
         /// <param name="nuclide"></param>
         /// <param name="hasProgeny"></param>
-        public InputData(string filePath, string modelType, string nuclide, bool hasProgeny)
+        public InputData(string filePath, string title, string nuclide, bool hasProgeny)
         {
             FilePath = filePath;
-            ModelType = modelType;
+            Title = title;
             Nuclide = nuclide;
             HasProgeny = hasProgeny;
         }
@@ -50,7 +50,7 @@ namespace FlexID.ViewModels
         {
             return obj is InputData other &&
                    FilePath == other.FilePath &&
-                   ModelType == other.ModelType &&
+                   Title == other.Title &&
                    Nuclide == other.Nuclide &&
                    HasProgeny == other.HasProgeny;
         }
@@ -59,16 +59,16 @@ namespace FlexID.ViewModels
         {
             int hashCode = -1273085575;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FilePath);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ModelType);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Title);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Nuclide);
             hashCode = hashCode * -1521134295 + HasProgeny.GetHashCode();
             return hashCode;
         }
 
-        public void Deconstruct(out string filePath, out string modelType, out string nuclide, out bool hasProgeny)
+        public void Deconstruct(out string filePath, out string title, out string nuclide, out bool hasProgeny)
         {
             filePath = FilePath;
-            modelType = ModelType;
+            title = Title;
             nuclide = Nuclide;
             hasProgeny = HasProgeny;
         }
@@ -109,11 +109,11 @@ namespace FlexID.ViewModels
                 if (parentNuclide is null)
                     continue;
 
-                var type = parentNuclide.IntakeRoute;
+                var title = data.Title;
                 var nuclide = parentNuclide.Nuclide;
                 var hasProgeny = data.Nuclides.Count > 1;
 
-                yield return new InputData(inputFile, type, nuclide, hasProgeny);
+                yield return new InputData(inputFile, title, nuclide, hasProgeny);
             }
         }
 
@@ -153,11 +153,11 @@ namespace FlexID.ViewModels
                 if (parentNuclide is null)
                     continue;
 
-                var type = parentNuclide.IntakeRoute;
+                var title = data.Title;
                 var nuclide = parentNuclide.Nuclide;
                 var hasProgeny = data.Nuclides.Count > 1;
 
-                yield return new InputData(inputFile, type, nuclide, hasProgeny);
+                yield return new InputData(inputFile, title, nuclide, hasProgeny);
             }
         }
     }
