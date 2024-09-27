@@ -1046,11 +1046,13 @@ namespace FlexID.Calc
             reader.DiscardBufferedData();
             lineNum = 0;
 
-            var firstLine = GetNextLine();
-            if (firstLine is null)
+            var title = GetNextLine();
+            if (title is null)
                 throw Program.Error("Reach to EOF while reading input file.");
 
             var data = new InputData();
+
+            data.Title = title;
 
             data.StartAge =
                 age == "Age:3month" /**/? 100 :
@@ -1064,6 +1066,10 @@ namespace FlexID.Calc
             {
                 var isProgeny = false;
             Lcont:
+                var firstLine = GetNextLine();
+                if (firstLine is null)
+                    throw Program.Error("Reach to EOF while reading input file.");
+
                 // 核種のヘッダ行を読み込む。
                 var values = firstLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -1114,9 +1120,6 @@ namespace FlexID.Calc
                             break;
 
                         isProgeny = true;
-                        firstLine = GetNextLine();
-                        if (firstLine is null)
-                            throw Program.Error("Reach to EOF while reading input file.");
                         goto Lcont;
                     }
 
