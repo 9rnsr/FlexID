@@ -127,6 +127,8 @@ namespace FlexID.Views.Behaviors
                 var lv = AssociatedObject;
                 var count = lv.Items.Count;
                 var current = lv.SelectedIndex;
+                if (current < 0)
+                    current = 0;
                 for (int i = 0; i < count; i++)
                 {
                     // 現在の選択項目から検索を開始する。
