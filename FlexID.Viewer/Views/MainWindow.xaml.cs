@@ -1,3 +1,6 @@
+using System.Windows.Controls;
+using System.Windows.Input;
+
 namespace FlexID.Viewer.Views
 {
     /// <summary>
@@ -8,6 +11,36 @@ namespace FlexID.Viewer.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // Ctrl+Tab
+            if (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Control) != 0)
+            {
+                var index = MainTabControl.SelectedIndex;
+                var count = MainTabControl.Items.Count;
+
+                var shiftPressed = (Keyboard.Modifiers & ~ModifierKeys.Control) == ModifierKeys.Shift;
+                index += (shiftPressed ? -1 : +1);
+                if (index >= count)
+                    index = 0;
+                else if (index < 0)
+                    index = count - 1;
+
+                MainTabControl.SelectedIndex = index;
+
+                e.Handled = true;
+            }
+        }
+
+        private void OutputFilePathTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None)
+            {
+                var binding = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
+                binding?.UpdateSource();
+            }
         }
     }
 }

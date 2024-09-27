@@ -112,6 +112,16 @@ namespace FlexID.Viewer
         public ObservableCollection<OutputType> OutputTypes { get; } = new ObservableCollection<OutputType>();
 
         /// <summary>
+        /// インプットのタイトル。
+        /// </summary>
+        public string Title
+        {
+            get => title;
+            set => SetProperty(ref title, value);
+        }
+        private string title = "";
+
+        /// <summary>
         /// 表示中の出力ファイルのデータ。
         /// </summary>
         private OutputData CurrentOutput { get; set; }
@@ -119,27 +129,12 @@ namespace FlexID.Viewer
         /// <summary>
         /// 表示中の核種のデータ。
         /// </summary>
-        private OutputNuclideData CurrentNuclide => CurrentOutput?.Nuclides[0];
+        private OutputNuclideData CurrentNuclide { get; set; }
 
         /// <summary>
-        /// 核種。
+        /// 核種リスト。
         /// </summary>
-        public string Nuclide
-        {
-            get => nuclide;
-            set => SetProperty(ref nuclide, value);
-        }
-        private string nuclide = "";
-
-        /// <summary>
-        /// 摂取経路。
-        /// </summary>
-        public string IntakeRoute
-        {
-            get => intakeRoute;
-            set => SetProperty(ref intakeRoute, value);
-        }
-        private string intakeRoute = "";
+        public ObservableCollection<string> Nuclides { get; } = new ObservableCollection<string>();
 
         #endregion
 
@@ -437,8 +432,16 @@ namespace FlexID.Viewer
                 return;
             CurrentOutput = null;
 
-            Nuclide = "";
-            IntakeRoute = "";
+            Title = "";
+            Nuclides.Clear();
+            ClearNuclide();
+        }
+
+        private void ClearNuclide()
+        {
+            if (CurrentNuclide is null)
+                return;
+            CurrentNuclide = null;
 
             ContourMax = 0;
             ContourMin = 0;
@@ -516,8 +519,26 @@ namespace FlexID.Viewer
 
             CurrentOutput = newOutput;
 
-            Nuclide = CurrentOutput.Nuclide;
-            IntakeRoute = CurrentOutput.IntakeRoute;
+            Title = $"{CurrentOutput.Nuclide}, {CurrentOutput.IntakeRoute}";
+            Nuclides.AddRange(CurrentOutput.Nuclides.Select(n => n.Nuclide));
+        }
+
+        /// <summary>
+        /// 崩壊系列を構成する核種から描画対象を設定する。
+        /// </summary>
+        public void SetNuclide(string nuc)
+        {
+            if (CurrentNuclide?.Nuclide == nuc)
+                return;
+
+            var index = Nuclides.IndexOf(nuc);
+            if (index == -1)
+            {
+                ClearNuclide();
+                return;
+            }
+
+            CurrentNuclide = CurrentOutput.Nuclides[index];
 
             SetMinMax();
             SetSteps();
@@ -531,8 +552,8 @@ namespace FlexID.Viewer
         /// </summary>
         private void SetMinMax()
         {
-            var max = CurrentNuclide.Compartments.SelectMany(c => c.Values).Max();
-            var min = CurrentNuclide.Compartments.SelectMany(c => c.Values).Min();
+            var max = CurrentNuclide.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Max();
+            var min = CurrentNuclide.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Min();
 
             // 1E**に合わせる
             ContourMax = Math.Pow(10, Math.Ceiling(Math.Log10(max)));
@@ -558,35 +579,61 @@ namespace FlexID.Viewer
         /// </summary>
         private void SetPlot()
         {
-            var calcTimes = CurrentOutput.TimeSteps;
-
+            var timeSteps = CurrentOutput.TimeSteps;
             var compartments = CurrentNuclide.Compartments;
-            for (int i = 0; i < compartments.Length; i++)
+
+            void AddSeries(string name, OxyColor? color = null)
             {
-                var compartment = compartments[i];
-                var values = compartment.Values;
+                var compartment = compartments.FirstOrDefault(c => c.Name == name);
+                if (compartment is null)
+                    return;
+
+                if (PlotModel.Series.Any(ser => ser.Title == name))
+                    return;
 
                 var serie = new ScatterSeries()
                 {
-                    Title = compartment.Name,
-                    IsVisible = false,  // 初期状態は非表示。
+                    Title = name,
+                    IsVisible = color != null,
+                    MarkerFill = color ?? OxyColors.Automatic,
                 };
-                for (int j = 0; j < calcTimes.Count; j++)
+
+                var values = compartment.Values;
+                for (int j = 0; j < timeSteps.Count; j++)
                 {
-                    if (calcTimes[j] == 0)
+                    if (timeSteps[j] == 0)
                         continue;
-                    serie.Points.Add(new ScatterPoint(calcTimes[j], values[j]));
+                    serie.Points.Add(new ScatterPoint(timeSteps[j], values[j]));
                 }
 
                 Regions.Add(new RegionData(serie, compartment.Name));
                 PlotModel.Series.Add(serie);
             }
 
+            var type = CurrentOutput.Type;
+
+            AddSeries("WholeBody", OxyColor.FromUInt32(0xFF4466A3));
+
+            if (type == OutputType.RetentionActivity ||
+                type == OutputType.CumulativeActivity)
+            {
+                AddSeries("Urine",            /**/OxyColor.FromUInt32(0xFFF39C35));
+                AddSeries("Faeces",           /**/OxyColor.FromUInt32(0xFFF14C14));
+                AddSeries("AlimentaryTract*", /**/OxyColor.FromUInt32(0xFF4E97A8));
+                AddSeries("Lungs*",           /**/OxyColor.FromUInt32(0xFF2B406B));
+                AddSeries("Skeleton*",        /**/OxyColor.FromUInt32(0xFFB3080E));
+                AddSeries("Liver*",           /**/OxyColor.FromUInt32(0xFFF2C05D));
+                AddSeries("Thyroid*",         /**/OxyColor.FromUInt32(0xFF1D7B63));
+            }
+
+            foreach (var compartment in compartments)
+                AddSeries(compartment.Name);
+
             var graphLabel =
-                CurrentOutput.Type == OutputType.RetentionActivity ? "Retention" :
-                CurrentOutput.Type == OutputType.CumulativeActivity ? "CumulativeActivity" :
-                CurrentOutput.Type == OutputType.Dose ? "Effective/Equivalent Dose" :
-                CurrentOutput.Type == OutputType.DoseRate ? "DoseRate" :
+                type == OutputType.RetentionActivity ? "Retention" :
+                type == OutputType.CumulativeActivity ? "CumulativeActivity" :
+                type == OutputType.Dose ? "Effective/Equivalent Dose" :
+                type == OutputType.DoseRate ? "DoseRate" :
                 throw new NotSupportedException();
             graphLabel += $"[{ContourUnit}]";
 

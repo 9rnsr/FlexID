@@ -7,6 +7,7 @@ using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
 
 namespace FlexID.Viewer.ViewModels
@@ -28,9 +29,11 @@ namespace FlexID.Viewer.ViewModels
 
         public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new ReactivePropertySlim<OutputType?>();
 
-        public ReadOnlyReactivePropertySlim<string> Nuclide { get; }
+        public ReadOnlyReactivePropertySlim<string> Title { get; }
 
-        public ReadOnlyReactivePropertySlim<string> IntakeRoute { get; }
+        public ObservableCollection<string> Nuclides => this.model.Nuclides;
+
+        public ReactivePropertySlim<string> SelectedNuclide { get; } = new ReactivePropertySlim<string>();
 
         #endregion
 
@@ -128,12 +131,22 @@ namespace FlexID.Viewer.ViewModels
             SelectedOutputType.Subscribe(type =>
             {
                 if (type is OutputType t)
+                {
+                    var nuc = SelectedNuclide.Value;
+                    var tstep = CurrentTimeStep.Value;
+
                     this.model.SetOutput(t);
+
+                    if (!this.model.Nuclides.Contains(nuc))
+                        nuc = this.model.Nuclides.FirstOrDefault();
+                    SelectedNuclide.Value = nuc;
+                    CurrentTimeStep.Value = tstep;
+                }
             });
 
-            Nuclide = this.model.ObserveProperty(x => x.Nuclide).ToReadOnlyReactivePropertySlim();
+            Title = this.model.ObserveProperty(x => x.Title).ToReadOnlyReactivePropertySlim();
 
-            IntakeRoute = this.model.ObserveProperty(x => x.IntakeRoute).ToReadOnlyReactivePropertySlim();
+            SelectedNuclide.Subscribe(nuc => this.model.SetNuclide(nuc));
 
             #endregion
 
