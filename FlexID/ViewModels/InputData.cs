@@ -1,4 +1,5 @@
 using FlexID.Calc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -73,79 +74,91 @@ namespace FlexID.ViewModels
         }
 
         /// <summary>
-        /// 指定フォルダ内にある、ある核種のOIRのインプット群の情報を取得する。
+        /// 指定フォルダ内にある、ある核種のOIRのインプット群を列挙する。
         /// </summary>
         /// <param name="baseDir">基準フォルダ。</param>
-        /// <param name="nuclide">基準フォルダの直下にある、核種のインプットを格納したサブフォルダの名前。</param>
         /// <returns>取得したインプット群の情報。</returns>
-        public static List<InputData> GetInputsOIR(string baseDir, string nuclide)
+        public static IEnumerable<InputData> GetInputsOIR(string baseDir)
         {
-            var inputs = new List<InputData>();
-
-            var targetDir = Path.Combine(baseDir, nuclide);
-            var inputFiles = Directory.GetFileSystemEntries(targetDir, @"*.inp");
+            IEnumerable<string> inputFiles;
+            try
+            {
+                inputFiles = Directory.EnumerateFiles(baseDir, "*.inp", SearchOption.AllDirectories);
+            }
+            catch (Exception e) when (e is IOException || e is SystemException)
+            {
+                // baseDirが存在しない場合など。
+                yield break;
+            }
 
             foreach (var inputFile in inputFiles)
             {
+                Calc.InputData data;
                 try
                 {
                     var reader = new InputDataReader(inputFile, calcProgeny: true);
-                    var data = reader.Read_OIR();
-
-                    var parentNuclide = data.Nuclides.FirstOrDefault();
-                    if (parentNuclide is null)
-                        continue;
-
-                    var type = parentNuclide.IntakeRoute;
-                    var hasProgeny = data.Nuclides.Count > 1;
-
-                    inputs.Add(new InputData(inputFile, type, nuclide, hasProgeny));
+                    data = reader.Read_OIR();
                 }
                 catch
                 {
-                    // 読み込みに失敗したので一覧には出さない。
+                    // 読み込みに失敗した。
+                    continue;
                 }
-            }
 
-            return inputs;
+                var parentNuclide = data.Nuclides.FirstOrDefault();
+                if (parentNuclide is null)
+                    continue;
+
+                var type = parentNuclide.IntakeRoute;
+                var nuclide = parentNuclide.Nuclide;
+                var hasProgeny = data.Nuclides.Count > 1;
+
+                yield return new InputData(inputFile, type, nuclide, hasProgeny);
+            }
         }
 
         /// <summary>
-        /// 指定フォルダ内にある、ある核種のEIRのインプット群の情報を取得する。
+        /// 指定フォルダ内にある、ある核種のEIRのインプット群を列挙する。
         /// </summary>
         /// <param name="baseDir">基準フォルダ。</param>
-        /// <param name="nuclide">基準フォルダの直下にある、核種のインプットを格納したサブフォルダの名前。</param>
         /// <returns>取得したインプット群の情報。</returns>
-        public static List<InputData> GetInputsEIR(string baseDir, string nuclide)
+        public static IEnumerable<InputData> GetInputsEIR(string baseDir)
         {
-            var inputs = new List<InputData>();
-
-            var targetDir = Path.Combine(baseDir, nuclide);
-            var inputFiles = Directory.GetFileSystemEntries(targetDir, @"*.inp");
+            IEnumerable<string> inputFiles;
+            try
+            {
+                inputFiles = Directory.EnumerateFiles(baseDir, "*.inp", SearchOption.AllDirectories);
+            }
+            catch (Exception e) when (e is IOException || e is SystemException)
+            {
+                // baseDirが存在しない場合など。
+                yield break;
+            }
 
             foreach (var inputFile in inputFiles)
             {
+                Calc.InputData data;
                 try
                 {
                     var reader = new InputDataReader(inputFile, calcProgeny: true);
-                    var data = reader.Read_EIR().FirstOrDefault();
-
-                    var parentNuclide = data?.Nuclides.FirstOrDefault();
-                    if (parentNuclide is null)
-                        continue;
-
-                    var type = parentNuclide.IntakeRoute;
-                    var hasProgeny = data.Nuclides.Count > 1;
-
-                    inputs.Add(new InputData(inputFile, type, nuclide, hasProgeny));
+                    data = reader.Read_EIR().FirstOrDefault();
                 }
                 catch
                 {
-                    // 読み込みに失敗したので一覧には出さない。
+                    // 読み込みに失敗した。
+                    continue;
                 }
-            }
 
-            return inputs;
+                var parentNuclide = data?.Nuclides.FirstOrDefault();
+                if (parentNuclide is null)
+                    continue;
+
+                var type = parentNuclide.IntakeRoute;
+                var nuclide = parentNuclide.Nuclide;
+                var hasProgeny = data.Nuclides.Count > 1;
+
+                yield return new InputData(inputFile, type, nuclide, hasProgeny);
+            }
         }
     }
 }

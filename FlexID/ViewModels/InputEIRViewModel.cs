@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -82,19 +81,18 @@ namespace FlexID.ViewModels
             const string InputDirPath = @"inp\EIR";
             var cacheNucInps = new Dictionary<string, List<InputData>>();
 
-            // EIR用のインプットフォルダにある核種の一覧を取得する。
-            try
+            // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
+            foreach (var input in InputData.GetInputsEIR(InputDirPath))
             {
-                foreach (var x in Directory.EnumerateDirectories(InputDirPath))
+                var nuc = input.Nuclide;
+                if (!cacheNucInps.TryGetValue(nuc, out var inputs))
                 {
-                    var nuc = Path.GetFileName(x);
-                    Nuclides.Add(nuc);
+                    inputs = new List<InputData>();
+                    cacheNucInps.Add(nuc, inputs);
                 }
+                inputs.Add(input);
             }
-            catch (Exception e) when (e is IOException || e is SystemException)
-            {
-                // InputDirPathがない場合はNuclidesが空になる。
-            }
+            Nuclides.AddRange(cacheNucInps.Keys.OrderBy(nuc => nuc));
             SelectedNuclide.Value = Nuclides.FirstOrDefault();
 
             // 核種に対応する、選択されたインプット群。
@@ -102,12 +100,7 @@ namespace FlexID.ViewModels
             {
                 if (nuc is null)
                     return new List<InputData>();
-                if (!cacheNucInps.TryGetValue(nuc, out var inputs))
-                {
-                    inputs = InputData.GetInputsEIR(InputDirPath, nuc);
-                    cacheNucInps.Add(nuc, inputs);
-                }
-                return inputs;
+                return cacheNucInps[nuc];
             });
 
             selectedInputs.Subscribe(inputs =>
