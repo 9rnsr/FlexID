@@ -29,9 +29,9 @@ namespace FlexID.ViewModels
 
         public ReactivePropertySlim<bool> CalcProgeny { get; } = new ReactivePropertySlim<bool>();
 
-        public ObservableCollection<string> ModelTypes { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> InputTitles { get; } = new ObservableCollection<string>();
 
-        public ReactivePropertySlim<string> SelectedModelType { get; } = new ReactivePropertySlim<string>();
+        public ReactivePropertySlim<string> SelectedInputTitle { get; } = new ReactivePropertySlim<string>();
 
         public ReactivePropertySlim<string> CalcTimeMeshFilePath { get; } = new ReactivePropertySlim<string>();
 
@@ -106,16 +106,16 @@ namespace FlexID.ViewModels
             selectedInputs.Subscribe(inputs =>
             {
                 // インプットの種別(被ばく経路/化学形態)の一覧を更新する。
-                var types = inputs.Select(inp => inp.ModelType);
-                ModelTypes.Clear();
-                ModelTypes.AddRange(types);
+                var titles = inputs.Select(inp => inp.Title);
+                InputTitles.Clear();
+                InputTitles.AddRange(titles);
 
-                SelectedModelType.Value = types.FirstOrDefault();
+                SelectedInputTitle.Value = titles.FirstOrDefault();
             }).AddTo(Disposables);
 
-            // 核種とインプットの種別(被ばく経路/化学形態)に対応する、選択されたインプット情報。
-            var selectedInput = selectedInputs.CombineLatest(SelectedModelType,
-                (inputs, type) => inputs?.FirstOrDefault(inp => inp.ModelType == type))
+            // 核種とインプットのタイトルに対応する、選択されたインプット情報。
+            var selectedInput = selectedInputs.CombineLatest(SelectedInputTitle,
+                (inputs, title) => inputs?.FirstOrDefault(inp => inp.Title == title))
                 .ToReadOnlyReactivePropertySlim().AddTo(Disposables);
 
             // 子孫核種を持つインプットに対してのみ、子孫核種の計算を選択可能にする。
@@ -204,7 +204,7 @@ namespace FlexID.ViewModels
             {
                 throw new Exception("Please select Nuclide.");
             }
-            if (SelectedModelType.Value is null)
+            if (SelectedInputTitle.Value is null)
             {
                 throw new Exception("Please select Route of Intake.");
             }
