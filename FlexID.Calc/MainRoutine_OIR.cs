@@ -54,10 +54,11 @@ namespace FlexID.Calc
 
             var data = new InputDataReader(InputPath, CalcProgeny).Read_OIR();
 
-            WriteOutLog(data);
-
             using (CalcOut = new CalcOut(data, OutputPath))
             {
+                // ログファイルを出力する。
+                WriteOutLog(data);
+
                 // OIRでは、集合コンパートメントを処理するための準備を行う。
                 CalcOut.PrepareCompositeCompartments();
 
