@@ -179,7 +179,7 @@ namespace FlexID.ViewModels
             await Task.Run(() => main.Main());
 
             // ファイルパスを引数にして出力GUI実行
-            var p = Process.Start("FlexID.Viewer.exe", main.OutputPath);
+            var p = Process.Start("FlexID.Viewer.exe", main.OutputPath + "_Retention.out");
             p.WaitForExit();
         }
 
