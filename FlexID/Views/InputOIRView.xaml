@@ -134,7 +134,7 @@
       </TextBox>
       <Button
         Grid.Column="2"
-        Command="{Binding SelectOutputFilePathCommand}"
+        Command="{Binding SelectOutTimeMeshFilePathCommand}"
         Content="Browse" />
     </Grid>
 
