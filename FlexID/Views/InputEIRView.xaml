@@ -93,8 +93,9 @@
     <ComboBox
       Grid.Row="3"
       Grid.Column="1"
-      ItemsSource="{Binding InputTitles}"
-      SelectedValue="{Binding SelectedInputTitle.Value}" />
+      DisplayMemberPath="Title"
+      ItemsSource="{Binding Inputs}"
+      SelectedValue="{Binding SelectedInput.Value}" />
 
     <Label
       Grid.Row="4"
