@@ -126,11 +126,6 @@ namespace FlexID.Calc
         public string Nuclide;
 
         /// <summary>
-        /// 被ばく経路。
-        /// </summary>
-        public string IntakeRoute;
-
-        /// <summary>
         /// 崩壊定数λ[/day]。(＝ ln(2) / 半減期[day])
         /// </summary>
         public double Lambda;
@@ -488,15 +483,15 @@ namespace FlexID.Calc
                     // 核種の定義行を読み込む。
                     var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (values.Length != 4)
+                    if (values.Length != 3)
                         throw Program.Error($"Line {lineNum}: Nuclide definition should have 4 values.");
 
-                    if (!double.TryParse(values[2], out var lambda))
+                    if (!double.TryParse(values[1], out var lambda))
                         throw Program.Error($"Line {lineNum}: Cannot get nuclide Lambda.");
                     if (lambda < 0)
                         throw Program.Error($"Line {lineNum}: Nuclide Lambda should be positive.");
 
-                    if (!double.TryParse(values[3], out var decayRate))
+                    if (!double.TryParse(values[2], out var decayRate))
                         throw Program.Error($"Line {lineNum}: Cannot get nuclide DecayRate.");
                     if (decayRate < 0)
                         throw Program.Error($"Line {lineNum}: Nuclide DecayRate should be positive.");
@@ -504,7 +499,6 @@ namespace FlexID.Calc
                     var nuclide = new NuclideData
                     {
                         Nuclide = values[0],
-                        IntakeRoute = values[1],
                         Lambda = lambda,
                         DecayRate = decayRate,
                         IsProgeny = isProgeny,
@@ -1076,9 +1070,8 @@ namespace FlexID.Calc
                 var nuclide = new NuclideData
                 {
                     Nuclide = values[0],
-                    IntakeRoute = values[1],
-                    Lambda = double.Parse(values[2]),
-                    DecayRate = double.Parse(values[3]),
+                    Lambda = double.Parse(values[1]),
+                    DecayRate = double.Parse(values[2]),
                     IsProgeny = isProgeny,
                 };
                 data.Nuclides.Add(nuclide);
