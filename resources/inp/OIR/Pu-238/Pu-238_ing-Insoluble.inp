@@ -2,9 +2,9 @@
 Pu-238 Ingestion:Insoluble
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Pu-238    Ingestion:Insoluble                    2.165374E-05     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Pu-238    2.165374E-05        0.0
 
 
 [Pu-238:compartment]

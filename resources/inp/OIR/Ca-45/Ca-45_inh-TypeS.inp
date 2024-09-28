@@ -2,9 +2,9 @@
 Ca-45 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Ca-45     Inhalation:Type-S                      4.261063E-03     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Ca-45     4.261063E-03        0.0
 
 
 [Ca-45:compartment]

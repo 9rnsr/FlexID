@@ -1,5 +1,5 @@
 Sr-90 Ingestion
- Sr-90 Ingestion                             6.596156E-05    0.0
+ Sr-90                                       6.596156E-05    0.0
  Age:3month
    1 input             inp      0.0        0     0      0.0        -
    4 Stomach           acc     24.0        1     1    100.0        St_Cont
@@ -30,7 +30,7 @@ Sr-90 Ingestion
  120 UB-con            acc     40.0        1   110      3.845897   UB_Cont
  121 Urine             exc      0.0        1   120    100.0        -
 cont
- Y-90 Ingestion                              2.595247E-01    1.0
+ Y-90                                        2.595247E-01    1.0
  131 input             inp      0.0        0     0      0.0        -
  134 Stomach           acc     24.0        1     4     -1.0        St_Cont
  135 SI                acc     15.0        2   134    100.0        SI_Cont
@@ -106,7 +106,7 @@ next
  120 UB-con            acc     32.0        1   110      8.462605   UB_Cont
  121 Urine             exc      0.0        1   120    100.0        -
 cont
- Y-90 Ingestion                              2.595247E-01    1.0
+ Y-90                                        2.595247E-01    1.0
  131 input             inp      0.0        0     0      0.0        -
  134 Stomach           acc     24.0        1     4     -1.0        St_Cont
  135 SI                acc     10.0        2   134    100.0        SI_Cont
@@ -182,7 +182,7 @@ next
  120 UB-con            acc     12.0        1   110      9.198528   UB_Cont
  121 Urine             exc      0.0        1   120    100.0        -
 cont
- Y-90 Ingestion                              2.595247E-01    1.0
+ Y-90                                        2.595247E-01    1.0
  131 input             inp      0.0        0     0      0.0        -
  134 Stomach           acc     24.0        1     4     -1.0        St_Cont
  135 SI                acc     10.0        2   134    100.0        SI_Cont
@@ -258,7 +258,7 @@ next
  120 UB-con            acc     12.0        1   110      6.79556    UB_Cont
  121 Urine             exc      0.0        1   120    100.0        -
 cont
- Y-90 Ingestion                              2.595247E-01    1.0
+ Y-90                                        2.595247E-01    1.0
  131 input             inp      0.0        0     0      0.0        -
  134 Stomach           acc     24.0        1     4     -1.0        St_Cont
  135 SI                acc     10.0        2   134    100.0        SI_Cont
@@ -334,7 +334,7 @@ next
  120 UB-con            acc     12.0        1   110      3.9992     UB_Cont
  121 Urine             exc      0.0        1   120    100.0        -
 cont
- Y-90 Ingestion                              2.595247E-01    1.0
+ Y-90                                        2.595247E-01    1.0
  131 input             inp      0.0        0     0      0.0        -
  134 Stomach           acc     24.0        1     4     -1.0        St_Cont
  135 SI                acc     10.0        2   134    100.0        SI_Cont
@@ -410,7 +410,7 @@ next
  120 UB-con            acc     12.0        1   110     11.527186   UB_Cont
  121 Urine             exc      0.0        1   120    100.0        -
 cont
- Y-90 Ingestion                              2.595247E-01    1.0
+ Y-90                                        2.595247E-01    1.0
  131 input             inp      0.0        0     0      0.0        -
  134 Stomach           acc     24.0        1     4     -1.0        St_Cont
  135 SI                acc      8.5714286  2   134    100.0        SI_Cont

@@ -2,9 +2,9 @@
 Pu-242 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Pu-242    Inhalation:Type-S                      5.064089E-09     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Pu-242    5.064089E-09        0.0
 
 
 [Pu-242:compartment]

@@ -2,9 +2,9 @@
 Ra-226 Ingestion
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Ra-226    Ingestion                              1.186896E-06     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Ra-226    1.186896E-06        0.0
 
 
 [Ra-226:compartment]

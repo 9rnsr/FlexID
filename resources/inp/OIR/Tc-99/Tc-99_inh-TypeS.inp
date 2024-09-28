@@ -2,9 +2,9 @@
 Tc-99 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Tc-99     Inhalation:Type-S                      8.995895E-09     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Tc-99     8.995895E-09        0.0
 
 
 [Tc-99:compartment]
