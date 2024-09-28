@@ -370,13 +370,13 @@ namespace FlexID.Calc
         /// 計算したS係数データをIDAC Dose2.1と比較可能な形式でファイルに書き出す。
         /// </summary>
         /// <param name="filePath"></param>
-        public void WriteOutIdacDoseCompatibleResult(string filePath)
+        public void WriteOutIdacDoseCompatibleResult(string filePath, Sex sex)
         {
-            var lines = GenerateScoeffFileContent_IdacDoseCompatible();
+            var lines = GenerateScoeffFileContent_IdacDoseCompatible(sex);
             File.WriteAllLines(filePath, lines, System.Text.Encoding.UTF8);
         }
 
-        private IEnumerable<string> GenerateScoeffFileContent_IdacDoseCompatible()
+        private IEnumerable<string> GenerateScoeffFileContent_IdacDoseCompatible(Sex sex)
         {
             var nS = safdata.SourceRegions.Length;
             var nT = safdata.TargetRegions.Length;
@@ -385,6 +385,73 @@ namespace FlexID.Calc
             var targetRegions = SortTargetRegionsByIdacDoseOrder(safdata.TargetRegions.Select(t => t.Name)).ToArray();
             var numS = sourceRegions.Length;
             var numT = targetRegions.Length;
+
+            (string name, double MaleMass, double FemaleMass)[] OtherSourceRegions = new[]
+            {
+                ("O-mucosa",   3.583E-02, 2.245E-02), ("Teeth-V",    5.000E-02, 4.000E-02), ("Tonsils",    3.000E-03, 3.000E-03),
+                ("Oesophag-w", 4.000E-02, 3.500E-02), ("St-wall",    1.500E-01, 1.400E-01), ("SI-wall",    6.500E-01, 6.000E-01),
+                ("RC-wall",    1.500E-01, 1.450E-01), ("LC-wall",    1.500E-01, 1.450E-01), ("RS-wall",    7.000E-02, 7.000E-02),
+                ("LN-ET",      1.500E-02, 1.200E-02), ("LN-Th",      1.500E-02, 1.200E-02), ("Adrenals",   1.400E-02, 1.300E-02),
+                ("C-bone-V",   4.400E+00, 3.200E+00), ("T-bone-V",   1.100E+00, 8.000E-01), ("R-marrow",   1.170E+00, 9.000E-01),
+                ("Y-marrow",   2.480E+00, 1.800E+00), ("Brain",      1.450E+00, 1.300E+00), ("Breast",     2.500E-02, 5.000E-01),
+                ("Eye-lens",   4.000E-04, 4.000E-04), ("GB-wall",    1.000E-02, 8.000E-03), ("Ht-wall",    3.300E-01, 2.500E-01),
+                ("Kidneys",    3.100E-01, 2.750E-01), ("Liver",      1.800E+00, 1.400E+00), ("LN-Sys",     1.484E-01, 1.187E-01),
+                ("Ovaries",    0.000E+00, 1.100E-02), ("Pancreas",   1.400E-01, 1.200E-01), ("P-gland",    6.000E-04, 6.000E-04),
+                ("Prostate",   1.700E-02, 0.000E+00), ("S-glands",   8.500E-02, 7.000E-02), ("Skin",       3.300E+00, 2.300E+00),
+                ("Spleen",     1.500E-01, 1.300E-01), ("Testes",     3.500E-02, 0.000E+00), ("Thymus",     2.500E-02, 2.000E-02),
+                ("Thyroid",    2.000E-02, 1.700E-02), ("Ureters",    1.600E-02, 1.500E-02), ("UB-wall",    5.000E-02, 4.000E-02),
+                ("Uterus",     0.000E+00, 8.000E-02), ("Adipose",    1.723E+01, 2.141E+01), ("Cartilage",  1.100E+00, 9.000E-01),
+                ("Muscle",     2.900E+01, 1.750E+01), ("ET1-wall",   2.923E-03, 2.526E-03), ("ET2-wall",   2.923E-03, 2.526E-03),
+                ("Lung-Tis",   5.000E-01, 4.200E-01),
+            };
+
+            string CalcOther(int iT)
+            {
+                var outP = 0.0;
+                var outE = 0.0;
+                var outB = 0.0;
+                var outA = 0.0;
+                var outN = 0.0;
+                var outTotal = 0.0;
+
+                var otherMass = 0.0;
+                foreach (var o in OtherSourceRegions)
+                {
+                    var name = o.name;
+                    var mass = sex == Sex.Male ? o.MaleMass : o.FemaleMass;
+
+                    var (_, _, iS) = sourceRegions.First(x => x.NameOIR == name);
+                    var i = iT + nT * iS;
+
+                    // Otherの内訳である43個の線源領域のS係数を、線源領域毎の重量で加重平均する
+                    otherMass += mass;
+                    outP += mass * OutP[i];
+                    outE += mass * OutE[i];
+                    outB += mass * OutB[i];
+                    outA += mass * OutA[i];
+                    outN += mass * OutN[i];
+                    outTotal += OutTotal[i];
+                }
+
+                if (otherMass != 0)
+                {
+                    outP /= otherMass;
+                    outE /= otherMass;
+                    outB /= otherMass;
+                    outA /= otherMass;
+                    outN /= otherMass;
+                    outTotal /= otherMass;
+                }
+
+                string line = "";
+                line += $",{outP:0.00000000E+00}";
+                line += $",{outE:0.00000000E+00}";
+                line += $",{outB:0.00000000E+00}";
+                line += $",{outA:0.00000000E+00}";
+                line += $",{outN:0.00000000E+00}";
+                line += $",{outTotal:0.00000000E+00}";
+                return line;
+            }
 
             yield return "Source Regions,,Target Regions,,Photon,Electron,Beta,Alpha,Neutron,Total";
             yield return "IDAC Dose2.1,OIR(FlexID),IDAC Dose2.1,OIR(FlexID)";
@@ -402,7 +469,10 @@ namespace FlexID.Calc
                     line += $"{targetIdacDose},{targetOIR}";
                     if (iS == -1 || iT == -1)
                     {
-                        line += $",,,,,,";
+                        if (sourceIdacDose == "\"Other\"" && iT != -1)
+                            line += CalcOther(iT);
+                        else
+                            line += $",,,,,,";
                     }
                     else
                     {
