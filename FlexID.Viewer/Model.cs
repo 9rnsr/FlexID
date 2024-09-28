@@ -519,7 +519,7 @@ namespace FlexID.Viewer
 
             CurrentOutput = newOutput;
 
-            Title = $"{CurrentOutput.Nuclide}, {CurrentOutput.IntakeRoute}";
+            Title = CurrentOutput.Title;
             Nuclides.AddRange(CurrentOutput.Nuclides.Select(n => n.Nuclide));
         }
 
