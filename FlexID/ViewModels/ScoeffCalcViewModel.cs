@@ -131,7 +131,7 @@ namespace FlexID.ViewModels
                 //calcS.WriteOutTotalResult(scoeffFilePath);
 
                 var scoeffFilePath = Path.Combine(outPath, target + ".csv");
-                calcS.WriteOutIdacDoseCompatibleResult(scoeffFilePath);
+                calcS.WriteOutIdacDoseCompatibleResult(scoeffFilePath, sex);
 
             })).ToArray());
         }
