@@ -318,7 +318,7 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        public void NuclideRamdIsNotValue()
+        public void NuclideLambdaIsNotValue()
         {
             var reader = CreateReader(new[]
             {
@@ -337,11 +337,11 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
-            Assert.AreEqual("Line 5: Cannot get nuclide Ramd.", e.Message);
+            Assert.AreEqual("Line 5: Cannot get nuclide Lambda.", e.Message);
         }
 
         [TestMethod]
-        public void NuclideRamdIsNotPositive()
+        public void NuclideLambdaIsNotPositive()
         {
             var reader = CreateReader(new[]
             {
@@ -360,7 +360,7 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
-            Assert.AreEqual("Line 5: Nuclide Ramd should be positive.", e.Message);
+            Assert.AreEqual("Line 5: Nuclide Lambda should be positive.", e.Message);
         }
 
         [TestMethod]

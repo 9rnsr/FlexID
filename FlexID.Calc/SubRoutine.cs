@@ -54,7 +54,7 @@ namespace FlexID.Calc
                                                                       i.Organ.Nuclide == nuclide);
                 if (inflowFromInp != null)
                 {
-                    var nucDecay = nuclide.Ramd;
+                    var nucDecay = nuclide.Lambda;
 
                     var init = inflowFromInp.Rate / nucDecay;
                     Act.CalcNow[organ.Index].ini = init;
