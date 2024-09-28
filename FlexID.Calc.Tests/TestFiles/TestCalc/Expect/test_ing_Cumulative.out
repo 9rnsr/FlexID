@@ -1,6 +1,11 @@
-﻿ CumulativeActivity  Cs-134 test1
-     Time        WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    Stomach-con     SI-con          SI-wall         Faeces        
-     [day]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]       
+﻿FlexID output: CumulativeActivity
+test1
+
+Radionuclide: Cs-134
+Units: day, Bq
+
+Cs-134
+  Time           WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    Stomach-con     SI-con          SI-wall         Faeces        
   0.000000E+00   0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   1.000000E+00   7.96987452E-01  1.85868131E-01  4.00073818E-01  1.93642790E-01  1.74027137E-02  6.80411645E-02  7.66206047E-02  4.12063614E-02  1.53241209E-01
   2.000000E+00   1.24011521E+00  4.41017586E-01  4.43048021E-01  3.29706853E-01  2.63427521E-02  1.30213244E-01  1.86160219E-01  1.24644124E-01  3.72320437E-01

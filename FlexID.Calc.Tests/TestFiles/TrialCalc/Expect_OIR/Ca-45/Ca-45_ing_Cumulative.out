@@ -1,6 +1,11 @@
-﻿ CumulativeActivity  Ca-45 Ingestion
-     Time        WholeBody     AlimentaryTract*  Skeleton*       Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ST0             ST1             ST2             C-bone-S        Exch-C-bone-V   Noch-C-bone-V   T-bone-S        Exch-T-bone-V   Noch-T-bone-V   UB-con          Urine         
-     [day]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]       
+﻿FlexID output: CumulativeActivity
+Ca-45 Ingestion
+
+Radionuclide: Ca-45
+Units: day, Bq
+
+Ca-45
+  Time           WholeBody     AlimentaryTract*  Skeleton*       Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ST0             ST1             ST2             C-bone-S        Exch-C-bone-V   Noch-C-bone-V   T-bone-S        Exch-T-bone-V   Noch-T-bone-V   UB-con          Urine         
   0.000000E+00   0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   4.14492381E-02  4.05284416E-02  6.81510075E-05  1.38888807E-04  7.29157544E-05  4.62961776E-05  2.77789595E-02  1.16410353E-02  1.04298748E-03  2.25684438E-05  3.85419958E-07  7.70839915E-07  6.07220731E-04  5.83101612E-05  1.02945183E-05  5.15506220E-09  1.14091732E-05  1.16475475E-08  3.49990856E-13  1.42102277E-05  1.45071250E-08  4.35915687E-13  3.72512402E-06  4.47014883E-05
   8.333333E-02   8.30946288E-02  7.87617827E-02  5.17930327E-04  1.38888807E-04  7.29157544E-05  4.62961776E-05  3.97676716E-02  3.22214958E-02  6.25568967E-03  2.83546104E-04  9.98791974E-06  1.99758395E-05  3.19130911E-03  6.54893678E-04  1.18702357E-04  5.95428165E-08  1.30883663E-04  2.84215444E-07  1.78149991E-11  1.63016778E-04  3.53992889E-07  2.21886269E-11  3.86335590E-05  4.63602708E-04

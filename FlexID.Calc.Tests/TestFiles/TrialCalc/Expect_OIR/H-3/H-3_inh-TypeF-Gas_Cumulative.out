@@ -1,6 +1,11 @@
-﻿ CumulativeActivity  H-3 Inhalation:Type-F_Gas
-     Time        WholeBody     AlimentaryTract*  Lungs*          Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          ET2-F           ETseq-F         LNET-F          BB-F            BBseq-F         bb-F            bbseq-F         ALV-F           INT-F           LNTH-F          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
-     [day]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]       
+﻿FlexID output: CumulativeActivity
+H-3 Inhalation:Type-F_Gas
+
+Radionuclide: H-3
+Units: day, Bq
+
+H-3
+  Time           WholeBody     AlimentaryTract*  Lungs*          Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          ET2-F           ETseq-F         LNET-F          BB-F            BBseq-F         bb-F            bbseq-F         ALV-F           INT-F           LNTH-F          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
   0.000000E+00   0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   4.16241728E-02  3.06632783E-03  8.39737647E-03  4.82488876E-05  2.62651778E-03  8.70657784E-05  1.29141063E-05  3.31062392E-07  6.35594574E-09  1.27118915E-08  1.04226238E-03  3.93794212E-06  3.67902604E-11  9.01373466E-04  1.96897106E-06  1.96147734E-03  3.93794212E-06  4.92233566E-03  4.59870286E-08  5.51971638E-11  4.84989640E-03  2.51262912E-02  2.46545162E-07  3.28784599E-08  4.07391297E-04  9.84528969E-04  3.52820288E-05  4.23384345E-04
   8.333333E-02   8.31726979E-02  4.84356472E-03  9.01816020E-03  4.83116661E-05  4.03419708E-03  1.37035829E-04  4.74023748E-05  2.64102499E-06  1.08003299E-07  2.16006598E-07  1.04353270E-03  3.99899246E-06  3.99095186E-11  9.10792938E-04  1.99949623E-06  1.99164158E-03  3.99899246E-06  4.99864080E-03  4.98858941E-08  5.98791179E-11  8.88829154E-03  6.09483244E-02  1.31884680E-06  1.75912713E-07  7.46616490E-04  1.80432318E-03  1.10235708E-04  1.32282849E-03

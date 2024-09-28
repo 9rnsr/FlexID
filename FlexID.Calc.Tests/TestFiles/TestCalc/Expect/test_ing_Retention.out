@@ -1,6 +1,11 @@
-﻿ Retention  Cs-134 test1
-     Time        WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    Stomach-con     SI-con          SI-wall         Faeces        
-     [day]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]       
+﻿FlexID output: RetentionActivity
+test1
+
+Radionuclide: Cs-134
+Units: day, Bq/Bq
+
+Cs-134
+  Time           WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    Stomach-con     SI-con          SI-wall         Faeces        
   0.000000E+00   1.00000000E+00  0.00000000E+00  1.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   1.000000E+00   6.62615589E-01  2.43307855E-01  1.07415686E-01  2.88106307E-01  2.37857417E-02  8.35670517E-02  9.84330074E-02  6.13077957E-02  1.53241209E-01
   2.000000E+00   3.41152109E-01  2.64224826E-01  1.15381295E-02  6.18942729E-02  3.49487965E-03  5.72900948E-02  1.12701450E-01  9.42332819E-02  2.19079228E-01

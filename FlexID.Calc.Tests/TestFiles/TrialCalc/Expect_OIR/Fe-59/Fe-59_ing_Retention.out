@@ -1,6 +1,11 @@
-﻿ Retention  Fe-59 Ingestion:Unspecified
-     Time        WholeBody     AlimentaryTract*  Liver*          Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          SI-conRe        RC-con          LC-con          RS-con          Faeces          OtherPlasma     PlasmaTrans     RBC             Liver1(Hepato)  Liver2(RE)      Spleen          MarrowSynthe    MarrowTransit   MarrowStorage   Other1(Trans)   Other2(Parenc)  Other3(RE)      UB-con          Urine           Excreta       
-     [day]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]       
+﻿FlexID output: RetentionActivity
+Fe-59 Ingestion:Unspecified
+
+Radionuclide: Fe-59
+Units: day, Bq/Bq
+
+Fe-59
+  Time           WholeBody     AlimentaryTract*  Liver*          Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          SI-conRe        RC-con          LC-con          RS-con          Faeces          OtherPlasma     PlasmaTrans     RBC             Liver1(Hepato)  Liver2(RE)      Spleen          MarrowSynthe    MarrowTransit   MarrowStorage   Other1(Trans)   Other2(Parenc)  Other3(RE)      UB-con          Urine           Excreta       
   0.000000E+00   1.00000000E+00  0.00000000E+00  0.00000000E+00  1.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   9.99353575E-01  9.91766044E-01  7.83382801E-04  0.00000000E+00  0.00000000E+00  1.94668624E-40  4.28266383E-01  4.89860968E-01  9.42845380E-11  7.09598877E-02  2.10481589E-03  4.54643193E-05       ----       3.51965538E-03  4.02959571E-03  1.10288673E-06  2.83473661E-05  3.76464732E-11  6.03764193E-11  4.80093086E-04  4.66622491E-07  2.25523684E-10  5.61072354E-05  1.17927453E-07  2.25523684E-10  5.69675144E-07       ----       6.72186483E-11
   8.333333E-02   9.98684525E-01  9.76501648E-01  2.12321693E-03  0.00000000E+00  0.00000000E+00  0.00000000E+00  1.81637505E-01  5.81723541E-01  1.62522638E-09  1.98537936E-01  1.27034230E-02  5.74286649E-04       ----       5.33272645E-03  1.35751480E-02  2.00435964E-05  2.30423660E-04  1.46498742E-09  2.34950812E-09  3.88683314E-03  8.36842450E-06  8.77610386E-09  4.50240990E-04  2.12904051E-06  8.77610386E-09  1.89595624E-06       ----       1.21355309E-09

@@ -1,6 +1,11 @@
-﻿ Retention  H-3 Ingestion:Insoluble
-     Time        WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
-     [day]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]       
+﻿FlexID output: RetentionActivity
+H-3 Ingestion:Insoluble
+
+Radionuclide: H-3
+Units: day, Bq/Bq
+
+H-3
+  Time           WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
   0.000000E+00   1.00000000E+00  0.00000000E+00  1.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   9.99983612E-01  9.91966580E-01  0.00000000E+00  0.00000000E+00  1.94792879E-40  4.28540283E-01  4.90174255E-01  7.09996196E-02  2.10602708E-03  4.54909757E-05       ----       1.44149569E-03  6.66736188E-03  5.70057041E-08  7.60197546E-09  1.21085638E-04  2.92623625E-04  9.01390289E-06       ----     
   8.333333E-02   9.99919318E-01  9.76622515E-01  0.00000000E+00  0.00000000E+00  0.00000000E+00  1.81870517E-01  5.82469761E-01  1.98771318E-01  1.27185393E-02  5.74976417E-04       ----       3.10577265E-03  2.03727791E-02  3.89804201E-07  5.19918006E-08  2.60884903E-04  6.30471848E-04  3.52129226E-05       ----     

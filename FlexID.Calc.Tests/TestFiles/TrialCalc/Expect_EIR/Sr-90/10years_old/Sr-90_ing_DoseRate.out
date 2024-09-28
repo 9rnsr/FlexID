@@ -1,6 +1,11 @@
-﻿ DoseRate  Sr-90 Ingestion
-     Time         WholeBody     Adrenals      UB_Wall       Bone_Sur      Brain         Breasts       St_Wall       SI_Wall       ULI_Wall      LLI_Wall      Kidneys       Liver         ET1-bas       ET2-bas       LN-ET         BBi-bas       BBi-sec       bbe-sec       AI            LN-Th         Muscle        Ovaries       Pancreas      R_Marrow      Skin          Spleen        Testes        Thymus        Thyroid       GB_Wall       Ht_Wall       Uterus      
-     [day]         [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]        [Sv/h]      
+﻿FlexID output: DoseRate
+Sr-90 Ingestion
+
+Radionuclide: Sr-90, Y-90
+Units: day, Sv/h
+
+Sr-90
+  Time           WholeBody     Adrenals      UB_Wall       Bone_Sur      Brain         Breasts       St_Wall       SI_Wall       ULI_Wall      LLI_Wall      Kidneys       Liver         ET1-bas       ET2-bas       LN-ET         BBi-bas       BBi-sec       bbe-sec       AI            LN-Th         Muscle        Ovaries       Pancreas      R_Marrow      Skin          Spleen        Testes        Thymus        Thyroid       GB_Wall       Ht_Wall       Uterus      
   4.166667E-02   3.433758E-11  6.793185E-14  2.136198E-13  8.006262E-13  6.793185E-14  6.793185E-14  2.703155E-10  1.058991E-10  1.854278E-11  6.703963E-13  6.793185E-14  6.793186E-14  6.793185E-14  6.793185E-14  6.793185E-14  6.793185E-14  6.793185E-14  6.793185E-14  6.793185E-14  6.793185E-14  6.793187E-14  6.793200E-14  6.793196E-14  1.107587E-13  6.793185E-14  6.793186E-14  6.793185E-14  6.793185E-14  6.793185E-14  6.793190E-14  6.793185E-14  6.793189E-14
   8.333333E-02   2.019804E-11  2.999147E-13  1.591170E-12  7.312089E-12  2.999147E-13  2.999147E-13  1.036564E-10  1.790577E-10  8.927427E-11  7.014141E-12  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999153E-13  2.999148E-13  7.255011E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999147E-13  2.999149E-13  2.999147E-13  2.999148E-13
   1.250000E-01   1.906882E-11  5.109613E-13  3.742529E-12  1.992534E-11  5.109613E-13  5.109613E-13  4.032093E-11  1.640261E-10  1.665153E-10  2.247886E-11  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109614E-13  5.109625E-13  5.109614E-13  1.737841E-12  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109613E-13  5.109617E-13  5.109613E-13  5.109615E-13

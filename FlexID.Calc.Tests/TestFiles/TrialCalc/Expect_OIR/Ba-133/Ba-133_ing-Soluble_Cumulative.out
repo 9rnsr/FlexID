@@ -1,6 +1,11 @@
-﻿ CumulativeActivity  Ba-133 Ingestion:Soluble
-     Time        WholeBody     AlimentaryTract*  Skeleton*       Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Plasma          ST0             ST1             ST2             C-bone-S        Exch-C-bone-V   Noch-C-bone-V   T-bone-S        Exch-T-bone-V   Noch-T-bone-V   UB-con          Urine         
-     [day]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]       
+﻿FlexID output: CumulativeActivity
+Ba-133 Ingestion:Soluble
+
+Radionuclide: Ba-133
+Units: day, Bq
+
+Ba-133
+  Time           WholeBody     AlimentaryTract*  Skeleton*       Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Plasma          ST0             ST1             ST2             C-bone-S        Exch-C-bone-V   Noch-C-bone-V   T-bone-S        Exch-T-bone-V   Noch-T-bone-V   UB-con          Urine         
   0.000000E+00   0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   4.14526037E-02  4.09692500E-02  4.20329436E-05  1.38888885E-04  7.29158198E-05  4.62962913E-05  2.77809978E-02  1.20508999E-02  1.10292073E-03  2.36400457E-05  4.01095924E-07  8.02191848E-07  1.48436207E-04  3.90086199E-05  1.26434802E-05  2.54489504E-07  1.40521969E-05  1.51136237E-08  4.76120224E-13  1.75562152E-05  1.88823165E-08  5.94862657E-13  3.65803413E-06  4.38964095E-05
   8.333333E-02   8.31099523E-02  8.15261696E-02  3.31241328E-04  1.38888885E-04  7.29158198E-05  4.62962913E-05  3.97726133E-02  3.45262590E-02  6.86803283E-03  3.06655597E-04  1.06909038E-05  2.13818076E-05  5.98828315E-04  3.31758889E-04  1.15460535E-04  2.34156723E-06  1.28323617E-04  3.01256321E-07  2.01924863E-11  1.60322051E-04  3.76376791E-07  2.52278830E-11  2.98870064E-05  3.58644077E-04

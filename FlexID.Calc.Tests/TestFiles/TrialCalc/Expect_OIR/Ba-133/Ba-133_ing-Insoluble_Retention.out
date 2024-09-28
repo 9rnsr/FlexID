@@ -1,6 +1,11 @@
-﻿ Retention  Ba-133 Ingestion:Insoluble
-     Time        WholeBody     AlimentaryTract*  Skeleton*       Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Plasma          ST0             ST1             ST2             C-bone-S        Exch-C-bone-V   Noch-C-bone-V   T-bone-S        Exch-T-bone-V   Noch-T-bone-V   UB-con          Urine         
-     [day]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]       
+﻿FlexID output: RetentionActivity
+Ba-133 Ingestion:Insoluble
+
+Radionuclide: Ba-133
+Units: day, Bq/Bq
+
+Ba-133
+  Time           WholeBody     AlimentaryTract*  Skeleton*       Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Plasma          ST0             ST1             ST2             C-bone-S        Exch-C-bone-V   Noch-C-bone-V   T-bone-S        Exch-T-bone-V   Noch-T-bone-V   UB-con          Urine         
   0.000000E+00   1.00000000E+00  0.00000000E+00  0.00000000E+00  1.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   9.99991709E-01  9.99985790E-01  1.27979973E-06  0.00000000E+00  0.00000000E+00  1.94792667E-40  4.28539815E-01  4.97607489E-01  7.16718392E-02  2.12067479E-03  4.57422221E-05       ----       3.28547395E-06  1.26819128E-06  4.19337200E-07  8.45773965E-09  4.66057745E-07  6.60675062E-10  2.56684631E-14  5.82272658E-07  8.25419229E-10  3.20689838E-14  1.17526218E-07       ----     
   8.333333E-02   9.99963845E-01  9.99947760E-01  4.65509823E-06  0.00000000E+00  0.00000000E+00  0.00000000E+00  1.81870118E-01  6.01948332E-01  2.02650262E-01  1.28973337E-02  5.81339461E-04       ----       5.36151572E-06  4.66817647E-06  1.70645769E-06  3.47866708E-08  1.89655499E-06  6.11779285E-09  5.17371176E-13  2.36947488E-06  7.64330932E-09  6.46377246E-13  4.08987020E-07       ----     
