@@ -5,6 +5,7 @@
     <TargetFramework>net462</TargetFramework>
 
     <UseWPF>true</UseWPF>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
     <DisableFody Condition="'$(Configuration)' == 'Debug'">true</DisableFody>
 
     <OutputPath>$(SolutionDir)$(Configuration)\bin\FlexID\</OutputPath>
