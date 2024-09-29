@@ -95,7 +95,7 @@ namespace ResultChecker
             var cTimeMeshFile = @"lib\TimeMesh\time.dat";
 
             // 出力時間メッシュは、OIRの残留放射能データと同じになるように設定する。
-            var oTimeMeshFile = Path.Combine("out-OIR.dat");
+            var oTimeMeshFile = @"lib\TimeMesh\out-time-OIR.dat";
 
             var commitmentPeriod = "50years";
 

@@ -4,16 +4,17 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net462</TargetFramework>
 
+    <OutputPath>$(SolutionDir)$(Configuration)\bin\</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</IntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
     <UseWPF>true</UseWPF>
     <ApplicationManifest>App.manifest</ApplicationManifest>
     <DisableFody Condition="'$(Configuration)' == 'Debug'">true</DisableFody>
-
-    <OutputPath>$(SolutionDir)$(Configuration)\bin\FlexID\</OutputPath>
-    <IntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Copyright>Copyright @ 2017</Copyright>
+    <Copyright>Copyright © 2017</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
