@@ -21,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="out-OIR.dat" CopyToOutputDirectory="PreserveNewest" />
-
     <None Update="Expect/*.dat" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
