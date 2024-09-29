@@ -1,6 +1,11 @@
-﻿ Retention  H-3 Ingestion:Soluble
-     Time        WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
-     [day]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]         [Bq/Bq]       
+﻿FlexID output: RetentionActivity
+H-3 Ingestion:Soluble
+
+Radionuclide: H-3
+Units: day, Bq/Bq
+
+H-3
+  Time           WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
   0.000000E+00   1.00000000E+00  0.00000000E+00  1.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   9.99174973E-01  4.54589223E-01  0.00000000E+00  0.00000000E+00  1.94792879E-40  4.28540283E-01  1.52797892E-02  5.38096601E-03  2.38196746E-04  6.65974032E-06       ----       7.34761218E-02  4.75523190E-01  6.02575039E-06  8.03598689E-07  6.17199423E-03  1.49156527E-02  7.22936945E-04       ----     
   8.333333E-02   9.97637683E-01  2.02735854E-01  0.00000000E+00  0.00000000E+00  0.00000000E+00  1.81870517E-01  6.48467212E-03  7.47863077E-03  7.49806300E-04  4.50532215E-05       ----       8.72453530E-02  7.12266468E-01  2.12869265E-05  2.83955120E-06  7.32860965E-03  1.77108067E-02  1.47305598E-03       ----     

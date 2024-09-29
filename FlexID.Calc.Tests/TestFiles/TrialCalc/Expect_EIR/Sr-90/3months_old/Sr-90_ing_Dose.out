@@ -1,6 +1,11 @@
-﻿ Effective/Equivalent_Dose  Sr-90 Ingestion
-     Time         WholeBody     Adrenals      UB_Wall       Bone_Sur      Brain         Breasts       St_Wall       SI_Wall       ULI_Wall      LLI_Wall      Kidneys       Liver         ET1-bas       ET2-bas       LN-ET         BBi-bas       BBi-sec       bbe-sec       AI            LN-Th         Muscle        Ovaries       Pancreas      R_Marrow      Skin          Spleen        Testes        Thymus        Thyroid       GB_Wall       Ht_Wall       Uterus      
-     [day]         [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]       [Sv/Bq]     
+﻿FlexID output: Dose
+Sr-90 Ingestion
+
+Radionuclide: Sr-90, Y-90
+Units: day, Sv/Bq
+
+Sr-90
+  Time           WholeBody     Adrenals      UB_Wall       Bone_Sur      Brain         Breasts       St_Wall       SI_Wall       ULI_Wall      LLI_Wall      Kidneys       Liver         ET1-bas       ET2-bas       LN-ET         BBi-bas       BBi-sec       bbe-sec       AI            LN-Th         Muscle        Ovaries       Pancreas      R_Marrow      Skin          Spleen        Testes        Thymus        Thyroid       GB_Wall       Ht_Wall       Uterus      
   4.166667E-02   4.233869E-10  1.299852E-12  2.364253E-12  1.089178E-11  1.299852E-12  1.299852E-12  3.391286E-09  8.704969E-10  1.540587E-10  6.411160E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299854E-12  1.299854E-12  2.572232E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299852E-12  1.299853E-12  1.299852E-12  1.299853E-12
   8.333333E-02   6.435337E-10  6.502076E-12  1.485003E-11  1.039720E-10  6.502076E-12  6.502076E-12  4.692864E-09  2.194004E-09  8.545060E-10  6.633972E-11  6.502076E-12  6.502077E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502077E-12  6.502088E-12  6.502080E-12  1.987827E-11  6.502076E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502076E-12  6.502081E-12  6.502076E-12  6.502082E-12
   1.250000E-01   8.155248E-10  1.438135E-11  3.653660E-11  3.436939E-10  1.438135E-11  1.438135E-11  5.200021E-09  3.256854E-09  2.083069E-09  2.459849E-10  1.438135E-11  1.438136E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438138E-11  1.438136E-11  6.100980E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438135E-11  1.438136E-11  1.438135E-11  1.438136E-11

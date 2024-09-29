@@ -2,9 +2,9 @@
 Ba-133 Ingestion:Soluble
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Ba-133    Ingestion:Soluble                      1.805165E-4      0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Ba-133    1.805165E-04        0.0
 
 
 [Ba-133:compartment]

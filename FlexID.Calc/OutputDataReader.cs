@@ -21,12 +21,12 @@ namespace FlexID.Calc
     [DebuggerDisplay("{Nuclide}, {Type}, Compartments: {Compartments.Length}")]
     public class OutputData
     {
-        public OutputData(OutputType type, string intakeRoute,
+        public OutputData(OutputType type, string title,
             string timesUnit, string valuesUnit,
             List<double> timeSteps, IEnumerable<OutputNuclideData> nuclides)
         {
             Type = type;
-            IntakeRoute = intakeRoute;
+            Title = title;
             TimeStepUnit = timesUnit;
             DataValueUnit = valuesUnit;
             TimeSteps = timeSteps.AsReadOnly();
@@ -37,7 +37,7 @@ namespace FlexID.Calc
 
         public string Nuclide => Nuclides[0].Nuclide;
 
-        public string IntakeRoute { get; }
+        public string Title { get; }
 
         public string TimeStepUnit { get; }
 
@@ -116,44 +116,48 @@ namespace FlexID.Calc
         /// <exception cref="InvalidDataException">内容が適切ではない場合。</exception>
         public OutputData Read()
         {
-            string nuclide;
-            string intakeRoute;
-            string[] compartments;
+            string title;
             string timesUnit;
             string valuesUnit;
             var timeSteps = new List<double>();
 
-            var separators = new[] { ' ' };
-            string[] Split(string line)
-            {
-                if (line is null)
-                    throw new InvalidDataException("");
-                return line.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-            }
-
+            string line;
             string[] values;
 
-            values = reader.ReadLine()?.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-            if (values is null || values.Length != 3)
+            void ReadEmptyLine()
+            {
+                line = reader.ReadLine();
+                if (line != "")
+                    throw new InvalidDataException("unrecognized file format");
+            }
+
+            line = reader.ReadLine();
+            if (!line.StartsWith("FlexID output: "))
                 throw new InvalidDataException("unrecognized file format");
 
-            var type =
-                values[0] == "Retention" ? OutputType.RetentionActivity :
-                values[0] == "CumulativeActivity" ? OutputType.CumulativeActivity :
-                values[0] == "Effective/Equivalent_Dose" ? OutputType.Dose :
-                values[0] == "DoseRate" ? OutputType.DoseRate :
+            line = line.Substring("FlexID output: ".Length);
+            var (type, unit) =
+                line == "RetentionActivity" ? (OutputType.RetentionActivity, "Bq/Bq") :
+                line == "CumulativeActivity" ? (OutputType.CumulativeActivity, "Bq") :
+                line == "Dose" ? (OutputType.Dose, "Sv/Bq") :
+                line == "DoseRate" ? (OutputType.DoseRate, "Sv/h") :
                 throw new InvalidDataException("unrecognized file format");
 
-            nuclide = values[1];
-            intakeRoute = values[2];
+            title = reader.ReadLine();
+            if (title is null)
+                throw new InvalidCastException("unrecognized file format");
 
-            int expectColumns;
+            ReadEmptyLine();
 
-            values = Split(reader.ReadLine());
-            if (values.Length < 2)  // Time 1 or more compartments
-                throw new InvalidDataException("too low data column count");
-            expectColumns = values.Length;
-            compartments = values.Skip(1).ToArray();
+            line = reader.ReadLine();
+            if (line is null || !line.StartsWith("Radionuclide: "))
+                throw new InvalidCastException("unrecognized file format");
+            var nuclides = line.Substring("Radionuclide: ".Length).Split(new[] { ", " }, StringSplitOptions.None);
+
+            line = reader.ReadLine();
+            if (line is null || !line.StartsWith("Units: "))
+                throw new InvalidCastException("unrecognized file format");
+            var units = line.Substring("Units: ".Length).Split(new[] { ", " }, StringSplitOptions.None);
 
             timesUnit = "day";
             valuesUnit =
@@ -161,80 +165,73 @@ namespace FlexID.Calc
                 type == OutputType.CumulativeActivity ? "Bq" :
                 type == OutputType.Dose ? "Sv/Bq" :
                 type == OutputType.DoseRate ? "Sv/h" : throw new NotSupportedException();
+            if (units.Length != 2 || units[0] != timesUnit || units[1] != valuesUnit)
+                throw new InvalidCastException("unrecognized file format");
 
-            values = Split(reader.ReadLine());
-            if (values.Length != expectColumns)
-                throw new InvalidDataException("mismatch data column count");
-            if (values[0] != "[day]")
-                throw new InvalidDataException("incorrect data column unit");
-            var valuesUnits = values.Skip(1).Distinct();
-            if (valuesUnits.Count() != 1 || valuesUnits.First() != $"[{valuesUnit}]")
-                throw new InvalidDataException("incorrect data column unit");
+            ReadEmptyLine();
 
-            var nuclides = new List<OutputNuclideData>();
-
-            var compartmentValues = compartments.Select(i => new List<double>()).ToArray();
-            while (true)
+            var separators = new[] { ' ' };
+            string[] ReadValues(string ln)
             {
-                var line = reader.ReadLine();
-                if (string.IsNullOrEmpty(line))
-                {
-                    nuclides.Add(new OutputNuclideData(nuclide,
-                        compartments.Select((name, i) => new OutputCompartmentData(name, compartmentValues[i]))));
-
-                    if (line is null)
-                        break;
-
-                    values = reader.ReadLine()?.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                    if (values is null || values.Length != 3)
-                        throw new InvalidDataException("unrecognized file format");
-
-                    nuclide = values[1];
-
-                    values = Split(reader.ReadLine());
-                    if (values.Length < 2)  // Time + 1 or more compartments
-                        throw new InvalidDataException("too low data column count");
-                    expectColumns = values.Length;
-                    compartments = values.Skip(1).ToArray();
-
-                    values = Split(reader.ReadLine());
-                    if (values.Length != expectColumns)
-                        throw new InvalidDataException("mismatch data column count");
-                    if (values[0] != "[day]")
-                        throw new InvalidDataException("incorrect data column unit");
-                    valuesUnits = values.Skip(1).Distinct();
-                    if (valuesUnits.Count() != 1 || valuesUnits.First() != $"[{valuesUnit}]")
-                        throw new InvalidDataException("incorrect data column unit");
-
-                    compartmentValues = compartments.Select(i => new List<double>()).ToArray();
-
-                    line = reader.ReadLine();
-                }
-
-                values = Split(line);
-                if (values.Length != expectColumns)
-                    throw new InvalidDataException("mismatch data column count");
-
-                if (!double.TryParse(values[0], out var step))
-                    throw new InvalidDataException("incorrect time step column");
-                if (nuclides.Count == 0)
-                    timeSteps.Add(step);
-                else
-                {
-                    var istep = compartmentValues[0].Count;
-                    if (timeSteps[istep] != step)
-                        throw new InvalidDataException("incorrect time step column");
-                }
-
-                for (int i = 1; i < expectColumns; i++)
-                {
-                    if (!double.TryParse(values[i], out var value))
-                        value = double.NaN;
-                    compartmentValues[i - 1].Add(value);
-                }
+                if (ln is null)
+                    throw new InvalidDataException("unrecognized file format");
+                return ln.Split(separators, StringSplitOptions.RemoveEmptyEntries);
             }
 
-            return new OutputData(type, intakeRoute, timesUnit, valuesUnit, timeSteps, nuclides);
+            var outputCount =
+                type == OutputType.RetentionActivity || type == OutputType.CumulativeActivity ? nuclides.Length : 1;
+
+            var nuclideDatas = new List<OutputNuclideData>(outputCount);
+            for (int iOut = 0; iOut < outputCount; iOut++)
+            {
+                var nuclide = reader.ReadLine();
+                if (nuclide != nuclides[iOut])
+                    throw new InvalidDataException("mismatch radiouclide");
+
+                values = ReadValues(reader.ReadLine());
+                if (values.Length < 2)  // Time 1 or more compartments
+                    throw new InvalidDataException("too low data column count");
+                int expectColumns = values.Length;
+                var compartments = values.Skip(1).ToArray();
+                var compartmentValues = compartments.Select(i => new List<double>()).ToArray();
+
+                while (true)
+                {
+                    line = reader.ReadLine();
+                    if (string.IsNullOrEmpty(line))
+                    {
+                        nuclideDatas.Add(new OutputNuclideData(nuclide,
+                            compartments.Select((name, i) => new OutputCompartmentData(name, compartmentValues[i]))));
+                        break;
+                    }
+
+                    values = ReadValues(line);
+                    if (values.Length != expectColumns)
+                        throw new InvalidDataException("mismatch data column count");
+
+                    if (!double.TryParse(values[0], out var step))
+                        throw new InvalidDataException("incorrect time step column");
+                    if (nuclideDatas.Count == 0)
+                        timeSteps.Add(step);
+                    else
+                    {
+                        var istep = compartmentValues[0].Count;
+                        if (timeSteps[istep] != step)
+                            throw new InvalidDataException("incorrect time step column");
+                    }
+
+                    for (int i = 1; i < expectColumns; i++)
+                    {
+                        if (!double.TryParse(values[i], out var value))
+                            value = double.NaN;
+                        compartmentValues[i - 1].Add(value);
+                    }
+                }
+            }
+            if (line != null)
+                throw new InvalidDataException("unrecognized file format");
+
+            return new OutputData(type, title, timesUnit, valuesUnit, timeSteps, nuclideDatas);
         }
     }
 }

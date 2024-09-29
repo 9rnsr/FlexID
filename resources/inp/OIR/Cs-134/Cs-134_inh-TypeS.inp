@@ -2,9 +2,9 @@
 Cs-134 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Cs-134    Inhalation:Type-S                      9.197178E-04     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Cs-134    9.197178E-04        0.0
 
 
 [Cs-134:compartment]

@@ -2,9 +2,9 @@
 H-3 Ingestion:Insoluble
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  H-3       Ingestion:Insoluble                    1.541423E-04     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  H-3       1.541423E-04        0.0
 
 
 [H-3:compartment]

@@ -2,9 +2,9 @@
 C-14 Inhalation:Type-F
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  C-14      Inhalation:Type-F                      3.331637E-07     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  C-14      3.331637E-07        0.0
 
 
 [C-14:compartment]

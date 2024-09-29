@@ -1,6 +1,11 @@
-﻿ CumulativeActivity  H-3 Ingestion:Insoluble
-     Time        WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
-     [day]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]       
+﻿FlexID output: CumulativeActivity
+H-3 Ingestion:Insoluble
+
+Radionuclide: H-3
+Units: day, Bq
+
+H-3
+  Time           WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
   0.000000E+00   0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   4.14529559E-02  4.10744855E-02  1.38888886E-04  7.29158203E-05  4.62962920E-05  2.77810109E-02  1.21918891E-02  1.07615438E-03  2.31390543E-05  3.93536081E-07  7.87072162E-07  2.71215415E-05  9.50267153E-05  5.90542436E-10  7.87489290E-11  2.27820949E-06  5.50567293E-06  1.18989355E-07  1.42787225E-06
   8.333333E-02   8.31168088E-02  8.20939217E-02  1.38888886E-04  7.29158203E-05  4.62962920E-05  3.97726453E-02  3.53472155E-02  6.65718847E-03  2.97895864E-04  1.04068540E-05  2.08137080E-05  1.22425307E-04  6.49927315E-04  8.70432903E-09  1.16088691E-09  1.02837258E-05  2.48523374E-05  9.93388964E-07  1.19206676E-05

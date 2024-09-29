@@ -178,9 +178,18 @@ namespace FlexID.Calc
                 var indexN = data.Nuclides.IndexOf(nuclide);
                 var wRete = wsRete[indexN];
 
-                wRete.WriteLine(" {0} {1} {2}", "Retention ", nuclide.Nuclide, nuclide.IntakeRoute);
+                if (indexN == 0)
+                {
+                    wRete.WriteLine("FlexID output: RetentionActivity");
+                    wRete.WriteLine(data.Title);
+                    wRete.WriteLine();
+                    wRete.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                    wRete.WriteLine("Units: day, Bq/Bq");
+                    wRete.WriteLine();
+                }
 
-                wRete.Write("     Time      ");
+                wRete.WriteLine(nuclide.Nuclide);
+                wRete.Write("  Time         ");
                 wRete.Write("  {0,-14}", "WholeBody");
 
                 if (nuclide.AtractIndexes  /**/.Length != 0) wRete.Write("{0,-16}", "AlimentaryTract*");
@@ -197,24 +206,6 @@ namespace FlexID.Calc
                     wRete.Write("  {0,-14}", organ.Name);
                 }
                 wRete.WriteLine();
-
-                wRete.Write("     [day]       ");
-                wRete.Write("  [Bq/Bq]       ");
-
-                if (nuclide.AtractIndexes  /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
-                if (nuclide.LungsIndexes   /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
-                if (nuclide.SkeletonIndexes/**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
-                if (nuclide.LiverIndexes   /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
-                if (nuclide.ThyroidIndexes /**/.Length != 0) wRete.Write("  [Bq/Bq]       ");
-
-                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
-                {
-                    if (organ.Func == OrganFunc.inp)
-                        continue;
-
-                    wRete.Write("  [Bq/Bq]       ");
-                }
-                wRete.WriteLine();
             }
 
             // Cumulative
@@ -223,8 +214,18 @@ namespace FlexID.Calc
                 var indexN = data.Nuclides.IndexOf(nuclide);
                 var wCumu = wsCumu[indexN];
 
-                wCumu.WriteLine(" {0} {1} {2}", "CumulativeActivity ", nuclide.Nuclide, nuclide.IntakeRoute);
-                wCumu.Write("     Time      ");
+                if (indexN == 0)
+                {
+                    wCumu.WriteLine("FlexID output: CumulativeActivity");
+                    wCumu.WriteLine(data.Title);
+                    wCumu.WriteLine();
+                    wCumu.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                    wCumu.WriteLine("Units: day, Bq");
+                    wCumu.WriteLine();
+                }
+
+                wCumu.WriteLine(nuclide.Nuclide);
+                wCumu.Write("  Time         ");
                 wCumu.Write("  {0,-14}", "WholeBody");
 
                 if (nuclide.AtractIndexes  /**/.Length != 0) wCumu.Write("{0,-16}", "AlimentaryTract*");
@@ -241,24 +242,6 @@ namespace FlexID.Calc
                     wCumu.Write("  {0,-14}", organ.Name);
                 }
                 wCumu.WriteLine();
-
-                wCumu.Write("     [day]       ");
-                wCumu.Write("     [Bq]       ");
-
-                if (nuclide.AtractIndexes  /**/.Length != 0) wCumu.Write("     [Bq]       ");
-                if (nuclide.LungsIndexes   /**/.Length != 0) wCumu.Write("     [Bq]       ");
-                if (nuclide.SkeletonIndexes/**/.Length != 0) wCumu.Write("     [Bq]       ");
-                if (nuclide.LiverIndexes   /**/.Length != 0) wCumu.Write("     [Bq]       ");
-                if (nuclide.ThyroidIndexes /**/.Length != 0) wCumu.Write("     [Bq]       ");
-
-                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
-                {
-                    if (organ.Func == OrganFunc.inp)
-                        continue;
-
-                    wCumu.Write("     [Bq]       ");
-                }
-                wCumu.WriteLine();
             }
         }
 
@@ -272,31 +255,33 @@ namespace FlexID.Calc
 
             // Dose
             {
-                wDose.WriteLine("{0} {1} {2}", " Effective/Equivalent_Dose ", nuclide.Nuclide, nuclide.IntakeRoute);
-
-                wDose.Write("     Time    ");
-                wDose.Write("     WholeBody   ");
-                foreach (var t in targets) wDose.Write("  {0,-12:n}", t);
+                wDose.WriteLine("FlexID output: Dose");
+                wDose.WriteLine(data.Title);
+                wDose.WriteLine();
+                wDose.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                wDose.WriteLine("Units: day, Sv/Bq");
                 wDose.WriteLine();
 
-                wDose.Write("     [day]       ");
-                wDose.Write("  [Sv/Bq]     ");
-                foreach (var _ in targets) wDose.Write("  [Sv/Bq]     ");
+                wDose.WriteLine(nuclide.Nuclide);
+                wDose.Write("  Time         ");
+                wDose.Write("  WholeBody   ");
+                foreach (var t in targets) wDose.Write("  {0,-12:n}", t);
                 wDose.WriteLine();
             }
 
             // DoseRate
             {
-                wRate.WriteLine("{0} {1} {2}", " DoseRate ", nuclide.Nuclide, nuclide.IntakeRoute);
-
-                wRate.Write("     Time    ");
-                wRate.Write("     WholeBody   ");
-                foreach (var t in targets) wRate.Write("  {0,-12:n}", t);
+                wRate.WriteLine("FlexID output: DoseRate");
+                wRate.WriteLine(data.Title);
+                wRate.WriteLine();
+                wRate.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                wRate.WriteLine("Units: day, Sv/h");
                 wRate.WriteLine();
 
-                wRate.Write("     [day]       ");
-                wRate.Write("  [Sv/h]      ");
-                foreach (var _ in targets) wRate.Write("  [Sv/h]      ");
+                wRate.WriteLine(nuclide.Nuclide);
+                wRate.Write("  Time         ");
+                wRate.Write("  WholeBody   ");
+                foreach (var t in targets) wRate.Write("  {0,-12:n}", t);
                 wRate.WriteLine();
             }
         }

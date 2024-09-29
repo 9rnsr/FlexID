@@ -1,6 +1,11 @@
-﻿ CumulativeActivity  H-3 Ingestion:Organic
-     Time        WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
-     [day]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]            [Bq]       
+﻿FlexID output: CumulativeActivity
+H-3 Ingestion:Organic
+
+Radionuclide: H-3
+Units: day, Bq
+
+H-3
+  Time           WholeBody     AlimentaryTract*  Oralcavity      Oesophagus-F    Oesophagus-S    St-con          SI-con          RC-con          LC-con          RS-con          Faeces          Blood           ExtravasHTO     OBT1            OBT2            Breath(discharge)  Skin(discharge)  UB-con          Urine         
   0.000000E+00   0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00
   4.166667E-02   4.14478646E-02  2.89136719E-02  1.38888886E-04  7.29158203E-05  4.62962920E-05  2.77810109E-02  9.26959105E-04  1.21953660E-04  3.38659257E-06  6.94240255E-08  1.38848051E-07  1.14703158E-03  5.02401037E-03  6.17866214E-03  5.35866179E-09  9.63506529E-05  2.32847411E-04  6.67447727E-06  8.00937272E-05
   8.333333E-02   8.30812287E-02  4.17445634E-02  1.38888886E-04  7.29158203E-05  4.62962920E-05  3.97726453E-02  1.35273072E-03  3.95720834E-04  2.34044811E-05  1.00453262E-06  2.00906523E-06  2.84368016E-03  1.77581468E-02  2.06459213E-02  4.19748719E-08  2.38869133E-04  5.77267072E-04  2.98317158E-05  3.57980590E-04

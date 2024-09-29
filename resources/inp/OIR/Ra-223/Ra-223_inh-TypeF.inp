@@ -2,9 +2,9 @@
 Ra-223 Inhalation:Type-F
 
 [nuclide]
-# Nuclide | Intake route                         | Ramd           | DecayRate
-#---------+--------------------------------------+----------------+---------------
-  Ra-223    Inhalation:Type-F                      6.064280E-02     0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Ra-223    6.064280E-02        0.0
 
 
 [Ra-223:compartment]

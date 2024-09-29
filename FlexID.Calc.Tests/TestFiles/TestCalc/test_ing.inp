@@ -2,9 +2,9 @@
 test1
 
 [nuclide]
-# Nuclide | Intake route        | Ramd           | DecayRate
-#---------+---------------------+----------------+---------------
-  Cs-134    test1                 0.23104906       0.0
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Cs-134    0.23104906          0.0
 
 [Cs-134:compartment]
 #-----+-----------------| S-Coefficient
