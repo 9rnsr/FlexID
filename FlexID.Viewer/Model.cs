@@ -235,6 +235,21 @@ namespace FlexID.Viewer
         /// </summary>
         private int CurrentTimeIndex { get; set; } = -1;
 
+        void SetCurrentTimeIndex(int i)
+        {
+            if (0 <= i && i < TimeSteps.Count)
+            {
+                CurrentTimeIndex = i;
+                currentTimeStep = TimeSteps[i];
+            }
+            else
+            {
+                CurrentTimeIndex = -1;
+                currentTimeStep = 0;
+            }
+            RaisePropertyChanged(nameof(CurrentTimeStep));
+        }
+
         /// <summary>
         /// 現在スライダーが示している出力タイムステップ。
         /// </summary>
@@ -260,7 +275,7 @@ namespace FlexID.Viewer
                     CurrentTimeIndex = TimeSteps.Count - 1;
                     value = end;
                 }
-                else
+                else if (value != currentTimeStep)
                 {
                     // [s, e) の区間内にある時間が設定された場合は、sの時間に設定する。
                     for (int i = 1; i < TimeSteps.Count; i++)
@@ -339,26 +354,28 @@ namespace FlexID.Viewer
 
             if (cancellationPlaying != null)
             {
+                // 再生中の処理。
                 cancellationPlaying.Cancel();
                 return;
             }
 
+            // 停止中の処理。
             IsPlaying = true;
             try
             {
                 using (cancellationPlaying = new CancellationTokenSource())
                 {
+                    var timeSteps = TimeSteps;
+                    var currentTimeIndex = CurrentTimeIndex;
                     var cancellationToken = cancellationPlaying.Token;
 
                     await Task.Run(async () =>
                     {
-                        // 停止時の処理。
-                        for (var i = CurrentTimeIndex + 1; i < TimeSteps.Count; i++)
+                        for (var i = currentTimeIndex + 1; i < timeSteps.Count; i++)
                         {
                             Application.Current.Dispatcher.Invoke(new Action(() =>
                             {
-                                CurrentTimeIndex = i;
-                                CurrentTimeStep = TimeSteps[CurrentTimeIndex];
+                                SetCurrentTimeIndex(i);
                             }));
                             await Task.Delay(200, cancellationToken);
                         }
@@ -468,8 +485,7 @@ namespace FlexID.Viewer
             ContourUnit = "-";
 
             TimeSteps = Array.Empty<double>();
-            CurrentTimeIndex = -1;
-            CurrentTimeStep = 0;
+            SetCurrentTimeIndex(-1);
 
             ClearValues();
 
@@ -590,8 +606,7 @@ namespace FlexID.Viewer
             TimeSteps = CurrentOutput.TimeSteps;
 
             var anySteps = TimeSteps.Count != 0;
-            CurrentTimeIndex = anySteps ? 0 : -1;
-            CurrentTimeStep = anySteps ? TimeSteps[CurrentTimeIndex] : 0;
+            SetCurrentTimeIndex(anySteps ? 0 : -1);
         }
 
         /// <summary>
