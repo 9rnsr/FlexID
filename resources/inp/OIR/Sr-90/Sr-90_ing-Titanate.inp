@@ -1,5 +1,5 @@
 [title]
-Sr-90, Ingestion, Strontium titanate, fA=1E-2
+Sr-90 Ingestion:StrontiumTitanate
 
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction

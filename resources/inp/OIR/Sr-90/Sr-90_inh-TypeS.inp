@@ -1,5 +1,5 @@
 [title]
-Sr-90, Inhalation, Aerosols Type S, FAP, PSL, fA=2.5E-3
+Sr-90 Inhalation:Type-S
 
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
