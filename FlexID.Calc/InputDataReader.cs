@@ -887,8 +887,8 @@ namespace FlexID.Calc
                     double inflowRate;
                     if (organFrom.Nuclide != nuclide)
                     {
-                        // 親から子への移行経路では、親からの分岐比*親の崩壊定数とする。
-                        inflowRate = organTo.Nuclide.DecayRate * organFrom.NuclideDecay;
+                        // 親から子への移行経路では、親からの分岐比とする。
+                        inflowRate = organTo.Nuclide.DecayRate;
                     }
                     else if (isRate)
                     {
@@ -1224,11 +1224,10 @@ namespace FlexID.Calc
                     // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
                     inflow.Organ = data.Organs.First(o => o.ID == inflow.ID);
 
-                    // 流入割合がマイナスの時の処理は親からの分岐比*親の崩壊定数とする。
+                    // 流入割合がマイナスの時の処理は親からの分岐比とする。
                     if (inflow.Rate < 0)
                     {
-                        var nucDecay = inflow.Organ.NuclideDecay;
-                        inflow.Rate = organ.Nuclide.DecayRate * nucDecay;
+                        inflow.Rate = organ.Nuclide.DecayRate;
                     }
                 }
             }

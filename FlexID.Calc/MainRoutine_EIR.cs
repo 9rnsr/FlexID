@@ -382,10 +382,8 @@ namespace FlexID.Calc
                     if (organ.Name.Contains("mix"))
                         continue;
 
-                    var nucDecay = organ.NuclideDecay;
-
                     // コンパートメントの残留放射能がゼロの場合は何もしない。
-                    var activity = Act.CalcNow[organ.Index].end * calcDeltaT * nucDecay;
+                    var activity = Act.CalcNow[organ.Index].end * calcDeltaT;
                     if (activity == 0)
                         continue;
 

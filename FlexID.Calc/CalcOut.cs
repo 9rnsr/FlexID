@@ -310,10 +310,8 @@ namespace FlexID.Calc
                     if (organ.Func != OrganFunc.acc)
                         continue;
 
-                    var nucDecay = organ.NuclideDecay;
-
-                    var retention = Act.OutNow[organ.Index].end * nucDecay;
-                    var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
+                    var retention = Act.OutNow[organ.Index].end;
+                    var cumulative = Act.OutTotalFromIntake[organ.Index];
 
                     reteWholeBody += retention;
                     cumuWholeBody += cumulative;
@@ -322,15 +320,15 @@ namespace FlexID.Calc
                 wsRete[i].Write("  {0:0.00000000E+00}", reteWholeBody);
                 wsCumu[i].Write("  {0:0.00000000E+00}", cumuWholeBody);
 
-                var reteBlood = nuclide.BloodIndexes.Select(oi => Act.OutNow[oi].end * data.Organs[oi].NuclideDecay).Sum();
-                var cumuBlood = nuclide.BloodIndexes.Select(oi => Act.OutTotalFromIntake[oi] * data.Organs[oi].NuclideDecay).Sum();
+                var reteBlood = nuclide.BloodIndexes.Select(oi => Act.OutNow[oi].end).Sum();
+                var cumuBlood = nuclide.BloodIndexes.Select(oi => Act.OutTotalFromIntake[oi]).Sum();
 
                 void WriteOutSum(int[] indexes, double bloodFraction)
                 {
                     if (indexes.Length == 0)
                         return;
-                    var rete = indexes.Select(oi => Act.OutNow[oi].end * data.Organs[oi].NuclideDecay).Sum();
-                    var cumu = indexes.Select(oi => Act.OutTotalFromIntake[oi] * data.Organs[oi].NuclideDecay).Sum();
+                    var rete = indexes.Select(oi => Act.OutNow[oi].end).Sum();
+                    var cumu = indexes.Select(oi => Act.OutTotalFromIntake[oi]).Sum();
 
                     wsRete[i].Write("  {0:0.00000000E+00}", rete + reteBlood * bloodFraction);
                     wsCumu[i].Write("  {0:0.00000000E+00}", cumu + cumuBlood * bloodFraction);
@@ -348,17 +346,15 @@ namespace FlexID.Calc
                 if (organ.Func == OrganFunc.inp)
                     continue;
 
-                var nucDecay = organ.NuclideDecay;
-
-                var retention = Act.OutNow[organ.Index].end * nucDecay;
-                var cumulative = Act.OutTotalFromIntake[organ.Index] * nucDecay;
+                var retention = Act.OutNow[organ.Index].end;
+                var cumulative = Act.OutTotalFromIntake[organ.Index];
 
                 if (organ.ExcretaCompatibleWithOIR)
                 {
                     // OIR互換出力を行うexcコンパートメントでは、24-hour sample出力値を模擬して
                     // 出力時間メッシュから24-hour前までの各計算時間メッシュにおけるtotalの総計、
                     // その一日あたりの平均値(これはtotalと等しい)を残留放射能として出力する。
-                    retention = Act.OutNow[organ.Index].ave * nucDecay;
+                    retention = Act.OutNow[organ.Index].ave;
                 }
 
                 var wrRete = wsOrgansRete[organ.Index];
