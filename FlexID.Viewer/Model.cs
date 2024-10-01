@@ -455,6 +455,7 @@ namespace FlexID.Viewer
 
             Regions.Clear();
             PlotModel.Series.Clear();
+            PlotModel.InvalidatePlot(updateData: true);
         }
 
         private void ClearValues()
