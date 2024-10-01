@@ -455,6 +455,7 @@ namespace FlexID.Viewer
 
             Regions.Clear();
             PlotModel.Series.Clear();
+            PlotModel.InvalidatePlot(updateData: true);
         }
 
         private void ClearValues()
@@ -531,12 +532,11 @@ namespace FlexID.Viewer
             if (CurrentNuclide?.Nuclide == nuc)
                 return;
 
+            ClearNuclide();
+
             var index = Nuclides.IndexOf(nuc);
             if (index == -1)
-            {
-                ClearNuclide();
                 return;
-            }
 
             CurrentNuclide = CurrentOutput.Nuclides[index];
 
@@ -591,7 +591,7 @@ namespace FlexID.Viewer
                 if (PlotModel.Series.Any(ser => ser.Title == name))
                     return;
 
-                var serie = new ScatterSeries()
+                var series = new ScatterSeries()
                 {
                     Title = name,
                     IsVisible = color != null,
@@ -603,11 +603,11 @@ namespace FlexID.Viewer
                 {
                     if (timeSteps[j] == 0)
                         continue;
-                    serie.Points.Add(new ScatterPoint(timeSteps[j], values[j]));
+                    series.Points.Add(new ScatterPoint(timeSteps[j], values[j]));
                 }
 
-                Regions.Add(new RegionData(serie, compartment.Name));
-                PlotModel.Series.Add(serie);
+                Regions.Add(new RegionData(series, compartment.Name));
+                PlotModel.Series.Add(series);
             }
 
             var type = CurrentOutput.Type;
