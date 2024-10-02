@@ -40,6 +40,10 @@
       Modifiers="Ctrl" />
   </Controls:MetroWindow.InputBindings>
 
+  <i:Interaction.Behaviors>
+    <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
+  </i:Interaction.Behaviors>
+
   <Grid
     Grid.Row="0"
     Grid.Column="0"
@@ -128,7 +132,6 @@
         KeyDown="OutputFilePathTextBox_KeyDown"
         Text="{Binding OutputFilePath.Value, UpdateSourceTrigger=Explicit}">
         <i:Interaction.Behaviors>
-          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
           <vb:PathPasteBehavior />
         </i:Interaction.Behaviors>
       </TextBox>
