@@ -14,21 +14,26 @@ namespace ResultChecker
     {
         static int Main(string[] args)
         {
-            Regex pattern = null;
-            if (args.Length == 1)
+            List<Regex> patterns = null;
+            if (args.Length >= 1)
             {
-                try
+                patterns = new List<Regex>();
+                for (int i = 0; i < args.Length; i++)
                 {
-                    pattern = new Regex(args[0], RegexOptions.IgnoreCase);
-                }
-                catch
-                {
-                    Console.WriteLine("target pattern is not correct.");
-                    return -1;
+                    try
+                    {
+                        patterns.Add(new Regex(args[i], RegexOptions.IgnoreCase));
+                    }
+                    catch
+                    {
+                        var nth = i == 0 ? "1st" : i == 1 ? "2nd" : $"{i + 1}th";
+                        Console.WriteLine($"{nth} target pattern is not correct.");
+                        return -1;
+                    }
                 }
             }
 
-            var targets = GetTargets().Where(t => pattern?.IsMatch(t.Target) ?? true).ToArray();
+            var targets = GetTargets().Where(t => patterns?.Any(pattern => pattern.IsMatch(t.Target)) ?? true).ToArray();
             var results = new ConcurrentBag<Result>();
 
             // 並列に計算を実施する。
