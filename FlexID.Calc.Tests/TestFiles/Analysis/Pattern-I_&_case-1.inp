@@ -4,7 +4,7 @@ Pattern I & case 1
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
 #---------+-------------------+---------------------
-  Ba-133    9.999999E-09        0.0
+  Ba-133    0.000000E+00        0.0
 
 
 [Ba-133:compartment]

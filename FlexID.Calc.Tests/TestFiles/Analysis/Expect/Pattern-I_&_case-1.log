@@ -1,0 +1,51 @@
+﻿
+Nuclide: Ba-133
+
+Source regions those are part of 'Other':
+O-mucosa,Teeth-V,Tonsils,Oesophag-w,St-wall,SI-wall,RC-wall,LC-wall,RS-wall,LN-ET,LN-Th,Adrenals,C-bone-V,T-bone-V,R-marrow,Y-marrow,Brain,Breast,Eye-lens,GB-wall,Ht-wall,Kidneys,Liver,LN-Sys,Ovaries,Pancreas,P-gland,Prostate,S-glands,Skin,Spleen,Testes,Thymus,Thyroid,Ureters,UB-wall,Uterus,Adipose,Cartilage,Muscle,ET1-wall,ET2-wall,Lung-Tis
+
+S-Coefficient values from 'Other' to each target regions:
+  T/S      Other         
+O-mucosa   4.63544424E-16
+Oesophagus 4.99381697E-16
+St-stem    4.99347905E-16
+SI-stem    5.53866300E-16
+RC-stem    5.21312571E-16
+LC-stem    5.14213674E-16
+RS-stem    5.78427782E-16
+ET1-bas    3.21693203E-16
+ET2-bas    4.54304376E-16
+LN-ET      5.52501544E-16
+Bronch-bas 4.86930863E-16
+Bronch-sec 4.83206811E-16
+Bchiol-sec 4.63697517E-16
+AI         4.14693235E-16
+LN-Th      5.22718021E-16
+R-marrow   5.39636469E-16
+Endost-BS  4.79515306E-16
+Brain      4.75177843E-16
+Eye-lens   3.35426680E-16
+P-gland    5.15020269E-16
+Tongue     3.50935549E-16
+Tonsils    5.01055169E-16
+S-glands   4.48757654E-16
+Thyroid    4.91102564E-16
+Breast     3.91699413E-16
+Thymus     4.98115960E-16
+Ht-wall    4.76779072E-16
+Adrenals   5.97072749E-16
+Liver      5.23071216E-16
+Pancreas   5.82045764E-16
+Kidneys    5.73978395E-16
+Spleen     4.97990928E-16
+GB-wall    5.89781959E-16
+Ureters    6.37337742E-16
+UB-wall    5.67441777E-16
+Ovaries    3.56141924E-16
+Testes     2.46424588E-16
+Prostate   2.97729857E-16
+Uterus     3.39496760E-16
+LN-Sys     5.52931870E-16
+Skin       3.63799641E-16
+Adipose    4.48626576E-16
+Muscle     5.14047693E-16
