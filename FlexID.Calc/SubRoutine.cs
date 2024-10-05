@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace FlexID.Calc
 {
@@ -54,9 +51,7 @@ namespace FlexID.Calc
                                                                       i.Organ.Nuclide == nuclide);
                 if (inflowFromInp != null)
                 {
-                    var nucDecay = nuclide.Lambda;
-
-                    var init = inflowFromInp.Rate / nucDecay;
+                    var init = inflowFromInp.Rate;
                     Act.CalcNow[organ.Index].ini = init;
                     Act.CalcNow[organ.Index].ave = init;
                     Act.CalcNow[organ.Index].end = init;
@@ -176,7 +171,7 @@ namespace FlexID.Calc
 
                 // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
                 if (inflowOrgan.Nuclide != organ.Nuclide)
-                    beforeBio = 1;
+                    beforeBio = organ.NuclideDecay; // TODO: なぜ娘核種のλを乗算するのか？
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
                 ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
@@ -243,7 +238,7 @@ namespace FlexID.Calc
 
                 // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
                 if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
-                    beforeBio = 1 * organLo.Inflows[i].Rate;
+                    beforeBio = organLo.NuclideDecay * organLo.Inflows[i].Rate; // TODO: なぜ娘核種のλを乗算するのか？
 
                 // 放射能[Bq/day] = 流入元臓器の放射能[Bq/day] * 流入元臓器の生物学的崩壊定数 * 流入割合
                 ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio;
