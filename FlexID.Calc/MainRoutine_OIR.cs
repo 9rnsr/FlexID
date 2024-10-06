@@ -235,7 +235,7 @@ namespace FlexID.Calc
                         continue;
 
                     // コンパートメントの残留放射能がゼロの場合は何もしない。
-                    var activity = Act.CalcNow[organ.Index].end * calcDeltaT;
+                    var activity = Act.CalcNow[organ.Index].ave * calcDeltaT;
                     if (activity == 0)
                         continue;
 
