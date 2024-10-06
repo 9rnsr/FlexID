@@ -80,6 +80,7 @@ namespace FlexID.Calc.Tests
         [DataRow("lib/TimeMesh/time.dat")]
         [DataRow("lib/TimeMesh/out-time.dat")]
         [DataRow("lib/TimeMesh/out-per-h.dat")]
+        [DataRow("lib/TimeMesh/out-time-OIR.dat")]
         public void ReadTimeMeshFile(string filePath)
         {
             filePath = TestFiles.ReplaceVar(filePath);
@@ -134,6 +135,12 @@ namespace FlexID.Calc.Tests
                     new TimeMeshBoundary( "3650 days", "12 hours"),
                     new TimeMeshBoundary("27375 days", "24 hours"),
                 })
+            };
+
+            yield return new object[]
+            {
+                new TimeMesh("lib/TimeMesh/out-time-OIR.dat"),
+                new TimeMesh("lib/TimeMesh/time.dat"),
             };
         }
 
