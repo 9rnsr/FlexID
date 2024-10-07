@@ -234,9 +234,6 @@ namespace FlexID.Calc
                     if (organ.SourceRegion is null)
                         continue;
 
-                    if (organ.Name.Contains("mix"))
-                        continue;
-
                     // コンパートメントの残留放射能がゼロの場合は何もしない。
                     var activity = Act.CalcNow[organ.Index].end * calcDeltaT;
                     if (activity == 0)
