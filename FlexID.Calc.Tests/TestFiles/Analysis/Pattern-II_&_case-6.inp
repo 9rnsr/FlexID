@@ -45,6 +45,6 @@ OutputCumulative = false
   PatternI      PatternII         100
   PatternII     comp.A              0.005
 
-  comp.A        comp.B              1
-  comp.B        end                 0.005
-  comp.B        comp.A              0.005
+  comp.A        comp.B              0.5     #(50% * 1)
+  comp.A        end                 0.5     #(50% * 1)
+  comp.B        comp.A              0.01
