@@ -2,22 +2,22 @@
 # 計算用の時間メッシュ定義ファイル。
 #----------------------------------------------------------------
 until  , step
-  144 m,    3 min     # 0.10 d
-  216 m,    3 min     # 0.15 d
-  288 m,    3 min     # 0.20 d
-    1 d,    3 min     # 1.0 d
-   36 h,    3 min     # 1.5 d
-    2 d,    3 min     # 2.0 d
-   20 d,    3 min
-   40 d,    3 min
-  100 d,    3 min
-  200 d,    3 min
- 1000 d,    3 min
- 2000 d,    3 min
-10000 d,    3 min
-15000 d,    3 min
-18250 d,    3 min
-20000 d,    3 min
-25000 d,    3 min
-25550 d,    3 min
-27375 d,    3 min
+  144 m,    1 sec     # 0.10 d
+  216 m,    1 sec     # 0.15 d
+  288 m,    1 sec     # 0.20 d
+    1 d,    1 sec     # 1.0 d
+   36 h,    1 sec     # 1.5 d
+    2 d,    1 sec     # 2.0 d
+   20 d,    1 sec
+   40 d,    1 sec
+  100 d,    1 sec
+  200 d,    1 sec
+ 1000 d,    1 sec
+ 2000 d,    1 sec
+10000 d,    1 sec
+15000 d,    1 sec
+18250 d,    1 sec
+20000 d,    1 sec
+25000 d,    1 sec
+25550 d,    1 sec
+27375 d,    1 sec
