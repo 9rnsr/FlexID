@@ -256,39 +256,36 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="alpha">崩壊定数[/day]。</param>
         /// <param name="dT">時間メッシュの幅[day]</param>
-        /// <param name="ave">流入する平均放射能[Bq/day]</param>
+        /// <param name="aveIn">流入する平均放射能[Bq/day]</param>
         /// <param name="pre">前回時間メッシュの計算結果。</param>
         /// <param name="now">今回時間メッシュの計算結果。</param>
-        private static void Accumulation(double alpha, double dT, double ave, in OrganActivity pre, ref OrganActivity now)
+        private static void Accumulation(double alpha, double dT, double aveIn, in OrganActivity pre, ref OrganActivity now)
         {
             var alpha_dT = alpha * dT;
+            if (alpha_dT >= 100)
+                alpha_dT = 100;
 
-            double rini = pre.end;  // 初期放射能[Bq/day]
-            double rend;            // 末期放射能[Bq/day]
-            double rtot;            // 積算放射能[Bq]
+            var dddd = Math.Exp(-alpha_dT);
+            var xxxx = 1 - dddd;
             if (alpha_dT <= 1E-9)
-            {
-                rend = ave * alpha_dT / alpha + rini * Math.Exp(-alpha_dT);
-                rtot = ave * (dT - alpha_dT / alpha) / alpha + rini / alpha * alpha_dT;
-            }
-            else
-            {
-                if (alpha_dT >= 100)
-                    alpha_dT = 100;
+                xxxx = alpha_dT;
 
-                rend = ave * (1 - Math.Exp(-alpha_dT)) / alpha + rini * Math.Exp(-alpha_dT);
-                rtot = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
-            }
+            // 初期放射能[Bq/day]
+            var rini = pre.end;
 
-            var rave = rtot / dT;   // 平均放射能[Bq/day] = 積算放射能[Bq] / Δt[day]
+            // 末期放射能[Bq/day]
+            var rend = aveIn * xxxx / alpha + rini * dddd;
+
+            // 積算放射能[Bq]
+            var rtot = aveIn * (dT - xxxx / alpha) / alpha + rini / alpha * xxxx;
+
+            // 平均放射能[Bq/day] = 積算放射能[Bq] / Δt[day]
+            var rave = rtot / dT;
 
             // 計算値が1E-60以下の場合は0とする
-            if (rave <= 1E-60)
-                rave = 0;
-            if (rend <= 1E-60)
-                rend = 0;
-            if (rtot <= 1E-60)
-                rtot = 0;
+            if (rave <= 1E-60) rave = 0;
+            if (rend <= 1E-60) rend = 0;
+            if (rtot <= 1E-60) rtot = 0;
 
             now.ini = rini;
             now.ave = rave;
