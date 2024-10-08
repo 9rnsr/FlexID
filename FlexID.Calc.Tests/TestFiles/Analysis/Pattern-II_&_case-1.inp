@@ -1,0 +1,34 @@
+[title]
+Pattern II & case 1
+
+[nuclide]
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Ba-133    9.999999E-09        0.0
+
+
+[Ba-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   PatternI              ---
+  acc   PatternII             ---
+
+  acc   case1-II-A            ---
+  acc   case1-II-B            ---
+
+  exc   end                   ---
+
+
+[Ba-133:transfer]
+#-------------+---------------+--------------
+# From        | To            | Transfer rate[/d] or fraction[%]
+#-------------+---------------+--------------
+
+  input         PatternI          100%
+  PatternI      PatternII         100.0
+
+  PatternII     case1-II-A          0.005
+  case1-II-A    case1-II-B      10000.0
+  case1-II-B    end                 1.0
