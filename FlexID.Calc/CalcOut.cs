@@ -302,33 +302,22 @@ namespace FlexID.Calc
             for (int i = 0; i < data.Nuclides.Count; i++)
             {
                 var nuclide = data.Nuclides[i];
-                var reteWholeBody = 0.0;
-                var cumuWholeBody = 0.0;
+                var accs = data.Organs.Where(o => o.Nuclide == nuclide && o.Func == OrganFunc.acc);
 
-                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
-                {
-                    if (organ.Func != OrganFunc.acc)
-                        continue;
-
-                    var retention = Act.OutNow[organ.Index].end;
-                    var cumulative = Act.OutTotalFromIntake[organ.Index];
-
-                    reteWholeBody += retention;
-                    cumuWholeBody += cumulative;
-                }
-
+                var reteWholeBody = accs.Select(o => Act.OutNow[o.Index].end).KahanSum();
+                var cumuWholeBody = accs.Select(o => Act.OutTotalFromIntake[o.Index]).KahanSum();
                 wsRete[i].Write("  {0:0.00000000E+00}", reteWholeBody);
                 wsCumu[i].Write("  {0:0.00000000E+00}", cumuWholeBody);
 
-                var reteBlood = nuclide.BloodIndexes.Select(oi => Act.OutNow[oi].end).Sum();
-                var cumuBlood = nuclide.BloodIndexes.Select(oi => Act.OutTotalFromIntake[oi]).Sum();
+                var reteBlood = nuclide.BloodIndexes.Select(oi => Act.OutNow[oi].end).KahanSum();
+                var cumuBlood = nuclide.BloodIndexes.Select(oi => Act.OutTotalFromIntake[oi]).KahanSum();
 
                 void WriteOutSum(int[] indexes, double bloodFraction)
                 {
                     if (indexes.Length == 0)
                         return;
-                    var rete = indexes.Select(oi => Act.OutNow[oi].end).Sum();
-                    var cumu = indexes.Select(oi => Act.OutTotalFromIntake[oi]).Sum();
+                    var rete = indexes.Select(oi => Act.OutNow[oi].end).KahanSum();
+                    var cumu = indexes.Select(oi => Act.OutTotalFromIntake[oi]).KahanSum();
 
                     wsRete[i].Write("  {0:0.00000000E+00}", rete + reteBlood * bloodFraction);
                     wsCumu[i].Write("  {0:0.00000000E+00}", cumu + cumuBlood * bloodFraction);

@@ -218,14 +218,14 @@ namespace FlexID.Calc
                         {
                             // 24-hourの範囲内となる分だけを加算する。
                             var rate = (double)(calcNowT - outBefore24hourT) / calcDeltaT;
-                            Act.OutNow[organ.Index].total += calcNowTotal * rate;
+                            Act.OutNow[organ.Index].total.KahanSum(calcNowTotal * rate, ref Act.OutNowTotalComp[organ.Index]);
                         }
                     }
                     else
-                        Act.OutNow[organ.Index].total += calcNowTotal;
+                        Act.OutNow[organ.Index].total.KahanSum(calcNowTotal, ref Act.OutNowTotalComp[organ.Index]);
 
                     // 摂取時からの積算放射能。
-                    Act.OutTotalFromIntake[organ.Index] += calcNowTotal;
+                    Act.OutTotalFromIntake[organ.Index].KahanSum(calcNowTotal, ref Act.OutTotalCompFromIntake[organ.Index]);
                 }
 
                 foreach (var organ in data.Organs)

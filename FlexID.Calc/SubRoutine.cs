@@ -19,7 +19,9 @@ namespace FlexID.Calc
             Act.IterNow = new OrganActivity[data.Organs.Count];
 
             Act.OutNow = new OrganActivity[data.Organs.Count];
+            Act.OutNowTotalComp = new double[data.Organs.Count];
             Act.OutTotalFromIntake = new double[data.Organs.Count];
+            Act.OutTotalCompFromIntake = new double[data.Organs.Count];
 
             // 全ての組織における計算結果を初期化する
             foreach (var organ in data.Organs)
@@ -40,6 +42,7 @@ namespace FlexID.Calc
                 Act.OutNow[organ.Index].total = 0;
 
                 Act.OutTotalFromIntake[organ.Index] = 0;
+                Act.OutTotalCompFromIntake[organ.Index] = 0;
             }
 
             foreach (var organ in data.Organs)
@@ -71,9 +74,9 @@ namespace FlexID.Calc
         /// <param name="dT">ΔT[day]</param>
         public static void Excretion(Organ organ, Activity Act, double dT)
         {
-            double ini = 0;
-            double ave = 0;
-            double end = 0;
+            double ini = 0, ini_c = 0;
+            double ave = 0, ave_c = 0;
+            double end = 0, end_c = 0;
 
             // 排泄コンパートメントでは、計算時間メッシュ期間において
             // 他のコンパートメントからの流入量のみに着目する。
@@ -90,9 +93,9 @@ namespace FlexID.Calc
                 var beforeBio = inflow.Organ.BioDecay;
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-                ini += Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-                ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-                end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+                ini.KahanSum(Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate, ref ini_c);
+                ave.KahanSum(Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate, ref ave_c);
+                end.KahanSum(Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate, ref end_c);
             }
             Act.IterNow[organ.Index].ini = ini;
             Act.IterNow[organ.Index].ave = ave;
@@ -107,9 +110,9 @@ namespace FlexID.Calc
         /// <param name="Act">計算結果</param>
         public static void Mix(Organ organ, Activity Act)
         {
-            double ini = 0;
-            double ave = 0;
-            double end = 0;
+            double ini = 0, ini_c = 0;
+            double ave = 0, ave_c = 0;
+            double end = 0, end_c = 0;
 
             foreach (var inflow in organ.Inflows)
             {
@@ -117,9 +120,9 @@ namespace FlexID.Calc
                 var beforeBio = inflow.Organ.BioDecay;
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-                ini += Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-                ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-                end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+                ini.KahanSum(Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate, ref ini_c);
+                ave.KahanSum(Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate, ref ave_c);
+                end.KahanSum(Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate, ref end_c);
             }
             Act.IterNow[organ.Index].ini = ini;
             Act.IterNow[organ.Index].ave = ave;
@@ -159,7 +162,7 @@ namespace FlexID.Calc
             var alpha = organ.NuclideDecay + organ.BioDecay;
 
             // 流入する平均放射能[Bq/day]
-            var ave = 0.0;
+            double ave = 0.0, ave_c = 0;
 
             #region 流入臓器の数ループ
             foreach (var inflow in organ.Inflows)
@@ -174,7 +177,7 @@ namespace FlexID.Calc
                     beforeBio = organ.NuclideDecay; // TODO: なぜ娘核種のλを乗算するのか？
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-                ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+                ave.KahanSum(Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate, ref ave_c);
             }
             #endregion
 
@@ -197,7 +200,7 @@ namespace FlexID.Calc
             var bioDecay = organLo.BioDecay;
 
             // 流入する平均放射能[Bq/day]
-            var ave = 0.0;
+            double ave = 0.0, ave_c = 0;
 
             #region 流入臓器の数ループ
             for (int i = 0; i < organLo.Inflows.Count; i++)
@@ -241,7 +244,7 @@ namespace FlexID.Calc
                     beforeBio = organLo.NuclideDecay * organLo.Inflows[i].Rate; // TODO: なぜ娘核種のλを乗算するのか？
 
                 // 放射能[Bq/day] = 流入元臓器の放射能[Bq/day] * 流入元臓器の生物学的崩壊定数 * 流入割合
-                ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio;
+                ave.KahanSum(Act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio, ref ave_c);
             }
             #endregion
 

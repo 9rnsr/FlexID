@@ -1,7 +1,32 @@
 using System;
+using System.Collections.Generic;
 
 namespace FlexID.Calc
 {
+    public static class KahanSumRoutine
+    {
+        public static void KahanSum(this ref double sum, double input, ref double c)
+        {
+            var t = sum + input + c;
+
+            if (Math.Abs(input) <= Math.Abs(sum))
+                c = (input + c) - (t - sum);
+            else
+                c = (sum + c) - (t - input);
+
+            sum = t;
+        }
+
+        public static double KahanSum(this IEnumerable<double> values)
+        {
+            var sum = 0.0;
+            var c = 0.0;
+            foreach (var v in values)
+                KahanSum(ref sum, v, ref c);
+            return sum;
+        }
+    }
+
     /// <summary>
     /// あるコンパートメントにおける、計算時間メッシュ内の放射能を保持する。
     /// </summary>
@@ -55,10 +80,14 @@ namespace FlexID.Calc
         /// </summary>
         public OrganActivity[] OutNow;
 
+        public double[] OutNowTotalComp;
+
         /// <summary>
         /// 摂取時からの、コンパートメント毎の積算放射能[Bq]。
         /// </summary>
         public double[] OutTotalFromIntake;
+
+        public double[] OutTotalCompFromIntake;
 
         /// <summary>
         /// 次の計算時間メッシュのための準備を行う。
