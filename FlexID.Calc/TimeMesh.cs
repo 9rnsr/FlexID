@@ -141,6 +141,7 @@ namespace FlexID.Calc
                 ReadLine();
 
                 var prevEnd = 0L;
+                var prevEndStr = "";
                 while (true)
                 {
                     var ln = ReadLine();
@@ -159,10 +160,11 @@ namespace FlexID.Calc
                     if (interval < currStep)
                         throw new FormatException("Mesh interval is less than step value.");
                     if (interval % currStep != 0)
-                        throw new FormatException("Mesh interval should be equal to multiple of step value.");
+                        throw new FormatException($"Mesh interval ({columns[0]} - {prevEndStr}) should be equal to multiple of step value {columns[1]}.");
 
                     boundaries.Add(new TimeMeshBoundary(currEnd, currStep));
                     prevEnd = currEnd;
+                    prevEndStr = columns[0];
                 }
                 if (boundaries.Count < 1)
                     throw new FormatException("At least one mesh boundary is required.");
