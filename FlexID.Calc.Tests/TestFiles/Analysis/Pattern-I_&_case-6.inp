@@ -1,0 +1,49 @@
+[title]
+Pattern I & case 6
+
+[parameter]
+OutputDose = false
+OutputDoseRate = false
+OutputRetention = true
+OutputCumulative = false
+
+# Ba-133 Ingestion:Soluble                    9.999999E-9     0.0
+#   1 input             inp      0.0        0     0      0.0        -
+#   2 PatternI          acc    100.0        1     1    100.0        Other
+# 161 case6-I-A         acc      1.0        2     2    100.0        Other
+#                                               162    100.0
+# 162 case6-I-B         acc      0.01       1   161     50.0        Other
+# end
+
+[nuclide]
+# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
+#---------+-------------------+---------------------
+  Ba-133    0.000000E+00
+
+
+[Ba-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+  acc   PatternI              ---
+
+
+  acc   comp.A                ---
+  acc   comp.B                ---
+
+  exc   end                   ---
+
+
+[Ba-133:transfer]
+#-------------+---------------+--------------
+# From        | To            | Transfer rate[/d] or fraction[%]
+#-------------+---------------+--------------
+
+  input         PatternI          100%
+  PatternI      comp.A            100
+
+
+  comp.A        comp.B              1
+  comp.B        end                 0.005
+  comp.B        comp.A              0.005
