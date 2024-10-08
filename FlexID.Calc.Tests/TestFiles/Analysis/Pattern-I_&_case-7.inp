@@ -38,6 +38,6 @@ Pattern I & case 7
   PatternI      comp.A            100
 
 
-  comp.A        comp.B              0.1
-  comp.B        end                 0.000005
-  comp.B        comp.A              0.000005
+  comp.A        comp.B              0.05    # (50% * 0.1)
+  comp.A        end                 0.05    # (50% * 0.1)
+  comp.B        comp.A              0.00001
