@@ -139,31 +139,54 @@ namespace FlexID.Calc
             // 甲状腺を構成する、OIRにおける線源領域の名称リスト。
             var sregionsThyroid = new[] { "Thyroid" };
 
-            // 血液(輸送コンパートメント)を構成する、OIRにおける線源領域の名称リスト。
-            var sregionsBlood = new[] { "Blood" };
-
             foreach (var nuclide in data.Nuclides)
             {
                 var compartmentsAcc = data.Organs
-                    .Where(o => o.Func == OrganFunc.acc && o.Nuclide == nuclide && o.SourceRegion != null);
+                    .Where(o => o.Func == OrganFunc.acc && o.Nuclide == nuclide && o.SourceRegion != null).ToArray();
 
-                nuclide.AtractIndexes = compartmentsAcc
-                    .Where(o => sregionsAtract.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+                var otherIndexes = compartmentsAcc
+                    .Where(o => o.SourceRegion == "Other").Select(o => o.Index).ToArray();
 
-                nuclide.LungsIndexes = compartmentsAcc
-                    .Where(o => sregionsLungs.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+                var bloodIndexes = compartmentsAcc
+                    .Where(o => o.SourceRegion == "Blood").Select(o => o.Index).ToArray();
 
-                nuclide.SkeletonIndexes = compartmentsAcc
-                    .Where(o => sregionsSkeleton.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+                var otherSourceRegions = nuclide.OtherSourceRegions.Select(sr => data.SourceRegions.First(s => s.Name == sr)).ToArray();
+                var massOtherAM = otherSourceRegions.Select(s => s.MaleMass).Sum();
+                var massOtherAF = otherSourceRegions.Select(s => s.FemaleMass).Sum();
+                var massOther = (massOtherAM + massOtherAF) / 2;    // 男女平均
 
-                nuclide.LiverIndexes = compartmentsAcc
-                    .Where(o => sregionsLiver.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+                (int, double)[] GetIndexes(string[] sregions, double bloodFraction)
+                {
+                    // コンパートメントとして明示されている集合コンパートメントの構成要素を得る。
+                    var explicits = compartmentsAcc.Where(o => sregions.Contains(o.SourceRegion)).ToArray();
+                    if (!explicits.Any())   // 構成要素が1つも明示されていない＝集合コンパートメントなしとする。
+                        return Array.Empty<(int, double)>();
 
-                nuclide.ThyroidIndexes = compartmentsAcc
-                    .Where(o => sregionsThyroid.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+                    // 線源領域Otherに含まれる集合コンパートメント構成要素の、Other全体に対する質量比を得る。
+                    var otherFraction = sregions
+                        .Where(sr => nuclide.OtherSourceRegions.Contains(sr) && !explicits.Any(s => s.SourceRegion == sr))
+                        .Select(sr =>
+                        {
+                            var sourceRegion = data.SourceRegions.First(s => s.Name == sr);
+                            var massRateAM = sourceRegion.MaleMass / massOtherAM;
+                            var massRateAF = sourceRegion.FemaleMass / massOtherAF;
+                            var massRate = (massRateAM + massRateAF) / 2;
+                            return massRate;
+                        }).Sum();
 
-                nuclide.BloodIndexes = compartmentsAcc
-                    .Where(o => sregionsBlood.Contains(o.SourceRegion)).Select(o => o.Index).ToArray();
+                    // 明示されたコンパートメントの残留放射能を1.0で、
+                    // 血液コンパートメントの残留放射能をbloodFractionで、
+                    // 線源領域Otherのコンパートメントの残留放射能をotherFractionで、それぞれ加算する。
+                    return explicits.Select(o => (o.Index, 1.0))
+                        .Concat(bloodIndexes.Select(i => (i, bloodFraction)))
+                        .Concat(otherIndexes.Select(i => (i, otherFraction))).ToArray();
+                }
+
+                nuclide.AtractIndexes   /**/= GetIndexes(sregionsAtract,   /**/ 0.07);
+                nuclide.LungsIndexes    /**/= GetIndexes(sregionsLungs,    /**/ 0.125);
+                nuclide.SkeletonIndexes /**/= GetIndexes(sregionsSkeleton, /**/ 0.07);
+                nuclide.LiverIndexes    /**/= GetIndexes(sregionsLiver,    /**/ 0.1);
+                nuclide.ThyroidIndexes  /**/= GetIndexes(sregionsThyroid,  /**/ 0.0006);
             }
         }
 
@@ -320,25 +343,22 @@ namespace FlexID.Calc
                 wsRete[i].Write("  {0:0.00000000E+00}", reteWholeBody);
                 wsCumu[i].Write("  {0:0.00000000E+00}", cumuWholeBody);
 
-                var reteBlood = nuclide.BloodIndexes.Select(oi => Act.OutNow[oi].end).Sum();
-                var cumuBlood = nuclide.BloodIndexes.Select(oi => Act.OutTotalFromIntake[oi]).Sum();
-
-                void WriteOutSum(int[] indexes, double bloodFraction)
+                void WriteOutSum((int index, double Rate)[] indexes)
                 {
                     if (indexes.Length == 0)
                         return;
-                    var rete = indexes.Select(oi => Act.OutNow[oi].end).Sum();
-                    var cumu = indexes.Select(oi => Act.OutTotalFromIntake[oi]).Sum();
+                    var rete = indexes.Select(x => Act.OutNow[x.index].end * x.Rate).Sum();
+                    var cumu = indexes.Select(x => Act.OutTotalFromIntake[x.index] * x.Rate).Sum();
 
-                    wsRete[i].Write("  {0:0.00000000E+00}", rete + reteBlood * bloodFraction);
-                    wsCumu[i].Write("  {0:0.00000000E+00}", cumu + cumuBlood * bloodFraction);
+                    wsRete[i].Write("  {0:0.00000000E+00}", rete);
+                    wsCumu[i].Write("  {0:0.00000000E+00}", cumu);
                 }
 
-                WriteOutSum(nuclide.AtractIndexes, 0.07);
-                WriteOutSum(nuclide.LungsIndexes, 0.125);
-                WriteOutSum(nuclide.SkeletonIndexes, 0.07);
-                WriteOutSum(nuclide.LiverIndexes, 0.1);
-                WriteOutSum(nuclide.ThyroidIndexes, 0.0006);
+                WriteOutSum(nuclide.AtractIndexes);
+                WriteOutSum(nuclide.LungsIndexes);
+                WriteOutSum(nuclide.SkeletonIndexes);
+                WriteOutSum(nuclide.LiverIndexes);
+                WriteOutSum(nuclide.ThyroidIndexes);
             }
 
             foreach (var organ in data.Organs)

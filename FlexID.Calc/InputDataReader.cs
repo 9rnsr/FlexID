@@ -152,34 +152,29 @@ namespace FlexID.Calc
         public string[] OtherSourceRegions;
 
         /// <summary>
-        /// 消化管に対応するコンパートメント群のインデックス。
+        /// 消化管に対応するコンパートメント群のインデックスと寄与率。
         /// </summary>
-        public int[] AtractIndexes = Array.Empty<int>();
+        public (int Index, double Rate)[] AtractIndexes = Array.Empty<(int, double)>();
 
         /// <summary>
-        /// 肺に対応するコンパートメント群のインデックス。
+        /// 肺に対応するコンパートメント群のインデックスと寄与率。
         /// </summary>
-        public int[] LungsIndexes = Array.Empty<int>();
+        public (int Index, double Rate)[] LungsIndexes = Array.Empty<(int, double)>();
 
         /// <summary>
-        /// 骨格に対応するコンパートメント群のインデックス。
+        /// 骨格に対応するコンパートメント群のインデックスと寄与率。
         /// </summary>
-        public int[] SkeletonIndexes = Array.Empty<int>();
+        public (int Index, double Rate)[] SkeletonIndexes = Array.Empty<(int, double)>();
 
         /// <summary>
-        /// 肝臓に対応するコンパートメント群のインデックス。
+        /// 肝臓に対応するコンパートメント群のインデックスと寄与率。
         /// </summary>
-        public int[] LiverIndexes = Array.Empty<int>();
+        public (int Index, double Rate)[] LiverIndexes = Array.Empty<(int, double)>();
 
         /// <summary>
-        /// 甲状腺に対応するコンパートメント群のインデックス。
+        /// 甲状腺に対応するコンパートメント群のインデックスと寄与率。
         /// </summary>
-        public int[] ThyroidIndexes = Array.Empty<int>();
-
-        /// <summary>
-        /// 血液(輸送コンパートメント)に対応するコンパートメント群のインデックス。
-        /// </summary>
-        public int[] BloodIndexes = Array.Empty<int>();
+        public (int Index, double Rate)[] ThyroidIndexes = Array.Empty<(int, double)>();
 
         /// <summary>
         /// パラメータ定義。
