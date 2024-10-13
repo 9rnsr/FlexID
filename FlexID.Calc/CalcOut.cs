@@ -155,7 +155,7 @@ namespace FlexID.Calc
                 var massOtherAF = otherSourceRegions.Select(s => s.FemaleMass).Sum();
                 var massOther = (massOtherAM + massOtherAF) / 2;    // 男女平均
 
-                (int, double)[] GetIndexes(string[] sregions, double bloodFraction)
+                (int, double)[] GetIndexes(string[] sregions, double bloodFraction, bool considerOther = true)
                 {
                     // コンパートメントとして明示されている集合コンパートメントの構成要素を得る。
                     var explicits = compartmentsAcc.Where(o => sregions.Contains(o.SourceRegion)).ToArray();
@@ -177,14 +177,16 @@ namespace FlexID.Calc
                     // 明示されたコンパートメントの残留放射能を1.0で、
                     // 血液コンパートメントの残留放射能をbloodFractionで、
                     // 線源領域Otherのコンパートメントの残留放射能をotherFractionで、それぞれ加算する。
-                    return explicits.Select(o => (o.Index, 1.0))
-                        .Concat(bloodIndexes.Select(i => (i, bloodFraction)))
-                        .Concat(otherIndexes.Select(i => (i, otherFraction))).ToArray();
+                    var indexes = explicits.Select(o => (o.Index, 1.0))
+                        .Concat(bloodIndexes.Select(i => (i, bloodFraction)));
+                    if (considerOther)
+                        indexes = indexes.Concat(otherIndexes.Select(i => (i, otherFraction)));
+                    return indexes.ToArray();
                 }
 
                 nuclide.AtractIndexes   /**/= GetIndexes(sregionsAtract,   /**/ 0.07);
                 nuclide.LungsIndexes    /**/= GetIndexes(sregionsLungs,    /**/ 0.125);
-                nuclide.SkeletonIndexes /**/= GetIndexes(sregionsSkeleton, /**/ 0.07);
+                nuclide.SkeletonIndexes /**/= GetIndexes(sregionsSkeleton, /**/ 0.07, considerOther: false);
                 nuclide.LiverIndexes    /**/= GetIndexes(sregionsLiver,    /**/ 0.1);
                 nuclide.ThyroidIndexes  /**/= GetIndexes(sregionsThyroid,  /**/ 0.0006);
             }
