@@ -11,10 +11,9 @@ namespace FlexID.Calc.Tests
             //var expectFile = TestFiles.Combine("SAFRead", "Ca-45_RadExpected.txt");
             //var expectLines = File.ReadAllLines(expectFile);
 
-            /*var actuals = */
-            IndexDataReader.ReadNDX();
-            //foreach (var actual in actuals)
-            //{ }
+            foreach (var actual in IndexDataReader.ReadNDX())
+            {
+            }
 
             //CollectionAssert.AreEqual(expectLines, actualLines);
 
