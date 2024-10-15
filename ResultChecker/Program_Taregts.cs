@@ -80,6 +80,12 @@ namespace ResultChecker
             yield return ("I-129_inh-TypeM",            /**/"Inhalation, Aerosols Type M, fA=0.2, 5 µm");
             yield return ("I-129_inh-TypeS",            /**/"Inhalation, Aerosols Type S, fA=1E-2, 5 µm");
 
+            yield return ("Mo-93_ing-Other",            /**/"Ingestion, All other forms, fA=0.9");
+            yield return ("Mo-93_ing-Sulphide",         /**/"Ingestion, Sulphide, fA=5E-2");
+            yield return ("Mo-93_inh-TypeF",            /**/"Inhalation, Aerosols Type F, Chloride and ammonium molybdate, fA=0.9, 5 µm");
+            yield return ("Mo-93_inh-TypeM",            /**/"Inhalation, Aerosols Type M, Oxide and all unspecified forms, fA=0.18, 5 µm");
+            yield return ("Mo-93_inh-TypeS",            /**/"Inhalation, Aerosols Type S, fA=9E-3, 5 µm");
+
             yield return ("Pu-238_ing-Insoluble",       /**/"Ingestion, Insoluble forms: oxides, fA=1E-5");
             yield return ("Pu-238_ing-Unidentified",    /**/"Ingestion, Soluble forms: nitrate, chloride, bicarbonates, all other unidentified chemical forms, fA=5E-4");
             yield return ("Pu-238_inh-TypeF",           /**/"Inhalation, Aerosols Type F, fA=5E-4, 5 µm");
