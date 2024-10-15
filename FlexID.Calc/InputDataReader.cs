@@ -491,6 +491,8 @@ namespace FlexID.Calc
                 // 1番目が親核種、2番目以降が子孫核種になる。
                 var isProgeny = false;
 
+                var indexData = IndexDataReader.ReadNDX().ToDictionary(x => x.Nuclide, x => x);
+
                 while (true)
                 {
                     nextLine = GetNextLine();
@@ -502,18 +504,20 @@ namespace FlexID.Calc
                     // 核種の定義行を読み込む。
                     var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (values.Length != 3)
-                        throw Program.Error($"Line {lineNum}: Nuclide definition should have 3 values.");
+                    //if (values.Length != 3)
+                    //    throw Program.Error($"Line {lineNum}: Nuclide definition should have 3 values.");
+                    //
+                    //if (!double.TryParse(values[1], out var lambda))
+                    //    throw Program.Error($"Line {lineNum}: Cannot get nuclide Lambda.");
+                    //if (lambda < 0)
+                    //    throw Program.Error($"Line {lineNum}: Nuclide Lambda should be positive.");
+                    //
+                    //if (!double.TryParse(values[2], out var decayRate))
+                    //    throw Program.Error($"Line {lineNum}: Cannot get nuclide DecayRate.");
+                    //if (decayRate < 0)
+                    //    throw Program.Error($"Line {lineNum}: Nuclide DecayRate should be positive.");
 
-                    if (!double.TryParse(values[1], out var lambda))
-                        throw Program.Error($"Line {lineNum}: Cannot get nuclide Lambda.");
-                    if (lambda < 0)
-                        throw Program.Error($"Line {lineNum}: Nuclide Lambda should be positive.");
-
-                    if (!double.TryParse(values[2], out var decayRate))
-                        throw Program.Error($"Line {lineNum}: Cannot get nuclide DecayRate.");
-                    if (decayRate < 0)
-                        throw Program.Error($"Line {lineNum}: Nuclide DecayRate should be positive.");
+                    indexData.Try
 
                     var nuclide = new NuclideData
                     {
