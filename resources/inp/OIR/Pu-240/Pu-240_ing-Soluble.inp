@@ -1,13 +1,13 @@
 [title]
-Pu-239 Ingestion:Unidentified
+Pu-240 Ingestion:Soluble
 
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
 #---------+-------------------+---------------------
-  Pu-239    7.876538E-08        0.0
+  Pu-240    2.893104E-07        0.0
 
 
-[Pu-239:compartment]
+[Pu-240:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -42,7 +42,7 @@ Pu-239 Ingestion:Unidentified
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-[Pu-239:transfer]
+[Pu-240:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
