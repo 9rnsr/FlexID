@@ -33,7 +33,7 @@ namespace ResultChecker
                 }
             }
 
-            var targets = GetTargets().Where(t => patterns?.Any(pattern => pattern.IsMatch(t)) ?? true).ToArray();
+            var inputs = GetInputs().Where(inp => patterns?.Any(pattern => pattern.IsMatch(Path.GetFileNameWithoutExtension(inp))) ?? true).ToArray();
             var results = new ConcurrentBag<Result>();
 
             var parallelOptions = new ParallelOptions
@@ -42,11 +42,12 @@ namespace ResultChecker
             };
 
             // 並列に計算を実施する。
-            Parallel.ForEach(targets, parallelOptions, target =>
+            Parallel.ForEach(inputs, parallelOptions, inputPath =>
             {
+                var target = Path.GetFileNameWithoutExtension(inputPath);
                 try
                 {
-                    var result = CalcAndSummary(target);
+                    var result = CalcAndSummary(target, inputPath);
                     results.Add(result);
                     Console.WriteLine($"done: {target}");
                 }
@@ -86,10 +87,9 @@ namespace ResultChecker
             public (double Min, double Max) FractionsThyroid;
         }
 
-        static Result CalcAndSummary(string target)
+        static Result CalcAndSummary(string target, string inputPath)
         {
             var nuclide = target.Split('_')[0];
-            var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
 
             var outputDir = "out";
             Directory.CreateDirectory(outputDir);
