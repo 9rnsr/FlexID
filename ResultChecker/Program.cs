@@ -27,13 +27,19 @@ namespace ResultChecker
                     catch
                     {
                         var nth = i == 0 ? "1st" : i == 1 ? "2nd" : $"{i + 1}th";
-                        Console.WriteLine($"{nth} target pattern is not correct.");
+                        Console.Error.WriteLine($"{nth} target pattern is not correct.");
                         return -1;
                     }
                 }
             }
 
             var inputs = GetInputs().Where(inp => patterns?.Any(pattern => pattern.IsMatch(Path.GetFileNameWithoutExtension(inp))) ?? true).ToArray();
+            if (inputs.Length == 0)
+            {
+                Console.Error.WriteLine($"error: there is no target inputs.");
+                return -1;
+            }
+
             var results = new ConcurrentBag<Result>();
 
             var parallelOptions = new ParallelOptions
@@ -55,7 +61,7 @@ namespace ResultChecker
                 {
                     // 何らかのエラーが発生した場合。
                     results.Add(new Result { Target = target, HasErrors = true });
-                    Console.WriteLine($"error: {target}, {ex.Message}");
+                    Console.Error.WriteLine($"error: {target}, {ex.Message}");
                 }
             });
 
