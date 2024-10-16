@@ -33,31 +33,32 @@ namespace ResultChecker
                 }
             }
 
-            var targets = GetTargets().Where(t => patterns?.Any(pattern => pattern.IsMatch(t.Target)) ?? true).ToArray();
+            var targets = GetTargets().Where(t => patterns?.Any(pattern => pattern.IsMatch(t)) ?? true).ToArray();
             var results = new ConcurrentBag<Result>();
 
-            // 並列に計算を実施する。
-            Parallel.ForEach(targets, x =>
+            var parallelOptions = new ParallelOptions
             {
-                var (target, material) = x;
+                MaxDegreeOfParallelism = -1,
+            };
 
+            // 並列に計算を実施する。
+            Parallel.ForEach(targets, parallelOptions, target =>
+            {
                 try
                 {
-                    var result = CalcAndSummary(target, material);
+                    var result = CalcAndSummary(target);
                     results.Add(result);
                     Console.WriteLine($"done: {target}");
                 }
-                catch
+                catch (Exception ex)
                 {
                     // 何らかのエラーが発生した場合。
                     results.Add(new Result { Target = target, HasErrors = true });
-                    Console.WriteLine($"error: {target}");
+                    Console.WriteLine($"error: {target}, {ex.Message}");
                 }
             });
 
             var sortedResults = results.OrderBy(r => r.Target).ToArray();
-
-            //WriteSummaryCsv(sortedResults);
 
             WriteSummaryExcel("summary.xlsx", sortedResults);
 
@@ -68,7 +69,6 @@ namespace ResultChecker
         struct Result
         {
             public string Target;
-            public string Material;
 
             public bool HasErrors;
 
@@ -86,7 +86,7 @@ namespace ResultChecker
             public (double Min, double Max) FractionsThyroid;
         }
 
-        static Result CalcAndSummary(string target, string material)
+        static Result CalcAndSummary(string target)
         {
             var nuclide = target.Split('_')[0];
             var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
@@ -114,19 +114,12 @@ namespace ResultChecker
 
             main.Main();
 
-            var result = new Result() { Target = target, Material = material };
-
-            // 50年預託実行線量の比較。
-            var actualDose = main.WholeBodyEffectiveDose;
-            var expectDose = ReadDosePerIntake(target, material);
-            result.ActualEffectiveDose = $"{actualDose:0.000000E+00}";
-            result.ExpectEffectiveDose = expectDose;
-            result.FractionEffectiveDose = actualDose / double.Parse(expectDose);
+            var result = new Result() { Target = target };
 
             // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
             var actualActs = GetResultRetentions(target);
-            var expectActs = GetExpectRetentions(target, material);
+            var expectActs = GetExpectRetentions(target, out var mat);
             var fractionsWholeBody /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsUrine     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsFaeces    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
@@ -211,6 +204,13 @@ namespace ResultChecker
             result.FractionsLiver     /**/= fractionsLiver;
             result.FractionsThyroid   /**/= fractionsThyroid;
 
+            // 50年預託実行線量の比較。
+            var actualDose = main.WholeBodyEffectiveDose;
+            var expectDose = ReadDosePerIntake(target, mat);
+            result.ActualEffectiveDose = $"{actualDose:0.000000E+00}";
+            result.ExpectEffectiveDose = expectDose;
+            result.FractionEffectiveDose = actualDose / double.Parse(expectDose);
+
             return result;
         }
 
@@ -220,14 +220,14 @@ namespace ResultChecker
         /// 指定のmaterialに対応する数値を取得する。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="material"></param>
+        /// <param name="mat"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static string ReadDosePerIntake(string target, string material)
+        static string ReadDosePerIntake(string target, string mat)
         {
             var nuclide = target.Split('_')[0];
             var filePath = $"Expect/{nuclide}.dat";
-            var (routeOfIntake, _, _) = DecomposeMaterial(material);
+            var (routeOfIntake, _, _) = DecomposeMaterial(mat);
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, Encoding.UTF8))
@@ -252,7 +252,7 @@ namespace ResultChecker
                 {
                     columns = line.Split('\t');
 
-                    if (columns[0] == material ||
+                    if (columns[0] == mat ||
                         columns[0] == routeOfIntake)    // Injectionの場合
                     {
                         var dose = columns[1];
@@ -360,12 +360,12 @@ namespace ResultChecker
         /// <param name="mat"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static List<Retention> GetExpectRetentions(string target, string mat)
+        static List<Retention> GetExpectRetentions(string target, out string mat)
         {
             var nuclide = target.Split('_')[0];
             var filePath = $"Expect/{target}.dat";
 
-            var (routeOfIntake, material, particleSize) = DecomposeMaterial(mat);
+            mat = "";
 
             var retentions = new List<Retention>();
 
@@ -379,21 +379,19 @@ namespace ResultChecker
                 if (columns[1] != nuclide)
                     throw new InvalidDataException();
 
-                // 対象の摂取形態かどうか確認する。
-                columns = reader.ReadLine().Split('\t');
-                if (columns[1] != routeOfIntake)
-                    throw new InvalidDataException();
+                // 対象の摂取形態。
+                var routeOfIntake = reader.ReadLine().Split('\t')[1];
 
-                // 対象の化学形態かどうか確認する。
-                columns = reader.ReadLine().Split('\t');
-                if (columns[1] != material &&
-                    columns[1] != $"{routeOfIntake}, {material}")   // Injectionの場合
-                    throw new InvalidDataException();
+                // 対象の化学形態。
+                var chemicalForm = reader.ReadLine().Split('\t')[1];
 
-                // 対象の粒子サイズかどうか確認する。
-                columns = reader.ReadLine().Split('\t');
-                if (columns[1] != particleSize)
-                    throw new InvalidDataException();
+                // 対象の粒子サイズ。
+                var particleSize = reader.ReadLine().Split('\t')[1];
+
+                // 預託線量の期待値を引くための文字列を組み立てる。
+                mat = $"{routeOfIntake}, {chemicalForm}";
+                if (particleSize != "-")
+                    mat += $", {particleSize} µm";
 
                 reader.ReadLine();  // (empty line)
 
