@@ -1,6 +1,12 @@
 [title]
 Sr-90 Ingestion:Other
 
+[parameter]
+OutputDose = false
+OutputDoseRate = false
+OutputRetention = false
+OutputCumulative = false
+
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
 #---------+-------------------+---------------------

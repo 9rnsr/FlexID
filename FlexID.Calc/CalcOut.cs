@@ -448,10 +448,10 @@ namespace FlexID.Calc
             foreach (var w in wsRete) w.Dispose();
             foreach (var w in wsCumu) w.Dispose();
 
-            // 残留/積算放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
             var nuclideCount = data.Nuclides.Count;
-            if (nuclideCount >= 2)
+            if (nuclideCount >= 2 && data.OutputRetention)
             {
+                // 残留放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
                 using (var wRete = new StreamWriter(RetentionPath, append: true))
                 {
                     for (int n = 1; n < nuclideCount; n++)
@@ -464,7 +464,10 @@ namespace FlexID.Calc
                         File.Delete(progenyRetentionFile);
                     }
                 }
-
+            }
+            if (nuclideCount >= 2 && data.OutputCumulative)
+            {
+                // 積算放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
                 using (var wCumu = new StreamWriter(CumulativePath, append: true))
                 {
                     for (int n = 1; n < nuclideCount; n++)
