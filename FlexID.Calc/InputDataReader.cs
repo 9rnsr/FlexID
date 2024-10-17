@@ -921,24 +921,14 @@ namespace FlexID.Calc
                 // TODO; excを除く、流出がないコンパートメントがある場合はこれをエラーにする。
             }
 
+            bool CheckOutput(string name) =>
+                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
+
             // 出力ファイルの設定。
-            {
-                bool CheckOutput(string name) =>
-                    data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
-
-                var outDose = CheckOutput("OutputDose");
-                var outDoseRate = CheckOutput("OutputDoseRate");
-                var outRetention = CheckOutput("OutputRetention");
-                var outCumulative = CheckOutput("OutputCumulative");
-
-                if (!data.Organs.Where(o => o.Func == OrganFunc.acc && o.SourceRegion != null).Any())
-                    outDose = outDoseRate = false;
-
-                data.OutputDose = outDose;
-                data.OutputDoseRate = outDoseRate;
-                data.OutputRetention = outRetention;
-                data.OutputCumulative = outCumulative;
-            }
+            data.OutputDose = CheckOutput("OutputDose");
+            data.OutputDoseRate = CheckOutput("OutputDoseRate");
+            data.OutputRetention = CheckOutput("OutputRetention");
+            data.OutputCumulative = CheckOutput("OutputCumulative");
 
             return data;
         }
