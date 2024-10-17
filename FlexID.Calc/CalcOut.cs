@@ -53,12 +53,12 @@ namespace FlexID.Calc
             CumulativePath = outputPath + "_Cumulative.out";
 
             // 預託線量の出力ファイルを用意する。
-            wDose = new StreamWriter(DosePath, false, Encoding.UTF8);
-            wRate = new StreamWriter(DoseRatePath, false, Encoding.UTF8);
+            wDose = data.OutputDose ? new StreamWriter(DosePath, false, Encoding.UTF8) : StreamWriter.Null;
+            wRate = data.OutputDoseRate ? new StreamWriter(DoseRatePath, false, Encoding.UTF8) : StreamWriter.Null;
 
             // 残留放射能の出力ファイルを用意する。
-            wsRete = CreateWriters(RetentionPath).ToArray();
-            wsCumu = CreateWriters(CumulativePath).ToArray();
+            wsRete = data.OutputRetention ? CreateWriters(RetentionPath).ToArray() : Enumerable.Repeat(StreamWriter.Null, data.Nuclides.Count).ToArray();
+            wsCumu = data.OutputCumulative ? CreateWriters(CumulativePath).ToArray() : Enumerable.Repeat(StreamWriter.Null, data.Nuclides.Count).ToArray();
 
             IEnumerable<StreamWriter> CreateWriters(string basePath)
             {
@@ -448,7 +448,7 @@ namespace FlexID.Calc
             foreach (var w in wsRete) w.Dispose();
             foreach (var w in wsCumu) w.Dispose();
 
-            // 預託線量について、子孫核種の出力ファイルの内容を親核種の出力ファイルに追記していく。
+            // 残留/積算放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
             var nuclideCount = data.Nuclides.Count;
             if (nuclideCount >= 2)
             {

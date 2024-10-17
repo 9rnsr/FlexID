@@ -241,9 +241,18 @@ namespace FlexID.Calc
         /// </summary>
         public static readonly string[] ParameterNames = new[]
         {
+            "OutputDose",
+            "OutputDoseRate",
+            "OutputRetention",
+            "OutputCumulative",
             "ExcludeOtherSourceRegions",
             "IncludeOtherSourceRegions"
         };
+
+        public bool OutputDose { get; set; } = true;
+        public bool OutputDoseRate { get; set; } = true;
+        public bool OutputRetention { get; set; } = true;
+        public bool OutputCumulative { get; set; } = true;
     }
 
     /// <summary>
@@ -910,6 +919,25 @@ namespace FlexID.Calc
 
                 // TODO; inpを除く、流入がないコンパートメントがある場合はこれをエラーにする。
                 // TODO; excを除く、流出がないコンパートメントがある場合はこれをエラーにする。
+            }
+
+            // 出力ファイルの設定。
+            {
+                bool CheckOutput(string name) =>
+                    data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
+
+                var outDose = CheckOutput("OutputDose");
+                var outDoseRate = CheckOutput("OutputDoseRate");
+                var outRetention = CheckOutput("OutputRetention");
+                var outCumulative = CheckOutput("OutputCumulative");
+
+                if (!data.Organs.Where(o => o.Func == OrganFunc.acc && o.SourceRegion != null).Any())
+                    outDose = outDoseRate = false;
+
+                data.OutputDose = outDose;
+                data.OutputDoseRate = outDoseRate;
+                data.OutputRetention = outRetention;
+                data.OutputCumulative = outCumulative;
             }
 
             return data;

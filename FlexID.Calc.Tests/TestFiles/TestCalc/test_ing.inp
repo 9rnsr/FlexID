@@ -1,6 +1,12 @@
 [title]
 test1
 
+[parameter]
+# OutputDose = false
+# OutputDoseRate = false
+OutputRetention = false
+OutputCumulative = false
+
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
 #---------+-------------------+---------------------
