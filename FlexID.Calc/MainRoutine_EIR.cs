@@ -16,11 +16,6 @@ namespace FlexID.Calc
         public string OutputPath { get; set; }
 
         /// <summary>
-        /// 核種情報ファイルパス。
-        /// </summary>
-        public string InputPath { get; set; }
-
-        /// <summary>
         /// 計算時間メッシュファイルパス。
         /// </summary>
         public string CalcTimeMeshPath { get; set; }
@@ -34,11 +29,6 @@ namespace FlexID.Calc
         /// 預託期間。
         /// </summary>
         public string CommitmentPeriod { get; set; }
-
-        /// <summary>
-        /// 子孫核種の計算を行うかどうか。
-        /// </summary>
-        public bool CalcProgeny { get; set; }
 
         /// <summary>
         /// 被ばく時の年齢。
@@ -57,14 +47,12 @@ namespace FlexID.Calc
         public const int Age15year = 15 * 365;
         public const int AgeAdult = 25 * 365;   // TODO: 現在はSrしか計算しないため25歳で決め打ち
 
-        public void Main()
+        public void Main(List<InputData> dataList)
         {
             var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
             var outTimeMesh = new TimeMesh(OutTimeMeshPath);
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
-
-            var dataList = new InputDataReader(InputPath, CalcProgeny).Read_EIR();
 
             using (CalcOut = new CalcOut(dataList[0], OutputPath))
             {
