@@ -89,6 +89,24 @@ Ba-133 Inhalation:Type-S
   input                   ALV-S                     5.2668%     # = 99%          of  5.32%
   input                   Environment              18.04%       # = 100% - 81.96%
 
+# input                   ET1-F                 (     $f_r          * 47.94%)
+# input                   ET2-F                 (     $f_r  * 99.8% * 25.82%)
+# input                   ETseq-F               (     $f_r  *  0.2% * 25.82%)
+# input                   BB-F                  (     $f_r  * 99.8% *  1.78%)
+# input                   BBseq-F               (     $f_r  *  0.2% *  1.78%)
+# input                   bb-F                  (     $f_r  * 99.8% *  1.10%)
+# input                   bbseq-F               (     $f_r  *  0.2% *  1.10%)
+# input                   ALV-F                 (     $f_r          *  5.32%)
+# input                   ET1-S                 ((1 - $f_r)         * 47.94%)
+# input                   ET2-S                 ((1 - $f_r) * 99.8% * 25.82%)
+# input                   ETseq-S               ((1 - $f_r) *  0.2% * 25.82%)
+# input                   BB-S                  ((1 - $f_r) * 99.8% *  1.78%)
+# input                   BBseq-S               ((1 - $f_r) *  0.2% *  1.78%)
+# input                   bb-S                  ((1 - $f_r) * 99.8% *  1.10%)
+# input                   bbseq-S               ((1 - $f_r) *  0.2% *  1.10%)
+# input                   ALV-S                 ((1 - $f_r)         *  5.32%)
+# input                   Environment           (              100% - 81.96%)
+
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
   ALV-F                   bb-F                      0.002
@@ -148,9 +166,8 @@ Ba-133 Inhalation:Type-S
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
-# ICRP Publ.137 p.168 Table 7.2
-#   fA = 0.002   (Inhaled particulate materials, Absorption type S)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.002 * 6 / (1 - 0.002) = 1.202404809619238E-2
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+# SI-con                  Plasma                ($fA * 6 / (1 - $fA))
   SI-con                  Plasma                    1.202404809619238E-2
 
 # ICRP Publ.137 p.175 Table 7.3
