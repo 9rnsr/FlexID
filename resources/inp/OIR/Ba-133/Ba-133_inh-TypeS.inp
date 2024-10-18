@@ -19,6 +19,7 @@ Ba-133 Inhalation:Type-S
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -42,6 +43,7 @@ Ba-133 Inhalation:Type-S
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
   acc   Plasma                Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -73,6 +75,7 @@ Ba-133 Inhalation:Type-S
   input                   bb-F                      0.010978%   # =  1% of 99.8% of  1.10%
   input                   bbseq-F                   0.000022%   # =  1% of  0.2% of  1.10%
   input                   ALV-F                     0.0532%     # =  1%          of  5.32%
+
   input                   ET1-S                    47.4606%     # = 99%          of 47.94%
   input                   ET2-S                    25.5106764%  # = 99% of 99.8% of 25.82%
   input                   ETseq-S                   0.0511236%  # = 99% of  0.2% of 25.82%
@@ -81,6 +84,7 @@ Ba-133 Inhalation:Type-S
   input                   bb-S                      1.086822%   # = 99% of 99.8% of  1.10%
   input                   bbseq-S                   0.002178%   # = 99% of  0.2% of  1.10%
   input                   ALV-S                     5.2668%     # = 99%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
