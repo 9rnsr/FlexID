@@ -253,8 +253,17 @@ namespace FlexID.Calc
         public static readonly string[] ParameterNames = new[]
         {
             "ExcludeOtherSourceRegions",
-            "IncludeOtherSourceRegions"
+            "IncludeOtherSourceRegions",
+            "OutputDose",
+            "OutputDoseRate",
+            "OutputRetention",
+            "OutputCumulative",
         };
+
+        public bool OutputDose { get; set; } = true;
+        public bool OutputDoseRate { get; set; } = true;
+        public bool OutputRetention { get; set; } = true;
+        public bool OutputCumulative { get; set; } = true;
     }
 
     /// <summary>
@@ -946,6 +955,15 @@ namespace FlexID.Calc
             }
             // 初期配分を終えた後は流入なし。
             input.IsZeroInflow = true;
+
+            bool CheckOutput(string name) =>
+                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
+
+            // 出力ファイルの設定。
+            data.OutputDose = CheckOutput("OutputDose");
+            data.OutputDoseRate = CheckOutput("OutputDoseRate");
+            data.OutputRetention = CheckOutput("OutputRetention");
+            data.OutputCumulative = CheckOutput("OutputCumulative");
 
             return data;
         }
