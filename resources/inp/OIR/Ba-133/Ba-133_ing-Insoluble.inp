@@ -12,6 +12,7 @@ Ba-133 Ingestion:Insoluble
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -21,6 +22,9 @@ Ba-133 Ingestion:Insoluble
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Plasma                Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -31,17 +35,16 @@ Ba-133 Ingestion:Insoluble
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Ba-133:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.137 p.168 Table 7.2
-  $fA = 1E-4    # Ingested materials, Insoluble forms
+# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Insoluble forms
+  $fA = 1E-4
 
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -54,6 +57,9 @@ Ba-133 Ingestion:Insoluble
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.168 Table 7.2
 #   fA = 1E-4   (Ingested materials, Insoluble forms)
@@ -81,6 +87,3 @@ Ba-133 Ingestion:Insoluble
   Exch-C-bone-V           Noch-C-bone-V             0.0042
   Noch-C-bone-V           Plasma                    0.0000821
   Noch-T-bone-V           Plasma                    0.000493
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

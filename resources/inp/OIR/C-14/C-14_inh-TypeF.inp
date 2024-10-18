@@ -12,6 +12,7 @@ C-14 Inhalation:Type-F
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -19,6 +20,9 @@ C-14 Inhalation:Type-F
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -31,6 +35,7 @@ C-14 Inhalation:Type-F
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
   exc   Environment           ---
+
   acc   Blood0                Blood         # Generic model
   acc   Blood1                Blood         # CO2 model
   acc   Blood2                Blood         # CO2 model
@@ -46,18 +51,20 @@ C-14 Inhalation:Type-F
   acc   T-bone-V              T-bone-V
   exc   Exhalation            ---
   exc   Excreta(skin)         ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [C-14:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 100
+  $ss =   0
+  $fA = 0.99 # ≒1
+
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
-# ICRP Publ.134 p.53 Table 3.3
-#     f_r = 1 (100%)
   input                   ET1-F                    47.94%       # =          47.94%
   input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
   input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
@@ -82,18 +89,16 @@ C-14 Inhalation:Type-F
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
 
-# ICRP Publ.134 p.53 Table 3.3
-#   s_r[/d] = 100  (Inhaled particulate materials, Absorption type F)
-  ALV-F                   Blood0                  100
-  INT-F                   Blood0                  100
-  bb-F                    Blood0                  100
-  bbseq-F                 Blood0                  100
-  BB-F                    Blood0                  100
-  BBseq-F                 Blood0                  100
-  ET2-F                   Blood0                  100
-  ETseq-F                 Blood0                  100
-  LNET-F                  Blood0                  100
-  LNTH-F                  Blood0                  100
+  ALV-F                   Blood0                $sr
+  INT-F                   Blood0                $sr
+  bb-F                    Blood0                $sr
+  bbseq-F                 Blood0                $sr
+  BB-F                    Blood0                $sr
+  BBseq-F                 Blood0                $sr
+  ET2-F                   Blood0                $sr
+  ETseq-F                 Blood0                $sr
+  LNET-F                  Blood0                $sr
+  LNTH-F                  Blood0                $sr
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oesophagus-S            St-con                 2160
@@ -102,6 +107,9 @@ C-14 Inhalation:Type-F
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.53 Table 3.3
 #   fA = 1≒0.99   (Inhaled particulate materials, Absorption type F)
@@ -142,6 +150,3 @@ C-14 Inhalation:Type-F
   Sys-Tis(short)          Blood0                    0.0924
   Sys-Tis(short)          RC-con                    0.0693
   Sys-Tis(long)           Blood1                    0.0099
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

@@ -12,6 +12,7 @@ C-14 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -21,6 +22,9 @@ C-14 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood0                Blood         # Generic model
   acc   Blood1                Blood         # CO2 model
   acc   Blood2                Blood         # CO2 model
@@ -36,14 +40,16 @@ C-14 Ingestion
   acc   T-bone-V              T-bone-V
   exc   Exhalation            ---
   exc   Excreta(skin)         ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [C-14:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.53 Table 3.3 / Ingested materials, All chemical forms
+  $fA = 0.99 # ≒1
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote

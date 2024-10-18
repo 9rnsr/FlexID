@@ -20,6 +20,8 @@ Ba-133 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -56,24 +58,19 @@ Ba-133 Inhalation:Type-M
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
 
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
 [Ba-133:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.137 p.168 Table 7.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fA = 0.04
+
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
-# ICRP Publ.137 p.168 Table 7.2
-  $f_r = 0.2        # 20%
-
-  $s_r = 3          # Inhaled particulate materials, Absorption type M
-  $s_s = 0.005      # Inhaled particulate materials, Absorption type M
-
-  $fA = 0.04        # Inhaled particulate materials, Absorption type M
-
   input                   ET1-F                     9.588%      # = 20%          of 47.94%
   input                   ET2-F                     5.153672%   # = 20% of 99.8% of 25.82%
   input                   ETseq-F                   0.010328%   # = 20% of  0.2% of 25.82%
@@ -118,27 +115,27 @@ Ba-133 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Plasma                $s_r
-  INT-F                   Plasma                $s_r
-  bb-F                    Plasma                $s_r
-  bbseq-F                 Plasma                $s_r
-  BB-F                    Plasma                $s_r
-  BBseq-F                 Plasma                $s_r
-  ET2-F                   Plasma                $s_r
-  ETseq-F                 Plasma                $s_r
-  LNET-F                  Plasma                $s_r
-  LNTH-F                  Plasma                $s_r
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
 
-  ALV-S                   Plasma                $s_s
-  INT-S                   Plasma                $s_s
-  bb-S                    Plasma                $s_s
-  bbseq-S                 Plasma                $s_s
-  BB-S                    Plasma                $s_s
-  BBseq-S                 Plasma                $s_s
-  ET2-S                   Plasma                $s_s
-  ETseq-S                 Plasma                $s_s
-  LNET-S                  Plasma                $s_s
-  LNTH-S                  Plasma                $s_s
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oesophagus-S            St-con                 2160
@@ -147,6 +144,9 @@ Ba-133 Inhalation:Type-M
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.168 Table 7.2
 #   fA = 0.04   (Inhaled particulate materials, Absorption type F)
@@ -174,6 +174,3 @@ Ba-133 Inhalation:Type-M
   Exch-C-bone-V           Noch-C-bone-V             0.0042
   Noch-C-bone-V           Plasma                    0.0000821
   Noch-T-bone-V           Plasma                    0.000493
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
