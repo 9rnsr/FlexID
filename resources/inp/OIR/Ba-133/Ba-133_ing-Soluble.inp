@@ -12,6 +12,7 @@ Ba-133 Ingestion:Soluble
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -23,6 +24,7 @@ Ba-133 Ingestion:Soluble
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   Plasma                Blood
   acc   ST0                   Other
   acc   ST1                   Other

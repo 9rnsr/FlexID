@@ -12,6 +12,7 @@ Tc-99 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
@@ -29,6 +30,7 @@ Tc-99 Ingestion
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   Blood                 Blood
   acc   Liver1                Liver
   acc   Liver2                Liver

@@ -12,20 +12,7 @@ I-129 Inhalation:Type-S
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   OralcavityRe          O-cavity
-  acc   Oesophagus-s          Oesophag-s
-  acc   Oesophagus-sRe        Oesophag-s
-  acc   St-wall               St-wall
-  acc   St-con                St-cont
-  acc   St-conRe              St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -49,6 +36,22 @@ I-129 Inhalation:Type-S
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   Liver1                Liver

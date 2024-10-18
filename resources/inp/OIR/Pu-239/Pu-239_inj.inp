@@ -12,6 +12,7 @@ Pu-239 Injection
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
@@ -19,6 +20,7 @@ Pu-239 Injection
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   Blood0                Blood
   acc   Blood1                Blood
   acc   Blood2                Blood

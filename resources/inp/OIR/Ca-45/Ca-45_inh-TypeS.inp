@@ -12,15 +12,7 @@ Ca-45 Inhalation:Type-S
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -44,6 +36,17 @@ Ca-45 Inhalation:Type-S
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -112,26 +115,26 @@ Ca-45 Inhalation:Type-S
 # ICRP Publ.134 p.118 Table 6.2
 #   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
 #   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
+  ALV-F                   Blood                     3
+  INT-F                   Blood                     3
+  bb-F                    Blood                     3
+  bbseq-F                 Blood                     3
+  BB-F                    Blood                     3
+  BBseq-F                 Blood                     3
   ET2-F                   Blood                     3
   ETseq-F                 Blood                     3
   LNET-F                  Blood                     3
-  BB-F                    Blood                     3
-  BBseq-F                 Blood                     3
-  bb-F                    Blood                     3
-  bbseq-F                 Blood                     3
-  ALV-F                   Blood                     3
-  INT-F                   Blood                     3
   LNTH-F                  Blood                     3
 
+  ALV-S                   Blood                     1E-4
+  INT-S                   Blood                     1E-4
+  bb-S                    Blood                     1E-4
+  bbseq-S                 Blood                     1E-4
+  BB-S                    Blood                     1E-4
+  BBseq-S                 Blood                     1E-4
   ET2-S                   Blood                     1E-4
   ETseq-S                 Blood                     1E-4
   LNET-S                  Blood                     1E-4
-  BB-S                    Blood                     1E-4
-  BBseq-S                 Blood                     1E-4
-  bb-S                    Blood                     1E-4
-  bbseq-S                 Blood                     1E-4
-  ALV-S                   Blood                     1E-4
-  INT-S                   Blood                     1E-4
   LNTH-S                  Blood                     1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote

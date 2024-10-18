@@ -12,6 +12,7 @@ C-14 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -23,6 +24,7 @@ C-14 Ingestion
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   Blood0                Blood         # Generic model
   acc   Blood1                Blood         # CO2 model
   acc   Blood2                Blood         # CO2 model

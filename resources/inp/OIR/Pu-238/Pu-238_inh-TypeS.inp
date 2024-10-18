@@ -12,15 +12,7 @@ Pu-238 Inhalation:Type-S
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -54,6 +46,17 @@ Pu-238 Inhalation:Type-S
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
   exc   Environment           ---
+
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other

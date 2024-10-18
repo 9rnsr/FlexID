@@ -12,6 +12,7 @@ Fe-59 Ingestion:Unspecified
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -24,6 +25,7 @@ Fe-59 Ingestion:Unspecified
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   OtherPlasma           Blood
   acc   PlasmaTrans           Blood
   acc   RBC                   Blood

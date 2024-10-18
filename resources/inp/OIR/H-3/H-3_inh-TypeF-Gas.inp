@@ -12,6 +12,7 @@ H-3 Inhalation:Type-F_Gas
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -21,6 +22,7 @@ H-3 Inhalation:Type-F_Gas
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
   acc   LNET-F                LN-ET
@@ -31,6 +33,7 @@ H-3 Inhalation:Type-F_Gas
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+
   acc   Blood                 Blood
   acc   ExtravasHTO           Other
   acc   OBT1                  Other

@@ -12,6 +12,7 @@ Pu-239 Ingestion:Soluble
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -23,6 +24,7 @@ Pu-239 Ingestion:Soluble
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other

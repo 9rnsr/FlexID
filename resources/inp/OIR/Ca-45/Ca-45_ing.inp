@@ -12,6 +12,7 @@ Ca-45 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -23,6 +24,7 @@ Ca-45 Ingestion
   exc   Faeces                ---
   acc   UB-con                UB-cont
   exc   Urine                 ---
+
   acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other

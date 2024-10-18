@@ -14,15 +14,7 @@ Sr-90 Inhalation:Type-S
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -46,6 +38,17 @@ Sr-90 Inhalation:Type-S
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -181,19 +184,6 @@ Sr-90 Inhalation:Type-S
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-
-# ICRP Publ.134 p.252 Table 11.3
-  acc   SI-conRe              SI-cont   # SI-con Re-Absorption
-
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -217,6 +207,21 @@ Sr-90 Inhalation:Type-S
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+
+# ICRP Publ.134 p.252 Table 11.3
+  acc   SI-conRe              SI-cont   # SI-con Re-Absorption
+
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -244,15 +249,6 @@ Sr-90 Inhalation:Type-S
 #-----------------------+---------------------+--------------
 
 # from parent to progeny
-  Sr-90/Oesophagus-S      Oesophagus-S              ---
-  Sr-90/St-con            St-con                    ---
-  Sr-90/SI-con            SI-con                    ---
-  Sr-90/RC-con            RC-con                    ---
-  Sr-90/LC-con            LC-con                    ---
-  Sr-90/RS-con            RS-con                    ---
-  Sr-90/Faeces            Faeces                    ---
-  Sr-90/UB-con            UB-con                    ---
-  Sr-90/Urine             Urine                     ---
   Sr-90/ET1-F             ET1-F                     ---
   Sr-90/ET2-F             ET2-F                     ---
   Sr-90/ETseq-F           ETseq-F                   ---
@@ -277,6 +273,16 @@ Sr-90 Inhalation:Type-S
   Sr-90/LNTH-S            LNTH-S                    ---
   Sr-90/Environment       Environment               ---
   Sr-90/Blood             Blood1                    ---
+
+  Sr-90/Oesophagus-S      Oesophagus-S              ---
+  Sr-90/St-con            St-con                    ---
+  Sr-90/SI-con            SI-con                    ---
+  Sr-90/RC-con            RC-con                    ---
+  Sr-90/LC-con            LC-con                    ---
+  Sr-90/RS-con            RS-con                    ---
+  Sr-90/Faeces            Faeces                    ---
+  Sr-90/UB-con            UB-con                    ---
+  Sr-90/Urine             Urine                     ---
 
 # ICRP Publ.134 p.223-224 Para.483
 # Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)

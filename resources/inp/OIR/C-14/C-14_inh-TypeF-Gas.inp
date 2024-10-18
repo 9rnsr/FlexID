@@ -12,15 +12,7 @@ C-14 Inhalation:Type-F_UnspecifiedGas
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
   acc   LNET-F                LN-ET
@@ -31,6 +23,17 @@ C-14 Inhalation:Type-F_UnspecifiedGas
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood0                Blood         # Generic model
   acc   Blood1                Blood         # CO2 model
   acc   Blood2                Blood         # CO2 model

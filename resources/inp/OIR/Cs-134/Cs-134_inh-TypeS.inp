@@ -12,22 +12,7 @@ Cs-134 Inhalation:Type-S
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-wall               St-wall
-  acc   St-con                St-cont
-  acc   St-conRe              St-cont
-  acc   SI-wall               SI-wall
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-wall               RC-wall
-  acc   RC-con                RC-cont
-  acc   LC-wall               LC-wall
-  acc   LC-con                LC-cont
-  acc   RS-wall               RS-wall
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -51,6 +36,24 @@ Cs-134 Inhalation:Type-S
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-wall               SI-wall
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-wall               LC-wall
+  acc   LC-con                LC-cont
+  acc   RS-wall               RS-wall
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   Liver                 Liver
