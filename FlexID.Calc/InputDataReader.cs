@@ -349,6 +349,35 @@ namespace FlexID.Calc
             var SCoeffTables = new List<Dictionary<string, double[]>>();
             int organId = 0;
 
+            var variables = new Dictionary<string, LiteralValue>();
+
+            var patternVarDecl = new Regex(@"^ *\$(?<var>[A-Za-z][A-Za-z0-9_]*)\s*=\s*(?<expr>.+)$");
+            var patternVarIdent = new Regex(@"^(?<var>[A-Za-z][A-Za-z0-9_]*)$");
+
+            string GetContentLine()
+            {
+            Lagain:
+                var nextLine = GetNextLine();
+
+                Match m;
+                if (nextLine != null && (m = patternVarDecl.Match(nextLine)).Success)
+                {
+                    var ident = m.Groups["var"].Value;
+                    var expr = m.Groups["expr"].Value;
+
+                    if (variables.TryGetValue(ident, out _))
+                        throw Program.Error($"Line {lineNum}: Variable '{ident}' is already defined.");
+
+                    if (!decimal.TryParse(expr, NumberStyles.Float, null, out var v))
+                        throw Program.Error($"Line {lineNum}: Invalid variable definition.");
+
+                    variables[ident] = new LiteralValue { Expr = expr, Value = v };
+
+                    goto Lagain;
+                }
+                return nextLine;
+            }
+
             while (true)
             {
                 var header = GetSectionHeader(line);
@@ -400,12 +429,12 @@ namespace FlexID.Calc
                 if (inputTitle != null)
                     throw Program.Error($"Line {lineNum}: Duplicated [title] section.");
 
-                var title = GetNextLine();
+                var title = GetContentLine();
                 if (title is null)
                     throw Program.Error($"Line {lineNum}: Reach to EOF while reading title section.");
                 inputTitle = title;
 
-                nextLine = GetNextLine();
+                nextLine = GetContentLine();
                 if (!CheckSectionHeader(nextLine))
                     throw Program.Error($"Line {lineNum}: Unrecognized line in [title] section.");
             }
@@ -434,7 +463,7 @@ namespace FlexID.Calc
 
                 while (true)
                 {
-                    nextLine = GetNextLine();
+                    nextLine = GetContentLine();
                     if (nextLine is null)
                         break;
                     if (CheckSectionHeader(nextLine))
@@ -469,7 +498,7 @@ namespace FlexID.Calc
 
                 while (true)
                 {
-                    nextLine = GetNextLine();
+                    nextLine = GetContentLine();
                     if (nextLine is null)
                         break;
                     if (CheckSectionHeader(nextLine))
@@ -515,7 +544,7 @@ namespace FlexID.Calc
 
                 while (true)
                 {
-                    nextLine = GetNextLine();
+                    nextLine = GetContentLine();
                     if (nextLine is null)
                         break;
                     if (CheckSectionHeader(nextLine))
@@ -566,13 +595,13 @@ namespace FlexID.Calc
 
                 while (true)
                 {
-                    nextLine = GetNextLine();
+                    nextLine = GetContentLine();
                     if (nextLine is null)
                         break;
                     if (CheckSectionHeader(nextLine))
                         break;
 
-                    var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var values = nextLine.Split(new string[] { " " }, 3, StringSplitOptions.RemoveEmptyEntries);
 
                     if (values.Length != 3)
                         throw Program.Error($"Line {lineNum}: Transfer path definition should have 3 values.");
@@ -581,9 +610,28 @@ namespace FlexID.Calc
                     var organTo = values[1];
                     var coeffStr = values[2];    // 移行係数、[/d] or [%]
 
-                    decimal? coeff = null;
+                    decimal? coeff;
                     var isRate = false;
-                    if (!IsBar(coeffStr))
+                    if (IsBar(coeffStr))
+                    {
+                        coeff = null;
+                    }
+                    else if (coeffStr.StartsWith("$"))
+                    {
+                        var m = patternVarIdent.Match(coeffStr.Substring(1).TrimEnd());
+                        if (!m.Success)
+                            throw Program.Error($"Line {lineNum}: Invalid variable reference.");
+
+                        var ident = m.Groups["var"].Value;
+                        if (!variables.TryGetValue(ident, out var v))
+                            throw Program.Error($"Line {lineNum}: nedfined variable '{ident}'.");
+
+                        coeff = v.Value;
+
+                        //if (coeffStr.EndsWith("%"))
+                        //    isRate = true;
+                    }
+                    else
                     {
                         if (coeffStr.EndsWith("%"))
                         {

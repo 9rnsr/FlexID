@@ -12,6 +12,7 @@ Ba-133 Inhalation:Type-F
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -19,6 +20,7 @@ Ba-133 Inhalation:Type-F
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -31,6 +33,7 @@ Ba-133 Inhalation:Type-F
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
   exc   Environment           ---
+
   acc   Plasma                Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -52,7 +55,13 @@ Ba-133 Inhalation:Type-F
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
 # ICRP Publ.137 p.168 Table 7.2
-#     f_r = 1 (100%)
+  $f_r = 1          # 100%
+
+  $s_r = 20         # Inhaled particulate materials, Absorption type F
+  $s_s =  0         # Inhaled particulate materials, Absorption type F
+
+  $fA = 0.2         # Inhaled particulate materials, Absorption type F
+
   input                   ET1-F                    47.94%       # =          47.94%
   input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
   input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
@@ -77,18 +86,16 @@ Ba-133 Inhalation:Type-F
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
 
-# ICRP Publ.137 p.168 Table 7.2
-#   s_r = 20[/d]  (Inhaled particulate materials, Absorption type F)
-  ALV-F                   Plasma                   20
-  INT-F                   Plasma                   20
-  bb-F                    Plasma                   20
-  bbseq-F                 Plasma                   20
-  BB-F                    Plasma                   20
-  BBseq-F                 Plasma                   20
-  ET2-F                   Plasma                   20
-  ETseq-F                 Plasma                   20
-  LNET-F                  Plasma                   20
-  LNTH-F                  Plasma                   20
+  ALV-F                   Plasma                $s_r
+  INT-F                   Plasma                $s_r
+  bb-F                    Plasma                $s_r
+  bbseq-F                 Plasma                $s_r
+  BB-F                    Plasma                $s_r
+  BBseq-F                 Plasma                $s_r
+  ET2-F                   Plasma                $s_r
+  ETseq-F                 Plasma                $s_r
+  LNET-F                  Plasma                $s_r
+  LNTH-F                  Plasma                $s_r
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oesophagus-S            St-con                 2160

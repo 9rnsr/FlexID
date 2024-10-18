@@ -12,6 +12,7 @@ Ba-133 Inhalation:Type-M
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -19,6 +20,7 @@ Ba-133 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -42,6 +44,7 @@ Ba-133 Inhalation:Type-M
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
   acc   Plasma                Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -52,6 +55,7 @@ Ba-133 Inhalation:Type-M
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
+
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
@@ -63,8 +67,13 @@ Ba-133 Inhalation:Type-M
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
 # ICRP Publ.137 p.168 Table 7.2
-#     f_r = 0.2 (20%)
-# 1 - f_r = 0.8 (80%)
+  $f_r = 0.2        # 20%
+
+  $s_r = 3          # Inhaled particulate materials, Absorption type M
+  $s_s = 0.005      # Inhaled particulate materials, Absorption type M
+
+  $fA = 0.04        # Inhaled particulate materials, Absorption type M
+
   input                   ET1-F                     9.588%      # = 20%          of 47.94%
   input                   ET2-F                     5.153672%   # = 20% of 99.8% of 25.82%
   input                   ETseq-F                   0.010328%   # = 20% of  0.2% of 25.82%
@@ -109,30 +118,27 @@ Ba-133 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.137 p.168 Table 7.2
-#   s_r = 3[/d]      (Inhaled particulate materials, Absorption type M)
-#   s_s = 0.005[/d]  (Inhaled particulate materials, Absorption type M)
-  ALV-F                   Plasma                    3
-  INT-F                   Plasma                    3
-  bb-F                    Plasma                    3
-  bbseq-F                 Plasma                    3
-  BB-F                    Plasma                    3
-  BBseq-F                 Plasma                    3
-  ET2-F                   Plasma                    3
-  ETseq-F                 Plasma                    3
-  LNET-F                  Plasma                    3
-  LNTH-F                  Plasma                    3
+  ALV-F                   Plasma                $s_r
+  INT-F                   Plasma                $s_r
+  bb-F                    Plasma                $s_r
+  bbseq-F                 Plasma                $s_r
+  BB-F                    Plasma                $s_r
+  BBseq-F                 Plasma                $s_r
+  ET2-F                   Plasma                $s_r
+  ETseq-F                 Plasma                $s_r
+  LNET-F                  Plasma                $s_r
+  LNTH-F                  Plasma                $s_r
 
-  ALV-S                   Plasma                    0.005
-  INT-S                   Plasma                    0.005
-  bb-S                    Plasma                    0.005
-  bbseq-S                 Plasma                    0.005
-  BB-S                    Plasma                    0.005
-  BBseq-S                 Plasma                    0.005
-  ET2-S                   Plasma                    0.005
-  ETseq-S                 Plasma                    0.005
-  LNET-S                  Plasma                    0.005
-  LNTH-S                  Plasma                    0.005
+  ALV-S                   Plasma                $s_s
+  INT-S                   Plasma                $s_s
+  bb-S                    Plasma                $s_s
+  bbseq-S                 Plasma                $s_s
+  BB-S                    Plasma                $s_s
+  BBseq-S                 Plasma                $s_s
+  ET2-S                   Plasma                $s_s
+  ETseq-S                 Plasma                $s_s
+  LNET-S                  Plasma                $s_s
+  LNTH-S                  Plasma                $s_s
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oesophagus-S            St-con                 2160

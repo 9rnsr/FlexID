@@ -39,6 +39,9 @@ Ba-133 Ingestion:Soluble
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.137 p.168 Table 7.2
+  $fA = 0.2     # Ingested materials, Soluble forms
+
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
