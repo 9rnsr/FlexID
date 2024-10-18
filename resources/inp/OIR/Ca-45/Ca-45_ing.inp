@@ -21,6 +21,8 @@ Ca-45 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -31,8 +33,6 @@ Ca-45 Ingestion
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Ca-45:transfer]
 #-----------------------+---------------------+--------------
@@ -51,6 +51,9 @@ Ca-45 Ingestion
   RC-con                  LC-con                    2           # 100.0%
   LC-con                  RS-con                    2           # 100.0%
   RS-con                  Faeces                    2           # 100.0%
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.118 Table 6.2
 #   fA = 0.4  (Ingested materials, All unspecified forms)
@@ -78,6 +81,3 @@ Ca-45 Ingestion
   Exch-C-bone-V           Noch-C-bone-V             0.004159
   Noch-C-bone-V           Blood                     0.0000821
   Noch-T-bone-V           Blood                     0.000493
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

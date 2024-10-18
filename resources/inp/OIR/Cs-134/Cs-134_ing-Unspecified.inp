@@ -28,6 +28,8 @@ Cs-134 Ingestion:Unspecified
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   Liver                 Liver
@@ -47,8 +49,6 @@ Cs-134 Ingestion:Unspecified
   acc   Other1                Other
   acc   Other2                Other
   exc   Excreta(sweat)        ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Cs-134:transfer]
 #-----------------------+---------------------+--------------
@@ -67,6 +67,9 @@ Cs-134 Ingestion:Unspecified
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.142 Table 6.2
 #   fA = 1≒0.99   (Ingested materials, All unspecified compounds)
@@ -146,6 +149,3 @@ Cs-134 Ingestion:Unspecified
   RS-wall                 RS-con                    0.21
   Other1                  Plasma                    0.762
   Other2                  Plasma                    0.00141
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

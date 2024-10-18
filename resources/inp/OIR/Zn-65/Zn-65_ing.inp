@@ -22,6 +22,8 @@ Zn-65 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   Plasma                Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -37,8 +39,6 @@ Zn-65 Ingestion
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
   exc   Excreta               ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Zn-65:transfer]
 #-----------------------+---------------------+--------------
@@ -57,6 +57,9 @@ Zn-65 Ingestion
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.186 Table 9.2
 #   fA = 0.5   (Ingested materials, All forms)
@@ -103,6 +106,3 @@ Zn-65 Ingestion
   C-bone-S                C-bone-V                  0.00053
   T-bone-V                Plasma                    0.000493
   C-bone-V                Plasma                    0.0000821
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

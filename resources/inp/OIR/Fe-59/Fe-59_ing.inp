@@ -22,6 +22,8 @@ Fe-59 Ingestion:Unspecified
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   OtherPlasma           Blood
   acc   PlasmaTrans           Blood
   acc   RBC                   Blood
@@ -34,8 +36,6 @@ Fe-59 Ingestion:Unspecified
   acc   Other1(Trans)         Other
   acc   Other2(Parenc)        Other
   acc   Other3(RE)            Other
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
   exc   Excreta               ---
 
 [Fe-59:transfer]
@@ -54,6 +54,9 @@ Fe-59 Ingestion:Unspecified
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.136 Table 7.2
 #   fA = 0.1   (Ingested materials, All unspecified forms)
@@ -97,6 +100,3 @@ Fe-59 Ingestion:Unspecified
   Other2(Parenc)          Other1(Trans)             0.00127
   Other2(Parenc)          Excreta                   0.00057
   Other2(Parenc)          UB-con                    0.00003
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

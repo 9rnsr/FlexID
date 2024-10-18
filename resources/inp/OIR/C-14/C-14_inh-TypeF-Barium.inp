@@ -19,6 +19,8 @@ C-14 Inhalation:Type-F_Barium
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -43,8 +45,6 @@ C-14 Inhalation:Type-F_Barium
   acc   T-bone-V              T-bone-V
   exc   Exhalation            ---
   exc   Excreta(skin)         ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [C-14:transfer]
 #-----------------------+---------------------+--------------
@@ -100,6 +100,9 @@ C-14 Inhalation:Type-F_Barium
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.53 Table 3.3
 #   fA = 1≒0.99   (Inhaled particulate materials, Barium carbonite)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
@@ -130,6 +133,3 @@ C-14 Inhalation:Type-F_Barium
   C-bone-S                Blood1                    0.01733
   T-bone-V                Blood1                    0.000493
   C-bone-V                Blood1                    0.0000821
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

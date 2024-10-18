@@ -20,6 +20,8 @@ Fe-59 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -55,8 +57,6 @@ Fe-59 Inhalation:Type-M
   acc   Other1(Trans)         Other
   acc   Other2(Parenc)        Other
   acc   Other3(RE)            Other
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
   exc   Excreta               ---
 
 [Fe-59:transfer]
@@ -146,6 +146,9 @@ Fe-59 Inhalation:Type-M
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.136 Table 7.2
 #   fA = 0.02   (Inhaled particulate materials, Absorption type M)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.02 * 6 / (1 - 0.02) = 1.224489795918367E-1
@@ -188,6 +191,3 @@ Fe-59 Inhalation:Type-M
   Other2(Parenc)          Other1(Trans)             0.00127
   Other2(Parenc)          Excreta                   0.00057
   Other2(Parenc)          UB-con                    0.00003
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

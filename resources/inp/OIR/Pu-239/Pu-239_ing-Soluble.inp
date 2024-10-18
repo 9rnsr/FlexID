@@ -21,6 +21,8 @@ Pu-239 Ingestion:Soluble
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -39,8 +41,6 @@ Pu-239 Ingestion:Soluble
   acc   Ovaries               Ovaries
   acc   Testes                Testes
   acc   Renal-tubules         Ureters
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Pu-239:transfer]
 #-----------------------+---------------------+--------------
@@ -59,6 +59,9 @@ Pu-239 Ingestion:Soluble
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.141 p.337 Table 22.11
 #   fA = 5E-4   (Ingested materials, All other unidentified chemical forms)
@@ -102,6 +105,3 @@ Pu-239 Ingestion:Soluble
   T-bone-V                T-marrow                  4.9300E-4
   C-marrow                Blood2                    7.6000E-3
   T-marrow                Blood2                    7.6000E-3
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

@@ -21,6 +21,8 @@ C-14 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   Blood0                Blood         # Generic model
   acc   Blood1                Blood         # CO2 model
   acc   Blood2                Blood         # CO2 model
@@ -36,8 +38,6 @@ C-14 Ingestion
   acc   T-bone-V              T-bone-V
   exc   Exhalation            ---
   exc   Excreta(skin)         ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [C-14:transfer]
 #-----------------------+---------------------+--------------
@@ -56,6 +56,9 @@ C-14 Ingestion
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.53 Table 3.3
 #   fA = 1≒0.99   (Ingested materials, All chemical forms)
@@ -96,6 +99,3 @@ C-14 Ingestion
   Sys-Tis(short)          Blood0                    0.0924
   Sys-Tis(short)          RC-con                    0.0693
   Sys-Tis(long)           Blood1                    0.0099
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

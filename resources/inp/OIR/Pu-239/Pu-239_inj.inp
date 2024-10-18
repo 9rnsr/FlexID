@@ -17,6 +17,8 @@ Pu-239 Injection
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   Blood0                Blood
   acc   Blood1                Blood
   acc   Blood2                Blood
@@ -36,8 +38,6 @@ Pu-239 Injection
   acc   Ovaries               Ovaries
   acc   Testes                Testes
   acc   Renal-tubules         Ureters
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Pu-239:transfer]
 #-----------------------+---------------------+--------------
@@ -51,6 +51,9 @@ Pu-239 Injection
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ????
 #   fA = 2E-5 ?
@@ -96,6 +99,3 @@ Pu-239 Injection
   T-bone-V                T-marrow                  4.9300E-4
   C-marrow                Blood2                    7.6000E-3
   T-marrow                Blood2                    7.6000E-3
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

@@ -19,6 +19,8 @@ Pu-241 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -70,8 +72,6 @@ Pu-241 Inhalation:Type-M
   acc   Ovaries               Ovaries
   acc   Testes                Testes
   acc   Renal-tubules         Ureters
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Pu-241:transfer]
 #-----------------------+---------------------+--------------
@@ -202,6 +202,9 @@ Pu-241 Inhalation:Type-M
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.141 p.337 Table 22.11
 #   fA = 1E-4   (Inhaled particulate materials, Absorption type M)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-4 * 6 / (1 - 1E-4) = 6.000600060006001E-4
@@ -244,6 +247,3 @@ Pu-241 Inhalation:Type-M
   T-bone-V                T-marrow                  4.9300E-4
   C-marrow                Blood2                    7.6000E-3
   T-marrow                Blood2                    7.6000E-3
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

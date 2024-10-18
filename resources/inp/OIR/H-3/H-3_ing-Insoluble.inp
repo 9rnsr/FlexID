@@ -21,14 +21,14 @@ H-3 Ingestion:Insoluble
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
   acc   Blood                 Blood
   acc   ExtravasHTO           Other
   acc   OBT1                  Other
   acc   OBT2                  Other
   exc   Breath(discharge)     ---
   exc   Skin(discharge)       ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------
@@ -48,6 +48,9 @@ H-3 Ingestion:Insoluble
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.21 Table 2.3
 #   fA = 0.1   (Ingested materials, Relatively insoluble forms)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
@@ -64,6 +67,3 @@ H-3 Ingestion:Insoluble
   ExtravasHTO             Blood                    44
   OBT1                    ExtravasHTO               0.01733
   OBT2                    ExtravasHTO               0.0019
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
