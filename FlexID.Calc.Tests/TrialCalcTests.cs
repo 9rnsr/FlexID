@@ -36,28 +36,29 @@ namespace FlexID.Calc.Tests
 
             var commitmentPeriod = "50years";
 
+            var data = new InputDataReader(inputPath, calcProgeny: true).Read_OIR();
+
             var main = new MainRoutine_OIR();
-            main.InputPath        /**/= inputPath;
             main.OutputPath       /**/= outputPath;
             main.CalcTimeMeshPath /**/= cTimeMeshFile;
             main.OutTimeMeshPath  /**/= oTimeMeshFile;
             main.CommitmentPeriod /**/= commitmentPeriod;
-            main.CalcProgeny      /**/= true;
 
-            main.Main();
+            main.Main(data);
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")));
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")));
+
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")));
+            CollectionAssert.AreEqual(
+                File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
+                File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
         }
 
         [TestMethod]
@@ -90,29 +91,30 @@ namespace FlexID.Calc.Tests
                 exposureAge == "Adult"       /**/? "50years" :   // 75years - 25years
                 throw new NotSupportedException();
 
+            var dataList = new InputDataReader(inputPath, calcProgeny: true).Read_EIR();
+
             var main = new MainRoutine_EIR();
-            main.InputPath        /**/= inputPath;
             main.OutputPath       /**/= outputPath;
             main.CalcTimeMeshPath /**/= cTimeMeshFile;
             main.OutTimeMeshPath  /**/= oTimeMeshFile;
             main.CommitmentPeriod /**/= commitmentPeriod;
-            main.CalcProgeny      /**/= true;
             main.ExposureAge      /**/= exposureAge;
 
-            main.Main();
+            main.Main(dataList);
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")));
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")));
+
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")));
+            CollectionAssert.AreEqual(
+                File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
+                File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
         }
     }
 }
