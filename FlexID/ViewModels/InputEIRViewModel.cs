@@ -170,16 +170,16 @@ namespace FlexID.ViewModels
         {
             // FlexID.Calcアセンブリがない場合はこのメソッドに入った直後に例外が発生する。
 
-            var main = new MainRoutine_EIR();
-            main.OutputPath = OutputFilePath.Value;
-            main.InputPath = selectedInput.FilePath;
-            main.CalcTimeMeshPath = CalcTimeMeshFilePath.Value;
-            main.OutTimeMeshPath = OutTimeMeshFilePath.Value;
-            main.CommitmentPeriod = CommitmentPeriod.Value + SelectedCommitmentPeriodUnit.Value;
-            main.CalcProgeny = CalcProgeny.Value;
-            main.ExposureAge = SelectedIntakeAge.Value;
+            var dataList = new InputDataReader(selectedInput.FilePath, CalcProgeny.Value).Read_EIR();
 
-            await Task.Run(() => main.Main());
+            var main = new MainRoutine_EIR();
+            main.OutputPath       /**/= OutputFilePath.Value;
+            main.CalcTimeMeshPath /**/= CalcTimeMeshFilePath.Value;
+            main.OutTimeMeshPath  /**/= OutTimeMeshFilePath.Value;
+            main.CommitmentPeriod /**/= CommitmentPeriod.Value + SelectedCommitmentPeriodUnit.Value;
+            main.ExposureAge      /**/= SelectedIntakeAge.Value;
+
+            await Task.Run(() => main.Main(dataList));
 
             // ファイルパスを引数にして出力GUI実行
             var p = Process.Start("FlexID.Viewer.exe", main.OutputPath + "_Retention.out");

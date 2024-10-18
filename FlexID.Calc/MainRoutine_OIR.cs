@@ -17,11 +17,6 @@ namespace FlexID.Calc
         public string OutputPath { get; set; }
 
         /// <summary>
-        /// 核種情報ファイルパス。
-        /// </summary>
-        public string InputPath { get; set; }
-
-        /// <summary>
         /// 計算時間メッシュファイルパス。
         /// </summary>
         public string CalcTimeMeshPath { get; set; }
@@ -36,23 +31,16 @@ namespace FlexID.Calc
         /// </summary>
         public string CommitmentPeriod { get; set; }
 
-        /// <summary>
-        /// 子孫核種の計算を行うかどうか。
-        /// </summary>
-        public bool CalcProgeny { get; set; }
-
         public Activity Act { get; } = new Activity();
 
         private CalcOut CalcOut { get; set; }
 
-        public void Main()
+        public void Main(InputData data)
         {
             var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
             var outTimeMesh = new TimeMesh(OutTimeMeshPath);
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
-
-            var data = new InputDataReader(InputPath, CalcProgeny).Read_OIR();
 
             using (CalcOut = new CalcOut(data, OutputPath))
             {
