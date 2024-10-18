@@ -68,7 +68,7 @@ namespace FlexID.Calc
                 var FileLines = File.ReadAllLines(args[0]);
                 var param = GetParam(FileLines);
 
-                var data = new InputDataReader(param.Input, calcProgeny: true).Read_OIR();
+                var data = new InputDataReader(param.Input).Read_OIR();
 
                 main.OutputPath       /**/= param.Output;
                 main.CalcTimeMeshPath /**/= param.CalcTimeMesh;
