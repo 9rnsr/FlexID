@@ -40,6 +40,7 @@ Sr-90 Ingestion:Other
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
