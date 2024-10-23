@@ -599,7 +599,7 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
-            Assert.AreEqual("Line 12: Transfer coefficient should be a number or '---', not 'abc%'.", e.Message);
+            Assert.AreEqual("Line 12: Transfer coefficient should be evaluated to a number, not 'abc%'.", e.Message);
         }
 
         [TestMethod]
@@ -918,7 +918,7 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        public void TransferFractionRequiredFromImp()
+        public void TransferFractionRequiredFromInp()
         {
             var reader = CreateReader(new[]
             {
@@ -933,7 +933,7 @@ namespace FlexID.Calc.Tests
                 "  acc    ST0        ---",
                 "",
                 "[Sr-90:transfer]",
-                "  input  ST0        100",
+                "  input  ST0        ---",
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
@@ -959,7 +959,7 @@ namespace FlexID.Calc.Tests
                 "[Sr-90:transfer]",
                 "  input  ST0        100%",
                 "  ST0    mix-Blood  100",
-                "  mix-Blood  ST0    100",
+                "  mix-Blood  ST0    ---",
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());

@@ -73,8 +73,14 @@ namespace FlexID.Calc
                 from initializer in Expr
                 select (ident, initializer);
 
+            var SignedNumerExpr =
+                from sign in OrEmpty(Chars("+-"))
+                from expr in NumberExpr
+                select (sign == "+" ? visitor.Pos(expr) :
+                        sign == "-" ? visitor.Neg(expr) : expr);
+
             Coefficient =
-                from expr in NumberExpr.Or(Char('$').Then(_ => VarExpr.Or(Parenthesis)))
+                from expr in SignedNumerExpr.Or(Char('$').Then(_ => VarExpr.Or(Parenthesis)))
                 select expr;
         }
     }
@@ -154,7 +160,7 @@ namespace FlexID.Calc
 
             var result = parser.Coefficient.Token().TryParse(input);
             if (!result.WasSuccessful)
-                throw Program.Error($"Line {lineNum}: Transfer coefficient should be evaluated to a number or '---', not '{input}'.");
+                throw Program.Error($"Line {lineNum}: Transfer coefficient should be evaluated to a number, not '{input}'.");
 
             var (expr, isRate) = result.Value;
             Debug.WriteLine($"Line {lineNum} '{input}' ==> {expr * (isRate ? 100 : 1)}{(isRate ? "%" : "")}");
@@ -188,8 +194,8 @@ namespace FlexID.Calc
             left.r == right.r ? (left.v - right.v, left.r)
                               : throw Program.Error($"Line {lineNum}: addition with inconsistent value units");
 
-        public (decimal v, bool r) Mul((decimal v, bool r) left, (decimal v, bool r) right) => (left.v * right.v, left.r || right.r);
+        public (decimal v, bool r) Mul((decimal v, bool r) left, (decimal v, bool r) right) => (left.v * right.v, left.r && right.r);
 
-        public (decimal v, bool r) Div((decimal v, bool r) left, (decimal v, bool r) right) => (left.v / right.v, left.r || right.r);
+        public (decimal v, bool r) Div((decimal v, bool r) left, (decimal v, bool r) right) => (left.v / right.v, left.r && right.r);
     }
 }

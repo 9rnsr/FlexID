@@ -90,6 +90,11 @@ namespace FlexID.Calc
         public OrganFunc Func;
 
         /// <summary>
+        /// 流出が即時に行われるかどうか。
+        /// </summary>
+        public bool IsInstantOutflow => Func == OrganFunc.inp || Func == OrganFunc.mix;
+
+        /// <summary>
         /// excコンパートメントにおいて、OIRにおける24-hour smaple値を模擬した
         /// 残留放射能を出力する場合に <see langword="true"/>。
         /// </summary>
@@ -593,16 +598,10 @@ namespace FlexID.Calc
                     var organTo = values[1];
                     var coeffStr = values[2];    // 移行係数、[/d] or [%]
 
-                    decimal? coeff;
+                    var coeff = default(decimal?);
                     var isRate = false;
-                    if (IsBar(coeffStr))
-                    {
-                        coeff = null;
-                    }
-                    else
-                    {
+                    if (!IsBar(coeffStr))
                         (coeff, isRate) = evaluator.ReadCoefficient(lineNum, coeffStr);
-                    }
 
                     transfers.Add((lineNum, orgamFrom, organTo, coeff, isRate));
                 }
@@ -756,7 +755,7 @@ namespace FlexID.Calc
                 // 移行経路の定義が正しいことの確認と、
                 // 各コンパートメントから流出する移行係数の総計を求める。
                 var definedTransfers = new HashSet<(string from, string to)>();
-                var transfersCorrect = new List<(Organ from, Organ to, decimal coeff, bool isRate)>();
+                var transfersCorrect = new List<(Organ from, Organ to, decimal coeff)>();
                 var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
                 foreach (var (lineNum, from, to, coeff, isRate) in transfers)
                 {
@@ -807,7 +806,7 @@ namespace FlexID.Calc
                     var fromFunc = organFrom.Func;
                     var toFunc = organTo.Func;
                     var isDecayPath = fromNuclide != toNuclide;
-                    var isCoeff = coeff != null && !isRate;
+                    var hasCoeff = coeff != null;
 
                     // inpへの流入は定義できない。
                     if (toFunc == OrganFunc.inp)
@@ -824,7 +823,7 @@ namespace FlexID.Calc
                     if (isDecayPath)
                     {
                         // inpやmixから娘核種への壊変経路は定義できない。
-                        if (fromFunc == OrganFunc.inp || fromFunc == OrganFunc.mix)
+                        if (organFrom.IsInstantOutflow)
                             throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{fromName}'.");
 
                         // 親核種からの壊変経路では、係数は指定できない。
@@ -833,12 +832,14 @@ namespace FlexID.Calc
                     }
                     else
                     {
-                        // inpまたはmixからの配分経路では、[%]入力を要求する。
-                        if ((fromFunc == OrganFunc.inp || fromFunc == OrganFunc.mix) && !isRate)
+                        // inpまたはmixからの配分経路では、移行割合の入力を要求する。
+                        // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
+                        if (organFrom.IsInstantOutflow && !hasCoeff)
                             throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{fromName}'.");
 
-                        // accからの流出経路では、[/d]入力を要求する。
-                        if (fromFunc == OrganFunc.acc && !isCoeff)
+                        // accからの流出経路では、移行速度の入力を要求する。
+                        // なお、ここでパーセント値を設定するのは明らかにおかしいので設定エラーとして弾く。
+                        if (fromFunc == OrganFunc.acc && (!hasCoeff || isRate))
                             throw Program.Error($"Line {lineNum}: Require transfer rate [/d] from {fromFunc} '{fromName}'.");
                     }
                     if (coeff is decimal coeff_v)
@@ -852,7 +853,7 @@ namespace FlexID.Calc
                         sumOfOutflowCoeff[organFrom] = sum + coeff_v;
                     }
 
-                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0, isRate));
+                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0));
                 }
 
                 // あるコンパートメントから同じ核種のまま流出する全ての移行経路について処理する。
@@ -864,14 +865,10 @@ namespace FlexID.Calc
                         continue;
                     var organFrom = outflows.Key;
                     var fromName = organFrom.Name;
-                    var isRate = outflows.First().isRate;
 
-                    // inp,mixからは移行割合[%]で、accからは移行速度[/d]で流出することを確認済み。
-                    Debug.Assert(outflows.All(t => t.isRate == isRate));
-
-                    if (isRate)
+                    if (organFrom.IsInstantOutflow)
                     {
-                        // 流出放射能に対する移行割合[%]の合計が100%かどうかを確認する。
+                        // 流出放射能に対する移行割合の合計が1.0 == 100%かどうかを確認する。
                         var sum = sumOfOutflowCoeff[organFrom];
                         if (sum != 1)
                             throw Program.Error($"Total [%] of transfer paths from '{fromName}' is  not 100%, but {sum * 100:G29}%.");
@@ -885,7 +882,7 @@ namespace FlexID.Calc
                 }
 
                 // 各コンパートメントへの流入経路と、移行割合を設定する。
-                foreach (var (organFrom, organTo, coeff, isRate) in transfersCorrect)
+                foreach (var (organFrom, organTo, coeff) in transfersCorrect)
                 {
                     double inflowRate;
                     if (organFrom.Nuclide != nuclide)
@@ -893,7 +890,7 @@ namespace FlexID.Calc
                         // 親から子への移行経路では、親からの分岐比とする。
                         inflowRate = organTo.Nuclide.DecayRate;
                     }
-                    else if (isRate)
+                    else if (organFrom.IsInstantOutflow)
                     {
                         // fromからtoへの移行割合 = 移行割合[%]
                         inflowRate = (double)coeff;
