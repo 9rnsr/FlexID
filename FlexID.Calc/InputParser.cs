@@ -167,9 +167,9 @@ namespace FlexID.Calc
 
             var (ident, initializer) = result.Value;
 
-            // TODO: 変数定義の上書きを許可する？
-            if (variables.TryGetValue(ident, out _))
-                throw Program.Error($"Line {lineNum}: Variable '{ident}' is already defined.");
+            // 変数定義の上書きを許可する。
+            // if (variables.TryGetValue(ident, out _))
+            //     throw Program.Error($"Line {lineNum}: Variable '{ident}' is already defined.");
 
             variables[ident] = initializer;
 

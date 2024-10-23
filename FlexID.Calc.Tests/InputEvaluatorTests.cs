@@ -17,7 +17,8 @@ namespace FlexID.Calc.Tests
             Assert.IsTrue(evaluator.TryReadVarDecl(LineNum, "$var = 123"));
             Assert.AreEqual((123m, false), evaluator.ReadCoefficient(LineNum, "$var"));
 
-            Assert.ThrowsException<ApplicationException>(() => evaluator.TryReadVarDecl(LineNum, "$var = 456.78"));
+            Assert.IsTrue(evaluator.TryReadVarDecl(LineNum, "$var = 456.78"));
+            Assert.AreEqual((456.78m, false), evaluator.ReadCoefficient(LineNum, "$var"));
         }
 
         [TestMethod]
