@@ -48,6 +48,11 @@ H-3 Inhalation:Type-F_Gas
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Absorption type F
+  $sr = 100
+  $ss =   0
+  $fA = 0.99 # ≒1
+
 # ICRP Publ.130 p.62 Para.92
 # ICRP Publ.134 p.20 Table 2.2
   input                   ET2-F                    19.96%       # = 99.8% of 20%
@@ -71,18 +76,16 @@ H-3 Inhalation:Type-F_Gas
   ET2-F                   Oesophagus-S            100
   ETseq-F                 LNET-F                    0.001
 
-# ICRP Publ.134 p.21 Table 2.3
-#   s_r[/d] = 100  (Inhaled particulate materials, Absorption type F)
-  ALV-F                   Blood                   100
-  INT-F                   Blood                   100
-  bb-F                    Blood                   100
-  bbseq-F                 Blood                   100
-  BB-F                    Blood                   100
-  BBseq-F                 Blood                   100
-  ET2-F                   Blood                   100
-  ETseq-F                 Blood                   100
-  LNET-F                  Blood                   100
-  LNTH-F                  Blood                   100
+  ALV-F                   Blood                 $sr
+  INT-F                   Blood                 $sr
+  bb-F                    Blood                 $sr
+  bbseq-F                 Blood                 $sr
+  BB-F                    Blood                 $sr
+  BBseq-F                 Blood                 $sr
+  ET2-F                   Blood                 $sr
+  ETseq-F                 Blood                 $sr
+  LNET-F                  Blood                 $sr
+  LNTH-F                  Blood                 $sr
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -95,10 +98,8 @@ H-3 Inhalation:Type-F_Gas
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.21 Table 2.3
-#   fA = 1≒0.99   (Inhaled particulate materials, Absorption type F)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-con                  Blood                   594
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.35 Table 2.5 & footnote†
   Blood                   ExtravasHTO             400

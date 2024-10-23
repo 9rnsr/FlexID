@@ -70,30 +70,33 @@ C-14 Inhalation:Type-S
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fA = 0.01
+
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
-# ICRP Publ.134 p.53 Table 3.3
-#     f_r = 0.01 ( 1%)
-# 1 - f_r = 0.99 (99%)
-  input                   ET1-F                     0.4794%     # =  1%          of 47.94%
-  input                   ET2-F                     0.2576836%  # =  1% of 99.8% of 25.82%
-  input                   ETseq-F                   0.0005164%  # =  1% of  0.2% of 25.82%
-  input                   BB-F                      0.0177644%  # =  1% of 99.8% of  1.78%
-  input                   BBseq-F                   0.0000356%  # =  1% of  0.2% of  1.78%
-  input                   bb-F                      0.010978%   # =  1% of 99.8% of  1.10%
-  input                   bbseq-F                   0.000022%   # =  1% of  0.2% of  1.10%
-  input                   ALV-F                     0.0532%     # =  1%          of  5.32%
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
 
-  input                   ET1-S                    47.4606%     # = 99%          of 47.94%
-  input                   ET2-S                    25.5106764%  # = 99% of 99.8% of 25.82%
-  input                   ETseq-S                   0.0511236%  # = 99% of  0.2% of 25.82%
-  input                   BB-S                      1.7586756%  # = 99% of 99.8% of  1.78%
-  input                   BBseq-S                   0.0035244%  # = 99% of  0.2% of  1.78%
-  input                   bb-S                      1.086822%   # = 99% of 99.8% of  1.10%
-  input                   bbseq-S                   0.002178%   # = 99% of  0.2% of  1.10%
-  input                   ALV-S                     5.2668%     # = 99%          of  5.32%
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
 
-  input                   Environment              18.04%       # = 100% - 81.96%
+  input                   Environment           $(                     100% - 81.96% )
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -121,30 +124,27 @@ C-14 Inhalation:Type-S
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.134 p.53 Table 3.3
-#   s_r[/d] = 3     (Inhaled particulate materials, Absorption type S)
-#   s_s[/d] = 1E-4  (Inhaled particulate materials, Absorption type S)
-  ALV-F                   Blood0                    3
-  INT-F                   Blood0                    3
-  bb-F                    Blood0                    3
-  bbseq-F                 Blood0                    3
-  BB-F                    Blood0                    3
-  BBseq-F                 Blood0                    3
-  ET2-F                   Blood0                    3
-  ETseq-F                 Blood0                    3
-  LNET-F                  Blood0                    3
-  LNTH-F                  Blood0                    3
+  ALV-F                   Blood0                $sr
+  INT-F                   Blood0                $sr
+  bb-F                    Blood0                $sr
+  bbseq-F                 Blood0                $sr
+  BB-F                    Blood0                $sr
+  BBseq-F                 Blood0                $sr
+  ET2-F                   Blood0                $sr
+  ETseq-F                 Blood0                $sr
+  LNET-F                  Blood0                $sr
+  LNTH-F                  Blood0                $sr
 
-  ALV-S                   Blood0                    1E-4
-  INT-S                   Blood0                    1E-4
-  bb-S                    Blood0                    1E-4
-  bbseq-S                 Blood0                    1E-4
-  BB-S                    Blood0                    1E-4
-  BBseq-S                 Blood0                    1E-4
-  ET2-S                   Blood0                    1E-4
-  ETseq-S                 Blood0                    1E-4
-  LNET-S                  Blood0                    1E-4
-  LNTH-S                  Blood0                    1E-4
+  ALV-S                   Blood0                $ss
+  INT-S                   Blood0                $ss
+  bb-S                    Blood0                $ss
+  bbseq-S                 Blood0                $ss
+  BB-S                    Blood0                $ss
+  BBseq-S                 Blood0                $ss
+  ET2-S                   Blood0                $ss
+  ETseq-S                 Blood0                $ss
+  LNET-S                  Blood0                $ss
+  LNTH-S                  Blood0                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -160,10 +160,8 @@ C-14 Inhalation:Type-S
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
-# ICRP Publ.134 p.53 Table 3.3
-#   fA = 0.01   (Inhaled particulate materials, Absorption type S)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-2
-  SI-con                  Blood0                    6.060606060606061E-2
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood0                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.66 Table 3.5
   Blood1                  Exhalation               36.2

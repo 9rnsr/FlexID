@@ -62,30 +62,40 @@ Mo-93 Inhalation:Type-M
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type M
+#
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#   • The parameter values (sr, ss) describing absorption of the inhaled parent from the
+#     respiratory tract into blood are applied to all members of the decay chain
+#     formed in the respiratory tract.
+#
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fA = 0.18
+
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
-# ICRP Publ.134 p.305 Table 14.2
-#     f_r = 0.2 (20%)
-# 1 - f_r = 0.8 (80%)
-  input                   ET1-F                     9.588%      # = 20%          of 47.94%
-  input                   ET2-F                     5.153672%   # = 20% of 99.8% of 25.82%
-  input                   ETseq-F                   0.010328%   # = 20% of  0.2% of 25.82%
-  input                   BB-F                      0.355288%   # = 20% of 99.8% of  1.78%
-  input                   BBseq-F                   0.000712%   # = 20% of  0.2% of  1.78%
-  input                   bb-F                      0.21956%    # = 20% of 99.8% of  1.10%
-  input                   bbseq-F                   0.00044%    # = 20% of  0.2% of  1.10%
-  input                   ALV-F                     1.064%      # = 20%          of  5.32%
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
 
-  input                   ET1-S                    38.352%      # = 80%          of 47.94%
-  input                   ET2-S                    20.614688%   # = 80% of 99.8% of 25.82%
-  input                   ETseq-S                   0.041312%   # = 80% of  0.2% of 25.82%
-  input                   BB-S                      1.421152%   # = 80% of 99.8% of  1.78%
-  input                   BBseq-S                   0.002848%   # = 80% of  0.2% of  1.78%
-  input                   bb-S                      0.87824%    # = 80% of 99.8% of  1.10%
-  input                   bbseq-S                   0.00176%    # = 80% of  0.2% of  1.10%
-  input                   ALV-S                     4.256%      # = 80%          of  5.32%
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
 
-  input                   Environment              18.04%       # = 100% - 81.96%
+  input                   Environment           $(                     100% - 81.96% )
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -113,30 +123,27 @@ Mo-93 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.134 p.305 Table 14.2
-#   s_r[/d] = 3      (Inhaled particulate materials, Absorption type M)
-#   s_s[/d] = 0.005  (Inhaled particulate materials, Absorption type M)
-  ALV-F                   Blood1                    3
-  INT-F                   Blood1                    3
-  bb-F                    Blood1                    3
-  bbseq-F                 Blood1                    3
-  BB-F                    Blood1                    3
-  BBseq-F                 Blood1                    3
-  ET2-F                   Blood1                    3
-  ETseq-F                 Blood1                    3
-  LNET-F                  Blood1                    3
-  LNTH-F                  Blood1                    3
+  ALV-F                   Blood1                $sr
+  INT-F                   Blood1                $sr
+  bb-F                    Blood1                $sr
+  bbseq-F                 Blood1                $sr
+  BB-F                    Blood1                $sr
+  BBseq-F                 Blood1                $sr
+  ET2-F                   Blood1                $sr
+  ETseq-F                 Blood1                $sr
+  LNET-F                  Blood1                $sr
+  LNTH-F                  Blood1                $sr
 
-  ALV-S                   Blood1                    0.005
-  INT-S                   Blood1                    0.005
-  bb-S                    Blood1                    0.005
-  bbseq-S                 Blood1                    0.005
-  BB-S                    Blood1                    0.005
-  BBseq-S                 Blood1                    0.005
-  ET2-S                   Blood1                    0.005
-  ETseq-S                 Blood1                    0.005
-  LNET-S                  Blood1                    0.005
-  LNTH-S                  Blood1                    0.005
+  ALV-S                   Blood1                $ss
+  INT-S                   Blood1                $ss
+  bb-S                    Blood1                $ss
+  bbseq-S                 Blood1                $ss
+  BB-S                    Blood1                $ss
+  BBseq-S                 Blood1                $ss
+  ET2-S                   Blood1                $ss
+  ETseq-S                 Blood1                $ss
+  LNET-S                  Blood1                $ss
+  LNTH-S                  Blood1                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -152,10 +159,8 @@ Mo-93 Inhalation:Type-M
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
-# ICRP Publ.134 p.305 Table 14.2
-#   fA = 0.18   (Inhaled particulate materials, Absorption type M)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.18 * 6 / (1 - 0.18) = 1.317073170731707
-  SI-con                  Blood1                    1.317073170731707
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.310 Table 14.3
   Blood1                  Blood2                   12.5
@@ -235,6 +240,36 @@ Mo-93 Inhalation:Type-M
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
+
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#   • The default absorption fraction, fA, for a progeny radionuclide produced in the
+#     respiratory tract following inhalation of a parent, or produced in the alimentary
+#     tract following transfer of activity from the respiratory tract to the alimentary
+#     tract, is the product of the fraction of inhaled material with rapid
+#     dissolution (fr) for the assigned absorption type, and the reference value of
+#     fA for the progeny radionuclide when ingested as a parent radionuclide. If
+#     the progeny radionuclide has multiple reference values of fA when ingested
+#     as a parent, corresponding to different chemical or physical forms, the default
+#     value of fA is the product of fr for the absorption type and the highest reference
+#     value provided.
+#
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic compartments
+#   into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
+# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.01
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-93/ET1-F             ET1-F                     ---
@@ -334,36 +369,27 @@ Mo-93 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The parameter values (s_r, s_s) describing absorption of the inhaled parent from the
-#     respiratory tract into blood are applied to all members of the decay chain
-#     formed in the respiratory tract.
-#
-# ICRP Publ.134 p.305 Table 14.2(Molybdenium)
-#   s_r[/d] = 3      (Inhaled particulate materials, Absorption type M)
-#   s_s[/d] = 0.005  (Inhaled particulate materials, Absorption type M)
-  ALV-F                   Blood1                    3
-  INT-F                   Blood1                    3
-  bb-F                    Blood1                    3
-  bbseq-F                 Blood1                    3
-  BB-F                    Blood1                    3
-  BBseq-F                 Blood1                    3
-  ET2-F                   Blood1                    3
-  ETseq-F                 Blood1                    3
-  LNET-F                  Blood1                    3
-  LNTH-F                  Blood1                    3
+  ALV-F                   Blood1                $sr
+  INT-F                   Blood1                $sr
+  bb-F                    Blood1                $sr
+  bbseq-F                 Blood1                $sr
+  BB-F                    Blood1                $sr
+  BBseq-F                 Blood1                $sr
+  ET2-F                   Blood1                $sr
+  ETseq-F                 Blood1                $sr
+  LNET-F                  Blood1                $sr
+  LNTH-F                  Blood1                $sr
 
-  ALV-S                   Blood1                    0.005
-  INT-S                   Blood1                    0.005
-  bb-S                    Blood1                    0.005
-  bbseq-S                 Blood1                    0.005
-  BB-S                    Blood1                    0.005
-  BBseq-S                 Blood1                    0.005
-  ET2-S                   Blood1                    0.005
-  ETseq-S                 Blood1                    0.005
-  LNET-S                  Blood1                    0.005
-  LNTH-S                  Blood1                    0.005
+  ALV-S                   Blood1                $ss
+  INT-S                   Blood1                $ss
+  bb-S                    Blood1                $ss
+  bbseq-S                 Blood1                $ss
+  BB-S                    Blood1                $ss
+  BBseq-S                 Blood1                $ss
+  ET2-S                   Blood1                $ss
+  ETseq-S                 Blood1                $ss
+  LNET-S                  Blood1                $ss
+  LNTH-S                  Blood1                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -380,50 +406,9 @@ Mo-93 Inhalation:Type-M
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#
-#   • The default absorption fraction, fA, for a progeny radionuclide produced in the
-#     respiratory tract following inhalation of a parent, or produced in the alimentary
-#     tract following transfer of activity from the respiratory tract to the alimentary
-#     tract, is the product of the fraction of inhaled material with rapid
-#     dissolution (fr) for the assigned absorption type, and the reference value of
-#     fA for the progeny radionuclide when ingested as a parent radionuclide. If
-#     the progeny radionuclide has multiple reference values of fA when ingested
-#     as a parent, corresponding to different chemical or physical forms, the default
-#     value of fA is the product of fr for the absorption type and the highest reference
-#     value provided.
-#
-# ICRP Publ.134 p.305 Table 14.2
-# ICRP Publ.134 p.288 Table 13.2
-#   f_r(Type-M) = 0.2 (20%)
-#   fA(Max value of ing(Nb)) = 0.01   (Ingested material, All forms)
-#
-#   fA(Nb) = f_r(Type-M) * fA(Max value of ing(Nb)) = 0.2 * 0.01 = 0.002
-#   λ(SI->Blood1(Nb)) = fA(Nb) * λ(SI->RC) / (1 - fA(Nb))
-#                      = 0.002 * 6 / (1 - 0.002) = 1.202404809619238E-02
-#
-  SI-con                  Blood1                    1.202404809619238E-02
-
-# ICRP Publ.130 p.79 Para.149
-#   Some of the biokinetic models used in this series of reports to predict the
-#   systemic behaviour of radionuclides depict secretion from systemic compartments
-#   into the contents of the alimentary tract. Activity transferred from systemic
-#   compartments into the small intestine or higher segments of the alimentary tract is
-#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
-#   fraction fA for the secreted activity is the reference fA for ingestion of the
-#   radionuclide. If multiple reference values of fA are given for different forms of the
-#   ingested radionuclide, the default fA for the secreted activity is the highest reference
-#   value provided for X.
-#
-# ICRP Publ.134 p.288 Table 13.2
-#   fA(Max value of ing(Nb)) = 0.01   (Ingested material, All forms)
-#
-#   fA(Re-Ab(Nb)) = fA(Max value of ing(Nb))
-#   λ(SI_Re->Blood1(Nb)) = fA(Re-Ab(Nb)) * λ(SI->RC) / (1 - fA(Re-Ab(Nb)))
-#                         = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-02
-#
-  SI-conRe                Blood1                    6.060606060606061E-02
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.134 p.294 Table 13.3
   Blood1                  Blood2                    3.2

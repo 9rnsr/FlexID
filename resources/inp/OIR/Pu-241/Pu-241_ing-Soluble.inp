@@ -49,6 +49,10 @@ Pu-241 Ingestion:Soluble
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, All other unidentified chemical forms
+  $fA = 5E-4
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -62,10 +66,8 @@ Pu-241 Ingestion:Soluble
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.141 p.337 Table 22.11
-#   fA = 5E-4   (Ingested materials, All other unidentified chemical forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 5E-4 * 6 / (1 - 5E-4) = 3.001500750375188E-3
-  SI-con                  Blood1                    3.001500750375188E-3
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.141 p.225 Table 18.6
   Blood1                  Liver0                    4.6200E-1

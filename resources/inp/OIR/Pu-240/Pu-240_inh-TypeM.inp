@@ -83,30 +83,35 @@ Pu-240 Inhalation:Type-M
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.141 p.337 Table 22.11 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 0.4
+  $ss = 0.005
+  $fb = 0.002       # footnote*
+  $sb = 0           # footnote*
+  $fA = 1E-4
+
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
-# ICRP Publ.141 p.337 Table 22.11
-#     f_r = 0.2 (20%)
-# 1 - f_r = 0.8 (80%)
-  input                   ET1-F                     9.588%      # = 20%          of 47.94%
-  input                   ET2-F                     5.153672%   # = 20% of 99.8% of 25.82%
-  input                   ETseq-F                   0.010328%   # = 20% of  0.2% of 25.82%
-  input                   BB-F                      0.355288%   # = 20% of 99.8% of  1.78%
-  input                   BBseq-F                   0.000712%   # = 20% of  0.2% of  1.78%
-  input                   bb-F                      0.21956%    # = 20% of 99.8% of  1.10%
-  input                   bbseq-F                   0.00044%    # = 20% of  0.2% of  1.10%
-  input                   ALV-F                     1.064%      # = 20%          of  5.32%
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
 
-  input                   ET1-S                    38.352%      # = 80%          of 47.94%
-  input                   ET2-S                    20.614688%   # = 80% of 99.8% of 25.82%
-  input                   ETseq-S                   0.041312%   # = 80% of  0.2% of 25.82%
-  input                   BB-S                      1.421152%   # = 80% of 99.8% of  1.78%
-  input                   BBseq-S                   0.002848%   # = 80% of  0.2% of  1.78%
-  input                   bb-S                      0.87824%    # = 80% of 99.8% of  1.10%
-  input                   bbseq-S                   0.00176%    # = 80% of  0.2% of  1.10%
-  input                   ALV-S                     4.256%      # = 80%          of  5.32%
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
 
-  input                   Environment              18.04%       # = 100% - 81.96%
+  input                   Environment           $(                     100% - 81.96% )
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -136,70 +141,60 @@ Pu-240 Inhalation:Type-M
 
 # ICRP Publ.130 p.67 Fig.3.5
 # ICRP Publ.130 p.68 Para.107
-# ICRP Publ.141 p.337 Table 22.11 & footnote*
-#   s_r[/d] = 0.4    (Inhaled particulate materials, Absorption type M)
-#   s_s[/d] = 0.005  (Inhaled particulate materials, Absorption type M)
-#   f_b[/d] = 0.002
-#   s_b[/d] = 0                             (HRTM-B to blood)
-#      fb  * s_r = 0.002 * 0.4   = 0.0008   (HRTM-F to HRTM-B)
-#      fb  * s_s = 0.002 * 0.005 = 0.00001  (HRTM-S to HRTM-B)
-#   (1-fb) * s_r = 0.998 * 0.4   = 0.3992   (HRTM-F to blood)
-#   (1-fb) * s_s = 0.998 * 0.005 = 0.00499  (HRTM-S to blood)
-#
-  ALV-F                   ALV-B                     0.0008
-  INT-F                   INT-B                     0.0008
-  bb-F                    bb-B                      0.0008
-  bbseq-F                 bbseq-B                   0.0008
-  BB-F                    BB-B                      0.0008
-  BBseq-F                 BBseq-B                   0.0008
-  ET2-F                   ET2-B                     0.0008
-  ETseq-F                 ETseq-B                   0.0008
-  LNET-F                  LNET-B                    0.0008
-  LNTH-F                  LNTH-B                    0.0008
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   ALV-B                     0.00001
-  INT-S                   INT-B                     0.00001
-  bb-S                    bb-B                      0.00001
-  bbseq-S                 bbseq-B                   0.00001
-  BB-S                    BB-B                      0.00001
-  BBseq-S                 BBseq-B                   0.00001
-  ET2-S                   ET2-B                     0.00001
-  ETseq-S                 ETseq-B                   0.00001
-  LNET-S                  LNET-B                    0.00001
-  LNTH-S                  LNTH-B                    0.00001
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
 
-  ALV-F                   Blood1                    0.3992
-  INT-F                   Blood1                    0.3992
-  bb-F                    Blood1                    0.3992
-  bbseq-F                 Blood1                    0.3992
-  BB-F                    Blood1                    0.3992
-  BBseq-F                 Blood1                    0.3992
-  ET2-F                   Blood1                    0.3992
-  ETseq-F                 Blood1                    0.3992
-  LNET-F                  Blood1                    0.3992
-  LNTH-F                  Blood1                    0.3992
+  ALV-F                   Blood1                $( (1 - fb) * sr )
+  INT-F                   Blood1                $( (1 - fb) * sr )
+  bb-F                    Blood1                $( (1 - fb) * sr )
+  bbseq-F                 Blood1                $( (1 - fb) * sr )
+  BB-F                    Blood1                $( (1 - fb) * sr )
+  BBseq-F                 Blood1                $( (1 - fb) * sr )
+  ET2-F                   Blood1                $( (1 - fb) * sr )
+  ETseq-F                 Blood1                $( (1 - fb) * sr )
+  LNET-F                  Blood1                $( (1 - fb) * sr )
+  LNTH-F                  Blood1                $( (1 - fb) * sr )
 
-  ALV-S                   Blood1                    0.00499
-  INT-S                   Blood1                    0.00499
-  bb-S                    Blood1                    0.00499
-  bbseq-S                 Blood1                    0.00499
-  BB-S                    Blood1                    0.00499
-  BBseq-S                 Blood1                    0.00499
-  ET2-S                   Blood1                    0.00499
-  ETseq-S                 Blood1                    0.00499
-  LNET-S                  Blood1                    0.00499
-  LNTH-S                  Blood1                    0.00499
+  ALV-S                   Blood1                $( (1 - fb) * ss )
+  INT-S                   Blood1                $( (1 - fb) * ss )
+  bb-S                    Blood1                $( (1 - fb) * ss )
+  bbseq-S                 Blood1                $( (1 - fb) * ss )
+  BB-S                    Blood1                $( (1 - fb) * ss )
+  BBseq-S                 Blood1                $( (1 - fb) * ss )
+  ET2-S                   Blood1                $( (1 - fb) * ss )
+  ETseq-S                 Blood1                $( (1 - fb) * ss )
+  LNET-S                  Blood1                $( (1 - fb) * ss )
+  LNTH-S                  Blood1                $( (1 - fb) * ss )
 
-  ALV-B                   Blood1                    0
-  INT-B                   Blood1                    0
-  bb-B                    Blood1                    0
-  bbseq-B                 Blood1                    0
-  BB-B                    Blood1                    0
-  BBseq-B                 Blood1                    0
-  ET2-B                   Blood1                    0
-  ETseq-B                 Blood1                    0
-  LNET-B                  Blood1                    0
-  LNTH-B                  Blood1                    0
+  ALV-B                   Blood1                $sb
+  INT-B                   Blood1                $sb
+  bb-B                    Blood1                $sb
+  bbseq-B                 Blood1                $sb
+  BB-B                    Blood1                $sb
+  BBseq-B                 Blood1                $sb
+  ET2-B                   Blood1                $sb
+  ETseq-B                 Blood1                $sb
+  LNET-B                  Blood1                $sb
+  LNTH-B                  Blood1                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -212,10 +207,8 @@ Pu-240 Inhalation:Type-M
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.141 p.337 Table 22.11
-#   fA = 1E-4   (Inhaled particulate materials, Absorption type M)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-4 * 6 / (1 - 1E-4) = 6.000600060006001E-4
-  SI-con                  Blood1                    6.000600060006001E-4
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.141 p.225 Table 18.6
   Blood1                  Liver0                    4.6200E-1

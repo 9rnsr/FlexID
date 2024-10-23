@@ -57,15 +57,20 @@ C-14 Inhalation:Type-F_UnspecifiedGas
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Absorption type F
+  $sr = 100
+  $fA = 0.99 # ≒1
+
 # ICRP Publ.130 p.62 Para.92
 # ICRP Publ.134 p.52 Table 3.2
-  input                   ET2-F                    19.96%       # = 99.8% of 20%
-  input                   ETseq-F                   0.04%       # =  0.2% of 20%
-  input                   BB-F                      9.98%       # = 99.8% of 10%
-  input                   BBseq-F                   0.02%       # =  0.2% of 10%
-  input                   bb-F                     19.96%       # = 99.8% of 20%
-  input                   bbseq-F                   0.04%       # =  0.2% of 20%
-  input                   ALV-F                    50.0%        # =          50%
+  input                   ET2-F                 $( (100% - 0.2%) * 20% )
+  input                   ETseq-F               $(         0.2%  * 20% )
+  input                   BB-F                  $( (100% - 0.2%) * 10% )
+  input                   BBseq-F               $(         0.2%  * 10% )
+  input                   bb-F                  $( (100% - 0.2%) * 20% )
+  input                   bbseq-F               $(         0.2%  * 20% )
+  input                   ALV-F                 $(                 50% )
+
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -80,18 +85,16 @@ C-14 Inhalation:Type-F_UnspecifiedGas
   ET2-F                   Oesophagus-S            100
   ETseq-F                 LNET-F                    0.001
 
-# ICRP Publ.134 p.53 Table 3.3
-#   s_r[/d] = 100  (Inhaled particulate materials, Absorption type F)
-  ALV-F                   Blood0                  100
-  INT-F                   Blood0                  100
-  bb-F                    Blood0                  100
-  bbseq-F                 Blood0                  100
-  BB-F                    Blood0                  100
-  BBseq-F                 Blood0                  100
-  ET2-F                   Blood0                  100
-  ETseq-F                 Blood0                  100
-  LNET-F                  Blood0                  100
-  LNTH-F                  Blood0                  100
+  ALV-F                   Blood0                $sr
+  INT-F                   Blood0                $sr
+  bb-F                    Blood0                $sr
+  bbseq-F                 Blood0                $sr
+  BB-F                    Blood0                $sr
+  BBseq-F                 Blood0                $sr
+  ET2-F                   Blood0                $sr
+  ETseq-F                 Blood0                $sr
+  LNET-F                  Blood0                $sr
+  LNTH-F                  Blood0                $sr
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -104,10 +107,8 @@ C-14 Inhalation:Type-F_UnspecifiedGas
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.53 Table 3.3
-#   fA = 1≒0.99   (Inhaled particulate materials, Absorption type F)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-con                  Blood0                  594
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood0                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.66 Table 3.5
   Blood1                  Exhalation               36.2

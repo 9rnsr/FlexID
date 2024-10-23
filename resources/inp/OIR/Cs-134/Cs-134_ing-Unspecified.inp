@@ -57,6 +57,11 @@ Cs-134 Ingestion:Unspecified
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.137 p.142 Table 6.2 / Ingested materials, All unspecified compounds
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -70,20 +75,12 @@ Cs-134 Ingestion:Unspecified
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.137 p.142 Table 6.2
-#   fA = 1≒0.99   (Ingested materials, All unspecified compounds)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-con                  Plasma                  594
-
-# ICRP Publ.137 p.146 Fig.6,1
   St-conRe                SI-conRe                 20.57
-
-# ICRP Publ.130 p.76 Table 3.4
-# ICRP Publ.137 p.142 Table 6.2 footnote¶
-#   fA = 1≒0.99   (re-absorption)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
   SI-conRe                RC-con                    6
-  SI-conRe                Plasma                  594
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.137 p.147 Table 6.3
   Plasma                  RBC                       1.8
