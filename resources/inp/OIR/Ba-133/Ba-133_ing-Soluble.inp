@@ -39,6 +39,9 @@ Ba-133 Ingestion:Soluble
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Soluble forms
+  $fA = 0.2
+
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -52,10 +55,8 @@ Ba-133 Ingestion:Soluble
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.137 p.168 Table 7.2
-#   fA = 0.2   (Ingested materials, Soluble forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.2 * 6 / (1 - 0.2) = 1.5
-  SI-con                  Plasma                    1.5
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.137 p.175 Table 7.3
   Plasma                  UB-con                    2.24
