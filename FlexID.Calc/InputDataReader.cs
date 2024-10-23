@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -323,6 +322,19 @@ namespace FlexID.Calc
         /// <returns></returns>
         public InputData Read_OIR()
         {
+            var evaluator = new InputEvaluator();
+
+            string GetNextLine()
+            {
+            Lagain:
+                var nextLine = this.GetNextLine();
+
+                if (evaluator.TryReadVarDecl(lineNum, nextLine))
+                    goto Lagain;
+
+                return nextLine;
+            }
+
             var line = GetNextLine();
             if (line is null)
                 throw Program.Error("Reach to EOF while reading input file.");
@@ -572,7 +584,7 @@ namespace FlexID.Calc
                     if (CheckSectionHeader(nextLine))
                         break;
 
-                    var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var values = nextLine.Split(new string[] { " " }, 3, StringSplitOptions.RemoveEmptyEntries);
 
                     if (values.Length != 3)
                         throw Program.Error($"Line {lineNum}: Transfer path definition should have 3 values.");
@@ -581,19 +593,15 @@ namespace FlexID.Calc
                     var organTo = values[1];
                     var coeffStr = values[2];    // 移行係数、[/d] or [%]
 
-                    decimal? coeff = null;
+                    decimal? coeff;
                     var isRate = false;
-                    if (!IsBar(coeffStr))
+                    if (IsBar(coeffStr))
                     {
-                        if (coeffStr.EndsWith("%"))
-                        {
-                            isRate = true;
-                            coeffStr = coeffStr.Substring(0, coeffStr.Length - 1);
-                        }
-                        if (decimal.TryParse(coeffStr, NumberStyles.Float, null, out var v))
-                            coeff = v;
-                        else
-                            throw Program.Error($"Line {lineNum}: Transfer coefficient should be a number or '---', not '{values[2]}'.");
+                        coeff = null;
+                    }
+                    else
+                    {
+                        (coeff, isRate) = evaluator.ReadCoefficient(lineNum, coeffStr);
                     }
 
                     transfers.Add((lineNum, orgamFrom, organTo, coeff, isRate));
@@ -865,8 +873,8 @@ namespace FlexID.Calc
                     {
                         // 流出放射能に対する移行割合[%]の合計が100%かどうかを確認する。
                         var sum = sumOfOutflowCoeff[organFrom];
-                        if (sum != 100)
-                            throw Program.Error($"Total [%] of transfer paths from '{fromName}' is  not 100%, but {sum:G29}%.");
+                        if (sum != 1)
+                            throw Program.Error($"Total [%] of transfer paths from '{fromName}' is  not 100%, but {sum * 100:G29}%.");
                     }
                     else
                     {
@@ -887,14 +895,14 @@ namespace FlexID.Calc
                     }
                     else if (isRate)
                     {
-                        // fromからtoへの移行割合 = 移行係数[%] / 100
-                        inflowRate = (double)(coeff / 100);
+                        // fromからtoへの移行割合 = 移行割合[%]
+                        inflowRate = (double)coeff;
                     }
                     else
                     {
                         var sum = sumOfOutflowCoeff[organFrom];
 
-                        // fromからtoへの移行割合 = 移行係数[/d] / fromから流出する移行係数[/d]の総計
+                        // fromからtoへの移行割合 = 移行速度[/d] / fromから流出する移行速度[/d]の総計
                         inflowRate = sum == 0 ? 0.0 : (double)coeff / (double)sum;
                     }
 
