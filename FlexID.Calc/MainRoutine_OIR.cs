@@ -79,6 +79,18 @@ namespace FlexID.Calc
             using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var writer = new StreamWriter(stream, Encoding.UTF8))
             {
+                writer.WriteLine();
+                writer.WriteLine($"Zero inflow organs:");
+
+                foreach (var nuclide in data.Nuclides)
+                {
+                    foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                    {
+                        if (organ.ZeroInflow && organ.Func != OrganFunc.inp)
+                            writer.WriteLine($"  {nuclide.Nuclide} / {organ.Name}");
+                    }
+                }
+
                 var otherSourceRegion = "Other";
 
                 foreach (var (nuclide, scoeffTable) in data.Nuclides.Zip(data.SCoeffTables))

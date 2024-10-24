@@ -58,6 +58,7 @@ namespace FlexID.Calc
     /// <summary>
     /// 臓器(コンパートメント)を表現する。
     /// </summary>
+    [DebuggerDisplay("{Func} {Name} ({Nuclide})")]
     public class Organ
     {
         /// <summary>
@@ -108,6 +109,11 @@ namespace FlexID.Calc
         public List<Inflow> Inflows;
 
         /// <summary>
+        /// コンパートメントへの流入がない場合に<see langword="true"/>。
+        /// </summary>
+        public bool ZeroInflow;
+
+        /// <summary>
         /// 線源領域の名称。
         /// </summary>
         public string SourceRegion;
@@ -118,6 +124,7 @@ namespace FlexID.Calc
         public double[] S_Coefficients;
     }
 
+    [DebuggerDisplay("{Nuclide}")]
     public class NuclideData
     {
         /// <summary>
@@ -625,6 +632,8 @@ namespace FlexID.Calc
             if (!nuclides.Any())
                 throw Program.Error($"None of nuclides defined.");
 
+            Organ input = null;
+
             // 全ての核種のコンパートメントを定義する。
             foreach (var nuclide in nuclides)
             {
@@ -645,8 +654,6 @@ namespace FlexID.Calc
                 nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? new Dictionary<string, string>();
 
                 data.Nuclides.Add(nuclide);
-
-                Organ input = null;
 
                 // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
                 var validSourceRegions = data.SourceRegions
@@ -907,10 +914,33 @@ namespace FlexID.Calc
                         Organ = organFrom,
                     });
                 }
-
-                // TODO; inpを除く、流入がないコンパートメントがある場合はこれをエラーにする。
-                // TODO; excを除く、流出がないコンパートメントがある場合はこれをエラーにする。
             }
+
+            while (true)
+            {
+                var modified = false;
+
+                foreach (var organ in data.Organs)
+                {
+                    if (organ.Func == OrganFunc.inp)
+                        continue;   // 初期配分による流入があるため。
+                    if (organ.ZeroInflow)
+                        continue;   // 既に流入なしと判定済み。
+
+                    // コンパートメントが流入を持たない場合。
+                    if (organ.Inflows.All(i => i.Rate == 0 || i.Organ.ZeroInflow))
+                    {
+                        organ.ZeroInflow = true;
+                        modified = true;
+                    }
+                }
+
+                // 流入なしマーク状態が変化しなくなるまで繰り返す。
+                if (!modified)
+                    break;
+            }
+            // 初期配分を終えた後は流入なし。
+            input.ZeroInflow = true;
 
             return data;
         }
@@ -1226,6 +1256,10 @@ namespace FlexID.Calc
                     }
                 }
             }
+
+            // 初期配分を終えた後は流入なし。
+            foreach (var input in data.Organs.Where(o => o.Func == OrganFunc.inp))
+                input.ZeroInflow = true;
 
             return data;
         }
