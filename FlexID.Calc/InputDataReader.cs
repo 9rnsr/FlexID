@@ -908,8 +908,11 @@ namespace FlexID.Calc
                     });
                 }
 
-                // TODO; inpを除く、流入がないコンパートメントがある場合はこれをエラーにする。
-                // TODO; excを除く、流出がないコンパートメントがある場合はこれをエラーにする。
+                foreach (var organ in data.Organs)
+                {
+                    var sumRate = organ.Inflows.Sum(i => i.Rate);
+                    //if (sumRate == 0)
+                }
             }
 
             return data;
