@@ -314,7 +314,7 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
-            Assert.AreEqual("Line 5: Nuclide definition should have 4 values.", e.Message);
+            Assert.AreEqual("Line 5: Nuclide definition should have 3 values.", e.Message);
         }
 
         [TestMethod]

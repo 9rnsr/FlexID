@@ -479,7 +479,7 @@ namespace FlexID.Calc
                     var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                     if (values.Length != 3)
-                        throw Program.Error($"Line {lineNum}: Nuclide definition should have 4 values.");
+                        throw Program.Error($"Line {lineNum}: Nuclide definition should have 3 values.");
 
                     if (!double.TryParse(values[1], out var lambda))
                         throw Program.Error($"Line {lineNum}: Cannot get nuclide Lambda.");
