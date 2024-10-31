@@ -13,6 +13,9 @@ Sr-90 Inhalation:Type-M
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -20,6 +23,7 @@ Sr-90 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -43,6 +47,7 @@ Sr-90 Inhalation:Type-M
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
   acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -74,6 +79,7 @@ Sr-90 Inhalation:Type-M
   input                   bb-F                      0.21956%    # = 20% of 99.8% of  1.10%
   input                   bbseq-F                   0.00044%    # = 20% of  0.2% of  1.10%
   input                   ALV-F                     1.064%      # = 20%          of  5.32%
+
   input                   ET1-S                    38.352%      # = 80%          of 47.94%
   input                   ET2-S                    20.614688%   # = 80% of 99.8% of 25.82%
   input                   ETseq-S                   0.041312%   # = 80% of  0.2% of 25.82%
@@ -82,6 +88,7 @@ Sr-90 Inhalation:Type-M
   input                   bb-S                      0.87824%    # = 80% of 99.8% of  1.10%
   input                   bbseq-S                   0.00176%    # = 80% of  0.2% of  1.10%
   input                   ALV-S                     4.256%      # = 80%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
@@ -136,6 +143,9 @@ Sr-90 Inhalation:Type-M
   LNTH-S                  Blood                     0.005
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
@@ -178,6 +188,8 @@ Sr-90 Inhalation:Type-M
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -185,6 +197,7 @@ Sr-90 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -208,6 +221,7 @@ Sr-90 Inhalation:Type-M
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -228,6 +242,8 @@ Sr-90 Inhalation:Type-M
 #-----------------------+---------------------+--------------
 
 # from parent to progeny
+  Sr-90/Oralcavity        Oralcavity                ---
+  Sr-90/Oesophagus-F      Oesophagus-F              ---
   Sr-90/Oesophagus-S      Oesophagus-S              ---
   Sr-90/St-con            St-con                    ---
   Sr-90/SI-con            SI-con                    ---
@@ -235,6 +251,7 @@ Sr-90 Inhalation:Type-M
   Sr-90/LC-con            LC-con                    ---
   Sr-90/RS-con            RS-con                    ---
   Sr-90/Faeces            Faeces                    ---
+
   Sr-90/ET1-F             ET1-F                     ---
   Sr-90/ET2-F             ET2-F                     ---
   Sr-90/ETseq-F           ETseq-F                   ---
@@ -258,6 +275,7 @@ Sr-90 Inhalation:Type-M
   Sr-90/INT-S             INT-S                     ---
   Sr-90/LNTH-S            LNTH-S                    ---
   Sr-90/Environment       Environment               ---
+
   Sr-90/Blood             Blood1                    ---
   Sr-90/ST0               ST0                       ---
   Sr-90/ST1               ST0                       ---
@@ -323,6 +341,9 @@ Sr-90 Inhalation:Type-M
   LNTH-S                  Blood1                    0.005
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
