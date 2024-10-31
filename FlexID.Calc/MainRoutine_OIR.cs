@@ -181,6 +181,10 @@ namespace FlexID.Calc
                 {
                     foreach (var organ in data.Organs)
                     {
+                        // 流入がないコンパートメントの計算をスキップする。
+                        if (organ.ZeroInflow)
+                            continue;
+
                         var func = organ.Func; // 臓器機能
 
                         // 臓器機能ごとに異なる処理をする
