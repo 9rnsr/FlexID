@@ -12,6 +12,7 @@ Pu-240 Ingestion:Insoluble
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -21,6 +22,7 @@ Pu-240 Ingestion:Insoluble
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -59,6 +61,7 @@ Pu-240 Ingestion:Insoluble
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
+
 # ICRP Publ.141 p.337 Table 22.11
 #   fA = 1E-5   (Ingested materials, Insoluble forms)
 #   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-5 * 6 / (1 - 1E-5) = 6.000060000600006E-5
