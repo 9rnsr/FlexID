@@ -12,6 +12,7 @@ Zn-65 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -22,6 +23,7 @@ Zn-65 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Plasma                Blood
   acc   ST0                   Other
   acc   ST1                   Other
