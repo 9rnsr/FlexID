@@ -38,6 +38,8 @@ Mo-93 Inhalation:Type-S
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -45,7 +47,6 @@ Mo-93 Inhalation:Type-S
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
-
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
@@ -74,6 +75,7 @@ Mo-93 Inhalation:Type-S
   input                   bb-F                      0.010978%   # =  1% of 99.8% of  1.10%
   input                   bbseq-F                   0.000022%   # =  1% of  0.2% of  1.10%
   input                   ALV-F                     0.0532%     # =  1%          of  5.32%
+
   input                   ET1-S                    47.4606%     # = 99%          of 47.94%
   input                   ET2-S                    25.5106764%  # = 99% of 99.8% of 25.82%
   input                   ETseq-S                   0.0511236%  # = 99% of  0.2% of 25.82%
@@ -82,6 +84,7 @@ Mo-93 Inhalation:Type-S
   input                   bb-S                      1.086822%   # = 99% of 99.8% of  1.10%
   input                   bbseq-S                   0.002178%   # = 99% of  0.2% of  1.10%
   input                   ALV-S                     5.2668%     # = 99%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
@@ -136,6 +139,9 @@ Mo-93 Inhalation:Type-S
   LNTH-S                  Blood1                    1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
@@ -193,6 +199,8 @@ Mo-93 Inhalation:Type-S
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -253,6 +261,8 @@ Mo-93 Inhalation:Type-S
   Mo-93/LNTH-S            LNTH-S                    ---
   Mo-93/Environment       Environment               ---
 
+  Mo-93/Oralcavity        Oralcavity                ---
+  Mo-93/Oesophagus-F      Oesophagus-F              ---
   Mo-93/Oesophagus-S      Oesophagus-S              ---
   Mo-93/St-con            St-con                    ---
   Mo-93/SI-con            SI-con                    ---
@@ -356,6 +366,9 @@ Mo-93 Inhalation:Type-S
   LNTH-S                  Blood1                    1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
