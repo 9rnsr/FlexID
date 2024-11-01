@@ -86,7 +86,7 @@ namespace FlexID.Calc
                 {
                     foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                     {
-                        if (organ.ZeroInflow && organ.Func != OrganFunc.inp)
+                        if (organ.IsZeroInflow && organ.Func != OrganFunc.inp)
                             writer.WriteLine($"  {nuclide.Nuclide} / {organ.Name}");
                     }
                 }
@@ -182,7 +182,7 @@ namespace FlexID.Calc
                     foreach (var organ in data.Organs)
                     {
                         // 流入がないコンパートメントの計算をスキップする。
-                        if (organ.ZeroInflow)
+                        if (organ.IsZeroInflow)
                             continue;
 
                         var func = organ.Func; // 臓器機能

@@ -110,7 +110,7 @@ namespace FlexID.Calc
         /// <summary>
         /// コンパートメントへの流入がない場合に<see langword="true"/>。
         /// </summary>
-        public bool ZeroInflow;
+        public bool IsZeroInflow;
 
         /// <summary>
         /// コンパートメントからの流出が即時に処理される場合に<see langword="true"/>。
@@ -929,13 +929,13 @@ namespace FlexID.Calc
                 {
                     if (organ.Func == OrganFunc.inp)
                         continue;   // 初期配分による流入があるため。
-                    if (organ.ZeroInflow)
+                    if (organ.IsZeroInflow)
                         continue;   // 既に流入なしと判定済み。
 
                     // コンパートメントが流入を持たない場合。
-                    if (organ.Inflows.All(i => i.Rate == 0 || i.Organ.ZeroInflow))
+                    if (organ.Inflows.All(i => i.Rate == 0 || i.Organ.IsZeroInflow))
                     {
-                        organ.ZeroInflow = true;
+                        organ.IsZeroInflow = true;
                         modified = true;
                     }
                 }
@@ -945,7 +945,7 @@ namespace FlexID.Calc
                     break;
             }
             // 初期配分を終えた後は流入なし。
-            input.ZeroInflow = true;
+            input.IsZeroInflow = true;
 
             return data;
         }
@@ -1264,7 +1264,7 @@ namespace FlexID.Calc
 
             // 初期配分を終えた後は流入なし。
             foreach (var input in data.Organs.Where(o => o.Func == OrganFunc.inp))
-                input.ZeroInflow = true;
+                input.IsZeroInflow = true;
 
             return data;
         }

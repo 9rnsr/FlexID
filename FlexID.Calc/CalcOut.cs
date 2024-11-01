@@ -225,7 +225,7 @@ namespace FlexID.Calc
 
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
-                    if (organ.ZeroInflow)
+                    if (organ.IsZeroInflow)
                         continue;
 
                     wRete.Write("  {0,-14}", organ.Name);
@@ -261,7 +261,7 @@ namespace FlexID.Calc
 
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
-                    if (organ.ZeroInflow)
+                    if (organ.IsZeroInflow)
                         continue;
 
                     wCumu.Write("  {0,-14}", organ.Name);
@@ -365,7 +365,7 @@ namespace FlexID.Calc
 
             foreach (var organ in data.Organs)
             {
-                if (organ.ZeroInflow)
+                if (organ.IsZeroInflow)
                     continue;
 
                 var retention = Act.OutNow[organ.Index].end;
