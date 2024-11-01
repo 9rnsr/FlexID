@@ -12,6 +12,9 @@ Pu-239 Inhalation:Type-S
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -19,6 +22,7 @@ Pu-239 Inhalation:Type-S
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -52,6 +56,7 @@ Pu-239 Inhalation:Type-S
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
   exc   Environment           ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -91,6 +96,7 @@ Pu-239 Inhalation:Type-S
   input                   bb-F                      0.010978%   # =  1% of 99.8% of  1.10%
   input                   bbseq-F                   0.000022%   # =  1% of  0.2% of  1.10%
   input                   ALV-F                     0.0532%     # =  1%          of  5.32%
+
   input                   ET1-S                    47.4606%     # = 99%          of 47.94%
   input                   ET2-S                    25.5106764%  # = 99% of 99.8% of 25.82%
   input                   ETseq-S                   0.0511236%  # = 99% of  0.2% of 25.82%
@@ -99,6 +105,7 @@ Pu-239 Inhalation:Type-S
   input                   bb-S                      1.086822%   # = 99% of 99.8% of  1.10%
   input                   bbseq-S                   0.002178%   # = 99% of  0.2% of  1.10%
   input                   ALV-S                     5.2668%     # = 99%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
@@ -195,6 +202,9 @@ Pu-239 Inhalation:Type-S
   LNTH-B                  Blood1                    0
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
