@@ -12,11 +12,17 @@ Pu-239 Injection
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
+  acc   Oesophagus-S          Oesophag-s
+  acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Blood0                Blood
   acc   Blood1                Blood
   acc   Blood2                Blood
@@ -47,6 +53,11 @@ Pu-239 Injection
   input                   Blood0                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2

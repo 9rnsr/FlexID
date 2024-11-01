@@ -13,6 +13,7 @@ Cs-137 Ingestion:Unspecified
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -29,6 +30,7 @@ Cs-137 Ingestion:Unspecified
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   Liver                 Liver
@@ -165,6 +167,7 @@ Cs-137 Ingestion:Unspecified
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Plasma                Blood
   acc   Ht-wall               Ht-wall
   acc   Liver                 Liver
@@ -230,6 +233,7 @@ Cs-137 Ingestion:Unspecified
   Cs-137/LC-con           LC-con                    ---
   Cs-137/RS-con           RS-con                    ---
   Cs-137/Faeces           Faeces                    ---
+
   Cs-137/Plasma           Plasma                    ---
   Cs-137/T-bone-S         T-bone-S                  ---
   Cs-137/C-bone-S         C-bone-S                  ---

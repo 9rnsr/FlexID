@@ -12,6 +12,7 @@ Fe-59 Ingestion:Unspecified
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -22,6 +23,7 @@ Fe-59 Ingestion:Unspecified
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   OtherPlasma           Blood
   acc   PlasmaTrans           Blood
   acc   RBC                   Blood
@@ -45,6 +47,7 @@ Fe-59 Ingestion:Unspecified
 
   input                   Oralcavity              100.0%
 
+# ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
   Oralcavity              Oesophagus-S            720
   Oesophagus-F            St-con                12343

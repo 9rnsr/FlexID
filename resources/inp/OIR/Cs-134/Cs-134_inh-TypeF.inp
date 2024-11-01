@@ -12,6 +12,9 @@ Cs-134 Inhalation:Type-F
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-wall               St-wall
   acc   St-con                St-cont
@@ -26,6 +29,7 @@ Cs-134 Inhalation:Type-F
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -37,7 +41,19 @@ Cs-134 Inhalation:Type-F
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
   exc   Environment           ---
+
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   Liver                 Liver
@@ -69,14 +85,25 @@ Cs-134 Inhalation:Type-F
 # ICRP Publ.130 p.65 Fig.3.4 footnote
 # ICRP Publ.137 p.142 Table 6.2
 #     f_r = 1 (100%)
-  input                   ET1-F                    47.94%       # =          47.94%
-  input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
-  input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
-  input                   BB-F                      1.77644%    # = 99.8% of  1.78%
-  input                   BBseq-F                   0.00356%    # =  0.2% of  1.78%
-  input                   bb-F                      1.0978%     # = 99.8% of  1.10%
-  input                   bbseq-F                   0.0022%     # =  0.2% of  1.10%
-  input                   ALV-F                     5.32%       # =           5.32%
+# 1 - f_r = 0   (0%)
+  input                   ET1-F                    47.94%       # = 100% of          47.94%
+  input                   ET2-F                    25.76836%    # = 100% of 99.8% of 25.82%
+  input                   ETseq-F                   0.05164%    # = 100% of  0.2% of 25.82%
+  input                   BB-F                      1.77644%    # = 100% of 99.8% of  1.78%
+  input                   BBseq-F                   0.00356%    # = 100% of  0.2% of  1.78%
+  input                   bb-F                      1.0978%     # = 100% of 99.8% of  1.10%
+  input                   bbseq-F                   0.0022%     # = 100% of  0.2% of  1.10%
+  input                   ALV-F                     5.32%       # = 100% of           5.32%
+
+  input                   ET1-S                     0.0%        # =   0%          of 47.94%
+  input                   ET2-S                     0.0%        # =   0% of 99.8% of 25.82%
+  input                   ETseq-S                   0.0%        # =   0% of  0.2% of 25.82%
+  input                   BB-S                      0.0%        # =   0% of 99.8% of  1.78%
+  input                   BBseq-S                   0.0%        # =   0% of  0.2% of  1.78%
+  input                   bb-S                      0.0%        # =   0% of 99.8% of  1.10%
+  input                   bbseq-S                   0.0%        # =   0% of  0.2% of  1.10%
+  input                   ALV-S                     0.0%        # =   0%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
@@ -93,8 +120,21 @@ Cs-134 Inhalation:Type-F
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
 
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
 # ICRP Publ.137 p.142 Table 6.2
 #   s_r[/d] = 100  (Inhaled particulate materials, Absorption type F)
+#   s_s[/d] =   0  (Inhaled particulate materials, Absorption type F)
   ALV-F                   Plasma                  100
   INT-F                   Plasma                  100
   bb-F                    Plasma                  100
@@ -106,7 +146,21 @@ Cs-134 Inhalation:Type-F
   LNET-F                  Plasma                  100
   LNTH-F                  Plasma                  100
 
+  ALV-S                   Plasma                    0
+  INT-S                   Plasma                    0
+  bb-S                    Plasma                    0
+  bbseq-S                 Plasma                    0
+  BB-S                    Plasma                    0
+  BBseq-S                 Plasma                    0
+  ET2-S                   Plasma                    0
+  ETseq-S                 Plasma                    0
+  LNET-S                  Plasma                    0
+  LNTH-S                  Plasma                    0
+
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6

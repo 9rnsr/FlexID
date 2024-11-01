@@ -12,6 +12,9 @@ Pu-239 Inhalation:Type-F
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -19,6 +22,7 @@ Pu-239 Inhalation:Type-F
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -30,6 +34,17 @@ Pu-239 Inhalation:Type-F
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
   acc   ET2-B                 ET2-sur
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
@@ -41,6 +56,7 @@ Pu-239 Inhalation:Type-F
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
   exc   Environment           ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -71,14 +87,25 @@ Pu-239 Inhalation:Type-F
 # ICRP Publ.130 p.65 Fig.3.4 footnote
 # ICRP Publ.141 p.337 Table 22.11
 #     f_r = 1 (100%)
-  input                   ET1-F                    47.94%       # =          47.94%
-  input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
-  input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
-  input                   BB-F                      1.77644%    # = 99.8% of  1.78%
-  input                   BBseq-F                   0.00356%    # =  0.2% of  1.78%
-  input                   bb-F                      1.0978%     # = 99.8% of  1.10%
-  input                   bbseq-F                   0.0022%     # =  0.2% of  1.10%
-  input                   ALV-F                     5.32%       # =           5.32%
+# 1 - f_r = 0   (0%)
+  input                   ET1-F                    47.94%       # = 100% of          47.94%
+  input                   ET2-F                    25.76836%    # = 100% of 99.8% of 25.82%
+  input                   ETseq-F                   0.05164%    # = 100% of  0.2% of 25.82%
+  input                   BB-F                      1.77644%    # = 100% of 99.8% of  1.78%
+  input                   BBseq-F                   0.00356%    # = 100% of  0.2% of  1.78%
+  input                   bb-F                      1.0978%     # = 100% of 99.8% of  1.10%
+  input                   bbseq-F                   0.0022%     # = 100% of  0.2% of  1.10%
+  input                   ALV-F                     5.32%       # = 100% of           5.32%
+
+  input                   ET1-S                     0.0%        # =   0%          of 47.94%
+  input                   ET2-S                     0.0%        # =   0% of 99.8% of 25.82%
+  input                   ETseq-S                   0.0%        # =   0% of  0.2% of 25.82%
+  input                   BB-S                      0.0%        # =   0% of 99.8% of  1.78%
+  input                   BBseq-S                   0.0%        # =   0% of  0.2% of  1.78%
+  input                   bb-S                      0.0%        # =   0% of 99.8% of  1.10%
+  input                   bbseq-S                   0.0%        # =   0% of  0.2% of  1.10%
+  input                   ALV-S                     0.0%        # =   0%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
@@ -95,14 +122,29 @@ Pu-239 Inhalation:Type-F
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
 
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
 # ICRP Publ.130 p.67 Fig.3.5
 # ICRP Publ.130 p.68 Para.107
 # ICRP Publ.141 p.337 Table 22.11 & footnote*
 #   s_r[/d] = 0.4    (Inhaled particulate materials, Absorption type F)
+#   s_s[/d] = 0      (Inhaled particulate materials, Absorption type F)
 #   f_b[/d] = 0.002
 #   s_b[/d] = 0                             (HRTM-B to blood)
 #      fb  * s_r = 0.002 * 0.4 = 0.0008     (HRTM-F to HRTM-B)
+#      fb  * s_s = 0.002 * 0   = 0          (HRTM-S to HRTM-B)
 #   (1-fb) * s_r = 0.998 * 0.4 = 0.3992     (HRTM-F to blood)
+#   (1-fb) * s_s = 0.998 * 0   = 0          (HRTM-S to blood)
 #
   ALV-F                   ALV-B                     0.0008
   INT-F                   INT-B                     0.0008
@@ -115,6 +157,17 @@ Pu-239 Inhalation:Type-F
   LNET-F                  LNET-B                    0.0008
   LNTH-F                  LNTH-B                    0.0008
 
+  ALV-S                   ALV-B                     0
+  INT-S                   INT-B                     0
+  bb-S                    bb-B                      0
+  bbseq-S                 bbseq-B                   0
+  BB-S                    BB-B                      0
+  BBseq-S                 BBseq-B                   0
+  ET2-S                   ET2-B                     0
+  ETseq-S                 ETseq-B                   0
+  LNET-S                  LNET-B                    0
+  LNTH-S                  LNTH-B                    0
+
   ALV-F                   Blood1                    0.3992
   INT-F                   Blood1                    0.3992
   bb-F                    Blood1                    0.3992
@@ -125,6 +178,17 @@ Pu-239 Inhalation:Type-F
   ETseq-F                 Blood1                    0.3992
   LNET-F                  Blood1                    0.3992
   LNTH-F                  Blood1                    0.3992
+
+  ALV-S                   Blood1                    0
+  INT-S                   Blood1                    0
+  bb-S                    Blood1                    0
+  bbseq-S                 Blood1                    0
+  BB-S                    Blood1                    0
+  BBseq-S                 Blood1                    0
+  ET2-S                   Blood1                    0
+  ETseq-S                 Blood1                    0
+  LNET-S                  Blood1                    0
+  LNTH-S                  Blood1                    0
 
   ALV-B                   Blood1                    0
   INT-B                   Blood1                    0
@@ -138,6 +202,9 @@ Pu-239 Inhalation:Type-F
   LNTH-B                  Blood1                    0
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6

@@ -12,6 +12,7 @@ Cs-134 Ingestion:Insoluble
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -28,6 +29,7 @@ Cs-134 Ingestion:Insoluble
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   Liver                 Liver

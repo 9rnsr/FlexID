@@ -12,6 +12,9 @@ Cs-134 Inhalation:Type-S
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-wall               St-wall
   acc   St-con                St-cont
@@ -26,6 +29,7 @@ Cs-134 Inhalation:Type-S
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -49,6 +53,7 @@ Cs-134 Inhalation:Type-S
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   Liver                 Liver
@@ -89,6 +94,7 @@ Cs-134 Inhalation:Type-S
   input                   bb-F                      0.010978%   # =  1% of 99.8% of  1.10%
   input                   bbseq-F                   0.000022%   # =  1% of  0.2% of  1.10%
   input                   ALV-F                     0.0532%     # =  1%          of  5.32%
+
   input                   ET1-S                    47.4606%     # = 99%          of 47.94%
   input                   ET2-S                    25.5106764%  # = 99% of 99.8% of 25.82%
   input                   ETseq-S                   0.0511236%  # = 99% of  0.2% of 25.82%
@@ -97,6 +103,7 @@ Cs-134 Inhalation:Type-S
   input                   bb-S                      1.086822%   # = 99% of 99.8% of  1.10%
   input                   bbseq-S                   0.002178%   # = 99% of  0.2% of  1.10%
   input                   ALV-S                     5.2668%     # = 99%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
@@ -151,6 +158,9 @@ Cs-134 Inhalation:Type-S
   LNTH-S                  Plasma                    1E-4
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6

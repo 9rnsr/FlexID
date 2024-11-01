@@ -25,8 +25,21 @@ Mo-93 Inhalation:Type-F
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -34,7 +47,6 @@ Mo-93 Inhalation:Type-F
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
-
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
@@ -54,14 +66,25 @@ Mo-93 Inhalation:Type-F
 # ICRP Publ.130 p.65 Fig.3.4 footnote
 # ICRP Publ.134 p.305 Table 14.2
 #     f_r = 1 (100%)
-  input                   ET1-F                    47.94%       # =          47.94%
-  input                   ET2-F                    25.76836%    # = 99.8% of 25.82%
-  input                   ETseq-F                   0.05164%    # =  0.2% of 25.82%
-  input                   BB-F                      1.77644%    # = 99.8% of  1.78%
-  input                   BBseq-F                   0.00356%    # =  0.2% of  1.78%
-  input                   bb-F                      1.0978%     # = 99.8% of  1.10%
-  input                   bbseq-F                   0.0022%     # =  0.2% of  1.10%
-  input                   ALV-F                     5.32%       # =           5.32%
+# 1 - f_r = 0   (0%)
+  input                   ET1-F                    47.94%       # = 100% of          47.94%
+  input                   ET2-F                    25.76836%    # = 100% of 99.8% of 25.82%
+  input                   ETseq-F                   0.05164%    # = 100% of  0.2% of 25.82%
+  input                   BB-F                      1.77644%    # = 100% of 99.8% of  1.78%
+  input                   BBseq-F                   0.00356%    # = 100% of  0.2% of  1.78%
+  input                   bb-F                      1.0978%     # = 100% of 99.8% of  1.10%
+  input                   bbseq-F                   0.0022%     # = 100% of  0.2% of  1.10%
+  input                   ALV-F                     5.32%       # = 100% of           5.32%
+
+  input                   ET1-S                     0.0%        # =   0%          of 47.94%
+  input                   ET2-S                     0.0%        # =   0% of 99.8% of 25.82%
+  input                   ETseq-S                   0.0%        # =   0% of  0.2% of 25.82%
+  input                   BB-S                      0.0%        # =   0% of 99.8% of  1.78%
+  input                   BBseq-S                   0.0%        # =   0% of  0.2% of  1.78%
+  input                   bb-S                      0.0%        # =   0% of 99.8% of  1.10%
+  input                   bbseq-S                   0.0%        # =   0% of  0.2% of  1.10%
+  input                   ALV-S                     0.0%        # =   0%          of  5.32%
+
   input                   Environment              18.04%       # = 100% - 81.96%
 
 # ICRP Publ.130 p.65 Fig.3.4
@@ -78,8 +101,21 @@ Mo-93 Inhalation:Type-F
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
 
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
 # ICRP Publ.134 p.305 Table 14.2
 #   s_r[/d] = 30  (Inhaled particulate materials, Absorption type F)
+#   s_s[/d] =  0  (Inhaled particulate materials, Absorption type F)
   ALV-F                   Blood1                   30
   INT-F                   Blood1                   30
   bb-F                    Blood1                   30
@@ -91,7 +127,21 @@ Mo-93 Inhalation:Type-F
   LNET-F                  Blood1                   30
   LNTH-F                  Blood1                   30
 
+  ALV-S                   Blood1                    0
+  INT-S                   Blood1                    0
+  bb-S                    Blood1                    0
+  bbseq-S                 Blood1                    0
+  BB-S                    Blood1                    0
+  BBseq-S                 Blood1                    0
+  ET2-S                   Blood1                    0
+  ETseq-S                 Blood1                    0
+  LNET-S                  Blood1                    0
+  LNTH-S                  Blood1                    0
+
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
@@ -136,8 +186,21 @@ Mo-93 Inhalation:Type-F
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -185,8 +248,21 @@ Mo-93 Inhalation:Type-F
   Mo-93/ALV-F             ALV-F                     ---
   Mo-93/INT-F             INT-F                     ---
   Mo-93/LNTH-F            LNTH-F                    ---
+  Mo-93/ET1-S             ET1-S                     ---
+  Mo-93/ET2-S             ET2-S                     ---
+  Mo-93/ETseq-S           ETseq-S                   ---
+  Mo-93/LNET-S            LNET-S                    ---
+  Mo-93/BB-S              BB-S                      ---
+  Mo-93/BBseq-S           BBseq-S                   ---
+  Mo-93/bb-S              bb-S                      ---
+  Mo-93/bbseq-S           bbseq-S                   ---
+  Mo-93/ALV-S             ALV-S                     ---
+  Mo-93/INT-S             INT-S                     ---
+  Mo-93/LNTH-S            LNTH-S                    ---
   Mo-93/Environment       Environment               ---
 
+  Mo-93/Oralcavity        Oralcavity                ---
+  Mo-93/Oesophagus-F      Oesophagus-F              ---
   Mo-93/Oesophagus-S      Oesophagus-S              ---
   Mo-93/St-con            St-con                    ---
   Mo-93/SI-con            SI-con                    ---
@@ -246,6 +322,18 @@ Mo-93 Inhalation:Type-F
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
 
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-S            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
 # ICRP Publ.130 p.45 Para.37
 #   For all radionuclides with the exception of noble gases:
 #   • The parameter values (s_r, s_s) describing absorption of the inhaled parent from the
@@ -254,6 +342,7 @@ Mo-93 Inhalation:Type-F
 #
 # ICRP Publ.134 p.305 Table 14.2(Molybdenium)
 #   s_r[/d] = 30  (Inhaled particulate materials, Absorption type F)
+#   s_s[/d] =  0  (Inhaled particulate materials, Absorption type F)
   ALV-F                   Blood1                   30
   INT-F                   Blood1                   30
   bb-F                    Blood1                   30
@@ -265,7 +354,21 @@ Mo-93 Inhalation:Type-F
   LNET-F                  Blood1                   30
   LNTH-F                  Blood1                   30
 
+  ALV-S                   Blood1                    0
+  INT-S                   Blood1                    0
+  bb-S                    Blood1                    0
+  bbseq-S                 Blood1                    0
+  BB-S                    Blood1                    0
+  BBseq-S                 Blood1                    0
+  ET2-S                   Blood1                    0
+  ETseq-S                 Blood1                    0
+  LNET-S                  Blood1                    0
+  LNTH-S                  Blood1                    0
+
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
