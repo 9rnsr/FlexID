@@ -12,6 +12,7 @@ Ca-45 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -21,6 +22,7 @@ Ca-45 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -42,15 +44,15 @@ Ca-45 Ingestion
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480           #  90.0%
-  Oralcavity              Oesophagus-S            720           #  10.0%
-  Oesophagus-F            St-con                12343           # 100.0%
-  Oesophagus-S            St-con                 2160           # 100.0%
-  St-con                  SI-con                   20.57        # 100.0%
-  SI-con                  RC-con                    6           #  60.0%
-  RC-con                  LC-con                    2           # 100.0%
-  LC-con                  RS-con                    2           # 100.0%
-  RS-con                  Faeces                    2           # 100.0%
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
+  Oesophagus-S            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
 
 # ICRP Publ.134 p.118 Table 6.2
 #   fA = 0.4  (Ingested materials, All unspecified forms)
