@@ -42,6 +42,10 @@ Sr-90 Ingestion:StrontiumTitanate
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
+  $fA = 0.01
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -55,10 +59,8 @@ Sr-90 Ingestion:StrontiumTitanate
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.215 Table 10.2
-#   fA = 0.01   (Ingested material, Strontium titanate)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-2
-  SI-con                  Blood1                    6.060606060606061E-2
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.220 Table 10.3
   Blood1                  UB-con                    1.73
@@ -119,6 +121,9 @@ Sr-90 Ingestion:StrontiumTitanate
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.242 Table 11.2 / Ingested material, All chemical forms
+  $fA = 1E-4
+
 # from parent to progeny
   Sr-90/Oralcavity        Oralcavity                ---
   Sr-90/Oesophagus-F      Oesophagus-F              ---
@@ -154,10 +159,8 @@ Sr-90 Ingestion:StrontiumTitanate
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.242 Table 11.2
-#   fA = 1E-4   (Ingested material, All chemical forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 1E-4 * 6 / (1 - 1E-4) = 6.000600060006001E-4
-  SI-con                  Blood1                    6.000600060006001E-4
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.252 Table 11.3
   Blood1                  Blood2                    0.498

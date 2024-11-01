@@ -65,30 +65,33 @@ Ba-133 Inhalation:Type-M
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.137 p.168 Table 7.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fA = 0.04
+
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
-# ICRP Publ.137 p.168 Table 7.2
-#     f_r = 0.2 (20%)
-# 1 - f_r = 0.8 (80%)
-  input                   ET1-F                     9.588%      # = 20%          of 47.94%
-  input                   ET2-F                     5.153672%   # = 20% of 99.8% of 25.82%
-  input                   ETseq-F                   0.010328%   # = 20% of  0.2% of 25.82%
-  input                   BB-F                      0.355288%   # = 20% of 99.8% of  1.78%
-  input                   BBseq-F                   0.000712%   # = 20% of  0.2% of  1.78%
-  input                   bb-F                      0.21956%    # = 20% of 99.8% of  1.10%
-  input                   bbseq-F                   0.00044%    # = 20% of  0.2% of  1.10%
-  input                   ALV-F                     1.064%      # = 20%          of  5.32%
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
 
-  input                   ET1-S                    38.352%      # = 80%          of 47.94%
-  input                   ET2-S                    20.614688%   # = 80% of 99.8% of 25.82%
-  input                   ETseq-S                   0.041312%   # = 80% of  0.2% of 25.82%
-  input                   BB-S                      1.421152%   # = 80% of 99.8% of  1.78%
-  input                   BBseq-S                   0.002848%   # = 80% of  0.2% of  1.78%
-  input                   bb-S                      0.87824%    # = 80% of 99.8% of  1.10%
-  input                   bbseq-S                   0.00176%    # = 80% of  0.2% of  1.10%
-  input                   ALV-S                     4.256%      # = 80%          of  5.32%
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
 
-  input                   Environment              18.04%       # = 100% - 81.96%
+  input                   Environment           $(                     100% - 81.96% )
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -116,30 +119,27 @@ Ba-133 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.137 p.168 Table 7.2
-#   s_r = 3[/d]      (Inhaled particulate materials, Absorption type M)
-#   s_s = 0.005[/d]  (Inhaled particulate materials, Absorption type M)
-  ALV-F                   Plasma                    3
-  INT-F                   Plasma                    3
-  bb-F                    Plasma                    3
-  bbseq-F                 Plasma                    3
-  BB-F                    Plasma                    3
-  BBseq-F                 Plasma                    3
-  ET2-F                   Plasma                    3
-  ETseq-F                 Plasma                    3
-  LNET-F                  Plasma                    3
-  LNTH-F                  Plasma                    3
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
 
-  ALV-S                   Plasma                    0.005
-  INT-S                   Plasma                    0.005
-  bb-S                    Plasma                    0.005
-  bbseq-S                 Plasma                    0.005
-  BB-S                    Plasma                    0.005
-  BBseq-S                 Plasma                    0.005
-  ET2-S                   Plasma                    0.005
-  ETseq-S                 Plasma                    0.005
-  LNET-S                  Plasma                    0.005
-  LNTH-S                  Plasma                    0.005
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -152,10 +152,8 @@ Ba-133 Inhalation:Type-M
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.137 p.168 Table 7.2
-#   fA = 0.04   (Inhaled particulate materials, Absorption type F)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.04 * 6 / (1 - 0.04) = 0.25
-  SI-con                  Plasma                    0.25
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.137 p.175 Table 7.3
   Plasma                  UB-con                    2.24
