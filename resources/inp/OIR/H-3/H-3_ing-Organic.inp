@@ -12,6 +12,7 @@ H-3 Ingestion:Organic
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
@@ -21,6 +22,7 @@ H-3 Ingestion:Organic
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Blood                 Blood
   acc   ExtravasHTO           Other
   acc   OBT1                  Other

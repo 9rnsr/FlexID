@@ -12,6 +12,9 @@ H-3 Inhalation:Type-F_Gas
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-F          Oesophag-f
   acc   Oesophagus-S          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
@@ -19,6 +22,7 @@ H-3 Inhalation:Type-F_Gas
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
   acc   LNET-F                LN-ET
@@ -29,6 +33,7 @@ H-3 Inhalation:Type-F_Gas
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+
   acc   Blood                 Blood
   acc   ExtravasHTO           Other
   acc   OBT1                  Other
@@ -80,6 +85,9 @@ H-3 Inhalation:Type-F_Gas
   LNTH-F                  Blood                   100
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-F           6480
+  Oralcavity              Oesophagus-S            720
+  Oesophagus-F            St-con                12343
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
