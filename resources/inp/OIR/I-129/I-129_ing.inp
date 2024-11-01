@@ -12,6 +12,7 @@ I-129 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
@@ -26,6 +27,7 @@ I-129 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   Liver1                Liver
