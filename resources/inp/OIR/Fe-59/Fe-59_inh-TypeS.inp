@@ -14,8 +14,8 @@ Fe-59 Inhalation:Type-S
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
@@ -107,7 +107,7 @@ Fe-59 Inhalation:Type-S
   bbseq-F                 LNTH-F                    0.001
   BB-F                    ET2-F                    10
   BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-S            100
+  ET2-F                   Oesophagus-s            100
   ETseq-F                 LNET-F                    0.001
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
@@ -119,7 +119,7 @@ Fe-59 Inhalation:Type-S
   bbseq-S                 LNTH-S                    0.001
   BB-S                    ET2-S                    10
   BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-S            100
+  ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
@@ -147,10 +147,10 @@ Fe-59 Inhalation:Type-S
   LNTH-S                  OtherPlasma           $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2

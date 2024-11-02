@@ -15,8 +15,8 @@ Mo-93 Ingestion:Sulphide
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
@@ -45,10 +45,10 @@ Mo-93 Ingestion:Sulphide
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -80,8 +80,8 @@ Mo-93 Ingestion:Sulphide
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
@@ -145,8 +145,8 @@ Mo-93 Ingestion:Sulphide
 
 # from parent to progeny
   Mo-93/Oralcavity        Oralcavity                ---
-  Mo-93/Oesophagus-F      Oesophagus-F              ---
-  Mo-93/Oesophagus-S      Oesophagus-S              ---
+  Mo-93/Oesophagus-f      Oesophagus-f              ---
+  Mo-93/Oesophagus-s      Oesophagus-s              ---
   Mo-93/St-con            St-con                    ---
   Mo-93/SI-con            SI-con                    ---
   Mo-93/RC-con            RC-con                    ---
@@ -191,10 +191,10 @@ Mo-93 Ingestion:Sulphide
   decay-OtherTissue       Blood1                    1.39
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   SI-conRe                RC-con                    6

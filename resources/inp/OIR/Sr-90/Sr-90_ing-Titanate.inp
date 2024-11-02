@@ -15,8 +15,8 @@ Sr-90 Ingestion:StrontiumTitanate
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
@@ -49,10 +49,10 @@ Sr-90 Ingestion:StrontiumTitanate
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -93,8 +93,8 @@ Sr-90 Ingestion:StrontiumTitanate
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
@@ -126,8 +126,8 @@ Sr-90 Ingestion:StrontiumTitanate
 
 # from parent to progeny
   Sr-90/Oralcavity        Oralcavity                ---
-  Sr-90/Oesophagus-F      Oesophagus-F              ---
-  Sr-90/Oesophagus-S      Oesophagus-S              ---
+  Sr-90/Oesophagus-f      Oesophagus-f              ---
+  Sr-90/Oesophagus-s      Oesophagus-s              ---
   Sr-90/St-con            St-con                    ---
   Sr-90/SI-con            SI-con                    ---
   Sr-90/RC-con            RC-con                    ---
@@ -149,10 +149,10 @@ Sr-90 Ingestion:StrontiumTitanate
   Sr-90/Noch-T-bone-V     T-bone-V                  ---
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
