@@ -69,7 +69,7 @@ Sr-90 Inhalation:Type-S
 # ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type S
   $fr = 0.01
   $sr = 3
-  $ss = 1E-4 
+  $ss = 1E-4
   $fA = 0.0025
 
 # ICRP Publ.130 p.62 Table 3.1

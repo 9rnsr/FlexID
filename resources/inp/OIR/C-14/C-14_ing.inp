@@ -46,6 +46,10 @@ C-14 Ingestion
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.53 Table 3.3 / Ingested materials, All chemical forms
+  $fA = 0.99 # ≒1
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -59,10 +63,8 @@ C-14 Ingestion
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.53 Table 3.3
-#   fA = 1≒0.99   (Ingested materials, All chemical forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-con                  Blood0                  594
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood0                $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.66 Table 3.5
   Blood1                  Exhalation               36.2

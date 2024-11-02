@@ -49,6 +49,11 @@ I-129 Ingestion
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -62,11 +67,6 @@ I-129 Ingestion
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.137 p.97 Table 5.3
-#   fA = 1≒0.99   (Ingested materials, All unspecified forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-con                  Blood1                  594
-
 # ICRP Publ.130 p.76 Table 3.4
 # ICRP Publ.130 p.77 Para.143
 # ICRP Publ.137 p.106 Fig.5.2
@@ -75,10 +75,9 @@ I-129 Ingestion
   St-conRe                SI-conRe                 20.57
   SI-conRe                RC-con                    6
 
-# ICRP Publ.137 p.97 Table 5.3 footnote¶
-#   fA = 1≒0.99   (re-absorption)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
-  SI-conRe                Blood1                  594
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.137 p.108 Table 5.4
   Blood1                  Thyroid1                  7.26

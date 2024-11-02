@@ -45,6 +45,10 @@ Ra-226 Ingestion
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
+  $fA = 0.2
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -58,10 +62,8 @@ Ra-226 Ingestion
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.137 p.325 Table 13.2
-#   fA = 0.2   (Ingested materials, All forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.2 * 6 / (1 - 0.2) = 1.5
-  SI-con                  Blood                     1.5
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
 
 # ICRP Publ.137 p.332 Table 13.3
   Blood                   UB-con                    0.606

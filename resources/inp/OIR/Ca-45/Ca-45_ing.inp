@@ -41,6 +41,10 @@ Ca-45 Ingestion
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
+  $fA = 0.4
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -54,10 +58,8 @@ Ca-45 Ingestion
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.118 Table 6.2
-#   fA = 0.4  (Ingested materials, All unspecified forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.4 * 6 / (1 - 0.4) = 4
-  SI-con                  Blood                     4
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
 
 # ICRP Publ.134 p.121 Table 6.3
   Blood                   UB-con                    0.60

@@ -47,6 +47,11 @@ Zn-65 Ingestion
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  $fA    = 0.5
+  $fA_Re = 0.5          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -60,18 +65,12 @@ Zn-65 Ingestion
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.186 Table 9.2
-#   fA = 0.5   (Ingested materials, All forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.5 * 6 / (1 - 0.5) = 6
-  SI-con                  Plasma                    6
-
 # ICRP Publ.130 p.76 Table 3.4
   SI-conRe                RC-con                    6
 
-# ICRP Publ.134 p.186 Table 9.2 footnote¶
-#   fA = 0.5   (re-absorption)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.5 * 6 / (1 - 0.5) = 6
-  SI-conRe                Plasma                    6
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.134 p.199 Table 9.4
   Plasma                  Liver1                   60

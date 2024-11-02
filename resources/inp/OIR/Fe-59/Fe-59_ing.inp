@@ -45,6 +45,11 @@ Fe-59 Ingestion:Unspecified
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.136 Table 7.2 / Ingested materials, All unspecified forms
+  $fA    = 0.1
+  $fA_Re = 0.1          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -58,18 +63,11 @@ Fe-59 Ingestion:Unspecified
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.136 Table 7.2
-#   fA = 0.1   (Ingested materials, All unspecified forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
-  SI-con                  OtherPlasma               6.666666666666667E-1
-
-# ICRP Publ.130 p.76 Table 3.4
   SI-conRe                RC-con                    6
 
-# ICRP Publ.134 p.136 Table 7.2 footnote¶
-#   fA = 0.1   (re-absorption)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.1 * 6 / (1 - 0.1) = 6.666666666666667E-1
-  SI-conRe                OtherPlasma               6.666666666666667E-1
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  OtherPlasma           $(fA    * 6 / (1 - fA   ))
+  SI-conRe                OtherPlasma           $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.134 p.143 Table 7.3
   OtherPlasma             PlasmaTrans              70

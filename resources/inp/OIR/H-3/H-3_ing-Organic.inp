@@ -37,6 +37,10 @@ H-3 Ingestion:Organic
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.21 Table 2.3 / Ingested materials, Soluble forms
+  $fA = 0.99 # ≒1
+
+# ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -50,13 +54,11 @@ H-3 Ingestion:Organic
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.21 Table 2.3
-#   fA = 1≒0.99   (Ingested materials, Soluble forms)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
 # ICRP Publ.134 p.37 Para.76
 # ICRP Publ.134 p.38 Fig.2.4
-  SI-con                  Blood                   297
-  SI-con                  OBT1                    297
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA) / 2)
+  SI-con                  OBT1                  $(fA * 6 / (1 - fA) / 2)
 
 # ICRP Publ.134 p.35 Table 2.5 & footnote†
   Blood                   ExtravasHTO             400

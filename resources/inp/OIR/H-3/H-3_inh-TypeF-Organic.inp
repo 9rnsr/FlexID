@@ -62,30 +62,33 @@ H-3 Inhalation:Type-F_Organic
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Biogenic organic compounds
+  $fr = 1
+  $sr = 100
+  $ss =   0
+  $fA = 0.99 # ≒1
+
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
-# ICRP Publ.134 p.21 Table 2.3
-#     f_r = 1 (100%)
-# 1 - f_r = 0   (0%)
-  input                   ET1-F                    47.94%       # = 100% of          47.94%
-  input                   ET2-F                    25.76836%    # = 100% of 99.8% of 25.82%
-  input                   ETseq-F                   0.05164%    # = 100% of  0.2% of 25.82%
-  input                   BB-F                      1.77644%    # = 100% of 99.8% of  1.78%
-  input                   BBseq-F                   0.00356%    # = 100% of  0.2% of  1.78%
-  input                   bb-F                      1.0978%     # = 100% of 99.8% of  1.10%
-  input                   bbseq-F                   0.0022%     # = 100% of  0.2% of  1.10%
-  input                   ALV-F                     5.32%       # = 100% of           5.32%
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
 
-  input                   ET1-S                     0.0%        # =   0%          of 47.94%
-  input                   ET2-S                     0.0%        # =   0% of 99.8% of 25.82%
-  input                   ETseq-S                   0.0%        # =   0% of  0.2% of 25.82%
-  input                   BB-S                      0.0%        # =   0% of 99.8% of  1.78%
-  input                   BBseq-S                   0.0%        # =   0% of  0.2% of  1.78%
-  input                   bb-S                      0.0%        # =   0% of 99.8% of  1.10%
-  input                   bbseq-S                   0.0%        # =   0% of  0.2% of  1.10%
-  input                   ALV-S                     0.0%        # =   0%          of  5.32%
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
 
-  input                   Environment              18.04%       # = 100% - 81.96%
+  input                   Environment           $(                     100% - 81.96% )
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -113,30 +116,27 @@ H-3 Inhalation:Type-F_Organic
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.134 p.21 Table 2.3
-#   s_r[/d] = 100  (Inhaled particulate materials, Biogenic organic compounds)
-#   s_s[/d] =   0  (Inhaled particulate materials, Biogenic organic compounds)
-  ALV-F                   mix-Blood               100
-  INT-F                   mix-Blood               100
-  bb-F                    mix-Blood               100
-  bbseq-F                 mix-Blood               100
-  BB-F                    mix-Blood               100
-  BBseq-F                 mix-Blood               100
-  ET2-F                   mix-Blood               100
-  ETseq-F                 mix-Blood               100
-  LNET-F                  mix-Blood               100
-  LNTH-F                  mix-Blood               100
+  ALV-F                   mix-Blood             $sr
+  INT-F                   mix-Blood             $sr
+  bb-F                    mix-Blood             $sr
+  bbseq-F                 mix-Blood             $sr
+  BB-F                    mix-Blood             $sr
+  BBseq-F                 mix-Blood             $sr
+  ET2-F                   mix-Blood             $sr
+  ETseq-F                 mix-Blood             $sr
+  LNET-F                  mix-Blood             $sr
+  LNTH-F                  mix-Blood             $sr
 
-  ALV-S                   mix-Blood                 0
-  INT-S                   mix-Blood                 0
-  bb-S                    mix-Blood                 0
-  bbseq-S                 mix-Blood                 0
-  BB-S                    mix-Blood                 0
-  BBseq-S                 mix-Blood                 0
-  ET2-S                   mix-Blood                 0
-  ETseq-S                 mix-Blood                 0
-  LNET-S                  mix-Blood                 0
-  LNTH-S                  mix-Blood                 0
+  ALV-S                   mix-Blood             $ss
+  INT-S                   mix-Blood             $ss
+  bb-S                    mix-Blood             $ss
+  bbseq-S                 mix-Blood             $ss
+  BB-S                    mix-Blood             $ss
+  BBseq-S                 mix-Blood             $ss
+  ET2-S                   mix-Blood             $ss
+  ETseq-S                 mix-Blood             $ss
+  LNET-S                  mix-Blood             $ss
+  LNTH-S                  mix-Blood             $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -149,12 +149,11 @@ H-3 Inhalation:Type-F_Organic
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.134 p.21 Table 2.3
-#   fA = 1≒0.99   (Inhaled particulate materials, Biogenic organic compounds)
-#   λ(SI->Blood) = fA*λ(SI->RC)/(1-fA) = 0.99 * 6 / (1 - 0.99) = 594
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  mix-Blood             $(fA * 6 / (1 - fA))
+
 # ICRP Publ.134 p.37 Para.76
 # ICRP Publ.134 p.38 Fig.2.4
-  SI-con                  mix-Blood               594
   mix-Blood               Blood                    50.0%
   mix-Blood               OBT1                     50.0%
 
