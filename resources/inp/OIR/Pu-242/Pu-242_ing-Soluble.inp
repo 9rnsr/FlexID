@@ -14,14 +14,16 @@ Pu-242 Ingestion:Soluble
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood1                Blood
   acc   Blood2                Blood
@@ -41,8 +43,6 @@ Pu-242 Ingestion:Soluble
   acc   Ovaries               Ovaries
   acc   Testes                Testes
   acc   Renal-tubules         Ureters
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Pu-242:transfer]
 #-----------------------+---------------------+--------------
@@ -56,10 +56,10 @@ Pu-242 Ingestion:Soluble
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -68,6 +68,9 @@ Pu-242 Ingestion:Soluble
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.141 p.225 Table 18.6
   Blood1                  Liver0                    4.6200E-1
@@ -106,6 +109,3 @@ Pu-242 Ingestion:Soluble
   T-bone-V                T-marrow                  4.9300E-4
   C-marrow                Blood2                    7.6000E-3
   T-marrow                Blood2                    7.6000E-3
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

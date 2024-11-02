@@ -14,8 +14,8 @@ Cs-134 Ingestion:Unspecified
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-wall               St-wall
   acc   St-con                St-cont
   acc   St-conRe              St-cont
@@ -29,6 +29,8 @@ Cs-134 Ingestion:Unspecified
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Plasma                Blood
   acc   RBC                   Blood
@@ -49,8 +51,6 @@ Cs-134 Ingestion:Unspecified
   acc   Other1                Other
   acc   Other2                Other
   exc   Excreta(sweat)        ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Cs-134:transfer]
 #-----------------------+---------------------+--------------
@@ -65,10 +65,10 @@ Cs-134 Ingestion:Unspecified
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -81,6 +81,9 @@ Cs-134 Ingestion:Unspecified
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.147 Table 6.3
   Plasma                  RBC                       1.8
@@ -145,6 +148,3 @@ Cs-134 Ingestion:Unspecified
   RS-wall                 RS-con                    0.21
   Other1                  Plasma                    0.762
   Other2                  Plasma                    0.00141
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

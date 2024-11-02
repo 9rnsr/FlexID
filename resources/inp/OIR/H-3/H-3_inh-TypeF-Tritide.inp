@@ -13,16 +13,6 @@ H-3 Inhalation:Type-F_LaNiAlTritide
 #-----+---------------------+---------------
   inp   input                 ---
 
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -47,14 +37,24 @@ H-3 Inhalation:Type-F_LaNiAlTritide
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood                 Blood
   acc   ExtravasHTO           Other
   acc   OBT1                  Other
   acc   OBT2                  Other
   exc   Breath(discharge)     ---
   exc   Skin(discharge)       ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------
@@ -98,7 +98,7 @@ H-3 Inhalation:Type-F_LaNiAlTritide
   bbseq-F                 LNTH-F                    0.001
   BB-F                    ET2-F                    10
   BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-S            100
+  ET2-F                   Oesophagus-s            100
   ETseq-F                 LNET-F                    0.001
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
@@ -110,7 +110,7 @@ H-3 Inhalation:Type-F_LaNiAlTritide
   bbseq-S                 LNTH-S                    0.001
   BB-S                    ET2-S                    10
   BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-S            100
+  ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
@@ -138,10 +138,10 @@ H-3 Inhalation:Type-F_LaNiAlTritide
   LNTH-S                  Blood                 $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -150,6 +150,9 @@ H-3 Inhalation:Type-F_LaNiAlTritide
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.35 Table 2.5 & footnote†
   Blood                   ExtravasHTO             400
@@ -162,6 +165,3 @@ H-3 Inhalation:Type-F_LaNiAlTritide
   ExtravasHTO             Blood                    44
   OBT1                    ExtravasHTO               0.01733
   OBT2                    ExtravasHTO               0.0019
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

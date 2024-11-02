@@ -15,8 +15,8 @@ Mo-93 Ingestion:Other
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
@@ -45,21 +45,21 @@ Mo-93 Ingestion:Other
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.310 Table 14.3
   Blood1                  Blood2                   12.5
@@ -80,8 +80,8 @@ Mo-93 Ingestion:Other
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
@@ -89,7 +89,6 @@ Mo-93 Ingestion:Other
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
-
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
@@ -146,15 +145,14 @@ Mo-93 Ingestion:Other
 
 # from parent to progeny
   Mo-93/Oralcavity        Oralcavity                ---
-  Mo-93/Oesophagus-F      Oesophagus-F              ---
-  Mo-93/Oesophagus-S      Oesophagus-S              ---
+  Mo-93/Oesophagus-f      Oesophagus-f              ---
+  Mo-93/Oesophagus-s      Oesophagus-s              ---
   Mo-93/St-con            St-con                    ---
   Mo-93/SI-con            SI-con                    ---
   Mo-93/RC-con            RC-con                    ---
   Mo-93/LC-con            LC-con                    ---
   Mo-93/RS-con            RS-con                    ---
   Mo-93/Faeces            Faeces                    ---
-
   Mo-93/UB-con            UB-con                    ---
   Mo-93/Urine             Urine                     ---
 
@@ -193,10 +191,10 @@ Mo-93 Ingestion:Other
   decay-OtherTissue       Blood1                    1.39
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   SI-conRe                RC-con                    6
@@ -204,12 +202,12 @@ Mo-93 Ingestion:Other
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.294 Table 13.3
   Blood1                  Blood2                    3.2

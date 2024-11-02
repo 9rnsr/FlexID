@@ -14,8 +14,8 @@ Fe-59 Ingestion:Unspecified
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
@@ -23,6 +23,8 @@ Fe-59 Ingestion:Unspecified
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   OtherPlasma           Blood
   acc   PlasmaTrans           Blood
@@ -36,8 +38,6 @@ Fe-59 Ingestion:Unspecified
   acc   Other1(Trans)         Other
   acc   Other2(Parenc)        Other
   acc   Other3(RE)            Other
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
   exc   Excreta               ---
 
 [Fe-59:transfer]
@@ -53,10 +53,10 @@ Fe-59 Ingestion:Unspecified
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -68,6 +68,9 @@ Fe-59 Ingestion:Unspecified
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  OtherPlasma           $(fA    * 6 / (1 - fA   ))
   SI-conRe                OtherPlasma           $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.143 Table 7.3
   OtherPlasma             PlasmaTrans              70
@@ -98,6 +101,3 @@ Fe-59 Ingestion:Unspecified
   Other2(Parenc)          Other1(Trans)             0.00127
   Other2(Parenc)          Excreta                   0.00057
   Other2(Parenc)          UB-con                    0.00003
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

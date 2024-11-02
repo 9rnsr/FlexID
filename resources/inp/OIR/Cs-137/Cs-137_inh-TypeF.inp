@@ -14,23 +14,6 @@ Cs-137 Inhalation:Type-F
 #-----+---------------------+---------------
   inp   input                 ---
 
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-wall               St-wall
-  acc   St-con                St-cont
-  acc   St-conRe              St-cont
-  acc   SI-wall               SI-wall
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-wall               RC-wall
-  acc   RC-con                RC-cont
-  acc   LC-wall               LC-wall
-  acc   LC-con                LC-cont
-  acc   RS-wall               RS-wall
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -55,6 +38,25 @@ Cs-137 Inhalation:Type-F
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-wall               SI-wall
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-wall               LC-wall
+  acc   LC-con                LC-cont
+  acc   RS-wall               RS-wall
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   Liver                 Liver
@@ -74,8 +76,6 @@ Cs-137 Inhalation:Type-F
   acc   Other1                Other
   acc   Other2                Other
   exc   Excreta(sweat)        ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Cs-137:transfer]
 #-----------------------+---------------------+--------------
@@ -120,7 +120,7 @@ Cs-137 Inhalation:Type-F
   bbseq-F                 LNTH-F                    0.001
   BB-F                    ET2-F                    10
   BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-S            100
+  ET2-F                   Oesophagus-s            100
   ETseq-F                 LNET-F                    0.001
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
@@ -132,7 +132,7 @@ Cs-137 Inhalation:Type-F
   bbseq-S                 LNTH-S                    0.001
   BB-S                    ET2-S                    10
   BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-S            100
+  ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
@@ -160,10 +160,10 @@ Cs-137 Inhalation:Type-F
   LNTH-S                  Plasma                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -176,6 +176,9 @@ Cs-137 Inhalation:Type-F
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.147 Table 6.3
   Plasma                  RBC                       1.8
@@ -241,24 +244,11 @@ Cs-137 Inhalation:Type-F
   Other1                  Plasma                    0.762
   Other2                  Plasma                    0.00141
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 
 [Ba-137m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -283,6 +273,18 @@ Cs-137 Inhalation:Type-F
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Plasma                Blood
   acc   Ht-wall               Ht-wall
   acc   Liver                 Liver
@@ -303,8 +305,6 @@ Cs-137 Inhalation:Type-F
   acc   T-bone-S              T-bone-S
   acc   C-bone-S              C-bone-S
   acc   Other                 Other
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
   acc   Cartilage             Cartilage
   acc   Exch-T-bone-V         T-bone-V
   acc   Exch-C-bone-V         C-bone-V
@@ -342,18 +342,6 @@ Cs-137 Inhalation:Type-F
   $fA = 0.2
 
 # from parent to progeny
-  Cs-137/Oralcavity       Oralcavity                ---
-  Cs-137/Oesophagus-F     Oesophagus-F              ---
-  Cs-137/Oesophagus-S     Oesophagus-S              ---
-  Cs-137/St-con           St-con                    ---
-  Cs-137/St-conRe         St-con                    ---
-  Cs-137/SI-con           SI-con                    ---
-  Cs-137/SI-conRe         SI-con                    ---
-  Cs-137/RC-con           RC-con                    ---
-  Cs-137/LC-con           LC-con                    ---
-  Cs-137/RS-con           RS-con                    ---
-  Cs-137/Faeces           Faeces                    ---
-
   Cs-137/ET1-F            ET1-F                     ---
   Cs-137/ET2-F            ET2-F                     ---
   Cs-137/ETseq-F          ETseq-F                   ---
@@ -377,11 +365,23 @@ Cs-137 Inhalation:Type-F
   Cs-137/INT-S            INT-S                     ---
   Cs-137/LNTH-S           LNTH-S                    ---
 
+  Cs-137/Oralcavity       Oralcavity                ---
+  Cs-137/Oesophagus-f     Oesophagus-f              ---
+  Cs-137/Oesophagus-s     Oesophagus-s              ---
+  Cs-137/St-con           St-con                    ---
+  Cs-137/St-conRe         St-con                    ---
+  Cs-137/SI-con           SI-con                    ---
+  Cs-137/SI-conRe         SI-con                    ---
+  Cs-137/RC-con           RC-con                    ---
+  Cs-137/LC-con           LC-con                    ---
+  Cs-137/RS-con           RS-con                    ---
+  Cs-137/Faeces           Faeces                    ---
+  Cs-137/UB-con           UB-con                    ---
+  Cs-137/Urine            Urine                     ---
+
   Cs-137/Plasma           Plasma                    ---
   Cs-137/T-bone-S         T-bone-S                  ---
   Cs-137/C-bone-S         C-bone-S                  ---
-  Cs-137/UB-con           UB-con                    ---
-  Cs-137/Urine            Urine                     ---
   Cs-137/RBC              Dec-RBC                   ---
   Cs-137/SkeletalMuscle   Dec-Muscle                ---
   Cs-137/St-wall          Dec-St-wall               ---
@@ -412,7 +412,7 @@ Cs-137 Inhalation:Type-F
   bbseq-F                 LNTH-F                    0.001
   BB-F                    ET2-F                    10
   BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-S            100
+  ET2-F                   Oesophagus-s            100
   ETseq-F                 LNET-F                    0.001
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
@@ -424,7 +424,7 @@ Cs-137 Inhalation:Type-F
   bbseq-S                 LNTH-S                    0.001
   BB-S                    ET2-S                    10
   BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-S            100
+  ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
@@ -452,10 +452,10 @@ Cs-137 Inhalation:Type-F
   LNTH-S                  Plasma                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -464,6 +464,9 @@ Cs-137 Inhalation:Type-F
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.152-154 Para.317
   # > Barium produced in skeletal muscle and red blood cells transfers to plasma at the
@@ -583,6 +586,3 @@ Cs-137 Inhalation:Type-F
   Exch-C-bone-V           Noch-C-bone-V             0.042       #  30.2158% of 0.139/d  # 0.0042 = 30.2158% of 0.0139の間違いか？
   Noch-C-bone-V           Plasma                    4.93E-4     # 100.0%                # 0.0000821 の間違いか？
   Noch-T-bone-V           Plasma                    8.21E-5     # 100.0%                # 0.000493 の間違いか？
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

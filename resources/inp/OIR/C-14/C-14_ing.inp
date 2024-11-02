@@ -14,14 +14,16 @@ C-14 Ingestion
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood0                Blood         # Generic model
   acc   Blood1                Blood         # CO2 model
@@ -38,8 +40,6 @@ C-14 Ingestion
   acc   T-bone-V              T-bone-V
   exc   Exhalation            ---
   exc   Excreta(skin)         ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [C-14:transfer]
 #-----------------------+---------------------+--------------
@@ -53,10 +53,10 @@ C-14 Ingestion
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -65,6 +65,9 @@ C-14 Ingestion
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood0                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.66 Table 3.5
   Blood1                  Exhalation               36.2
@@ -100,6 +103,3 @@ C-14 Ingestion
   Sys-Tis(short)          Blood0                    0.0924
   Sys-Tis(short)          RC-con                    0.0693
   Sys-Tis(long)           Blood1                    0.0099
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

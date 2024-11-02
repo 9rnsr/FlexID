@@ -14,14 +14,16 @@ Ra-226 Ingestion
   inp   input                 ---
 
   acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   acc   ST0                   Other
@@ -37,8 +39,6 @@ Ra-226 Ingestion
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Ra-226:transfer]
 #-----------------------+---------------------+--------------
@@ -52,10 +52,10 @@ Ra-226 Ingestion
   input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -64,6 +64,9 @@ Ra-226 Ingestion
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.332 Table 13.3
   Blood                   UB-con                    0.606
@@ -94,6 +97,3 @@ Ra-226 Ingestion
   Exch-C-bone-V           Noch-C-bone-V             0.0046
   Noch-C-bone-V           Blood                     0.0000821
   Noch-T-bone-V           Blood                     0.000493
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

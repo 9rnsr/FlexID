@@ -13,22 +13,6 @@ Tc-99 Inhalation:Type-F
 #-----+---------------------+---------------
   inp   input                 ---
 
-  acc   Oralcavity            O-cavity
-  acc   OralcavityRe          O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   Oesophagus-sRe        Oesophag-s
-  acc   St-wall               St-wall
-  acc   St-con                St-cont
-  acc   St-conRe              St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-wall               RC-wall
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -53,6 +37,24 @@ Tc-99 Inhalation:Type-F
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood                 Blood
   acc   Liver1                Liver
   acc   Liver2                Liver
@@ -68,8 +70,6 @@ Tc-99 Inhalation:Type-F
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Tc-99:transfer]
 #-----------------------+---------------------+--------------
@@ -176,6 +176,9 @@ Tc-99 Inhalation:Type-F
   SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.334 Table 15.3
   Blood                   Thyroid1                  7.0
   Blood                   ST0                      71.88
@@ -210,6 +213,3 @@ Tc-99 Inhalation:Type-F
   C-bone-S                C-bone-V                  0.00462
   T-bone-V                Blood                     0.000493
   C-bone-V                Blood                     0.0000821
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

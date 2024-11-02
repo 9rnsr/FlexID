@@ -12,6 +12,7 @@ Tc-99 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
@@ -27,6 +28,8 @@ Tc-99 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   acc   Liver1                Liver
@@ -43,8 +46,6 @@ Tc-99 Ingestion
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Tc-99:transfer]
 #-----------------------+---------------------+--------------
@@ -81,6 +82,9 @@ Tc-99 Ingestion
   SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.334 Table 15.3
   Blood                   Thyroid1                  7.0
   Blood                   ST0                      71.88
@@ -115,6 +119,3 @@ Tc-99 Ingestion
   C-bone-S                C-bone-V                  0.00462
   T-bone-V                Blood                     0.000493
   C-bone-V                Blood                     0.0000821
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

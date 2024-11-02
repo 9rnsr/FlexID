@@ -14,16 +14,6 @@ Sr-90 Inhalation:Type-S
 #-----+---------------------+---------------
   inp   input                 ---
 
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -48,6 +38,18 @@ Sr-90 Inhalation:Type-S
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
@@ -58,8 +60,6 @@ Sr-90 Inhalation:Type-S
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Sr-90:transfer]
 #-----------------------+---------------------+------------------------
@@ -103,7 +103,7 @@ Sr-90 Inhalation:Type-S
   bbseq-F                 LNTH-F                    0.001
   BB-F                    ET2-F                    10
   BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-S            100
+  ET2-F                   Oesophagus-s            100
   ETseq-F                 LNET-F                    0.001
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
@@ -115,7 +115,7 @@ Sr-90 Inhalation:Type-S
   bbseq-S                 LNTH-S                    0.001
   BB-S                    ET2-S                    10
   BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-S            100
+  ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
@@ -143,10 +143,10 @@ Sr-90 Inhalation:Type-S
   LNTH-S                  Blood                 $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   RC-con                  LC-con                    2
@@ -155,6 +155,9 @@ Sr-90 Inhalation:Type-S
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.220 Table 10.3
   Blood                   UB-con                    1.73
@@ -178,28 +181,11 @@ Sr-90 Inhalation:Type-S
   Noch-C-bone-V           Blood                     0.0000821
   Noch-T-bone-V           Blood                     0.000493
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 
 [Y-90:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-F          Oesophag-f
-  acc   Oesophagus-S          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-
-# ICRP Publ.134 p.252 Table 11.3
-  acc   SI-conRe              SI-cont   # SI-con Re-Absorption
-
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -224,6 +210,22 @@ Sr-90 Inhalation:Type-S
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+
+# ICRP Publ.134 p.252 Table 11.3
+  acc   SI-conRe              SI-cont   # SI-con Re-Absorption
+
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -244,8 +246,6 @@ Sr-90 Inhalation:Type-S
   acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Y-90:transfer]
 #-----------------------+---------------------+--------------
@@ -287,16 +287,6 @@ Sr-90 Inhalation:Type-S
   $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
-  Sr-90/Oralcavity        Oralcavity                ---
-  Sr-90/Oesophagus-F      Oesophagus-F              ---
-  Sr-90/Oesophagus-S      Oesophagus-S              ---
-  Sr-90/St-con            St-con                    ---
-  Sr-90/SI-con            SI-con                    ---
-  Sr-90/RC-con            RC-con                    ---
-  Sr-90/LC-con            LC-con                    ---
-  Sr-90/RS-con            RS-con                    ---
-  Sr-90/Faeces            Faeces                    ---
-
   Sr-90/ET1-F             ET1-F                     ---
   Sr-90/ET2-F             ET2-F                     ---
   Sr-90/ETseq-F           ETseq-F                   ---
@@ -321,6 +311,18 @@ Sr-90 Inhalation:Type-S
   Sr-90/LNTH-S            LNTH-S                    ---
   Sr-90/Environment       Environment               ---
 
+  Sr-90/Oralcavity        Oralcavity                ---
+  Sr-90/Oesophagus-f      Oesophagus-f              ---
+  Sr-90/Oesophagus-s      Oesophagus-s              ---
+  Sr-90/St-con            St-con                    ---
+  Sr-90/SI-con            SI-con                    ---
+  Sr-90/RC-con            RC-con                    ---
+  Sr-90/LC-con            LC-con                    ---
+  Sr-90/RS-con            RS-con                    ---
+  Sr-90/Faeces            Faeces                    ---
+  Sr-90/UB-con            UB-con                    ---
+  Sr-90/Urine             Urine                     ---
+
   Sr-90/Blood             Blood1                    ---
 
 # ICRP Publ.134 p.223-224 Para.483
@@ -332,15 +334,13 @@ Sr-90 Inhalation:Type-S
   Sr-90/ST0               ST-decay                  ---
   Sr-90/ST1               ST-decay                  ---
   Sr-90/ST2               ST-decay                  ---
-#
+
   Sr-90/C-bone-S          C-bone-S                  ---
   Sr-90/Exch-C-bone-V     C-bone-V                  ---
   Sr-90/Noch-C-bone-V     C-bone-V                  ---
   Sr-90/T-bone-S          T-bone-S                  ---
   Sr-90/Exch-T-bone-V     T-bone-V                  ---
   Sr-90/Noch-T-bone-V     T-bone-V                  ---
-  Sr-90/UB-con            UB-con                    ---
-  Sr-90/Urine             Urine                     ---
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -351,7 +351,7 @@ Sr-90 Inhalation:Type-S
   bbseq-F                 LNTH-F                    0.001
   BB-F                    ET2-F                    10
   BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-S            100
+  ET2-F                   Oesophagus-s            100
   ETseq-F                 LNET-F                    0.001
   ET1-F                   Environment               0.6
   ET1-F                   ET2-F                     1.5
@@ -363,7 +363,7 @@ Sr-90 Inhalation:Type-S
   bbseq-S                 LNTH-S                    0.001
   BB-S                    ET2-S                    10
   BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-S            100
+  ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
@@ -391,10 +391,10 @@ Sr-90 Inhalation:Type-S
   LNTH-S                  Blood1                $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-F           6480
-  Oralcavity              Oesophagus-S            720
-  Oesophagus-F            St-con                12343
-  Oesophagus-S            St-con                 2160
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
   SI-conRe                RC-con                    6
@@ -405,6 +405,9 @@ Sr-90 Inhalation:Type-S
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.252 Table 11.3
   Blood1                  Blood2                    0.498
@@ -439,6 +442,3 @@ Sr-90 Inhalation:Type-S
   C-bone-S                Blood1                    0.0000821
   C-bone-S                C-bone-V                  0.0000411
   C-bone-V                Blood1                    0.0000821
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
