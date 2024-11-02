@@ -50,7 +50,7 @@ Sr-90 Inhalation:Type-F
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Blood1                Blood
+  acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -120,27 +120,27 @@ Sr-90 Inhalation:Type-F
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Blood1                $sr
-  INT-F                   Blood1                $sr
-  bb-F                    Blood1                $sr
-  bbseq-F                 Blood1                $sr
-  BB-F                    Blood1                $sr
-  BBseq-F                 Blood1                $sr
-  ET2-F                   Blood1                $sr
-  ETseq-F                 Blood1                $sr
-  LNET-F                  Blood1                $sr
-  LNTH-F                  Blood1                $sr
+  ALV-F                   Blood                 $sr
+  INT-F                   Blood                 $sr
+  bb-F                    Blood                 $sr
+  bbseq-F                 Blood                 $sr
+  BB-F                    Blood                 $sr
+  BBseq-F                 Blood                 $sr
+  ET2-F                   Blood                 $sr
+  ETseq-F                 Blood                 $sr
+  LNET-F                  Blood                 $sr
+  LNTH-F                  Blood                 $sr
 
-  ALV-S                   Blood1                $ss
-  INT-S                   Blood1                $ss
-  bb-S                    Blood1                $ss
-  bbseq-S                 Blood1                $ss
-  BB-S                    Blood1                $ss
-  BBseq-S                 Blood1                $ss
-  ET2-S                   Blood1                $ss
-  ETseq-S                 Blood1                $ss
-  LNET-S                  Blood1                $ss
-  LNTH-S                  Blood1                $ss
+  ALV-S                   Blood                 $ss
+  INT-S                   Blood                 $ss
+  bb-S                    Blood                 $ss
+  bbseq-S                 Blood                 $ss
+  BB-S                    Blood                 $ss
+  BBseq-S                 Blood                 $ss
+  ET2-S                   Blood                 $ss
+  ETseq-S                 Blood                 $ss
+  LNET-S                  Blood                 $ss
+  LNTH-S                  Blood                 $ss
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -154,32 +154,32 @@ Sr-90 Inhalation:Type-F
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood1                $(fA * 6 / (1 - fA))
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
 # ICRP Publ.134 p.220 Table 10.3
-  Blood1                  UB-con                    1.73
-  Blood1                  RC-con                    0.525
-  Blood1                  T-bone-S                  2.08
-  Blood1                  C-bone-S                  1.67
-  Blood1                  ST0                       7.5
-  Blood1                  ST1                       1.5
-  Blood1                  ST2                       0.003
-  T-bone-S                Blood1                    0.578
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+  Blood                   ST1                       1.5
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
   T-bone-S                Exch-T-bone-V             0.116
-  C-bone-S                Blood1                    0.578
+  C-bone-S                Blood                     0.578
   C-bone-S                Exch-C-bone-V             0.116
-  ST0                     Blood1                    2.50
-  ST1                     Blood1                    0.116
-  ST2                     Blood1                    0.00038
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
   Exch-T-bone-V           T-bone-S                  0.0043
   Exch-T-bone-V           Noch-T-bone-V             0.0043
   Exch-C-bone-V           C-bone-S                  0.0043
   Exch-C-bone-V           Noch-C-bone-V             0.0043
-  Noch-C-bone-V           Blood1                    0.0000821
-  Noch-T-bone-V           Blood1                    0.000493
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
 
 
 [Y-90:compartment]
@@ -281,7 +281,7 @@ Sr-90 Inhalation:Type-F
   Sr-90/UB-con            UB-con                    ---
   Sr-90/Urine             Urine                     ---
 
-  Sr-90/Blood1            Blood1                    ---
+  Sr-90/Blood             Blood1                    ---
   Sr-90/ST0               ST0                       ---
   Sr-90/ST1               ST0                       ---
   Sr-90/ST2               ST0                       ---
