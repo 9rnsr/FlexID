@@ -14,18 +14,6 @@ Sr-90 Inhalation:Type-F
 #-----+---------------------+---------------
   inp   input                 ---
 
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -49,6 +37,18 @@ Sr-90 Inhalation:Type-F
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
   exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood1                Blood
   acc   ST0                   Other
@@ -186,18 +186,6 @@ Sr-90 Inhalation:Type-F
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -222,6 +210,18 @@ Sr-90 Inhalation:Type-F
   acc   LNTH-S                LN-Th
   exc   Environment           ---
 
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   ST0                   Other
@@ -245,18 +245,6 @@ Sr-90 Inhalation:Type-F
   $fA = 1E-4
 
 # from parent to progeny
-  Sr-90/Oralcavity        Oralcavity                ---
-  Sr-90/Oesophagus-f      Oesophagus-f              ---
-  Sr-90/Oesophagus-s      Oesophagus-s              ---
-  Sr-90/St-con            St-con                    ---
-  Sr-90/SI-con            SI-con                    ---
-  Sr-90/RC-con            RC-con                    ---
-  Sr-90/LC-con            LC-con                    ---
-  Sr-90/RS-con            RS-con                    ---
-  Sr-90/Faeces            Faeces                    ---
-  Sr-90/UB-con            UB-con                    ---
-  Sr-90/Urine             Urine                     ---
-
   Sr-90/ET1-F             ET1-F                     ---
   Sr-90/ET2-F             ET2-F                     ---
   Sr-90/ETseq-F           ETseq-F                   ---
@@ -280,6 +268,18 @@ Sr-90 Inhalation:Type-F
   Sr-90/INT-S             INT-S                     ---
   Sr-90/LNTH-S            LNTH-S                    ---
   Sr-90/Environment       Environment               ---
+
+  Sr-90/Oralcavity        Oralcavity                ---
+  Sr-90/Oesophagus-f      Oesophagus-f              ---
+  Sr-90/Oesophagus-s      Oesophagus-s              ---
+  Sr-90/St-con            St-con                    ---
+  Sr-90/SI-con            SI-con                    ---
+  Sr-90/RC-con            RC-con                    ---
+  Sr-90/LC-con            LC-con                    ---
+  Sr-90/RS-con            RS-con                    ---
+  Sr-90/Faeces            Faeces                    ---
+  Sr-90/UB-con            UB-con                    ---
+  Sr-90/Urine             Urine                     ---
 
   Sr-90/Blood1            Blood1                    ---
   Sr-90/ST0               ST0                       ---

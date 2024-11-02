@@ -12,6 +12,7 @@ Tc-99 Ingestion
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   inp   input                 ---
+
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
