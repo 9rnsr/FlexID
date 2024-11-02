@@ -215,10 +215,7 @@ Sr-90 Inhalation:Type-S
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
-
-# ICRP Publ.134 p.252 Table 11.3
-  acc   SI-conRe              SI-cont   # SI-con Re-Absorption
-
+  acc   SI-conRe              SI-cont       # Re-Absorption
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -230,15 +227,7 @@ Sr-90 Inhalation:Type-S
   acc   Blood2                Blood
   acc   ST0                   Other
   acc   ST1                   Other
-
-# ICRP Publ.134 p.223-224 Para.483
-# Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
-# is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
-# from compartments of other soft tissue in the model for yttrium as a parent), and then
-# to follow the kinetics of yttrium as a parent radionuclide.
-#
-  acc   ST-decay              Other
-
+  acc   ST-decay              Other         # ambiguous compartment from Sr-90
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Kidneys               Kidneys
@@ -326,14 +315,15 @@ Sr-90 Inhalation:Type-S
   Sr-90/Blood             Blood1                    ---
 
 # ICRP Publ.134 p.223-224 Para.483
-# Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
-# is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
-# from compartments of other soft tissue in the model for yttrium as a parent), and then
-# to follow the kinetics of yttrium as a parent radionuclide.
+#   Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
+#   is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
+#   from compartments of other soft tissue in the model for yttrium as a parent), and then
+#   to follow the kinetics of yttrium as a parent radionuclide.
 #
   Sr-90/ST0               ST-decay                  ---
   Sr-90/ST1               ST-decay                  ---
   Sr-90/ST2               ST-decay                  ---
+  ST-decay                Blood1                    0.23105     # = ln(2)/3
 
   Sr-90/C-bone-S          C-bone-S                  ---
   Sr-90/Exch-C-bone-V     C-bone-V                  ---
@@ -397,7 +387,7 @@ Sr-90 Inhalation:Type-S
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
@@ -427,15 +417,6 @@ Sr-90 Inhalation:Type-S
   Kidneys                 Blood1                    0.0019
   ST0                     Blood1                    0.231
   ST1                     Blood1                    0.0019
-
-# ICRP Publ.134 p.223-224 Para.483
-# Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
-# is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
-# from compartments of other soft tissue in the model for yttrium as a parent), and then
-# to follow the kinetics of yttrium as a parent radionuclide.
-#
-  ST-decay                Blood1                    0.23105     # = ln(2)/3
-
   T-bone-S                Blood1                    0.000493
   T-bone-S                T-bone-V                  0.000247
   T-bone-V                Blood1                    0.000493
