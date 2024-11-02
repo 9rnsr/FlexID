@@ -22,6 +22,8 @@ C-14 Inhalation:Type-S
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -62,8 +64,6 @@ C-14 Inhalation:Type-S
   acc   T-bone-V              T-bone-V
   exc   Exhalation            ---
   exc   Excreta(skin)         ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [C-14:transfer]
 #-----------------------+---------------------+--------------
@@ -157,11 +157,11 @@ C-14 Inhalation:Type-S
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood0                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.66 Table 3.5
   Blood1                  Exhalation               36.2

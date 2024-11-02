@@ -22,6 +22,8 @@ H-3 Ingestion:Soluble
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   acc   ExtravasHTO           Other
@@ -29,8 +31,6 @@ H-3 Ingestion:Soluble
   acc   OBT2                  Other
   exc   Breath(discharge)     ---
   exc   Skin(discharge)       ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------
@@ -57,6 +57,9 @@ H-3 Ingestion:Soluble
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood                 $(fA * 6 / (1 - fA))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.35 Table 2.5 & footnote†
   Blood                   ExtravasHTO             400
   ExtravasHTO             OBT1                      0.0006
@@ -68,6 +71,3 @@ H-3 Ingestion:Soluble
   ExtravasHTO             Blood                    44
   OBT1                    ExtravasHTO               0.01733
   OBT2                    ExtravasHTO               0.0019
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

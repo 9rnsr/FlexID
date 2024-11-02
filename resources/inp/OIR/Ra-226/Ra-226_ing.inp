@@ -22,6 +22,8 @@ Ra-226 Ingestion
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   acc   ST0                   Other
@@ -37,8 +39,6 @@ Ra-226 Ingestion
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Ra-226:transfer]
 #-----------------------+---------------------+--------------
@@ -64,6 +64,9 @@ Ra-226 Ingestion
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.332 Table 13.3
   Blood                   UB-con                    0.606
@@ -94,6 +97,3 @@ Ra-226 Ingestion
   Exch-C-bone-V           Noch-C-bone-V             0.0046
   Noch-C-bone-V           Blood                     0.0000821
   Noch-T-bone-V           Blood                     0.000493
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

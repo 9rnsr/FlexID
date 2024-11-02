@@ -23,6 +23,8 @@ Sr-90 Inhalation:Type-S
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -58,8 +60,6 @@ Sr-90 Inhalation:Type-S
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Sr-90:transfer]
 #-----------------------+---------------------+------------------------
@@ -156,6 +156,9 @@ Sr-90 Inhalation:Type-S
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood                 $(fA * 6 / (1 - fA))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.220 Table 10.3
   Blood                   UB-con                    1.73
   Blood                   RC-con                    0.525
@@ -178,9 +181,6 @@ Sr-90 Inhalation:Type-S
   Noch-C-bone-V           Blood                     0.0000821
   Noch-T-bone-V           Blood                     0.000493
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 
 [Y-90:compartment]
 #-----+---------------------| S-Coefficient
@@ -199,6 +199,8 @@ Sr-90 Inhalation:Type-S
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -244,8 +246,6 @@ Sr-90 Inhalation:Type-S
   acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Y-90:transfer]
 #-----------------------+---------------------+--------------
@@ -296,6 +296,8 @@ Sr-90 Inhalation:Type-S
   Sr-90/LC-con            LC-con                    ---
   Sr-90/RS-con            RS-con                    ---
   Sr-90/Faeces            Faeces                    ---
+  Sr-90/UB-con            UB-con                    ---
+  Sr-90/Urine             Urine                     ---
 
   Sr-90/ET1-F             ET1-F                     ---
   Sr-90/ET2-F             ET2-F                     ---
@@ -332,15 +334,13 @@ Sr-90 Inhalation:Type-S
   Sr-90/ST0               ST-decay                  ---
   Sr-90/ST1               ST-decay                  ---
   Sr-90/ST2               ST-decay                  ---
-#
+
   Sr-90/C-bone-S          C-bone-S                  ---
   Sr-90/Exch-C-bone-V     C-bone-V                  ---
   Sr-90/Noch-C-bone-V     C-bone-V                  ---
   Sr-90/T-bone-S          T-bone-S                  ---
   Sr-90/Exch-T-bone-V     T-bone-V                  ---
   Sr-90/Noch-T-bone-V     T-bone-V                  ---
-  Sr-90/UB-con            UB-con                    ---
-  Sr-90/Urine             Urine                     ---
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -406,6 +406,9 @@ Sr-90 Inhalation:Type-S
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.252 Table 11.3
   Blood1                  Blood2                    0.498
   Blood1                  Liver0                    1.66
@@ -439,6 +442,3 @@ Sr-90 Inhalation:Type-S
   C-bone-S                Blood1                    0.0000821
   C-bone-S                C-bone-V                  0.0000411
   C-bone-V                Blood1                    0.0000821
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

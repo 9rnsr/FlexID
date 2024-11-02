@@ -156,11 +156,11 @@ Mo-93 Inhalation:Type-F
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.310 Table 14.3
   Blood1                  Blood2                   12.5
@@ -214,7 +214,6 @@ Mo-93 Inhalation:Type-F
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
-
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
@@ -305,7 +304,6 @@ Mo-93 Inhalation:Type-F
   Mo-93/LC-con            LC-con                    ---
   Mo-93/RS-con            RS-con                    ---
   Mo-93/Faeces            Faeces                    ---
-
   Mo-93/UB-con            UB-con                    ---
   Mo-93/Urine             Urine                     ---
 
@@ -403,12 +401,12 @@ Mo-93 Inhalation:Type-F
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.294 Table 13.3
   Blood1                  Blood2                    3.2

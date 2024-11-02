@@ -29,6 +29,8 @@ Cs-134 Ingestion:Insoluble
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Plasma                Blood
   acc   RBC                   Blood
@@ -49,8 +51,6 @@ Cs-134 Ingestion:Insoluble
   acc   Other1                Other
   acc   Other2                Other
   exc   Excreta(sweat)        ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Cs-134:transfer]
 #-----------------------+---------------------+--------------
@@ -81,6 +81,9 @@ Cs-134 Ingestion:Insoluble
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.147 Table 6.3
   Plasma                  RBC                       1.8
@@ -145,6 +148,3 @@ Cs-134 Ingestion:Insoluble
   RS-wall                 RS-con                    0.21
   Other1                  Plasma                    0.762
   Other2                  Plasma                    0.00141
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

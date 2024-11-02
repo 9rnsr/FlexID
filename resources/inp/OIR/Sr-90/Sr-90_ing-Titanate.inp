@@ -23,6 +23,8 @@ Sr-90 Ingestion:StrontiumTitanate
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood1                Blood
   acc   ST0                   Other
@@ -34,8 +36,6 @@ Sr-90 Ingestion:StrontiumTitanate
   acc   T-bone-S              T-bone-S
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Sr-90:transfer]
 #-----------------------+---------------------+--------------
@@ -62,6 +62,9 @@ Sr-90 Ingestion:StrontiumTitanate
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA * 6 / (1 - fA))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.220 Table 10.3
   Blood1                  UB-con                    1.73
   Blood1                  RC-con                    0.525
@@ -84,9 +87,6 @@ Sr-90 Ingestion:StrontiumTitanate
   Noch-C-bone-V           Blood1                    0.0000821
   Noch-T-bone-V           Blood1                    0.000493
 
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
 
 [Y-90:compartment]
 #-----+---------------------| S-Coefficient
@@ -101,6 +101,8 @@ Sr-90 Ingestion:StrontiumTitanate
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood1                Blood
   acc   Blood2                Blood
@@ -113,8 +115,6 @@ Sr-90 Ingestion:StrontiumTitanate
   acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Y-90:transfer]
 #-----------------------+---------------------+--------------
@@ -134,6 +134,8 @@ Sr-90 Ingestion:StrontiumTitanate
   Sr-90/LC-con            LC-con                    ---
   Sr-90/RS-con            RS-con                    ---
   Sr-90/Faeces            Faeces                    ---
+  Sr-90/UB-con            UB-con                    ---
+  Sr-90/Urine             Urine                     ---
 
   Sr-90/Blood1            Blood1                    ---
   Sr-90/ST0               ST0                       ---
@@ -145,8 +147,6 @@ Sr-90 Ingestion:StrontiumTitanate
   Sr-90/T-bone-S          T-bone-S                  ---
   Sr-90/Exch-T-bone-V     T-bone-V                  ---
   Sr-90/Noch-T-bone-V     T-bone-V                  ---
-  Sr-90/UB-con            UB-con                    ---
-  Sr-90/Urine             Urine                     ---
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-F           6480
@@ -161,6 +161,9 @@ Sr-90 Ingestion:StrontiumTitanate
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.134 p.252 Table 11.3
   Blood1                  Blood2                    0.498
@@ -186,6 +189,3 @@ Sr-90 Ingestion:StrontiumTitanate
   C-bone-S                Blood1                    0.0000821
   C-bone-S                C-bone-V                  0.0000411
   C-bone-V                Blood1                    0.0000821
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

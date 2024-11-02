@@ -27,6 +27,8 @@ I-129 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -65,8 +67,6 @@ I-129 Inhalation:Type-M
   acc   Other2                Other
   acc   Other3                Other
   acc   Other4                Other
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [I-129:transfer]
 #-----------------------+---------------------+--------------
@@ -173,6 +173,9 @@ I-129 Inhalation:Type-M
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.137 p.108 Table 5.4
   Blood1                  Thyroid1                  7.26
   Blood1                  UB-con                   11.84
@@ -204,6 +207,3 @@ I-129 Inhalation:Type-M
   Liver2                  Blood2                   21
   Liver2                  Blood1                    0.14
   Liver2                  RC-con                    0.08
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

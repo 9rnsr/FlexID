@@ -22,6 +22,8 @@ Pu-241 Ingestion:Soluble
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood1                Blood
   acc   Blood2                Blood
@@ -41,8 +43,6 @@ Pu-241 Ingestion:Soluble
   acc   Ovaries               Ovaries
   acc   Testes                Testes
   acc   Renal-tubules         Ureters
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Pu-241:transfer]
 #-----------------------+---------------------+--------------
@@ -68,6 +68,9 @@ Pu-241 Ingestion:Soluble
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
 
 # ICRP Publ.141 p.225 Table 18.6
   Blood1                  Liver0                    4.6200E-1
@@ -106,6 +109,3 @@ Pu-241 Ingestion:Soluble
   T-bone-V                T-marrow                  4.9300E-4
   C-marrow                Blood2                    7.6000E-3
   T-marrow                Blood2                    7.6000E-3
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

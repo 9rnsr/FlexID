@@ -29,6 +29,8 @@ Cs-134 Inhalation:Type-M
   acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -73,8 +75,6 @@ Cs-134 Inhalation:Type-M
   acc   Other1                Other
   acc   Other2                Other
   exc   Excreta(sweat)        ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Cs-134:transfer]
 #-----------------------+---------------------+--------------
@@ -176,6 +176,9 @@ Cs-134 Inhalation:Type-M
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.137 p.147 Table 6.3
   Plasma                  RBC                       1.8
   Plasma                  SkeletalMuscle           30.0
@@ -239,6 +242,3 @@ Cs-134 Inhalation:Type-M
   RS-wall                 RS-con                    0.21
   Other1                  Plasma                    0.762
   Other2                  Plasma                    0.00141
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

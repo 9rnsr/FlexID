@@ -22,6 +22,8 @@ H-3 Inhalation:Type-F_Organic
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -54,8 +56,6 @@ H-3 Inhalation:Type-F_Organic
   acc   OBT2                  Other
   exc   Breath(discharge)     ---
   exc   Skin(discharge)       ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [H-3:transfer]
 #-----------------------+---------------------+--------------
@@ -152,6 +152,9 @@ H-3 Inhalation:Type-F_Organic
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  mix-Blood             $(fA * 6 / (1 - fA))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.134 p.37 Para.76
 # ICRP Publ.134 p.38 Fig.2.4
   mix-Blood               Blood                    50.0%
@@ -168,6 +171,3 @@ H-3 Inhalation:Type-F_Organic
   ExtravasHTO             Blood                    44
   OBT1                    ExtravasHTO               0.01733
   OBT2                    ExtravasHTO               0.0019
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12

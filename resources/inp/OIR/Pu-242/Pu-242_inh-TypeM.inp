@@ -22,6 +22,8 @@ Pu-242 Inhalation:Type-M
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
@@ -75,8 +77,6 @@ Pu-242 Inhalation:Type-M
   acc   Ovaries               Ovaries
   acc   Testes                Testes
   acc   Renal-tubules         Ureters
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
 
 [Pu-242:transfer]
 #-----------------------+---------------------+--------------
@@ -210,6 +210,9 @@ Pu-242 Inhalation:Type-M
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA * 6 / (1 - fA))
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
 # ICRP Publ.141 p.225 Table 18.6
   Blood1                  Liver0                    4.6200E-1
   Blood1                  C-bone-S                  8.7780E-2
@@ -247,6 +250,3 @@ Pu-242 Inhalation:Type-M
   T-bone-V                T-marrow                  4.9300E-4
   C-marrow                Blood2                    7.6000E-3
   T-marrow                Blood2                    7.6000E-3
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
