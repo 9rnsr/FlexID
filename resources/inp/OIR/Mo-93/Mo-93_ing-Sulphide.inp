@@ -169,6 +169,7 @@ Mo-93 Ingestion:Sulphide
   Oesophagus-S            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
@@ -193,9 +194,9 @@ Mo-93 Ingestion:Sulphide
 #
 #   fA(Nb) = fA(Max value of ing(Nb)) = 0.01
 #   λ(SI->Blood1(Nb)) = fA(Nb) * λ(SI->RC) / (1 - fA(Nb))
-#                      = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-01
+#                      = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-02
 #
-  SI-con                  Blood1                    6.060606060606061E-01
+  SI-con                  Blood1                    6.060606060606061E-02
 
 # ICRP Publ.130 p.79 Para.149
 #   Some of the biokinetic models used in this series of reports to predict the
@@ -212,9 +213,9 @@ Mo-93 Ingestion:Sulphide
 #   fA(Re-Absorption(Nb)) = 0.01   (Ingested material, All forms)
 #
 #   λ(SI_Re-Absorption->Blood1(Nb)) = fA(Re-Ab(Nb)) * λ(SI->RC) / (1 - fA(Re-Ab(Nb)))
-#                                    = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-01
+#                                    = 0.01 * 6 / (1 - 0.01) = 6.060606060606061E-02
 #
-  SI-conRe                Blood1                    6.060606060606061E-01
+  SI-conRe                Blood1                    6.060606060606061E-02
 
 # ICRP Publ.134 p.294 Table 13.3
   Blood1                  Blood2                    3.2
