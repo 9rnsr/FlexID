@@ -26,7 +26,7 @@ Sr-90 Ingestion:Other
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Blood1                Blood
+  acc   Blood                 Blood
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -60,32 +60,32 @@ Sr-90 Ingestion:Other
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood1                $(fA * 6 / (1 - fA))
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
 # ICRP Publ.134 p.220 Table 10.3
-  Blood1                  UB-con                    1.73
-  Blood1                  RC-con                    0.525
-  Blood1                  T-bone-S                  2.08
-  Blood1                  C-bone-S                  1.67
-  Blood1                  ST0                       7.5
-  Blood1                  ST1                       1.5
-  Blood1                  ST2                       0.003
-  T-bone-S                Blood1                    0.578
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+  Blood                   ST1                       1.5
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
   T-bone-S                Exch-T-bone-V             0.116
-  C-bone-S                Blood1                    0.578
+  C-bone-S                Blood                     0.578
   C-bone-S                Exch-C-bone-V             0.116
-  ST0                     Blood1                    2.50
-  ST1                     Blood1                    0.116
-  ST2                     Blood1                    0.00038
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
   Exch-T-bone-V           T-bone-S                  0.0043
   Exch-T-bone-V           Noch-T-bone-V             0.0043
   Exch-C-bone-V           C-bone-S                  0.0043
   Exch-C-bone-V           Noch-C-bone-V             0.0043
-  Noch-C-bone-V           Blood1                    0.0000821
-  Noch-T-bone-V           Blood1                    0.000493
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
 
 
 [Y-90:compartment]
@@ -97,6 +97,7 @@ Sr-90 Ingestion:Other
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont       # Re-Absorption
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -108,6 +109,7 @@ Sr-90 Ingestion:Other
   acc   Blood2                Blood
   acc   ST0                   Other
   acc   ST1                   Other
+  acc   ST-decay              Other         # ambiguous compartment from Sr-90
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Kidneys               Kidneys
@@ -121,8 +123,33 @@ Sr-90 Ingestion:Other
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#   • The default absorption fraction, fA, for a progeny radionuclide produced by
+#     decay in the contents of the alimentary tract (in the small intestine or a higher
+#     compartment) following ingestion of a parent radionuclide, or produced in a
+#     systemic compartment and subsequently transferred into the alimentary tract
+#     content, is the reference value of fA for the progeny radionuclide when ingested
+#     as a parent. If the radionuclide has multiple reference values corresponding to
+#     different chemical or physical forms, the default value of fA is the highest reference
+#     value provided.
+#
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic compartments
+#   into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
 # ICRP Publ.134 p.242 Table 11.2 / Ingested material, All chemical forms
-  $fA = 1E-4
+  $fA_MaxValueOfIng = 1E-4
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Sr-90/Oralcavity        Oralcavity                ---
@@ -137,10 +164,19 @@ Sr-90 Ingestion:Other
   Sr-90/UB-con            UB-con                    ---
   Sr-90/Urine             Urine                     ---
 
-  Sr-90/Blood1            Blood1                    ---
-  Sr-90/ST0               ST0                       ---
-  Sr-90/ST1               ST0                       ---
-  Sr-90/ST2               ST0                       ---
+  Sr-90/Blood             Blood1                    ---
+
+# ICRP Publ.134 p.223-224 Para.483
+#   Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
+#   is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
+#   from compartments of other soft tissue in the model for yttrium as a parent), and then
+#   to follow the kinetics of yttrium as a parent radionuclide.
+#
+  Sr-90/ST0               ST-decay                  ---
+  Sr-90/ST1               ST-decay                  ---
+  Sr-90/ST2               ST-decay                  ---
+  ST-decay                Blood1                    0.23105     # = ln(2)/3
+
   Sr-90/C-bone-S          C-bone-S                  ---
   Sr-90/Exch-C-bone-V     C-bone-V                  ---
   Sr-90/Noch-C-bone-V     C-bone-V                  ---
@@ -155,12 +191,14 @@ Sr-90 Ingestion:Other
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood1                $(fA * 6 / (1 - fA))
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
@@ -172,11 +210,11 @@ Sr-90 Ingestion:Other
   Blood1                  ST0                       3.652
   Blood1                  ST1                       1.328
   Blood1                  UB-con                    2.49
-  Blood1                  SI-con                    0.166
+  Blood1                  SI-conRe                  0.166
   Blood1                  T-bone-S                  3.32
   Blood1                  C-bone-S                  3.32
   Blood2                  Blood1                    0.462
-  Liver0                  SI-con                    0.0231
+  Liver0                  SI-conRe                  0.0231
   Liver0                  Blood1                    0.0924
   Liver0                  Liver1                    0.116
   Liver1                  Blood1                    0.0019
