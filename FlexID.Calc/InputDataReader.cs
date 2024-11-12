@@ -91,12 +91,6 @@ namespace FlexID.Calc
         public OrganFunc Func;
 
         /// <summary>
-        /// excコンパートメントにおいて、OIRにおける24-hour smaple値を模擬した
-        /// 残留放射能を出力する場合に <see langword="true"/>。
-        /// </summary>
-        public bool ExcretaCompatibleWithOIR;
-
-        /// <summary>
         /// 生物学的崩壊定数[/day]。
         /// 蓄積コンパートメントのみで意味を持ち、それ以外では1.0となる。
         /// </summary>
@@ -116,6 +110,12 @@ namespace FlexID.Calc
         /// コンパートメントからの流出が即時に処理される場合に<see langword="true"/>。
         /// </summary>
         public bool IsInstantOutflow => Func == OrganFunc.inp || Func == OrganFunc.mix;
+
+        /// <summary>
+        /// excコンパートメントにおいて、OIRにおける24-hour smaple値を模擬した
+        /// 残留放射能を出力する場合に <see langword="true"/>。
+        /// </summary>
+        public bool IsExcretaCompatibleWithOIR;
 
         /// <summary>
         /// 線源領域の名称。
@@ -734,7 +734,7 @@ namespace FlexID.Calc
                     {
                         if (organ.Name == "Urine" || organ.Name == "Faeces")
                         {
-                            organ.ExcretaCompatibleWithOIR = true;
+                            organ.IsExcretaCompatibleWithOIR = true;
                         }
                     }
                 }
@@ -1213,7 +1213,7 @@ namespace FlexID.Calc
                     {
                         if (organ.Name == "Urine" || organ.Name == "Faeces")
                         {
-                            organ.ExcretaCompatibleWithOIR = true;
+                            organ.IsExcretaCompatibleWithOIR = true;
                         }
                     }
 
