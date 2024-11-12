@@ -197,6 +197,8 @@ namespace FlexID.Calc
         /// </summary>
         public static readonly string[] ParameterNames = new[]
         {
+            "ExcretaCompartments",
+
             "ExcludeOtherSourceRegions",
             "IncludeOtherSourceRegions"
         };
@@ -252,6 +254,8 @@ namespace FlexID.Calc
         /// </summary>
         public static readonly string[] ParameterNames = new[]
         {
+            "ExcretaCompartments",
+
             "ExcludeOtherSourceRegions",
             "IncludeOtherSourceRegions",
             "OutputDose",
@@ -489,11 +493,11 @@ namespace FlexID.Calc
                         break;
 
                     var values = nextLine.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                    if (values.Length != 2)
-                        throw Program.Error($"Line {lineNum}: Parameter definition should have 2 values.");
+                    //if (values.Length != 2)
+                    //    throw Program.Error($"Line {lineNum}: Parameter definition should have 2 values.");
 
                     var paramName = values[0].Trim();
-                    var paramValue = values[1].Trim();
+                    var paramValue = values.Length == 2 ? values[1].Trim() : "";
 
                     if (!parameterNames.Contains(paramName))
                         throw Program.Error($"Line {lineNum}: Unrecognized parameter '{paramName}' definition.");
@@ -686,6 +690,13 @@ namespace FlexID.Calc
 
                 data.Nuclides.Add(nuclide);
 
+                var inpParams = data.Parameters;
+                var nucParams = nuclide.Parameters;
+
+                var inpExcretas = inpParams.GetValueOrDefault("ExcretaCompartments", null)?.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var nucExcretas = nucParams.GetValueOrDefault("ExcretaCompartments", null)?.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var excreatas = (nucExcretas ?? inpExcretas) ?? new[] { "Urine", "Faeces" };
+
                 // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
                 var validSourceRegions = data.SourceRegions
                     .Select(s => s.Name).Append("Other").ToArray();
@@ -694,11 +705,8 @@ namespace FlexID.Calc
                     .Where(s => s.MaleID != 0 || s.FemaleID != 0)
                     .Select(s => s.Name).ToList();
 
-                var inpParams = data.Parameters;
                 var inpIncludes = (inpParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 var inpExcludes = (inpParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                var nucParams = nuclide.Parameters;
                 var nucExcludes = (nucParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 var nucIncludes = (nucParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -747,10 +755,7 @@ namespace FlexID.Calc
 
                     if (organ.Func == OrganFunc.exc)
                     {
-                        if (organ.Name == "Urine" || organ.Name == "Faeces")
-                        {
-                            organ.IsExcretaCompatibleWithOIR = true;
-                        }
+                        organ.IsExcretaCompatibleWithOIR = excreatas.Contains(organ.Name);
                     }
                 }
 
