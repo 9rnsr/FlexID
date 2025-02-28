@@ -7,6 +7,14 @@ OutputDoseRate = false
 OutputRetention = true
 OutputCumulative = false
 
+# Ba-133 Ingestion:Soluble                    9.999999E-9     0.0
+#   1 input             inp      0.0        0     0      0.0        -
+#   2 PatternI          acc    100.0        1     1    100.0        Other
+#
+#  21 case2-I-A         acc      1.0        1     2    100.0        Other
+#  22 case2-I-B         acc      0.01       1    21    100.0        Other
+# end
+
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
 #---------+-------------------+---------------------
