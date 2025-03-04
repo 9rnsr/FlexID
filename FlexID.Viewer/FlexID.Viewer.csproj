@@ -2,11 +2,6 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net462</TargetFramework>
-
-    <OutputPath>$(SolutionDir)$(Configuration)\bin\</OutputPath>
-    <IntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</IntermediateOutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
     <UseWPF>true</UseWPF>
     <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -18,15 +13,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="5.7.0">
+    <PackageReference Include="Costura.Fody">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
-    <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
-    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
-    <PackageReference Include="ReactiveProperty" Version="9.6.0" />
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="MahApps.Metro.IconPacks" />
+    <PackageReference Include="OxyPlot.Wpf" />
+    <PackageReference Include="Prism.DryIoc" />
+    <PackageReference Include="ReactiveProperty" />
   </ItemGroup>
 
   <ItemGroup>

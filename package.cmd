@@ -1,0 +1,1 @@
+PowerShell ./package.ps1
