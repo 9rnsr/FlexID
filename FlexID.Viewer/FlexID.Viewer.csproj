@@ -2,11 +2,6 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net462</TargetFramework>
-
-    <OutputPath>$(SolutionDir)$(Configuration)\bin\</OutputPath>
-    <IntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</IntermediateOutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
     <UseWPF>true</UseWPF>
     <ApplicationManifest>App.manifest</ApplicationManifest>

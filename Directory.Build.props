@@ -1,0 +1,27 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+
+    <OutputPath>$(SolutionDir)$(Configuration)\bin\</OutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <!-- Workaround for "*_wpftmp" folder, https://github.com/dotnet/wpf/issues/2930#issuecomment-654130569 -->
+  <Target Name="RemoveWpfTemp" AfterTargets="Build">
+    <ItemGroup>
+      <WpfTempDirectories Include="$([System.IO.Directory]::GetDirectories(&quot;$(SolutionDir)/$(Configuration)&quot;,&quot;$(MSBuildProjectName)_*_wpftmp&quot;))"/>
+    </ItemGroup>
+    <RemoveDir Directories="@(WpfTempDirectories)" />
+  </Target>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RepoRoot>
+    <PathMap>$(RepoRoot)=.</PathMap>
+  </PropertyGroup>
+
+</Project>
