@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Costura.Fody" Version="5.7.0" />
+    <PackageVersion Include="System.Memory" Version="4.5.5" />
+    <PackageVersion Include="System.Net.Http" Version="4.3.4" />
+    <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
+    <PackageVersion Include="Sprache" Version="2.3.1" />
+    <PackageVersion Include="Prism.DryIoc" Version="8.1.97" />
+    <PackageVersion Include="MahApps.Metro" Version="2.4.10" />
+    <PackageVersion Include="MahApps.Metro.IconPacks" Version="5.0.0" />
+    <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageVersion Include="ReactiveProperty" Version="9.6.0" />
+    <PackageVersion Include="OxyPlot.Wpf" Version="2.1.2" />
+    <PackageVersion Include="VirtualizingWrapPanel" Version="2.0.10" />
+    <PackageVersion Include="EPPlus" Version="7.3.0" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageVersion Include="MSTest.TestFramework" Version="2.2.10" />
+  </ItemGroup>
+</Project>
