@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.IO;
 
 namespace FlexID.Calc.Tests
@@ -28,18 +29,17 @@ namespace FlexID.Calc.Tests
 
             main.Main();
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Cumulative.out")),
-                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Cumulative.out")));
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Dose.out")),
-                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Dose.out")));
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_DoseRate.out")),
-                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_DoseRate.out")));
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Retention.out")),
-                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Retention.out")));
+            File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Cumulative.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Cumulative.out")));
+
+            File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Dose.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Dose.out")));
+
+            File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_DoseRate.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_DoseRate.out")));
+
+            File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Retention.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Retention.out")));
         }
     }
 }
