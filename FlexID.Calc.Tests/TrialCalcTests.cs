@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System;
 using System.IO;
 
@@ -46,19 +47,17 @@ namespace FlexID.Calc.Tests
 
             main.Main(data);
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")));
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")));
+            File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")));
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
+            File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")));
+
+            File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")));
+
+            File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")));
         }
 
         [TestMethod]
@@ -102,19 +101,17 @@ namespace FlexID.Calc.Tests
 
             main.Main(dataList);
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")));
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")));
+            File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")));
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
-                File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
+            File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")));
+
+            File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")));
+
+            File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")).ShouldBe(
+            File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")));
         }
     }
 }

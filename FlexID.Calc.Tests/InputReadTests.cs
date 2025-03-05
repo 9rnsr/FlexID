@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.IO;
 
 namespace FlexID.Calc.Tests
@@ -103,7 +104,7 @@ namespace FlexID.Calc.Tests
             var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
 
             var data = new InputDataReader(inputPath).Read_OIR();
-            Assert.IsNotNull(data);
+            data.ShouldNotBeNull();
         }
 
         [TestMethod]
@@ -114,7 +115,7 @@ namespace FlexID.Calc.Tests
             var inputPath = Path.Combine("inp", "EIR", nuclide, target + ".inp");
 
             var data = new InputDataReader(inputPath).Read_EIR();
-            Assert.IsNotNull(data);
+            data.ShouldNotBeNull();
         }
     }
 }

@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Costura.Fody" Version="6.0.0" />
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.Memory" Version="4.6.0" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
