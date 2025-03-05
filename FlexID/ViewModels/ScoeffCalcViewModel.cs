@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -44,7 +45,11 @@ namespace FlexID.ViewModels
 
         public ReactivePropertySlim<bool> IdacDoseCompatible { get; } = new ReactivePropertySlim<bool>(false);
 
+        public ReactivePropertySlim<bool> SelectedNuclidesOnly { get; } = new ReactivePropertySlim<bool>(false);
+
         public ObservableCollection<NuclideItem> Nuclides { get; } = new ObservableCollection<NuclideItem>();
+
+        public ObservableCollection<NuclideItem> FilteredNuclides { get; } = new ObservableCollection<NuclideItem>();
 
         public ReactiveCommandSlim SelectOutputFilePathCommand { get; }
 
@@ -63,6 +68,20 @@ namespace FlexID.ViewModels
             OutputFilePath.Value = @"out\";
 
             Nuclides.AddRange(SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideItem { Nuclide = nuc }));
+
+            SelectedNuclidesOnly.Subscribe(b =>
+            {
+                if (b)
+                {
+                    FilteredNuclides.Clear();
+                    FilteredNuclides.AddRange(Nuclides.Where(item => item.IsChecked));
+                }
+                else
+                {
+                    FilteredNuclides.Clear();
+                    FilteredNuclides.AddRange(Nuclides);
+                }
+            }).AddTo(Disposables);
 
             SelectOutputFilePathCommand = new ReactiveCommandSlim().WithSubscribe(() =>
             {
