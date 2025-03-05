@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.IO;
 
 namespace FlexID.Calc.Tests
@@ -60,9 +61,7 @@ namespace FlexID.Calc.Tests
                 var target = $@"{nuclide}_{(sex == Sex.Male ? "AM" : "AF")}";
                 var expectFilePath = Path.Combine(expectDir, target + ".txt");
                 var actualFilePath = Path.Combine(resultDir, target + ".txt");
-                CollectionAssert.AreEqual(
-                    File.ReadAllLines(expectFilePath),
-                    File.ReadAllLines(actualFilePath));
+                File.ReadAllLines(actualFilePath).ShouldBe(File.ReadAllLines(expectFilePath));
             }
         }
 
@@ -111,9 +110,7 @@ namespace FlexID.Calc.Tests
                 var target = $@"{nuclide}_{(sex == Sex.Male ? "AM" : "AF")}";
                 var expectFilePath = Path.Combine(expectDir, target + ".txt");
                 var actualFilePath = Path.Combine(resultDir, target + ".txt");
-                CollectionAssert.AreEqual(
-                    File.ReadAllLines(expectFilePath),
-                    File.ReadAllLines(actualFilePath));
+                File.ReadAllLines(actualFilePath).ShouldBe(File.ReadAllLines(expectFilePath));
             }
         }
     }

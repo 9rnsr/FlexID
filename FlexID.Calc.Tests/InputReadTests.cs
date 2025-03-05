@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.IO;
 
 namespace FlexID.Calc.Tests
@@ -104,7 +105,7 @@ namespace FlexID.Calc.Tests
 
             var calcProgeny = true;
             var data = new InputDataReader(inputPath, calcProgeny).Read_OIR();
-            Assert.IsNotNull(data);
+            data.ShouldNotBeNull();
         }
 
         [TestMethod]
@@ -116,7 +117,7 @@ namespace FlexID.Calc.Tests
 
             var calcProgeny = true;
             var data = new InputDataReader(inputPath, calcProgeny).Read_EIR();
-            Assert.IsNotNull(data);
+            data.ShouldNotBeNull();
         }
     }
 }
