@@ -24,6 +24,7 @@
       <RowDefinition Height="Auto" SharedSizeGroup="R" />
       <RowDefinition Height="Auto" SharedSizeGroup="R" />
       <RowDefinition Height="Auto" SharedSizeGroup="R" />
+      <RowDefinition Height="Auto" SharedSizeGroup="R" />
       <RowDefinition />
       <RowDefinition Height="12" />
       <RowDefinition Height="Auto" />
@@ -91,9 +92,33 @@
     <Label
       Grid.Row="3"
       Grid.Column="0"
+      Content="Output Format" />
+    <Grid
+      Grid.Row="3"
+      Grid.Column="1"
+      HorizontalAlignment="Center">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <RadioButton
+        Grid.Column="0"
+        Margin="16,4"
+        Content="FlexID (*.txt)"
+        IsChecked="{Binding IdacDoseCompatible.Value, Converter={StaticResource Inverted}}" />
+      <RadioButton
+        Grid.Column="1"
+        Margin="16,4"
+        Content="IDAC-Dose 2.1 compatible (*.csv)"
+        IsChecked="{Binding IdacDoseCompatible.Value}" />
+    </Grid>
+
+    <Label
+      Grid.Row="4"
+      Grid.Column="0"
       Content="Target Nuclides" />
     <ListView
-      Grid.Row="3"
+      Grid.Row="4"
       Grid.RowSpan="2"
       Grid.Column="1"
       MinHeight="64"
@@ -128,7 +153,7 @@
       </ListView.ItemTemplate>
     </ListView>
 
-    <Grid Grid.Row="6" Grid.ColumnSpan="2">
+    <Grid Grid.Row="7" Grid.ColumnSpan="2">
       <Button
         Width="120"
         Height="36"
