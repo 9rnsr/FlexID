@@ -117,12 +117,19 @@
       Grid.Row="4"
       Grid.Column="0"
       Content="Target Nuclides" />
+    <CheckBox
+      Grid.Row="5"
+      Grid.Column="0"
+      Margin="4"
+      HorizontalAlignment="Left"
+      Content="Selected Only"
+      IsChecked="{Binding SelectedNuclidesOnly.Value}" />
     <ListView
       Grid.Row="4"
       Grid.RowSpan="2"
       Grid.Column="1"
       MinHeight="64"
-      ItemsSource="{Binding Nuclides}"
+      ItemsSource="{Binding FilteredNuclides}"
       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
       SelectionMode="Extended">
 
