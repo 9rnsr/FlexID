@@ -23,6 +23,7 @@ namespace System.Linq
 {
     internal static class Extensions
     {
+#if !NETCOREAPP3_0_OR_GREATER
         private static (T1, T2) ZipSelector2<T1, T2>(T1 v1, T2 v2) => (v1, v2);
 
         public static IEnumerable<(T1, T2)> Zip<T1, T2>(this IEnumerable<T1> source1, IEnumerable<T2> source2)
@@ -34,7 +35,9 @@ namespace System.Linq
 
             return source1.Zip(source2, ZipSelector2);
         }
+#endif
 
+#if !NET471_OR_GREATER
         public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T element)
         {
             if (source is null)
@@ -56,5 +59,6 @@ namespace System.Linq
 
             yield return element;
         }
+#endif
     }
 }
