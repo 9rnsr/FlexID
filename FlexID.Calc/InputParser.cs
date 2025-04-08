@@ -1,6 +1,5 @@
 using Sprache;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using static Sprache.Parse;
 
@@ -191,7 +190,7 @@ namespace FlexID.Calc
                 throw Program.Error($"Line {lineNum}: Transfer coefficient should be evaluated to a number, not '{input}'.");
 
             var (expr, isRate) = result.Value;
-            Debug.WriteLine($"Line {lineNum} '{input}' ==> {expr * (isRate ? 100 : 1)}{(isRate ? "%" : "")}");
+            //Debug.WriteLine($"Line {lineNum} '{input}' ==> {expr * (isRate ? 100 : 1)}{(isRate ? "%" : "")}");
             return result.Value;
         }
 
