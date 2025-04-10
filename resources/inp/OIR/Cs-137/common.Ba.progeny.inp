@@ -93,6 +93,7 @@
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d]
 #-----------------------+---------------------+--------------
+
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
   Oralcavity              Oesophagus-s            720
