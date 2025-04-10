@@ -79,6 +79,19 @@ namespace FlexID.Calc
             using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var writer = new StreamWriter(stream, Encoding.UTF8))
             {
+                foreach (var nuclide in data.Nuclides)
+                {
+                    writer.WriteLine();
+                    writer.WriteLine($"Nuclide: {nuclide.Nuclide}");
+                    writer.WriteLine($"  HalfLife:  {nuclide.HalfLife}");
+                    writer.WriteLine($"  Lambda:    {nuclide.Lambda:E}");
+
+                    foreach (var branch in nuclide.DecayRates)
+                    {
+                        writer.WriteLine($"  DecayRate: {branch.Branch} <= {branch.Parent}");
+                    }
+                }
+
                 writer.WriteLine();
                 writer.WriteLine($"Zero inflow organs:");
 
