@@ -20,12 +20,13 @@ Cs-137 Inhalation:Type-M
   $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
 
 #------------------------------------------------------------
+# Cs-137の親核種としての共通定義を読み込む。
+  ${include Nuclide=Cs-137, Path=../common/Cs.inp}
+
+#------------------------------------------------------------
 # 吸入摂取
 #------------------------------------------------------------
 [Cs-137:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[%]
-#-----------------------+---------------------+--------------
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
   input                   ET1-F                 $(      fr  *                 47.94% )
@@ -49,11 +50,7 @@ Cs-137 Inhalation:Type-M
   input                   Environment           $(                     100% - 81.96% )
 
 # HRTMでの移行係数を読み込む。
-  ${include: Nuclide=CS-137, Path=common.HRTM.5µm.inp}
-
-#------------------------------------------------------------
-# Cs-137の親核種としての共通定義を読み込む。
-  ${include Nuclide=Cs-137, Path=common.Cs.inp}
+  ${include: Nuclide=CS-137, Path=../common/HRTM.5µm.inp}
 
 
 #===============================================================================
@@ -64,6 +61,10 @@ Cs-137 Inhalation:Type-M
   $sr = 3
   $ss = 0.005
   $fA = 0.04
+
+#------------------------------------------------------------
+# Ba-137mの娘核種としての共通定義を読み込む。
+  ${include Nuclide=Ba-137m, Path=../common/Ba.progeny.inp}
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------
@@ -132,8 +133,4 @@ Cs-137 Inhalation:Type-M
   Cs-137/Other2           Dec-Other2                ---
 
 # HRTMでの移行係数を読み込む。
-  ${include Nuclide=Ba-137m, Path=common.HRTM.5µm.inp}
-
-#------------------------------------------------------------
-# Ba-137mの娘核種としての共通定義を読み込む。
-  ${include Nuclide=Ba-137m, Path=common.Ba-137m.progeny.inp}
+  ${include Nuclide=Ba-137m, Path=../common/HRTM.5µm.inp}
