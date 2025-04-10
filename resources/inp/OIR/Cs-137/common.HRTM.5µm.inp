@@ -2,7 +2,7 @@
 
 [*:transfer]
 #-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
+# From                  | To                  | Coefficient[/d]
 #-----------------------+---------------------+--------------
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -29,3 +29,25 @@
   ETseq-S                 LNET-S                    0.001
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
+
+  ALV-F                   $Blood                $sr
+  INT-F                   $Blood                $sr
+  bb-F                    $Blood                $sr
+  bbseq-F                 $Blood                $sr
+  BB-F                    $Blood                $sr
+  BBseq-F                 $Blood                $sr
+  ET2-F                   $Blood                $sr
+  ETseq-F                 $Blood                $sr
+  LNET-F                  $Blood                $sr
+  LNTH-F                  $Blood                $sr
+
+  ALV-S                   $Blood                $ss
+  INT-S                   $Blood                $ss
+  bb-S                    $Blood                $ss
+  bbseq-S                 $Blood                $ss
+  BB-S                    $Blood                $ss
+  BBseq-S                 $Blood                $ss
+  ET2-S                   $Blood                $ss
+  ETseq-S                 $Blood                $ss
+  LNET-S                  $Blood                $ss
+  LNTH-S                  $Blood                $ss
