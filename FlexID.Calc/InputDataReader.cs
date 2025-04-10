@@ -137,6 +137,11 @@ namespace FlexID.Calc
         public string Nuclide;
 
         /// <summary>
+        /// 半減期(単位付き)。
+        /// </summary>
+        public string HalfLife;
+
+        /// <summary>
         /// 崩壊定数λ[/day]。(＝ ln(2) / 半減期[day])
         /// </summary>
         public double Lambda;
@@ -144,7 +149,7 @@ namespace FlexID.Calc
         /// <summary>
         /// 親核種からの崩壊割合(100%＝1.00と置いた比で持つ)。
         /// </summary>
-        public double DecayRate;
+        public (string Parent, double Branch)[] DecayRates;
 
         /// <summary>
         /// 子孫核種の場合は<c>true</c>。
@@ -491,6 +496,10 @@ namespace FlexID.Calc
                 // 1番目が親核種、2番目以降が子孫核種になる。
                 var isProgeny = false;
 
+                var indexTable = IndexDataReader.ReadNDX().ToDictionary(x => x.Nuclide, x => x);
+
+                var branches = new List<(string Parent, string Daugher, double Branch)>();
+
                 while (true)
                 {
                     nextLine = GetNextLine();
@@ -502,29 +511,49 @@ namespace FlexID.Calc
                     // 核種の定義行を読み込む。
                     var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (values.Length != 3)
-                        throw Program.Error($"Line {lineNum}: Nuclide definition should have 3 values.");
+                    //if (values.Length != 3)
+                    //    throw Program.Error($"Line {lineNum}: Nuclide definition should have 3 values.");
+                    //
+                    //if (!double.TryParse(values[1], out var lambda))
+                    //    throw Program.Error($"Line {lineNum}: Cannot get nuclide Lambda.");
+                    //if (lambda < 0)
+                    //    throw Program.Error($"Line {lineNum}: Nuclide Lambda should be positive.");
+                    //
+                    //if (!double.TryParse(values[2], out var decayRate))
+                    //    throw Program.Error($"Line {lineNum}: Cannot get nuclide DecayRate.");
+                    //if (decayRate < 0)
+                    //    throw Program.Error($"Line {lineNum}: Nuclide DecayRate should be positive.");
 
-                    if (!double.TryParse(values[1], out var lambda))
-                        throw Program.Error($"Line {lineNum}: Cannot get nuclide Lambda.");
-                    if (lambda < 0)
-                        throw Program.Error($"Line {lineNum}: Nuclide Lambda should be positive.");
+                    var nuc = values[0];
 
-                    if (!double.TryParse(values[2], out var decayRate))
-                        throw Program.Error($"Line {lineNum}: Cannot get nuclide DecayRate.");
-                    if (decayRate < 0)
-                        throw Program.Error($"Line {lineNum}: Nuclide DecayRate should be positive.");
+                    if (!indexTable.TryGetValue(nuc, out var indexData))
+                        throw Program.Error($"Line {lineNum}: Nuclide should be defined in ICRP-07.NDX file.");
+
+                    branches.AddRange(indexData.Daughters.Select(d => (nuc, d.Daughter, (double)d.Branch)));
 
                     var nuclide = new NuclideData
                     {
-                        Nuclide = values[0],
-                        Lambda = lambda,
-                        DecayRate = decayRate,
+                        Nuclide = nuc,
+                        HalfLife = indexData.HalfLife,
+                        Lambda = indexData.Lambda,
+                        //DecayRate = decayRate,
                         IsProgeny = isProgeny,
                     };
                     nuclides.Add(nuclide);
 
                     isProgeny = true;
+                }
+
+                foreach (var nuclide in nuclides)
+                {
+                    if (nuclide.IsProgeny)
+                    {
+                        nuclide.DecayRates = branches.Where(b => b.Daugher == nuclide.Nuclide).Select(b => (b.Parent, b.Branch)).ToArray();
+                    }
+                    else
+                    {
+                        nuclide.DecayRates = Array.Empty<(string, double)>();
+                    }
                 }
             }
 
@@ -895,7 +924,10 @@ namespace FlexID.Calc
                     if (organFrom.Nuclide != nuclide)
                     {
                         // 親から子への移行経路では、親からの分岐比とする。
-                        inflowRate = organTo.Nuclide.DecayRate;
+                        var parentNuclide = organFrom.Nuclide.Nuclide;
+                        var branch = organTo.Nuclide.DecayRates.First(b => b.Parent == parentNuclide).Branch;
+
+                        inflowRate = branch;
                     }
                     else if (organFrom.IsInstantOutflow)
                     {
@@ -1101,7 +1133,7 @@ namespace FlexID.Calc
                 {
                     Nuclide = values[0],
                     Lambda = double.Parse(values[1]),
-                    DecayRate = double.Parse(values[2]),
+                    DecayRates = new[] { ("", double.Parse(values[2])) }, // todo
                     IsProgeny = isProgeny,
                 };
                 data.Nuclides.Add(nuclide);
@@ -1257,7 +1289,7 @@ namespace FlexID.Calc
                     // 流入割合がマイナスの時の処理は親からの分岐比とする。
                     if (inflow.Rate < 0)
                     {
-                        inflow.Rate = organ.Nuclide.DecayRate;
+                        inflow.Rate = organ.Nuclide.DecayRates[0].Branch;
                     }
                 }
             }
