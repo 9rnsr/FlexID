@@ -1,3 +1,7 @@
+{Cs:variable]
+  $Blood = Plasma
+
+
 [Cs:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
