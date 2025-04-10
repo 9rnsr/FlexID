@@ -18,7 +18,7 @@ Cs-137 Ingestion:Insoluble
 
 #------------------------------------------------------------
 # Cs-137の親核種としての共通定義を読み込む。
-  ${include Nuclide=Cs-137, Path=../common/Cs.inp}
+  ${import Nuclide=Cs-137, Path=../common/Cs.inp}
 
 #------------------------------------------------------------
 # 経口摂取
@@ -37,7 +37,7 @@ Cs-137 Ingestion:Insoluble
 
 #------------------------------------------------------------
 # Ba-137mの娘核種としての共通定義を読み込む。
-  ${include Nuclide=Ba-137m, Path=../common/Ba.progeny.inp}
+  ${import Nuclide=Ba-137m, Path=../common/Ba.progeny.inp}
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------
