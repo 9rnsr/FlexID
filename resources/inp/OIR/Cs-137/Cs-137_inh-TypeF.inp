@@ -21,7 +21,7 @@ Cs-137 Inhalation:Type-F
 
 #------------------------------------------------------------
 # Cs-137の親核種としての共通定義を読み込む。
-  ${include Nuclide=Cs-137, Path=../common/Cs.inp}
+  ${import Nuclide=Cs-137, Path=../common/Cs.inp}
 
 #------------------------------------------------------------
 # 吸入摂取
@@ -50,7 +50,7 @@ Cs-137 Inhalation:Type-F
   input                   Environment           $(                     100% - 81.96% )
 
 # HRTMでの移行係数を読み込む。
-  ${include: Nuclide=CS-137, Path=../common/HRTM.5µm.inp}
+  ${import Nuclide=CS-137, Path=../common/HRTM.5µm.inp}
 
 
 #===============================================================================
@@ -64,7 +64,7 @@ Cs-137 Inhalation:Type-F
 
 #------------------------------------------------------------
 # Ba-137mの娘核種としての共通定義を読み込む。
-  ${include Nuclide=Ba-137m, Path=../common/Ba.progeny.inp}
+  ${import Nuclide=Ba-137m, Path=../common/Ba.progeny.inp}
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------
@@ -133,4 +133,4 @@ Cs-137 Inhalation:Type-F
   Cs-137/Other2           Dec-Other2                ---
 
 # HRTMでの移行係数を読み込む。
-  ${include Nuclide=Ba-137m, Path=../common/HRTM.5µm.inp}
+  ${import Nuclide=Ba-137m, Path=../common/HRTM.5µm.inp}
