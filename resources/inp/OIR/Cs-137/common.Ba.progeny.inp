@@ -1,4 +1,4 @@
-[Ba-137m:compartment]
+[Ba:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -61,7 +61,7 @@
   acc   Dec-Other2            Other
 
 
-[Ba-137m:transfer]
+[Ba:transfer]
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
   Oralcavity              Oesophagus-s            720
