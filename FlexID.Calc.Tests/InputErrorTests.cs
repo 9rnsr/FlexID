@@ -1050,7 +1050,7 @@ namespace FlexID.Calc.Tests
 
             var stream = new MemoryStream(inputFileBytes);
             var reader = new StreamReader(stream);
-            return new InputDataReader(reader, calcProgeny: true);
+            return new InputDataReader(reader);
         }
     }
 }

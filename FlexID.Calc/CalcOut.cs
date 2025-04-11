@@ -16,24 +16,30 @@ namespace FlexID.Calc
         public string CumulativePath { get; }
 
         // 線量の出力ファイル用
-        private StreamWriter wDose;
+        private TextWriter wDose;
 
         // 線量率の出力ファイル用
-        private StreamWriter wRate;
+        private TextWriter wRate;
 
         // 残留放射能の出力ファイル用
-        private StreamWriter[] wsRete;
+        private TextWriter[] wsRete;
 
         // 積算放射能の出力ファイル用
-        private StreamWriter[] wsCumu;
+        private TextWriter[] wsCumu;
 
-        private StreamWriter[] wsOrgansRete;
-        private StreamWriter[] wsOrgansCumu;
+        private TextWriter[] wsOrgansRete;
+        private TextWriter[] wsOrgansCumu;
 
         /// <summary>
         /// 計算処理が正常に終了した場合に<c>true</c>を設定する。
         /// </summary>
         private bool IsFinished = false;
+
+        // StreamWriter.Nullはスレッドセーフでなくテストで問題を発生し得るため、
+        // ここでスレッドセーフなラッパーを作り、これを計算処理で使用する。
+        private static TextWriter NullWriter { get; } = TextWriter.Synchronized(StreamWriter.Null);
+
+        private static IEnumerable<TextWriter> NullWriters(int n) => Enumerable.Repeat(NullWriter, n);
 
         /// <summary>
         /// コンストラクタ。
@@ -53,14 +59,14 @@ namespace FlexID.Calc
             CumulativePath = outputPath + "_Cumulative.out";
 
             // 預託線量の出力ファイルを用意する。
-            wDose = new StreamWriter(DosePath, false, Encoding.UTF8);
-            wRate = new StreamWriter(DoseRatePath, false, Encoding.UTF8);
+            wDose = data.OutputDose ? new StreamWriter(DosePath, false, Encoding.UTF8) : NullWriter;
+            wRate = data.OutputDoseRate ? new StreamWriter(DoseRatePath, false, Encoding.UTF8) : NullWriter;
 
             // 残留放射能の出力ファイルを用意する。
-            wsRete = CreateWriters(RetentionPath).ToArray();
-            wsCumu = CreateWriters(CumulativePath).ToArray();
+            wsRete = (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count)).ToArray();
+            wsCumu = (data.OutputCumulative ? CreateWriters(CumulativePath) : NullWriters(data.Nuclides.Count)).ToArray();
 
-            IEnumerable<StreamWriter> CreateWriters(string basePath)
+            IEnumerable<TextWriter> CreateWriters(string basePath)
             {
                 // 親核種の出力ファイルはそのまま結果ファイルになる。
                 yield return new StreamWriter(basePath, false, Encoding.UTF8);
@@ -84,12 +90,12 @@ namespace FlexID.Calc
                 }
             }
 
-            // 残留放射能の数値を出力するStreamWriterを
+            // 残留放射能の数値を出力するTextWriterを
             // コンパートメント毎にorgan.Indexでアクセスできるようにする。
             wsOrgansRete = GetOrganWriters(wsRete).ToArray();
             wsOrgansCumu = GetOrganWriters(wsCumu).ToArray();
 
-            IEnumerable<StreamWriter> GetOrganWriters(StreamWriter[] ws)
+            IEnumerable<TextWriter> GetOrganWriters(TextWriter[] ws)
             {
                 foreach (var organ in data.Organs)
                 {
@@ -448,10 +454,10 @@ namespace FlexID.Calc
             foreach (var w in wsRete) w.Dispose();
             foreach (var w in wsCumu) w.Dispose();
 
-            // 預託線量について、子孫核種の出力ファイルの内容を親核種の出力ファイルに追記していく。
             var nuclideCount = data.Nuclides.Count;
-            if (nuclideCount >= 2)
+            if (nuclideCount >= 2 && data.OutputRetention)
             {
+                // 残留放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
                 using (var wRete = new StreamWriter(RetentionPath, append: true))
                 {
                     for (int n = 1; n < nuclideCount; n++)
@@ -464,7 +470,10 @@ namespace FlexID.Calc
                         File.Delete(progenyRetentionFile);
                     }
                 }
-
+            }
+            if (nuclideCount >= 2 && data.OutputCumulative)
+            {
+                // 積算放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
                 using (var wCumu = new StreamWriter(CumulativePath, append: true))
                 {
                     for (int n = 1; n < nuclideCount; n++)

@@ -110,15 +110,15 @@ namespace ResultChecker
 
             var commitmentPeriod = "50years";
 
+            var data = new InputDataReader(inputPath).Read_OIR();
+
             var main = new MainRoutine_OIR();
-            main.InputPath        /**/= inputPath;
             main.OutputPath       /**/= outputPath;
             main.CalcTimeMeshPath /**/= cTimeMeshFile;
             main.OutTimeMeshPath  /**/= oTimeMeshFile;
             main.CommitmentPeriod /**/= commitmentPeriod;
-            main.CalcProgeny      /**/= true;
 
-            main.Main();
+            main.Main(data);
 
             var result = new Result() { Target = target };
 

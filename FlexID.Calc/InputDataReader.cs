@@ -253,8 +253,32 @@ namespace FlexID.Calc
         public static readonly string[] ParameterNames = new[]
         {
             "ExcludeOtherSourceRegions",
-            "IncludeOtherSourceRegions"
+            "IncludeOtherSourceRegions",
+            "OutputDose",
+            "OutputDoseRate",
+            "OutputRetention",
+            "OutputCumulative",
         };
+
+        /// <summary>
+        /// 線量の計算結果をファイルに出力する場合は <see langword="true"/>。
+        /// </summary>
+        public bool OutputDose { get; set; } = true;
+
+        /// <summary>
+        /// 線量率の計算結果をファイルに出力する場合は <see langword="true"/>。
+        /// </summary>
+        public bool OutputDoseRate { get; set; } = true;
+
+        /// <summary>
+        /// 残留放射能の計算結果をファイルに出力する場合は <see langword="true"/>。
+        /// </summary>
+        public bool OutputRetention { get; set; } = true;
+
+        /// <summary>
+        /// 積算放射能の計算結果をファイルに出力する場合は <see langword="true"/>。
+        /// </summary>
+        public bool OutputCumulative { get; set; } = true;
     }
 
     /// <summary>
@@ -281,8 +305,8 @@ namespace FlexID.Calc
         /// コンストラクタ。
         /// </summary>
         /// <param name="inputPath">インプットファイルのパス文字列。</param>
-        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
-        public InputDataReader(string inputPath, bool calcProgeny)
+        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
+        public InputDataReader(string inputPath, bool calcProgeny = true)
         {
             var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             var reader = new StreamReader(stream);
@@ -295,8 +319,8 @@ namespace FlexID.Calc
         /// コンストラクタ。
         /// </summary>
         /// <param name="reader">インプットの読み込み元。</param>
-        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
-        public InputDataReader(StreamReader reader, bool calcProgeny)
+        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
+        public InputDataReader(StreamReader reader, bool calcProgeny = true)
         {
             this.reader = reader;
             this.calcProgeny = calcProgeny;
@@ -946,6 +970,15 @@ namespace FlexID.Calc
             }
             // 初期配分を終えた後は流入なし。
             input.IsZeroInflow = true;
+
+            bool CheckOutput(string name) =>
+                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) && value;
+
+            // 出力ファイルの設定。
+            data.OutputDose = CheckOutput("OutputDose");
+            data.OutputDoseRate = CheckOutput("OutputDoseRate");
+            data.OutputRetention = CheckOutput("OutputRetention");
+            data.OutputCumulative = CheckOutput("OutputCumulative");
 
             return data;
         }
