@@ -18,28 +18,29 @@ namespace FlexID.Calc.Tests
 
             Directory.CreateDirectory(ResultDir);
 
+            var data = new InputDataReader(Path.Combine(TargetDir, target), calcProgeny: false).Read_OIR();
+
             var main = new MainRoutine_OIR();
-            main.InputPath = Path.Combine(TargetDir, target);
-            main.OutputPath = Path.Combine(ResultDir, TargetName);
-            main.CalcTimeMeshPath = Path.Combine(TargetDir, "time-per-1d.dat");
-            main.OutTimeMeshPath = Path.Combine(TargetDir, "time-per-1d.dat");
-            main.CommitmentPeriod = @"5days";
-            main.CalcProgeny = false;
+            main.OutputPath       /**/= Path.Combine(ResultDir, TargetName);
+            main.CalcTimeMeshPath /**/= Path.Combine(TargetDir, "time-per-1d.dat");
+            main.OutTimeMeshPath  /**/= Path.Combine(TargetDir, "time-per-1d.dat");
+            main.CommitmentPeriod /**/= @"5days";
 
-            main.Main();
+            main.Main(data);
 
-            CollectionAssert.AreEqual(
-                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Cumulative.out")),
-                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Cumulative.out")));
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Dose.out")),
                 File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Dose.out")));
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_DoseRate.out")),
                 File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_DoseRate.out")));
+
             CollectionAssert.AreEqual(
                 File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Retention.out")),
                 File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Retention.out")));
+            CollectionAssert.AreEqual(
+                File.ReadAllLines(Path.Combine(ExpectDir, TargetName + "_Cumulative.out")),
+                File.ReadAllLines(Path.Combine(ResultDir, TargetName + "_Cumulative.out")));
         }
     }
 }
