@@ -18,7 +18,7 @@ namespace FlexID.Calc.Tests
 
             Directory.CreateDirectory(ResultDir);
 
-            var data = new InputDataReader(Path.Combine(TargetDir, target), calcProgeny: false).Read_OIR();
+            var data = new InputDataReader(Path.Combine(TargetDir, target)).Read_OIR();
 
             var main = new MainRoutine_OIR();
             main.OutputPath       /**/= Path.Combine(ResultDir, TargetName);

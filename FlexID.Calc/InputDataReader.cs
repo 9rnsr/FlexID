@@ -281,8 +281,8 @@ namespace FlexID.Calc
         /// コンストラクタ。
         /// </summary>
         /// <param name="inputPath">インプットファイルのパス文字列。</param>
-        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
-        public InputDataReader(string inputPath, bool calcProgeny)
+        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
+        public InputDataReader(string inputPath, bool calcProgeny = true)
         {
             var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             var reader = new StreamReader(stream);
@@ -295,8 +295,8 @@ namespace FlexID.Calc
         /// コンストラクタ。
         /// </summary>
         /// <param name="reader">インプットの読み込み元。</param>
-        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は<c>true</c>。</param>
-        public InputDataReader(StreamReader reader, bool calcProgeny)
+        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
+        public InputDataReader(StreamReader reader, bool calcProgeny = true)
         {
             this.reader = reader;
             this.calcProgeny = calcProgeny;

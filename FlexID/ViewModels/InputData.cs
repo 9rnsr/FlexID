@@ -96,7 +96,7 @@ namespace FlexID.ViewModels
                 Calc.InputData data;
                 try
                 {
-                    var reader = new InputDataReader(inputFile, calcProgeny: true);
+                    var reader = new InputDataReader(inputFile);
                     data = reader.Read_OIR();
                 }
                 catch
@@ -140,7 +140,7 @@ namespace FlexID.ViewModels
                 Calc.InputData data;
                 try
                 {
-                    var reader = new InputDataReader(inputFile, calcProgeny: true);
+                    var reader = new InputDataReader(inputFile);
                     data = reader.Read_EIR().FirstOrDefault();
                 }
                 catch

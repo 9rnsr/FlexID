@@ -36,7 +36,7 @@ namespace FlexID.Calc.Tests
 
             var commitmentPeriod = "50years";
 
-            var data = new InputDataReader(inputPath, calcProgeny: true).Read_OIR();
+            var data = new InputDataReader(inputPath).Read_OIR();
 
             var main = new MainRoutine_OIR();
             main.OutputPath       /**/= outputPath;
@@ -91,7 +91,7 @@ namespace FlexID.Calc.Tests
                 exposureAge == "Adult"       /**/? "50years" :   // 75years - 25years
                 throw new NotSupportedException();
 
-            var dataList = new InputDataReader(inputPath, calcProgeny: true).Read_EIR();
+            var dataList = new InputDataReader(inputPath).Read_EIR();
 
             var main = new MainRoutine_EIR();
             main.OutputPath       /**/= outputPath;
