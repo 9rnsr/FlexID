@@ -211,7 +211,7 @@ namespace ResultChecker
             result.FractionsThyroid   /**/= fractionsThyroid;
 
             // 50年預託実行線量の比較。
-            var actualDose = main.WholeBodyEffectiveDose;
+            var actualDose = GetResultEffectiveDose(target);
             var expectDose = ReadDosePerIntake(target, mat);
             result.ActualEffectiveDose = $"{actualDose:0.000000E+00}";
             result.ExpectEffectiveDose = expectDose;
@@ -446,6 +446,30 @@ namespace ResultChecker
             }
 
             return retentions;
+        }
+
+        /// <summary>
+        /// FlexIDが出力した各出力時間メッシュにおける線量の出力ファイル
+        /// *_Dose.outから、Whole Bodyの数値列の最終値を読み込む。
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        static double GetResultEffectiveDose(string target)
+        {
+            var nuclide = target.Split('_')[0];
+            var filePath = $"out/{target}_Dose.out";
+
+            using (var reader = new OutputDataReader(filePath))
+            {
+                var data = reader.Read();
+                var result = data.Nuclides[0];
+
+                var resultWholeBody = result.Compartments.FirstOrDefault(c => c.Name == "WholeBody");
+                if (resultWholeBody is null)
+                    throw new InvalidDataException();
+
+                return resultWholeBody.Values.Last();
+            }
         }
     }
 
