@@ -972,7 +972,7 @@ namespace FlexID.Calc
             input.IsZeroInflow = true;
 
             bool CheckOutput(string name) =>
-                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) && value;
+                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
 
             // 出力ファイルの設定。
             data.OutputDose = CheckOutput("OutputDose");
