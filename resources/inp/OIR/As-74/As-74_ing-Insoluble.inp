@@ -2,9 +2,7 @@
 As-74 Ingestion:WaterInsoluble
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  As-74     3.900659E-02        0.0
+  As-74
 
 
 [As-74:compartment]
