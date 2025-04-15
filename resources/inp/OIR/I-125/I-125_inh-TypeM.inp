@@ -2,9 +2,7 @@
 I-125 Inhalation:Type-M
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  I-125     1.166914E-02        0.0
+  I-125
 
 
 [I-125:compartment]
