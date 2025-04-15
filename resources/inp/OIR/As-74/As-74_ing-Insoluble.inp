@@ -1,0 +1,94 @@
+[title]
+As-74 Ingestion:WaterInsoluble
+
+[nuclide]
+  As-74
+
+
+[As-74:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   Other1                Other
+  acc   Other2                Other
+  acc   Other3                Other
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+
+[As-74:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Insoluble compounds and arsenic in soil
+  $fA = 0.3
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.183 Table 19.3
+  Plasma                  RBC                       2.0
+  Plasma                  Other1                   20
+  Plasma                  Other2                    1.52
+  Plasma                  Other3                    0.28
+  Plasma                  Liver1                    2.4
+  Plasma                  Kidneys1                  2.52
+  Plasma                  Kidneys2                  0.28
+  Plasma                  C-bone-S                  1.0
+  Plasma                  T-bone-S                  1.0
+  Plasma                  UB-con                    8.4
+  Plasma                  RC-con                    0.6
+  RBC                     Plasma                    0.3
+  Other1                  Plasma                    0.6
+  Other2                  Plasma                    0.08
+  Other3                  Plasma                    0.018
+  Liver1                  Plasma                    0.95
+  Liver1                  Liver2                    0.05
+  Liver2                  Plasma                    0.07
+  Kidneys1                UB-con                    5.0
+  Kidneys2                Plasma                    0.7
+  C-bone-S                Plasma                    0.6
+  T-bone-S                Plasma                    0.6
+  C-bone-S                C-bone-V                  0.003
+  T-bone-S                T-bone-V                  0.006
+  C-bone-V                Plasma                    0.0000821
+  T-bone-V                Plasma                    0.000493
