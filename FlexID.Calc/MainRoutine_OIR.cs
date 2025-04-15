@@ -75,7 +75,7 @@ namespace FlexID.Calc
                     foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                     {
                         if (organ.IsZeroInflow && organ.Func != OrganFunc.inp)
-                            writer.WriteLine($"  {nuclide.Nuclide} / {organ.Name}");
+                            writer.WriteLine($"  {nuclide.Name} / {organ.Name}");
                     }
                 }
 
@@ -84,7 +84,7 @@ namespace FlexID.Calc
                 foreach (var (nuclide, scoeffTable) in data.Nuclides.Zip(data.SCoeffTables))
                 {
                     writer.WriteLine();
-                    writer.WriteLine($"Nuclide: {nuclide.Nuclide}");
+                    writer.WriteLine($"Nuclide: {nuclide.Name}");
                     writer.WriteLine();
                     writer.WriteLine($"Source regions those are part of '{otherSourceRegion}':");
                     writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));

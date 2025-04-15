@@ -128,13 +128,13 @@ namespace FlexID.Calc
         public double[] S_Coefficients;
     }
 
-    [DebuggerDisplay("{Nuclide}")]
+    [DebuggerDisplay("{Name}")]
     public class NuclideData
     {
         /// <summary>
-        /// 核種の一覧。
+        /// 核種名。
         /// </summary>
-        public string Nuclide;
+        public string Name;
 
         /// <summary>
         /// 崩壊定数λ[/day]。(＝ ln(2) / 半減期[day])
@@ -541,7 +541,7 @@ namespace FlexID.Calc
 
                     var nuclide = new NuclideData
                     {
-                        Nuclide = values[0],
+                        Name = values[0],
                         Lambda = lambda,
                         DecayRate = decayRate,
                         IsProgeny = isProgeny,
@@ -671,7 +671,7 @@ namespace FlexID.Calc
                 if (!calcProgeny && nuclide.IsProgeny)
                     continue;
 
-                var nuc = nuclide.Nuclide;
+                var nuc = nuclide.Name;
                 if (!nuclideOrgans.TryGetValue(nuc, out var organs))
                     throw Program.Error($"Missing [{nuc}:compartment] section.");
                 if (!organs.Any())
@@ -780,7 +780,7 @@ namespace FlexID.Calc
                 if (!calcProgeny && nuclide.IsProgeny)
                     continue;
 
-                var nuc = nuclide.Nuclide;
+                var nuc = nuclide.Name;
                 var transfers = nuclideTransfers[nuc];
 
                 // 移行経路の定義が正しいことの確認と、
@@ -796,7 +796,7 @@ namespace FlexID.Calc
                     {
                         var fromNuc = from.Substring(0, i);
                         fromName = from.Substring(i + 1);
-                        fromNuclide = nuclides.FirstOrDefault(n => n.Nuclide == fromNuc);
+                        fromNuclide = nuclides.FirstOrDefault(n => n.Name == fromNuc);
                         if (fromNuclide is null)
                             throw Program.Error($"Line {lineNum}: Undefined nuclide '{fromNuc}'.");
                     }
@@ -807,7 +807,7 @@ namespace FlexID.Calc
                     {
                         var toNuc = to.Substring(0, j);
                         toName = to.Substring(j + 1);
-                        toNuclide = nuclides.FirstOrDefault(n => n.Nuclide == toNuc);
+                        toNuclide = nuclides.FirstOrDefault(n => n.Name == toNuc);
                         if (toNuclide is null)
                             throw Program.Error($"Line {lineNum}: Undefined nuclide '{toNuc}'.");
                     }
@@ -991,7 +991,7 @@ namespace FlexID.Calc
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
         private static Dictionary<string, double[]> ReadSCoeff(InputData data, NuclideData nuclide)
         {
-            var nuc = nuclide.Nuclide;
+            var nuc = nuclide.Name;
             var fileAM = $"{nuc}_AM.txt";
             var fileAF = $"{nuc}_AF.txt";
 
@@ -1132,7 +1132,7 @@ namespace FlexID.Calc
 
                 var nuclide = new NuclideData
                 {
-                    Nuclide = values[0],
+                    Name = values[0],
                     Lambda = double.Parse(values[1]),
                     DecayRate = double.Parse(values[2]),
                     IsProgeny = isProgeny,
@@ -1311,7 +1311,7 @@ namespace FlexID.Calc
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
         private static Dictionary<string, double[]> ReadSee(InputData data, string age, NuclideData nuclide)
         {
-            var nuc = nuclide.Nuclide;
+            var nuc = nuclide.Name;
             var file = $"{nuc}.txt";
 
             using (var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file)))
