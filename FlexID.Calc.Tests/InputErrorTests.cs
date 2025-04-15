@@ -295,7 +295,7 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        public void NuclideShouldHave4Values()
+        public void NuclideShouldHave3Values()
         {
             var reader = CreateReader(new[]
             {
