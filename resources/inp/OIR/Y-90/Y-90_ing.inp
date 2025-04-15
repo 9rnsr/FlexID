@@ -2,9 +2,7 @@
 Y-90 Ingestion
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Y-90      2.595247E-01        1.0
+  Y-90
 
 
 [Y-90:compartment]
