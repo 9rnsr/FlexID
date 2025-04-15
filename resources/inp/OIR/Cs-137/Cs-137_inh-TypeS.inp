@@ -2,10 +2,7 @@
 Cs-137 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Cs-137    6.295048E-05        0.0
-  Ba-137m   3.911175E+02        0.944
+  Cs-137  Ba-137m
 
 
 [Cs-137:compartment]

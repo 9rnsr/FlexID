@@ -2,9 +2,7 @@
 Fe-59 Inhalation:Type-F
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Fe-59     1.557809E-02        0.0
+  Fe-59
 
 
 [Fe-59:compartment]

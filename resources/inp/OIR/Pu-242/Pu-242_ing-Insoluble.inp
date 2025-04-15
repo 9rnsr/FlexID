@@ -2,9 +2,7 @@
 Pu-242 Ingestion:Insoluble
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Pu-242    5.064089E-09        0.0
+  Pu-242
 
 
 [Pu-242:compartment]

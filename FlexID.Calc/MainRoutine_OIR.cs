@@ -67,6 +67,8 @@ namespace FlexID.Calc
             using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var writer = new StreamWriter(stream, Encoding.UTF8))
             {
+                WriteOutNuclides(data, writer);
+
                 writer.WriteLine();
                 writer.WriteLine($"Zero inflow organs:");
 
@@ -75,7 +77,7 @@ namespace FlexID.Calc
                     foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                     {
                         if (organ.IsZeroInflow && organ.Func != OrganFunc.inp)
-                            writer.WriteLine($"  {nuclide.Nuclide} / {organ.Name}");
+                            writer.WriteLine($"  {nuclide.Name} / {organ.Name}");
                     }
                 }
 
@@ -84,7 +86,7 @@ namespace FlexID.Calc
                 foreach (var (nuclide, scoeffTable) in data.Nuclides.Zip(data.SCoeffTables))
                 {
                     writer.WriteLine();
-                    writer.WriteLine($"Nuclide: {nuclide.Nuclide}");
+                    writer.WriteLine($"Nuclide: {nuclide.Name}");
                     writer.WriteLine();
                     writer.WriteLine($"Source regions those are part of '{otherSourceRegion}':");
                     writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));
@@ -99,6 +101,83 @@ namespace FlexID.Calc
                         writer.WriteLine($"{targetRegion,-10} {scoeff:0.00000000E+00}");
                     }
                 }
+            }
+        }
+
+        private static void WriteOutNuclides(InputData data, StreamWriter writer)
+        {
+            var formatted = data.Nuclides
+                .Select(n => (Nuclide: n.Name, Lambda: n.Lambda.ToString("E"), HalfLife: n.HalfLife ?? "",
+                              DecayRates: n.DecayRates.Select(d => $"{d.Parent}/{d.Branch}").ToArray())).ToArray();
+
+            const string HeaderN = "Nuclide";
+            const string HeaderL = "Lambda";
+            const string HeaderH = "HalfLife";
+
+            var widthN = formatted.Select(n => n.Nuclide.Length).Max();
+            var widthL = formatted.Select(n => n.Lambda.Length).Max();
+            var widthHL = formatted.Select(n => n.HalfLife.Length).Max();
+            var widthBr = formatted.SelectMany(n => n.DecayRates).Append("").Max(r => r.Length);
+
+            widthN = Math.Max(widthN, HeaderN.Length);
+            widthL = Math.Max(widthL, HeaderL.Length);
+            if (widthHL > 0)
+                widthHL = Math.Max(widthHL, HeaderH.Length);
+            var branchColumn = widthBr != 0;
+
+            writer.WriteLine();
+
+            int remainPadding = 0;
+            void WriteStr(string value, int width = 0)
+            {
+                while (remainPadding-- != 0)
+                    writer.Write(' ');
+
+                if (width > 0) // PadLeft
+                    for (int w = width - value.Length; w != 0; w--) writer.Write(' ');
+
+                writer.Write(value);
+
+                if (width < 0) // PadRight
+                    remainPadding = -width - value.Length;
+                else
+                    remainPadding = 0;
+            }
+            void WriteLine()
+            {
+                writer.WriteLine();
+                remainPadding = 0;
+            }
+
+            WriteStr(HeaderN, -widthN);
+            WriteStr("  ");
+            WriteStr(HeaderL, -widthL);
+            if (widthHL != 0) { WriteStr("  "); WriteStr(HeaderH, widthHL); }
+            if (widthBr != 0) { WriteStr("  Branches"); }
+            WriteLine();
+
+            foreach (var nuclide in formatted)
+            {
+                WriteStr(nuclide.Nuclide, -widthN);
+                WriteStr("  ");
+                WriteStr(nuclide.Lambda, +widthL);
+
+                if (widthHL != 0)
+                {
+                    WriteStr("  ");
+                    WriteStr(nuclide.HalfLife, widthHL);
+                }
+                if (nuclide.DecayRates.Any())
+                {
+                    WriteStr(" ");
+                    foreach (var branch in nuclide.DecayRates)
+                    {
+                        WriteStr(" ");
+                        WriteStr(branch, -widthBr);
+                    }
+                }
+
+                WriteLine();
             }
         }
 

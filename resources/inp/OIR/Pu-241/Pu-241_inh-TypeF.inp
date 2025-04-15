@@ -2,9 +2,7 @@
 Pu-241 Inhalation:Type-F
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Pu-241    1.323368E-04        0.0
+  Pu-241
 
 
 [Pu-241:compartment]

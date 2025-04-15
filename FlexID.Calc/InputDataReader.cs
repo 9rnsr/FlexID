@@ -128,13 +128,18 @@ namespace FlexID.Calc
         public double[] S_Coefficients;
     }
 
-    [DebuggerDisplay("{Nuclide}")]
+    [DebuggerDisplay("{Name}")]
     public class NuclideData
     {
         /// <summary>
-        /// 核種の一覧。
+        /// 核種名。
         /// </summary>
-        public string Nuclide;
+        public string Name;
+
+        /// <summary>
+        /// 半減期(単位付き)。
+        /// </summary>
+        public string HalfLife;
 
         /// <summary>
         /// 崩壊定数λ[/day]。(＝ ln(2) / 半減期[day])
@@ -144,12 +149,12 @@ namespace FlexID.Calc
         /// <summary>
         /// 親核種からの崩壊割合(100%＝1.00と置いた比で持つ)。
         /// </summary>
-        public double DecayRate;
+        public (string Parent, double Branch)[] DecayRates;
 
         /// <summary>
         /// 子孫核種の場合は<c>true</c>。
         /// </summary>
-        public bool IsProgeny;
+        public bool IsProgeny => DecayRates.Length != 0;
 
         /// <summary>
         /// S係数データにおける各線源領域の名称。
@@ -512,8 +517,11 @@ namespace FlexID.Calc
 
                 nuclides = new List<NuclideData>();
 
-                // 1番目が親核種、2番目以降が子孫核種になる。
-                var isProgeny = false;
+                // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
+                var autoMode = default(bool?);
+
+                Dictionary<string, IndexData> indexTable = null;
+                var branches = new List<(string Parent, string Daugher, double Branch)>();
 
                 while (true)
                 {
@@ -525,6 +533,41 @@ namespace FlexID.Calc
 
                     // 核種の定義行を読み込む。
                     var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (autoMode == true || autoMode == default && values.All(patternNuclide.IsMatch))
+                    {
+                        autoMode = true;
+
+                        if (indexTable is null)
+                            indexTable = IndexDataReader.ReadNDX().ToDictionary(x => x.Nuclide, x => x);
+
+                        foreach (var nuc in values)
+                        {
+                            if (!patternNuclide.IsMatch(nuc))
+                                throw Program.Error($"Line {lineNum}: '{nuc}' is not nuclide name.");
+
+                            var nuclide = new NuclideData { Name = nuc };
+
+                            if (indexTable.TryGetValue(nuc, out var indexData))
+                            {
+                                nuclide.HalfLife = indexData.HalfLife;
+                                nuclide.Lambda = indexData.Lambda;
+
+                                branches.AddRange(indexData.Daughters.Select(d => (nuc, d.Daughter, (double)d.Branch)));
+                            }
+                            else
+                            {
+                                // NDXファイルに定義されていないものは安定核種として扱う。
+                                nuclide.HalfLife = "---";
+                                nuclide.Lambda = 0.0;
+                            }
+
+                            nuclides.Add(nuclide);
+                        }
+                        continue;
+                    }
+                    else
+                        autoMode = false;
 
                     if (values.Length != 3)
                         throw Program.Error($"Line {lineNum}: Nuclide definition should have 3 values.");
@@ -539,16 +582,32 @@ namespace FlexID.Calc
                     if (decayRate < 0)
                         throw Program.Error($"Line {lineNum}: Nuclide DecayRate should be positive.");
 
-                    var nuclide = new NuclideData
+                    nuclides.Add(new NuclideData
                     {
-                        Nuclide = values[0],
+                        Name = values[0],
                         Lambda = lambda,
-                        DecayRate = decayRate,
-                        IsProgeny = isProgeny,
-                    };
-                    nuclides.Add(nuclide);
+                        DecayRates = nuclides.Count == 0
+                            ? Array.Empty<(string Parent, double Branch)>()
+                            : new[] { (Parent: nuclides.Last().Name, Branch: decayRate) },
+                    });
+                }
 
-                    isProgeny = true;
+                if (autoMode == true && nuclides.Any())
+                {
+                    // 親核種のDecayRatesについては空に設定する。
+                    nuclides.First().DecayRates = Array.Empty<(string Parent, double Branch)>();
+
+                    // 親を持つ子孫核種のDecayRatesについて設定する。
+                    foreach (var nuclide in nuclides.Skip(1))
+                    {
+                        var nuc = nuclide.Name;
+
+                        var decayRates = branches.Where(b => b.Daugher == nuc).Select(b => (b.Parent, b.Branch)).ToArray();
+                        if (!decayRates.Any())
+                            throw Program.Error($"Progeny nuclide '{nuc}' has no decay path from any other nuclides.");
+
+                        nuclide.DecayRates = decayRates;
+                    }
                 }
             }
 
@@ -671,7 +730,7 @@ namespace FlexID.Calc
                 if (!calcProgeny && nuclide.IsProgeny)
                     continue;
 
-                var nuc = nuclide.Nuclide;
+                var nuc = nuclide.Name;
                 if (!nuclideOrgans.TryGetValue(nuc, out var organs))
                     throw Program.Error($"Missing [{nuc}:compartment] section.");
                 if (!organs.Any())
@@ -780,7 +839,7 @@ namespace FlexID.Calc
                 if (!calcProgeny && nuclide.IsProgeny)
                     continue;
 
-                var nuc = nuclide.Nuclide;
+                var nuc = nuclide.Name;
                 var transfers = nuclideTransfers[nuc];
 
                 // 移行経路の定義が正しいことの確認と、
@@ -796,7 +855,7 @@ namespace FlexID.Calc
                     {
                         var fromNuc = from.Substring(0, i);
                         fromName = from.Substring(i + 1);
-                        fromNuclide = nuclides.FirstOrDefault(n => n.Nuclide == fromNuc);
+                        fromNuclide = nuclides.FirstOrDefault(n => n.Name == fromNuc);
                         if (fromNuclide is null)
                             throw Program.Error($"Line {lineNum}: Undefined nuclide '{fromNuc}'.");
                     }
@@ -807,7 +866,7 @@ namespace FlexID.Calc
                     {
                         var toNuc = to.Substring(0, j);
                         toName = to.Substring(j + 1);
-                        toNuclide = nuclides.FirstOrDefault(n => n.Nuclide == toNuc);
+                        toNuclide = nuclides.FirstOrDefault(n => n.Name == toNuc);
                         if (toNuclide is null)
                             throw Program.Error($"Line {lineNum}: Undefined nuclide '{toNuc}'.");
                     }
@@ -853,6 +912,10 @@ namespace FlexID.Calc
 
                     if (isDecayPath)
                     {
+                        // 分岐比が不明な壊変経路は定義できない。
+                        if (!organTo.Nuclide.DecayRates.Any(b => b.Parent == fromNuclide.Name))
+                            throw Program.Error($"Line {lineNum}: There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
+
                         // inpやmixから娘核種への壊変経路は定義できない。
                         if (organFrom.IsInstantOutflow)
                             throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{fromName}'.");
@@ -919,7 +982,10 @@ namespace FlexID.Calc
                     if (organFrom.Nuclide != nuclide)
                     {
                         // 親から子への移行経路では、親からの分岐比とする。
-                        inflowRate = organTo.Nuclide.DecayRate;
+                        var parentNuclide = organFrom.Nuclide.Name;
+                        var branch = organTo.Nuclide.DecayRates.First(b => b.Parent == parentNuclide).Branch;
+
+                        inflowRate = branch;
                     }
                     else if (organFrom.IsInstantOutflow)
                     {
@@ -991,7 +1057,7 @@ namespace FlexID.Calc
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
         private static Dictionary<string, double[]> ReadSCoeff(InputData data, NuclideData nuclide)
         {
-            var nuc = nuclide.Nuclide;
+            var nuc = nuclide.Name;
             var fileAM = $"{nuc}_AM.txt";
             var fileAF = $"{nuc}_AF.txt";
 
@@ -1132,10 +1198,11 @@ namespace FlexID.Calc
 
                 var nuclide = new NuclideData
                 {
-                    Nuclide = values[0],
+                    Name = values[0],
                     Lambda = double.Parse(values[1]),
-                    DecayRate = double.Parse(values[2]),
-                    IsProgeny = isProgeny,
+                    DecayRates = data.Nuclides.Count == 0
+                        ? Array.Empty<(string Parent, double Branch)>()
+                        : new[] { (Parent: data.Nuclides.Last().Name, Branch: double.Parse(values[2])) },
                 };
                 data.Nuclides.Add(nuclide);
 
@@ -1290,7 +1357,7 @@ namespace FlexID.Calc
                     // 流入割合がマイナスの時の処理は親からの分岐比とする。
                     if (inflow.Rate < 0)
                     {
-                        inflow.Rate = organ.Nuclide.DecayRate;
+                        inflow.Rate = organ.Nuclide.DecayRates[0].Branch;
                     }
                 }
             }
@@ -1311,7 +1378,7 @@ namespace FlexID.Calc
         /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
         private static Dictionary<string, double[]> ReadSee(InputData data, string age, NuclideData nuclide)
         {
-            var nuc = nuclide.Nuclide;
+            var nuc = nuclide.Name;
             var file = $"{nuc}.txt";
 
             using (var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file)))
@@ -1379,6 +1446,12 @@ namespace FlexID.Calc
 
             return (targets.ToArray(), weights.ToArray());
         }
+
+        /// <summary>
+        /// 核種名に合致する正規表現。
+        /// 準安定核種について、一般的な表記(m1, m2)とICRP-07データのもの(m, n)の両方を受け付けるようにしている。
+        /// </summary>
+        private static readonly Regex patternNuclide = new Regex(@"^[A-Za-z]+-\d+(?:[a-z]|m\d)?$", RegexOptions.Compiled);
 
         private static readonly Regex patternBar = new Regex("^-+$", RegexOptions.Compiled);
 

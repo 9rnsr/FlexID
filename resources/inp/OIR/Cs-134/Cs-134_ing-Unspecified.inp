@@ -2,9 +2,7 @@
 Cs-134 Ingestion:Unspecified
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Cs-134    9.197178E-04        0.0
+  Cs-134
 
 
 [Cs-134:compartment]

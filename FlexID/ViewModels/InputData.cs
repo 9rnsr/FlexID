@@ -110,7 +110,7 @@ namespace FlexID.ViewModels
                     continue;
 
                 var title = data.Title;
-                var nuclide = parentNuclide.Nuclide;
+                var nuclide = parentNuclide.Name;
                 var hasProgeny = data.Nuclides.Count > 1;
 
                 yield return new InputData(inputFile, title, nuclide, hasProgeny);
@@ -154,7 +154,7 @@ namespace FlexID.ViewModels
                     continue;
 
                 var title = data.Title;
-                var nuclide = parentNuclide.Nuclide;
+                var nuclide = parentNuclide.Name;
                 var hasProgeny = data.Nuclides.Count > 1;
 
                 yield return new InputData(inputFile, title, nuclide, hasProgeny);

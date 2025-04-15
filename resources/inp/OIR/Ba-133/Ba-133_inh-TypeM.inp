@@ -2,9 +2,7 @@
 Ba-133 Inhalation:Type-M
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Ba-133    1.805165E-04        0.0
+  Ba-133
 
 
 [Ba-133:compartment]

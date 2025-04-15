@@ -214,12 +214,12 @@ namespace FlexID.Calc
                     wRete.WriteLine("FlexID output: RetentionActivity");
                     wRete.WriteLine(data.Title);
                     wRete.WriteLine();
-                    wRete.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                    wRete.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
                     wRete.WriteLine("Units: day, Bq/Bq");
                     wRete.WriteLine();
                 }
 
-                wRete.WriteLine(nuclide.Nuclide);
+                wRete.WriteLine(nuclide.Name);
                 wRete.Write("  Time         ");
                 wRete.Write("  {0,-14}", "WholeBody");
 
@@ -250,12 +250,12 @@ namespace FlexID.Calc
                     wCumu.WriteLine("FlexID output: CumulativeActivity");
                     wCumu.WriteLine(data.Title);
                     wCumu.WriteLine();
-                    wCumu.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                    wCumu.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
                     wCumu.WriteLine("Units: day, Bq");
                     wCumu.WriteLine();
                 }
 
-                wCumu.WriteLine(nuclide.Nuclide);
+                wCumu.WriteLine(nuclide.Name);
                 wCumu.Write("  Time         ");
                 wCumu.Write("  {0,-14}", "WholeBody");
 
@@ -289,11 +289,11 @@ namespace FlexID.Calc
                 wDose.WriteLine("FlexID output: Dose");
                 wDose.WriteLine(data.Title);
                 wDose.WriteLine();
-                wDose.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                wDose.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
                 wDose.WriteLine("Units: day, Sv/Bq");
                 wDose.WriteLine();
 
-                wDose.WriteLine(nuclide.Nuclide);
+                wDose.WriteLine(nuclide.Name);
                 wDose.Write("  Time         ");
                 wDose.Write("  WholeBody   ");
                 foreach (var t in targets) wDose.Write("  {0,-12:n}", t);
@@ -305,11 +305,11 @@ namespace FlexID.Calc
                 wRate.WriteLine("FlexID output: DoseRate");
                 wRate.WriteLine(data.Title);
                 wRate.WriteLine();
-                wRate.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Nuclide)));
+                wRate.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
                 wRate.WriteLine("Units: day, Sv/h");
                 wRate.WriteLine();
 
-                wRate.WriteLine(nuclide.Nuclide);
+                wRate.WriteLine(nuclide.Name);
                 wRate.Write("  Time         ");
                 wRate.Write("  WholeBody   ");
                 foreach (var t in targets) wRate.Write("  {0,-12:n}", t);
