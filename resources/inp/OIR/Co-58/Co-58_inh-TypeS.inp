@@ -2,9 +2,7 @@
 Co-58 Inhalation:Type-S
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Co-58    9.781925E-03        0.0
+  Co-58
 
 
 [Co-58:compartment]
