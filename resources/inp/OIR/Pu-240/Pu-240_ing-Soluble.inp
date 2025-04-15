@@ -2,9 +2,7 @@
 Pu-240 Ingestion:Soluble
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Pu-240    2.893104E-07        0.0
+  Pu-240
 
 
 [Pu-240:compartment]

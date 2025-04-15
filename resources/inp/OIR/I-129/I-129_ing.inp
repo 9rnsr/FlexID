@@ -2,9 +2,7 @@
 I-129 Ingestion
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  I-129     1.209575E-10        0.0
+  I-129
 
 
 [I-129:compartment]

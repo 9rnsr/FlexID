@@ -2,10 +2,7 @@
 Mo-93 Ingestion:Sulphide
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Mo-93     4.747583E-07        0.0             # ln(2)/(365 * 4.0E+3 y)
-  Nb-93m    1.177330E-04        1.0             # ln(2)/(365 * 16.13 y)
+  Mo-93  Nb-93m
 
 
 [Mo-93:compartment]

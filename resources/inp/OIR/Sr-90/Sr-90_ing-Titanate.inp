@@ -2,10 +2,7 @@
 Sr-90 Ingestion:StrontiumTitanate
 
 [nuclide]
-# Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
-#---------+-------------------+---------------------
-  Sr-90     6.596156E-05        0.0
-  Y-90      2.595247E-01        1.0
+  Sr-90  Y-90
 
 
 [Sr-90:compartment]
