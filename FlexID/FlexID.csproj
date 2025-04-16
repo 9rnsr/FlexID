@@ -13,10 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Costura.Fody">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Costura.Fody" PrivateAssets="all" />
     <PackageReference Include="Prism.DryIoc" />
     <PackageReference Include="ReactiveProperty" />
     <PackageReference Include="System.Net.Http" />
