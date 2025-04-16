@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
 
+    <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
+
     <OutputPath>$(SolutionDir)$(Configuration)\bin\</OutputPath>
     <BaseIntermediateOutputPath>$(SolutionDir)$(Configuration)\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
