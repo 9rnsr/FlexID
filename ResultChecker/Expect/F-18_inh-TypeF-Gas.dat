@@ -1,0 +1,25 @@
+Radionuclide	F-18
+Route of Intake	Inhalation
+Material	Gas or vapour Type F, Unspecified , fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Urine (24-hour sample)	Faeces (24-hour sample)	Alimentary Tract*	Lungs*	Skeleton*
+0.041667	6.8E-1	-	-	6.8E-2	1.6E-1	2.4E-1
+0.083333	4.5E-1	-	-	2.4E-2	3.4E-2	2.5E-1
+0.125	2.9E-1	-	-	8.6E-3	8.5E-3	1.8E-1
+0.25	7.7E-2	-	-	8.9E-4	7.9E-4	5.0E-2
+0.375	2.0E-2	-	-	2.1E-4	2.0E-4	1.3E-2
+0.5	5.2E-3	-	-	5.6E-5	5.1E-5	3.4E-3
+0.625	1.4E-3	-	-	1.5E-5	1.3E-5	8.7E-4
+0.75	3.5E-4	-	-	4.2E-6	3.4E-6	2.3E-4
+0.875	9.1E-5	-	-	1.1E-6	8.9E-7	5.9E-5
+1	2.4E-5	8.9E-5	5.6E-8	3.1E-7	2.3E-7	1.5E-5
+1.125	6.2E-6	-	-	8.5E-8	6.0E-8	4.0E-6
+1.25	1.6E-6	-	-	2.3E-8	1.5E-8	1.0E-6
+1.375	4.2E-7	-	-	6.3E-9	4.0E-9	2.7E-7
+1.5	1.1E-7	-	-	1.7E-9	1.0E-9	6.9E-8
+1.625	2.8E-8	-	-	4.7E-10	2.7E-10	1.8E-8
+1.75	7.3E-9	-	-	1.3E-10	-	4.7E-9
+1.875	1.9E-9	-	-	-	-	1.2E-9
+2	4.9E-10	2.2E-9	-	-	-	3.1E-10
