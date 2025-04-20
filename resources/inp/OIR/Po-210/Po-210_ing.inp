@@ -1,0 +1,109 @@
+[title]
+Po-210 Ingestion
+
+[nuclide]
+  Po-210
+
+
+[Po-210:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma1               Blood
+  acc   Plasma2               Blood
+  acc   Plasma3               Blood
+  acc   RBC                   Blood
+  mix   BoneSurface           ---           # ICRP Publ.137 p.289 Para.605
+  acc   BoneSurface-C         C-bone-S      # ICRP Publ.137 p.289 Para.605
+  acc   BoneSurface-T         T-bone-S      # ICRP Publ.137 p.289 Para.605
+  acc   RedMarrow             R-marrow
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+  acc   Testes                Testes
+  acc   Other                 Other
+  exc   Excreta               ---
+
+[Po-210:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
+  $fA    = 0.1
+  $fA_Re = 0.1          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma1               $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma1               $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.285 Table 11.3
+  Plasma2                 Plasma1                 800
+  Plasma2                 Kidneys1                200
+  Plasma1                 Plasma3                   4
+  Plasma1                 RBC                       6
+  Plasma1                 Liver1                   17.5
+  Plasma1                 Liver2                   17.5
+  Plasma1                 Kidneys1                  5
+  Plasma1                 Kidneys2                  5
+  Plasma1                 Skin                      5
+  Plasma1                 RedMarrow                 4
+  Plasma1                 BoneSurface               1.5
+  Plasma1                 Spleen                    2
+  Plasma1                 Testes                    0.1
+  Plasma1                 Ovaries                   0.05
+  Plasma1                 Other                    32.35
+  Plasma3                 Plasma1                   0.099
+  RBC                     Plasma1                   0.099
+  Liver1                  SI-conRe                  0.139
+  Liver2                  Plasma1                   0.099
+  Kidneys1                UB-con                    0.173
+  Kidneys2                Plasma1                   0.099
+  Skin                    Plasma1                   0.00693
+  Skin                    Excreta                   0.00693
+  RedMarrow               Plasma1                   0.099
+  BoneSurface             BoneSurface-C            50%      # ICRP Publ.137 p.289 Para.605
+  BoneSurface             BoneSurface-T            50%      # ICRP Publ.137 p.289 Para.605
+  BoneSurface-C           Plasma1                   0.0231  # ICRP Publ.137 p.289 Para.605
+  BoneSurface-T           Plasma1                   0.0231  # ICRP Publ.137 p.289 Para.605
+  Spleen                  Plasma1                   0.099
+  Testes                  Plasma1                   0.0139
+  Ovaries                 Plasma1                   0.0139
+  Other                   Plasma1                   0.099
