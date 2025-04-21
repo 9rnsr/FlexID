@@ -307,26 +307,6 @@ Cs-137 Inhalation:Type-F
   acc   Exch-C-bone-V         C-bone-V
   acc   Noch-T-bone-V         T-bone-V
   acc   Noch-C-bone-V         C-bone-V
-  acc   Dec-RBC               Blood
-  acc   Dec-Muscle            Muscle
-  acc   Dec-St-wall           St-wall
-  acc   Dec-SI-wall           SI-wall
-  acc   Dec-RC-wall           RC-wall
-  acc   Dec-LC-wall           LC-wall
-  acc   Dec-RS-wall           RS-wall
-  acc   Dec-Liver             Liver
-  acc   Dec-Kidneys           Kidneys
-  acc   Dec-Spleen            Spleen
-  acc   Dec-Pancreas          Pancreas
-  acc   Dec-Skin              Skin
-  acc   Dec-Adipose           Adipose
-  acc   Dec-Brain             Brain
-  acc   Dec-Ht-wall           Ht-wall
-  acc   Dec-Lung-Tis          Lung-Tis
-  acc   Dec-R-marrow          R-marrow
-  acc   Dec-Cartilage         Cartilage
-  acc   Dec-Other1            Other
-  acc   Dec-Other2            Other
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------
@@ -379,26 +359,6 @@ Cs-137 Inhalation:Type-F
   Cs-137/Plasma           Plasma                    ---
   Cs-137/T-bone-S         T-bone-S                  ---
   Cs-137/C-bone-S         C-bone-S                  ---
-  Cs-137/RBC              Dec-RBC                   ---
-  Cs-137/SkeletalMuscle   Dec-Muscle                ---
-  Cs-137/St-wall          Dec-St-wall               ---
-  Cs-137/SI-wall          Dec-SI-wall               ---
-  Cs-137/RC-wall          Dec-RC-wall               ---
-  Cs-137/LC-wall          Dec-LC-wall               ---
-  Cs-137/RS-wall          Dec-RS-wall               ---
-  Cs-137/Liver            Dec-Liver                 ---
-  Cs-137/Kidneys          Dec-Kidneys               ---
-  Cs-137/Spleen           Dec-Spleen                ---
-  Cs-137/Pancreas         Dec-Pancreas              ---
-  Cs-137/Skin             Dec-Skin                  ---
-  Cs-137/Adipose          Dec-Adipose               ---
-  Cs-137/Brain            Dec-Brain                 ---
-  Cs-137/Ht-wall          Dec-Ht-wall               ---
-  Cs-137/Lung-Tis         Dec-Lung-Tis              ---
-  Cs-137/R-marrow         Dec-R-marrow              ---
-  Cs-137/Cartilage        Dec-Cartilage             ---
-  Cs-137/Other1           Dec-Other1                ---
-  Cs-137/Other2           Dec-Other2                ---
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -470,8 +430,8 @@ Cs-137 Inhalation:Type-F
   #   rate 1000 d⁻¹, the default value for extremely rapid transfer between systemic compartments.
   # > 骨格筋と赤血球で生成されたバリウムは、全身コンパートメント間の極めて迅速な移行の
   #   デフォルト値である 1000 d⁻¹ の速度で血漿に移行します。
-  Dec-RBC                 Plasma                 1000
-  Dec-Muscle              Plasma                 1000
+  Cs-137/RBC              Plasma                 1000
+  Cs-137/SkeletalMuscle   Plasma                 1000
 
   # > Barium produced in all other soft tissue compartments transfers to
   #   plasma at the rate 200 d⁻¹ (t½=5 min), chosen to yield, at most, a moderate deficiency
@@ -479,24 +439,24 @@ Cs-137 Inhalation:Type-F
   # > その他のすべての軟部組織コンパートメントで生成されたバリウムは、平衡値と比較してこれらの
   #   組織で最大でも中程度の 137mBa の欠乏をもたらすように選択された 200 d⁻¹ (t½=5 分) の速度で
   #   血漿に移行します。
-  Dec-St-wall             Plasma                  200
-  Dec-SI-wall             Plasma                  200
-  Dec-RC-wall             Plasma                  200
-  Dec-LC-wall             Plasma                  200
-  Dec-RS-wall             Plasma                  200
-  Dec-Liver               Plasma                  200
-  Dec-Kidneys             Plasma                  200
-  Dec-Spleen              Plasma                  200
-  Dec-Pancreas            Plasma                  200
-  Dec-Skin                Plasma                  200
-  Dec-Adipose             Plasma                  200
-  Dec-Brain               Plasma                  200
-  Dec-Ht-wall             Plasma                  200
-  Dec-Lung-Tis            Plasma                  200
-  Dec-R-marrow            Plasma                  200
-  Dec-Cartilage           Plasma                  200
-  Dec-Other1              Plasma                  200
-  Dec-Other2              Plasma                  200
+  Cs-137/St-wall          Plasma                  200
+  Cs-137/SI-wall          Plasma                  200
+  Cs-137/RC-wall          Plasma                  200
+  Cs-137/LC-wall          Plasma                  200
+  Cs-137/RS-wall          Plasma                  200
+  Cs-137/Liver            Plasma                  200
+  Cs-137/Kidneys          Plasma                  200
+  Cs-137/Spleen           Plasma                  200
+  Cs-137/Pancreas         Plasma                  200
+  Cs-137/Skin             Plasma                  200
+  Cs-137/Adipose          Plasma                  200
+  Cs-137/Brain            Plasma                  200
+  Cs-137/Ht-wall          Plasma                  200
+  Cs-137/Lung-Tis         Plasma                  200
+  Cs-137/R-marrow         Plasma                  200
+  Cs-137/Cartilage        Plasma                  200
+  Cs-137/Other1           Plasma                  200
+  Cs-137/Other2           Plasma                  200
 
   # > Barium produced
   #   in bone decays at its site of production. Barium transfers from plasma to trabecular
