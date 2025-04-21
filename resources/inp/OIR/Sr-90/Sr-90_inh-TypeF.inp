@@ -224,7 +224,6 @@ Sr-90 Inhalation:Type-F
   acc   Blood2                Blood
   acc   ST0                   Other
   acc   ST1                   Other
-  acc   ST-decay              Other         # ambiguous compartment from Sr-90
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Kidneys               Kidneys
@@ -317,10 +316,9 @@ Sr-90 Inhalation:Type-F
 #   from compartments of other soft tissue in the model for yttrium as a parent), and then
 #   to follow the kinetics of yttrium as a parent radionuclide.
 #
-  Sr-90/ST0               ST-decay                  ---
-  Sr-90/ST1               ST-decay                  ---
-  Sr-90/ST2               ST-decay                  ---
-  ST-decay                Blood1                    0.23105     # = ln(2)/3
+  Sr-90/ST0               Blood1                    0.23105     # = ln(2)/3
+  Sr-90/ST1               Blood1                    0.23105     # = ln(2)/3
+  Sr-90/ST2               Blood1                    0.23105     # = ln(2)/3
 
   Sr-90/C-bone-S          C-bone-S                  ---
   Sr-90/Exch-C-bone-V     C-bone-V                  ---
