@@ -623,9 +623,9 @@ namespace FlexID.Calc
 
                     // 移行元と移行先のそれぞれがcompartmentセクションで定義済みかを確認する。
                     if (organFrom is null)
-                        throw Program.Error($"Line {lineNum}: Undefined compartment '{fromName}'.");
+                        throw Program.Error($"Line {lineNum}: Undefined compartment '{from}'.");
                     if (organTo is null)
-                        throw Program.Error($"Line {lineNum}: Undefined compartment '{toName}'.");
+                        throw Program.Error($"Line {lineNum}: Undefined compartment '{to}'.");
 
                     // 自分自身への移行経路は定義できない。
                     if (organTo == organFrom)
@@ -633,7 +633,7 @@ namespace FlexID.Calc
 
                     // 同じ移行経路が複数回定義されていないことを確認する。
                     if (!definedTransfers.Add((from, to)))
-                        throw Program.Error($"Line {lineNum}: Duplicated transfer path from '{fromName}' to '{toName}'.");
+                        throw Program.Error($"Line {lineNum}: Duplicated transfer path from '{from}' to '{to}'.");
 
                     // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
                     var fromFunc = organFrom.Func;
@@ -643,11 +643,11 @@ namespace FlexID.Calc
 
                     // inpへの流入は定義できない。
                     if (toFunc == OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Cannot set input path to inp '{toName}'.");
+                        throw Program.Error($"Line {lineNum}: Cannot set input path to inp '{to}'.");
 
                     // excからの流出は(娘核種のexcへの壊変経路を除いて)定義できない。
                     if (fromFunc == OrganFunc.exc && !(toFunc == OrganFunc.exc && isDecayPath))
-                        throw Program.Error($"Line {lineNum}: Cannot set output path from exc '{fromName}'.");
+                        throw Program.Error($"Line {lineNum}: Cannot set output path from exc '{from}'.");
 
                     // TODO: mixからmixへの経路は定義できない。
                     //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
@@ -661,7 +661,7 @@ namespace FlexID.Calc
 
                         // inpやmixから娘核種への壊変経路は定義できない。
                         if (organFrom.IsInstantOutflow)
-                            throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{fromName}'.");
+                            throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{from}'.");
 
                         // 親核種からの壊変経路では、係数は指定できない。
                         if (coeff != null)
@@ -672,12 +672,12 @@ namespace FlexID.Calc
                         // inpまたはmixからの配分経路では、移行割合の入力を要求する。
                         // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
                         if (organFrom.IsInstantOutflow && !hasCoeff)
-                            throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{fromName}'.");
+                            throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{from}'.");
 
                         // accからの流出経路では、移行速度の入力を要求する。
                         // なお、ここでパーセント値を設定するのは明らかにおかしいので設定エラーとして弾く。
                         if (fromFunc == OrganFunc.acc && (!hasCoeff || isRate))
-                            throw Program.Error($"Line {lineNum}: Require transfer rate [/d] from {fromFunc} '{fromName}'.");
+                            throw Program.Error($"Line {lineNum}: Require transfer rate [/d] from {fromFunc} '{from}'.");
                     }
                     if (coeff is decimal coeff_v)
                     {

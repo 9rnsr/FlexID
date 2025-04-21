@@ -852,7 +852,7 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 19: Cannot set decay path from inp 'input'.", e.Message);
+            Assert.AreEqual("Line 19: Cannot set decay path from inp 'Sr-90/input'.", e.Message);
         }
 
         [TestMethod]
@@ -884,7 +884,7 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 21: Cannot set decay path from mix 'mix-Blood'.", e.Message);
+            Assert.AreEqual("Line 21: Cannot set decay path from mix 'Sr-90/mix-Blood'.", e.Message);
         }
 
         [TestMethod]
