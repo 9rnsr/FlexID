@@ -10,6 +10,23 @@ namespace FlexID.Calc
     /// </summary>
     public class InputDataReader_OIR : InputDataReaderBase
     {
+        private readonly InputEvaluator evaluator = new InputEvaluator();
+
+        private string inputTitle;
+
+        private Dictionary<string, string> inputParameters;
+
+        private Dictionary<string, Dictionary<string, string>> nuclideParameters = new Dictionary<string, Dictionary<string, string>>();
+
+        private List<NuclideData> nuclides;
+
+        private Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
+
+        private Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers =
+            new Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>>();
+
+        private List<Dictionary<string, double[]>> SCoeffTables = new List<Dictionary<string, double[]>>();
+
         /// <summary>
         /// コンストラクタ。
         /// </summary>
@@ -30,50 +47,38 @@ namespace FlexID.Calc
         {
         }
 
+        protected override string GetNextLine()
+        {
+        Lagain:
+            var nextLine = base.GetNextLine();
+
+            if (evaluator.TryReadVarDecl(LineNum, nextLine))
+                goto Lagain;
+
+            return nextLine;
+        }
+
+        private static bool CheckSectionHeader(string ln) => ln.StartsWith("[");
+
+        private ReadOnlySpan<char> GetSectionHeader(string ln)
+        {
+            if (!CheckSectionHeader(ln))
+                throw Program.Error($"Line {LineNum}: Section header should start with '['");
+            if (!ln.EndsWith("]"))
+                throw Program.Error($"Line {LineNum}: Section header should be closed with ']'.");
+
+            return ln.AsSpan(1, ln.Length - 2).Trim();
+        }
+
         /// <summary>
         /// インプットファイルを読み込む。
         /// </summary>
         /// <returns></returns>
         public InputData Read()
         {
-            var evaluator = new InputEvaluator();
-
-            string GetNextLine()
-            {
-            Lagain:
-                var nextLine = this.GetNextLine();
-
-                if (evaluator.TryReadVarDecl(LineNum, nextLine))
-                    goto Lagain;
-
-                return nextLine;
-            }
-
             var line = GetNextLine();
             if (line is null)
                 throw Program.Error("Reach to EOF while reading input file.");
-
-            bool CheckSectionHeader(string ln) => ln.StartsWith("[");
-
-            ReadOnlySpan<char> GetSectionHeader(string ln)
-            {
-                if (!CheckSectionHeader(ln))
-                    throw Program.Error($"Line {LineNum}: Section header should start with '['");
-                if (!ln.EndsWith("]"))
-                    throw Program.Error($"Line {LineNum}: Section header should be closed with ']'.");
-
-                return ln.AsSpan(1, ln.Length - 2).Trim();
-            }
-
-            var inputTitle = default(string);
-            var inputParameters = default(Dictionary<string, string>);
-            var nuclideParameters = new Dictionary<string, Dictionary<string, string>>();
-            var nuclides = default(List<NuclideData>);
-            var nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
-            var nuclideTransfers = new Dictionary<string,
-                    List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>>();
-            var SCoeffTables = new List<Dictionary<string, double[]>>();
-            int organId = 0;
 
             while (true)
             {
@@ -85,289 +90,39 @@ namespace FlexID.Calc
 
                 if (buffer.SequenceEqual("title".AsSpan()))
                 {
-                    GetTitle(out line);
+                    line = GetTitle();
                 }
                 else if (buffer.SequenceEqual("parameter".AsSpan()))
                 {
-                    GetParameters("", out line);
+                    line = GetParameters("");
                 }
                 else if (buffer.EndsWith(":parameter".AsSpan()))
                 {
                     var i = header.IndexOf(':');
                     var nuc = header.Slice(0, i).ToString();
-                    GetParameters(nuc, out line);
+                    line = GetParameters(nuc);
                 }
                 else if (buffer.SequenceEqual("nuclide".AsSpan()))
                 {
-                    GetNuclides(out line);
+                    line = GetNuclides();
                 }
                 else if (buffer.EndsWith(":compartment".AsSpan()))
                 {
                     var i = header.IndexOf(':');
                     var nuc = header.Slice(0, i).ToString();
-                    GetCompartments(nuc, out line);
+                    line = GetCompartments(nuc);
                 }
                 else if (buffer.EndsWith(":transfer".AsSpan()))
                 {
                     var i = header.IndexOf(':');
                     var nuc = header.Slice(0, i).ToString();
-                    GetTransfers(nuc, out line);
+                    line = GetTransfers(nuc);
                 }
                 else
                     throw Program.Error($"Line {LineNum}: Unrecognized section $'[{header.ToString()}]'.");
 
                 if (line is null)
                     break;
-            }
-
-            // タイトルの定義セクションを読み込む。
-            void GetTitle(out string nextLine)
-            {
-                if (inputTitle != null)
-                    throw Program.Error($"Line {LineNum}: Duplicated [title] section.");
-
-                var title = GetNextLine();
-                if (title is null)
-                    throw Program.Error($"Line {LineNum}: Reach to EOF while reading title section.");
-                inputTitle = title;
-
-                nextLine = GetNextLine();
-                if (!CheckSectionHeader(nextLine))
-                    throw Program.Error($"Line {LineNum}: Unrecognized line in [title] section.");
-            }
-
-            void GetParameters(string nuc, out string nextLine)
-            {
-                Dictionary<string, string> parameters;
-                string[] parameterNames;
-                if (nuc == "")
-                {
-                    if (inputParameters != null)
-                        throw Program.Error($"Line {LineNum}: Duplicated [parameter] section.");
-                    parameters = new Dictionary<string, string>();
-                    parameterNames = InputData.ParameterNames;
-                    inputParameters = parameters;
-                }
-                else
-                {
-                    if (nuclideParameters.ContainsKey(nuc))
-                        throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:parameter] section.");
-                    parameters = new Dictionary<string, string>();
-                    parameterNames = NuclideData.ParameterNames;
-                    nuclideParameters.Add(nuc, parameters);
-                }
-
-
-                while (true)
-                {
-                    nextLine = GetNextLine();
-                    if (nextLine is null)
-                        break;
-                    if (CheckSectionHeader(nextLine))
-                        break;
-
-                    var values = nextLine.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                    if (values.Length != 2)
-                        throw Program.Error($"Line {LineNum}: Parameter definition should have 2 values.");
-
-                    var paramName = values[0].Trim();
-                    var paramValue = values[1].Trim();
-
-                    if (!parameterNames.Contains(paramName))
-                        throw Program.Error($"Line {LineNum}: Unrecognized parameter '{paramName}' definition.");
-                    if (parameters.ContainsKey(paramName))
-                        throw Program.Error($"Line {LineNum}: Duplicated parameter '{paramName}' definition.");
-
-                    parameters.Add(paramName, paramValue);
-                }
-            }
-
-            // 核種の定義セクションを読み込む。
-            void GetNuclides(out string nextLine)
-            {
-                if (nuclides != null)
-                    throw Program.Error($"Line {LineNum}: Duplicated [nuclide] section.");
-
-                nuclides = new List<NuclideData>();
-
-                // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
-                var autoMode = default(bool?);
-
-                Dictionary<string, IndexData> indexTable = null;
-                var branches = new List<(string Parent, string Daugher, double Branch)>();
-
-                while (true)
-                {
-                    nextLine = GetNextLine();
-                    if (nextLine is null)
-                        break;
-                    if (CheckSectionHeader(nextLine))
-                        break;
-
-                    // 核種の定義行を読み込む。
-                    var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (autoMode == true || autoMode == default && values.All(patternNuclide.IsMatch))
-                    {
-                        autoMode = true;
-
-                        if (indexTable is null)
-                            indexTable = IndexDataReader.ReadNDX().ToDictionary(x => x.Nuclide, x => x);
-
-                        foreach (var nuc in values)
-                        {
-                            if (!patternNuclide.IsMatch(nuc))
-                                throw Program.Error($"Line {LineNum}: '{nuc}' is not nuclide name.");
-
-                            var nuclide = new NuclideData { Name = nuc };
-
-                            if (indexTable.TryGetValue(nuc, out var indexData))
-                            {
-                                nuclide.HalfLife = indexData.HalfLife;
-                                nuclide.Lambda = indexData.Lambda;
-
-                                branches.AddRange(indexData.Daughters.Select(d => (nuc, d.Daughter, (double)d.Branch)));
-                            }
-                            else
-                            {
-                                // NDXファイルに定義されていないものは安定核種として扱う。
-                                nuclide.HalfLife = "---";
-                                nuclide.Lambda = 0.0;
-                            }
-
-                            nuclides.Add(nuclide);
-                        }
-                        continue;
-                    }
-                    else
-                        autoMode = false;
-
-                    if (values.Length != 3)
-                        throw Program.Error($"Line {LineNum}: Nuclide definition should have 3 values.");
-
-                    if (!double.TryParse(values[1], out var lambda))
-                        throw Program.Error($"Line {LineNum}: Cannot get nuclide Lambda.");
-                    if (lambda < 0)
-                        throw Program.Error($"Line {LineNum}: Nuclide Lambda should be positive.");
-
-                    if (!double.TryParse(values[2], out var decayRate))
-                        throw Program.Error($"Line {LineNum}: Cannot get nuclide DecayRate.");
-                    if (decayRate < 0)
-                        throw Program.Error($"Line {LineNum}: Nuclide DecayRate should be positive.");
-
-                    nuclides.Add(new NuclideData
-                    {
-                        Name = values[0],
-                        Lambda = lambda,
-                        DecayRates = nuclides.Count == 0
-                            ? Array.Empty<(string Parent, double Branch)>()
-                            : new[] { (Parent: nuclides.Last().Name, Branch: decayRate) },
-                    });
-                }
-
-                if (autoMode == true && nuclides.Any())
-                {
-                    // 親核種のDecayRatesについては空に設定する。
-                    nuclides.First().DecayRates = Array.Empty<(string Parent, double Branch)>();
-
-                    // 親を持つ子孫核種のDecayRatesについて設定する。
-                    foreach (var nuclide in nuclides.Skip(1))
-                    {
-                        var nuc = nuclide.Name;
-
-                        var decayRates = branches.Where(b => b.Daugher == nuc).Select(b => (b.Parent, b.Branch)).ToArray();
-                        if (!decayRates.Any())
-                            throw Program.Error($"Progeny nuclide '{nuc}' has no decay path from any other nuclides.");
-
-                        nuclide.DecayRates = decayRates;
-                    }
-                }
-            }
-
-            // コンパートメントの定義セクションを読み込む。
-            void GetCompartments(string nuc, out string nextLine)
-            {
-                if (nuclideOrgans.TryGetValue(nuc, out var organs))
-                    throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:compartment] section.");
-
-                organs = new List<(int lineNum, Organ)>();
-                nuclideOrgans.Add(nuc, organs);
-
-                while (true)
-                {
-                    nextLine = GetNextLine();
-                    if (nextLine is null)
-                        break;
-                    if (CheckSectionHeader(nextLine))
-                        break;
-
-                    var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (values.Length != 3)
-                        throw Program.Error($"Line {LineNum}: Compartment definition should have 3 values.");
-
-                    var organFn = values[0];        // コンパートメント機能
-                    var organName = values[1];      // コンパートメント名
-                    var sourceRegion = values[2];   // コンパートメントに対応する線源領域の名称
-
-                    var organFunc =
-                        organFn == "inp" ? OrganFunc.inp :
-                        organFn == "acc" ? OrganFunc.acc :
-                        organFn == "mix" ? OrganFunc.mix :
-                        organFn == "exc" ? OrganFunc.exc :
-                        throw Program.Error($"Line {LineNum}: Unrecognized compartment function '{organFn}'.");
-
-                    var organ = new Organ
-                    {
-                        Nuclide = null,     // 後で設定する。
-                        ID = ++organId,
-                        Index = -1,         // 後で設定する。
-                        Name = organName,
-                        Func = organFunc,
-                        BioDecay = 1.0,     // accは後で設定する。
-                        Inflows = new List<Inflow>(),
-                    };
-
-                    // 線源領域の名称については、妥当性を後で確認する。
-                    organ.SourceRegion = sourceRegion;
-
-                    organs.Add((LineNum, organ));
-                }
-            }
-
-            // 移行係数の定義セクションを読み込む。
-            void GetTransfers(string nuc, out string nextLine)
-            {
-                if (nuclideTransfers.TryGetValue(nuc, out var transfers))
-                    throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:transfer] section.");
-
-                transfers = new List<(int, string, string, decimal?, bool)>();
-                nuclideTransfers.Add(nuc, transfers);
-
-                while (true)
-                {
-                    nextLine = GetNextLine();
-                    if (nextLine is null)
-                        break;
-                    if (CheckSectionHeader(nextLine))
-                        break;
-
-                    var values = nextLine.Split(new string[] { " " }, 3, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (values.Length != 3)
-                        throw Program.Error($"Line {LineNum}: Transfer path definition should have 3 values.");
-
-                    var orgamFrom = values[0];
-                    var organTo = values[1];
-                    var coeffStr = values[2];    // 移行係数、[/d] or [%]
-
-                    var coeff = default(decimal?);
-                    var isRate = false;
-                    if (!IsBar(coeffStr))
-                        (coeff, isRate) = evaluator.ReadCoefficient(LineNum, coeffStr);
-
-                    transfers.Add((LineNum, orgamFrom, organTo, coeff, isRate));
-                }
             }
 
             var data = new InputData();
@@ -395,9 +150,318 @@ namespace FlexID.Calc
             if (!nuclides.Any())
                 throw Program.Error($"None of nuclides defined.");
 
+            // 全てのコンパートメントを定義する。
+            DefineCompartments(data);
+
+            // コンパートメント間の移行経路を定義する。
+            DefineTransfers(data);
+
+            // 流入を持たないコンパートメントをマークする。
+            MarkZeroInflows(data);
+
+            bool CheckOutput(string name) =>
+                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
+
+            // 出力ファイルの設定。
+            data.OutputDose = CheckOutput("OutputDose");
+            data.OutputDoseRate = CheckOutput("OutputDoseRate");
+            data.OutputRetention = CheckOutput("OutputRetention");
+            data.OutputCumulative = CheckOutput("OutputCumulative");
+
+            return data;
+        }
+
+        /// <summary>
+        /// タイトルの定義セクションを読み込む。
+        /// </summary>
+        /// <returns>セクションの次行。</returns>
+        private string GetTitle()
+        {
+            if (inputTitle != null)
+                throw Program.Error($"Line {LineNum}: Duplicated [title] section.");
+
+            var title = GetNextLine();
+            if (title is null)
+                throw Program.Error($"Line {LineNum}: Reach to EOF while reading title section.");
+            inputTitle = title;
+
+            var line = GetNextLine();
+            if (!CheckSectionHeader(line))
+                throw Program.Error($"Line {LineNum}: Unrecognized line in [title] section.");
+
+            return line;
+        }
+
+        /// <summary>
+        /// パラメーターの定義セクションを読み込む。
+        /// </summary>
+        /// <param name="nuc"></param>
+        /// <returns>セクションの次行。</returns>
+        private string GetParameters(string nuc)
+        {
+            Dictionary<string, string> parameters;
+            string[] parameterNames;
+            if (nuc == "")
+            {
+                if (inputParameters != null)
+                    throw Program.Error($"Line {LineNum}: Duplicated [parameter] section.");
+                parameters = new Dictionary<string, string>();
+                parameterNames = InputData.ParameterNames;
+                inputParameters = parameters;
+            }
+            else
+            {
+                if (nuclideParameters.ContainsKey(nuc))
+                    throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:parameter] section.");
+                parameters = new Dictionary<string, string>();
+                parameterNames = NuclideData.ParameterNames;
+                nuclideParameters.Add(nuc, parameters);
+            }
+
+            string line;
+            while (true)
+            {
+                line = GetNextLine();
+                if (line is null)
+                    break;
+                if (CheckSectionHeader(line))
+                    break;
+
+                var values = line.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
+                if (values.Length != 2)
+                    throw Program.Error($"Line {LineNum}: Parameter definition should have 2 values.");
+
+                var paramName = values[0].Trim();
+                var paramValue = values[1].Trim();
+
+                if (!parameterNames.Contains(paramName))
+                    throw Program.Error($"Line {LineNum}: Unrecognized parameter '{paramName}' definition.");
+                if (parameters.ContainsKey(paramName))
+                    throw Program.Error($"Line {LineNum}: Duplicated parameter '{paramName}' definition.");
+
+                parameters.Add(paramName, paramValue);
+            }
+
+            return line;
+        }
+
+        /// <summary>
+        /// 核種の定義セクションを読み込む。
+        /// </summary>
+        /// <returns>セクションの次行。</returns>
+        private string GetNuclides()
+        {
+            if (nuclides != null)
+                throw Program.Error($"Line {LineNum}: Duplicated [nuclide] section.");
+
+            nuclides = new List<NuclideData>();
+
+            // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
+            var autoMode = default(bool?);
+
+            Dictionary<string, IndexData> indexTable = null;
+            var branches = new List<(string Parent, string Daugher, double Branch)>();
+
+            string line;
+            while (true)
+            {
+                line = GetNextLine();
+                if (line is null)
+                    break;
+                if (CheckSectionHeader(line))
+                    break;
+
+                // 核種の定義行を読み込む。
+                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (autoMode == true || autoMode == default && values.All(patternNuclide.IsMatch))
+                {
+                    autoMode = true;
+
+                    if (indexTable is null)
+                        indexTable = IndexDataReader.ReadNDX().ToDictionary(x => x.Nuclide, x => x);
+
+                    foreach (var nuc in values)
+                    {
+                        if (!patternNuclide.IsMatch(nuc))
+                            throw Program.Error($"Line {LineNum}: '{nuc}' is not nuclide name.");
+
+                        var nuclide = new NuclideData { Name = nuc };
+
+                        if (indexTable.TryGetValue(nuc, out var indexData))
+                        {
+                            nuclide.HalfLife = indexData.HalfLife;
+                            nuclide.Lambda = indexData.Lambda;
+
+                            branches.AddRange(indexData.Daughters.Select(d => (nuc, d.Daughter, (double)d.Branch)));
+                        }
+                        else
+                        {
+                            // NDXファイルに定義されていないものは安定核種として扱う。
+                            nuclide.HalfLife = "---";
+                            nuclide.Lambda = 0.0;
+                        }
+
+                        nuclides.Add(nuclide);
+                    }
+                    continue;
+                }
+                else
+                    autoMode = false;
+
+                if (values.Length != 3)
+                    throw Program.Error($"Line {LineNum}: Nuclide definition should have 3 values.");
+
+                if (!double.TryParse(values[1], out var lambda))
+                    throw Program.Error($"Line {LineNum}: Cannot get nuclide Lambda.");
+                if (lambda < 0)
+                    throw Program.Error($"Line {LineNum}: Nuclide Lambda should be positive.");
+
+                if (!double.TryParse(values[2], out var decayRate))
+                    throw Program.Error($"Line {LineNum}: Cannot get nuclide DecayRate.");
+                if (decayRate < 0)
+                    throw Program.Error($"Line {LineNum}: Nuclide DecayRate should be positive.");
+
+                nuclides.Add(new NuclideData
+                {
+                    Name = values[0],
+                    Lambda = lambda,
+                    DecayRates = nuclides.Count == 0
+                        ? Array.Empty<(string Parent, double Branch)>()
+                        : new[] { (Parent: nuclides.Last().Name, Branch: decayRate) },
+                });
+            }
+
+            if (autoMode == true && nuclides.Any())
+            {
+                // 親核種のDecayRatesについては空に設定する。
+                nuclides.First().DecayRates = Array.Empty<(string Parent, double Branch)>();
+
+                // 親を持つ子孫核種のDecayRatesについて設定する。
+                foreach (var nuclide in nuclides.Skip(1))
+                {
+                    var nuc = nuclide.Name;
+
+                    var decayRates = branches.Where(b => b.Daugher == nuc).Select(b => (b.Parent, b.Branch)).ToArray();
+                    if (!decayRates.Any())
+                        throw Program.Error($"Progeny nuclide '{nuc}' has no decay path from any other nuclides.");
+
+                    nuclide.DecayRates = decayRates;
+                }
+            }
+
+            return line;
+        }
+
+        /// <summary>
+        /// コンパートメントの定義セクションを読み込む。
+        /// </summary>
+        /// <param name="nuc"></param>
+        /// <returns>セクションの次行。</returns>
+        private string GetCompartments(string nuc)
+        {
+            if (nuclideOrgans.TryGetValue(nuc, out var organs))
+                throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:compartment] section.");
+
+            organs = new List<(int lineNum, Organ)>();
+            nuclideOrgans.Add(nuc, organs);
+
+            string line;
+            while (true)
+            {
+                line = GetNextLine();
+                if (line is null)
+                    break;
+                if (CheckSectionHeader(line))
+                    break;
+
+                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (values.Length != 3)
+                    throw Program.Error($"Line {LineNum}: Compartment definition should have 3 values.");
+
+                var organFn = values[0];        // コンパートメント機能
+                var organName = values[1];      // コンパートメント名
+                var sourceRegion = values[2];   // コンパートメントに対応する線源領域の名称
+
+                var organFunc =
+                    organFn == "inp" ? OrganFunc.inp :
+                    organFn == "acc" ? OrganFunc.acc :
+                    organFn == "mix" ? OrganFunc.mix :
+                    organFn == "exc" ? OrganFunc.exc :
+                    throw Program.Error($"Line {LineNum}: Unrecognized compartment function '{organFn}'.");
+
+                var organ = new Organ
+                {
+                    Nuclide = null,     // 後で設定する。
+                    ID = organs.Count + 1,
+                    Index = -1,         // 後で設定する。
+                    Name = organName,
+                    Func = organFunc,
+                    BioDecay = 1.0,     // accは後で設定する。
+                    Inflows = new List<Inflow>(),
+                };
+
+                // 線源領域の名称については、妥当性を後で確認する。
+                organ.SourceRegion = sourceRegion;
+
+                organs.Add((LineNum, organ));
+            }
+
+            return line;
+        }
+
+        /// <summary>
+        /// 移行係数の定義セクションを読み込む。
+        /// </summary>
+        /// <param name="nuc"></param>
+        /// <returns>セクションの次行。</returns>
+        /// <param name="line"></param>
+        private string GetTransfers(string nuc)
+        {
+            if (nuclideTransfers.TryGetValue(nuc, out var transfers))
+                throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:transfer] section.");
+
+            transfers = new List<(int, string, string, decimal?, bool)>();
+            nuclideTransfers.Add(nuc, transfers);
+
+            string line;
+            while (true)
+            {
+                line = GetNextLine();
+                if (line is null)
+                    break;
+                if (CheckSectionHeader(line))
+                    break;
+
+                var values = line.Split(new string[] { " " }, 3, StringSplitOptions.RemoveEmptyEntries);
+
+                if (values.Length != 3)
+                    throw Program.Error($"Line {LineNum}: Transfer path definition should have 3 values.");
+
+                var orgamFrom = values[0];
+                var organTo = values[1];
+                var coeffStr = values[2];    // 移行係数、[/d] or [%]
+
+                var coeff = default(decimal?);
+                var isRate = false;
+                if (!IsBar(coeffStr))
+                    (coeff, isRate) = evaluator.ReadCoefficient(LineNum, coeffStr);
+
+                transfers.Add((LineNum, orgamFrom, organTo, coeff, isRate));
+            }
+
+            return line;
+        }
+
+        /// <summary>
+        /// 全てのコンパートメントを定義する。
+        /// </summary>
+        /// <param name="data"></param>
+        private void DefineCompartments(InputData data)
+        {
             Organ input = null;
 
-            // 全ての核種のコンパートメントを定義する。
             foreach (var nuclide in nuclides)
             {
                 if (!CalcProgeny && nuclide.IsProgeny)
@@ -505,8 +569,14 @@ namespace FlexID.Calc
                     }
                 }
             }
+        }
 
-            // コンパートメント間の移行経路を定義する。
+        /// <summary>
+        /// 全ての移行経路を定義する。
+        /// </summary>
+        /// <param name="data"></param>
+        private void DefineTransfers(InputData data)
+        {
             foreach (var nuclide in nuclides)
             {
                 if (!CalcProgeny && nuclide.IsProgeny)
@@ -683,7 +753,14 @@ namespace FlexID.Calc
                     });
                 }
             }
+        }
 
+        /// <summary>
+        /// 流入を持たないコンパートメントをマークする。
+        /// </summary>
+        /// <param name="data"></param>
+        private void MarkZeroInflows(InputData data)
+        {
             while (true)
             {
                 var modified = false;
@@ -707,19 +784,10 @@ namespace FlexID.Calc
                 if (!modified)
                     break;
             }
+
             // 初期配分を終えた後は流入なし。
+            var input = data.Organs.First(o => o.Func == OrganFunc.inp);
             input.IsZeroInflow = true;
-
-            bool CheckOutput(string name) =>
-                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
-
-            // 出力ファイルの設定。
-            data.OutputDose = CheckOutput("OutputDose");
-            data.OutputDoseRate = CheckOutput("OutputDoseRate");
-            data.OutputRetention = CheckOutput("OutputRetention");
-            data.OutputCumulative = CheckOutput("OutputCumulative");
-
-            return data;
         }
 
         /// <summary>

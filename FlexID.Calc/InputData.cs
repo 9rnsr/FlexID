@@ -330,7 +330,7 @@ namespace FlexID.Calc
         /// インプットの次行を読み取る。
         /// </summary>
         /// <returns></returns>
-        protected string GetNextLine()
+        protected virtual string GetNextLine()
         {
         Lagain:
             var line = reader.ReadLine();
