@@ -49,7 +49,7 @@ namespace FlexID.Calc.Tests
                 "  input  ST0        100%",
             });
 
-            var data = reader.Read_OIR();
+            var data = reader.Read();
             var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
 
             CollectionAssert.AreEquivalent(new[]
@@ -96,7 +96,7 @@ namespace FlexID.Calc.Tests
                 "  input  ST0        100%",
             });
 
-            var data = reader.Read_OIR();
+            var data = reader.Read();
             var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
 
             // コンパートメントとして明示されているためOtherの内訳から除外される。
@@ -135,7 +135,7 @@ namespace FlexID.Calc.Tests
                 "  input  ST0        100%",
             });
 
-            var data = reader.Read_OIR();
+            var data = reader.Read();
             var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
 
             Include(expectOtherSourceRegions, "O-cavity");
@@ -181,7 +181,7 @@ namespace FlexID.Calc.Tests
                 "  input  ST0        100%",
             });
 
-            var data = reader.Read_OIR();
+            var data = reader.Read();
             var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
 
             Include(expectOtherSourceRegions, "O-cavity");
@@ -231,7 +231,7 @@ namespace FlexID.Calc.Tests
                 "  input  ST0        100%",
             });
 
-            var data = reader.Read_OIR();
+            var data = reader.Read();
             var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
 
             // from input parameters

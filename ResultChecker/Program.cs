@@ -110,7 +110,7 @@ namespace ResultChecker
 
             var commitmentPeriod = "50years";
 
-            var data = new InputDataReader(inputPath).Read_OIR();
+            var data = new InputDataReader_OIR(inputPath).Read();
             data.OutputDose = true;
             data.OutputDoseRate = false;
             data.OutputRetention = true;

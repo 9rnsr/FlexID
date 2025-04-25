@@ -102,7 +102,7 @@ namespace FlexID.Calc.Tests
             var nuclide = target.Split('_')[0];
             var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
 
-            var data = new InputDataReader(inputPath).Read_OIR();
+            var data = new InputDataReader_OIR(inputPath).Read();
             Assert.IsNotNull(data);
         }
 
@@ -113,7 +113,7 @@ namespace FlexID.Calc.Tests
             var nuclide = target.Split('_')[0];
             var inputPath = Path.Combine("inp", "EIR", nuclide, target + ".inp");
 
-            var data = new InputDataReader(inputPath).Read_EIR();
+            var data = new InputDataReader_EIR(inputPath).Read();
             Assert.IsNotNull(data);
         }
     }
