@@ -170,7 +170,7 @@ namespace FlexID.ViewModels
         {
             // FlexID.Calcアセンブリがない場合はこのメソッドに入った直後に例外が発生する。
 
-            var dataList = new InputDataReader(selectedInput.FilePath, CalcProgeny.Value).Read_EIR();
+            var dataList = new InputDataReader_EIR(selectedInput.FilePath, CalcProgeny.Value).Read();
 
             var main = new MainRoutine_EIR();
             main.OutputPath       /**/= OutputFilePath.Value;

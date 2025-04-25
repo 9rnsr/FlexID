@@ -44,7 +44,7 @@ namespace FlexID.Calc.Tests
                 File.Delete(previousOutFile);
 
             // インプットファイルを読み込む。
-            var data = new InputDataReader(Path.Combine(targetDir, target)).Read_OIR();
+            var data = new InputDataReader_OIR(Path.Combine(targetDir, target)).Read();
 
             // アウトプットファイル書き出しの有無を設定する。
             data.OutputDose = outDose;

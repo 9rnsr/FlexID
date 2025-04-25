@@ -33,7 +33,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 4: Duplicated [title] section.", e.Message);
         }
 
@@ -56,7 +56,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Missing [title] section.", e.Message);
         }
 
@@ -68,7 +68,7 @@ namespace FlexID.Calc.Tests
                 "[title]",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 2: Reach to EOF while reading title section.", e.Message);
         }
 
@@ -85,7 +85,7 @@ namespace FlexID.Calc.Tests
                 "[nuclide]",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 4: Unrecognized line in [title] section.", e.Message);
         }
 
@@ -111,7 +111,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 7: Duplicated [nuclide] section.", e.Message);
         }
 
@@ -134,7 +134,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Missing [nuclide] section.", e.Message);
         }
 
@@ -149,7 +149,7 @@ namespace FlexID.Calc.Tests
                 "[nuclide]",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("None of nuclides defined.", e.Message);
         }
 
@@ -175,7 +175,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 11: Duplicated [Sr-90:compartment] section.", e.Message);
         }
 
@@ -198,7 +198,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Missing [Sr-90:compartment] section.", e.Message);
         }
 
@@ -218,7 +218,7 @@ namespace FlexID.Calc.Tests
                 "[Sr-90:transfer]",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("None of compartments defined for nuclide 'Sr-90'.", e.Message);
         }
 
@@ -245,7 +245,7 @@ namespace FlexID.Calc.Tests
                 "  ST0        ST1   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 15: Duplicated [Sr-90:transfer] section.", e.Message);
         }
 
@@ -268,7 +268,7 @@ namespace FlexID.Calc.Tests
                 "#   input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Missing [Sr-90:transfer] section.", e.Message);
         }
 
@@ -290,7 +290,7 @@ namespace FlexID.Calc.Tests
                 "[Sr-90:transfer]",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("None of transfers defined for nuclide 'Sr-90'.", e.Message);
         }
 
@@ -313,7 +313,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 5: Nuclide definition should have 3 values.", e.Message);
         }
 
@@ -336,7 +336,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 5: Cannot get nuclide Lambda.", e.Message);
         }
 
@@ -359,7 +359,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 5: Nuclide Lambda should be positive.", e.Message);
         }
 
@@ -382,7 +382,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 5: Cannot get nuclide DecayRate.", e.Message);
         }
 
@@ -405,7 +405,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 5: Nuclide DecayRate should be positive.", e.Message);
         }
 
@@ -428,7 +428,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 8: Compartment definition should have 3 values.", e.Message);
         }
 
@@ -451,7 +451,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 9: Unrecognized compartment function 'add'.", e.Message);
         }
 
@@ -475,7 +475,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 9: Duplicated 'inp' compartment.", e.Message);
         }
 
@@ -498,7 +498,7 @@ namespace FlexID.Calc.Tests
                 "  ST0    ST1   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Missing 'inp' compartment.", e.Message);
         }
 
@@ -529,7 +529,7 @@ namespace FlexID.Calc.Tests
                 "  Sr-90/ST0  ST0   ---"
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 16: Cannot define 'inp' compartment which belongs to progeny nuclide.", e.Message);
         }
 
@@ -552,7 +552,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 9: Unknown source region name 'Abcde'.", e.Message);
         }
 
@@ -575,7 +575,7 @@ namespace FlexID.Calc.Tests
                 "  input    # ST0   100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 12: Transfer path definition should have 3 values.", e.Message);
         }
 
@@ -598,7 +598,7 @@ namespace FlexID.Calc.Tests
                 "  input  ST0   abc%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 12: Transfer coefficient should be evaluated to a number, not 'abc%'.", e.Message);
         }
 
@@ -622,7 +622,7 @@ namespace FlexID.Calc.Tests
                 "  Y-90/ST0   ST0   100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 13: Undefined nuclide 'Y-90'.", e.Message);
         }
 
@@ -646,7 +646,7 @@ namespace FlexID.Calc.Tests
                 "  ST0   Y-90/ST0   100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 13: Undefined nuclide 'Y-90'.", e.Message);
         }
 
@@ -676,7 +676,7 @@ namespace FlexID.Calc.Tests
                 "  ST0  Sr-90/ST0   ---",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 19: Cannot set transfer path to a compartment which is not belong to 'Y-90'.", e.Message);
         }
 
@@ -700,7 +700,7 @@ namespace FlexID.Calc.Tests
                 "  ST1    ST0   100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 13: Undefined compartment 'ST1'.", e.Message);
         }
 
@@ -724,7 +724,7 @@ namespace FlexID.Calc.Tests
                 "  ST0    ST1   100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 13: Undefined compartment 'ST1'.", e.Message);
         }
 
@@ -748,7 +748,7 @@ namespace FlexID.Calc.Tests
                 "  ST0        ST0   100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 13: Cannot set transfer path to itself.", e.Message);
         }
 
@@ -772,7 +772,7 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   50%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 13: Duplicated transfer path from 'input' to 'ST0'.", e.Message);
         }
 
@@ -796,7 +796,7 @@ namespace FlexID.Calc.Tests
                 "  ST0    input     100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 13: Cannot set input path to inp 'input'.", e.Message);
         }
 
@@ -821,7 +821,7 @@ namespace FlexID.Calc.Tests
                 "  Excreta  ST0     100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 14: Cannot set output path from exc 'Excreta'.", e.Message);
         }
 
@@ -851,7 +851,7 @@ namespace FlexID.Calc.Tests
                 "  Sr-90/input ST0  ---",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 19: Cannot set decay path from inp 'input'.", e.Message);
         }
 
@@ -883,7 +883,7 @@ namespace FlexID.Calc.Tests
                 "  Sr-90/mix-Blood   ST0  ---",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 21: Cannot set decay path from mix 'mix-Blood'.", e.Message);
         }
 
@@ -913,7 +913,7 @@ namespace FlexID.Calc.Tests
                 "  Sr-90/ST0   ST0   100",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 19: Cannot set transfer coefficient on decay path.", e.Message);
         }
 
@@ -936,7 +936,7 @@ namespace FlexID.Calc.Tests
                 "  input  ST0        ---",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 12: Require fraction of output activity [%] from inp 'input'.", e.Message);
         }
 
@@ -962,7 +962,7 @@ namespace FlexID.Calc.Tests
                 "  mix-Blood  ST0    ---",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 15: Require fraction of output activity [%] from mix 'mix-Blood'.", e.Message);
         }
 
@@ -987,7 +987,7 @@ namespace FlexID.Calc.Tests
                 "  ST0    ST1        100%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 14: Require transfer rate [/d] from acc 'ST0'.", e.Message);
         }
 
@@ -1012,7 +1012,7 @@ namespace FlexID.Calc.Tests
                 "  ST0    ST1        -30",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Line 14: Transfer coefficient should be positive.", e.Message);
         }
 
@@ -1037,20 +1037,20 @@ namespace FlexID.Calc.Tests
                 "  input  ST1        36.8528%",
             });
 
-            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read_OIR());
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Total [%] of transfer paths from 'input' is  not 100%, but 99.999%.", e.Message);
         }
     }
 
     class InputErrorTestHelpers
     {
-        public static InputDataReader CreateReader(string[] inputLines)
+        public static InputDataReader_OIR CreateReader(string[] inputLines)
         {
             var inputFileBytes = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, inputLines));
 
             var stream = new MemoryStream(inputFileBytes);
             var reader = new StreamReader(stream);
-            return new InputDataReader(reader);
+            return new InputDataReader_OIR(reader);
         }
     }
 }

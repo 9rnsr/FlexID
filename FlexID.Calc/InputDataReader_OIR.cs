@@ -2,42 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace FlexID.Calc
 {
     /// <summary>
-    /// インプットファイルの読み取り処理。
+    /// OIR用インプットファイルの読み取り処理。
     /// </summary>
-    public class InputDataReader : IDisposable
+    public class InputDataReader_OIR : InputDataReaderBase
     {
-        /// <summary>
-        /// インプットファイルの読み出し用TextReader。
-        /// </summary>
-        private readonly StreamReader reader;
-
-        /// <summary>
-        /// 子孫核種のインプットを読み飛ばす場合は<c>true</c>。
-        /// </summary>
-        private readonly bool calcProgeny;
-
-        /// <summary>
-        /// 行番号(1始まり)。
-        /// </summary>
-        private int lineNum;
-
         /// <summary>
         /// コンストラクタ。
         /// </summary>
         /// <param name="inputPath">インプットファイルのパス文字列。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
-        public InputDataReader(string inputPath, bool calcProgeny = true)
+        public InputDataReader_OIR(string inputPath, bool calcProgeny = true)
+            : base(new StreamReader(new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read)), calcProgeny)
         {
-            var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var reader = new StreamReader(stream);
-
-            this.reader = reader;
-            this.calcProgeny = calcProgeny;
         }
 
         /// <summary>
@@ -45,43 +25,16 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="reader">インプットの読み込み元。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
-        public InputDataReader(StreamReader reader, bool calcProgeny = true)
+        public InputDataReader_OIR(StreamReader reader, bool calcProgeny = true)
+            : base(reader, calcProgeny)
         {
-            this.reader = reader;
-            this.calcProgeny = calcProgeny;
-        }
-
-        public void Dispose() => reader.Dispose();
-
-        private string GetNextLine()
-        {
-        Lagain:
-            var line = reader.ReadLine();
-            lineNum++;
-            if (line is null)
-                return null;
-            line = line.Trim();
-
-            // 空行を読み飛ばす。
-            if (line.Length == 0)
-                goto Lagain;
-
-            // コメント行を読み飛ばす。
-            if (line.StartsWith("#"))
-                goto Lagain;
-
-            // 行末コメントを除去する。
-            var trailingComment = line.IndexOf("#");
-            if (trailingComment != -1)
-                line = line.Substring(0, trailingComment).TrimEnd();
-            return line;
         }
 
         /// <summary>
-        /// OIR用のインプットファイルを読み込む。
+        /// インプットファイルを読み込む。
         /// </summary>
         /// <returns></returns>
-        public InputData Read_OIR()
+        public InputData Read()
         {
             var evaluator = new InputEvaluator();
 
@@ -90,7 +43,7 @@ namespace FlexID.Calc
             Lagain:
                 var nextLine = this.GetNextLine();
 
-                if (evaluator.TryReadVarDecl(lineNum, nextLine))
+                if (evaluator.TryReadVarDecl(LineNum, nextLine))
                     goto Lagain;
 
                 return nextLine;
@@ -105,9 +58,9 @@ namespace FlexID.Calc
             ReadOnlySpan<char> GetSectionHeader(string ln)
             {
                 if (!CheckSectionHeader(ln))
-                    throw Program.Error($"Line {lineNum}: Section header should start with '['");
+                    throw Program.Error($"Line {LineNum}: Section header should start with '['");
                 if (!ln.EndsWith("]"))
-                    throw Program.Error($"Line {lineNum}: Section header should be closed with ']'.");
+                    throw Program.Error($"Line {LineNum}: Section header should be closed with ']'.");
 
                 return ln.AsSpan(1, ln.Length - 2).Trim();
             }
@@ -161,7 +114,7 @@ namespace FlexID.Calc
                     GetTransfers(nuc, out line);
                 }
                 else
-                    throw Program.Error($"Line {lineNum}: Unrecognized section $'[{header.ToString()}]'.");
+                    throw Program.Error($"Line {LineNum}: Unrecognized section $'[{header.ToString()}]'.");
 
                 if (line is null)
                     break;
@@ -171,16 +124,16 @@ namespace FlexID.Calc
             void GetTitle(out string nextLine)
             {
                 if (inputTitle != null)
-                    throw Program.Error($"Line {lineNum}: Duplicated [title] section.");
+                    throw Program.Error($"Line {LineNum}: Duplicated [title] section.");
 
                 var title = GetNextLine();
                 if (title is null)
-                    throw Program.Error($"Line {lineNum}: Reach to EOF while reading title section.");
+                    throw Program.Error($"Line {LineNum}: Reach to EOF while reading title section.");
                 inputTitle = title;
 
                 nextLine = GetNextLine();
                 if (!CheckSectionHeader(nextLine))
-                    throw Program.Error($"Line {lineNum}: Unrecognized line in [title] section.");
+                    throw Program.Error($"Line {LineNum}: Unrecognized line in [title] section.");
             }
 
             void GetParameters(string nuc, out string nextLine)
@@ -190,7 +143,7 @@ namespace FlexID.Calc
                 if (nuc == "")
                 {
                     if (inputParameters != null)
-                        throw Program.Error($"Line {lineNum}: Duplicated [parameter] section.");
+                        throw Program.Error($"Line {LineNum}: Duplicated [parameter] section.");
                     parameters = new Dictionary<string, string>();
                     parameterNames = InputData.ParameterNames;
                     inputParameters = parameters;
@@ -198,7 +151,7 @@ namespace FlexID.Calc
                 else
                 {
                     if (nuclideParameters.ContainsKey(nuc))
-                        throw Program.Error($"Line {lineNum}: Duplicated [{nuc}:parameter] section.");
+                        throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:parameter] section.");
                     parameters = new Dictionary<string, string>();
                     parameterNames = NuclideData.ParameterNames;
                     nuclideParameters.Add(nuc, parameters);
@@ -215,15 +168,15 @@ namespace FlexID.Calc
 
                     var values = nextLine.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
                     if (values.Length != 2)
-                        throw Program.Error($"Line {lineNum}: Parameter definition should have 2 values.");
+                        throw Program.Error($"Line {LineNum}: Parameter definition should have 2 values.");
 
                     var paramName = values[0].Trim();
                     var paramValue = values[1].Trim();
 
                     if (!parameterNames.Contains(paramName))
-                        throw Program.Error($"Line {lineNum}: Unrecognized parameter '{paramName}' definition.");
+                        throw Program.Error($"Line {LineNum}: Unrecognized parameter '{paramName}' definition.");
                     if (parameters.ContainsKey(paramName))
-                        throw Program.Error($"Line {lineNum}: Duplicated parameter '{paramName}' definition.");
+                        throw Program.Error($"Line {LineNum}: Duplicated parameter '{paramName}' definition.");
 
                     parameters.Add(paramName, paramValue);
                 }
@@ -233,7 +186,7 @@ namespace FlexID.Calc
             void GetNuclides(out string nextLine)
             {
                 if (nuclides != null)
-                    throw Program.Error($"Line {lineNum}: Duplicated [nuclide] section.");
+                    throw Program.Error($"Line {LineNum}: Duplicated [nuclide] section.");
 
                 nuclides = new List<NuclideData>();
 
@@ -264,7 +217,7 @@ namespace FlexID.Calc
                         foreach (var nuc in values)
                         {
                             if (!patternNuclide.IsMatch(nuc))
-                                throw Program.Error($"Line {lineNum}: '{nuc}' is not nuclide name.");
+                                throw Program.Error($"Line {LineNum}: '{nuc}' is not nuclide name.");
 
                             var nuclide = new NuclideData { Name = nuc };
 
@@ -290,17 +243,17 @@ namespace FlexID.Calc
                         autoMode = false;
 
                     if (values.Length != 3)
-                        throw Program.Error($"Line {lineNum}: Nuclide definition should have 3 values.");
+                        throw Program.Error($"Line {LineNum}: Nuclide definition should have 3 values.");
 
                     if (!double.TryParse(values[1], out var lambda))
-                        throw Program.Error($"Line {lineNum}: Cannot get nuclide Lambda.");
+                        throw Program.Error($"Line {LineNum}: Cannot get nuclide Lambda.");
                     if (lambda < 0)
-                        throw Program.Error($"Line {lineNum}: Nuclide Lambda should be positive.");
+                        throw Program.Error($"Line {LineNum}: Nuclide Lambda should be positive.");
 
                     if (!double.TryParse(values[2], out var decayRate))
-                        throw Program.Error($"Line {lineNum}: Cannot get nuclide DecayRate.");
+                        throw Program.Error($"Line {LineNum}: Cannot get nuclide DecayRate.");
                     if (decayRate < 0)
-                        throw Program.Error($"Line {lineNum}: Nuclide DecayRate should be positive.");
+                        throw Program.Error($"Line {LineNum}: Nuclide DecayRate should be positive.");
 
                     nuclides.Add(new NuclideData
                     {
@@ -335,7 +288,7 @@ namespace FlexID.Calc
             void GetCompartments(string nuc, out string nextLine)
             {
                 if (nuclideOrgans.TryGetValue(nuc, out var organs))
-                    throw Program.Error($"Line {lineNum}: Duplicated [{nuc}:compartment] section.");
+                    throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:compartment] section.");
 
                 organs = new List<(int lineNum, Organ)>();
                 nuclideOrgans.Add(nuc, organs);
@@ -351,7 +304,7 @@ namespace FlexID.Calc
                     var values = nextLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                     if (values.Length != 3)
-                        throw Program.Error($"Line {lineNum}: Compartment definition should have 3 values.");
+                        throw Program.Error($"Line {LineNum}: Compartment definition should have 3 values.");
 
                     var organFn = values[0];        // コンパートメント機能
                     var organName = values[1];      // コンパートメント名
@@ -362,7 +315,7 @@ namespace FlexID.Calc
                         organFn == "acc" ? OrganFunc.acc :
                         organFn == "mix" ? OrganFunc.mix :
                         organFn == "exc" ? OrganFunc.exc :
-                        throw Program.Error($"Line {lineNum}: Unrecognized compartment function '{organFn}'.");
+                        throw Program.Error($"Line {LineNum}: Unrecognized compartment function '{organFn}'.");
 
                     var organ = new Organ
                     {
@@ -378,7 +331,7 @@ namespace FlexID.Calc
                     // 線源領域の名称については、妥当性を後で確認する。
                     organ.SourceRegion = sourceRegion;
 
-                    organs.Add((lineNum, organ));
+                    organs.Add((LineNum, organ));
                 }
             }
 
@@ -386,7 +339,7 @@ namespace FlexID.Calc
             void GetTransfers(string nuc, out string nextLine)
             {
                 if (nuclideTransfers.TryGetValue(nuc, out var transfers))
-                    throw Program.Error($"Line {lineNum}: Duplicated [{nuc}:transfer] section.");
+                    throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:transfer] section.");
 
                 transfers = new List<(int, string, string, decimal?, bool)>();
                 nuclideTransfers.Add(nuc, transfers);
@@ -402,7 +355,7 @@ namespace FlexID.Calc
                     var values = nextLine.Split(new string[] { " " }, 3, StringSplitOptions.RemoveEmptyEntries);
 
                     if (values.Length != 3)
-                        throw Program.Error($"Line {lineNum}: Transfer path definition should have 3 values.");
+                        throw Program.Error($"Line {LineNum}: Transfer path definition should have 3 values.");
 
                     var orgamFrom = values[0];
                     var organTo = values[1];
@@ -411,9 +364,9 @@ namespace FlexID.Calc
                     var coeff = default(decimal?);
                     var isRate = false;
                     if (!IsBar(coeffStr))
-                        (coeff, isRate) = evaluator.ReadCoefficient(lineNum, coeffStr);
+                        (coeff, isRate) = evaluator.ReadCoefficient(LineNum, coeffStr);
 
-                    transfers.Add((lineNum, orgamFrom, organTo, coeff, isRate));
+                    transfers.Add((LineNum, orgamFrom, organTo, coeff, isRate));
                 }
             }
 
@@ -447,7 +400,7 @@ namespace FlexID.Calc
             // 全ての核種のコンパートメントを定義する。
             foreach (var nuclide in nuclides)
             {
-                if (!calcProgeny && nuclide.IsProgeny)
+                if (!CalcProgeny && nuclide.IsProgeny)
                     continue;
 
                 var nuc = nuclide.Name;
@@ -556,7 +509,7 @@ namespace FlexID.Calc
             // コンパートメント間の移行経路を定義する。
             foreach (var nuclide in nuclides)
             {
-                if (!calcProgeny && nuclide.IsProgeny)
+                if (!CalcProgeny && nuclide.IsProgeny)
                     continue;
 
                 var nuc = nuclide.Name;
@@ -865,316 +818,5 @@ namespace FlexID.Calc
                 return table;
             }
         }
-
-        /// <summary>
-        /// EIR用のインプットファイルを読み込む。
-        /// </summary>
-        /// <returns></returns>
-        public List<InputData> Read_EIR()
-        {
-            var dataList = new List<InputData>();
-            dataList.Add(Read_EIR("Age:3month"));
-            dataList.Add(Read_EIR("Age:1year"));
-            dataList.Add(Read_EIR("Age:5year"));
-            dataList.Add(Read_EIR("Age:10year"));
-            dataList.Add(Read_EIR("Age:15year"));
-            dataList.Add(Read_EIR("Age:adult"));
-            return dataList;
-        }
-
-        public InputData Read_EIR(string age)
-        {
-            // 読み取り位置をファイル先頭に戻す。
-            reader.BaseStream.Position = 0;
-            reader.DiscardBufferedData();
-            lineNum = 0;
-
-            var title = GetNextLine();
-            if (title is null)
-                throw Program.Error("Reach to EOF while reading input file.");
-
-            var data = new InputData();
-
-            data.Title = title;
-
-            data.StartAge =
-                age == "Age:3month" /**/? 100 :
-                age == "Age:1year"  /**/? 365 :
-                age == "Age:5year"  /**/? 365 * 5 :
-                age == "Age:10year" /**/? 365 * 10 :
-                age == "Age:15year" /**/? 365 * 15 :
-                age == "Age:adult"  /**/? 365 * 25 : // 現在はSrしか計算しないため25歳で決め打ち、今後インプット等で成人の年齢を読み込む必要あり？
-                throw new NotSupportedException();
-
-            {
-                var isProgeny = false;
-            Lcont:
-                var firstLine = GetNextLine();
-                if (firstLine is null)
-                    throw Program.Error("Reach to EOF while reading input file.");
-
-                // 核種のヘッダ行を読み込む。
-                var values = firstLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                var nuclide = new NuclideData
-                {
-                    Name = values[0],
-                    Lambda = double.Parse(values[1]),
-                    DecayRates = data.Nuclides.Count == 0
-                        ? Array.Empty<(string Parent, double Branch)>()
-                        : new[] { (Parent: data.Nuclides.Last().Name, Branch: double.Parse(values[2])) },
-                };
-                data.Nuclides.Add(nuclide);
-
-                if (!isProgeny)
-                {
-                    // 組織加重係数データを読み込む。
-                    var (ts, ws) = ReadTissueWeights(Path.Combine("lib", "EIR", "wT.txt"));
-                    data.TargetRegions = ts;
-                    data.TargetWeights = ws;
-
-                    // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
-                    while (true)
-                    {
-                        var ln = GetNextLine();
-                        if (ln is null)
-                            throw Program.Error("Reach to EOF while reading input file.");
-                        if (ln == age)
-                            break;
-                    }
-                }
-
-                // 核種に対応するS係数データを読み込む。
-                var tableSCoeff = ReadSee(data, age, nuclide);
-                data.SCoeffTables.Add(tableSCoeff);
-
-                // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
-                while (true)
-                {
-                    var ln = GetNextLine();
-                    if (ln is null)
-                        throw Program.Error("Reach to EOF while reading input file.");
-                    if (ln == "end" || ln == "next")
-                        break;
-
-                    if (ln == "cont")
-                    {
-                        if (calcProgeny == false)
-                            break;
-
-                        isProgeny = true;
-                        goto Lcont;
-                    }
-
-                    values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (values.Length != 8)
-                        throw Program.Error($"Line {lineNum}: First line of compartment definition should have 8 values.");
-
-                    var organId = int.Parse(values[0]);     // 臓器番号
-                    var organName = values[1];              // 臓器名
-                    var organFn = values[2];                // 臓器機能名称
-                    var bioDecay = double.Parse(values[3]); // 生物学的崩壊定数
-                    var inflowNum = int.Parse(values[4]);   // 流入臓器数
-                    var sourceRegion = values[7];           // 臓器に対応する線源領域の名称
-
-                    var organFunc =
-                        organFn == "inp" ? OrganFunc.inp :
-                        organFn == "acc" ? OrganFunc.acc :
-                        organFn == "mix" ? OrganFunc.mix :
-                        organFn == "exc" ? OrganFunc.exc :
-                        throw Program.Error($"Line {lineNum}: Unrecognized organ function '{organFn}'.");
-
-                    if (organFunc != OrganFunc.acc)
-                        bioDecay = 1.0;
-
-                    var organ = new Organ
-                    {
-                        Nuclide = nuclide,
-                        ID = organId,
-                        Index = data.Organs.Count,
-                        Name = organName,
-                        Func = organFunc,
-                        BioDecay = bioDecay,
-                        Inflows = new List<Inflow>(inflowNum),
-                    };
-
-                    if (!IsBar(sourceRegion))
-                    {
-                        // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
-                        var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
-                        if (indexS == -1)
-                            throw Program.Error($"Line {lineNum}: Unknown source region name: '{sourceRegion}'");
-
-                        // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
-                        organ.SourceRegion = sourceRegion;
-                        organ.S_Coefficients = tableSCoeff[sourceRegion];
-                    }
-
-                    if (organ.Func == OrganFunc.exc)
-                    {
-                        if (organ.Name == "Urine" || organ.Name == "Faeces")
-                        {
-                            organ.ExcretaCompatibleWithOIR = true;
-                        }
-                    }
-
-                    // コンパートメントへの流入経路の記述を読み込む。
-                    if (organ.Func == OrganFunc.inp)
-                    {
-                        if (inflowNum != 0)
-                            throw Program.Error($"Line {lineNum}: The number of inflow paths in the Input compartment should be 0.");
-                    }
-                    else
-                    {
-                        if (inflowNum <= 0)
-                            throw Program.Error($"Line {lineNum}: The number of inflow paths should be >= 1.");
-
-                        for (int i = 0; i < inflowNum; i++)
-                        {
-                            int inflowID;
-                            double inflowRate;
-                            if (i == 0)
-                            {
-                                inflowID = int.Parse(values[5]);
-                                inflowRate = double.Parse(values[6]);
-                            }
-                            else
-                            {
-                                ln = GetNextLine();
-                                if (ln is null)
-                                    throw Program.Error("Reach to EOF while reading input file.");
-                                values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                                if (values.Length != 2)
-                                    throw Program.Error($"Line {lineNum}: Continuous lines of compartment definition should have 2 values.");
-
-                                inflowID = int.Parse(values[0]);
-                                inflowRate = double.Parse(values[1]);
-                            }
-
-                            organ.Inflows.Add(new Inflow
-                            {
-                                ID = inflowID,
-                                Rate = inflowRate * 0.01,
-                            });
-                        }
-                    }
-
-                    data.Organs.Add(organ);
-                }
-            }
-
-            foreach (var organ in data.Organs)
-            {
-                foreach (var inflow in organ.Inflows)
-                {
-                    if (inflow.ID == 0)
-                        continue;
-
-                    // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
-                    inflow.Organ = data.Organs.First(o => o.ID == inflow.ID);
-
-                    // 流入割合がマイナスの時の処理は親からの分岐比とする。
-                    if (inflow.Rate < 0)
-                    {
-                        inflow.Rate = organ.Nuclide.DecayRates[0].Branch;
-                    }
-                }
-            }
-
-            // 初期配分を終えた後は流入なし。
-            foreach (var input in data.Organs.Where(o => o.Func == OrganFunc.inp))
-                input.IsZeroInflow = true;
-
-            return data;
-        }
-
-        /// <summary>
-        /// SEEデータを読み込む。
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="age">被ばく評価期間の開始年齢</param>
-        /// <param name="nuclide">対象核種。線源領域の名称が設定される。</param>
-        /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
-        private static Dictionary<string, double[]> ReadSee(InputData data, string age, NuclideData nuclide)
-        {
-            var nuc = nuclide.Name;
-            var file = $"{nuc}.txt";
-
-            using (var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file)))
-            {
-                while (reader.ReadLine() != age)
-                { }
-
-                // 2行目から線源領域の名称を配列で取得。
-                var sources = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
-                if (sources is null)
-                    throw Program.Error($"Incorrect SEE file format: {file}");
-                if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
-                    throw Program.Error($"Incorrect SEE file format: {file}");
-                var sourcesCount = sources.Length;
-
-                var targets = new string[31];
-                var table = sources.ToDictionary(s => s, s => new double[31]);
-                for (int indexT = 0; indexT < 31; indexT++)
-                {
-                    var values = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (values?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
-
-                    // 各行の1列目から標的領域の名称を取得。
-                    var target = values[0];
-                    targets[indexT] = target;
-
-                    for (int indexS = 0; indexS < sourcesCount; indexS++)
-                    {
-                        var sourceRegion = sources[indexS];
-                        var scoeff = double.Parse(values[1 + indexS]);
-                        table[sourceRegion][indexT] = scoeff;
-                    }
-                }
-
-                // 核種が考慮する線源領域の名称を設定する。
-                nuclide.SourceRegions = sources;
-
-                if (!Enumerable.SequenceEqual(data.TargetRegions, targets))
-                    throw Program.Error($"Found mismatch of target region names between tissue weighting factor data and S-Coefficient data for nuclide {nuc}.");
-
-                return table;
-            }
-        }
-
-        /// <summary>
-        /// 組織加重係数データを読み込む。
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        private static (string[] targets, double[] weights) ReadTissueWeights(string fileName)
-        {
-            var targets = new List<string>();
-            var weights = new List<double>();
-
-            var fileLines = File.ReadLines(fileName);
-            foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
-            {
-                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var target = values[0];
-                var weight = double.Parse(values[1]);
-
-                targets.Add(target);
-                weights.Add(weight);
-            }
-
-            return (targets.ToArray(), weights.ToArray());
-        }
-
-        /// <summary>
-        /// 核種名に合致する正規表現。
-        /// 準安定核種について、一般的な表記(m1, m2)とICRP-07データのもの(m, n)の両方を受け付けるようにしている。
-        /// </summary>
-        private static readonly Regex patternNuclide = new Regex(@"^[A-Za-z]+-\d+(?:[a-z]|m\d)?$", RegexOptions.Compiled);
-
-        private static readonly Regex patternBar = new Regex("^-+$", RegexOptions.Compiled);
-
-        bool IsBar(string s) => patternBar.IsMatch(s);
     }
 }

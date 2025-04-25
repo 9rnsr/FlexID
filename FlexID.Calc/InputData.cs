@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FlexID.Calc
 {
@@ -281,5 +284,108 @@ namespace FlexID.Calc
         /// 積算放射能の計算結果をファイルに出力する場合は <see langword="true"/>。
         /// </summary>
         public bool OutputCumulative { get; set; } = true;
+    }
+
+    public abstract class InputDataReaderBase : IDisposable
+    {
+        /// <summary>
+        /// インプットファイルの読み出し用TextReader。
+        /// </summary>
+        private readonly StreamReader reader;
+
+        /// <summary>
+        /// 子孫核種のインプットを読み飛ばす場合は<c>true</c>。
+        /// </summary>
+        protected bool CalcProgeny { get; }
+
+        /// <summary>
+        /// 行番号(1始まり)。
+        /// </summary>
+        protected int LineNum { get; private set; }
+
+        /// <summary>
+        /// コンストラクタ。
+        /// </summary>
+        /// <param name="reader">インプットの読み込み元。</param>
+        /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
+        public InputDataReaderBase(StreamReader reader, bool calcProgeny = true)
+        {
+            this.reader = reader;
+            this.CalcProgeny = calcProgeny;
+        }
+
+        public void Dispose() => reader.Dispose();
+
+        /// <summary>
+        /// 読み取り位置をファイル先頭に戻す。
+        /// </summary>
+        protected void ResetPosition()
+        {
+            reader.BaseStream.Position = 0;
+            reader.DiscardBufferedData();
+            LineNum = 0;
+        }
+
+        /// <summary>
+        /// インプットの次行を読み取る。
+        /// </summary>
+        /// <returns></returns>
+        protected string GetNextLine()
+        {
+        Lagain:
+            var line = reader.ReadLine();
+            LineNum++;
+            if (line is null)
+                return null;
+            line = line.Trim();
+
+            // 空行を読み飛ばす。
+            if (line.Length == 0)
+                goto Lagain;
+
+            // コメント行を読み飛ばす。
+            if (line.StartsWith("#"))
+                goto Lagain;
+
+            // 行末コメントを除去する。
+            var trailingComment = line.IndexOf("#");
+            if (trailingComment != -1)
+                line = line.Substring(0, trailingComment).TrimEnd();
+            return line;
+        }
+
+        /// <summary>
+        /// 組織加重係数データを読み込む。
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        protected static (string[] targets, double[] weights) ReadTissueWeights(string fileName)
+        {
+            var targets = new List<string>();
+            var weights = new List<double>();
+
+            var fileLines = File.ReadLines(fileName);
+            foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
+            {
+                var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var target = values[0];
+                var weight = double.Parse(values[1]);
+
+                targets.Add(target);
+                weights.Add(weight);
+            }
+
+            return (targets.ToArray(), weights.ToArray());
+        }
+
+        /// <summary>
+        /// 核種名に合致する正規表現。
+        /// 準安定核種について、一般的な表記(m1, m2)とICRP-07データのもの(m, n)の両方を受け付けるようにしている。
+        /// </summary>
+        protected static readonly Regex patternNuclide = new Regex(@"^[A-Za-z]+-\d+(?:[a-z]|m\d)?$", RegexOptions.Compiled);
+
+        private static readonly Regex patternBar = new Regex("^-+$", RegexOptions.Compiled);
+
+        protected static bool IsBar(string s) => patternBar.IsMatch(s);
     }
 }
