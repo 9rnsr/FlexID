@@ -118,6 +118,11 @@ namespace FlexID.Calc
         public bool IsInstantOutflow => Func == OrganFunc.inp || Func == OrganFunc.mix;
 
         /// <summary>
+        /// コンパートメントが移行速度付き壊変経路のために自動定義された場合に<see langword="true"/>。
+        /// </summary>
+        public bool IsDecayCompartment;
+
+        /// <summary>
         /// 線源領域の名称。
         /// </summary>
         public string SourceRegion;
