@@ -76,6 +76,8 @@ namespace FlexID.Calc
                 {
                     foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                     {
+                        if (organ.IsDecayCompartment)
+                            continue;
                         if (organ.IsZeroInflow && organ.Func != OrganFunc.inp)
                             writer.WriteLine($"  {nuclide.Name} / {organ.Name}");
                     }

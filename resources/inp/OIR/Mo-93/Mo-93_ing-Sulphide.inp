@@ -89,12 +89,6 @@ Mo-93 Ingestion:Sulphide
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  # Mo-93のコンパートメントで生成されたNb-93mを受ける
-  acc   decay-Blood2          Blood
-  acc   decay-Liver           Liver
-  acc   decay-Kidneys         Kidneys
-  acc   decay-OtherTissue     Other
-
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   Liver0                Liver
@@ -167,8 +161,7 @@ Mo-93 Ingestion:Sulphide
   #   model transfers to Blood 1 of the niobium model at a rate of 1000 d⁻¹.
   # > モリブデンモデルの Blood 2 で生成された
   #   ニオブは、1000 d⁻¹ の速度でニオブモデルの Blood 1 に移動すると考えられます。
-  Mo-93/Blood2            decay-Blood2              ---
-  decay-Blood2            Blood1                    1000
+  Mo-93/Blood2            Blood1                    1000
 
   # > Niobium produced in a tissue compartment of the molybdenum model is assumed to transfer
   #   to Blood 1 in the niobium model at a rate of 1.39 d⁻¹; the highest rate of transfer to
@@ -179,13 +172,10 @@ Mo-93 Ingestion:Sulphide
   #   1.39 d⁻¹ の速度で移動すると考えられます。これは、ニオブモデルの「他の組織」コンパートメントから
   #   血液に移動する最高速度です。ニオブモデルで Blood 1 に到達した後、ニオブはその
   #   特性全身モデルに従うと考えられます。
-  Mo-93/Liver             decay-Liver               ---
-  Mo-93/KidneyUrinaryPath decay-Kidneys             ---
-  Mo-93/KidneyOtherTissue decay-Kidneys             ---
-  Mo-93/OtherTissue       decay-OtherTissue         ---
-  decay-Liver             Blood1                    1.39
-  decay-Kidneys           Blood1                    1.39
-  decay-OtherTissue       Blood1                    1.39
+  Mo-93/Liver             Blood1                    1.39
+  Mo-93/KidneyUrinaryPath Blood1                    1.39
+  Mo-93/KidneyOtherTissue Blood1                    1.39
+  Mo-93/OtherTissue       Blood1                    1.39
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

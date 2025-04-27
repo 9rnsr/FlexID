@@ -231,6 +231,8 @@ namespace FlexID.Calc
 
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
+                    if (organ.IsDecayCompartment)
+                        continue;
                     if (organ.IsZeroInflow)
                         continue;
 
@@ -267,6 +269,8 @@ namespace FlexID.Calc
 
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
+                    if (organ.IsDecayCompartment)
+                        continue;
                     if (organ.IsZeroInflow)
                         continue;
 
@@ -371,6 +375,8 @@ namespace FlexID.Calc
 
             foreach (var organ in data.Organs)
             {
+                if (organ.IsDecayCompartment)
+                    continue;
                 if (organ.IsZeroInflow)
                     continue;
 

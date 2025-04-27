@@ -852,7 +852,7 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 19: Cannot set decay path from inp 'input'.", e.Message);
+            Assert.AreEqual("Line 19: Cannot set decay path from inp 'Sr-90/input'.", e.Message);
         }
 
         [TestMethod]
@@ -884,11 +884,11 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 21: Cannot set decay path from mix 'mix-Blood'.", e.Message);
+            Assert.AreEqual("Line 21: Cannot set decay path from mix 'Sr-90/mix-Blood'.", e.Message);
         }
 
         [TestMethod]
-        public void TransferDecayWithCoefficient()
+        public void TransferDecayWithPercent()
         {
             var reader = CreateReader(new[]
             {
@@ -910,11 +910,11 @@ namespace FlexID.Calc.Tests
                 "  acc    ST0        ---",
                 "",
                 "[Y-90:transfer]",
-                "  Sr-90/ST0   ST0   100",
+                "  Sr-90/ST0   ST0   100%",
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 19: Cannot set transfer coefficient on decay path.", e.Message);
+            Assert.AreEqual("Line 19: Require transfer rate [/d] from acc 'Sr-90/ST0'.", e.Message);
         }
 
         [TestMethod]
