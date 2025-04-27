@@ -645,45 +645,53 @@ namespace FlexID.Calc
                     if (toFunc == OrganFunc.inp)
                         throw Program.Error($"Line {lineNum}: Cannot set input path to inp '{to}'.");
 
-                    // excからの流出は(娘核種のexcへの壊変経路を除いて)定義できない。
-                    if (fromFunc == OrganFunc.exc && !(toFunc == OrganFunc.exc && isDecayPath))
-                        throw Program.Error($"Line {lineNum}: Cannot set output path from exc '{from}'.");
+                    if (fromFunc == OrganFunc.acc && !isDecayPath)
+                    {
+                        // accからの流出経路では、移行速度の入力を要求する。
+                        // なお、ここでパーセント値を設定するのは明らかにおかしいので設定エラーとして弾く。
+                        if (!hasCoeff || isRate)
+                            throw Program.Error($"Line {lineNum}: Require transfer rate [/d] from {fromFunc} '{from}'.");
+                    }
+
+                    if (fromFunc == OrganFunc.exc)
+                    {
+                        // excからの流出は(娘核種のexcへの壊変経路を除いて)定義できない。
+                        if (!(toFunc == OrganFunc.exc && isDecayPath))
+                            throw Program.Error($"Line {lineNum}: Cannot set output path from exc '{from}'.");
+                    }
 
                     // TODO: mixからmixへの経路は定義できない。
                     //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
                     //    throw Program.Error($"Line {lineNum}: Cannot set transfer path from 'mix' to 'mix'.");
 
+                    if (organFrom.IsInstantOutflow)
+                    {
+                        // inpやmixから娘核種への壊変経路は定義できない。
+                        if (isDecayPath)
+                            throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{from}'.");
+
+                        // inpまたはmixからの同核種での移行経路では、移行割合の入力を要求する。
+                        // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
+                        else if (!hasCoeff)
+                            throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{from}'.");
+                    }
+
                     if (isDecayPath)
                     {
                         // 分岐比が不明な壊変経路は定義できない。
-                        if (!organTo.Nuclide.DecayRates.Any(b => b.Parent == fromNuclide.Name))
+                        if (!toNuclide.DecayRates.Any(b => b.Parent == fromNuclide.Name))
                             throw Program.Error($"Line {lineNum}: There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
-
-                        // inpやmixから娘核種への壊変経路は定義できない。
-                        if (organFrom.IsInstantOutflow)
-                            throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{from}'.");
-
-                        // 親核種からの壊変経路では、係数は指定できない。
-                        if (coeff != null)
-                            throw Program.Error($"Line {lineNum}: Cannot set transfer coefficient on decay path.");
                     }
-                    else
-                    {
-                        // inpまたはmixからの配分経路では、移行割合の入力を要求する。
-                        // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
-                        if (organFrom.IsInstantOutflow && !hasCoeff)
-                            throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{from}'.");
 
-                        // accからの流出経路では、移行速度の入力を要求する。
-                        // なお、ここでパーセント値を設定するのは明らかにおかしいので設定エラーとして弾く。
-                        if (fromFunc == OrganFunc.acc && (!hasCoeff || isRate))
-                            throw Program.Error($"Line {lineNum}: Require transfer rate [/d] from {fromFunc} '{from}'.");
-                    }
                     if (coeff is decimal coeff_v)
                     {
                         // 移行係数が負の値でないことを確認する。
                         if (coeff_v < 0)
                             throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
+
+                        // 親核種からの壊変経路では、係数は指定できない。
+                        if (isDecayPath)
+                            throw Program.Error($"Line {lineNum}: Cannot set transfer coefficient on decay path.");
 
                         if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
                             sum = 0;
