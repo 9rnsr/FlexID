@@ -665,7 +665,15 @@ namespace FlexID.Calc
                 var sourceRegion = organFrom.SourceRegion;
                 if (sourceRegion != null)
                 {
-                    // 親核種のコンパートメントと同じ名前の線源領域を娘核種でも設定する。
+                    // 親核種のコンパートメントに設定された線源領域が、
+                    // 子孫核種の動態モデルおいても明示的に設定されているかどうかを調べる。
+                    var explicitUsed = data.Organs.Where(o => o.Nuclide == progeny)
+                                                  .Any(o => o.SourceRegion == sourceRegion);
+
+                    // 明示的に設定されていない場合は、ambiguous compartmentを'Other'に割り当てる。
+                    if (!explicitUsed)
+                        sourceRegion = "Other";
+
                     organDecay.SourceRegion = sourceRegion;
 
                     // 核種に対応するS係数データを取得する。
