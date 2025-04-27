@@ -1,0 +1,666 @@
+[title]
+Bi-210 Inhalation:Type-M
+
+[nuclide]
+  Bi-210  Po-210  Tl-206
+
+
+[Bi-210:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Bi-210:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.253 Table 10.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 1
+  $ss = 0.005
+  $fA    = 0.01
+  $fA_Re = 0.05         # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
+
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.258 Table 10.3
+  Plasma                  UB-con                   20
+  Plasma                  RC-con                    4.0
+  Plasma                  RBC                       0.5
+  Plasma                  ST0                     300
+  Plasma                  ST1                       4.2
+  Plasma                  ST2                       1.3
+  Plasma                  Liver1                   30
+  Plasma                  Kidneys1                 30
+  Plasma                  Kidneys2                  5.0
+  Plasma                  C-bone-S                  2.5
+  Plasma                  T-bone-S                  2.5
+  RBC                     Plasma                    0.173
+  ST0                     Plasma                   66.54
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.00116
+ #Liver1                  Plasma        # Fig. 10.1 にはあるが、Table 10.3には数値の記載がない。
+  Liver1                  SI-conRe                  0.208
+  Liver1                  Liver2                    0.139
+  Liver2                  Plasma                    0.0693
+  Kidneys1                UB-con                    0.693
+  Kidneys2                Plasma                    0.139
+  C-bone-S                Plasma                    0.0347
+  T-bone-S                Plasma                    0.0347
+
+
+[Po-210:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma1               Blood
+  acc   Plasma2               Blood
+  acc   Plasma3               Blood
+  acc   RBC                   Blood
+  mix   BoneSurface           ---           # ICRP Publ.137 p.289 Para.605
+  acc   BoneSurface-C         C-bone-S      # ICRP Publ.137 p.289 Para.605
+  acc   BoneSurface-T         T-bone-S      # ICRP Publ.137 p.289 Para.605
+  acc   RedMarrow             R-marrow
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+  acc   Testes                Testes
+  acc   Other                 Other
+  exc   Excreta               ---
+
+[Po-210:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#   • The parameter values (sr, ss) describing absorption of the inhaled parent from the
+#     respiratory tract into blood are applied to all members of the decay chain
+#     formed in the respiratory tract.
+#
+#   • The default absorption fraction, fA, for a progeny radionuclide produced in the
+#     respiratory tract following inhalation of a parent, or produced in the alimentary
+#     tract following transfer of activity from the respiratory tract to the alimentary
+#     tract, is the product of the fraction of inhaled material with rapid
+#     dissolution (fr) for the assigned absorption type, and the reference value of
+#     fA for the progeny radionuclide when ingested as a parent radionuclide. If
+#     the progeny radionuclide has multiple reference values of fA when ingested
+#     as a parent, corresponding to different chemical or physical forms, the default
+#     value of fA is the product of fr for the absorption type and the highest reference
+#     value provided.
+#
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic compartments
+#   into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
+# ICRP Publ.137 p.279 Table 11.2 / Ingested material, All chemical forms
+  $fA_MaxValueOfIng = 0.1
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# from parent to progeny
+  Bi-210/ET1-F            ET1-F                     ---
+  Bi-210/ET2-F            ET2-F                     ---
+  Bi-210/ETseq-F          ETseq-F                   ---
+  Bi-210/LNET-F           LNET-F                    ---
+  Bi-210/BB-F             BB-F                      ---
+  Bi-210/BBseq-F          BBseq-F                   ---
+  Bi-210/bb-F             bb-F                      ---
+  Bi-210/bbseq-F          bbseq-F                   ---
+  Bi-210/ALV-F            ALV-F                     ---
+  Bi-210/INT-F            INT-F                     ---
+  Bi-210/LNTH-F           LNTH-F                    ---
+  Bi-210/ET1-S            ET1-S                     ---
+  Bi-210/ET2-S            ET2-S                     ---
+  Bi-210/ETseq-S          ETseq-S                   ---
+  Bi-210/LNET-S           LNET-S                    ---
+  Bi-210/BB-S             BB-S                      ---
+  Bi-210/BBseq-S          BBseq-S                   ---
+  Bi-210/bb-S             bb-S                      ---
+  Bi-210/bbseq-S          bbseq-S                   ---
+  Bi-210/ALV-S            ALV-S                     ---
+  Bi-210/INT-S            INT-S                     ---
+  Bi-210/LNTH-S           LNTH-S                    ---
+  Bi-210/Environment      Environment               ---
+
+  Bi-210/Oralcavity       Oralcavity                ---
+  Bi-210/Oesophagus-f     Oesophagus-f              ---
+  Bi-210/Oesophagus-s     Oesophagus-s              ---
+  Bi-210/St-con           St-con                    ---
+  Bi-210/SI-con           SI-con                    ---
+  Bi-210/SI-conRe         SI-conRe                  ---
+  Bi-210/RC-con           RC-con                    ---
+  Bi-210/LC-con           LC-con                    ---
+  Bi-210/RS-con           RS-con                    ---
+  Bi-210/Faeces           Faeces                    ---
+  Bi-210/UB-con           UB-con                    ---
+  Bi-210/Urine            Urine                     ---
+
+# ICRP Publ.137 p.231 Para.484
+#   (484) The systemic model for polonium as a member of a lead chain is the same as
+#   the systemic model applied in this publication to polonium as a parent radionuclide
+#   (Section 11), except that no distinction is made in the progeny model between
+#   polonium entering blood from the respiratory and alimentary tracts (see the description
+#   of the more detailed absorption model for polonium as a parent in Section
+#   11.2.3). With reference to the transfer coefficients for polonium as a parent listed
+#   in Table 11.3, polonium as a progeny transferred to blood from either the respiratory
+#   or alimentary tract is assigned to Plasma 2. Polonium produced in a blood compartment
+#   that is not identifiable with a blood compartment of the polonium model is
+#   assumed to transfer to Plasma 2 in the polonium model (Fig. 11.1) at the rate
+#   1000 d⁻¹. Polonium produced in a soft tissue compartment not identifiable with a
+#   compartment of the polonium model is assumed to move to Plasma 2 with a halftime
+#   of 7 d. Polonium produced in a compartment of cortical or trabecular bone
+#   volume is assumed to transfer to Plasma 2 at the reference rate of turnover of that
+#   bone type.
+#   (484) 鉛系列の一員としてのポロニウムの全身モデルは、本書で親核種としてのポロニウムに
+#   適用されている全身モデル（第11節）と同じである。ただし、子孫核種モデルでは、呼吸器系と
+#   消化器系から血液に入るポロニウムを区別しない点が異なる（親核種としてのポロニウムのより
+#   詳細な吸収モデルについては、第11.2.3節を参照）。表11.3に列挙されている親核種としての
+#   ポロニウムの移行係数を参照し、呼吸器系または消化器系から血液に移行する子孫核種としての
+#   ポロニウムは、血漿2に割り当てられる。ポロニウムモデルの血液コンパートメントと識別できない
+#   血液コンパートメントで生成されたポロニウムは、ポロニウムモデル（図11.1）において、
+#   1000 d⁻¹の速度で血漿2に移行すると仮定される。ポロニウムモデルのコンパートメントと
+#   識別できない軟部組織コンパートメントで生成されたポロニウムは、7日の半減期で血漿2へ
+#   移行すると仮定されます。皮質骨または海綿骨の容積コンパートメントで生成されたポロニウムは、
+#   その骨の種類の基準代謝率で血漿2へ移行すると仮定されます。
+  Bi-210/Plasma           Plasma2                1000
+  Bi-210/RBC              RBC                       ---
+  Bi-210/C-bone-S         Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
+  Bi-210/T-bone-S         Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
+  Bi-210/Liver1           Liver1                    ---
+  Bi-210/Liver2           Liver2                    ---
+  Bi-210/Kidneys1         Kidneys1                  ---
+  Bi-210/Kidneys2         Kidneys2                  ---
+  Bi-210/ST0              Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
+  Bi-210/ST1              Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
+  Bi-210/ST2              Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Plasma2               $sr
+  INT-F                   Plasma2               $sr
+  bb-F                    Plasma2               $sr
+  bbseq-F                 Plasma2               $sr
+  BB-F                    Plasma2               $sr
+  BBseq-F                 Plasma2               $sr
+  ET2-F                   Plasma2               $sr
+  ETseq-F                 Plasma2               $sr
+  LNET-F                  Plasma2               $sr
+  LNTH-F                  Plasma2               $sr
+
+  ALV-S                   Plasma2               $ss
+  INT-S                   Plasma2               $ss
+  bb-S                    Plasma2               $ss
+  bbseq-S                 Plasma2               $ss
+  BB-S                    Plasma2               $ss
+  BBseq-S                 Plasma2               $ss
+  ET2-S                   Plasma2               $ss
+  ETseq-S                 Plasma2               $ss
+  LNET-S                  Plasma2               $ss
+  LNTH-S                  Plasma2               $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.137 p.231 Para.484
+# > ... polonium as a progeny transferred to blood from either the respiratory
+# > or alimentary tract is assigned to Plasma 2.
+# > ... 呼吸器系または消化器系から血液に移行する子孫核種としての
+# > ポロニウムは、血漿2に割り当てられる。
+# 注：親核種としてのポロニウムでは、SI-con(Re)からPrasma1へ移行する。
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma2               $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma2               $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.285 Table 11.3
+  Plasma2                 Plasma1                 800
+  Plasma2                 Kidneys1                200
+  Plasma1                 Plasma3                   4
+  Plasma1                 RBC                       6
+  Plasma1                 Liver1                   17.5
+  Plasma1                 Liver2                   17.5
+  Plasma1                 Kidneys1                  5
+  Plasma1                 Kidneys2                  5
+  Plasma1                 Skin                      5
+  Plasma1                 RedMarrow                 4
+  Plasma1                 BoneSurface               1.5
+  Plasma1                 Spleen                    2
+  Plasma1                 Testes                    0.1
+  Plasma1                 Ovaries                   0.05
+  Plasma1                 Other                    32.35
+  Plasma3                 Plasma1                   0.099
+  RBC                     Plasma1                   0.099
+  Liver1                  SI-conRe                  0.139
+  Liver2                  Plasma1                   0.099
+  Kidneys1                UB-con                    0.173
+  Kidneys2                Plasma1                   0.099
+  Skin                    Plasma1                   0.00693
+  Skin                    Excreta                   0.00693
+  RedMarrow               Plasma1                   0.099
+  BoneSurface             BoneSurface-C            50%      # ICRP Publ.137 p.289 Para.605
+  BoneSurface             BoneSurface-T            50%      # ICRP Publ.137 p.289 Para.605
+  BoneSurface-C           Plasma1                   0.0231  # ICRP Publ.137 p.289 Para.605
+  BoneSurface-T           Plasma1                   0.0231  # ICRP Publ.137 p.289 Para.605
+  Spleen                  Plasma1                   0.099
+  Testes                  Plasma1                   0.0139
+  Ovaries                 Plasma1                   0.0139
+  Other                   Plasma1                   0.099
+
+
+[Tl-206:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other                 Other
+
+[Tl-206:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.344 Table 37.2 / Inhaled particulate materials, Absorption type F
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Bi-210/ET1-F            ET1-F                     ---
+  Bi-210/ET2-F            ET2-F                     ---
+  Bi-210/ETseq-F          ETseq-F                   ---
+  Bi-210/LNET-F           LNET-F                    ---
+  Bi-210/BB-F             BB-F                      ---
+  Bi-210/BBseq-F          BBseq-F                   ---
+  Bi-210/bb-F             bb-F                      ---
+  Bi-210/bbseq-F          bbseq-F                   ---
+  Bi-210/ALV-F            ALV-F                     ---
+  Bi-210/INT-F            INT-F                     ---
+  Bi-210/LNTH-F           LNTH-F                    ---
+  Bi-210/ET1-S            ET1-S                     ---
+  Bi-210/ET2-S            ET2-S                     ---
+  Bi-210/ETseq-S          ETseq-S                   ---
+  Bi-210/LNET-S           LNET-S                    ---
+  Bi-210/BB-S             BB-S                      ---
+  Bi-210/BBseq-S          BBseq-S                   ---
+  Bi-210/bb-S             bb-S                      ---
+  Bi-210/bbseq-S          bbseq-S                   ---
+  Bi-210/ALV-S            ALV-S                     ---
+  Bi-210/INT-S            INT-S                     ---
+  Bi-210/LNTH-S           LNTH-S                    ---
+  Bi-210/Environment      Environment               ---
+
+  Bi-210/Oralcavity       Oralcavity                ---
+  Bi-210/Oesophagus-f     Oesophagus-f              ---
+  Bi-210/Oesophagus-s     Oesophagus-s              ---
+  Bi-210/St-con           St-con                    ---
+  Bi-210/SI-con           SI-con                    ---
+  Bi-210/SI-conRe         SI-conRe                  ---
+  Bi-210/RC-con           RC-con                    ---
+  Bi-210/LC-con           LC-con                    ---
+  Bi-210/RS-con           RS-con                    ---
+  Bi-210/Faeces           Faeces                    ---
+  Bi-210/UB-con           UB-con                    ---
+  Bi-210/Urine            Urine                     ---
+
+# ???
+  Bi-210/Plasma           Plasma                    ---
+  Bi-210/RBC              Plasma                 1000
+  Bi-210/C-bone-S         C-bone-S                  ---
+  Bi-210/T-bone-S         T-bone-S                  ---
+  Bi-210/Liver1           Liver                     ---
+  Bi-210/Liver2           Plasma                    2.5     # 移行元を自明でない軟組織とする
+  Bi-210/Kidneys1         Kidneys                   ---
+ #Bi-210/Kidneys2         ???????                   ---     # ???
+  Bi-210/ST0              Plasma                    2.5     # 移行元を自明でない軟組織とする
+  Bi-210/ST1              Plasma                    2.5     # 移行元を自明でない軟組織とする
+  Bi-210/ST2              Plasma                    2.5     # 移行元を自明でない軟組織とする
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
+
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.346 Table 37.3
+  Plasma                  Liver                    10
+  Plasma                  Kidneys                  10
+  Plasma                  RBC                       5
+  Plasma                  T-bone-S                 15
+  Plasma                  C-bone-S                 15
+  Plasma                  Other                   140
+  Plasma                  UB-con                    1.5
+  Plasma                  RC-con                    3.5
+  RBC                     Plasma                    3.7
+  Liver                   Plasma                    2.5
+  Kidneys                 Plasma                    2.5
+  T-bone-S                Plasma                    2.5
+  C-bone-S                Plasma                    2.5
+  Other                   Plasma                    2.5
