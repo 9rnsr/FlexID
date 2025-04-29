@@ -1,0 +1,116 @@
+[title]
+Pu-240 Injection
+
+[nuclide]
+  Pu-240
+
+
+[Pu-240:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood0                Blood
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   T-marrow              T-marrow
+  acc   RenalTubules          Kidneys
+  acc   OtherKidneys          Kidneys
+  acc   Ovaries               Ovaries
+  acc   Testes                Testes
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Pu-240:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, All other unidentified chemical forms
+  $fA    = 5E-4
+  $fA_Re = 5E-4     # footnote§
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood0                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood0                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood0                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.141 p.225 Table 18.6
+  Blood0                  ST0                       3.0000E+2
+  Blood0                  Blood1                    7.0000E+2
+  Blood1                  Liver0                    4.6200E-1
+  Blood1                  C-bone-S                  8.7780E-2
+  Blood1                  C-bone-V                  4.6200E-3
+  Blood1                  T-bone-S                  1.2474E-1
+  Blood1                  T-bone-V                  1.3860E-2
+  Blood1                  UB-con                    1.5400E-2
+  Blood1                  RenalTubules              7.7000E-3
+  Blood1                  OtherKidneys              3.8500E-4
+  Blood1                  RC-con                    1.1550E-2
+  Blood1                  Testes                    2.6950E-4
+  Blood1                  Ovaries                   0.8470E-4
+  Blood1                  ST1                       1.8511E-2
+  Blood1                  ST2                       2.3100E-2
+  ST0                     Blood1                    9.9000E-2
+  Blood2                  UB-con                    3.5000E+0
+  Blood2                  Blood1                    6.7550E+1
+  Blood2                  ST0                       2.8950E+1
+  RenalTubules            UB-con                    1.7329E-2
+  OtherKidneys            Blood2                    1.2660E-4
+  ST1                     Blood2                    1.3860E-3
+  ST2                     Blood2                    1.2660E-4
+  Liver0                  SI-conRe                  9.2420E-4
+  Liver0                  Liver1                    4.5286E-2
+  Liver1                  Blood2                    1.5200E-3
+  Liver1                  Liver2                    3.8000E-4
+  Liver2                  Blood2                    1.2660E-4
+  Testes                  Blood2                    3.8000E-4
+  Ovaries                 Blood2                    3.8000E-4
+  C-bone-S                C-marrow                  8.2100E-5
+  C-bone-S                C-bone-V                  2.0500E-5
+  C-bone-V                C-marrow                  8.2100E-5
+  T-bone-S                T-marrow                  4.9300E-4
+  T-bone-S                T-bone-V                  1.2300E-4
+  T-bone-V                T-marrow                  4.9300E-4
+  C-marrow                Blood2                    7.6000E-3
+  T-marrow                Blood2                    7.6000E-3
