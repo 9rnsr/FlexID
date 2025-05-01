@@ -174,8 +174,8 @@ namespace ResultChecker
 
         static void WriteResultSheet(ExcelWorksheet sheet, Result res)
         {
-            var actualActs = GetResultRetentions(res.Target);
-            var expectActs = GetExpectRetentions(res.Target, out _);
+            var expectActs = GetExpectRetentions(res.Target, out _, out var retentionNuc);
+            var actualActs = GetResultRetentions(res.Target, retentionNuc);
 
             sheet.Cells[1, 1].Value = res.Target;
 
