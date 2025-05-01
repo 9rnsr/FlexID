@@ -47,13 +47,16 @@ namespace ResultChecker
                 MaxDegreeOfParallelism = -1,
             };
 
+            var outputDir = "out";
+            Directory.CreateDirectory(outputDir);
+
             // 並列に計算を実施する。
             Parallel.ForEach(inputs, parallelOptions, inputPath =>
             {
                 var target = Path.GetFileNameWithoutExtension(inputPath);
                 try
                 {
-                    var result = CalcAndSummary(target, inputPath);
+                    var result = CalcAndSummary(target, inputPath, outputDir);
                     results.Add(result);
                     Console.WriteLine($"done: {target}");
                 }
@@ -67,7 +70,8 @@ namespace ResultChecker
 
             var sortedResults = results.OrderBy(r => r.Target).ToArray();
 
-            WriteSummaryExcel("summary.xlsx", sortedResults);
+            var summaryFilePath = Path.Combine(outputDir, "summary.xlsx");
+            WriteSummaryExcel(summaryFilePath, sortedResults);
 
             return 0;
         }
@@ -93,12 +97,9 @@ namespace ResultChecker
             public (double Min, double Max) FractionsThyroid;
         }
 
-        static Result CalcAndSummary(string target, string inputPath)
+        static Result CalcAndSummary(string target, string inputPath, string outputDir)
         {
             var nuclide = target.Split('_')[0];
-
-            var outputDir = "out";
-            Directory.CreateDirectory(outputDir);
 
             var outputPath = Path.Combine(outputDir, target);
 
