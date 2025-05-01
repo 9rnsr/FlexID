@@ -47,13 +47,16 @@ namespace ResultChecker
                 MaxDegreeOfParallelism = -1,
             };
 
+            var outputDir = "out";
+            Directory.CreateDirectory(outputDir);
+
             // 並列に計算を実施する。
             Parallel.ForEach(inputs, parallelOptions, inputPath =>
             {
                 var target = Path.GetFileNameWithoutExtension(inputPath);
                 try
                 {
-                    var result = CalcAndSummary(target, inputPath);
+                    var result = CalcAndSummary(target, inputPath, outputDir);
                     results.Add(result);
                     Console.WriteLine($"done: {target}");
                 }
@@ -67,7 +70,8 @@ namespace ResultChecker
 
             var sortedResults = results.OrderBy(r => r.Target).ToArray();
 
-            WriteSummaryExcel("summary.xlsx", sortedResults);
+            var summaryFilePath = Path.Combine(outputDir, "summary.xlsx");
+            WriteSummaryExcel(summaryFilePath, sortedResults);
 
             return 0;
         }
@@ -93,12 +97,9 @@ namespace ResultChecker
             public (double Min, double Max) FractionsThyroid;
         }
 
-        static Result CalcAndSummary(string target, string inputPath)
+        static Result CalcAndSummary(string target, string inputPath, string outputDir)
         {
             var nuclide = target.Split('_')[0];
-
-            var outputDir = "out";
-            Directory.CreateDirectory(outputDir);
 
             var outputPath = Path.Combine(outputDir, target);
 
@@ -128,8 +129,8 @@ namespace ResultChecker
 
             // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
-            var actualActs = GetResultRetentions(target);
-            var expectActs = GetExpectRetentions(target, out var mat);
+            var expectActs = GetExpectRetentions(target, out var mat, out var retentionNuc);
+            var actualActs = GetResultRetentions(target, retentionNuc);
             var fractionsWholeBody /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsUrine     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsFaeces    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
@@ -297,8 +298,9 @@ namespace ResultChecker
         /// *_Retention.outから、Whole Bodyの数値列を読み込む。
         /// </summary>
         /// <param name="target"></param>
+        /// <param name="resultNuc"></param>
         /// <returns></returns>
-        static List<Retention> GetResultRetentions(string target)
+        static List<Retention> GetResultRetentions(string target, string resultNuc)
         {
             var nuclide = target.Split('_')[0];
             var filePath = $"out/{target}_Retention.out";
@@ -310,10 +312,12 @@ namespace ResultChecker
                 var data = reader.Read();
                 var result = data.Nuclides[0];
 
-                if (nuclide == "Cs-137")
+                if (resultNuc != nuclide)
                 {
-                    // 子孫核種であるBa-137mの結果を読み出す。
-                    result = data.Nuclides[1];
+                    // 子孫核種の結果を読み出す。
+                    result = data.Nuclides.Where(n => n.Nuclide == resultNuc).FirstOrDefault();
+                    if (result is null)
+                        throw new InvalidDataException($"Missing retention data of progeny nuclide '{resultNuc}'.");
                 }
 
                 var compartments = result.Compartments.Select(c => c.Name).ToArray();
@@ -368,9 +372,10 @@ namespace ResultChecker
         /// </summary>
         /// <param name="target"></param>
         /// <param name="mat"></param>
+        /// <param name="retentionNuc">残留放射能データが対応する核種名</param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static List<Retention> GetExpectRetentions(string target, out string mat)
+        static List<Retention> GetExpectRetentions(string target, out string mat, out string retentionNuc)
         {
             var nuclide = target.Split('_')[0];
             var filePath = $"Expect/{target}.dat";
@@ -418,6 +423,15 @@ namespace ResultChecker
                 var indexSkeleton  /**/= columns.IndexOf(s => s.Contains("Skeleton"));
                 var indexLiver     /**/= columns.IndexOf(s => s.Contains("Liver"));
                 var indexThyroid   /**/= columns.IndexOf(s => s.Contains("Thyroid"));
+
+                // 残留放射能データが子孫核種のものである場合、その名前が
+                // ヘッダに括弧書きされているためこれを取り出す。
+                var headerWholeBody = columns[indexWholeBody];
+                var m = Regex.Match(headerWholeBody, @"Whole Body *\((?<nuc>[^ ]+)\)");
+                if (m.Success)
+                    retentionNuc = m.Groups["nuc"].Value;
+                else
+                    retentionNuc = nuclide;
 
                 var startTime = 0.0;
 
