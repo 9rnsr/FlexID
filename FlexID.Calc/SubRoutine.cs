@@ -94,10 +94,10 @@ namespace FlexID.Calc
                 ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
                 end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
             }
-            Act.IterNow[organ.Index].ini = ini;
-            Act.IterNow[organ.Index].ave = ave;
-            Act.IterNow[organ.Index].end = end;
-            Act.IterNow[organ.Index].total = dT * ave;
+
+            // 蓄積した核種の壊変による減衰を適用する。
+            var alpha = organ.NuclideDecay;
+            Accumulation(alpha, dT, ave, in Act.CalcPre[organ.Index], ref Act.IterNow[organ.Index]);
         }
 
         /// <summary>
