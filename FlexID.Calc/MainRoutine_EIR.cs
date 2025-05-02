@@ -335,24 +335,26 @@ namespace FlexID.Calc
 
                 Act.FinishIter();
 
+                if (calcNowT <= outBefore24hourT)
+                {
+                    foreach (var organ in dataLo.Organs)
+                    {
+                        if (!organ.IsExcretaCompatibleWithOIR)
+                            continue;
+
+                        // OIR互換排泄コンパートメントについて、
+                        // 残留放射能をカウントすべき24時間より以前の結果を捨てる。
+                        Act.CalcNow[organ.Index].end = 0;
+                    }
+                }
+
                 // 時間メッシュ毎の放射能を足していく
                 foreach (var organ in dataLo.Organs)
                 {
                     var calcNowTotal = Act.CalcNow[organ.Index].total;
 
                     // 今回の出力時間メッシュにおける積算放射能。
-                    if (organ.IsExcretaCompatibleWithOIR && calcPreT < outBefore24hourT)
-                    {
-                        // 計算時間メッシュが、次回の出力時間メッシュから24-hour前の位置を跨いでいる場合。
-                        if (outBefore24hourT < calcNowT)
-                        {
-                            // 24-hourの範囲内となる分だけを加算する。
-                            var rate = (double)(calcNowT - outBefore24hourT) / calcDeltaT;
-                            Act.OutNow[organ.Index].total += calcNowTotal * rate;
-                        }
-                    }
-                    else
-                        Act.OutNow[organ.Index].total += calcNowTotal;
+                    Act.OutNow[organ.Index].total += calcNowTotal;
 
                     // 摂取時からの積算放射能。
                     Act.OutTotalFromIntake[organ.Index] += calcNowTotal;
@@ -420,13 +422,7 @@ namespace FlexID.Calc
                     // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                     foreach (var organ in dataLo.Organs)
                     {
-                        if (organ.IsExcretaCompatibleWithOIR && !maskExcreta)
-                        {
-                            // excのtotalは24-hourの時間幅で計算するため、total=aveとなる。
-                            Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total;
-                        }
-                        else
-                            Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
+                        Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
 
                         Act.OutNow[organ.Index].end = Act.CalcNow[organ.Index].end;
                     }
@@ -447,10 +443,21 @@ namespace FlexID.Calc
                     outIter = 0;
 
                     if (!maskExcreta)
+                    {
                         outLastExcretaT = outPreT;
+
+                        foreach (var organ in dataLo.Organs)
+                        {
+                            if (!organ.IsExcretaCompatibleWithOIR)
+                                continue;
+
+                            // OIR互換排泄コンパートメントについて、残留放射能をゼロクリアする。
+                            Act.CalcNow[organ.Index].end = 0;
+                        }
+                    }
                     outBefore24hourT = outNowT - Delta24hourT;
 
-                    Act.NextOut(dataLo, maskExcreta);
+                    Act.NextOut(dataLo);
 
                     wholeBodyPre = wholeBodyNow;
                     Array.Copy(resultNow, resultPre, resultNow.Length);
