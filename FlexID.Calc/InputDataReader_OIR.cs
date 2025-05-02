@@ -618,7 +618,7 @@ namespace FlexID.Calc
                     {
                         if (organ.Name == "Urine" || organ.Name == "Faeces")
                         {
-                            organ.ExcretaCompatibleWithOIR = true;
+                            organ.IsExcretaCompatibleWithOIR = true;
                         }
                     }
                 }

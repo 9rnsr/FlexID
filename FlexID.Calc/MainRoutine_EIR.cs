@@ -341,7 +341,7 @@ namespace FlexID.Calc
                     var calcNowTotal = Act.CalcNow[organ.Index].total;
 
                     // 今回の出力時間メッシュにおける積算放射能。
-                    if (organ.ExcretaCompatibleWithOIR && calcPreT < outBefore24hourT)
+                    if (organ.IsExcretaCompatibleWithOIR && calcPreT < outBefore24hourT)
                     {
                         // 計算時間メッシュが、次回の出力時間メッシュから24-hour前の位置を跨いでいる場合。
                         if (outBefore24hourT < calcNowT)
@@ -419,7 +419,7 @@ namespace FlexID.Calc
                     // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                     foreach (var organ in dataLo.Organs)
                     {
-                        if (organ.ExcretaCompatibleWithOIR)
+                        if (organ.IsExcretaCompatibleWithOIR)
                         {
                             if (outExc)
                             {
