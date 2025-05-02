@@ -383,7 +383,7 @@ namespace FlexID.Calc
                 var retention = Act.OutNow[organ.Index].end;
                 var cumulative = Act.OutTotalFromIntake[organ.Index];
 
-                if (organ.ExcretaCompatibleWithOIR)
+                if (organ.IsExcretaCompatibleWithOIR)
                 {
                     // OIR互換出力を行うexcコンパートメントでは、24-hour sample出力値を模擬して
                     // 出力時間メッシュから24-hour前までの各計算時間メッシュにおけるtotalの総計、
