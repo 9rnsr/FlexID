@@ -327,7 +327,8 @@ namespace FlexID.Calc
         /// <param name="outT"></param>
         /// <param name="Act"></param>
         /// <param name="iter"></param>
-        public void ActivityOut(double outT, Activity Act, int iter)
+        /// <param name="maskExcreta"></param>
+        public void ActivityOut(double outT, Activity Act, int iter, bool maskExcreta = false)
         {
             foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
             foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
@@ -394,15 +395,12 @@ namespace FlexID.Calc
                 var wrRete = wsOrgansRete[organ.Index];
                 var wrCumu = wsOrgansCumu[organ.Index];
 
-                if (double.IsNaN(retention))
+                if (organ.IsExcretaCompatibleWithOIR && maskExcreta)
                     wrRete.Write("       ----     ");
                 else
                     wrRete.Write("  {0:0.00000000E+00}", retention);
 
-                if (double.IsNaN(cumulative))
-                    wrCumu.Write("       ----     ");
-                else
-                    wrCumu.Write("  {0:0.00000000E+00}", cumulative);
+                wrCumu.Write("  {0:0.00000000E+00}", cumulative);
             }
 
             foreach (var w in wsRete) w.WriteLine();

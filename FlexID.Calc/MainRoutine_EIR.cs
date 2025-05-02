@@ -233,9 +233,9 @@ namespace FlexID.Calc
             outNowT = outTimes.Current;
             outIter = 0;
 
-            const long delta24hourT = 24 * 60 * 60;
-            long outExcLastT = outPreT; // excコンパートメントで最後に数値を出力した時間メッシュ
-            long outBefore24hourT = outNowT - delta24hourT;
+            const long Delta24hourT = 24 * 60 * 60;
+            long outLastExcretaT = outPreT; // excコンパートメントで最後に数値を出力した時間メッシュ
+            long outBefore24hourT = outNowT - Delta24hourT;
 
             // 計算時間メッシュを進める。
             while (calcTimes.MoveNext())
@@ -400,7 +400,7 @@ namespace FlexID.Calc
                     var outPreDay = TimeMesh.SecondsToDays(outPreT);
                     var outDeltaDay = TimeMesh.SecondsToDays(outDeltaT);
 
-                    if (outDeltaT < delta24hourT)
+                    if (outDeltaT < Delta24hourT)
                     {
                         // 24時間より小さい幅を持つ出力時間メッシュは、それらを合わせた時間幅が
                         // 前回の'exc'コンパートメントに対する数値出力から24-hour経過した時間と一致することをここで確認する。
@@ -408,29 +408,22 @@ namespace FlexID.Calc
                         // - これを許した場合、excの積算放射能を構成する複数の出力時間メッシュのうち、24-hourを超える古い側の
                         //   メッシュの寄与を後から減算しなければならず、この面倒な処理を避けるという理由もある。
                         // - 本来は計算開始前にTimeMesh入力検証で確認すべきだが、現在はOIRの'exc'に特有の処理であるためここで確認している。
-                        if ((outNowT - outExcLastT) > delta24hourT)
+                        if ((outNowT - outLastExcretaT) > Delta24hourT)
                             throw new Exception("sum of out time meshes those are smaller than 24-hour delta should match to 24-hour, "
                                               + "for the 'exc' compartment output compatibility with OIR.");
                     }
 
-                    // excにおける今回の出力時間が、前回の出力時間から24-hour以上経過しているか。
-                    var outExc = outExcLastT <= outBefore24hourT;
+                    // OIR互換排泄コンパートメントについて、前回の数値出力からの
+                    // 経過時間が24時間に満たない場合は、数値出力を抑制する。
+                    var maskExcreta = outNowT < outLastExcretaT + Delta24hourT;
 
                     // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                     foreach (var organ in dataLo.Organs)
                     {
-                        if (organ.IsExcretaCompatibleWithOIR)
+                        if (organ.IsExcretaCompatibleWithOIR && !maskExcreta)
                         {
-                            if (outExc)
-                            {
-                                // excのtotalは24-hourの時間幅で計算するため、total=aveとなる。
-                                Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total;
-                            }
-                            else
-                            {
-                                // excにおける残留放射能の出力処理を特別扱いするためのフラグとしてNaNを使う。
-                                Act.OutNow[organ.Index].ave = double.NaN;
-                            }
+                            // excのtotalは24-hourの時間幅で計算するため、total=aveとなる。
+                            Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total;
                         }
                         else
                             Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
@@ -439,7 +432,7 @@ namespace FlexID.Calc
                     }
 
                     // 放射能をファイルに出力する。
-                    CalcOut.ActivityOut(outNowDay, Act, outIter);
+                    CalcOut.ActivityOut(outNowDay, Act, outIter, maskExcreta);
 
                     // 線量をファイルに出力する。
                     CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
@@ -453,11 +446,11 @@ namespace FlexID.Calc
                     outNowT = outTimes.Current;
                     outIter = 0;
 
-                    if (outExc)
-                        outExcLastT = outPreT;
-                    outBefore24hourT = outNowT - delta24hourT;
+                    if (!maskExcreta)
+                        outLastExcretaT = outPreT;
+                    outBefore24hourT = outNowT - Delta24hourT;
 
-                    Act.NextOut(dataLo);
+                    Act.NextOut(dataLo, maskExcreta);
 
                     wholeBodyPre = wholeBodyNow;
                     Array.Copy(resultNow, resultPre, resultNow.Length);

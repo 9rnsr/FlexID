@@ -130,14 +130,15 @@ namespace FlexID.Calc
         /// 次の出力時間メッシュのための準備を行う。
         /// </summary>
         /// <param name="data"></param>
-        public void NextOut(InputData data)
+        /// <param name="maskExcreta"></param>
+        public void NextOut(InputData data, bool maskExcreta)
         {
             foreach (var o in data.Organs)
             {
-                // excコンパートメントにおいてOIR互換出力を行う場合、
-                // aveがNaNならば、今回の出力時間メッシュが24-hour位置ではないことを示している。
+                // OIR互換出力を行うexcコンパートメントについて、
+                // 数値出力を行わない＝今回の出力時間メッシュが24-hour位置ではないことを示している。
                 // このときtotalは24-hour分の残留放射能の合算に使用されるため、その内容を保持する必要がある。
-                var retainTotal = o.IsExcretaCompatibleWithOIR && double.IsNaN(OutNow[o.Index].ave);
+                var retainTotal = o.IsExcretaCompatibleWithOIR && maskExcreta;
 
                 // 前回の末期放射能を今回の初期放射能とする。
                 OutNow[o.Index].ini = OutNow[o.Index].end;
