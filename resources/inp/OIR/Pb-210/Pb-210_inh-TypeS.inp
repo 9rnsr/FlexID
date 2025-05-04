@@ -9,6 +9,10 @@ Pb-210 Inhalation:Type-S
 # Pb-210 ┬→ Bi-210 ┴┬→ Tl-206 ┘
 #        └→ Hg-206 ─┘
 
+# ICRP Publ.130 Para.125
+# > the behaviour of dissociated material would depend on its elemental form, and
+# > so, for example, bound fraction parameter values for a progeny radonuclide
+# > would not be those of the parent (‘independent kinetics’).
 
 [Pb-210:compartment]
 #-----+---------------------| S-Coefficient
@@ -281,6 +285,16 @@ Pb-210 Inhalation:Type-S
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -313,6 +327,10 @@ Pb-210 Inhalation:Type-S
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
 
+# parent parameter
+  $fb = 0.5             # Pb-210 parameter
+  $sb = 1.7             # Pb-210 parameter
+
 # ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.05
 
@@ -342,16 +360,16 @@ Pb-210 Inhalation:Type-S
   Pb-210/ALV-S            ALV-S                     ---
   Pb-210/INT-S            INT-S                     ---
   Pb-210/LNTH-S           LNTH-S                    ---
-  Pb-210/ET2-B            Plasma                 1000       # ?
-  Pb-210/ETseq-B          Plasma                 1000       # ?
-  Pb-210/LNET-B           Plasma                 1000       # ?
-  Pb-210/BB-B             Plasma                 1000       # ?
-  Pb-210/BBseq-B          Plasma                 1000       # ?
-  Pb-210/bb-B             Plasma                 1000       # ?
-  Pb-210/bbseq-B          Plasma                 1000       # ?
-  Pb-210/ALV-B            Plasma                 1000       # ?
-  Pb-210/INT-B            Plasma                 1000       # ?
-  Pb-210/LNTH-B           Plasma                 1000       # ?
+  Pb-210/ET2-B            ET2-B                     ---
+  Pb-210/ETseq-B          ETseq-B                   ---
+  Pb-210/LNET-B           LNET-B                    ---
+  Pb-210/BB-B             BB-B                      ---
+  Pb-210/BBseq-B          BBseq-B                   ---
+  Pb-210/bb-B             bb-B                      ---
+  Pb-210/bbseq-B          bbseq-B                   ---
+  Pb-210/ALV-B            ALV-B                     ---
+  Pb-210/INT-B            INT-B                     ---
+  Pb-210/LNTH-B           LNTH-B                    ---
 
   Pb-210/Oralcavity       Oralcavity                ---
   Pb-210/Oesophagus-f     Oesophagus-f              ---
@@ -408,27 +426,62 @@ Pb-210 Inhalation:Type-S
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Plasma                $sr
-  INT-F                   Plasma                $sr
-  bb-F                    Plasma                $sr
-  bbseq-F                 Plasma                $sr
-  BB-F                    Plasma                $sr
-  BBseq-F                 Plasma                $sr
-  ET2-F                   Plasma                $sr
-  ETseq-F                 Plasma                $sr
-  LNET-F                  Plasma                $sr
-  LNTH-F                  Plasma                $sr
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   Plasma                $ss
-  INT-S                   Plasma                $ss
-  bb-S                    Plasma                $ss
-  bbseq-S                 Plasma                $ss
-  BB-S                    Plasma                $ss
-  BBseq-S                 Plasma                $ss
-  ET2-S                   Plasma                $ss
-  ETseq-S                 Plasma                $ss
-  LNET-S                  Plasma                $ss
-  LNTH-S                  Plasma                $ss
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -771,6 +824,16 @@ Pb-210 Inhalation:Type-S
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -810,6 +873,10 @@ Pb-210 Inhalation:Type-S
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
+# parent parameter
+  $fb = 0.5             # Bi-210 == Pb-210 parameter
+  $sb = 1.7             # Bi-210 == Pb-210 parameter
+
 # ICRP Publ.137 p.279 Table 11.2 / Ingested material, All chemical forms
   $fA_MaxValueOfIng = 0.1
 
@@ -839,16 +906,16 @@ Pb-210 Inhalation:Type-S
   Pb-210/ALV-S            ALV-S                     ---
   Pb-210/INT-S            INT-S                     ---
   Pb-210/LNTH-S           LNTH-S                    ---
-  Pb-210/ET2-B            Plasma2                1000       # ?
-  Pb-210/ETseq-B          Plasma2                1000       # ?
-  Pb-210/LNET-B           Plasma2                1000       # ?
-  Pb-210/BB-B             Plasma2                1000       # ?
-  Pb-210/BBseq-B          Plasma2                1000       # ?
-  Pb-210/bb-B             Plasma2                1000       # ?
-  Pb-210/bbseq-B          Plasma2                1000       # ?
-  Pb-210/ALV-B            Plasma2                1000       # ?
-  Pb-210/INT-B            Plasma2                1000       # ?
-  Pb-210/LNTH-B           Plasma2                1000       # ?
+  Pb-210/ET2-B            ET2-B                     ---
+  Pb-210/ETseq-B          ETseq-B                   ---
+  Pb-210/LNET-B           LNET-B                    ---
+  Pb-210/BB-B             BB-B                      ---
+  Pb-210/BBseq-B          BBseq-B                   ---
+  Pb-210/bb-B             bb-B                      ---
+  Pb-210/bbseq-B          bbseq-B                   ---
+  Pb-210/ALV-B            ALV-B                     ---
+  Pb-210/INT-B            INT-B                     ---
+  Pb-210/LNTH-B           LNTH-B                    ---
 
   Pb-210/Oralcavity       Oralcavity                ---
   Pb-210/Oesophagus-f     Oesophagus-f              ---
@@ -932,27 +999,62 @@ Pb-210 Inhalation:Type-S
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Plasma2               $sr
-  INT-F                   Plasma2               $sr
-  bb-F                    Plasma2               $sr
-  bbseq-F                 Plasma2               $sr
-  BB-F                    Plasma2               $sr
-  BBseq-F                 Plasma2               $sr
-  ET2-F                   Plasma2               $sr
-  ETseq-F                 Plasma2               $sr
-  LNET-F                  Plasma2               $sr
-  LNTH-F                  Plasma2               $sr
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   Plasma2               $ss
-  INT-S                   Plasma2               $ss
-  bb-S                    Plasma2               $ss
-  bbseq-S                 Plasma2               $ss
-  BB-S                    Plasma2               $ss
-  BBseq-S                 Plasma2               $ss
-  ET2-S                   Plasma2               $ss
-  ETseq-S                 Plasma2               $ss
-  LNET-S                  Plasma2               $ss
-  LNTH-S                  Plasma2               $ss
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma2               $( (1 - fb) * sr )
+  INT-F                   Plasma2               $( (1 - fb) * sr )
+  bb-F                    Plasma2               $( (1 - fb) * sr )
+  bbseq-F                 Plasma2               $( (1 - fb) * sr )
+  BB-F                    Plasma2               $( (1 - fb) * sr )
+  BBseq-F                 Plasma2               $( (1 - fb) * sr )
+  ET2-F                   Plasma2               $( (1 - fb) * sr )
+  ETseq-F                 Plasma2               $( (1 - fb) * sr )
+  LNET-F                  Plasma2               $( (1 - fb) * sr )
+  LNTH-F                  Plasma2               $( (1 - fb) * sr )
+
+  ALV-S                   Plasma2               $( (1 - fb) * ss )
+  INT-S                   Plasma2               $( (1 - fb) * ss )
+  bb-S                    Plasma2               $( (1 - fb) * ss )
+  bbseq-S                 Plasma2               $( (1 - fb) * ss )
+  BB-S                    Plasma2               $( (1 - fb) * ss )
+  BBseq-S                 Plasma2               $( (1 - fb) * ss )
+  ET2-S                   Plasma2               $( (1 - fb) * ss )
+  ETseq-S                 Plasma2               $( (1 - fb) * ss )
+  LNET-S                  Plasma2               $( (1 - fb) * ss )
+  LNTH-S                  Plasma2               $( (1 - fb) * ss )
+
+  ALV-B                   Plasma2               $sb
+  INT-B                   Plasma2               $sb
+  bb-B                    Plasma2               $sb
+  bbseq-B                 Plasma2               $sb
+  BB-B                    Plasma2               $sb
+  BBseq-B                 Plasma2               $sb
+  ET2-B                   Plasma2               $sb
+  ETseq-B                 Plasma2               $sb
+  LNET-B                  Plasma2               $sb
+  LNTH-B                  Plasma2               $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -1040,6 +1142,16 @@ Pb-210 Inhalation:Type-S
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -1067,6 +1179,12 @@ Pb-210 Inhalation:Type-S
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
+
+# parent parameter
+  $fb = 0.5             # Bi-210 = Pb-210 parameter
+  $sb = 1.7             # Bi-210 = Pb-210 parameter
+  # ※親核種であるBi-210とHg-206のそれぞれを経由した分岐比を考えると
+  #   Bi-210の方が優位であるためそちらのパラメータを採用する。
 
 # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.99 # ≒1
@@ -1097,16 +1215,16 @@ Pb-210 Inhalation:Type-S
   Pb-210/ALV-S            ALV-S                     ---
   Pb-210/INT-S            INT-S                     ---
   Pb-210/LNTH-S           LNTH-S                    ---
-  Pb-210/ET2-B            Plasma                 1000       # ?
-  Pb-210/ETseq-B          Plasma                 1000       # ?
-  Pb-210/LNET-B           Plasma                 1000       # ?
-  Pb-210/BB-B             Plasma                 1000       # ?
-  Pb-210/BBseq-B          Plasma                 1000       # ?
-  Pb-210/bb-B             Plasma                 1000       # ?
-  Pb-210/bbseq-B          Plasma                 1000       # ?
-  Pb-210/ALV-B            Plasma                 1000       # ?
-  Pb-210/INT-B            Plasma                 1000       # ?
-  Pb-210/LNTH-B           Plasma                 1000       # ?
+  Pb-210/ET2-B            ET2-B                     ---
+  Pb-210/ETseq-B          ETseq-B                   ---
+  Pb-210/LNET-B           LNET-B                    ---
+  Pb-210/BB-B             BB-B                      ---
+  Pb-210/BBseq-B          BBseq-B                   ---
+  Pb-210/bb-B             bb-B                      ---
+  Pb-210/bbseq-B          bbseq-B                   ---
+  Pb-210/ALV-B            ALV-B                     ---
+  Pb-210/INT-B            INT-B                     ---
+  Pb-210/LNTH-B           LNTH-B                    ---
 
   Pb-210/Oralcavity       Oralcavity                ---
   Pb-210/Oesophagus-f     Oesophagus-f              ---
@@ -1163,27 +1281,62 @@ Pb-210 Inhalation:Type-S
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Plasma                $sr
-  INT-F                   Plasma                $sr
-  bb-F                    Plasma                $sr
-  bbseq-F                 Plasma                $sr
-  BB-F                    Plasma                $sr
-  BBseq-F                 Plasma                $sr
-  ET2-F                   Plasma                $sr
-  ETseq-F                 Plasma                $sr
-  LNET-F                  Plasma                $sr
-  LNTH-F                  Plasma                $sr
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   Plasma                $ss
-  INT-S                   Plasma                $ss
-  bb-S                    Plasma                $ss
-  bbseq-S                 Plasma                $ss
-  BB-S                    Plasma                $ss
-  BBseq-S                 Plasma                $ss
-  ET2-S                   Plasma                $ss
-  ETseq-S                 Plasma                $ss
-  LNET-S                  Plasma                $ss
-  LNTH-S                  Plasma                $ss
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
