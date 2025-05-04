@@ -853,7 +853,7 @@ namespace FlexID.Calc
                     if (isDecayPath)
                     {
                         // 分岐比が不明な壊変経路は定義できない。
-                        if (!toNuclide.DecayRates.Any(b => b.Parent == fromNuclide.Name))
+                        if (!decayNuclides[fromNuclide].Contains(toNuclide))
                             throw Program.Error($"Line {lineNum}: There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
 
                         var paths = decayPaths.Where(path => path.from == organFrom);
