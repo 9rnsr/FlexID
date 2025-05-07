@@ -260,7 +260,7 @@ namespace FlexID.Calc
             var autoMode = default(bool?);
 
             Dictionary<string, IndexData> indexTable = null;
-            var branches = new List<(string Parent, string Daugher, double Branch)>();
+            var branchTable = new Dictionary<NuclideData, (int LineNum, (string Daughter, decimal Fraction)[] Branches)>();
 
             string line;
             while (true)
@@ -276,6 +276,7 @@ namespace FlexID.Calc
 
                 if (autoMode == true || autoMode == default && values.All(patternNuclide.IsMatch))
                 {
+                    // インデックスファイルから娘核種と分岐比の情報を自動取得する。
                     autoMode = true;
 
                     if (indexTable is null)
@@ -285,68 +286,140 @@ namespace FlexID.Calc
                     {
                         if (!patternNuclide.IsMatch(nuc))
                             throw Program.Error($"Line {LineNum}: '{nuc}' is not nuclide name.");
+                        if (nuclides.Any(n => n.Name == nuc))
+                            throw Program.Error($"Line {LineNum}: Duplicated nuclide definition for '{nuc}'.");
 
-                        var nuclide = new NuclideData { Name = nuc };
+                        indexTable.TryGetValue(nuc, out var indexData);
 
-                        if (indexTable.TryGetValue(nuc, out var indexData))
+                        // インデックスファイルに定義されていないものは安定核種として扱う。
+                        var halfLife = indexData?.HalfLife;
+                        var lambda = indexData?.Lambda;
+                        var branches = indexData?.Daughters.Select(d => (d.Daughter, d.Branch)).ToArray()
+                                    ?? Array.Empty<(string Daughter, decimal Fraction)>();
+
+                        var nuclide = new NuclideData
                         {
-                            nuclide.HalfLife = indexData.HalfLife;
-                            nuclide.Lambda = indexData.Lambda;
-
-                            branches.AddRange(indexData.Daughters.Select(d => (nuc, d.Daughter, (double)d.Branch)));
-                        }
-                        else
-                        {
-                            // NDXファイルに定義されていないものは安定核種として扱う。
-                            nuclide.HalfLife = "---";
-                            nuclide.Lambda = 0.0;
-                        }
-
+                            Name = nuc,
+                            HalfLife = halfLife ?? "---",
+                            Lambda = lambda ?? 0.0,
+                            IsProgeny = nuclides.Count > 0,
+                        };
                         nuclides.Add(nuclide);
+
+                        branchTable[nuclide] = (LineNum, branches);
                     }
-                    continue;
                 }
                 else
+                {
+                    // 崩壊定数、娘核種、および分岐比を直接指定する。
                     autoMode = false;
 
-                if (values.Length != 3)
-                    throw Program.Error($"Line {LineNum}: Nuclide definition should have 3 values.");
+                    if (values.Length < 2)
+                        throw Program.Error($"Line {LineNum}: Nuclide definition should have at least 2 values.");
 
-                if (!double.TryParse(values[1], out var lambda))
-                    throw Program.Error($"Line {LineNum}: Cannot get nuclide Lambda.");
-                if (lambda < 0)
-                    throw Program.Error($"Line {LineNum}: Nuclide Lambda should be positive.");
+                    var nuc = values[0];
+                    if (nuclides.Any(n => n.Name == nuc))
+                        throw Program.Error($"Line {LineNum}: Duplicated nuclide definition for '{nuc}'.");
 
-                if (!double.TryParse(values[2], out var decayRate))
-                    throw Program.Error($"Line {LineNum}: Cannot get nuclide DecayRate.");
-                if (decayRate < 0)
-                    throw Program.Error($"Line {LineNum}: Nuclide DecayRate should be positive.");
+                    if (!double.TryParse(values[1], out var lambda))
+                        throw Program.Error($"Line {LineNum}: Cannot get nuclide Lambda.");
+                    if (lambda < 0)
+                        throw Program.Error($"Line {LineNum}: Nuclide Lambda should be positive.");
 
-                nuclides.Add(new NuclideData
-                {
-                    Name = values[0],
-                    Lambda = lambda,
-                    DecayRates = nuclides.Count == 0
-                        ? Array.Empty<(string Parent, double Branch)>()
-                        : new[] { (Parent: nuclides.Last().Name, Branch: decayRate) },
-                });
+                    var nuclide = new NuclideData
+                    {
+                        Name = nuc,
+                        Lambda = lambda,
+                        IsProgeny = nuclides.Count > 0,
+                    };
+                    nuclides.Add(nuclide);
+
+                    var branches = new (string Daughter, decimal Fraction)[values.Length - 2];
+                    for (int i = 0; i < branches.Length; i++)
+                    {
+                        var part = values[i + 2];
+
+                        var iSep = part.IndexOf('/');
+                        if (iSep == -1)
+                            throw Program.Error($"Line {LineNum}: Daughter name and branching fraction should be separated with '/'.");
+                        if (iSep == 0)
+                            throw Program.Error($"Line {LineNum}: Daughter name should not be empty.");
+
+                        var daughter = part.Substring(0, iSep);
+                        var frac = part.Substring(iSep + 1);
+
+                        if (!decimal.TryParse(frac, out var fraction))
+                            throw Program.Error($"Line {LineNum}: Cannot get branching fraction.");
+                        if (fraction < 0)
+                            throw Program.Error($"Line {LineNum}: Branching fraction should be positive.");
+
+                        branches[i] = (daughter, fraction);
+                    }
+                    branchTable[nuclide] = (LineNum, branches);
+                }
             }
 
-            if (autoMode == true && nuclides.Any())
+            // 壊変する娘核種とその分岐比を設定する。
+            foreach (var entry in branchTable)
             {
-                // 親核種のDecayRatesについては空に設定する。
-                nuclides.First().DecayRates = Array.Empty<(string Parent, double Branch)>();
+                var nuclide = entry.Key;
+                var lineNum = entry.Value.LineNum;
+                var branches = entry.Value.Branches;
 
-                // 親を持つ子孫核種のDecayRatesについて設定する。
-                foreach (var nuclide in nuclides.Skip(1))
+                NuclideData GetNuclide(string nuc)
+                    => nuclides.FirstOrDefault(n => n.Name == nuc);
+
+                if (autoMode == true)
                 {
-                    var nuc = nuclide.Name;
+                    // インデックスファイルには定義されているが、インプットでは
+                    // 計算対象として指定されていない娘核種への分岐を除去する。
+                    nuclide.Branches = branches
+                        .Select(b => (Daughter: GetNuclide(b.Daughter), (double)b.Fraction))
+                        .Where(b => b.Daughter != null).ToArray();
+                }
+                else
+                {
+                    // 全ての娘核種の名前が[nuclide]セクションで定義されていることを確認する。
+                    nuclide.Branches = branches.Select(b =>
+                    {
+                        var daughter = GetNuclide(b.Daughter);
+                        if (daughter is null)
+                            throw Program.Error($"Line {lineNum}: Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
+                        return (Daughter: daughter, (double)b.Fraction);
+                    }).ToArray();
+                }
+            }
 
-                    var decayRates = branches.Where(b => b.Daugher == nuc).Select(b => (b.Parent, b.Branch)).ToArray();
-                    if (!decayRates.Any())
-                        throw Program.Error($"Progeny nuclide '{nuc}' has no decay path from any other nuclides.");
+            // 崩壊系列が適切であることを確認する。
+            var root = nuclides.FirstOrDefault();
+            foreach (var nuclide in nuclides)
+            {
+                var tested = new List<NuclideData>();
 
-                    nuclide.DecayRates = decayRates;
+                CycleCheck(nuclide);
+
+                void CycleCheck(NuclideData target)
+                {
+                    foreach (var (daughter, _) in target.Branches)
+                    {
+                        // 自分自身へ壊変する経路が存在しないことを確認する。
+                        if (daughter == target)
+                            throw Program.Error($"Nuclide '{target.Name}' has a decay path to itself.");
+
+                        // 親核種に壊変する核種が存在しないことを確認する。
+                        if (daughter == root)
+                            throw Program.Error($"Nuclide '{target.Name}' has a decay path to parent nuclide '{root.Name}'.");
+
+                        // 循環する壊変経路がないことを確認する。
+                        if (daughter == nuclide)
+                            throw Program.Error($"Nuclide '{nuclide.Name}'  has a cyclic decay path starting from '{target.Name}'.");
+
+                        if (tested.Contains(daughter))
+                            continue;
+                        tested.Add(daughter);
+
+                        CycleCheck(daughter);
+                    }
                 }
             }
 
@@ -578,21 +651,16 @@ namespace FlexID.Calc
         /// <returns>rootを含まない、子孫核種のみの配列。</returns>
         private NuclideData[] GetDecayNuclides(NuclideData root)
         {
-            IEnumerable<NuclideData> GetParents(NuclideData nuclide) =>
-                nuclide.DecayRates.Select(b => nuclides.First(n => n.Name == b.Parent));
-
             var results = new List<NuclideData> { root };
 
         Lagain:
             var count = results.Count;
-            foreach (var nuclide in nuclides)
+            for (int i = 0; i < count; i++)
             {
-                // 系列を構成する核種の娘がnuclideである場合に、これを追加する。
-                if (!results.Contains(nuclide) &&
-                    GetParents(nuclide).Any(parent => results.Contains(parent)))
-                {
-                    results.Add(nuclide);
-                }
+                // 系列を構成する核種の娘を追加する。
+                var nuclide = results[i];
+                var daughters = nuclide.Branches.Select(b => b.Daughter);
+                results.AddRange(daughters.Where(d => !results.Contains(d)));
             }
             // 系列を構成する核種が増えなくなるまで繰り返す。
             if (results.Count > count)
@@ -649,9 +717,6 @@ namespace FlexID.Calc
             {
                 var nuclides = DecayNuclides.Prepend(RootCompartment.Nuclide);
 
-                IEnumerable<NuclideData> GetParents(NuclideData nuclide) => nuclide.DecayRates
-                    .Select(b => nuclides.FirstOrDefault(n => n.Name == b.Parent)).Where(n => n != null);
-
                 var results = new List<(NuclideData Parent, NuclideData Daughter)>();
                 foreach (var parent in nuclides)
                 {
@@ -659,7 +724,7 @@ namespace FlexID.Calc
                     {
                         if (parent == daughter)
                             continue;
-                        if (GetParents(daughter).Contains(parent))
+                        if (parent.Branches.Any(b => b.Daughter == daughter))
                             results.Add((parent, daughter));
                     }
                 }
@@ -1006,15 +1071,14 @@ namespace FlexID.Calc
                 if (to is null)
                     to = chain.AddDecayCompartment(data, path.Daughter);
 
-                var parentNuc = from.Nuclide.Name;
-                var branch = to.Nuclide.DecayRates.First(b => b.Parent == parentNuc).Branch;
+                var branch = from.Nuclide.Branches.First(b => b.Daughter == to.Nuclide);
 
                 to.Inflows.Add(new Inflow
                 {
                     ID = from.ID,
 
                     // 壊変経路では、親からの分岐比を移行割合としてとする。
-                    Rate = branch,
+                    Rate = branch.Fraction,
 
                     // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
                     Organ = from,

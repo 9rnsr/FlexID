@@ -68,6 +68,8 @@ namespace FlexID.Calc
                 age == "Age:adult"  /**/? 365 * 25 : // 現在はSrしか計算しないため25歳で決め打ち、今後インプット等で成人の年齢を読み込む必要あり？
                 throw new NotSupportedException();
 
+            var branchTable = new List<double>();
+
             {
                 var isProgeny = false;
             Lcont:
@@ -82,11 +84,11 @@ namespace FlexID.Calc
                 {
                     Name = values[0],
                     Lambda = double.Parse(values[1]),
-                    DecayRates = data.Nuclides.Count == 0
-                        ? Array.Empty<(string Parent, double Branch)>()
-                        : new[] { (Parent: data.Nuclides.Last().Name, Branch: double.Parse(values[2])) },
+                    IsProgeny = isProgeny,
                 };
                 data.Nuclides.Add(nuclide);
+
+                branchTable.Add(double.Parse(values[2]));
 
                 if (!isProgeny)
                 {
@@ -226,6 +228,22 @@ namespace FlexID.Calc
                 }
             }
 
+            // 娘核種への分岐比を設定する。
+            for (int i = 0; i < data.Nuclides.Count; i++)
+            {
+                var nuclide = data.Nuclides[i];
+                if (i + 1 < data.Nuclides.Count)
+                {
+                    var fraction = branchTable[i + 1];
+                    var daughter = data.Nuclides[i + 1];
+                    nuclide.Branches = new[] { (daughter, fraction) };
+                }
+                else
+                {
+                    nuclide.Branches = Array.Empty<(NuclideData, double)>();
+                }
+            }
+
             foreach (var organ in data.Organs)
             {
                 foreach (var inflow in organ.Inflows)
@@ -239,7 +257,12 @@ namespace FlexID.Calc
                     // 流入割合がマイナスの時の処理は親からの分岐比とする。
                     if (inflow.Rate < 0)
                     {
-                        inflow.Rate = organ.Nuclide.DecayRates[0].Branch;
+                        var fromNuclide = inflow.Organ.Nuclide;
+                        var toNuclide = organ.Nuclide;
+                        var branch = fromNuclide.Branches.FirstOrDefault(b => b.Daughter == toNuclide);
+                        if (branch == default)
+                            throw Program.Error($": There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
+                        inflow.Rate = branch.Fraction;
                     }
                 }
             }

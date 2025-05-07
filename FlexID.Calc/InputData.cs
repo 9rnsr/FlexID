@@ -152,14 +152,14 @@ namespace FlexID.Calc
         public double Lambda;
 
         /// <summary>
-        /// 親核種からの崩壊割合(100%＝1.00と置いた比で持つ)。
+        /// 娘核種への分岐比(100%＝1.00と置いた比で持つ)。
         /// </summary>
-        public (string Parent, double Branch)[] DecayRates;
+        public (NuclideData Daughter, double Fraction)[] Branches;
 
         /// <summary>
         /// 子孫核種の場合は<c>true</c>。
         /// </summary>
-        public bool IsProgeny => DecayRates.Length != 0;
+        public bool IsProgeny { get; set; }
 
         /// <summary>
         /// S係数データにおける各線源領域の名称。
