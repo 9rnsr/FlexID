@@ -110,7 +110,7 @@ namespace FlexID.Calc
         {
             var formatted = data.Nuclides
                 .Select(n => (Nuclide: n.Name, Lambda: n.Lambda.ToString("E"), HalfLife: n.HalfLife ?? "",
-                              DecayRates: n.DecayRates.Select(d => $"{d.Parent}/{d.Branch}").ToArray())).ToArray();
+                              Branches: n.Branches.Select(d => $"{d.Daughter.Name}/{d.Fraction}").ToArray())).ToArray();
 
             const string HeaderN = "Nuclide";
             const string HeaderL = "Lambda";
@@ -119,7 +119,7 @@ namespace FlexID.Calc
             var widthN = formatted.Select(n => n.Nuclide.Length).Max();
             var widthL = formatted.Select(n => n.Lambda.Length).Max();
             var widthHL = formatted.Select(n => n.HalfLife.Length).Max();
-            var widthBr = formatted.SelectMany(n => n.DecayRates).Append("").Max(r => r.Length);
+            var widthBr = formatted.SelectMany(n => n.Branches).Append("").Max(r => r.Length);
 
             widthN = Math.Max(widthN, HeaderN.Length);
             widthL = Math.Max(widthL, HeaderL.Length);
@@ -169,10 +169,10 @@ namespace FlexID.Calc
                     WriteStr("  ");
                     WriteStr(nuclide.HalfLife, widthHL);
                 }
-                if (nuclide.DecayRates.Any())
+                if (nuclide.Branches.Any())
                 {
                     WriteStr(" ");
-                    foreach (var branch in nuclide.DecayRates)
+                    foreach (var branch in nuclide.Branches)
                     {
                         WriteStr(" ");
                         WriteStr(branch, -widthBr);

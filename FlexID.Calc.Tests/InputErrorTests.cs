@@ -22,8 +22,8 @@ namespace FlexID.Calc.Tests
                 "dummy2",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
-                "  Y-90   2.595247E-01  1.0",
+                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -46,7 +46,7 @@ namespace FlexID.Calc.Tests
                 "# dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -98,10 +98,10 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[nuclide]",
-                "  Y-90   2.595247E-01  1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -124,7 +124,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "# [nuclide]",
-                "#   Sr-90  6.596156E-05  0.0",
+                "#   Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -162,7 +162,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -188,7 +188,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "# [Sr-90:compartment]",
                 "#   inp    input     ---",
@@ -211,7 +211,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "",
@@ -231,7 +231,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -258,7 +258,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -281,7 +281,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -295,7 +295,7 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        public void NuclideShouldHave3Values()
+        public void NuclideAutoModeInvalidName()
         {
             var reader = CreateReader(new[]
             {
@@ -303,7 +303,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  # 0.0",
+                "  Sr-90  Y-90",
+                "  aaa",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -314,7 +315,77 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 5: Nuclide definition should have 3 values.", e.Message);
+            Assert.AreEqual("Line 6: 'aaa' is not nuclide name.", e.Message);
+        }
+
+        [TestMethod]
+        public void NuclideAutoModeDuplicatedDefinition()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  Sr-90  Sr-90",
+                "",
+                "[Sr-90:compartment]",
+                "  inp    input     ---",
+                "  acc    ST0       ---",
+                "",
+                "[Sr-90:transfer]",
+                "  input      ST0   100%",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Line 5: Duplicated nuclide definition for 'Sr-90'.", e.Message);
+        }
+
+        [TestMethod]
+        public void NuclideDuplicatedDefinition()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Sr-90  2.595247E-01",
+                "",
+                "[Sr-90:compartment]",
+                "  inp    input     ---",
+                "  acc    ST0       ---",
+                "",
+                "[Sr-90:transfer]",
+                "  input      ST0   100%",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Line 6: Duplicated nuclide definition for 'Sr-90'.", e.Message);
+        }
+
+        [TestMethod]
+        public void NuclideShouldHaveAtLeast2Values()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  6.596156E-05",
+                "",
+                "[Sr-90:compartment]",
+                "  inp    input     ---",
+                "  acc    ST0       ---",
+                "",
+                "[Sr-90:transfer]",
+                "  input      ST0   100%",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Line 5: Nuclide definition should have at least 2 values.", e.Message);
         }
 
         [TestMethod]
@@ -326,7 +397,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  abcdefg  0.0",
+                "  Sr-90  abcdefg",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -349,7 +420,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  -6.596156E-05  0.0",
+                "  Sr-90  -6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -364,7 +435,7 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
-        public void NuclideDecayRateIsNotValue()
+        public void NuclideBranchingIncorrect()
         {
             var reader = CreateReader(new[]
             {
@@ -372,7 +443,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  xyz",
+                "  Sr-90  6.596156E-05  abc",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -383,11 +455,11 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 5: Cannot get nuclide DecayRate.", e.Message);
+            Assert.AreEqual("Line 5: Daughter name and branching fraction should be separated with '/'.", e.Message);
         }
 
         [TestMethod]
-        public void NuclideDecayIsNotPositive()
+        public void NuclideBranchingDaughterIsEmpty()
         {
             var reader = CreateReader(new[]
             {
@@ -395,7 +467,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  -1.0",
+                "  Sr-90  6.596156E-05  /1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -406,7 +479,55 @@ namespace FlexID.Calc.Tests
             });
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
-            Assert.AreEqual("Line 5: Nuclide DecayRate should be positive.", e.Message);
+            Assert.AreEqual("Line 5: Daughter name should not be empty.", e.Message);
+        }
+
+        [TestMethod]
+        public void NuclideBranchingFractionIsNotValue()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  Sr-90  6.596156E-05  Y-90/xyz",
+                "  Y-90   2.595247E-01",
+                "",
+                "[Sr-90:compartment]",
+                "  inp    input     ---",
+                "  acc    ST0       ---",
+                "",
+                "[Sr-90:transfer]",
+                "  input      ST0   100%",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Line 5: Cannot get branching fraction.", e.Message);
+        }
+
+        [TestMethod]
+        public void NuclideBranchingFractionIsNotPositive()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  Sr-90  6.596156E-05  Y-90/-1.0",
+                "  Y-90   2.595247E-01",
+                "",
+                "[Sr-90:compartment]",
+                "  inp    input     ---",
+                "  acc    ST0       ---",
+                "",
+                "[Sr-90:transfer]",
+                "  input      ST0   100%",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Line 5: Branching fraction should be positive.", e.Message);
         }
 
         [TestMethod]
@@ -418,7 +539,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input   # ---",
@@ -441,7 +562,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -464,7 +585,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -488,7 +609,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  acc    ST0   ---",
@@ -511,8 +632,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
-                "  Y-90   2.595247E-01  1.0",
+                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -542,7 +663,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -565,7 +686,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -588,7 +709,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -611,7 +732,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -635,7 +756,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -659,8 +780,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
-                "  Y-90   2.595247E-01  1.0",
+                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -689,7 +810,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -713,7 +834,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -737,7 +858,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -761,7 +882,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -785,7 +906,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -809,7 +930,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -834,8 +955,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
-                "  Y-90   2.595247E-01  1.0",
+                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -864,8 +985,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
-                "  Y-90   2.595247E-01  1.0",
+                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input      ---",
@@ -896,8 +1017,8 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
-                "  Y-90   2.595247E-01  1.0",
+                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Y-90   2.595247E-01",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input      ---",
@@ -926,7 +1047,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input      ---",
@@ -949,7 +1070,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input      ---",
@@ -975,7 +1096,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input      ---",
@@ -1000,7 +1121,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input      ---",
@@ -1025,7 +1146,7 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  0.0",
+                "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input      ---",
