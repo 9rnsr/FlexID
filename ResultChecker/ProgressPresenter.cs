@@ -40,7 +40,7 @@ namespace ResultChecker
         private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim();
 
         private string windmill = "/";
-        private readonly TimeSpan wait = TimeSpan.FromMilliseconds(100);
+        private readonly TimeSpan wait = TimeSpan.FromMilliseconds(250);
 
         private int totalCount;
         private int finishCount;
