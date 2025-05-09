@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace FlexID
+namespace FlexID.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
