@@ -1,3 +1,5 @@
+#define DEBUG_ParallelRunningCount
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +45,9 @@ namespace ResultChecker
         private int totalCount;
         private int finishCount;
         private const int DumpCount = 10;
+#if DEBUG_ParallelRunningCount
+        private int runningCount;
+#endif
 
         /// <summary>
         /// コンストラクタ。
@@ -93,6 +98,9 @@ namespace ResultChecker
                 var item = new ItemData(name);
                 items.Add(item);
                 PrintOut(item, overwriteLine: true);
+#if DEBUG_ParallelRunningCount
+                //System.Diagnostics.Debug.WriteLine($"START {name} : ThreadID = {Thread.CurrentThread.ManagedThreadId}");
+#endif
             }
             finally
             {
@@ -117,6 +125,9 @@ namespace ResultChecker
 
                 var target = items[i];
                 target.SetStatus(status, message);
+#if DEBUG_ParallelRunningCount
+                System.Diagnostics.Debug.WriteLine($"END   {name} : ThreadID = {Thread.CurrentThread.ManagedThreadId}");
+#endif
             }
             finally
             {
@@ -162,6 +173,14 @@ namespace ResultChecker
                 // 実行中の項目を出力。
                 foreach (var item in items)
                     PrintOut(item, overwriteLine);
+
+#if DEBUG_ParallelRunningCount
+                if (items.Count != runningCount)
+                {
+                    runningCount = items.Count;
+                    System.Diagnostics.Debug.WriteLine($"runningCount = {runningCount}");
+                }
+#endif
             }
             finally
             {
@@ -214,6 +233,9 @@ namespace ResultChecker
         {
             Console.Write("\x1B[K");
             Console.WriteLine($"=== {finishCount} / {totalCount} done ===");
+#if DEBUG_ParallelRunningCount
+            System.Diagnostics.Debug.WriteLine($"=== {finishCount} / {totalCount} done ===");
+#endif
         }
 
         public async Task WaitForExit()
