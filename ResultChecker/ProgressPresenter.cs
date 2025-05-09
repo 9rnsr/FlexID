@@ -40,7 +40,7 @@ namespace ResultChecker
         private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim();
 
         private string windmill = "/";
-        private readonly TimeSpan wait = TimeSpan.FromMilliseconds(100);
+        private readonly TimeSpan wait = TimeSpan.FromMilliseconds(250);
 
         private int totalCount;
         private int finishCount;
@@ -63,6 +63,9 @@ namespace ResultChecker
             // 一定間隔ごとに画面を更新するためのタスク。
             task = new Task(async () =>
             {
+                // カーソルを非表示にする。
+                Console.Write("\x1B[?25l");
+
                 DumpOut();
 
                 while (!cancellationToken.IsCancellationRequested)
@@ -81,6 +84,10 @@ namespace ResultChecker
 
                 if (totalCount % DumpCount != 0)
                     DumpOut();
+
+                // カーソルを再表示する。
+                Console.Write("\x1B[?25h");
+
             }, TaskCreationOptions.LongRunning);
 
             task.Start();
@@ -221,7 +228,7 @@ namespace ResultChecker
 
             // メッセージがある場合はこれを追加出力。
             if (item.IsFinished && item.Message != null)
-                Console.WriteLine($" : \x1B[33m{item.Message}\u001b[0m");
+                Console.WriteLine($" : \x1B[33m{item.Message}\x1B[0m");
             else
                 Console.WriteLine();
         }
