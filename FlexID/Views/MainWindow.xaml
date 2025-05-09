@@ -42,7 +42,7 @@
       HorizontalAlignment="Right"
       VerticalAlignment="Top"
       Command="{Binding AboutCommand}"
-      Content="_About..." />
+      Content="_About ..." />
   </Grid>
 
 </Window>
