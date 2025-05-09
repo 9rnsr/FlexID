@@ -1,36 +1,48 @@
 <Window
-  x:Class="FlexID.MainWindow"
+  x:Class="FlexID.Views.MainWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:prism="http://prismlibrary.com/"
   xmlns:v="clr-namespace:FlexID.Views"
+  xmlns:vm="clr-namespace:FlexID.ViewModels"
   Title="FlexID"
   Width="600"
+  d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
+  prism:ViewModelLocator.AutoWireViewModel="True"
   Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
   FontSize="14"
   mc:Ignorable="d">
 
-  <TabControl
-    Margin="4"
-    Padding="32,12"
-    prism:RegionManager.RegionName="ContentRegion"
-    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-    Grid.IsSharedSizeScope="True">
+  <Grid Margin="4">
+    <TabControl
+      Margin="0,8,0,0"
+      Padding="32,12"
+      prism:RegionManager.RegionName="ContentRegion"
+      Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+      Grid.IsSharedSizeScope="True">
 
-    <TabItem Header="OIR">
-      <v:InputOIRView />
-    </TabItem>
+      <TabItem Header="OIR">
+        <v:InputOIRView />
+      </TabItem>
 
-    <TabItem Header="EIR">
-      <v:InputEIRView />
-    </TabItem>
+      <TabItem Header="EIR">
+        <v:InputEIRView />
+      </TabItem>
 
-    <TabItem Header="OIR S-Coeff">
-      <v:ScoeffCalcView />
-    </TabItem>
+      <TabItem Header="OIR S-Coeff">
+        <v:ScoeffCalcView />
+      </TabItem>
 
-  </TabControl>
+    </TabControl>
+
+    <Button
+      HorizontalAlignment="Right"
+      VerticalAlignment="Top"
+      Command="{Binding AboutCommand}"
+      Content="_About..." />
+  </Grid>
 
 </Window>
