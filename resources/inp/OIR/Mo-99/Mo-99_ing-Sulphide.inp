@@ -1,0 +1,414 @@
+[title]
+Mo-99 Ingestion:Sulphide
+
+[nuclide]
+  Mo-99  Tc-99m  Tc-99
+
+
+[Mo-99:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver                 Liver
+  acc   KidneyUrinaryPath     Kidneys
+  acc   KidneyOtherTissue     Kidneys
+  acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
+
+[Mo-99:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.305 Table 14.2 / Ingested material, Sulphide
+  $fA = 0.05
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.310 Table 14.3
+  Blood1                  Blood2                   12.5
+  Blood1                  Liver                    14.2
+  Blood1                  UB-con                    6.5
+  Blood2                  KidneyUrinaryPath         1.7
+  Blood2                  KidneyOtherTissue         0.115
+  Blood2                  OtherTissue               1.73
+  Liver                   RC-con                    0.0048
+  Liver                   Blood2                    0.0122
+  KidneyOtherTissue       Blood2                    0.0474
+  OtherTissue             Blood2                    0.0323
+  KidneyUrinaryPath       UB-con                    1.40
+
+
+[Tc-99m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Tc-99m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#   • The default absorption fraction, fA, for a progeny radionuclide produced by
+#     decay in the contents of the alimentary tract (in the small intestine or a higher
+#     compartment) following ingestion of a parent radionuclide, or produced in a
+#     systemic compartment and subsequently transferred into the alimentary tract
+#     content, is the reference value of fA for the progeny radionuclide when ingested
+#     as a parent. If the radionuclide has multiple reference values corresponding to
+#     different chemical or physical forms, the default value of fA is the highest reference
+#     value provided.
+#
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic compartments
+#   into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
+# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.9
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Mo-99/Oralcavity        Oralcavity                ---
+  Mo-99/Oesophagus-f      Oesophagus-f              ---
+  Mo-99/Oesophagus-s      Oesophagus-s              ---
+  Mo-99/St-con            St-con                    ---
+  Mo-99/SI-con            SI-con                    ---
+  Mo-99/RC-con            RC-con                    ---
+  Mo-99/LC-con            LC-con                    ---
+  Mo-99/RS-con            RS-con                    ---
+  Mo-99/Faeces            Faeces                    ---
+  Mo-99/UB-con            UB-con                    ---
+  Mo-99/Urine             Urine                     ---
+
+# ICRP Publ.134 p.313 Para.664
+  Mo-99/Blood1            Blood                     ---
+  Mo-99/Blood2            Blood                  1000       # t½ = 1 min
+  Mo-99/Liver             Liver2                    ---
+  Mo-99/KidneyUrinaryPath Blood                     0.462
+  Mo-99/KidneyOtherTissue Blood                     0.462
+  Mo-99/OtherTissue       Blood                     0.462
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.134 p.334 Fig.15.1
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-sRe          St-conRe               2160
+  St-conRe                SI-conRe                 20.57
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.334 Table 15.3
+  Blood                   Thyroid1                  7.0
+  Blood                   ST0                      71.88
+  Blood                   ST1                       3.0
+  Blood                   ST2                       0.18
+  Blood                   UB-con                    1.7
+  Blood                   S-glands                  2.6
+  Blood                   St-wall                   4.3
+  Blood                   Kidneys1                  0.7
+  Blood                   Kidneys2                  0.04
+  Blood                   Liver1                    4.5
+  Blood                   RC-wall                   3.4
+  Blood                   T-bone-S                  0.35
+  Blood                   C-bone-S                  0.35
+  Thyroid1                Blood                   100
+  Thyroid1                Thyroid2                  1.0
+  Thyroid2                Blood                     1.0
+  ST0                     Blood                    50
+  ST1                     Blood                     0.462
+  ST2                     Blood                     0.0347
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  Kidneys1                UB-con                    8.32
+  Kidneys2                Blood                     0.0347
+  Liver1                  Blood                     8.234
+  Liver1                  Liver2                    0.0832
+  Liver2                  Blood                     0.0347
+  RC-wall                 RC-con                    1.39
+  T-bone-S                Blood                     0.457
+  T-bone-S                T-bone-V                  0.00462
+  C-bone-S                Blood                     0.457
+  C-bone-S                C-bone-V                  0.00462
+  T-bone-V                Blood                     0.000493
+  C-bone-V                Blood                     0.0000821
+
+
+[Tc-99:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Tc-99:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#   • The default absorption fraction, fA, for a progeny radionuclide produced by
+#     decay in the contents of the alimentary tract (in the small intestine or a higher
+#     compartment) following ingestion of a parent radionuclide, or produced in a
+#     systemic compartment and subsequently transferred into the alimentary tract
+#     content, is the reference value of fA for the progeny radionuclide when ingested
+#     as a parent. If the radionuclide has multiple reference values corresponding to
+#     different chemical or physical forms, the default value of fA is the highest reference
+#     value provided.
+#
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic compartments
+#   into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
+# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.9
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Mo-99/Oralcavity        Oralcavity                ---
+  Mo-99/Oesophagus-f      Oesophagus-f              ---
+  Mo-99/Oesophagus-s      Oesophagus-s              ---
+  Mo-99/St-con            St-con                    ---
+  Mo-99/SI-con            SI-con                    ---
+  Mo-99/RC-con            RC-con                    ---
+  Mo-99/LC-con            LC-con                    ---
+  Mo-99/RS-con            RS-con                    ---
+  Mo-99/Faeces            Faeces                    ---
+  Mo-99/UB-con            UB-con                    ---
+  Mo-99/Urine             Urine                     ---
+
+# ICRP Publ.134 p.313 Para.664
+  Mo-99/Blood1            Blood                     ---
+  Mo-99/Blood2            Blood                  1000       # t½ = 1 min
+  Mo-99/Liver             Liver2                    ---
+  Mo-99/KidneyUrinaryPath Blood                     0.462
+  Mo-99/KidneyOtherTissue Blood                     0.462
+  Mo-99/OtherTissue       Blood                     0.462
+
+  Tc-99m/Oralcavity       Oralcavity                ---
+  Tc-99m/OralcavityRe     OralcavityRe              ---
+  Tc-99m/Oesophagus-f     Oesophagus-f              ---
+  Tc-99m/Oesophagus-s     Oesophagus-s              ---
+  Tc-99m/Oesophagus-sRe   Oesophagus-sRe            ---
+  Tc-99m/St-wall          St-wall                   ---
+  Tc-99m/St-con           St-con                    ---
+  Tc-99m/St-conRe         St-conRe                  ---
+  Tc-99m/SI-con           SI-con                    ---
+  Tc-99m/SI-conRe         SI-conRe                  ---
+  Tc-99m/RC-wall          RC-wall                   ---
+  Tc-99m/RC-con           RC-con                    ---
+  Tc-99m/LC-con           LC-con                    ---
+  Tc-99m/RS-con           RS-con                    ---
+  Tc-99m/Faeces           Faeces                    ---
+  Tc-99m/UB-con           UB-con                    ---
+  Tc-99m/Urine            Urine                     ---
+
+  Tc-99m/Blood            Blood                     ---
+  Tc-99m/Liver1           Liver1                    ---
+  Tc-99m/Liver2           Liver2                    ---
+  Tc-99m/Kidneys1         Kidneys1                  ---
+  Tc-99m/Kidneys2         Kidneys2                  ---
+  Tc-99m/Thyroid1         Thyroid1                  ---
+  Tc-99m/Thyroid2         Thyroid2                  ---
+  Tc-99m/S-glands         S-glands                  ---
+  Tc-99m/T-bone-S         T-bone-S                  ---
+  Tc-99m/T-bone-V         T-bone-V                  ---
+  Tc-99m/C-bone-S         C-bone-S                  ---
+  Tc-99m/C-bone-V         C-bone-V                  ---
+  Tc-99m/ST0              ST0                       ---
+  Tc-99m/ST1              ST1                       ---
+  Tc-99m/ST2              ST2                       ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.134 p.334 Fig.15.1
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-sRe          St-conRe               2160
+  St-conRe                SI-conRe                 20.57
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.334 Table 15.3
+  Blood                   Thyroid1                  7.0
+  Blood                   ST0                      71.88
+  Blood                   ST1                       3.0
+  Blood                   ST2                       0.18
+  Blood                   UB-con                    1.7
+  Blood                   S-glands                  2.6
+  Blood                   St-wall                   4.3
+  Blood                   Kidneys1                  0.7
+  Blood                   Kidneys2                  0.04
+  Blood                   Liver1                    4.5
+  Blood                   RC-wall                   3.4
+  Blood                   T-bone-S                  0.35
+  Blood                   C-bone-S                  0.35
+  Thyroid1                Blood                   100
+  Thyroid1                Thyroid2                  1.0
+  Thyroid2                Blood                     1.0
+  ST0                     Blood                    50
+  ST1                     Blood                     0.462
+  ST2                     Blood                     0.0347
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  Kidneys1                UB-con                    8.32
+  Kidneys2                Blood                     0.0347
+  Liver1                  Blood                     8.234
+  Liver1                  Liver2                    0.0832
+  Liver2                  Blood                     0.0347
+  RC-wall                 RC-con                    1.39
+  T-bone-S                Blood                     0.457
+  T-bone-S                T-bone-V                  0.00462
+  C-bone-S                Blood                     0.457
+  C-bone-S                C-bone-V                  0.00462
+  T-bone-V                Blood                     0.000493
+  C-bone-V                Blood                     0.0000821
