@@ -163,7 +163,7 @@ namespace ResultChecker
 
             condition.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
             condition.LowValue.Value = 0.5;
-            condition.LowValue.Color = Color.LightBlue;
+            condition.LowValue.Color = Color.DeepSkyBlue;
             condition.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Num;
             condition.MiddleValue.Value = 1.0;
             condition.MiddleValue.Color = Color.LightGreen;
