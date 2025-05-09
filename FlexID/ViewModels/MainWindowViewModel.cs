@@ -1,4 +1,6 @@
+using FlexID.Services;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using System.Windows;
 
@@ -11,11 +13,11 @@ namespace FlexID.ViewModels
         /// <summary>
         /// コンストラクタ。
         /// </summary>
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDialogService dialogService)
         {
             AboutCommand = new ReactiveCommand().WithSubscribe(() =>
             {
-                MessageBox.Show("test", "About", MessageBoxButton.OK);
+                dialogService.ShowMessage("About FlexID", "FlexID Version x.yy.zz", MessageBoxButton.OK);
             });
         }
     }

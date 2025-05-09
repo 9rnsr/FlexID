@@ -1,0 +1,111 @@
+﻿<UserControl
+  x:Class="FlexID.Views.MessageDialogView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:FlexID.Views"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:prism="http://prismlibrary.com/"
+  xmlns:vb="clr-namespace:FlexID.Views.Behaviors"
+  xmlns:vc="clr-namespace:FlexID.Views.Converters"
+  xmlns:vm="clr-namespace:FlexID.ViewModels"
+  Width="600"
+  d:DataContext="{d:DesignInstance vm:MessageDialogViewModel}"
+  d:DesignWidth="600"
+  mc:Ignorable="d">
+
+  <prism:Dialog.WindowStyle>
+    <Style TargetType="{x:Type Window}">
+      <Setter Property="Title" Value="{Binding Title}" />
+      <Setter Property="SizeToContent" Value="WidthAndHeight" />
+      <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterOwner" />
+    </Style>
+  </prism:Dialog.WindowStyle>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Border
+      Grid.Row="0"
+      MinHeight="80"
+      Margin="15">
+
+      <TextBlock
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        d:Text="これはテストメッセージです。メッセージが長くなった場合には画面端で折り返されます。非常に長いメッセージの場合は、自動で縦方向に伸びます。改行も可。"
+        Text="{Binding Message}"
+        TextWrapping="Wrap" />
+    </Border>
+
+    <StackPanel
+      Grid.Row="1"
+      HorizontalAlignment="Center"
+      Orientation="Horizontal">
+
+      <StackPanel.Resources>
+        <vc:DefaultButtonConverter x:Key="DefaultButtonConverter" />
+
+        <Style TargetType="{x:Type Button}">
+          <Setter Property="Width" Value="80" />
+          <Setter Property="Height" Value="32" />
+          <Setter Property="Margin" Value="12" />
+          <Setter Property="vb:FocusBehavior.IsFocused">
+            <Setter.Value>
+              <Binding Path="IsDefault" RelativeSource="{RelativeSource Self}" />
+            </Setter.Value>
+          </Setter>
+          <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Visibility" Value="Collapsed" />
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </StackPanel.Resources>
+
+      <Button Command="{Binding OKCommand}" Content="OK">
+        <Button.IsDefault>
+          <Binding
+            Converter="{StaticResource DefaultButtonConverter}"
+            ConverterParameter="{x:Static MessageBoxResult.OK}"
+            Path="DefaultResult" />
+        </Button.IsDefault>
+      </Button>
+
+      <Button Command="{Binding YesCommand}" Content="_Yes">
+        <Button.IsDefault>
+          <Binding
+            Converter="{StaticResource DefaultButtonConverter}"
+            ConverterParameter="{x:Static MessageBoxResult.Yes}"
+            Path="DefaultResult" />
+        </Button.IsDefault>
+      </Button>
+
+      <Button Command="{Binding NoCommand}" Content="_No">
+        <Button.IsDefault>
+          <Binding
+            Converter="{StaticResource DefaultButtonConverter}"
+            ConverterParameter="{x:Static MessageBoxResult.No}"
+            Path="DefaultResult" />
+        </Button.IsDefault>
+      </Button>
+
+      <Button
+        Command="{Binding CancelCommand}"
+        Content="Cancel"
+        IsCancel="True">
+        <Button.IsDefault>
+          <Binding
+            Converter="{StaticResource DefaultButtonConverter}"
+            ConverterParameter="{x:Static MessageBoxResult.Cancel}"
+            Path="DefaultResult" />
+        </Button.IsDefault>
+      </Button>
+
+    </StackPanel>
+  </Grid>
+
+</UserControl>

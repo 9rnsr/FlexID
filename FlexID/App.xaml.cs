@@ -15,6 +15,9 @@ namespace FlexID
             containerRegistry.RegisterSingleton<CalcState>();
             containerRegistry.RegisterForNavigation<InputOIRView>();
             containerRegistry.RegisterForNavigation<InputEIRView>();
+
+            containerRegistry.RegisterDialogWindow<Views.DialogWindow>();
+            containerRegistry.RegisterDialog<Views.MessageDialogView>();
         }
 
         protected override Window CreateShell()
