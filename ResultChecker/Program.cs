@@ -12,7 +12,7 @@ namespace ResultChecker
 {
     internal partial class Program
     {
-        static int Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
             List<Regex> patterns = null;
             if (args.Length >= 1)
@@ -42,36 +42,51 @@ namespace ResultChecker
 
             var results = new ConcurrentBag<Result>();
 
-            var parallelOptions = new ParallelOptions
-            {
-                MaxDegreeOfParallelism = -1,
-            };
+            var presenter = new ProgressPresenter(inputs.Length);
+
+            // 1コアは画面更新とそのほかのプロセスのために占有しない。
+            var maxParallel = Math.Max(1, Environment.ProcessorCount - 1);
+
+            var lcts = new LimitedConcurrencyLevelTaskScheduler(maxParallel);
+            var factory = new TaskFactory(lcts);
 
             var outputDir = "out";
             Directory.CreateDirectory(outputDir);
 
             // 並列に計算を実施する。
-            Parallel.ForEach(inputs, parallelOptions, inputPath =>
+            Task.WaitAll(inputs.Select(inputPath => factory.StartNew(() =>
             {
                 var target = Path.GetFileNameWithoutExtension(inputPath);
                 try
                 {
+                    presenter.Start(target);
+
                     var result = CalcAndSummary(target, inputPath, outputDir);
                     results.Add(result);
-                    Console.WriteLine($"done: {target}");
+
+                    presenter.Stop(target, $"\x1B[36mOK\x1B[0m");
                 }
                 catch (Exception ex)
                 {
                     // 何らかのエラーが発生した場合。
                     results.Add(new Result { Target = target, HasErrors = true });
-                    Console.Error.WriteLine($"error: {target}, {ex.Message}");
-                }
-            });
 
+                    presenter.Stop(target, $"\x1B[31mNG\x1B[0m", ex.Message);
+                }
+
+                // 1ケースの計算が終了するごとにGCを呼ばないと、並列計算数がだんだん減ってしまう。
+                GC.Collect();
+            })).ToArray());
+
+            await presenter.WaitForExit();
+
+            var summaryFileName = "summary.xlsx";
+            var summaryFilePath = Path.Combine(outputDir, summaryFileName);
             var sortedResults = results.OrderBy(r => r.Target).ToArray();
 
-            var summaryFilePath = Path.Combine(outputDir, "summary.xlsx");
+            Console.Write($"\nGenerate {summaryFileName} ...");
             WriteSummaryExcel(summaryFilePath, sortedResults);
+            Console.WriteLine($"done");
 
             return 0;
         }
