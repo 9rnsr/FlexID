@@ -1,11 +1,11 @@
 [title]
-Pu-242 Ingestion:Insoluble
+Pu-238 Injection
 
 [nuclide]
-  Pu-242
+  Pu-238
 
 
-[Pu-242:compartment]
+[Pu-238:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -44,17 +44,17 @@ Pu-242 Ingestion:Insoluble
   acc   ST1                   Other
   acc   ST2                   Other
 
-[Pu-242:transfer]
+[Pu-238:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Insoluble forms
-  $fA    = 1E-5
+# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, All other unidentified chemical forms
+  $fA    = 5E-4
   $fA_Re = 5E-4     # footnote§
 
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood0                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
