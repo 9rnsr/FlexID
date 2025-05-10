@@ -168,8 +168,7 @@ namespace FlexID.Calc
             // 流入を持たないコンパートメントをマークする。
             MarkZeroInflows(data);
 
-            bool CheckOutput(string name) =>
-                data.Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : true;
+            bool CheckOutput(string name) => data.TryGetBooleanParameter(name, true);
 
             // 出力ファイルの設定。
             data.OutputDose = CheckOutput("OutputDose");
