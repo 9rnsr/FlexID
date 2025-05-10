@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-
-    <IsPublishable>false</IsPublishable>
   </PropertyGroup>
 
   <PropertyGroup>
