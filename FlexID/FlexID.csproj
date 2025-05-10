@@ -16,8 +16,6 @@
     <PackageReference Include="Costura.Fody" PrivateAssets="all" />
     <PackageReference Include="Prism.DryIoc" />
     <PackageReference Include="ReactiveProperty" />
-    <PackageReference Include="System.Net.Http" />
-    <PackageReference Include="System.Text.RegularExpressions" />
     <PackageReference Include="VirtualizingWrapPanel" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
 
     <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
 

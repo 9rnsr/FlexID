@@ -6,7 +6,7 @@
 
 プログラムの動作環境を以下に示す。
 
-- .NET Framework 4.6.2以降がインストール済みのWindows OSパソコン
+- .NET Framework 4.7.2以降がインストール済みのWindows OSパソコン
 
 # 3. 開発環境
 
@@ -15,7 +15,7 @@
 - OS：Windows 10
 - IDE：Microsoft Visual Studio 2022
 - 使用言語：C#
-- 対象フレームワーク：.NET Framework 4.6.2
+- 対象フレームワーク：.NET Framework 4.7.2
 
 # 4. 導入方法
 
