@@ -270,6 +270,9 @@ namespace FlexID.Calc
             "OutputCumulative",
         };
 
+        public bool TryGetBooleanParameter(string name, bool defaultValue) =>
+            Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : defaultValue;
+
         /// <summary>
         /// 線量の計算結果をファイルに出力する場合は <see langword="true"/>。
         /// </summary>

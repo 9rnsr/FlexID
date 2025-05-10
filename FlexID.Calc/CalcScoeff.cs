@@ -332,5 +332,38 @@ namespace FlexID.Calc
                 yield return line;
             }
         }
+
+        public static IEnumerable<string> GenerateScoeffFileContent(
+            Dictionary<string, double[]> outData,
+            IReadOnlyList<string> sourceRegions, IReadOnlyList<string> targetRegions)
+        {
+            var nS = sourceRegions.Count;
+            var nT = targetRegions.Count;
+
+            {
+                var line = $"{"  T/S",-10}";
+                for (var iS = 0; iS < nS; iS++)
+                {
+                    var sourceRegion = sourceRegions[iS];
+                    line += $" {sourceRegion,-14}";
+                }
+                yield return line.TrimEnd();
+            }
+            for (var iT = 0; iT < nT; iT++)
+            {
+                var targetRegion = targetRegions[iT];
+
+                var line = $"{targetRegion,-10}";
+
+                for (var iS = 0; iS < nS; iS++)
+                {
+                    var sourceRegion = sourceRegions[iS];
+                    var outDataColumn = outData[sourceRegion];
+                    line += $" {outDataColumn[iT]:0.00000000E+00}";
+                }
+
+                yield return line;
+            }
+        }
     }
 }

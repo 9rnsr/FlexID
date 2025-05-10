@@ -83,12 +83,24 @@ namespace FlexID.Calc
                     }
                 }
 
+                var printScoeff = data.TryGetBooleanParameter("PrintScoefficients", false);
+
+                var sourceRegions = data.SourceRegions.Select(s => s.Name).ToArray();
                 var otherSourceRegion = "Other";
 
                 foreach (var (nuclide, scoeffTable) in data.Nuclides.Zip(data.SCoeffTables))
                 {
                     writer.WriteLine();
                     writer.WriteLine($"Nuclide: {nuclide.Name}");
+
+                    if (printScoeff)
+                    {
+                        writer.WriteLine();
+                        writer.WriteLine($"S-Coefficients (average of Adult Male and Adult Female):");
+                        foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTable, sourceRegions, data.TargetRegions))
+                            writer.WriteLine(line);
+                    }
+
                     writer.WriteLine();
                     writer.WriteLine($"Source regions those are part of '{otherSourceRegion}':");
                     writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));

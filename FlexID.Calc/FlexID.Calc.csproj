@@ -27,7 +27,6 @@
     <None Include="$(SolutionDir)resources/inp/OIR/**/*.inp" LinkBase="inp/OIR" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/inp/EIR/**/*.inp" LinkBase="inp/EIR" CopyToOutputDirectory="PreserveNewest" />
 
-    <None Include="$(SolutionDir)resources/lib/OIR/Scoeff/*.txt" LinkBase="lib/OIR/Scoeff" CopyToOutputDirectory="PreserveNewest" />
     <None Include="$(SolutionDir)resources/lib/OIR/wT.txt" LinkBase="lib/OIR" CopyToOutputDirectory="PreserveNewest" />
 
     <None Include="$(SolutionDir)resources/lib/EIR/SEE/*.txt" LinkBase="lib/EIR/SEE" CopyToOutputDirectory="PreserveNewest" />
