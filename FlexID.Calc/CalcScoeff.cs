@@ -365,5 +365,224 @@ namespace FlexID.Calc
                 yield return line;
             }
         }
+
+        /// <summary>
+        /// 計算したS係数データをIDAC Dose2.1と比較可能な形式でファイルに書き出す。
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void WriteOutIdacDoseCompatibleResult(string filePath)
+        {
+            var lines = GenerateScoeffFileContent_IdacDoseCompatible();
+            File.WriteAllLines(filePath, lines, System.Text.Encoding.UTF8);
+        }
+
+        private IEnumerable<string> GenerateScoeffFileContent_IdacDoseCompatible()
+        {
+            var nS = safdata.SourceRegions.Length;
+            var nT = safdata.TargetRegions.Length;
+
+            var sourceRegions = SortSourceRegionsByIdacDoseOrder(safdata.SourceRegions.Select(s => s.Name)).ToArray();
+            var targetRegions = SortTargetRegionsByIdacDoseOrder(safdata.TargetRegions.Select(t => t.Name)).ToArray();
+            var numS = sourceRegions.Length;
+            var numT = targetRegions.Length;
+
+            yield return "Source Regions,,Target Regions,,Photon,Electron,Beta,Alpha,Neutron,Total";
+            yield return "IDAC Dose2.1,OIR(FlexID),IDAC Dose2.1,OIR(FlexID)";
+
+            for (var indexS = 0; indexS < numS; indexS++)
+            {
+                var (sourceIdacDose, sourceOIR, iS) = sourceRegions[indexS];
+
+                var line = $"{sourceIdacDose},{sourceOIR},";
+
+                for (var indexT = 0; indexT < numT; indexT++)
+                {
+                    var (targetIdacDose, targetOIR, iT) = targetRegions[indexT];
+
+                    line += $"{targetIdacDose},{targetOIR}";
+                    if (iS == -1 || iT == -1)
+                    {
+                        line += $",,,,,,";
+                    }
+                    else
+                    {
+                        var i = iT + nT * iS;
+                        line += $",{OutP[i]:0.00000000E+00}";
+                        line += $",{OutE[i]:0.00000000E+00}";
+                        line += $",{OutB[i]:0.00000000E+00}";
+                        line += $",{OutA[i]:0.00000000E+00}";
+                        line += $",{OutN[i]:0.00000000E+00}";
+                        line += $",{OutTotal[i]:0.00000000E+00}";
+                    }
+                    yield return line;
+
+                    line = ",,";
+                }
+
+                yield return "";
+                yield return "";
+                yield return "";
+            }
+        }
+
+        IEnumerable<(string NameIdacDose, string NameOIR, int iS)> SortSourceRegionsByIdacDoseOrder(IEnumerable<string> sourceRegions)
+        {
+            var regions = sourceRegions.ToArray();
+
+            (string, string, int) Get(string nameIdacDose, string nameOIR = null)
+            {
+                nameIdacDose = $"\"{nameIdacDose}\"";
+                if (nameOIR is null)
+                    return (nameIdacDose, "", -1);
+                else
+                    return (nameIdacDose, nameOIR, Array.IndexOf(regions, nameOIR));
+            }
+
+            yield return Get("Adipose/residual tissue",                      /**/ "Adipose");
+            yield return Get("Adrenals",                                     /**/ "Adrenals");
+            yield return Get("Alveolar-interstitial",                        /**/ "ALV");
+            yield return Get("Blood",                                        /**/ "Blood");
+            yield return Get("Brain",                                        /**/ "Brain");
+            yield return Get("Breast",                                       /**/ "Breast");
+            yield return Get("Bronchi",                                      /**/ "Bronchi");
+            yield return Get("Bronchi bound",                                /**/ "Bronchi-b");
+            yield return Get("Bronchi sequestered",                          /**/ "Bronchi-q");
+            yield return Get("Bronchioles",                                  /**/ "Brchiole");
+            yield return Get("Bronchioles bound",                            /**/ "Brchiole-b");
+            yield return Get("Bronchioles sequestered",                      /**/ "Brchiole-q");
+            yield return Get("Cartilage",                                    /**/ "Cartilage");
+            yield return Get("Cortical bone marrow",                         /**/ "C-marrow");
+            yield return Get("Cortical bone mineral, surface",               /**/ "C-bone-S");
+            yield return Get("Cortical bone mineral, volume",                /**/ "C-bone-V");
+            yield return Get("ET1 Surface of anterior nasal passages",       /**/ "ET1-sur");
+            yield return Get("ET1 Surface of posterior nasal passages wall", /**/ "ET1-wall");
+            yield return Get("ET2 region Bound",                             /**/ "ET2-bnd");
+            yield return Get("ET2 region Sequestered",                       /**/ "ET2-seq");
+            yield return Get("ET2 region Surface",                           /**/ "ET2-sur");
+            yield return Get("ET2 region wall",                              /**/ "ET2-wall");
+            yield return Get("Eye lenses",                                   /**/ "Eye-lens");
+            yield return Get("Gallbladder contents",                         /**/ "GB-cont");
+            yield return Get("Gallbladder wall",                             /**/ "GB-wall");
+            yield return Get("Heart wall",                                   /**/ "Ht-wall");
+            yield return Get("Kidneys",                                      /**/ "Kidneys");
+            yield return Get("Left colon contents",                          /**/ "LC-cont");
+            yield return Get("Left colon mucosa",                            /**/ "LC-mucosa");
+            yield return Get("Left colon wall",                              /**/ "LC-wall");
+            yield return Get("Liver",                                        /**/ "Liver");
+            yield return Get("Lung tissue",                                  /**/ "Lung-Tis");
+            yield return Get("Lungs",                                        /**/ "Lungs");
+            yield return Get("Lymph nodes in ET region",                     /**/ "LN-ET");
+            yield return Get("Lymph nodes in sys",                           /**/ "LN-Sys");
+            yield return Get("Lymph nodes in thoracic region",               /**/ "LN-Th");
+            yield return Get("Lymph nodes total");
+            yield return Get("Muscle",                                       /**/ "Muscle");
+            yield return Get("Oesophagus fast",                              /**/ "Oesophag-f");
+            yield return Get("Oesophagus slow",                              /**/ "Oesophag-s");
+            yield return Get("Oesophagus wall",                              /**/ "Oesophag-w");
+            yield return Get("Oral cavity",                                  /**/ "O-cavity");
+            yield return Get("Oral mucosa",                                  /**/ "O-mucosa");
+            yield return Get("Other");
+            yield return Get("Ovaries",                                      /**/ "Ovaries");
+            yield return Get("Pancreas",                                     /**/ "Pancreas");
+            yield return Get("Pituitary gland",                              /**/ "P-gland");
+            yield return Get("Prostate",                                     /**/ "Prostate");
+            yield return Get("Recto-sigmoid colon content",                  /**/ "RS-cont");
+            yield return Get("Recto-sigmoid colon mucosa",                   /**/ "RS-mucosa");
+            yield return Get("Recto-sigmoid colon wall",                     /**/ "RS-wall");
+            yield return Get("Red (active) bone marrow",                     /**/ "R-marrow");
+            yield return Get("Respiratory tract air",                        /**/ "RT-air");
+            yield return Get("Right colon contents",                         /**/ "RC-cont");
+            yield return Get("Right colon mucosa",                           /**/ "RC-mucosa");
+            yield return Get("Right colon wall",                             /**/ "RC-wall");
+            yield return Get("Salivary glands",                              /**/ "S-glands");
+            yield return Get("Skin",                                         /**/ "Skin");
+            yield return Get("Small intestine contents",                     /**/ "SI-cont");
+            yield return Get("Small intestine mucosa",                       /**/ "SI-mucosa");
+            yield return Get("Small intestine wall",                         /**/ "SI-wall");
+            yield return Get("Small intestine villi",                        /**/ "SI-villi");
+            yield return Get("Spleen",                                       /**/ "Spleen");
+            yield return Get("Stomach contents",                             /**/ "St-cont");
+            yield return Get("Stomach mucosa",                               /**/ "St-mucosa");
+            yield return Get("Stomach wall",                                 /**/ "St-wall");
+            yield return Get("Teeth surface activity",                       /**/ "Teeth-S");
+            yield return Get("Teeth volume activity",                        /**/ "Teeth-V");
+            yield return Get("Testes",                                       /**/ "Testes");
+            yield return Get("Thymus",                                       /**/ "Thymus");
+            yield return Get("Thyroid",                                      /**/ "Thyroid");
+            yield return Get("Tongue",                                       /**/ "Tongue");
+            yield return Get("Tonsils",                                      /**/ "Tonsils");
+            yield return Get("Total body");
+            yield return Get("Total body tissues excl. content");
+            yield return Get("Trabecular bone marrow",                       /**/ "T-marrow");
+            yield return Get("Trabecular bone mineral, surface",             /**/ "T-bone-S");
+            yield return Get("Trabecular bone mineral, volume",              /**/ "T-bone-V");
+            yield return Get("Ureters",                                      /**/ "Ureters");
+            yield return Get("Urinary bladder contents",                     /**/ "UB-cont");
+            yield return Get("Urinary bladder wall",                         /**/ "UB-wall");
+            yield return Get("Uterus/cervix",                                /**/ "Uterus");
+            yield return Get("Yellow (inactive) bone marrow",                /**/ "Y-marrow");
+        }
+
+        IEnumerable<(string NameIdacDose, string NameOIR, int iS)> SortTargetRegionsByIdacDoseOrder(IEnumerable<string> targetRegions)
+        {
+            var regions = targetRegions.ToArray();
+
+            (string, string, int) Get(string nameIdacDose, string nameOIR = null)
+            {
+                nameIdacDose = $"\"{nameIdacDose}\"";
+                if (nameOIR is null)
+                    return (nameIdacDose, "", -1);
+                else
+                    return (nameIdacDose, nameOIR, Array.IndexOf(regions, nameOIR));
+            }
+
+            yield return Get("Adipose/residual tissue",        /**/ "Adipose");
+            yield return Get("Adrenals",                       /**/ "Adrenals");
+            yield return Get("Alveolar-interstitial",          /**/ "AI");
+            yield return Get("Brain",                          /**/ "Brain");
+            yield return Get("Breast",                         /**/ "Breast");
+            yield return Get("Bronchi bound",                  /**/ "Bronch-bas");
+            yield return Get("Bronchi sequestered",            /**/ "Bronch-sec");
+            yield return Get("Bronchioles",                    /**/ "Bchiol-sec");
+            yield return Get("Colon wall");
+            yield return Get("Endosteum (bone surface)",       /**/ "Endost-BS");
+            yield return Get("ET region");
+            yield return Get("ET1 basal cells",                /**/ "ET1-bas");
+            yield return Get("ET2 basal cells",                /**/ "ET2-bas");
+            yield return Get("Eye lenses",                     /**/ "Eye-lens");
+            yield return Get("Gallbladder wall",               /**/ "GB-wall");
+            yield return Get("Heart wall",                     /**/ "Ht-wall");
+            yield return Get("Kidneys",                        /**/ "Kidneys");
+            yield return Get("Left colon wall",                /**/ "LC-stem");
+            yield return Get("Liver",                          /**/ "Liver");
+            yield return Get("Lung");
+            yield return Get("Lymphatic nodes");
+            yield return Get("Lymph nodes in ET region",       /**/ "LN-ET");
+            yield return Get("Lymph nodes in sys",             /**/ "LN-Sys");
+            yield return Get("Lymph nodes in thoracic region", /**/ "LN-Th");
+            yield return Get("Muscle",                         /**/ "Muscle");
+            yield return Get("Oesophagus",                     /**/ "Oesophagus");
+            yield return Get("Oral mucosa",                    /**/ "O-mucosa");
+            yield return Get("Ovaries",                        /**/ "Ovaries");
+            yield return Get("Pancreas",                       /**/ "Pancreas");
+            yield return Get("Pituitary gland",                /**/ "P-gland");
+            yield return Get("Prostate",                       /**/ "Prostate");
+            yield return Get("Recto-sigmoid colon wall",       /**/ "RS-stem");
+            yield return Get("Red (active) bone marrow",       /**/ "R-marrow");
+            yield return Get("Right colon wall",               /**/ "RC-stem");
+            yield return Get("Salivary glands",                /**/ "S-glands");
+            yield return Get("Skin",                           /**/ "Skin");
+            yield return Get("Small intestine wall",           /**/ "SI-stem");
+            yield return Get("Spleen",                         /**/ "Spleen");
+            yield return Get("Stomach wall",                   /**/ "St-stem");
+            yield return Get("Testes",                         /**/ "Testes");
+            yield return Get("Thymus",                         /**/ "Thymus");
+            yield return Get("Thyroid",                        /**/ "Thyroid");
+            yield return Get("Tongue",                         /**/ "Tongue");
+            yield return Get("Tonsils",                        /**/ "Tonsils");
+            yield return Get("Ureters",                        /**/ "Ureters");
+            yield return Get("Urinary bladder wall",           /**/ "UB-wall");
+            yield return Get("Uterus/cervix",                  /**/ "Uterus");
+        }
     }
 }
