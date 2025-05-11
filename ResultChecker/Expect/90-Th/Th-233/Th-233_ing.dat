@@ -1,0 +1,13 @@
+Radionuclide	Th-233
+Route of Intake	Ingestion
+Material	All forms, fA=5E-4
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	1.6E-1	1.6E-1	5.0E-7	5.6E-7
+0.083333	2.4E-2	2.4E-2	2.7E-7	2.4E-7
+0.125	3.7E-3	3.7E-3	8.5E-8	6.2E-8
+0.25	1.4E-5	1.4E-5	9.0E-10	3.9E-10
+0.375	5.1E-8	5.1E-8	-	-
+0.5	1.9E-10	1.9E-10	-	-
