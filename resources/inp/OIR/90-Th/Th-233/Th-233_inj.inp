@@ -1,0 +1,106 @@
+[title]
+Th-233 Injection
+
+[nuclide]
+  Th-233
+
+
+[Th-233:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Liver1                Liver         # hepatocytes
+  acc   Liver2                Liver         # reticulo-endothelial cells
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Th-233:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.362 Table 14.2 / Ingested materials, All forms
+  $fA    = 5E-4
+  $fA_Re = 5E-4         # footnote**
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.368 Table 14.3
+  Blood                   Liver1                    0.097
+  Blood                   C-bone-S                  0.6793
+  Blood                   T-bone-S                  0.6793
+  Blood                   UB-con                    0.1067
+  Blood                   Kidneys1                  0.0679
+  Blood                   Kidneys2                  0.0194
+  Blood                   RC-con                    0.0097
+  Blood                   Testes                    0.00068
+  Blood                   Ovaries                   0.00021
+  Blood                   ST0                       0.832
+  Blood                   ST1                       0.243
+  Blood                   ST2                       0.0388
+  Liver1                  Blood                     0.000475
+  Liver1                  Liver2                    0.00095
+  Liver1                  SI-conRe                  0.000475
+  C-bone-S                C-marrow                  0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  T-bone-S                T-marrow                  0.000493
+  T-bone-S                T-bone-V                  0.000247
+  Kidneys1                UB-con                    0.0462
+  Kidneys2                Blood                     0.00038
+  Testes                  Blood                     0.00038
+  Ovaries                 Blood                     0.00038
+  ST0                     Blood                     0.462
+  ST1                     Blood                     0.00095
+  ST2                     Blood                     0.000019
+  Liver2                  Blood                     0.000211
+  C-marrow                Blood                     0.0076
+  C-bone-V                C-marrow                  0.0000821
+  T-marrow                Blood                     0.0076
+  T-bone-V                T-marrow                  0.000493
