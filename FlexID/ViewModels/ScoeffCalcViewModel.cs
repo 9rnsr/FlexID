@@ -42,6 +42,8 @@ namespace FlexID.ViewModels
 
         public ReactivePropertySlim<bool> CalcPchip { get; } = new ReactivePropertySlim<bool>(true);
 
+        public ReactivePropertySlim<bool> IdacDoseCompatible { get; } = new ReactivePropertySlim<bool>(false);
+
         public ObservableCollection<NuclideItem> Nuclides { get; } = new ObservableCollection<NuclideItem>();
 
         public ReactiveCommandSlim SelectOutputFilePathCommand { get; }
@@ -89,9 +91,11 @@ namespace FlexID.ViewModels
 
                     var interpolationMethod = CalcPchip.Value ? "PCHIP" : "線形補間";
 
+                    var isIdacDoseCompatible = IdacDoseCompatible.Value;
+
                     await Task.WhenAll(
-                        calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outPath) : Task.CompletedTask,
-                        calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outPath) : Task.CompletedTask);
+                        calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask,
+                        calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask);
 
                     MessageBox.Show("Finish", "S-Coefficient", MessageBoxButton.OK);
                 }
@@ -102,7 +106,7 @@ namespace FlexID.ViewModels
             }).AddTo(Disposables);
         }
 
-        private static Task Run(Sex sex, string interpolationMethod, string[] nuclides, string outPath)
+        private static Task Run(Sex sex, string interpolationMethod, string[] nuclides, string outPath, bool isIdacDoseCompatible)
         {
             var safdata = SAFDataReader.ReadSAF(sex);
             if (safdata is null)
@@ -117,8 +121,18 @@ namespace FlexID.ViewModels
                 calcS.CalcS(nuc);
 
                 var target = $@"{nuc}_{(sex == Sex.Male ? "AM" : "AF")}";
-                var scoeffFilePath = Path.Combine(outPath, target + ".txt");
-                calcS.WriteOutTotalResult(scoeffFilePath);
+
+                if (isIdacDoseCompatible)
+                {
+                    var scoeffFilePath = Path.Combine(outPath, target + ".csv");
+                    calcS.WriteOutIdacDoseCompatibleResult(scoeffFilePath, sex);
+                }
+                else
+                {
+                    var scoeffFilePath = Path.Combine(outPath, target + ".txt");
+                    calcS.WriteOutTotalResult(scoeffFilePath);
+                }
+
             })).ToArray());
         }
     }
