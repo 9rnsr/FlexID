@@ -82,22 +82,24 @@ namespace FlexID.Calc
             // - 蓄積した核種の崩壊による流出(減衰)
             foreach (var inflow in organ.Inflows)
             {
-                // 親核種から子核種への崩壊による流入経路をスキップする。
-                if (inflow.Organ.Nuclide != organ.Nuclide)
-                    continue;
+                var inflowOrgan = inflow.Organ;
 
                 // 流入元の生物学的崩壊定数[/day]
-                var beforeBio = inflow.Organ.BioDecay;
+                var beforeBio = inflowOrgan.BioDecay;
+
+                // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
+                if (inflowOrgan.Nuclide != organ.Nuclide)
+                    beforeBio = organ.NuclideDecay; // TODO: なぜ娘核種のλを乗算するのか？
 
                 // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-                ini += Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-                ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-                end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+                ini += Act.IterPre[inflowOrgan.Index].ini * beforeBio * inflow.Rate;
+                ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+                end += Act.IterPre[inflowOrgan.Index].end * beforeBio * inflow.Rate;
             }
-            Act.IterNow[organ.Index].ini = ini;
-            Act.IterNow[organ.Index].ave = ave;
-            Act.IterNow[organ.Index].end = end;
-            Act.IterNow[organ.Index].total = dT * ave;
+
+            // 蓄積した核種の壊変による減衰を適用する。
+            var alpha = organ.NuclideDecay;
+            Accumulation(alpha, dT, ave, in Act.CalcPre[organ.Index], ref Act.IterNow[organ.Index]);
         }
 
         /// <summary>
