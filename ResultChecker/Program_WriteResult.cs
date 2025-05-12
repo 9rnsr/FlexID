@@ -23,6 +23,10 @@ namespace ResultChecker
                 var sheetSummary = package.Workbook.Worksheets.Add("Summary");
                 WriteSummarySheet(sheetSummary, sortedResults);
 
+                // 預託等価線量のシートを作成。
+                var sheetEequivDose = package.Workbook.Worksheets.Add("EquivDose");
+                WriteEquivDoseSheet(sheetEequivDose, sortedResults);
+
                 // 対象毎の残留放射能の確認シートを作成。
                 foreach (var res in sortedResults)
                 {
@@ -37,6 +41,11 @@ namespace ResultChecker
             }
         }
 
+        /// <summary>
+        /// 預託実効線量の比較結果と、残留放射能の要約比較を含んだシートを書き出す。
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="results"></param>
         static void WriteSummarySheet(ExcelWorksheet sheet, IEnumerable<Result> results)
         {
             sheet.Cells[1, 1].Value = "Summary";
@@ -54,7 +63,7 @@ namespace ResultChecker
                 sheet.Cells[rowH + 0, colT, rowH + 1, colT].Merge = true;
             }
 
-            // Dose
+            // Effective Dose
             {
                 var (r0, r1) = (rowH + 0, rowH + 1);
                 var (c0, c1, c2) = (colD + 0, colD + 1, colD + 2);
@@ -106,7 +115,7 @@ namespace ResultChecker
                     continue;
                 }
 
-                // Dose
+                // Effective Dose
                 {
                     var cellEffDoseE = sheet.Cells[r, colD + 0];
                     var cellEffDoseA = sheet.Cells[r, colD + 1];
@@ -156,6 +165,184 @@ namespace ResultChecker
             //sheet.Cells.AutoFitColumns(0);  // Autofit columns for all cells
         }
 
+        /// <summary>
+        /// 預託実効線量と預託等価線量の比較結果シートを書き出す。
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="results"></param>
+        static void WriteEquivDoseSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
+        {
+            sheet.Cells[1, 1].Value = "EquivDose";
+
+            const int rowH = 3;
+            const int rowV = rowH + 2;
+            const int colT = 1;
+            const int colD = 2;
+            const int colE = 7;
+
+            sheet.OutLineSummaryBelow = false;
+            sheet.OutLineSummaryRight = false;
+
+            // Target
+            {
+                sheet.Cells[rowH + 0, colT].Value = "Target";
+                sheet.Cells[rowH + 0, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[rowH + 0, colT, rowH + 1, colT].Merge = true;
+            }
+
+            // Effective Dose
+            {
+                var (r0, r1) = (rowH + 0, rowH + 1);
+                var (c0, c1, c2) = (colD + 0, colD + 1, colD + 2);
+                sheet.Cells[r0, c0].Value = "Whole Body Effective Dose";
+                sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r0, c0, r0, c2].Merge = true;
+                sheet.Cells[r1, c0].Value = "OIR";
+                sheet.Cells[r1, c1].Value = "FlexID";
+                sheet.Cells[r1, c2].Value = "Diff";
+                sheet.Cells[r1, c0, r1, c2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c2].Style.WrapText = true;
+            }
+
+            var targetRegions = new[]
+            {
+                "Bone marrow", "Colon", "Lung", "Stomach", "Breast", "Ovaries",
+                "Testes", "Urinary bladder", "Oesophagus", "Liver", "Thyroid",
+                "Bone Surface", "Brain", "Salivary glands", "Skin", "Adrenals",
+                "ET of HRTM", "Gall bladder", "Heart", "Kidneys", "Lymphatic nodes",
+                "Muscle", "Oral mucosa", "Pancreas", "Prostate", "Small intestine",
+                "Spleen", "Thymus", "Uterus" ,
+            };
+
+            // Equivalent Dose
+            {
+                int targetRegionCount = targetRegions.Length;
+                for (int i = 0; i < targetRegionCount; i++)
+                {
+                    var targetRegion = targetRegions[i];
+
+                    var (r0, r1) = (rowH + 0, rowH + 1);
+                    var c = colE + i;
+                    var cell = sheet.Cells[r0, c];
+                    cell.Value = targetRegion;
+                    sheet.Cells[r0, c, r1, c].Merge = true;
+                    sheet.Cells[r0, c, r1, c].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    sheet.Cells[r0, c, r1, c].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    sheet.Cells[r0, c, r1, c].Style.WrapText = true;
+                }
+            }
+
+            var r = rowV;
+            foreach (var res in results)
+            {
+                // Target
+                sheet.Cells[r, colT].Value = res.Target;
+                sheet.Cells[r, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                // Effective Dose
+                {
+                    if (res.HasErrors)
+                    {
+                        var cells = sheet.Cells[r, colD + 0, r, colD + 2];
+                        cells.Value = "-";
+                        cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+                    else
+                    {
+                        var cellEffDoseE = sheet.Cells[r, colD + 0];
+                        var cellEffDoseA = sheet.Cells[r, colD + 1];
+                        var cellEffDoseR = sheet.Cells[r, colD + 2];
+
+                        cellEffDoseE.Value = double.Parse(res.ExpectEffectiveDose);
+                        cellEffDoseA.Value = double.Parse(res.ActualEffectiveDose);
+                        cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
+                        cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
+                        cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
+                        cellEffDoseR.Style.Numberformat.Format = "0.0%";
+
+                        // 預託実効線量のFlexID/OIR比にカラースケールを設定。
+                        SetPercentColorScale(cellEffDoseR);
+                    }
+
+                    sheet.Cells[r, colD + 0, r + 4, colD + 0].Merge = true;
+                    sheet.Cells[r, colD + 1, r + 4, colD + 1].Merge = true;
+                    sheet.Cells[r, colD + 2, r + 4, colD + 2].Merge = true;
+
+                    sheet.Cells[r, colD + 0, r + 4, colD + 2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                }
+
+                // Equivalent Dose
+                {
+                    sheet.Cells[r + 0, colE - 1].Value = "Diff";
+                    sheet.Cells[r + 1, colE - 1].Value = "OIR Male";
+                    sheet.Cells[r + 2, colE - 1].Value = "OIR Female";
+                    sheet.Cells[r + 3, colE - 1].Value = "OIR Ave";
+                    sheet.Cells[r + 4, colE - 1].Value = "FlexID";
+                    sheet.Cells[r + 0, colE - 1, r + 4, colE - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    int targetRegionCount = res.ExpectEquivalentDosesMale.Length;
+                    if (res.HasErrors)
+                    {
+                        var cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegionCount - 1];
+                        cells.Value = "-";
+                        cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < targetRegionCount; i++)
+                        {
+                            var cellEquivDoseR = sheet.Cells[r + 0, colE + i];
+                            var cellEquivDoseM = sheet.Cells[r + 1, colE + i];
+                            var cellEquivDoseF = sheet.Cells[r + 2, colE + i];
+                            var cellEquivDoseE = sheet.Cells[r + 3, colE + i];
+                            var cellEquivDoseA = sheet.Cells[r + 4, colE + i];
+
+                            cellEquivDoseM.Value = double.Parse(res.ExpectEquivalentDosesMale[i]);
+                            cellEquivDoseF.Value = double.Parse(res.ExpectEquivalentDosesFemale[i]);
+                            cellEquivDoseE.Formula = $"AVERAGE({cellEquivDoseM.Address},{cellEquivDoseF.Address})";
+                            cellEquivDoseA.Value = res.ActualEquivalentDoses[i];
+                            cellEquivDoseR.Formula = $"{cellEquivDoseA.Address}/{cellEquivDoseE.Address}";
+
+                            if (double.IsNaN(res.ActualEquivalentDoses[i]))
+                            {
+                                cellEquivDoseA.Value = "-";
+                                cellEquivDoseR.Value = "-";
+                                cellEquivDoseA.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                cellEquivDoseR.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            }
+
+                            cellEquivDoseM.Style.Numberformat.Format = "0.0E+00";
+                            cellEquivDoseF.Style.Numberformat.Format = "0.0E+00";
+                            cellEquivDoseE.Style.Numberformat.Format = "0.0E+00";
+                            cellEquivDoseA.Style.Numberformat.Format = "0.0E+00";
+                            cellEquivDoseR.Style.Numberformat.Format = "0.0%";
+                        }
+
+                        // 預託等価線量のFlexID/OIR比にカラースケールを設定。
+                        var cellsEquivDose = sheet.Cells[r, colE, r, colE + targetRegions.Length - 1];
+                        SetPercentColorScale(cellsEquivDose);
+                    }
+                }
+
+                sheet.Rows[r + 1, r + 5].Group();
+                sheet.Rows[r].CollapseChildren(true);
+
+                r += 6;
+            }
+
+            sheet.Column(1).AutoFit();
+            sheet.Column(6).AutoFit();
+
+            r = rowV;
+            foreach (var res in results)
+            {
+                // Target
+                sheet.Cells[r, colT, r + 4, colT].Merge = true;
+                r += 6;
+            }
+        }
+
         private static void SetPercentColorScale(ExcelRange cells)
         {
             var sheet = cells.Worksheet;
@@ -172,12 +359,17 @@ namespace ResultChecker
             condition.HighValue.Color = Color.Orange;
         }
 
-        static void WriteResultSheet(ExcelWorksheet sheet, Result res)
+        /// <summary>
+        /// 計算対象の、残留放射能の比較結果シートを書き出す。
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="result"></param>
+        static void WriteResultSheet(ExcelWorksheet sheet, Result result)
         {
-            var expectActs = GetExpectRetentions(res.Target, out _, out var retentionNuc);
-            var actualActs = GetResultRetentions(res.Target, retentionNuc);
+            var expectActs = GetExpectRetentions(result.Target, out _, out var retentionNuc);
+            var actualActs = GetResultRetentions(result.Target, retentionNuc);
 
-            sheet.Cells[1, 1].Value = res.Target;
+            sheet.Cells[1, 1].Value = result.Target;
 
             const int rowH = 4;
             const int rowT = rowH + 1;
