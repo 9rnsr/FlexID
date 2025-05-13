@@ -368,7 +368,7 @@ namespace ResultChecker
                 var resultOesophagus     /**/= GetResult("Oesophagus");
                 var resultLiver          /**/= GetResult("Liver");
                 var resultThyroid        /**/= GetResult("Thyroid");
-                var resultBoneSurface    /**/= double.NaN; // GetResult("???");
+                var resultBoneSurface    /**/= GetResult("Endost-BS");
                 var resultBrain          /**/= GetResult("Brain");
                 var resultSalivaryGlands /**/= GetResult("S-glands");
                 var resultSkin           /**/= GetResult("Skin");
