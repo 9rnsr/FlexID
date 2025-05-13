@@ -5,7 +5,6 @@ using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 
 namespace ResultChecker
@@ -657,37 +656,6 @@ namespace ResultChecker
             serie.Marker.Style = eMarkerStyle.Triangle;
             serie.Marker.Fill.Style = eFillStyle.SolidFill;
             serie.Marker.Fill.Color = Color.OrangeRed;
-        }
-
-        static void WriteSummaryCsv(IEnumerable<Result> results)
-        {
-            var summaryHeaders = new[]
-            {
-                "Summary",
-                "",
-                "Target,Whole Body Effective Dose,,,,Whole Body,,Urine,,Faeces",
-                ",OIR,FlexID,Diff (FlexID/OIR),,Diff (min),Diff (max),Diff (min),Diff (max),Diff (min),Diff (max)",
-            };
-            var summaryLines = results.Select(res =>
-            {
-                var line = $"{res.Target}";
-                if (res.HasErrors)
-                    line += ",-,-,-,-,-";
-                else
-                {
-                    line += $",{res.ExpectEffectiveDose}" +
-                            $",{res.ActualEffectiveDose}" +
-                            $",{res.FractionEffectiveDose:0.00%},";
-                    line += $",{res.FractionsWholeBody.Min:0.00%}" +
-                            $",{res.FractionsWholeBody.Max:0.00%}" +
-                            $",{res.FractionsUrine.Min:0.00%}" +
-                            $",{res.FractionsUrine.Max:0.00%}" +
-                            $",{res.FractionsFaeces.Min:0.00%}" +
-                            $",{res.FractionsFaeces.Max:0.00%}";
-                }
-                return line;
-            });
-            File.WriteAllLines("summary.csv", summaryHeaders.Concat(summaryLines));
         }
     }
 }
