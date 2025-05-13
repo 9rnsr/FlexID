@@ -12,6 +12,16 @@ namespace ResultChecker
 {
     internal partial class Program
     {
+        /// <summary>
+        /// OIRデータが格納されたディレクトリ。
+        /// </summary>
+        static string ExpectDir = "Expect";
+
+        /// <summary>
+        /// 処理結果の出力先ディレクトリ。
+        /// </summary>
+        static string OutputDir = "out";
+
         static async Task<int> Main(string[] args)
         {
             List<Regex> patterns = null;
@@ -40,18 +50,16 @@ namespace ResultChecker
                 return -1;
             }
 
-            var results = new ConcurrentBag<Result>();
+            Directory.CreateDirectory(OutputDir);
 
-            var presenter = new ProgressPresenter(inputs.Length);
+            var results = new ConcurrentBag<Result>();
 
             // 1コアは画面更新とそのほかのプロセスのために占有しない。
             var maxParallel = Math.Max(1, Environment.ProcessorCount - 1);
-
             var lcts = new LimitedConcurrencyLevelTaskScheduler(maxParallel);
             var factory = new TaskFactory(lcts);
 
-            var outputDir = "out";
-            Directory.CreateDirectory(outputDir);
+            var presenter = new ProgressPresenter(inputs.Length);
 
             // 並列に計算を実施する。
             Task.WaitAll(inputs.Select(inputPath => factory.StartNew(() =>
@@ -61,7 +69,7 @@ namespace ResultChecker
                 {
                     presenter.Start(target);
 
-                    var result = CalcAndSummary(target, inputPath, outputDir);
+                    var result = CalcAndSummary(target, inputPath, OutputDir);
                     results.Add(result);
 
                     presenter.Stop(target, $"\x1B[36mOK\x1B[0m");
@@ -81,7 +89,7 @@ namespace ResultChecker
             await presenter.WaitForExit();
 
             var summaryFileName = "summary.xlsx";
-            var summaryFilePath = Path.Combine(outputDir, summaryFileName);
+            var summaryFilePath = Path.Combine(OutputDir, summaryFileName);
             var sortedResults = results.OrderBy(r => r.Target).ToArray();
 
             Console.Write($"\nGenerate {summaryFileName} ...");
@@ -266,7 +274,7 @@ namespace ResultChecker
         static Dose GetExpectDoses(string target, string mat)
         {
             var nuclide = target.Split('_')[0];
-            var filePath = $"Expect/{nuclide}.dat";
+            var filePath = Path.Combine(ExpectDir, $"{nuclide}.dat");
             var (routeOfIntake, _, _) = DecomposeMaterial(mat);
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -330,7 +338,7 @@ namespace ResultChecker
         static Dose GetResultDoses(string target)
         {
             var nuclide = target.Split('_')[0];
-            var filePath = $"out/{target}_Dose.out";
+            var filePath = Path.Combine(OutputDir, $"{target}_Dose.out");
 
             using (var reader = new OutputDataReader(filePath))
             {
@@ -448,7 +456,7 @@ namespace ResultChecker
         static List<Retention> GetResultRetentions(string target, string resultNuc)
         {
             var nuclide = target.Split('_')[0];
-            var filePath = $"out/{target}_Retention.out";
+            var filePath = Path.Combine(OutputDir, $"{target}_Retention.out");
 
             var retentions = new List<Retention>();
 
@@ -523,7 +531,7 @@ namespace ResultChecker
         static List<Retention> GetExpectRetentions(string target, out string mat, out string retentionNuc)
         {
             var nuclide = target.Split('_')[0];
-            var filePath = $"Expect/{target}.dat";
+            var filePath = Path.Combine(ExpectDir, $"{target}.dat");
 
             mat = "";
 
