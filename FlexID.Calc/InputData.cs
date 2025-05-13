@@ -367,7 +367,7 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        protected static (string[] targets, double[] weights) ReadTissueWeights(string fileName)
+        public static (string[] targets, double[] weights) ReadTissueWeights(string fileName)
         {
             var targets = new List<string>();
             var weights = new List<double>();
