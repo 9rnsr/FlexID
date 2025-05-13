@@ -235,8 +235,8 @@ namespace ResultChecker
             result.FractionsThyroid   /**/= fractionsThyroid;
 
             // 預託実効線量の比較。
-            var actualDose = GetResultEffectiveDose(target, out var actualEquivDoses);
-            var expectDose = ReadDosePerIntake(target, mat, out var expectEquivDosesMale, out var expectEquivDosesFemale);
+            var actualDose = GetResultDoses(target, out var actualEquivDoses);
+            var expectDose = GetExpectDoses(target, mat, out var expectEquivDosesMale, out var expectEquivDosesFemale);
             result.ActualEffectiveDose = $"{actualDose:0.000000E+00}";
             result.ExpectEffectiveDose = expectDose;
             result.FractionEffectiveDose = actualDose / double.Parse(expectDose);
@@ -260,7 +260,7 @@ namespace ResultChecker
         /// <param name="equivDosesFemale"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static string ReadDosePerIntake(string target, string mat, out string[] equivDosesMale, out string[] equivDosesFemale)
+        static string GetExpectDoses(string target, string mat, out string[] equivDosesMale, out string[] equivDosesFemale)
         {
             var nuclide = target.Split('_')[0];
             var filePath = $"Expect/{nuclide}.dat";
@@ -311,6 +311,94 @@ namespace ResultChecker
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// FlexIDが出力した各出力時間メッシュにおける線量の出力ファイル
+        /// *_Dose.outから、Whole Bodyの数値列の最終値を読み込む。
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="equivalentDoses"></param>
+        /// <returns></returns>
+        static double GetResultDoses(string target, out double[] equivalentDoses)
+        {
+            var nuclide = target.Split('_')[0];
+            var filePath = $"out/{target}_Dose.out";
+
+            using (var reader = new OutputDataReader(filePath))
+            {
+                var data = reader.Read();
+                var result = data.Nuclides[0];
+
+                var resultWholeBody = result.Compartments.FirstOrDefault(c => c.Name == "WholeBody");
+                if (resultWholeBody is null)
+                    throw new InvalidDataException();
+
+                var resultBoneMarrow     /**/= result.Compartments.FirstOrDefault(c => c.Name == "R-marrow").Values.Last();
+                var resultColon          /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
+                var resultLung           /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
+                var resultStomach        /**/= result.Compartments.FirstOrDefault(c => c.Name == "St-stem").Values.Last();
+                var resultBreast         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Breast").Values.Last();
+                var resultOvaries        /**/= result.Compartments.FirstOrDefault(c => c.Name == "Ovaries").Values.Last();
+                var resultTestes         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Testes").Values.Last();
+                var resultUrinaryBladder /**/= result.Compartments.FirstOrDefault(c => c.Name == "UB-wall").Values.Last();
+                var resultOesophagus     /**/= result.Compartments.FirstOrDefault(c => c.Name == "Oesophagus").Values.Last();
+                var resultLiver          /**/= result.Compartments.FirstOrDefault(c => c.Name == "Liver").Values.Last();
+                var resultThyroid        /**/= result.Compartments.FirstOrDefault(c => c.Name == "Thyroid").Values.Last();
+                var resultBoneSurface    /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
+                var resultBrain          /**/= result.Compartments.FirstOrDefault(c => c.Name == "Brain").Values.Last();
+                var resultSalivaryGlands /**/= result.Compartments.FirstOrDefault(c => c.Name == "S-glands").Values.Last();
+                var resultSkin           /**/= result.Compartments.FirstOrDefault(c => c.Name == "Skin").Values.Last();
+                var resultAdrenals       /**/= result.Compartments.FirstOrDefault(c => c.Name == "Adrenals").Values.Last();
+                var resultET_of_HRTM     /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
+                var resultGallBladder    /**/= result.Compartments.FirstOrDefault(c => c.Name == "GB-wall").Values.Last();
+                var resultHeart          /**/= result.Compartments.FirstOrDefault(c => c.Name == "Ht-wall").Values.Last();
+                var resultKidneys        /**/= result.Compartments.FirstOrDefault(c => c.Name == "Kidneys").Values.Last();
+                var resultLymphaticNodes /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
+                var resultMuscle         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Muscle").Values.Last();
+                var resultOmucosa        /**/= result.Compartments.FirstOrDefault(c => c.Name == "O-mucosa").Values.Last();
+                var resultPancreas       /**/= result.Compartments.FirstOrDefault(c => c.Name == "Pancreas").Values.Last();
+                var resultProstate       /**/= result.Compartments.FirstOrDefault(c => c.Name == "Prostate").Values.Last();
+                var resultSmallIntestine /**/= result.Compartments.FirstOrDefault(c => c.Name == "SI-stem").Values.Last();
+                var resultSpleen         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Spleen").Values.Last();
+                var resultThymus         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Thymus").Values.Last();
+                var resultUterus         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Uterus").Values.Last();
+
+                equivalentDoses = new[]
+                {
+                    resultBoneMarrow     ,
+                    resultColon          ,
+                    resultLung           ,
+                    resultStomach        ,
+                    resultBreast         ,
+                    resultOvaries        ,
+                    resultTestes         ,
+                    resultUrinaryBladder ,
+                    resultOesophagus     ,
+                    resultLiver          ,
+                    resultThyroid        ,
+                    resultBoneSurface    ,
+                    resultBrain          ,
+                    resultSalivaryGlands ,
+                    resultSkin           ,
+                    resultAdrenals       ,
+                    resultET_of_HRTM     ,
+                    resultGallBladder    ,
+                    resultHeart          ,
+                    resultKidneys        ,
+                    resultLymphaticNodes ,
+                    resultMuscle         ,
+                    resultOmucosa        ,
+                    resultPancreas       ,
+                    resultProstate       ,
+                    resultSmallIntestine ,
+                    resultSpleen         ,
+                    resultThymus         ,
+                    resultUterus         ,
+                };
+
+                return resultWholeBody.Values.Last();
+            }
         }
 
         // 残留放射能の取得結果。
@@ -500,94 +588,6 @@ namespace ResultChecker
             }
 
             return retentions;
-        }
-
-        /// <summary>
-        /// FlexIDが出力した各出力時間メッシュにおける線量の出力ファイル
-        /// *_Dose.outから、Whole Bodyの数値列の最終値を読み込む。
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="equivalentDoses"></param>
-        /// <returns></returns>
-        static double GetResultEffectiveDose(string target, out double[] equivalentDoses)
-        {
-            var nuclide = target.Split('_')[0];
-            var filePath = $"out/{target}_Dose.out";
-
-            using (var reader = new OutputDataReader(filePath))
-            {
-                var data = reader.Read();
-                var result = data.Nuclides[0];
-
-                var resultWholeBody = result.Compartments.FirstOrDefault(c => c.Name == "WholeBody");
-                if (resultWholeBody is null)
-                    throw new InvalidDataException();
-
-                var resultBoneMarrow     /**/= result.Compartments.FirstOrDefault(c => c.Name == "R-marrow").Values.Last();
-                var resultColon          /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
-                var resultLung           /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
-                var resultStomach        /**/= result.Compartments.FirstOrDefault(c => c.Name == "St-stem").Values.Last();
-                var resultBreast         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Breast").Values.Last();
-                var resultOvaries        /**/= result.Compartments.FirstOrDefault(c => c.Name == "Ovaries").Values.Last();
-                var resultTestes         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Testes").Values.Last();
-                var resultUrinaryBladder /**/= result.Compartments.FirstOrDefault(c => c.Name == "UB-wall").Values.Last();
-                var resultOesophagus     /**/= result.Compartments.FirstOrDefault(c => c.Name == "Oesophagus").Values.Last();
-                var resultLiver          /**/= result.Compartments.FirstOrDefault(c => c.Name == "Liver").Values.Last();
-                var resultThyroid        /**/= result.Compartments.FirstOrDefault(c => c.Name == "Thyroid").Values.Last();
-                var resultBoneSurface    /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
-                var resultBrain          /**/= result.Compartments.FirstOrDefault(c => c.Name == "Brain").Values.Last();
-                var resultSalivaryGlands /**/= result.Compartments.FirstOrDefault(c => c.Name == "S-glands").Values.Last();
-                var resultSkin           /**/= result.Compartments.FirstOrDefault(c => c.Name == "Skin").Values.Last();
-                var resultAdrenals       /**/= result.Compartments.FirstOrDefault(c => c.Name == "Adrenals").Values.Last();
-                var resultET_of_HRTM     /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
-                var resultGallBladder    /**/= result.Compartments.FirstOrDefault(c => c.Name == "GB-wall").Values.Last();
-                var resultHeart          /**/= result.Compartments.FirstOrDefault(c => c.Name == "Ht-wall").Values.Last();
-                var resultKidneys        /**/= result.Compartments.FirstOrDefault(c => c.Name == "Kidneys").Values.Last();
-                var resultLymphaticNodes /**/= double.NaN; // result.Compartments.FirstOrDefault(c => c.Name == "???").Values.Last();
-                var resultMuscle         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Muscle").Values.Last();
-                var resultOmucosa        /**/= result.Compartments.FirstOrDefault(c => c.Name == "O-mucosa").Values.Last();
-                var resultPancreas       /**/= result.Compartments.FirstOrDefault(c => c.Name == "Pancreas").Values.Last();
-                var resultProstate       /**/= result.Compartments.FirstOrDefault(c => c.Name == "Prostate").Values.Last();
-                var resultSmallIntestine /**/= result.Compartments.FirstOrDefault(c => c.Name == "SI-stem").Values.Last();
-                var resultSpleen         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Spleen").Values.Last();
-                var resultThymus         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Thymus").Values.Last();
-                var resultUterus         /**/= result.Compartments.FirstOrDefault(c => c.Name == "Uterus").Values.Last();
-
-                equivalentDoses = new[]
-                {
-                    resultBoneMarrow     ,
-                    resultColon          ,
-                    resultLung           ,
-                    resultStomach        ,
-                    resultBreast         ,
-                    resultOvaries        ,
-                    resultTestes         ,
-                    resultUrinaryBladder ,
-                    resultOesophagus     ,
-                    resultLiver          ,
-                    resultThyroid        ,
-                    resultBoneSurface    ,
-                    resultBrain          ,
-                    resultSalivaryGlands ,
-                    resultSkin           ,
-                    resultAdrenals       ,
-                    resultET_of_HRTM     ,
-                    resultGallBladder    ,
-                    resultHeart          ,
-                    resultKidneys        ,
-                    resultLymphaticNodes ,
-                    resultMuscle         ,
-                    resultOmucosa        ,
-                    resultPancreas       ,
-                    resultProstate       ,
-                    resultSmallIntestine ,
-                    resultSpleen         ,
-                    resultThymus         ,
-                    resultUterus         ,
-                };
-
-                return resultWholeBody.Values.Last();
-            }
         }
     }
 
