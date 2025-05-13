@@ -5,7 +5,6 @@ using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 
 namespace ResultChecker
@@ -120,8 +119,8 @@ namespace ResultChecker
                     var cellEffDoseE = sheet.Cells[r, colD + 0];
                     var cellEffDoseA = sheet.Cells[r, colD + 1];
                     var cellEffDoseR = sheet.Cells[r, colD + 2];
-                    cellEffDoseE.Value = double.Parse(res.ExpectEffectiveDose);
-                    cellEffDoseA.Value = double.Parse(res.ActualEffectiveDose);
+                    cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
+                    cellEffDoseA.Value = res.ActualDose.EffectiveDose;
                     cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
                     cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                     cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
@@ -254,8 +253,8 @@ namespace ResultChecker
                         var cellEffDoseA = sheet.Cells[r, colD + 1];
                         var cellEffDoseR = sheet.Cells[r, colD + 2];
 
-                        cellEffDoseE.Value = double.Parse(res.ExpectEffectiveDose);
-                        cellEffDoseA.Value = double.Parse(res.ActualEffectiveDose);
+                        cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
+                        cellEffDoseA.Value = res.ActualDose.EffectiveDose;
                         cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
                         cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                         cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
@@ -281,7 +280,7 @@ namespace ResultChecker
                     sheet.Cells[r + 4, colE - 1].Value = "FlexID";
                     sheet.Cells[r + 0, colE - 1, r + 4, colE - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    int targetRegionCount = res.ExpectEquivalentDosesMale.Length;
+                    int targetRegionCount = res.ExpectDose.EquivalentDosesMale.Length;
                     if (res.HasErrors)
                     {
                         var cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegionCount - 1];
@@ -298,13 +297,13 @@ namespace ResultChecker
                             var cellEquivDoseE = sheet.Cells[r + 3, colE + i];
                             var cellEquivDoseA = sheet.Cells[r + 4, colE + i];
 
-                            cellEquivDoseM.Value = double.Parse(res.ExpectEquivalentDosesMale[i]);
-                            cellEquivDoseF.Value = double.Parse(res.ExpectEquivalentDosesFemale[i]);
+                            cellEquivDoseM.Value = res.ExpectDose.EquivalentDosesMale[i];
+                            cellEquivDoseF.Value = res.ExpectDose.EquivalentDosesFemale[i];
                             cellEquivDoseE.Formula = $"AVERAGE({cellEquivDoseM.Address},{cellEquivDoseF.Address})";
-                            cellEquivDoseA.Value = res.ActualEquivalentDoses[i];
+                            cellEquivDoseA.Value = res.ActualDose.EquivalentDoses[i];
                             cellEquivDoseR.Formula = $"{cellEquivDoseA.Address}/{cellEquivDoseE.Address}";
 
-                            if (double.IsNaN(res.ActualEquivalentDoses[i]))
+                            if (double.IsNaN(res.ActualDose.EquivalentDoses[i]))
                             {
                                 cellEquivDoseA.Value = "-";
                                 cellEquivDoseR.Value = "-";
@@ -657,37 +656,6 @@ namespace ResultChecker
             serie.Marker.Style = eMarkerStyle.Triangle;
             serie.Marker.Fill.Style = eFillStyle.SolidFill;
             serie.Marker.Fill.Color = Color.OrangeRed;
-        }
-
-        static void WriteSummaryCsv(IEnumerable<Result> results)
-        {
-            var summaryHeaders = new[]
-            {
-                "Summary",
-                "",
-                "Target,Whole Body Effective Dose,,,,Whole Body,,Urine,,Faeces",
-                ",OIR,FlexID,Diff (FlexID/OIR),,Diff (min),Diff (max),Diff (min),Diff (max),Diff (min),Diff (max)",
-            };
-            var summaryLines = results.Select(res =>
-            {
-                var line = $"{res.Target}";
-                if (res.HasErrors)
-                    line += ",-,-,-,-,-";
-                else
-                {
-                    line += $",{res.ExpectEffectiveDose}" +
-                            $",{res.ActualEffectiveDose}" +
-                            $",{res.FractionEffectiveDose:0.00%},";
-                    line += $",{res.FractionsWholeBody.Min:0.00%}" +
-                            $",{res.FractionsWholeBody.Max:0.00%}" +
-                            $",{res.FractionsUrine.Min:0.00%}" +
-                            $",{res.FractionsUrine.Max:0.00%}" +
-                            $",{res.FractionsFaeces.Min:0.00%}" +
-                            $",{res.FractionsFaeces.Max:0.00%}";
-                }
-                return line;
-            });
-            File.WriteAllLines("summary.csv", summaryHeaders.Concat(summaryLines));
         }
     }
 }
