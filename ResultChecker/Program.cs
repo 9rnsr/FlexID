@@ -331,7 +331,7 @@ namespace ResultChecker
 
         /// <summary>
         /// FlexIDが出力した各出力時間メッシュにおける線量の出力ファイル
-        /// *_Dose.outから、Whole Bodyの数値列の最終値を読み込む。
+        /// *_Dose.outから、預託実効線量と預託等価線量の数値を読み込む。
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
@@ -340,84 +340,79 @@ namespace ResultChecker
             var nuclide = target.Split('_')[0];
             var filePath = Path.Combine(OutputDir, $"{target}_Dose.out");
 
+            // 組織加重係数データを読み込む。
+            var (ts, ws) = InputDataReaderBase.ReadTissueWeights(Path.Combine("lib", "OIR", "wT.txt"));
+
             using (var reader = new OutputDataReader(filePath))
             {
                 var data = reader.Read();
                 var result = data.Nuclides[0];
 
-                double GetResult(string targetRegionName)
+                // 列データの最終行＝評価期間の最後における線量値を取得する。
+                double GetDose(string targetRegion)
+                    => result.Compartments.FirstOrDefault(c => c.Name == targetRegion)?.Values.Last()
+                    ?? throw new InvalidDataException($"Missing '{targetRegion}' data column");
+
+                double GetTissueWeight(string targetRegion)
+                    => ws[Array.IndexOf(ts, targetRegion)];
+
+                double GetResult(string targetRegion, params string[] moreTargetRegions)
                 {
-                    var compartmentData = result.Compartments.FirstOrDefault(c => c.Name == targetRegionName);
-                    if (compartmentData is null)
-                        throw new InvalidDataException($"Missing '{targetRegionName}' data column");
-                    return compartmentData.Values.Last();
+                    var dose = GetDose(targetRegion);
+                    if (moreTargetRegions.Length == 0)
+                        return dose;
+
+                    // 複数の標的領域の等価線量を組織加重係数で加重平均したものを返す。
+                    var wT = GetTissueWeight(targetRegion);
+                    var sumOfWeightedDose = wT * dose;
+                    var sumOfTissueWeight = wT;
+                    foreach (var moreTargetRegion in moreTargetRegions)
+                    {
+                        wT = GetTissueWeight(moreTargetRegion);
+                        dose = GetDose(moreTargetRegion);
+                        sumOfWeightedDose += wT * dose;
+                        sumOfTissueWeight += wT;
+                    }
+                    return sumOfWeightedDose / sumOfTissueWeight;
                 }
 
                 // Effective Dose
                 var resultWholeBody = GetResult("WholeBody");
 
                 // Equivalent Dose
-                var resultBoneMarrow     /**/= GetResult("R-marrow");
-                var resultColon          /**/= double.NaN; // GetResult("???");
-                var resultLung           /**/= double.NaN; // GetResult("???");
-                var resultStomach        /**/= GetResult("St-stem");
-                var resultBreast         /**/= GetResult("Breast");
-                var resultOvaries        /**/= GetResult("Ovaries");
-                var resultTestes         /**/= GetResult("Testes");
-                var resultUrinaryBladder /**/= GetResult("UB-wall");
-                var resultOesophagus     /**/= GetResult("Oesophagus");
-                var resultLiver          /**/= GetResult("Liver");
-                var resultThyroid        /**/= GetResult("Thyroid");
-                var resultBoneSurface    /**/= double.NaN; // GetResult("???");
-                var resultBrain          /**/= GetResult("Brain");
-                var resultSalivaryGlands /**/= GetResult("S-glands");
-                var resultSkin           /**/= GetResult("Skin");
-                var resultAdrenals       /**/= GetResult("Adrenals");
-                var resultET_of_HRTM     /**/= double.NaN; // GetResult("???");
-                var resultGallBladder    /**/= GetResult("GB-wall");
-                var resultHeart          /**/= GetResult("Ht-wall");
-                var resultKidneys        /**/= GetResult("Kidneys");
-                var resultLymphaticNodes /**/= double.NaN; // GetResult("???");
-                var resultMuscle         /**/= GetResult("Muscle");
-                var resultOmucosa        /**/= GetResult("O-mucosa");
-                var resultPancreas       /**/= GetResult("Pancreas");
-                var resultProstate       /**/= GetResult("Prostate");
-                var resultSmallIntestine /**/= GetResult("SI-stem");
-                var resultSpleen         /**/= GetResult("Spleen");
-                var resultThymus         /**/= GetResult("Thymus");
-                var resultUterus         /**/= GetResult("Uterus");
-
                 var equivalentDoses = new[]
                 {
-                    resultBoneMarrow     ,
-                    resultColon          ,
-                    resultLung           ,
-                    resultStomach        ,
-                    resultBreast         ,
-                    resultOvaries        ,
-                    resultTestes         ,
-                    resultUrinaryBladder ,
-                    resultOesophagus     ,
-                    resultLiver          ,
-                    resultThyroid        ,
-                    resultBoneSurface    ,
-                    resultBrain          ,
-                    resultSalivaryGlands ,
-                    resultSkin           ,
-                    resultAdrenals       ,
-                    resultET_of_HRTM     ,
-                    resultGallBladder    ,
-                    resultHeart          ,
-                    resultKidneys        ,
-                    resultLymphaticNodes ,
-                    resultMuscle         ,
-                    resultOmucosa        ,
-                    resultPancreas       ,
-                    resultProstate       ,
-                    resultSmallIntestine ,
-                    resultSpleen         ,
-                    resultThymus         ,
-                    resultUterus         ,
+                    // OIR Data Viewerで提示されている預託等価線量の領域名と、
+                    // それらに対応する標的領域(1つ以上)の名称。
+                    /* Bone marrow     */ GetResult("R-marrow"),
+                    /* Colon           */ GetResult("RC-stem", "LC-stem", "RS-stem"),
+                    /* Lung            */ GetResult("Bronch-bas", "Bronch-sec", "Bchiol-sec", "AI"),
+                    /* Stomach         */ GetResult("St-stem"),
+                    /* Breast          */ GetResult("Breast"),
+                    /* Ovaries         */ GetResult("Ovaries"),
+                    /* Testes          */ GetResult("Testes"),
+                    /* Urinary bladder */ GetResult("UB-wall"),
+                    /* Oesophagus      */ GetResult("Oesophagus"),
+                    /* Liver           */ GetResult("Liver"),
+                    /* Thyroid         */ GetResult("Thyroid"),
+                    /* Bone Surface    */ GetResult("Endost-BS"),
+                    /* Brain           */ GetResult("Brain"),
+                    /* Salivary glands */ GetResult("S-glands"),
+                    /* Skin            */ GetResult("Skin"),
+                    /* Adrenals        */ GetResult("Adrenals"),
+                    /* ET of HRTM      */ GetResult("ET1-bas", "ET2-bas"),
+                    /* Gall bladder    */ GetResult("GB-wall"),
+                    /* Heart           */ GetResult("Ht-wall"),
+                    /* Kidneys         */ GetResult("Kidneys"),
+                    /* Lymphatic nodes */ GetResult("LN-Sys", "LN-Th", "LN-ET"),
+                    /* Muscle          */ GetResult("Muscle"),
+                    /* Oral mucosa     */ GetResult("O-mucosa"),
+                    /* Pancreas        */ GetResult("Pancreas"),
+                    /* Prostate        */ GetResult("Prostate"),
+                    /* Small intestine */ GetResult("SI-stem"),
+                    /* Spleen          */ GetResult("Spleen"),
+                    /* Thymus          */ GetResult("Thymus"),
+                    /* Uterus          */ GetResult("Uterus"),
                 };
 
                 return new Dose
