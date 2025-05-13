@@ -18,13 +18,13 @@ namespace ResultChecker
 
             using (var package = new ExcelPackage())
             {
-                // 結果の要約シートを作成。
-                var sheetSummary = package.Workbook.Worksheets.Add("Summary");
-                WriteSummarySheet(sheetSummary, sortedResults);
-
-                // 預託等価線量のシートを作成。
-                var sheetEequivDose = package.Workbook.Worksheets.Add("EquivDose");
+                // 預託実効線量と預託等価線量のシートを作成。
+                var sheetEequivDose = package.Workbook.Worksheets.Add("Dose");
                 WriteEquivDoseSheet(sheetEequivDose, sortedResults);
+
+                // (預託実効線量と)残留放射能の要約シートを作成。
+                var sheetSummary = package.Workbook.Worksheets.Add("Retention");
+                WriteSummarySheet(sheetSummary, sortedResults);
 
                 // 対象毎の残留放射能の確認シートを作成。
                 foreach (var res in sortedResults)
