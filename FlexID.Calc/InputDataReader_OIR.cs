@@ -235,12 +235,11 @@ namespace FlexID.Calc
                 if (CheckSectionHeader(line))
                     break;
 
-                var values = line.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                if (values.Length != 2)
-                    throw Program.Error($"Line {LineNum}: Parameter definition should have 2 values.");
-
-                var paramName = values[0].Trim();
-                var paramValue = values[1].Trim();
+                var i = line.IndexOf('=');
+                if (i == -1)
+                    throw Program.Error($"Line {LineNum}: Parameter definition should be <name> = <value(s)>.");
+                var paramName = line.Substring(0, i).Trim();
+                var paramValue = line.Substring(i + 1).Trim();
 
                 if (!parameterNames.Contains(paramName))
                     throw Program.Error($"Line {LineNum}: Unrecognized parameter '{paramName}' definition.");
@@ -563,6 +562,13 @@ namespace FlexID.Calc
 
                 data.Nuclides.Add(nuclide);
 
+                var inpParams = data.Parameters;
+                var nucParams = nuclide.Parameters;
+
+                var inpExcretas = inpParams.GetValueOrDefault("ExcretaCompartments", null)?.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var nucExcretas = nucParams.GetValueOrDefault("ExcretaCompartments", null)?.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var excreatas = (nucExcretas ?? inpExcretas) ?? new[] { "Urine", "Faeces" };
+
                 // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
                 var validSourceRegions = data.SourceRegions
                     .Select(s => s.Name).Append("Other").ToArray();
@@ -571,11 +577,8 @@ namespace FlexID.Calc
                     .Where(s => s.MaleID != 0 || s.FemaleID != 0)
                     .Select(s => s.Name).ToList();
 
-                var inpParams = data.Parameters;
                 var inpIncludes = (inpParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 var inpExcludes = (inpParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                var nucParams = nuclide.Parameters;
                 var nucExcludes = (nucParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 var nucIncludes = (nucParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -624,10 +627,7 @@ namespace FlexID.Calc
 
                     if (organ.Func == OrganFunc.exc)
                     {
-                        if (organ.Name == "Urine" || organ.Name == "Faeces")
-                        {
-                            organ.IsExcretaCompatibleWithOIR = true;
-                        }
+                        organ.IsExcretaCompatibleWithOIR = excreatas.Contains(organ.Name);
                     }
                 }
 

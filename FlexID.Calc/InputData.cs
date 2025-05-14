@@ -207,6 +207,7 @@ namespace FlexID.Calc
         /// </summary>
         public static readonly string[] ParameterNames = new[]
         {
+            "ExcretaCompartments",
             "ExcludeOtherSourceRegions",
             "IncludeOtherSourceRegions"
         };
@@ -262,6 +263,7 @@ namespace FlexID.Calc
         /// </summary>
         public static readonly string[] ParameterNames = new[]
         {
+            "ExcretaCompartments",
             "ExcludeOtherSourceRegions",
             "IncludeOtherSourceRegions",
             "OutputDose",
