@@ -1,6 +1,6 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sprache;
 using System;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
@@ -19,15 +19,14 @@ namespace FlexID.Calc.Tests
         public string Div(string left, string right) => $"({left} / {right})";
     }
 
-    [TestClass]
     public class InputParserTests
     {
         InputParser<string> parser = new InputParser<string>(new StringifyVisitor());
 
         (Func<string, string> Success, Action<string> Failure) MakeTesters(Parser<string> parser) =>
-            (input => parser.End().Parse(input), input => Assert.ThrowsException<ParseException>(() => parser.End().Parse(input)));
+            (input => parser.End().Parse(input), input => Assert.Throws<ParseException>(() => parser.End().Parse(input)));
 
-        [TestMethod]
+        [Fact]
         public void ParseVar()
         {
             var (Success, Failure) = MakeTesters(parser.VarExpr);
@@ -43,7 +42,7 @@ namespace FlexID.Calc.Tests
             Failure("abc.def");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseNumber()
         {
             var (Success, Failure) = MakeTesters(parser.NumberExpr);
@@ -68,7 +67,7 @@ namespace FlexID.Calc.Tests
             Failure("123xyz");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseUnaryExpr()
         {
             var (Success, Failure) = MakeTesters(parser.Expr);
@@ -86,35 +85,35 @@ namespace FlexID.Calc.Tests
             Success("-3.14%");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseBinaryExpr()
         {
             var (Success, Failure) = MakeTesters(parser.Expr);
 
-            Assert.AreEqual("(123 * 456)", Success("123*456"));
-            Assert.AreEqual("(123 / 456)", Success(" 123 / 456 "));
-            Assert.AreEqual("((12 * 34) / 56)", Success("12 * 34 / 56"));
-            Assert.AreEqual("(((12 * 34) / 56) * 78)", Success("12 * 34 / 56 * 78"));
+            Assert.Equal("(123 * 456)", Success("123*456"));
+            Assert.Equal("(123 / 456)", Success(" 123 / 456 "));
+            Assert.Equal("((12 * 34) / 56)", Success("12 * 34 / 56"));
+            Assert.Equal("(((12 * 34) / 56) * 78)", Success("12 * 34 / 56 * 78"));
 
-            Assert.AreEqual("(123 + 456)", Success("123+456"));
-            Assert.AreEqual("(123 - 456)", Success(" 123 - 456 "));
-            Assert.AreEqual("((12 + 34) - 56)", Success("12 + 34 - 56"));
-            Assert.AreEqual("(12 + (34 * 56))", Success("12 + 34 * 56"));
-            Assert.AreEqual("((12 * 34) + (56 / 78))", Success("12 * 34 + 56 / 78"));
+            Assert.Equal("(123 + 456)", Success("123+456"));
+            Assert.Equal("(123 - 456)", Success(" 123 - 456 "));
+            Assert.Equal("((12 + 34) - 56)", Success("12 + 34 - 56"));
+            Assert.Equal("(12 + (34 * 56))", Success("12 + 34 * 56"));
+            Assert.Equal("((12 * 34) + (56 / 78))", Success("12 * 34 + 56 / 78"));
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseExpr()
         {
             var (Success, Failure) = MakeTesters(parser.Expr);
 
-            Assert.AreEqual("identifier", /**/ Success("identifier"));
-            Assert.AreEqual("1234",       /**/ Success("1234"));
-            Assert.AreEqual("3.1415",     /**/ Success("3.1415"));
+            Assert.Equal("identifier", /**/ Success("identifier"));
+            Assert.Equal("1234",       /**/ Success("1234"));
+            Assert.Equal("3.1415",     /**/ Success("3.1415"));
 
-            Assert.AreEqual("identifier", /**/ Success("(identifier)"));
-            Assert.AreEqual("1234",       /**/ Success("(1234)"));
-            Assert.AreEqual("3.1415",     /**/ Success("(3.1415)"));
+            Assert.Equal("identifier", /**/ Success("(identifier)"));
+            Assert.Equal("1234",       /**/ Success("(1234)"));
+            Assert.Equal("3.1415",     /**/ Success("(3.1415)"));
 
             Success("-(1.2 + +(a * b) - (-c / +d))");
 
@@ -122,20 +121,20 @@ namespace FlexID.Calc.Tests
             Failure("456)");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCoefficient()
         {
             var (Success, Failure) = MakeTesters(parser.Coefficient);
 
-            Assert.AreEqual("123", Success("123"));
-            Assert.AreEqual("123.45", Success("123.45"));
-            Assert.AreEqual("1.23E-04", Success("1.23E-04"));
-            Assert.AreEqual("+123.45", Success("+123.45"));
-            Assert.AreEqual("-1.23E-04", Success("-1.23E-04"));
+            Assert.Equal("123", Success("123"));
+            Assert.Equal("123.45", Success("123.45"));
+            Assert.Equal("1.23E-04", Success("1.23E-04"));
+            Assert.Equal("+123.45", Success("+123.45"));
+            Assert.Equal("-1.23E-04", Success("-1.23E-04"));
 
-            Assert.AreEqual("a", Success("$a"));
+            Assert.Equal("a", Success("$a"));
 
-            Assert.AreEqual("((a * 12%) + 1.5)", Success("$(a * 12% + 1.5)"));
+            Assert.Equal("((a * 12%) + 1.5)", Success("$(a * 12% + 1.5)"));
 
             Failure("a");
             Failure("(a * 12% + 1.5)");

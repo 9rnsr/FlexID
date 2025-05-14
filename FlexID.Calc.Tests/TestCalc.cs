@@ -1,32 +1,31 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
-    [TestClass]
     public class TestCalc
     {
         /// <summary>
         /// テスト用計算ケースを使った計算処理の実行を確認する。
         /// アウトプットファイルの出力切り替え機能についても同時にテストしている。
         /// </summary>
-        [TestMethod]
-        [DataRow("test_ing.inp", true,  /**/true,  /**/true,  /**/true  /**/)]
-        [DataRow("test_ing.inp", true,  /**/true,  /**/true,  /**/false /**/)]
-        [DataRow("test_ing.inp", true,  /**/true,  /**/false, /**/true  /**/)]
-        [DataRow("test_ing.inp", true,  /**/true,  /**/false, /**/false /**/)]
-        [DataRow("test_ing.inp", true,  /**/false, /**/true,  /**/true  /**/)]
-        [DataRow("test_ing.inp", true,  /**/false, /**/true,  /**/false /**/)]
-        [DataRow("test_ing.inp", true,  /**/false, /**/false, /**/true  /**/)]
-        [DataRow("test_ing.inp", true,  /**/false, /**/false, /**/false /**/)]
-        [DataRow("test_ing.inp", false, /**/true,  /**/true,  /**/true  /**/)]
-        [DataRow("test_ing.inp", false, /**/true,  /**/true,  /**/false /**/)]
-        [DataRow("test_ing.inp", false, /**/true,  /**/false, /**/true  /**/)]
-        [DataRow("test_ing.inp", false, /**/true,  /**/false, /**/false /**/)]
-        [DataRow("test_ing.inp", false, /**/false, /**/true,  /**/true  /**/)]
-        [DataRow("test_ing.inp", false, /**/false, /**/true,  /**/false /**/)]
-        [DataRow("test_ing.inp", false, /**/false, /**/false, /**/true  /**/)]
-        [DataRow("test_ing.inp", false, /**/false, /**/false, /**/false /**/)]
+        [Theory]
+        [InlineData("test_ing.inp", true,  /**/true,  /**/true,  /**/true  /**/)]
+        [InlineData("test_ing.inp", true,  /**/true,  /**/true,  /**/false /**/)]
+        [InlineData("test_ing.inp", true,  /**/true,  /**/false, /**/true  /**/)]
+        [InlineData("test_ing.inp", true,  /**/true,  /**/false, /**/false /**/)]
+        [InlineData("test_ing.inp", true,  /**/false, /**/true,  /**/true  /**/)]
+        [InlineData("test_ing.inp", true,  /**/false, /**/true,  /**/false /**/)]
+        [InlineData("test_ing.inp", true,  /**/false, /**/false, /**/true  /**/)]
+        [InlineData("test_ing.inp", true,  /**/false, /**/false, /**/false /**/)]
+        [InlineData("test_ing.inp", false, /**/true,  /**/true,  /**/true  /**/)]
+        [InlineData("test_ing.inp", false, /**/true,  /**/true,  /**/false /**/)]
+        [InlineData("test_ing.inp", false, /**/true,  /**/false, /**/true  /**/)]
+        [InlineData("test_ing.inp", false, /**/true,  /**/false, /**/false /**/)]
+        [InlineData("test_ing.inp", false, /**/false, /**/true,  /**/true  /**/)]
+        [InlineData("test_ing.inp", false, /**/false, /**/true,  /**/false /**/)]
+        [InlineData("test_ing.inp", false, /**/false, /**/false, /**/true  /**/)]
+        [InlineData("test_ing.inp", false, /**/false, /**/false, /**/false /**/)]
         public void TestOutput(string target, bool outDose, bool outDoseRate, bool outActRete, bool outActCumu)
         {
             var targetDir = TestFiles.Combine("TestCalc");
@@ -72,9 +71,9 @@ namespace FlexID.Calc.Tests
                 var expectFilePath = Path.Combine(expectDir, fileName);
                 var actualFilePath = Path.Combine(resultDir, fileName);
                 if (outputFlag)
-                    CollectionAssert.AreEqual(File.ReadAllLines(expectFilePath), File.ReadAllLines(actualFilePath));
+                    Assert.Equal(File.ReadAllLines(expectFilePath), File.ReadAllLines(actualFilePath));
                 else
-                    Assert.IsFalse(File.Exists(actualFilePath));
+                    Assert.False(File.Exists(actualFilePath));
             }
         }
     }

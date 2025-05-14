@@ -1,25 +1,24 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
-    [TestClass]
     public class TrialCalcTests
     {
         private string TestDir => TestFiles.Combine("TrialCalc");
 
-        [TestMethod]
-        [DataRow("Ba-133_ing-Insoluble")]
-        [DataRow("Ba-133_ing-Soluble")]
-        [DataRow("Ba-133_inh-TypeF")]
-        [DataRow("Ba-133_inh-TypeM")]
-        [DataRow("Ba-133_inh-TypeS")]
-        [DataRow("Sr-90_ing-Other")]
-        [DataRow("Sr-90_ing-Titanate")]
-        [DataRow("Sr-90_inh-TypeF")]
-        [DataRow("Sr-90_inh-TypeM")]
-        [DataRow("Sr-90_inh-TypeS")]
+        [Theory]
+        [InlineData("Ba-133_ing-Insoluble")]
+        [InlineData("Ba-133_ing-Soluble")]
+        [InlineData("Ba-133_inh-TypeF")]
+        [InlineData("Ba-133_inh-TypeM")]
+        [InlineData("Ba-133_inh-TypeS")]
+        [InlineData("Sr-90_ing-Other")]
+        [InlineData("Sr-90_ing-Titanate")]
+        [InlineData("Sr-90_inh-TypeF")]
+        [InlineData("Sr-90_inh-TypeM")]
+        [InlineData("Sr-90_inh-TypeS")]
         public void Test_OIR(string target)
         {
             var nuclide = target.Split('_')[0];
@@ -46,28 +45,28 @@ namespace FlexID.Calc.Tests
 
             main.Main(data);
 
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")));
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")));
 
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")));
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
         }
 
-        [TestMethod]
-        [DataRow("Sr-90_ing", "3months old")]
-        [DataRow("Sr-90_ing", "1years old")]
-        [DataRow("Sr-90_ing", "5years old")]
-        [DataRow("Sr-90_ing", "10years old")]
-        [DataRow("Sr-90_ing", "15years old")]
-        [DataRow("Sr-90_ing", "Adult")]
+        [Theory]
+        [InlineData("Sr-90_ing", "3months old")]
+        [InlineData("Sr-90_ing", "1years old")]
+        [InlineData("Sr-90_ing", "5years old")]
+        [InlineData("Sr-90_ing", "10years old")]
+        [InlineData("Sr-90_ing", "15years old")]
+        [InlineData("Sr-90_ing", "Adult")]
         public void Test_EIR(string target, string exposureAge)
         {
             var nuclide = target.Split('_')[0];
@@ -102,17 +101,17 @@ namespace FlexID.Calc.Tests
 
             main.Main(dataList);
 
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")));
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_DoseRate.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_DoseRate.out")));
 
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")));
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Cumulative.out")),
                 File.ReadAllLines(Path.Combine(resultDir, target + "_Cumulative.out")));
         }

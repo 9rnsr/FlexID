@@ -1,12 +1,11 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
     using static InputErrorTestHelpers;
 
-    [TestClass]
     public class InputOtherCalcTests
     {
         List<string> ExpectOtherSourceRegions(InputData data) =>
@@ -24,13 +23,13 @@ namespace FlexID.Calc.Tests
         {
             // 除外設定：リストに存在する場合に削除する。
             var n = list.RemoveAll(x => x == item);
-            Assert.IsTrue(n == 0 || n == 1);
+            Assert.True(n == 0 || n == 1);
         }
 
         /// <summary>
         /// 何も調整されない場合のOtherの内訳をテストする。
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TestAdjustNothing()
         {
             var reader = CreateReader(new[]
@@ -52,7 +51,7 @@ namespace FlexID.Calc.Tests
             var data = reader.Read();
             var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
 
-            CollectionAssert.AreEquivalent(new[]
+            Assert.Equivalent(new[]
             {
                 "O-mucosa",    "Teeth-V",     "Tonsils",     "Oesophag-w",  "St-wall",
                 "SI-wall",     "RC-wall",     "LC-wall",     "RS-wall",     "LN-ET",
@@ -65,13 +64,13 @@ namespace FlexID.Calc.Tests
                 "ET1-wall",    "ET2-wall",    "Lung-Tis",
             }, expectOtherSourceRegions);
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            Assert.Equal(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
         }
 
         /// <summary>
         /// コンパートメントとして明示された線源領域をOtherの内訳から除く処理をテストする。
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TestAdjustOther()
         {
             var reader = CreateReader(new[]
@@ -103,10 +102,10 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            Assert.Equal(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAdjustOtherByParameterOfInput()
         {
             var reader = CreateReader(new[]
@@ -149,10 +148,10 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            Assert.Equal(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAdjustOtherByParameterOfNuclide()
         {
             var reader = CreateReader(new[]
@@ -195,10 +194,10 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            Assert.Equal(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAdjustOtherByParameterOfNuclideAndInput()
         {
             var reader = CreateReader(new[]
@@ -253,7 +252,7 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            Assert.Equal(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
         }
     }
 }

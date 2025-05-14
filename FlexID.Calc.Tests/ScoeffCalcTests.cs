@@ -1,9 +1,8 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
-    [TestClass]
     public class ScoeffCalcTests
     {
         static SAFData safdataAM;
@@ -15,27 +14,27 @@ namespace FlexID.Calc.Tests
             safdataAF = SAFDataReader.ReadSAF(Sex.Female);
         }
 
-        [TestMethod]
-        [DataRow("Ba-133")]
-        [DataRow("C-14")]
-        [DataRow("Ca-45")]
-        [DataRow("Cs-134")]
-        [DataRow("Cs-137")]
-        [DataRow("Ba-137m")]
-        [DataRow("Fe-59")]
-        [DataRow("H-3")]
-        [DataRow("I-129")]
-        [DataRow("Pu-238")]
-        [DataRow("Pu-239")]
-        [DataRow("Pu-240")]
-        [DataRow("Pu-241")]
-        [DataRow("Pu-242")]
-        [DataRow("Ra-223")]
-        [DataRow("Ra-226")]
-        [DataRow("Sr-90")]
-        [DataRow("Y-90")]
-        [DataRow("Tc-99")]
-        [DataRow("Zn-65")]
+        [Theory]
+        [InlineData("Ba-133")]
+        [InlineData("C-14")]
+        [InlineData("Ca-45")]
+        [InlineData("Cs-134")]
+        [InlineData("Cs-137")]
+        [InlineData("Ba-137m")]
+        [InlineData("Fe-59")]
+        [InlineData("H-3")]
+        [InlineData("I-129")]
+        [InlineData("Pu-238")]
+        [InlineData("Pu-239")]
+        [InlineData("Pu-240")]
+        [InlineData("Pu-241")]
+        [InlineData("Pu-242")]
+        [InlineData("Ra-223")]
+        [InlineData("Ra-226")]
+        [InlineData("Sr-90")]
+        [InlineData("Y-90")]
+        [InlineData("Tc-99")]
+        [InlineData("Zn-65")]
         public void TestPCHIP(string nuclide)
         {
             var expectDir = TestFiles.Combine("SCoeffCalc", "ExpectPCHIP");
@@ -60,33 +59,33 @@ namespace FlexID.Calc.Tests
                 var target = $@"{nuclide}_{(sex == Sex.Male ? "AM" : "AF")}";
                 var expectFilePath = Path.Combine(expectDir, target + ".txt");
                 var actualFilePath = Path.Combine(resultDir, target + ".txt");
-                CollectionAssert.AreEqual(
+                Assert.Equal(
                     File.ReadAllLines(expectFilePath),
                     File.ReadAllLines(actualFilePath));
             }
         }
 
-        [TestMethod]
-        [DataRow("Ba-133")]
-        [DataRow("C-14")]
-        [DataRow("Ca-45")]
-        [DataRow("Cs-134")]
-        [DataRow("Cs-137")]
-        [DataRow("Ba-137m")]
-        [DataRow("Fe-59")]
-        [DataRow("H-3")]
-        [DataRow("I-129")]
-        [DataRow("Pu-238")]
-        [DataRow("Pu-239")]
-        [DataRow("Pu-240")]
-        [DataRow("Pu-241")]
-        [DataRow("Pu-242")]
-        [DataRow("Ra-223")]
-        [DataRow("Ra-226")]
-        [DataRow("Sr-90")]
-        [DataRow("Y-90")]
-        [DataRow("Tc-99")]
-        [DataRow("Zn-65")]
+        [Theory]
+        [InlineData("Ba-133")]
+        [InlineData("C-14")]
+        [InlineData("Ca-45")]
+        [InlineData("Cs-134")]
+        [InlineData("Cs-137")]
+        [InlineData("Ba-137m")]
+        [InlineData("Fe-59")]
+        [InlineData("H-3")]
+        [InlineData("I-129")]
+        [InlineData("Pu-238")]
+        [InlineData("Pu-239")]
+        [InlineData("Pu-240")]
+        [InlineData("Pu-241")]
+        [InlineData("Pu-242")]
+        [InlineData("Ra-223")]
+        [InlineData("Ra-226")]
+        [InlineData("Sr-90")]
+        [InlineData("Y-90")]
+        [InlineData("Tc-99")]
+        [InlineData("Zn-65")]
         public void TestLinear(string nuclide)
         {
             var expectDir = TestFiles.Combine("SCoeffCalc", "ExpectLinear");
@@ -111,7 +110,7 @@ namespace FlexID.Calc.Tests
                 var target = $@"{nuclide}_{(sex == Sex.Male ? "AM" : "AF")}";
                 var expectFilePath = Path.Combine(expectDir, target + ".txt");
                 var actualFilePath = Path.Combine(resultDir, target + ".txt");
-                CollectionAssert.AreEqual(
+                Assert.Equal(
                     File.ReadAllLines(expectFilePath),
                     File.ReadAllLines(actualFilePath));
             }

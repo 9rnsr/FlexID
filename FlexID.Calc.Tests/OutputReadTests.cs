@@ -1,10 +1,9 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
-    [TestClass]
     public class OutputReadTests
     {
         static readonly (OutputType type, string suffix)[] types = new[]
@@ -15,9 +14,9 @@ namespace FlexID.Calc.Tests
             (OutputType.DoseRate,            "DoseRate"),
         };
 
-        [TestMethod]
-        [DataRow("Ba-133_ing-Insoluble")]
-        [DataRow("Sr-90_ing-Other", "Y-90")]
+        [Theory]
+        [InlineData("Ba-133_ing-Insoluble")]
+        [InlineData("Sr-90_ing-Other", "Y-90")]
         public void Test(string target, params string[] progeny)
         {
             var nuclide = target.Split('_')[0];
@@ -30,16 +29,16 @@ namespace FlexID.Calc.Tests
                 var path = Path.Combine(expectDir, nuclide, $"{target}_{suffix}.out");
                 var data = new OutputDataReader(path).Read();
 
-                Assert.AreEqual(nuclide, data.Nuclides[0].Nuclide);
+                Assert.Equal(nuclide, data.Nuclides[0].Nuclide);
                 if (type == OutputType.Dose || type == OutputType.DoseRate)
                 {
-                    Assert.AreEqual(1, data.Nuclides.Length);
+                    Assert.Single(data.Nuclides);
                 }
                 else
                 {
-                    Assert.AreEqual(1 + progeny.Length, data.Nuclides.Length);
-                    Assert.AreEqual(nuclide, data.Nuclides[0].Nuclide);
-                    CollectionAssert.AreEqual(progeny, data.Nuclides.Skip(1).Select(n => n.Nuclide).ToArray());
+                    Assert.Equal(1 + progeny.Length, data.Nuclides.Length);
+                    Assert.Equal(nuclide, data.Nuclides[0].Nuclide);
+                    Assert.Equal(progeny, data.Nuclides.Skip(1).Select(n => n.Nuclide).ToArray());
                 }
             }
         }

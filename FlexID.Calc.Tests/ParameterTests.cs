@@ -1,23 +1,22 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
-    [TestClass]
     public class ParameterTests
     {
         private string ParamDir => TestFiles.Combine("parameter");
 
-        [TestMethod]
-        [DynamicData(nameof(ValidCases), DynamicDataSourceType.Method)]
+        [Theory]
+        [MemberData(nameof(ValidCases))]
         public void TestValids(string paramFile, Program.CommandLine expect)
         {
             var paramFilePath = Path.Combine(ParamDir, paramFile);
             var lines = File.ReadAllLines(paramFilePath);
             var param = Program.GetParam(lines);
-            Assert.AreEqual(expect, param);
+            Assert.Equal(expect, param);
         }
 
         public static IEnumerable<object[]> ValidCases()
@@ -65,14 +64,14 @@ namespace FlexID.Calc.Tests
             };
         }
 
-        [TestMethod]
-        [DynamicData(nameof(ErrorCases), DynamicDataSourceType.Method)]
+        [Theory]
+        [MemberData(nameof(ErrorCases))]
         public void TestErrors(string paramFile, string expect)
         {
             var paramFilePath = Path.Combine(ParamDir, paramFile);
             var lines = File.ReadAllLines(paramFilePath);
-            var e = Assert.ThrowsException<ApplicationException>(() => Program.GetParam(lines));
-            Assert.AreEqual(expect, e.Message);
+            var e = Assert.Throws<ApplicationException>(() => Program.GetParam(lines));
+            Assert.Equal(expect, e.Message);
         }
 
         public static IEnumerable<object[]> ErrorCases()

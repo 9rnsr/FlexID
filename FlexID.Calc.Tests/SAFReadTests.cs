@@ -1,13 +1,12 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace FlexID.Calc.Tests
 {
-    [TestClass]
     public class SAFReadTests
     {
-        [TestMethod]
+        [Fact]
         public void TestReadRAD()
         {
             var expectFile = TestFiles.Combine("SAFRead", "Ca-45_RadExpected.txt");
@@ -15,10 +14,10 @@ namespace FlexID.Calc.Tests
 
             var actualLines = SAFDataReader.ReadRAD("Ca-45");
 
-            CollectionAssert.AreEqual(expectLines, actualLines);
+            Assert.Equal(expectLines, actualLines);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReadBET()
         {
             var expectFile = TestFiles.Combine("SAFRead", "Sr-90_BetExpected.txt");
@@ -26,14 +25,14 @@ namespace FlexID.Calc.Tests
 
             var actualLines = SAFDataReader.ReadBET("Sr-90");
 
-            CollectionAssert.AreEqual(expectLines, actualLines);
+            Assert.Equal(expectLines, actualLines);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReadSourceRegions()
         {
             var sregions = SAFDataReader.ReadSourceRegions();
-            CollectionAssert.AreEqual(new[]
+            Assert.Equal(new[]
             {
                 "O-cavity",    "O-mucosa",    "Teeth-S",     "Teeth-V",     "Tongue",
                 "Tonsils",     "Oesophag-s",  "Oesophag-f",  "Oesophag-w",  "St-cont",
@@ -53,7 +52,7 @@ namespace FlexID.Calc.Tests
                 "ET1-wall",    "ET2-wall",    "Lung-Tis",    "RT-air",
             }, sregions.Select(s => s.Name).ToArray());
 
-            CollectionAssert.AreEqual(new[]
+            Assert.Equal(new[]
             {
                 0.0      , 3.583E-02, 0.000E+00, 5.000E-02, 7.300E-02,
                 3.000E-03, 0.000E+00, 0.000E+00, 4.000E-02, 2.500E-01,
@@ -73,7 +72,7 @@ namespace FlexID.Calc.Tests
                 2.923E-03, 2.923E-03, 5.000E-01, 0.000E+00,
             }, sregions.Select(s => s.MaleMass).ToArray());
 
-            CollectionAssert.AreEqual(new[]
+            Assert.Equal(new[]
             {
                 0.0      ,  2.245E-02,  0.000E+00,  4.000E-02,  6.000E-02,
                 3.000E-03,  0.000E+00,  0.000E+00,  3.500E-02,  2.300E-01,
@@ -94,11 +93,11 @@ namespace FlexID.Calc.Tests
             }, sregions.Select(s => s.FemaleMass).ToArray());
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReadTargetRegions()
         {
             var tregions = SAFDataReader.ReadTargetRegions();
-            CollectionAssert.AreEqual(new[]
+            Assert.Equal(new[]
             {
                 "O-mucosa",     "Oesophagus",   "St-stem",      "SI-stem",      "RC-stem",
                 "LC-stem",      "RS-stem",      "ET1-bas",      "ET2-bas",      "LN-ET",
@@ -112,18 +111,18 @@ namespace FlexID.Calc.Tests
             }, tregions.Select(t => t.Name).ToArray());
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReadSAF_AdultMale()
         {
             var safdata = SAFDataReader.ReadSAF(Sex.Male);
-            Assert.IsNotNull(safdata);
+            Assert.NotNull(safdata);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReadSAF_AdultFemale()
         {
             var safdata = SAFDataReader.ReadSAF(Sex.Female);
-            Assert.IsNotNull(safdata);
+            Assert.NotNull(safdata);
         }
     }
 }
