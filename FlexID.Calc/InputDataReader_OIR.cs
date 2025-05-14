@@ -635,20 +635,6 @@ namespace FlexID.Calc
                     throw Program.Error($"Missing 'inp' compartment.");
 
                 nuclide.OtherSourceRegions = otherSourceRegions.ToArray();
-
-                // 核種に対応するS係数データを読み込む。
-                var tableSCoeff = ReadSCoeff(data, nuclide);
-                data.SCoeffTables.Add(tableSCoeff);
-
-                foreach (var (lineNum, organ) in organs)
-                {
-                    var sourceRegion = organ.SourceRegion;
-                    if (sourceRegion != null)
-                    {
-                        // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
-                        organ.S_Coefficients = tableSCoeff[sourceRegion];
-                    }
-                }
             }
         }
 
@@ -781,12 +767,6 @@ namespace FlexID.Calc
                         sourceRegion = "Other";
 
                     organDecay.SourceRegion = sourceRegion;
-
-                    // 核種に対応するS係数データを取得する。
-                    var tableSCoeff = data.SCoeffTables[data.Nuclides.IndexOf(progeny)];
-
-                    // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
-                    organDecay.S_Coefficients = tableSCoeff[sourceRegion];
                 }
 
                 return organDecay;
@@ -1127,6 +1107,30 @@ namespace FlexID.Calc
             // 初期配分を終えた後は流入なし。
             var input = data.Organs.First(o => o.Func == OrganFunc.inp);
             input.IsZeroInflow = true;
+        }
+
+        /// <summary>
+        /// S係数データをインプットに設定する。
+        /// </summary>
+        /// <param name="data"></param>
+        public static void SetSCoefficients(InputData data)
+        {
+            foreach (var nuclide in data.Nuclides)
+            {
+                // 核種に対応するS係数データを読み込む。
+                var tableSCoeff = ReadSCoeff(data, nuclide);
+                data.SCoeffTables.Add(tableSCoeff);
+
+                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+                {
+                    var sourceRegion = organ.SourceRegion;
+                    if (sourceRegion is null)
+                        continue;
+
+                    // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
+                    organ.S_Coefficients = tableSCoeff[sourceRegion];
+                }
+            }
         }
 
         /// <summary>

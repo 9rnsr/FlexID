@@ -42,6 +42,8 @@ namespace FlexID.Calc
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
+            InputDataReader_OIR.SetSCoefficients(data);
+
             using (CalcOut = new CalcOut(data, OutputPath))
             {
                 // ログファイルを出力する。
