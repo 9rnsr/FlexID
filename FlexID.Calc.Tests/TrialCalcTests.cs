@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FlexID.Calc.Tests
@@ -19,7 +20,7 @@ namespace FlexID.Calc.Tests
         [InlineData("Sr-90_inh-TypeF")]
         [InlineData("Sr-90_inh-TypeM")]
         [InlineData("Sr-90_inh-TypeS")]
-        public void Test_OIR(string target)
+        public async Task Test_OIR(string target)
         {
             var nuclide = target.Split('_')[0];
             var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
@@ -43,7 +44,7 @@ namespace FlexID.Calc.Tests
             main.OutTimeMeshPath  /**/= oTimeMeshFile;
             main.CommitmentPeriod /**/= commitmentPeriod;
 
-            main.Main(data);
+            await Task.Run(() => main.Main(data), TestContext.Current.CancellationToken);
 
             Assert.Equal(
                 File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")),
