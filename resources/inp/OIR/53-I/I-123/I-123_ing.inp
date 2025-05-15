@@ -1,0 +1,364 @@
+[title]
+I-123 Ingestion
+
+[nuclide]
+  I-123  Te-123m  Te-123
+
+
+[I-123:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # inorganic iodine in blood
+  acc   Blood2                Blood         #   organic iodine in blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   St-wall               St-wall
+  acc   Other1                Other
+  acc   Other2                Other
+  acc   Other3                Other
+  acc   Other4                Other
+
+[I-123:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.137 p.106 Fig.5.2
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-sRe          St-conRe               2160
+  St-conRe                SI-conRe                 20.57
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.108 Table 5.4
+  Blood1                  Thyroid1                  7.26
+  Blood1                  UB-con                   11.84
+  Blood1                  S-glands                  5.16
+  Blood1                  St-wall                   8.60
+  Blood1                  Other1                  600
+  Blood1                  Kidneys1                 25
+  Blood1                  Liver1                   15
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  Thyroid1                Thyroid2                 95
+  Thyroid1                Blood1                   36
+  Thyroid2                Blood2                    0.0077
+  Thyroid2                Blood1                    0
+  Other1                  Blood1                  330
+  Other1                  Other2                   35
+  Other2                  Other1                   56
+  Kidneys1                Blood1                  100
+  Liver1                  Blood1                  100
+  Blood2                  Other3                   15
+  Other3                  Blood2                   21
+  Other3                  Other4                    1.2
+  Other4                  Other3                    0.62
+  Other4                  Blood1                    0.14
+  Blood2                  Kidneys2                  3.6
+  Kidneys2                Blood2                   21
+  Kidneys2                Blood1                    0.14
+  Blood2                  Liver2                   21
+  Liver2                  Blood2                   21
+  Liver2                  Blood1                    0.14
+  Liver2                  RC-con                    0.08
+
+
+[Te-123m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # plasma
+  acc   Blood2                Blood         # red blood cells
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver                 Liver
+  acc   Thyroid               Thyroid
+  acc   Kidneys               Kidneys
+  acc   ST                    Other
+
+[Te-123m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.3
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  I-123/Oralcavity        Oralcavity                ---
+  I-123/OralcavityRe      Oralcavity                ---
+  I-123/Oesophagus-f      Oesophagus-f              ---
+  I-123/Oesophagus-s      Oesophagus-s              ---
+  I-123/Oesophagus-sRe    Oesophagus-s              ---
+  I-123/St-con            St-con                    ---
+  I-123/St-conRe          St-con                    ---
+  I-123/SI-con            SI-con                    ---
+  I-123/SI-conRe          SI-conRe                  ---
+  I-123/RC-con            RC-con                    ---
+  I-123/LC-con            LC-con                    ---
+  I-123/RS-con            RS-con                    ---
+  I-123/Faeces            Faeces                    ---
+  I-123/UB-con            UB-con                    ---
+  I-123/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.73 Table 4.7
+  Blood1                  UB-con                    0.751
+  Blood1                  Kidneys                   0.0404
+  Blood1                  Liver                     0.1213
+  Blood1                  Blood2                    0.1011
+  Blood1                  ST                        0.0768
+  Blood1                  C-bone-S                  0.0202
+  Blood1                  T-bone-S                  0.0404
+  Blood1                  Thyroid                   0.0040
+  Blood2                  Blood1                    0.0693
+  Liver                   SI-conRe                  0.0693
+  Thyroid                 Blood1                    0.0693
+  Kidneys                 Blood1                    0.0693
+  ST                      Blood1                    0.0693
+  C-bone-S                Blood1                    0.0116
+  T-bone-S                Blood1                    0.0116
+  C-bone-S                C-bone-V                  0.000693
+  T-bone-S                T-bone-V                  0.000693
+  C-bone-V                Blood1                    0.000082
+  T-bone-V                Blood1                    0.000493
+
+# ICRP Publ.137 p.113 Para.250
+# > (250) Tellurium atoms produced in the blood iodide compartment of the iodine
+# > model are assigned to the plasma compartment (Blood 1) of the tellurium model.
+# > Tellurium atoms produced in the blood organic iodine compartment of the iodine
+# > model are assumed to transfer to Blood 1 at the rate 1000 d⁻¹. Tellurium atoms
+# > produced at soft tissue sites in the iodine model are assumed to transfer to Blood
+# > 1 at the rate 0.0693 d⁻¹ (t½=10 d), which is the rate of removal from all soft tissue
+# > compartments in the characteristic model for tellurium.
+# > (250) ヨウ素モデルの血液ヨウ化物コンパートメントで生成されたテルル原子は、
+# > テルルモデルの血漿コンパートメント（血液1）に割り当てられます。ヨウ素モデルの
+# > 血液有機ヨウ素コンパートメントで生成されたテルル原子は、1000 d⁻¹の速度で血液1に
+# > 移動するものとします。ヨウ素モデルの軟部組織部位で生成されたテルル原子は、
+# > 0.0693 d⁻¹（t½=10 d）の速度で血液1に移動するものとします。これは、テルルの
+# > 特性モデルにおけるすべての軟部組織コンパートメントからの除去速度です。
+
+  I-123/Blood1            Blood1                    ---
+  I-123/Blood2            Blood1                 1000
+  I-123/Liver1            Blood1                    0.0693
+  I-123/Liver2            Blood1                    0.0693
+  I-123/Kidneys1          Blood1                    0.0693
+  I-123/Kidneys2          Blood1                    0.0693
+  I-123/Thyroid1          Blood1                    0.0693
+  I-123/Thyroid2          Blood1                    0.0693
+  I-123/S-glands          Blood1                    0.0693
+  I-123/St-wall           Blood1                    0.0693
+  I-123/Other1            Blood1                    0.0693
+  I-123/Other2            Blood1                    0.0693
+  I-123/Other3            Blood1                    0.0693
+  I-123/Other4            Blood1                    0.0693
+
+
+[Te-123:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # plasma
+  acc   Blood2                Blood         # red blood cells
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver                 Liver
+  acc   Thyroid               Thyroid
+  acc   Kidneys               Kidneys
+  acc   ST                    Other
+
+[Te-123:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.3
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  I-123/Oralcavity        Oralcavity                ---
+  I-123/OralcavityRe      Oralcavity                ---
+  I-123/Oesophagus-f      Oesophagus-f              ---
+  I-123/Oesophagus-s      Oesophagus-s              ---
+  I-123/Oesophagus-sRe    Oesophagus-s              ---
+  I-123/St-con            St-con                    ---
+  I-123/St-conRe          St-con                    ---
+  I-123/SI-con            SI-con                    ---
+  I-123/SI-conRe          SI-conRe                  ---
+  I-123/RC-con            RC-con                    ---
+  I-123/LC-con            LC-con                    ---
+  I-123/RS-con            RS-con                    ---
+  I-123/Faeces            Faeces                    ---
+  I-123/UB-con            UB-con                    ---
+  I-123/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.73 Table 4.7
+  Blood1                  UB-con                    0.751
+  Blood1                  Kidneys                   0.0404
+  Blood1                  Liver                     0.1213
+  Blood1                  Blood2                    0.1011
+  Blood1                  ST                        0.0768
+  Blood1                  C-bone-S                  0.0202
+  Blood1                  T-bone-S                  0.0404
+  Blood1                  Thyroid                   0.0040
+  Blood2                  Blood1                    0.0693
+  Liver                   SI-conRe                  0.0693
+  Thyroid                 Blood1                    0.0693
+  Kidneys                 Blood1                    0.0693
+  ST                      Blood1                    0.0693
+  C-bone-S                Blood1                    0.0116
+  T-bone-S                Blood1                    0.0116
+  C-bone-S                C-bone-V                  0.000693
+  T-bone-S                T-bone-V                  0.000693
+  C-bone-V                Blood1                    0.000082
+  T-bone-V                Blood1                    0.000493
+
+# ICRP Publ.137 p.113 Para.250
+  I-123/Blood1            Blood1                    ---
+  I-123/Blood2            Blood1                 1000
+  I-123/Liver1            Blood1                    0.0693
+  I-123/Liver2            Blood1                    0.0693
+  I-123/Kidneys1          Blood1                    0.0693
+  I-123/Kidneys2          Blood1                    0.0693
+  I-123/Thyroid1          Blood1                    0.0693
+  I-123/Thyroid2          Blood1                    0.0693
+  I-123/S-glands          Blood1                    0.0693
+  I-123/St-wall           Blood1                    0.0693
+  I-123/Other1            Blood1                    0.0693
+  I-123/Other2            Blood1                    0.0693
+  I-123/Other3            Blood1                    0.0693
+  I-123/Other4            Blood1                    0.0693
+
+  Te-123m/Blood1          Blood1                    ---
+  Te-123m/Blood2          Blood2                    ---
+  Te-123m/C-bone-S        C-bone-S                  ---
+  Te-123m/C-bone-V        C-bone-V                  ---
+  Te-123m/T-bone-S        T-bone-S                  ---
+  Te-123m/T-bone-V        T-bone-V                  ---
+  Te-123m/Liver           Liver                     ---
+  Te-123m/Thyroid         Thyroid                   ---
+  Te-123m/Kidneys         Kidneys                   ---
+  Te-123m/ST              ST                        ---
