@@ -1,0 +1,382 @@
+[title]
+I-133 Inhalation:Type-S
+
+[nuclide]
+  I-133  Xe-133m  Xe-133
+
+
+[I-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # inorganic iodine in blood
+  acc   Blood2                Blood         #   organic iodine in blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   St-wall               St-wall
+  acc   Other1                Other
+  acc   Other2                Other
+  acc   Other3                Other
+  acc   Other4                Other
+
+[I-133:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.97 Table 5.3 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fA    = 0.01
+  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood1                $sr
+  INT-F                   Blood1                $sr
+  bb-F                    Blood1                $sr
+  bbseq-F                 Blood1                $sr
+  BB-F                    Blood1                $sr
+  BBseq-F                 Blood1                $sr
+  ET2-F                   Blood1                $sr
+  ETseq-F                 Blood1                $sr
+  LNET-F                  Blood1                $sr
+  LNTH-F                  Blood1                $sr
+
+  ALV-S                   Blood1                $ss
+  INT-S                   Blood1                $ss
+  bb-S                    Blood1                $ss
+  bbseq-S                 Blood1                $ss
+  BB-S                    Blood1                $ss
+  BBseq-S                 Blood1                $ss
+  ET2-S                   Blood1                $ss
+  ETseq-S                 Blood1                $ss
+  LNET-S                  Blood1                $ss
+  LNTH-S                  Blood1                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.137 p.106 Fig.5.2
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-sRe          St-conRe               2160
+  St-conRe                SI-conRe                 20.57
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.108 Table 5.4
+  Blood1                  Thyroid1                  7.26
+  Blood1                  UB-con                   11.84
+  Blood1                  S-glands                  5.16
+  Blood1                  St-wall                   8.60
+  Blood1                  Other1                  600
+  Blood1                  Kidneys1                 25
+  Blood1                  Liver1                   15
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  Thyroid1                Thyroid2                 95
+  Thyroid1                Blood1                   36
+  Thyroid2                Blood2                    0.0077
+  Thyroid2                Blood1                    0
+  Other1                  Blood1                  330
+  Other1                  Other2                   35
+  Other2                  Other1                   56
+  Kidneys1                Blood1                  100
+  Liver1                  Blood1                  100
+  Blood2                  Other3                   15
+  Other3                  Blood2                   21
+  Other3                  Other4                    1.2
+  Other4                  Other3                    0.62
+  Other4                  Blood1                    0.14
+  Blood2                  Kidneys2                  3.6
+  Kidneys2                Blood2                   21
+  Kidneys2                Blood1                    0.14
+  Blood2                  Liver2                   21
+  Liver2                  Blood2                   21
+  Liver2                  Blood1                    0.14
+  Liver2                  RC-con                    0.08
+
+
+[Xe-133m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   UB-con                UB-cont
+
+  acc   Blood                 Blood
+  exc   Exhaled               ---
+
+[Xe-133m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 Para.38
+# > (38) Noble gases produced in compartments of the respiratory tract and in the
+# > alimentary tract models by radioactive decay are assumed to escape from these
+# > compartments directly to the environment at a rate of 100 d⁻¹, without transfer to
+# > the blood compartment and without transfer between compartments of respiratory
+# > tract and alimentary tract models. It is assumed that progeny of such noble gases
+# > formed within the body follow the rules stated in Para. 37.
+# > (38) 呼吸器系および消化器系モデルにおいて放射性崩壊により生成される希ガスは、
+# > これらの部位から100 d⁻¹の速度で直接環境へ放出され、血液系への移行や呼吸器系と
+# > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
+# > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
+
+  I-133/ET1-F             Exhaled                 100
+  I-133/ET2-F             Exhaled                 100
+  I-133/ETseq-F           Exhaled                 100
+  I-133/LNET-F            Exhaled                 100
+  I-133/BB-F              Exhaled                 100
+  I-133/BBseq-F           Exhaled                 100
+  I-133/bb-F              Exhaled                 100
+  I-133/bbseq-F           Exhaled                 100
+  I-133/ALV-F             Exhaled                 100
+  I-133/INT-F             Exhaled                 100
+  I-133/LNTH-F            Exhaled                 100
+  I-133/ET1-S             Exhaled                 100
+  I-133/ET2-S             Exhaled                 100
+  I-133/ETseq-S           Exhaled                 100
+  I-133/LNET-S            Exhaled                 100
+  I-133/BB-S              Exhaled                 100
+  I-133/BBseq-S           Exhaled                 100
+  I-133/bb-S              Exhaled                 100
+  I-133/bbseq-S           Exhaled                 100
+  I-133/ALV-S             Exhaled                 100
+  I-133/INT-S             Exhaled                 100
+  I-133/LNTH-S            Exhaled                 100
+
+  I-133/Oralcavity        Exhaled                 100
+  I-133/OralcavityRe      Exhaled                 100
+  I-133/Oesophagus-f      Exhaled                 100
+  I-133/Oesophagus-s      Exhaled                 100
+  I-133/Oesophagus-sRe    Exhaled                 100
+  I-133/St-con            Exhaled                 100
+  I-133/St-conRe          Exhaled                 100
+  I-133/SI-con            Exhaled                 100
+  I-133/SI-conRe          Exhaled                 100
+  I-133/RC-con            Exhaled                 100
+  I-133/LC-con            Exhaled                 100
+  I-133/RS-con            Exhaled                 100
+  I-133/UB-con            UB-con                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
+# ICRP Publ.137 Para.252
+# > (252) A generic biokinetic model is applied in this publication to xenon isotopes
+# > produced by decay of radionuclides in systemic pools. Xenon produced in bone is
+# > assumed to transfer to blood at the rate 100 d⁻¹ if produced in bone surfaces and
+# > 0.36 d⁻¹ if produced in bone volume. These rates are taken from the model for radon
+# > introduced in Publication 67 (ICRP, 1993). Xenon produced in a soft tissue compartment
+# > is assumed to transfer to blood with a half-time of 20 min. Xenon produced
+# > in the blood inorganic iodide compartment is assigned to the blood compartment of
+# > the xenon model. Xenon produced in the blood organic iodine compartment is
+# > assumed to transfer to blood in the xenon model at the rate 1000 d⁻¹. Xenon entering
+# > the blood compartment of the xenon model or produced in that compartment is
+# > assumed to be exhaled at the rate 1000 d⁻¹.
+# > (252) 本刊行物では、全身プールにおける放射性核種の崩壊によって生成されるキセノン同位体に
+# > 対し、一般的な生体動態モデルを適用する。骨で生成されるキセノンは、骨表面で生成される場合は
+# > 100 d⁻¹の速度で血液に移行すると仮定し、骨体積で生成される場合は0.36 d⁻¹の速度で血液に
+# > 移行すると仮定する。これらの速度は、Publication 67 (ICRP, 1993) で導入されたラドンの
+# > モデルに基づく。軟部組織コンパートメントで生成されるキセノンは、半減期20分で血液に
+# > 移行すると仮定する。血液中の無機ヨウ素コンパートメントで生成されるキセノンは、
+# > キセノンモデルの血液コンパートメントに割り当てられる。血液中の有機ヨウ素コンパートメントで
+# > 生成されるキセノンは、キセノンモデルにおいて1000 d⁻¹の速度で血液に移行すると仮定する。
+# > キセノンモデルの血液コンパートメントに入る、またはそこで生成されるキセノンは、1000 d⁻¹の
+# > 速度で呼気中に排出されると仮定されます。
+
+  I-133/Blood1            Blood                     ---
+  I-133/Blood2            Blood                  1000
+  I-133/Liver1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Liver2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Kidneys1          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Kidneys2          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Thyroid1          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Thyroid2          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/S-glands          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/St-wall           Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Other1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Other2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  Blood                   Exhaled                1000
+
+
+[Xe-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   UB-con                UB-cont
+
+  acc   Blood                 Blood
+  exc   Exhaled               ---
+
+[Xe-133:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 Para.38
+  I-133/ET1-F             Exhaled                 100
+  I-133/ET2-F             Exhaled                 100
+  I-133/ETseq-F           Exhaled                 100
+  I-133/LNET-F            Exhaled                 100
+  I-133/BB-F              Exhaled                 100
+  I-133/BBseq-F           Exhaled                 100
+  I-133/bb-F              Exhaled                 100
+  I-133/bbseq-F           Exhaled                 100
+  I-133/ALV-F             Exhaled                 100
+  I-133/INT-F             Exhaled                 100
+  I-133/LNTH-F            Exhaled                 100
+  I-133/ET1-S             Exhaled                 100
+  I-133/ET2-S             Exhaled                 100
+  I-133/ETseq-S           Exhaled                 100
+  I-133/LNET-S            Exhaled                 100
+  I-133/BB-S              Exhaled                 100
+  I-133/BBseq-S           Exhaled                 100
+  I-133/bb-S              Exhaled                 100
+  I-133/bbseq-S           Exhaled                 100
+  I-133/ALV-S             Exhaled                 100
+  I-133/INT-S             Exhaled                 100
+  I-133/LNTH-S            Exhaled                 100
+
+  I-133/Oralcavity        Exhaled                 100
+  I-133/OralcavityRe      Exhaled                 100
+  I-133/Oesophagus-f      Exhaled                 100
+  I-133/Oesophagus-s      Exhaled                 100
+  I-133/Oesophagus-sRe    Exhaled                 100
+  I-133/St-con            Exhaled                 100
+  I-133/St-conRe          Exhaled                 100
+  I-133/SI-con            Exhaled                 100
+  I-133/SI-conRe          Exhaled                 100
+  I-133/RC-con            Exhaled                 100
+  I-133/LC-con            Exhaled                 100
+  I-133/RS-con            Exhaled                 100
+  I-133/UB-con            UB-con                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
+# ICRP Publ.137 Para.252
+  I-133/Blood1            Blood                     ---
+  I-133/Blood2            Blood                  1000
+  I-133/Liver1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Liver2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Kidneys1          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Kidneys2          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Thyroid1          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Thyroid2          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/S-glands          Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/St-wall           Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Other1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-133/Other2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  Blood                   Exhaled                1000
