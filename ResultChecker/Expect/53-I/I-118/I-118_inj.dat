@@ -1,0 +1,11 @@
+Radionuclide	I-118
+Route of Intake	Injection
+Material	Injection, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Thyroid*	Liver*
+0.041667	4.7E-2	5.3E-3	2.6E-3	2.1E-3
+0.083333	2.1E-3	3.0E-4	1.9E-4	7.8E-5
+0.125	9.6E-5	1.4E-5	1.2E-5	3.3E-6
+0.25	8.7E-9	1.2E-9	2.1E-9	2.4E-10
