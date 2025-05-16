@@ -44,7 +44,6 @@ namespace ResultChecker
             if (args.Length >= 1)
             {
                 var processOptions = true;
-                patterns = new List<Regex>();
 
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -69,6 +68,17 @@ namespace ResultChecker
                     if (IsOption("--"))
                     {
                         processOptions = false;
+                        continue;
+                    }
+
+                    if (arg[0] == '@')
+                    {
+                        var head = args.AsSpan(0, i).ToArray();
+                        var tail = args.AsSpan(i + 1).ToArray();
+                        var newArgs = File.ReadAllText(arg.Substring(1))
+                            .Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
+                        args = head.Concat(newArgs).Concat(tail).ToArray();
+                        i--;
                         continue;
                     }
 
@@ -118,6 +128,8 @@ namespace ResultChecker
                     var pattern = arg;
                     try
                     {
+                        if (patterns is null)
+                            patterns = new List<Regex>();
                         patterns.Add(new Regex(pattern, RegexOptions.IgnoreCase));
                     }
                     catch
@@ -144,6 +156,7 @@ namespace ResultChecker
                 // 出力ディレクトリにあるログファイルから、処理対象を収集する。
                 targets = Directory.EnumerateFiles(OutputDir, "*.log")
                     .Select(logFile => (target: Path.GetFileNameWithoutExtension(logFile), inputPath: ""))
+                    .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)
                     .ToArray();
             }
             if (targets.Length == 0)
@@ -230,6 +243,7 @@ namespace ResultChecker
             Console.Error.WriteLine("    -of, --output-file <name>     set the output summary Excel file name");
             Console.Error.WriteLine("    --[no-]run                    run calculation");
             Console.Error.WriteLine("    -h, --help                    print help information");
+            Console.Error.WriteLine("    @file                         read command-line options from the file");
             Console.Error.WriteLine();
             Console.Error.WriteLine("<pattern>");
             Console.Error.WriteLine("    target input name pattern as regular expression.");
