@@ -28,12 +28,18 @@ namespace ResultChecker
         /// </summary>
         static string OutputFileName;
 
+        /// <summary>
+        /// 結果取得するための計算を実行するかどうか。
+        /// </summary>
+        static bool RunCalculation;
+
         static async Task<int> Main(string[] args)
         {
             List<Regex> patterns = null;
 
             OutputDir = "out";
             OutputFileName = "summary.xlsx";
+            RunCalculation = true;
 
             if (args.Length >= 1)
             {
@@ -90,6 +96,17 @@ namespace ResultChecker
                         continue;
                     }
 
+                    if (IsOption("--run"))
+                    {
+                        RunCalculation = true;
+                        continue;
+                    }
+                    if (IsOption("--no-run"))
+                    {
+                        RunCalculation = false;
+                        continue;
+                    }
+
                     if (arg.Length == 2 && arg[0] == '-' || arg.StartsWith("--"))
                     {
                         Console.Error.WriteLine($"error: unknown option '{arg}'");
@@ -113,10 +130,25 @@ namespace ResultChecker
                 }
             }
 
-            var inputs = GetInputs().Where(inp => patterns?.Any(pattern => pattern.IsMatch(Path.GetFileNameWithoutExtension(inp))) ?? true).ToArray();
-            if (inputs.Length == 0)
+            (string target, string inputPath)[] targets;
+            if (RunCalculation)
             {
-                Console.Error.WriteLine($"error: there is no target inputs.");
+                // パターンに合致するインプットを計算対象として収集する。
+                targets = GetInputs()
+                    .Select(inputPath => (target: Path.GetFileNameWithoutExtension(inputPath), inputPath))
+                    .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)
+                    .ToArray();
+            }
+            else
+            {
+                // 出力ディレクトリにあるログファイルから、処理対象を収集する。
+                targets = Directory.EnumerateFiles(OutputDir, "*.log")
+                    .Select(logFile => (target: Path.GetFileNameWithoutExtension(logFile), inputPath: ""))
+                    .ToArray();
+            }
+            if (targets.Length == 0)
+            {
+                Console.Error.WriteLine($"error: there is no targets.");
                 return -1;
             }
 
@@ -129,17 +161,34 @@ namespace ResultChecker
             var lcts = new LimitedConcurrencyLevelTaskScheduler(maxParallel);
             var factory = new TaskFactory(lcts);
 
-            var presenter = new ProgressPresenter(inputs.Length);
+            var presenter = new ProgressPresenter(targets.Length);
 
-            // 並列に計算を実施する。
-            Task.WaitAll(inputs.Select(inputPath => factory.StartNew(() =>
+            if (RunCalculation)
             {
-                var target = Path.GetFileNameWithoutExtension(inputPath);
+                // 並列処理で計算を実施する。
+                Task.WaitAll(targets.Select(x => factory.StartNew(() => Process(x.target, x.inputPath))).ToArray());
+            }
+            else
+            {
+                // 同期処理で出力の取得と進捗表示を実施する。
+                presenter.Update();
+                foreach (var (target, inputPath) in targets)
+                {
+                    Process(target, inputPath);
+                    presenter.Update();
+                }
+                presenter.Update();
+            }
+
+            void Process(string target, string inputPath)
+            {
                 try
                 {
                     presenter.Start(target);
 
-                    var result = CalcAndSummary(target, inputPath, OutputDir);
+                    var result = RunCalculation
+                        ? CalcAndSummary(target, inputPath, OutputDir)
+                        : GetResult(target);
                     results.Add(result);
 
                     presenter.Stop(target, $"\x1B[36mOK\x1B[0m");
@@ -153,8 +202,9 @@ namespace ResultChecker
                 }
 
                 // 1ケースの計算が終了するごとにGCを呼ばないと、並列計算数がだんだん減ってしまう。
-                GC.Collect();
-            })).ToArray());
+                if (RunCalculation)
+                    GC.Collect();
+            }
 
             await presenter.WaitForExit();
 
@@ -178,6 +228,7 @@ namespace ResultChecker
             Console.Error.WriteLine("    -o, --output <path>           set the output directory and output file name");
             Console.Error.WriteLine("    -od, --output-dir <path>      set the output directory");
             Console.Error.WriteLine("    -of, --output-file <name>     set the output summary Excel file name");
+            Console.Error.WriteLine("    --[no-]run                    run calculation");
             Console.Error.WriteLine("    -h, --help                    print help information");
             Console.Error.WriteLine();
             Console.Error.WriteLine("<pattern>");
