@@ -1,5 +1,5 @@
 [title]
-I-129 Ingestion
+I-129 Injection
 
 [nuclide]
   I-129
@@ -51,8 +51,8 @@ I-129 Ingestion
   $fA    = 0.99 # ≒1
   $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
 
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

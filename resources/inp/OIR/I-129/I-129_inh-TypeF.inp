@@ -40,7 +40,6 @@ I-129 Inhalation:Type-F
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
   acc   Oesophagus-sRe        Oesophag-s
-  acc   St-wall               St-wall
   acc   St-con                St-cont
   acc   St-conRe              St-cont
   acc   SI-con                SI-cont
@@ -52,8 +51,8 @@ I-129 Inhalation:Type-F
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Blood1                Blood
-  acc   Blood2                Blood
+  acc   Blood1                Blood         # inorganic iodine in blood
+  acc   Blood2                Blood         #   organic iodine in blood
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Kidneys1              Kidneys
@@ -61,6 +60,7 @@ I-129 Inhalation:Type-F
   acc   Thyroid1              Thyroid
   acc   Thyroid2              Thyroid
   acc   S-glands              S-glands
+  acc   St-wall               St-wall
   acc   Other1                Other
   acc   Other2                Other
   acc   Other3                Other
