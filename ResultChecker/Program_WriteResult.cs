@@ -47,7 +47,7 @@ namespace ResultChecker
         /// <param name="results"></param>
         static void WriteSummarySheet(ExcelWorksheet sheet, IEnumerable<Result> results)
         {
-            sheet.Cells[1, 1].Value = "Summary";
+            sheet.Cells[1, 1].Value = "Retention";
 
             const int rowH = 3;
             const int rowV = rowH + 2;
@@ -171,7 +171,7 @@ namespace ResultChecker
         /// <param name="results"></param>
         static void WriteEquivDoseSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
         {
-            sheet.Cells[1, 1].Value = "EquivDose";
+            sheet.Cells[1, 1].Value = "Dose";
 
             const int rowH = 3;
             const int rowV = rowH + 2;
@@ -280,15 +280,15 @@ namespace ResultChecker
                     sheet.Cells[r + 4, colE - 1].Value = "FlexID";
                     sheet.Cells[r + 0, colE - 1, r + 4, colE - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    int targetRegionCount = res.ExpectDose.EquivalentDosesMale.Length;
                     if (res.HasErrors)
                     {
-                        var cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegionCount - 1];
+                        var cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegions.Length - 1];
                         cells.Value = "-";
                         cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
                     else
                     {
+                        int targetRegionCount = res.ExpectDose.EquivalentDosesMale.Length;
                         for (int i = 0; i < targetRegionCount; i++)
                         {
                             var cellEquivDoseR = sheet.Cells[r + 0, colE + i];

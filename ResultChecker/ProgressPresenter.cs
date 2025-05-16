@@ -145,7 +145,7 @@ namespace ResultChecker
         /// <summary>
         /// 画面の更新処理。
         /// </summary>
-        private void Update()
+        public void Update()
         {
             switch (windmill)
             {
