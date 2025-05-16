@@ -145,6 +145,7 @@ namespace ResultChecker
                 // 出力ディレクトリにあるログファイルから、処理対象を収集する。
                 targets = Directory.EnumerateFiles(OutputDir, "*.log")
                     .Select(logFile => (target: Path.GetFileNameWithoutExtension(logFile), inputPath: ""))
+                    .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)
                     .ToArray();
             }
             if (targets.Length == 0)
