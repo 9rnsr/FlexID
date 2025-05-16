@@ -47,7 +47,7 @@ namespace ResultChecker
         /// <param name="results"></param>
         static void WriteSummarySheet(ExcelWorksheet sheet, IEnumerable<Result> results)
         {
-            sheet.Cells[1, 1].Value = "Summary";
+            sheet.Cells[1, 1].Value = "Retention";
 
             const int rowH = 3;
             const int rowV = rowH + 2;
@@ -171,7 +171,7 @@ namespace ResultChecker
         /// <param name="results"></param>
         static void WriteEquivDoseSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
         {
-            sheet.Cells[1, 1].Value = "EquivDose";
+            sheet.Cells[1, 1].Value = "Dose";
 
             const int rowH = 3;
             const int rowV = rowH + 2;
