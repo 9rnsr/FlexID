@@ -44,7 +44,6 @@ namespace ResultChecker
             if (args.Length >= 1)
             {
                 var processOptions = true;
-                patterns = new List<Regex>();
 
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -118,6 +117,8 @@ namespace ResultChecker
                     var pattern = arg;
                     try
                     {
+                        if (patterns is null)
+                            patterns = new List<Regex>();
                         patterns.Add(new Regex(pattern, RegexOptions.IgnoreCase));
                     }
                     catch
