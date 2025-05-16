@@ -71,6 +71,17 @@ namespace ResultChecker
                         continue;
                     }
 
+                    if (arg[0] == '@')
+                    {
+                        var head = args.AsSpan(0, i).ToArray();
+                        var tail = args.AsSpan(i + 1).ToArray();
+                        var newArgs = File.ReadAllText(arg.Substring(1))
+                            .Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
+                        args = head.Concat(newArgs).Concat(tail).ToArray();
+                        i--;
+                        continue;
+                    }
+
                     if (IsOption("-h", "--help"))
                     {
                         Usage();
@@ -232,6 +243,7 @@ namespace ResultChecker
             Console.Error.WriteLine("    -of, --output-file <name>     set the output summary Excel file name");
             Console.Error.WriteLine("    --[no-]run                    run calculation");
             Console.Error.WriteLine("    -h, --help                    print help information");
+            Console.Error.WriteLine("    @file                         read command-line options from the file");
             Console.Error.WriteLine();
             Console.Error.WriteLine("<pattern>");
             Console.Error.WriteLine("    target input name pattern as regular expression.");
