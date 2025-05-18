@@ -47,7 +47,7 @@ H-3 Inhalation:Type-F_Organic
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  mix   mix-Blood             ---
+  mix   mix-Blood             ---           # OBT model only
   acc   Blood                 Blood
   acc   ExtravasHTO           Other
   acc   OBT1                  Other
@@ -155,8 +155,8 @@ H-3 Inhalation:Type-F_Organic
 
 # ICRP Publ.134 p.37 Para.76
 # ICRP Publ.134 p.38 Fig.2.4
-  mix-Blood               Blood                    50.0%
-  mix-Blood               OBT1                     50.0%
+  mix-Blood               Blood                    50.0%        # OBT model only
+  mix-Blood               OBT1                     50.0%        # OBT model only
 
 # ICRP Publ.134 p.35 Table 2.5 & footnote†
   Blood                   ExtravasHTO             400
