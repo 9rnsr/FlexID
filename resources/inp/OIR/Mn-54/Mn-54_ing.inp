@@ -1,0 +1,103 @@
+[title]
+Mn-54 Ingestion
+
+[nuclide]
+  Mn-54
+
+
+[Mn-54:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Brain                 Brain
+  acc   Kidneys               Kidneys
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Mn-54:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.119 Table 14.2 / Ingested materials, All forms
+  $fA    = 0.05
+  $fA_Re = 0.05         # footnote§ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.123 Table 14.3
+  Plasma                  Liver1                  300
+  Plasma                  Kidneys                  50
+  Plasma                  Pancreas                 50
+  Plasma                  UB-con                    2
+  Plasma                  RC-con                   10
+  Plasma                  ST0                     391.8
+  Plasma                  ST1                     150
+  Plasma                  ST2                      40
+  Plasma                  C-bone-S                  2.5
+  Plasma                  T-bone-S                  2.5
+  Plasma                  Brain                     1.0
+  Plasma                  RBC                       0.2
+  Liver1                  SI-conRe                  0.139
+  Liver1                  Liver2                    0.555
+  Liver2                  Plasma                    0.347
+  Kidneys                 Plasma                    0.347
+  Pancreas                Plasma                    0.347
+  Pancreas                SI-conRe                  0.347
+  ST0                     Plasma                   33.3
+  ST1                     Plasma                    0.347
+  ST2                     Plasma                    0.0173
+  C-bone-S                Plasma                    0.01716
+  C-bone-S                C-bone-V                  0.0001733
+  T-bone-S                Plasma                    0.01716
+  T-bone-S                T-bone-V                  0.0001733
+  C-bone-V                Plasma                    0.0000821
+  T-bone-V                Plasma                    0.000493
+  Brain                   Plasma                    0.00462
+  RBC                     Plasma                    0.00833
