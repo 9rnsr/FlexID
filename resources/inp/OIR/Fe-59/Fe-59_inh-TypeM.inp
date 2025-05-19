@@ -54,9 +54,9 @@ Fe-59 Inhalation:Type-M
   acc   Liver1(Hepato)        Liver
   acc   Liver2(RE)            Liver
   acc   Spleen                Spleen
-  acc   MarrowSynthe          Other
-  acc   MarrowTransit         Other
-  acc   MarrowStorage         Other
+  acc   MarrowSynthe          R-marrow
+  acc   MarrowTransit         R-marrow
+  acc   MarrowStorage         R-marrow
   acc   Other1(Trans)         Other
   acc   Other2(Parenc)        Other
   acc   Other3(RE)            Other
