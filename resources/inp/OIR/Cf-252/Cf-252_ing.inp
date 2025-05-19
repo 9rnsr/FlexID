@@ -1,0 +1,107 @@
+[title]
+Cf-252 Ingestion
+
+[nuclide]
+  Cf-252
+
+
+[Cf-252:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   T-marrow              T-marrow
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Ovaries               Ovaries
+  acc   Testes                Testes
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Cf-252:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.141 p.434 Table 26.2 / Ingested materials, All compounds
+  $fA    = 5E-4
+  $fA_Re = 5E-4         # footnote¶
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.141 p.234 Table 18.9
+  Blood                   Liver1                    2.33
+  Blood                   T-bone-S                  2.91
+  Blood                   C-bone-S                  2.91
+  Blood                   Kidneys1                  0.233
+  Blood                   Kidneys2                  0.116
+  Blood                   UB-con                    1.28
+  Blood                   RC-con                    0.699
+  Blood                   Testes                    0.00408
+  Blood                   Ovaries                   0.00128
+  Blood                   ST0                       4.99
+  Blood                   ST1                       0.926
+  Blood                   ST2                       0.233
+  Liver1                  SI-conRe                  0.0006
+  Liver1                  Liver2                    0.0225
+  Liver1                  Blood                     0
+  Liver2                  Blood                     0.0019
+  T-bone-S                T-marrow                  4.93E-4
+  T-bone-S                T-bone-V                  2.47E-4
+  T-bone-V                T-marrow                  4.93E-4
+  T-marrow                Blood                     0.0076
+  C-bone-S                C-marrow                  8.21E-5
+  C-bone-S                C-bone-V                  4.11E-5
+  C-bone-V                C-marrow                  8.21E-5
+  C-marrow                Blood                     0.0076
+  C-marrow                C-bone-S                  0
+  Kidneys1                UB-con                    0.099
+  Kidneys2                Blood                     0.00038
+  Testes                  Blood                     0.00038
+  Ovaries                 Blood                     0.00038
+  ST0                     Blood                     1.39
+  ST1                     Blood                     0.00693
+  ST2                     Blood                     1.9E-5
