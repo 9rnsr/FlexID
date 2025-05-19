@@ -50,6 +50,7 @@ Pu-242 Inhalation:Type-F
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -57,11 +58,9 @@ Pu-242 Inhalation:Type-F
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
+  acc   Blood0                Blood
   acc   Blood1                Blood
   acc   Blood2                Blood
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   ST2                   Other
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Liver2                Liver
@@ -71,10 +70,13 @@ Pu-242 Inhalation:Type-F
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
   acc   T-marrow              T-marrow
-  acc   Other-Kidneys         Kidneys
+  acc   RenalTubules          Kidneys
+  acc   OtherKidneys          Kidneys
   acc   Ovaries               Ovaries
   acc   Testes                Testes
-  acc   Renal-tubules         Ureters
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
 
 [Pu-242:transfer]
 #-----------------------+---------------------+--------------
@@ -87,7 +89,8 @@ Pu-242 Inhalation:Type-F
   $ss = 0
   $fb = 0.002       # footnote*
   $sb = 0           # footnote*
-  $fA = 5E-4
+  $fA    = 5E-4
+  $fA_Re = 5E-4     # footnote§
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
@@ -161,38 +164,38 @@ Pu-242 Inhalation:Type-F
   LNET-S                  LNET-B                $(      fb  * ss )
   LNTH-S                  LNTH-B                $(      fb  * ss )
 
-  ALV-F                   Blood1                $( (1 - fb) * sr )
-  INT-F                   Blood1                $( (1 - fb) * sr )
-  bb-F                    Blood1                $( (1 - fb) * sr )
-  bbseq-F                 Blood1                $( (1 - fb) * sr )
-  BB-F                    Blood1                $( (1 - fb) * sr )
-  BBseq-F                 Blood1                $( (1 - fb) * sr )
-  ET2-F                   Blood1                $( (1 - fb) * sr )
-  ETseq-F                 Blood1                $( (1 - fb) * sr )
-  LNET-F                  Blood1                $( (1 - fb) * sr )
-  LNTH-F                  Blood1                $( (1 - fb) * sr )
+  ALV-F                   Blood0                $( (1 - fb) * sr )
+  INT-F                   Blood0                $( (1 - fb) * sr )
+  bb-F                    Blood0                $( (1 - fb) * sr )
+  bbseq-F                 Blood0                $( (1 - fb) * sr )
+  BB-F                    Blood0                $( (1 - fb) * sr )
+  BBseq-F                 Blood0                $( (1 - fb) * sr )
+  ET2-F                   Blood0                $( (1 - fb) * sr )
+  ETseq-F                 Blood0                $( (1 - fb) * sr )
+  LNET-F                  Blood0                $( (1 - fb) * sr )
+  LNTH-F                  Blood0                $( (1 - fb) * sr )
 
-  ALV-S                   Blood1                $( (1 - fb) * ss )
-  INT-S                   Blood1                $( (1 - fb) * ss )
-  bb-S                    Blood1                $( (1 - fb) * ss )
-  bbseq-S                 Blood1                $( (1 - fb) * ss )
-  BB-S                    Blood1                $( (1 - fb) * ss )
-  BBseq-S                 Blood1                $( (1 - fb) * ss )
-  ET2-S                   Blood1                $( (1 - fb) * ss )
-  ETseq-S                 Blood1                $( (1 - fb) * ss )
-  LNET-S                  Blood1                $( (1 - fb) * ss )
-  LNTH-S                  Blood1                $( (1 - fb) * ss )
+  ALV-S                   Blood0                $( (1 - fb) * ss )
+  INT-S                   Blood0                $( (1 - fb) * ss )
+  bb-S                    Blood0                $( (1 - fb) * ss )
+  bbseq-S                 Blood0                $( (1 - fb) * ss )
+  BB-S                    Blood0                $( (1 - fb) * ss )
+  BBseq-S                 Blood0                $( (1 - fb) * ss )
+  ET2-S                   Blood0                $( (1 - fb) * ss )
+  ETseq-S                 Blood0                $( (1 - fb) * ss )
+  LNET-S                  Blood0                $( (1 - fb) * ss )
+  LNTH-S                  Blood0                $( (1 - fb) * ss )
 
-  ALV-B                   Blood1                $sb
-  INT-B                   Blood1                $sb
-  bb-B                    Blood1                $sb
-  bbseq-B                 Blood1                $sb
-  BB-B                    Blood1                $sb
-  BBseq-B                 Blood1                $sb
-  ET2-B                   Blood1                $sb
-  ETseq-B                 Blood1                $sb
-  LNET-B                  Blood1                $sb
-  LNTH-B                  Blood1                $sb
+  ALV-B                   Blood0                $sb
+  INT-B                   Blood0                $sb
+  bb-B                    Blood0                $sb
+  bbseq-B                 Blood0                $sb
+  BB-B                    Blood0                $sb
+  BBseq-B                 Blood0                $sb
+  ET2-B                   Blood0                $sb
+  ETseq-B                 Blood0                $sb
+  LNET-B                  Blood0                $sb
+  LNTH-B                  Blood0                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -201,25 +204,29 @@ Pu-242 Inhalation:Type-F
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood1                $(fA * 6 / (1 - fA))
+  SI-con                  Blood0                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood0                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
 # ICRP Publ.141 p.225 Table 18.6
+  Blood0                  ST0                       3.0000E+2
+  Blood0                  Blood1                    7.0000E+2
   Blood1                  Liver0                    4.6200E-1
   Blood1                  C-bone-S                  8.7780E-2
   Blood1                  C-bone-V                  4.6200E-3
   Blood1                  T-bone-S                  1.2474E-1
   Blood1                  T-bone-V                  1.3860E-2
   Blood1                  UB-con                    1.5400E-2
-  Blood1                  Renal-tubules             7.7000E-3
-  Blood1                  Other-Kidneys             3.8500E-4
+  Blood1                  RenalTubules              7.7000E-3
+  Blood1                  OtherKidneys              3.8500E-4
   Blood1                  RC-con                    1.1550E-2
   Blood1                  Testes                    2.6950E-4
   Blood1                  Ovaries                   0.8470E-4
@@ -229,11 +236,11 @@ Pu-242 Inhalation:Type-F
   Blood2                  UB-con                    3.5000E+0
   Blood2                  Blood1                    6.7550E+1
   Blood2                  ST0                       2.8950E+1
-  Renal-tubules           UB-con                    1.7329E-2
-  Other-Kidneys           Blood2                    1.2660E-4
+  RenalTubules            UB-con                    1.7329E-2
+  OtherKidneys            Blood2                    1.2660E-4
   ST1                     Blood2                    1.3860E-3
   ST2                     Blood2                    1.2660E-4
-  Liver0                  SI-con                    9.2420E-4
+  Liver0                  SI-conRe                  9.2420E-4
   Liver0                  Liver1                    4.5286E-2
   Liver1                  Blood2                    1.5200E-3
   Liver1                  Liver2                    3.8000E-4
