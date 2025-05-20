@@ -65,42 +65,47 @@ namespace FlexID.Calc
             CumulativePath = outputPath + "_Cumulative.out";
 
             // 預託線量の出力ファイルを用意する。
-            wDoseM = data.OutputDose ? new StreamWriter(DosePath, false, Encoding.UTF8) : NullWriter;
-            wDoseF = data.OutputDose && !IsMaleOnly ? new StreamWriter(DosePath + ".f", false, Encoding.UTF8) : NullWriter;
-            wRateM = data.OutputDoseRate ? new StreamWriter(DoseRatePath, false, Encoding.UTF8) : NullWriter;
-            wRateF = data.OutputDoseRate && !IsMaleOnly ? new StreamWriter(DoseRatePath + ".f", false, Encoding.UTF8) : NullWriter;
-
-            // 隠しファイル属性を設定しておく。
-            if (data.OutputDose && !IsMaleOnly)
-                File.SetAttributes(DosePath + ".f", FileAttributes.Hidden);
-            if (data.OutputDoseRate && !IsMaleOnly)
-                File.SetAttributes(DoseRatePath + ".f", FileAttributes.Hidden);
+            wDoseM = data.OutputDose ? CreateWriter(DosePath) : NullWriter;
+            wDoseF = data.OutputDose && !IsMaleOnly ? CreateWriter(DosePath, ".f") : NullWriter;
+            wRateM = data.OutputDoseRate ? CreateWriter(DoseRatePath) : NullWriter;
+            wRateF = data.OutputDoseRate && !IsMaleOnly ? CreateWriter(DoseRatePath, ".f") : NullWriter;
 
             // 残留放射能の出力ファイルを用意する。
             wsRete = (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count)).ToArray();
             wsCumu = (data.OutputCumulative ? CreateWriters(CumulativePath) : NullWriters(data.Nuclides.Count)).ToArray();
 
-            IEnumerable<TextWriter> CreateWriters(string basePath)
+            TextWriter CreateWriter(string path, string suffix = null)
             {
-                // 親核種の出力ファイルはそのまま結果ファイルになる。
-                yield return new StreamWriter(basePath, false, Encoding.UTF8);
-
-                // 子孫核種の出力ファイルは一時ファイルとし、計算出力時に削除する。
-                for (int n = 1; n < data.Nuclides.Count; n++)
+                if (suffix != null)
                 {
-                    var path = basePath + $".{n}";
+                    path += suffix;
 
                     // 前回実行時の一時ファイルが残ってしまった場合を想定して、
                     // 同名のファイルが存在する場合はこの隠し属性を外しておく。
                     if (File.Exists(path))
                         File.SetAttributes(path, File.GetAttributes(path) & ~FileAttributes.Hidden);
+                }
 
-                    var writer = new StreamWriter(path, false, Encoding.UTF8);
+                var writer = new StreamWriter(path, false, Encoding.UTF8);
 
+                if (suffix != null)
+                {
                     // 隠しファイル属性を設定しておく。
                     File.SetAttributes(path, FileAttributes.Hidden);
+                }
 
-                    yield return writer;
+                return writer;
+            }
+
+            IEnumerable<TextWriter> CreateWriters(string basePath)
+            {
+                // 親核種の出力ファイルはそのまま結果ファイルになる。
+                yield return CreateWriter(basePath);
+
+                // 子孫核種の出力ファイルは一時ファイルとし、計算出力時に削除する。
+                for (int n = 1; n < data.Nuclides.Count; n++)
+                {
+                    yield return CreateWriter(basePath, $".{n}");
                 }
             }
 
