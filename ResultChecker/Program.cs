@@ -497,7 +497,7 @@ namespace ResultChecker
             using (var reader = new OutputDataReader(filePath))
             {
                 var data = reader.Read();
-                var result = data.Nuclides[0];
+                var result = data.Blocks[0];
 
                 // 列データの最終行＝評価期間の最後における線量値を取得する。
                 double GetDose(string targetRegion)
@@ -609,12 +609,12 @@ namespace ResultChecker
             using (var reader = new OutputDataReader(filePath))
             {
                 var data = reader.Read();
-                var result = data.Nuclides[0];
+                var result = data.Blocks[0];
 
                 if (resultNuc != nuclide)
                 {
                     // 子孫核種の結果を読み出す。
-                    result = data.Nuclides.Where(n => n.Nuclide == resultNuc).FirstOrDefault();
+                    result = data.Blocks.Where(n => n.Header == resultNuc).FirstOrDefault();
                     if (result is null)
                         throw new InvalidDataException($"Missing retention data of progeny nuclide '{resultNuc}'.");
                 }

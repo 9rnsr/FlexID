@@ -23,19 +23,19 @@ namespace FlexID.Calc
     {
         public OutputData(OutputType type, string title,
             string timesUnit, string valuesUnit,
-            List<double> timeSteps, IEnumerable<OutputNuclideData> nuclides)
+            List<double> timeSteps, IEnumerable<OutputBlockData> blocks)
         {
             Type = type;
             Title = title;
             TimeStepUnit = timesUnit;
             DataValueUnit = valuesUnit;
             TimeSteps = timeSteps.AsReadOnly();
-            Nuclides = nuclides.ToArray();
+            Blocks = blocks.ToArray();
         }
 
         public OutputType Type { get; }
 
-        public string Nuclide => Nuclides[0].Nuclide;
+        public string Nuclide => Blocks[0].Header;
 
         public string Title { get; }
 
@@ -45,19 +45,19 @@ namespace FlexID.Calc
 
         public IReadOnlyList<double> TimeSteps { get; }
 
-        public OutputNuclideData[] Nuclides { get; }
+        public OutputBlockData[] Blocks { get; }
     }
 
-    public class OutputNuclideData
+    public class OutputBlockData
     {
-        public OutputNuclideData(string nuclide, IEnumerable<OutputCompartmentData> compartments)
+        public OutputBlockData(string header, IEnumerable<OutputCompartmentData> compartments)
         {
-            Nuclide = nuclide;
+            Header = header;
 
             Compartments = compartments.ToArray();
         }
 
-        public string Nuclide { get; }
+        public string Header { get; }
 
         public OutputCompartmentData[] Compartments { get; }
     }
@@ -178,14 +178,14 @@ namespace FlexID.Calc
                 return ln.Split(separators, StringSplitOptions.RemoveEmptyEntries);
             }
 
-            var outputCount =
-                type == OutputType.RetentionActivity || type == OutputType.CumulativeActivity ? nuclides.Length : 1;
+            var outputHeaders = type == OutputType.Dose || type == OutputType.DoseRate
+                ? new[] { nuclides[0] } : nuclides;
 
-            var nuclideDatas = new List<OutputNuclideData>(outputCount);
-            for (int iOut = 0; iOut < outputCount; iOut++)
+            var blocks = new List<OutputBlockData>(outputHeaders.Length);
+            foreach (var outputHeader in outputHeaders)
             {
-                var nuclide = reader.ReadLine();
-                if (nuclide != nuclides[iOut])
+                var header = reader.ReadLine();
+                if (header != outputHeader)
                     throw new InvalidDataException("mismatch radiouclide");
 
                 values = ReadValues(reader.ReadLine());
@@ -200,7 +200,7 @@ namespace FlexID.Calc
                     line = reader.ReadLine();
                     if (string.IsNullOrEmpty(line))
                     {
-                        nuclideDatas.Add(new OutputNuclideData(nuclide,
+                        blocks.Add(new OutputBlockData(header,
                             compartments.Select((name, i) => new OutputCompartmentData(name, compartmentValues[i]))));
                         break;
                     }
@@ -211,7 +211,7 @@ namespace FlexID.Calc
 
                     if (!double.TryParse(values[0], out var step))
                         throw new InvalidDataException("incorrect time step column");
-                    if (nuclideDatas.Count == 0)
+                    if (blocks.Count == 0)
                         timeSteps.Add(step);
                     else
                     {
@@ -231,7 +231,7 @@ namespace FlexID.Calc
             if (line != null)
                 throw new InvalidDataException("unrecognized file format");
 
-            return new OutputData(type, title, timesUnit, valuesUnit, timeSteps, nuclideDatas);
+            return new OutputData(type, title, timesUnit, valuesUnit, timeSteps, blocks);
         }
     }
 }
