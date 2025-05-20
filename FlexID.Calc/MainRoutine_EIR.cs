@@ -431,7 +431,7 @@ namespace FlexID.Calc
                     CalcOut.ActivityOut(outNowDay, Act, outIter, maskExcreta);
 
                     // 線量をファイルに出力する。
-                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
+                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre, Sex.Male);
 
                     // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                     if (!outTimes.MoveNext())

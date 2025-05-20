@@ -236,8 +236,10 @@ namespace FlexID.Calc
 
             var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
             var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
-            var resultNow = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
-            var resultPre = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
+            var resultNowM = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+            var resultNowF = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+            var resultPreM = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
+            var resultPreF = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
 
             // inputの初期値を各コンパートメントに振り分ける。
             SubRoutine.Init(Act, data);
@@ -371,7 +373,8 @@ namespace FlexID.Calc
                         // 実効線量 = 等価線量(男女平均) * wT
                         var effectiveDose = (equivalentDoseM + equivalentDoseF) / 2 * targetWeight;
 
-                        resultNow[indexT] += (equivalentDoseM + equivalentDoseF) / 2; // todo, keep output format 
+                        resultNowM[indexT] += equivalentDoseM;
+                        resultNowF[indexT] += equivalentDoseF;
                         wholeBodyNow += effectiveDose;
                     }
                 }
@@ -413,7 +416,8 @@ namespace FlexID.Calc
                     CalcOut.ActivityOut(outNowDay, Act, outIter, maskExcreta);
 
                     // 線量をファイルに出力する。
-                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
+                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowM, resultPreM, Sex.Male);
+                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowF, resultPreF, Sex.Female);
 
                     // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                     if (!outTimes.MoveNext())
@@ -442,7 +446,8 @@ namespace FlexID.Calc
                     Act.NextOut(data);
 
                     wholeBodyPre = wholeBodyNow;
-                    Array.Copy(resultNow, resultPre, resultNow.Length);
+                    Array.Copy(resultNowM, resultPreM, resultNowM.Length);
+                    Array.Copy(resultNowF, resultPreF, resultNowF.Length);
                 }
             }
 
