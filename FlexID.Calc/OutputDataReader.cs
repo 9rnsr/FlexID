@@ -179,7 +179,7 @@ namespace FlexID.Calc
             }
 
             var outputHeaders = type == OutputType.Dose || type == OutputType.DoseRate
-                ? new[] { nuclides[0] } : nuclides;
+                ? new[] { nuclides[0] + " (Male)", nuclides[0] + " (Female)" } : nuclides;
 
             var blocks = new List<OutputBlockData>(outputHeaders.Length);
             foreach (var outputHeader in outputHeaders)
