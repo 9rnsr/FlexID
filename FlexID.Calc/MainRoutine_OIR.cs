@@ -90,16 +90,25 @@ namespace FlexID.Calc
                 var sourceRegions = data.SourceRegions.Select(s => s.Name).ToArray();
                 var otherSourceRegion = "Other";
 
-                foreach (var (nuclide, scoeffTable) in data.Nuclides.Zip(data.SCoeffTables))
+                foreach (var nuclide in data.Nuclides)
                 {
+                    var indexN = data.Nuclides.IndexOf(nuclide);
+                    var scoeffTableM = data.SCoeffTablesM[indexN];
+                    var scoeffTableF = data.SCoeffTablesF[indexN];
+
                     writer.WriteLine();
                     writer.WriteLine($"Nuclide: {nuclide.Name}");
 
                     if (printScoeff)
                     {
                         writer.WriteLine();
-                        writer.WriteLine($"S-Coefficients (average of Adult Male and Adult Female):");
-                        foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTable, sourceRegions, data.TargetRegions))
+                        writer.WriteLine($"S-Coefficients (Adult Male):");
+                        foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableM, sourceRegions, data.TargetRegions))
+                            writer.WriteLine(line);
+
+                        writer.WriteLine();
+                        writer.WriteLine($"S-Coefficients (Adult Female):");
+                        foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableF, sourceRegions, data.TargetRegions))
                             writer.WriteLine(line);
                     }
 
@@ -108,13 +117,18 @@ namespace FlexID.Calc
                     writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));
                     writer.WriteLine();
                     writer.WriteLine($"S-Coefficient values from '{otherSourceRegion}' to each target regions:");
-                    writer.WriteLine($"{"  T/S",-10} {otherSourceRegion,-14}");
+                    writer.WriteLine($"{"  T/S",-10} {otherSourceRegion + "(Male)",-14} {otherSourceRegion + "(Female)",-14}");
 
-                    var scoeffOther = scoeffTable[otherSourceRegion];
+                    var scoeffOtherM = scoeffTableM[otherSourceRegion];
+                    var scoeffOtherF = scoeffTableF[otherSourceRegion];
 
-                    foreach (var (targetRegion, scoeff) in data.TargetRegions.Zip(scoeffOther))
+                    foreach (var targetRegion in data.TargetRegions)
                     {
-                        writer.WriteLine($"{targetRegion,-10} {scoeff:0.00000000E+00}");
+                        var indexT = Array.IndexOf(data.TargetRegions, targetRegion);
+                        var scoeffM = scoeffOtherM[indexT];
+                        var scoeffF = scoeffOtherF[indexT];
+
+                        writer.WriteLine($"{targetRegion,-10} {scoeffM:0.00000000E+00} {scoeffF:0.00000000E+00}");
                     }
                 }
             }
@@ -222,8 +236,10 @@ namespace FlexID.Calc
 
             var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
             var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
-            var resultNow = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
-            var resultPre = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
+            var resultNowM = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+            var resultNowF = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+            var resultPreM = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
+            var resultPreF = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
 
             // inputの初期値を各コンパートメントに振り分ける。
             SubRoutine.Init(Act, data);
@@ -346,16 +362,19 @@ namespace FlexID.Calc
                         // 標的領域の部分的な重量。
                         var targetWeight = targetWeights[indexT];
 
-                        // S係数(男女平均)。
-                        var scoeff = organ.S_Coefficients[indexT];
+                        // S係数(男女別)。
+                        var scoeffM = organ.S_CoefficientsM[indexT];
+                        var scoeffF = organ.S_CoefficientsF[indexT];
 
-                        // 等価線量 = 放射能 * S係数
-                        var equivalentDose = activity * scoeff;
+                        // 等価線量 = 放射能 * S係数(男女別)
+                        var equivalentDoseM = activity * scoeffM;
+                        var equivalentDoseF = activity * scoeffF;
 
-                        // 実効線量 = 等価線量 * wT
-                        var effectiveDose = equivalentDose * targetWeight;
+                        // 実効線量 = 等価線量(男女平均) * wT
+                        var effectiveDose = (equivalentDoseM + equivalentDoseF) / 2 * targetWeight;
 
-                        resultNow[indexT] += equivalentDose;
+                        resultNowM[indexT] += equivalentDoseM;
+                        resultNowF[indexT] += equivalentDoseF;
                         wholeBodyNow += effectiveDose;
                     }
                 }
@@ -397,7 +416,8 @@ namespace FlexID.Calc
                     CalcOut.ActivityOut(outNowDay, Act, outIter, maskExcreta);
 
                     // 線量をファイルに出力する。
-                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre);
+                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowM, resultPreM, Sex.Male);
+                    CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowF, resultPreF, Sex.Female);
 
                     // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                     if (!outTimes.MoveNext())
@@ -426,7 +446,8 @@ namespace FlexID.Calc
                     Act.NextOut(data);
 
                     wholeBodyPre = wholeBodyNow;
-                    Array.Copy(resultNow, resultPre, resultNow.Length);
+                    Array.Copy(resultNowM, resultPreM, resultNowM.Length);
+                    Array.Copy(resultNowF, resultPreF, resultNowF.Length);
                 }
             }
 

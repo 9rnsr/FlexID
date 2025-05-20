@@ -235,15 +235,20 @@ namespace ResultChecker
             var r = rowV;
             foreach (var res in results)
             {
+                ExcelRange cells;
+
                 // Target
-                sheet.Cells[r, colT].Value = res.Target;
-                sheet.Cells[r, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                {
+                    cells = sheet.Cells[r, colT];
+                    cells.Value = res.Target;
+                    cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                }
 
                 // Effective Dose
                 {
                     if (res.HasErrors)
                     {
-                        var cells = sheet.Cells[r, colD + 0, r, colD + 2];
+                        cells = sheet.Cells[r, colD + 0, r, colD + 2];
                         cells.Value = "-";
                         cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
@@ -264,25 +269,27 @@ namespace ResultChecker
                         SetPercentColorScale(cellEffDoseR);
                     }
 
-                    sheet.Cells[r, colD + 0, r + 4, colD + 0].Merge = true;
-                    sheet.Cells[r, colD + 1, r + 4, colD + 1].Merge = true;
-                    sheet.Cells[r, colD + 2, r + 4, colD + 2].Merge = true;
+                    sheet.Cells[r + 0, colD + 0, r + 5, colD + 0].Merge = true;
+                    sheet.Cells[r + 0, colD + 1, r + 5, colD + 1].Merge = true;
+                    sheet.Cells[r + 0, colD + 2, r + 5, colD + 2].Merge = true;
 
-                    sheet.Cells[r, colD + 0, r + 4, colD + 2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    cells = sheet.Cells[r, colD + 0, r + 5, colD + 2];
+                    cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 }
 
                 // Equivalent Dose
                 {
-                    sheet.Cells[r + 0, colE - 1].Value = "Diff";
-                    sheet.Cells[r + 1, colE - 1].Value = "OIR Male";
-                    sheet.Cells[r + 2, colE - 1].Value = "OIR Female";
-                    sheet.Cells[r + 3, colE - 1].Value = "OIR Ave";
-                    sheet.Cells[r + 4, colE - 1].Value = "FlexID";
-                    sheet.Cells[r + 0, colE - 1, r + 4, colE - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    sheet.Cells[r + 0, colE - 1].Value = "Diff Male";
+                    sheet.Cells[r + 1, colE - 1].Value = "Diff Female";
+                    sheet.Cells[r + 2, colE - 1].Value = "OIR Male";
+                    sheet.Cells[r + 3, colE - 1].Value = "OIR Female";
+                    sheet.Cells[r + 4, colE - 1].Value = "FlexID Male";
+                    sheet.Cells[r + 5, colE - 1].Value = "FlexID Female";
+                    sheet.Cells[r + 0, colE - 1, r + 5, colE - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     if (res.HasErrors)
                     {
-                        var cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegions.Length - 1];
+                        cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegions.Length - 1];
                         cells.Value = "-";
                         cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
@@ -291,43 +298,38 @@ namespace ResultChecker
                         int targetRegionCount = res.ExpectDose.EquivalentDosesMale.Length;
                         for (int i = 0; i < targetRegionCount; i++)
                         {
-                            var cellEquivDoseR = sheet.Cells[r + 0, colE + i];
-                            var cellEquivDoseM = sheet.Cells[r + 1, colE + i];
-                            var cellEquivDoseF = sheet.Cells[r + 2, colE + i];
-                            var cellEquivDoseE = sheet.Cells[r + 3, colE + i];
-                            var cellEquivDoseA = sheet.Cells[r + 4, colE + i];
+                            var cellEquivDoseRM = sheet.Cells[r + 0, colE + i];
+                            var cellEquivDoseRF = sheet.Cells[r + 1, colE + i];
+                            var cellEquivDoseEM = sheet.Cells[r + 2, colE + i];
+                            var cellEquivDoseEF = sheet.Cells[r + 3, colE + i];
+                            var cellEquivDoseAM = sheet.Cells[r + 4, colE + i];
+                            var cellEquivDoseAF = sheet.Cells[r + 5, colE + i];
 
-                            cellEquivDoseM.Value = res.ExpectDose.EquivalentDosesMale[i];
-                            cellEquivDoseF.Value = res.ExpectDose.EquivalentDosesFemale[i];
-                            cellEquivDoseE.Formula = $"AVERAGE({cellEquivDoseM.Address},{cellEquivDoseF.Address})";
-                            cellEquivDoseA.Value = res.ActualDose.EquivalentDoses[i];
-                            cellEquivDoseR.Formula = $"{cellEquivDoseA.Address}/{cellEquivDoseE.Address}";
+                            cellEquivDoseRM.Formula = $"IFERROR({cellEquivDoseAM.Address}/{cellEquivDoseEM.Address},\"-\")";
+                            cellEquivDoseRF.Formula = $"IFERROR({cellEquivDoseAF.Address}/{cellEquivDoseEF.Address},\"-\")";
+                            cellEquivDoseEM.Value = res.ExpectDose.EquivalentDosesMale[i];
+                            cellEquivDoseEF.Value = res.ExpectDose.EquivalentDosesFemale[i];
+                            cellEquivDoseAM.Value = res.ActualDose.EquivalentDosesMale[i];
+                            cellEquivDoseAF.Value = res.ActualDose.EquivalentDosesFemale[i];
 
-                            if (double.IsNaN(res.ActualDose.EquivalentDoses[i]))
-                            {
-                                cellEquivDoseA.Value = "-";
-                                cellEquivDoseR.Value = "-";
-                                cellEquivDoseA.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                                cellEquivDoseR.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                            }
-
-                            cellEquivDoseM.Style.Numberformat.Format = "0.0E+00";
-                            cellEquivDoseF.Style.Numberformat.Format = "0.0E+00";
-                            cellEquivDoseE.Style.Numberformat.Format = "0.0E+00";
-                            cellEquivDoseA.Style.Numberformat.Format = "0.0E+00";
-                            cellEquivDoseR.Style.Numberformat.Format = "0.0%";
+                            cellEquivDoseRM.Style.Numberformat.Format = "0.0%";
+                            cellEquivDoseRF.Style.Numberformat.Format = "0.0%";
+                            cellEquivDoseEM.Style.Numberformat.Format = "0.0E+00";
+                            cellEquivDoseEF.Style.Numberformat.Format = "0.0E+00";
+                            cellEquivDoseAM.Style.Numberformat.Format = "0.0E+00";
+                            cellEquivDoseAF.Style.Numberformat.Format = "0.0E+00";
                         }
 
                         // 預託等価線量のFlexID/OIR比にカラースケールを設定。
-                        var cellsEquivDose = sheet.Cells[r, colE, r, colE + targetRegions.Length - 1];
+                        var cellsEquivDose = sheet.Cells[r, colE, r + 1, colE + targetRegions.Length - 1];
                         SetPercentColorScale(cellsEquivDose);
                     }
                 }
 
-                sheet.Rows[r + 1, r + 5].Group();
-                sheet.Rows[r].CollapseChildren(true);
+                sheet.Rows[r + 2, r + 6].Group();
+                sheet.Rows[r + 1].CollapseChildren(true);
 
-                r += 6;
+                r += 7;
             }
 
             sheet.Column(1).AutoFit();
@@ -337,8 +339,8 @@ namespace ResultChecker
             foreach (var res in results)
             {
                 // Target
-                sheet.Cells[r, colT, r + 4, colT].Merge = true;
-                r += 6;
+                sheet.Cells[r, colT, r + 5, colT].Merge = true;
+                r += 7;
             }
         }
 

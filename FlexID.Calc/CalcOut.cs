@@ -16,10 +16,12 @@ namespace FlexID.Calc
         public string CumulativePath { get; }
 
         // 線量の出力ファイル用
-        private TextWriter wDose;
+        private TextWriter wDoseM;
+        private TextWriter wDoseF;
 
         // 線量率の出力ファイル用
-        private TextWriter wRate;
+        private TextWriter wRateM;
+        private TextWriter wRateF;
 
         // 残留放射能の出力ファイル用
         private TextWriter[] wsRete;
@@ -34,6 +36,8 @@ namespace FlexID.Calc
         /// 計算処理が正常に終了した場合に<c>true</c>を設定する。
         /// </summary>
         private bool IsFinished = false;
+
+        private bool IsMaleOnly;
 
         // StreamWriter.Nullはスレッドセーフでなくテストで問題を発生し得るため、
         // ここでスレッドセーフなラッパーを作り、これを計算処理で使用する。
@@ -50,6 +54,8 @@ namespace FlexID.Calc
         {
             this.data = data;
 
+            IsMaleOnly = data.StartAge != 0;
+
             var outputDir = Path.GetDirectoryName(outputPath);
             Directory.CreateDirectory(outputDir);
 
@@ -59,8 +65,16 @@ namespace FlexID.Calc
             CumulativePath = outputPath + "_Cumulative.out";
 
             // 預託線量の出力ファイルを用意する。
-            wDose = data.OutputDose ? new StreamWriter(DosePath, false, Encoding.UTF8) : NullWriter;
-            wRate = data.OutputDoseRate ? new StreamWriter(DoseRatePath, false, Encoding.UTF8) : NullWriter;
+            wDoseM = data.OutputDose ? new StreamWriter(DosePath, false, Encoding.UTF8) : NullWriter;
+            wDoseF = data.OutputDose && !IsMaleOnly ? new StreamWriter(DosePath + ".f", false, Encoding.UTF8) : NullWriter;
+            wRateM = data.OutputDoseRate ? new StreamWriter(DoseRatePath, false, Encoding.UTF8) : NullWriter;
+            wRateF = data.OutputDoseRate && !IsMaleOnly ? new StreamWriter(DoseRatePath + ".f", false, Encoding.UTF8) : NullWriter;
+
+            // 隠しファイル属性を設定しておく。
+            if (data.OutputDose && !IsMaleOnly)
+                File.SetAttributes(DosePath + ".f", FileAttributes.Hidden);
+            if (data.OutputDoseRate && !IsMaleOnly)
+                File.SetAttributes(DoseRatePath + ".f", FileAttributes.Hidden);
 
             // 残留放射能の出力ファイルを用意する。
             wsRete = (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count)).ToArray();
@@ -157,9 +171,9 @@ namespace FlexID.Calc
                     .Where(o => o.SourceRegion == "Blood").Select(o => o.Index).ToArray();
 
                 var otherSourceRegions = nuclide.OtherSourceRegions.Select(sr => data.SourceRegions.First(s => s.Name == sr)).ToArray();
-                var massOtherAM = otherSourceRegions.Select(s => s.MaleMass).Sum();
-                var massOtherAF = otherSourceRegions.Select(s => s.FemaleMass).Sum();
-                var massOther = (massOtherAM + massOtherAF) / 2;    // 男女平均
+                var massOtherM = otherSourceRegions.Select(s => s.MaleMass).Sum();
+                var massOtherF = otherSourceRegions.Select(s => s.FemaleMass).Sum();
+                var massOther = (massOtherM + massOtherF) / 2;    // 男女平均
 
                 (int, double)[] GetIndexes(string[] sregions, double bloodFraction, bool considerOther = true)
                 {
@@ -174,9 +188,9 @@ namespace FlexID.Calc
                         .Select(sr =>
                         {
                             var sourceRegion = data.SourceRegions.First(s => s.Name == sr);
-                            var massRateAM = sourceRegion.MaleMass / massOtherAM;
-                            var massRateAF = sourceRegion.FemaleMass / massOtherAF;
-                            var massRate = (massRateAM + massRateAF) / 2;
+                            var massRateM = sourceRegion.MaleMass / massOtherM;
+                            var massRateF = sourceRegion.FemaleMass / massOtherF;
+                            var massRate = (massRateM + massRateF) / 2;
                             return massRate;
                         }).Sum();
 
@@ -290,34 +304,46 @@ namespace FlexID.Calc
 
             // Dose
             {
-                wDose.WriteLine("FlexID output: Dose");
-                wDose.WriteLine(data.Title);
-                wDose.WriteLine();
-                wDose.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
-                wDose.WriteLine("Units: day, Sv/Bq");
-                wDose.WriteLine();
+                wDoseM.WriteLine("FlexID output: Dose");
+                wDoseM.WriteLine(data.Title);
+                wDoseM.WriteLine();
+                wDoseM.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
+                wDoseM.WriteLine("Units: day, Sv/Bq");
+                wDoseM.WriteLine();
 
-                wDose.WriteLine(nuclide.Name);
-                wDose.Write("  Time         ");
-                wDose.Write("  WholeBody   ");
-                foreach (var t in targets) wDose.Write("  {0,-12:n}", t);
-                wDose.WriteLine();
+                wDoseM.WriteLine(nuclide.Name + (IsMaleOnly ? "" : " (Male)"));
+                wDoseM.Write("  Time         ");
+                wDoseM.Write("  WholeBody   ");
+                foreach (var t in targets) wDoseM.Write($"  {t,-12:n}");
+                wDoseM.WriteLine();
+
+                wDoseF.WriteLine(nuclide.Name + " (Female)");
+                wDoseF.Write("  Time         ");
+                wDoseF.Write("  WholeBody   ");
+                foreach (var t in targets) wDoseF.Write($"  {t,-12:n}");
+                wDoseF.WriteLine();
             }
 
             // DoseRate
             {
-                wRate.WriteLine("FlexID output: DoseRate");
-                wRate.WriteLine(data.Title);
-                wRate.WriteLine();
-                wRate.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
-                wRate.WriteLine("Units: day, Sv/h");
-                wRate.WriteLine();
+                wRateM.WriteLine("FlexID output: DoseRate");
+                wRateM.WriteLine(data.Title);
+                wRateM.WriteLine();
+                wRateM.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
+                wRateM.WriteLine("Units: day, Sv/h");
+                wRateM.WriteLine();
 
-                wRate.WriteLine(nuclide.Name);
-                wRate.Write("  Time         ");
-                wRate.Write("  WholeBody   ");
-                foreach (var t in targets) wRate.Write("  {0,-12:n}", t);
-                wRate.WriteLine();
+                wRateM.WriteLine(nuclide.Name + (IsMaleOnly ? "" : " (Male)"));
+                wRateM.Write("  Time         ");
+                wRateM.Write("  WholeBody   ");
+                foreach (var t in targets) wRateM.Write($"  {t,-12:n}");
+                wRateM.WriteLine();
+
+                wRateF.WriteLine(nuclide.Name + " (Female)");
+                wRateF.Write("  Time         ");
+                wRateF.Write("  WholeBody   ");
+                foreach (var t in targets) wRateF.Write($"  {t,-12:n}");
+                wRateF.WriteLine();
             }
         }
 
@@ -408,16 +434,21 @@ namespace FlexID.Calc
         /// <param name="wholeBodyPre">前回出力における全身の実効線量。</param>
         /// <param name="resultNow">今回出力における標的組織毎の等価線量。</param>
         /// <param name="resultPre">前回出力における標的組織毎の等価線量。</param>
-        public void CommitmentOut(double nowT, double preT, double wholeBodyNow, double wholeBodyPre, double[] resultNow, double[] resultPre)
+        /// <param name="sex">出力対象となる等価線量の性別。</param>
+        public void CommitmentOut(double nowT, double preT,
+            double wholeBodyNow, double wholeBodyPre, double[] resultNow, double[] resultPre, Sex sex)
         {
+            var (wDose, wRate) = sex == Sex.Male ? (wDoseM, wRateM) : (wDoseF, wRateF);
+            var deltaT = (nowT - preT) * 24;
+
             wDose.Write("{0,14:0.000000E+00}  ", nowT);
-            wDose.Write("{0,13:0.000000E+00}", wholeBodyNow);
             wRate.Write("{0,14:0.000000E+00}  ", nowT);
-            wRate.Write("{0,13:0.000000E+00}", (wholeBodyNow - wholeBodyPre) / ((nowT - preT) * 24));
+            wDose.Write("{0,13:0.000000E+00}", wholeBodyNow);
+            wRate.Write("{0,13:0.000000E+00}", (wholeBodyNow - wholeBodyPre) / deltaT);
             for (int i = 0; i < resultNow.Length; i++)
             {
                 wDose.Write("  {0,12:0.000000E+00}", resultNow[i]);
-                wRate.Write("  {0,12:0.000000E+00}", (resultNow[i] - resultPre[i]) / ((nowT - preT) * 24));
+                wRate.Write("  {0,12:0.000000E+00}", (resultNow[i] - resultPre[i]) / deltaT);
             }
             wDose.WriteLine();
             wRate.WriteLine();
@@ -439,16 +470,47 @@ namespace FlexID.Calc
                 // 計算が未完了の場合は、中断メッセージを出力する。
                 const string message = "[Abort Calculation]";
 
-                wDose.WriteLine(message);
-                wRate.WriteLine(message);
+                wDoseM.WriteLine(message);
+                wDoseF.WriteLine(message);
+                wRateM.WriteLine(message);
+                wRateF.WriteLine(message);
                 foreach (var w in wsRete) w.WriteLine(message);
                 foreach (var w in wsCumu) w.WriteLine(message);
             }
 
-            wDose.Dispose();
-            wRate.Dispose();
+            wDoseM.Dispose();
+            wDoseF.Dispose();
+            wRateM.Dispose();
+            wRateF.Dispose();
             foreach (var w in wsRete) w.Dispose();
             foreach (var w in wsCumu) w.Dispose();
+
+            if (data.OutputDose && !IsMaleOnly)
+            {
+                // 線量について、女性の出力を男性の出力ファイルに追記していく。
+                using (var wDose = new StreamWriter(DosePath, append: true))
+                {
+                    wDose.WriteLine();
+
+                    var femaleFile = DosePath + ".f";
+                    foreach (var ln in File.ReadLines(femaleFile))
+                        wDose.WriteLine(ln);
+                    File.Delete(femaleFile);
+                }
+            }
+            if (data.OutputDoseRate && !IsMaleOnly)
+            {
+                // 線量率について、女性の出力を男性の出力ファイルに追記していく。
+                using (var wRate = new StreamWriter(DoseRatePath, append: true))
+                {
+                    wRate.WriteLine();
+
+                    var femaleFile = DoseRatePath + ".f";
+                    foreach (var ln in File.ReadLines(femaleFile))
+                        wRate.WriteLine(ln);
+                    File.Delete(femaleFile);
+                }
+            }
 
             var nuclideCount = data.Nuclides.Count;
             if (nuclideCount >= 2 && data.OutputRetention)
@@ -460,10 +522,10 @@ namespace FlexID.Calc
                     {
                         wRete.WriteLine();
 
-                        var progenyRetentionFile = RetentionPath + $".{n}";
-                        foreach (var ln in File.ReadLines(progenyRetentionFile))
+                        var progenyFile = RetentionPath + $".{n}";
+                        foreach (var ln in File.ReadLines(progenyFile))
                             wRete.WriteLine(ln);
-                        File.Delete(progenyRetentionFile);
+                        File.Delete(progenyFile);
                     }
                 }
             }
@@ -476,10 +538,10 @@ namespace FlexID.Calc
                     {
                         wCumu.WriteLine();
 
-                        var progenyCumulativeFile = CumulativePath + $".{n}";
-                        foreach (var ln in File.ReadLines(progenyCumulativeFile))
+                        var progenyFile = CumulativePath + $".{n}";
+                        foreach (var ln in File.ReadLines(progenyFile))
                             wCumu.WriteLine(ln);
-                        File.Delete(progenyCumulativeFile);
+                        File.Delete(progenyFile);
                     }
                 }
             }

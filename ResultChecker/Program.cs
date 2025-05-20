@@ -408,7 +408,6 @@ namespace ResultChecker
         struct Dose
         {
             public double EffectiveDose { get; set; }
-            public double[] EquivalentDoses { get; set; }
             public double[] EquivalentDosesMale { get; set; }
             public double[] EquivalentDosesFemale { get; set; }
         }
@@ -462,12 +461,9 @@ namespace ResultChecker
                         columns = line.Split('\t');
                         var equivalentDosesFemale = columns.Skip(3).Select(v => double.Parse(v)).ToArray();
 
-                        var equivalentDoses = equivalentDosesMale.Zip(equivalentDosesFemale, (a, b) => (a + b) / 2).ToArray();
-
                         return new Dose
                         {
                             EffectiveDose = effectiveDose,
-                            EquivalentDoses = equivalentDoses,
                             EquivalentDosesMale = equivalentDosesMale,
                             EquivalentDosesFemale = equivalentDosesFemale,
                         };
@@ -497,38 +493,45 @@ namespace ResultChecker
             using (var reader = new OutputDataReader(filePath))
             {
                 var data = reader.Read();
-                var result = data.Nuclides[0];
+                var resultM = data.Blocks[0];
+                var resultF = data.Blocks[1];
 
                 // 列データの最終行＝評価期間の最後における線量値を取得する。
-                double GetDose(string targetRegion)
+                double GetDose(OutputBlockData result, string targetRegion)
                     => result.Compartments.FirstOrDefault(c => c.Name == targetRegion)?.Values.Last()
                     ?? throw new InvalidDataException($"Missing '{targetRegion}' data column");
 
                 double GetTissueWeight(string targetRegion)
                     => ws[Array.IndexOf(ts, targetRegion)];
 
-                double GetResult(string targetRegion, params string[] moreTargetRegions)
+                (double Male, double Female) GetResult(string targetRegion, params string[] moreTargetRegions)
                 {
-                    var dose = GetDose(targetRegion);
+                    var doseM = GetDose(resultM, targetRegion);
+                    var doseF = GetDose(resultF, targetRegion);
                     if (moreTargetRegions.Length == 0)
-                        return dose;
+                        return (doseM, doseF);
 
                     // 複数の標的領域の等価線量を組織加重係数で加重平均したものを返す。
                     var wT = GetTissueWeight(targetRegion);
-                    var sumOfWeightedDose = wT * dose;
+                    var sumOfWeightedDoseM = wT * doseM;
+                    var sumOfWeightedDoseF = wT * doseF;
                     var sumOfTissueWeight = wT;
                     foreach (var moreTargetRegion in moreTargetRegions)
                     {
                         wT = GetTissueWeight(moreTargetRegion);
-                        dose = GetDose(moreTargetRegion);
-                        sumOfWeightedDose += wT * dose;
+                        doseM = GetDose(resultM, moreTargetRegion);
+                        doseF = GetDose(resultF, moreTargetRegion);
+                        sumOfWeightedDoseM += wT * doseM;
+                        sumOfWeightedDoseF += wT * doseF;
                         sumOfTissueWeight += wT;
                     }
-                    return sumOfWeightedDose / sumOfTissueWeight;
+                    doseM = sumOfWeightedDoseM / sumOfTissueWeight;
+                    doseF = sumOfWeightedDoseF / sumOfTissueWeight;
+                    return (doseM, doseF);
                 }
 
                 // Effective Dose
-                var resultWholeBody = GetResult("WholeBody");
+                var resultWholeBody = GetDose(resultM, "WholeBody");
 
                 // Equivalent Dose
                 var equivalentDoses = new[]
@@ -569,7 +572,8 @@ namespace ResultChecker
                 return new Dose
                 {
                     EffectiveDose = resultWholeBody,
-                    EquivalentDoses = equivalentDoses
+                    EquivalentDosesMale = equivalentDoses.Select(d => d.Male).ToArray(),
+                    EquivalentDosesFemale = equivalentDoses.Select(d => d.Female).ToArray(),
                 };
             }
         }
@@ -609,12 +613,12 @@ namespace ResultChecker
             using (var reader = new OutputDataReader(filePath))
             {
                 var data = reader.Read();
-                var result = data.Nuclides[0];
+                var result = data.Blocks[0];
 
                 if (resultNuc != nuclide)
                 {
                     // 子孫核種の結果を読み出す。
-                    result = data.Nuclides.Where(n => n.Nuclide == resultNuc).FirstOrDefault();
+                    result = data.Blocks.Where(n => n.Header == resultNuc).FirstOrDefault();
                     if (result is null)
                         throw new InvalidDataException($"Missing retention data of progeny nuclide '{resultNuc}'.");
                 }

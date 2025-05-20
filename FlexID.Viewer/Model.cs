@@ -129,7 +129,7 @@ namespace FlexID.Viewer
         /// <summary>
         /// 表示中の核種のデータ。
         /// </summary>
-        private OutputNuclideData CurrentNuclide { get; set; }
+        private OutputBlockData CurrentNuclide { get; set; }
 
         /// <summary>
         /// 核種リスト。
@@ -521,7 +521,7 @@ namespace FlexID.Viewer
             CurrentOutput = newOutput;
 
             Title = CurrentOutput.Title;
-            Nuclides.AddRange(CurrentOutput.Nuclides.Select(n => n.Nuclide));
+            Nuclides.AddRange(CurrentOutput.Blocks.Select(n => n.Header));
         }
 
         /// <summary>
@@ -529,7 +529,7 @@ namespace FlexID.Viewer
         /// </summary>
         public void SetNuclide(string nuc)
         {
-            if (CurrentNuclide?.Nuclide == nuc)
+            if (CurrentNuclide?.Header == nuc)
                 return;
 
             ClearNuclide();
@@ -538,7 +538,7 @@ namespace FlexID.Viewer
             if (index == -1)
                 return;
 
-            CurrentNuclide = CurrentOutput.Nuclides[index];
+            CurrentNuclide = CurrentOutput.Blocks[index];
 
             SetMinMax();
             SetSteps();
