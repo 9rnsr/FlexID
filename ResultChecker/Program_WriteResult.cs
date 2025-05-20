@@ -142,7 +142,6 @@ namespace ResultChecker
                     {
                         cells = sheet.Cells[r, colD + 0, r, colD + 2];
                         cells.Value = "-";
-                        cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
                     else
                     {
@@ -155,7 +154,7 @@ namespace ResultChecker
                         cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
                         cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                         cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
-                        cellEffDoseR.Style.Numberformat.Format = "0.0%";
+                        cellEffDoseR.Style.Numberformat.Format = "??0.0%";
 
                         // 預託実効線量のFlexID/OIR比にカラースケールを設定。
                         SetPercentColorScale(cellEffDoseR);
@@ -165,7 +164,8 @@ namespace ResultChecker
                     sheet.Cells[r + 0, colD + 1, r + 5, colD + 1].Merge = true;
                     sheet.Cells[r + 0, colD + 2, r + 5, colD + 2].Merge = true;
 
-                    cells = sheet.Cells[r, colD + 0, r + 5, colD + 2];
+                    cells = sheet.Cells[r + 0, colD + 0, r + 5, colD + 2];
+                    cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 }
 
@@ -177,13 +177,11 @@ namespace ResultChecker
                     sheet.Cells[r + 3, colE - 1].Value = "OIR Female";
                     sheet.Cells[r + 4, colE - 1].Value = "FlexID Male";
                     sheet.Cells[r + 5, colE - 1].Value = "FlexID Female";
-                    sheet.Cells[r + 0, colE - 1, r + 5, colE - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     if (res.HasErrors)
                     {
-                        cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegions.Length - 1];
+                        cells = sheet.Cells[r + 0, colE, r + 5, colE + targetRegions.Length - 1];
                         cells.Value = "-";
-                        cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
                     else
                     {
@@ -204,8 +202,8 @@ namespace ResultChecker
                             cellEquivDoseAM.Value = res.ActualDose.EquivalentDosesMale[i];
                             cellEquivDoseAF.Value = res.ActualDose.EquivalentDosesFemale[i];
 
-                            cellEquivDoseRM.Style.Numberformat.Format = "0.0%";
-                            cellEquivDoseRF.Style.Numberformat.Format = "0.0%";
+                            cellEquivDoseRM.Style.Numberformat.Format = "??0.0%";
+                            cellEquivDoseRF.Style.Numberformat.Format = "??0.0%";
                             cellEquivDoseEM.Style.Numberformat.Format = "0.0E+00";
                             cellEquivDoseEF.Style.Numberformat.Format = "0.0E+00";
                             cellEquivDoseAM.Style.Numberformat.Format = "0.0E+00";
@@ -216,6 +214,9 @@ namespace ResultChecker
                         var cellsEquivDose = sheet.Cells[r, colE, r + 1, colE + targetRegions.Length - 1];
                         SetPercentColorScale(cellsEquivDose);
                     }
+
+                    cells = sheet.Cells[r + 0, colE - 1, r + 5, colE + targetRegions.Length - 1];
+                    cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 }
 
                 sheet.Rows[r + 2, r + 6].Group();
@@ -234,6 +235,9 @@ namespace ResultChecker
                 sheet.Cells[r, colT, r + 5, colT].Merge = true;
                 r += 7;
             }
+
+            // ウインドウ枠の固定を設定。
+            sheet.View.FreezePanes(rowV, colD);
         }
 
         /// <summary>
