@@ -20,11 +20,11 @@ namespace ResultChecker
             {
                 // 預託実効線量と預託等価線量のシートを作成。
                 var sheetEequivDose = package.Workbook.Worksheets.Add("Dose");
-                WriteEquivDoseSheet(sheetEequivDose, sortedResults);
+                WriteDoseSheet(sheetEequivDose, sortedResults);
 
                 // (預託実効線量と)残留放射能の要約シートを作成。
                 var sheetSummary = package.Workbook.Worksheets.Add("Retention");
-                WriteSummarySheet(sheetSummary, sortedResults);
+                WriteRetentionSheet(sheetSummary, sortedResults);
 
                 // 対象毎の残留放射能の確認シートを作成。
                 foreach (var res in sortedResults)
@@ -40,128 +40,20 @@ namespace ResultChecker
             }
         }
 
-        /// <summary>
-        /// 預託実効線量の比較結果と、残留放射能の要約比較を含んだシートを書き出す。
-        /// </summary>
-        /// <param name="sheet"></param>
-        /// <param name="results"></param>
-        static void WriteSummarySheet(ExcelWorksheet sheet, IEnumerable<Result> results)
+        private static void SetPercentColorScale(ExcelRange cells)
         {
-            sheet.Cells[1, 1].Value = "Retention";
+            var sheet = cells.Worksheet;
+            var condition = sheet.ConditionalFormatting.AddThreeColorScale(cells);
 
-            const int rowH = 3;
-            const int rowV = rowH + 2;
-            const int colT = 1;
-            const int colD = 2;
-            const int colA = 6;
-
-            // Target
-            {
-                sheet.Cells[rowH + 0, colT].Value = "Target";
-                sheet.Cells[rowH + 0, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                sheet.Cells[rowH + 0, colT, rowH + 1, colT].Merge = true;
-            }
-
-            // Effective Dose
-            {
-                var (r0, r1) = (rowH + 0, rowH + 1);
-                var (c0, c1, c2) = (colD + 0, colD + 1, colD + 2);
-                sheet.Cells[r0, c0].Value = "Whole Body Effective Dose";
-                sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                sheet.Cells[r0, c0, r0, c2].Merge = true;
-                sheet.Cells[r1, c0].Value = "OIR";
-                sheet.Cells[r1, c1].Value = "FlexID";
-                sheet.Cells[r1, c2].Value = "Diff";
-                sheet.Cells[r1, c0, r1, c2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                sheet.Cells[r1, c0, r1, c2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                sheet.Cells[r1, c0, r1, c2].Style.WrapText = true;
-            }
-
-            // Activity
-            void WriteActivityHeader(int c, string header)
-            {
-                var (r0, r1) = (rowH + 0, rowH + 1);
-                var (c0, c1) = (c + 0, c + 1);
-                sheet.Cells[r0, c0].Value = header;
-                sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                sheet.Cells[r0, c0, r0, c1].Merge = true;
-                sheet.Cells[r1, c0].Value = "Diff (min)";
-                sheet.Cells[r1, c1].Value = "Diff (max)";
-                sheet.Cells[r1, c0, r1, c1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                sheet.Cells[r1, c0, r1, c1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                sheet.Cells[r1, c0, r1, c1].Style.WrapText = true;
-            }
-            WriteActivityHeader(colA + 0, "Whole Body");
-            WriteActivityHeader(colA + 2, "Urine");
-            WriteActivityHeader(colA + 4, "Faeces");
-            WriteActivityHeader(colA + 6, "Alimentary Tract");
-            WriteActivityHeader(colA + 8, "Lungs");
-            WriteActivityHeader(colA + 10, "Skeleton");
-            WriteActivityHeader(colA + 12, "Liver");
-            WriteActivityHeader(colA + 14, "Thyroid");
-
-            var r = rowV;
-            foreach (var res in results)
-            {
-                // Target
-                sheet.Cells[r, 1].Value = res.Target;
-
-                if (res.HasErrors)
-                {
-                    sheet.Cells[r, 2, r, 4].Value = "-";
-                    sheet.Cells[r, 6, r, 11].Value = "-";
-                    r++;
-                    continue;
-                }
-
-                // Effective Dose
-                {
-                    var cellEffDoseE = sheet.Cells[r, colD + 0];
-                    var cellEffDoseA = sheet.Cells[r, colD + 1];
-                    var cellEffDoseR = sheet.Cells[r, colD + 2];
-                    cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
-                    cellEffDoseA.Value = res.ActualDose.EffectiveDose;
-                    cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
-                    cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
-                    cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
-                    cellEffDoseR.Style.Numberformat.Format = "0.0%";
-                }
-
-                // Activity
-                void WriteActivityValue(int c, (double Min, double Max) minmax)
-                {
-                    object GetValue(double value) =>
-                        double.IsInfinity(value) ? (object)"-" : value;
-
-                    var cell1 = sheet.Cells[r, c + 0];
-                    var cell2 = sheet.Cells[r, c + 1];
-                    cell1.Value = GetValue(minmax.Min);
-                    cell2.Value = GetValue(minmax.Max);
-                    cell1.Style.Numberformat.Format = "0.0%";
-                    cell2.Style.Numberformat.Format = "0.0%";
-                }
-                WriteActivityValue(colA + 0, res.FractionsWholeBody);
-                WriteActivityValue(colA + 2, res.FractionsUrine);
-                WriteActivityValue(colA + 4, res.FractionsFaeces);
-                WriteActivityValue(colA + 6, res.FractionsAtract);
-                WriteActivityValue(colA + 8, res.FractionsLungs);
-                WriteActivityValue(colA + 10, res.FractionsSkeleton);
-                WriteActivityValue(colA + 12, res.FractionsLiver);
-                WriteActivityValue(colA + 14, res.FractionsThyroid);
-
-                r++;
-            }
-
-            // 預託実効線量のFlexID/OIR比にカラースケールを設定。
-            var cellsDose = sheet.Cells[rowV, colD + 2, r - 1, colD + 2];
-            SetPercentColorScale(cellsDose);
-
-            // 残留放射能のFlexID/OIR比にカラースケールを設定。
-            var cellsActivity = sheet.Cells[rowV, colA, r - 1, colA + 15];
-            SetPercentColorScale(cellsActivity);
-
-            sheet.Column(1).AutoFit();
-            //sheet.Cells.AutoFitColumns(0);  // Autofit columns for all cells
+            condition.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
+            condition.LowValue.Value = 0.5;
+            condition.LowValue.Color = Color.DeepSkyBlue;
+            condition.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Num;
+            condition.MiddleValue.Value = 1.0;
+            condition.MiddleValue.Color = Color.LightGreen;
+            condition.HighValue.Type = eExcelConditionalFormattingValueObjectType.Num;
+            condition.HighValue.Value = 1.5;
+            condition.HighValue.Color = Color.Orange;
         }
 
         /// <summary>
@@ -169,7 +61,7 @@ namespace ResultChecker
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="results"></param>
-        static void WriteEquivDoseSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
+        static void WriteDoseSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
         {
             sheet.Cells[1, 1].Value = "Dose";
 
@@ -250,7 +142,6 @@ namespace ResultChecker
                     {
                         cells = sheet.Cells[r, colD + 0, r, colD + 2];
                         cells.Value = "-";
-                        cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
                     else
                     {
@@ -263,7 +154,7 @@ namespace ResultChecker
                         cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
                         cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                         cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
-                        cellEffDoseR.Style.Numberformat.Format = "0.0%";
+                        cellEffDoseR.Style.Numberformat.Format = "??0.0%";
 
                         // 預託実効線量のFlexID/OIR比にカラースケールを設定。
                         SetPercentColorScale(cellEffDoseR);
@@ -273,7 +164,8 @@ namespace ResultChecker
                     sheet.Cells[r + 0, colD + 1, r + 5, colD + 1].Merge = true;
                     sheet.Cells[r + 0, colD + 2, r + 5, colD + 2].Merge = true;
 
-                    cells = sheet.Cells[r, colD + 0, r + 5, colD + 2];
+                    cells = sheet.Cells[r + 0, colD + 0, r + 5, colD + 2];
+                    cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 }
 
@@ -285,13 +177,11 @@ namespace ResultChecker
                     sheet.Cells[r + 3, colE - 1].Value = "OIR Female";
                     sheet.Cells[r + 4, colE - 1].Value = "FlexID Male";
                     sheet.Cells[r + 5, colE - 1].Value = "FlexID Female";
-                    sheet.Cells[r + 0, colE - 1, r + 5, colE - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     if (res.HasErrors)
                     {
-                        cells = sheet.Cells[r + 0, colE, r + 4, colE + targetRegions.Length - 1];
+                        cells = sheet.Cells[r + 0, colE, r + 5, colE + targetRegions.Length - 1];
                         cells.Value = "-";
-                        cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
                     else
                     {
@@ -312,8 +202,8 @@ namespace ResultChecker
                             cellEquivDoseAM.Value = res.ActualDose.EquivalentDosesMale[i];
                             cellEquivDoseAF.Value = res.ActualDose.EquivalentDosesFemale[i];
 
-                            cellEquivDoseRM.Style.Numberformat.Format = "0.0%";
-                            cellEquivDoseRF.Style.Numberformat.Format = "0.0%";
+                            cellEquivDoseRM.Style.Numberformat.Format = "??0.0%";
+                            cellEquivDoseRF.Style.Numberformat.Format = "??0.0%";
                             cellEquivDoseEM.Style.Numberformat.Format = "0.0E+00";
                             cellEquivDoseEF.Style.Numberformat.Format = "0.0E+00";
                             cellEquivDoseAM.Style.Numberformat.Format = "0.0E+00";
@@ -324,6 +214,9 @@ namespace ResultChecker
                         var cellsEquivDose = sheet.Cells[r, colE, r + 1, colE + targetRegions.Length - 1];
                         SetPercentColorScale(cellsEquivDose);
                     }
+
+                    cells = sheet.Cells[r + 0, colE - 1, r + 5, colE + targetRegions.Length - 1];
+                    cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 }
 
                 sheet.Rows[r + 2, r + 6].Group();
@@ -342,22 +235,139 @@ namespace ResultChecker
                 sheet.Cells[r, colT, r + 5, colT].Merge = true;
                 r += 7;
             }
+
+            // ウインドウ枠の固定を設定。
+            sheet.View.FreezePanes(rowV, colD);
         }
 
-        private static void SetPercentColorScale(ExcelRange cells)
+        /// <summary>
+        /// 預託実効線量の比較結果と、残留放射能の要約比較を含んだシートを書き出す。
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="results"></param>
+        static void WriteRetentionSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
         {
-            var sheet = cells.Worksheet;
-            var condition = sheet.ConditionalFormatting.AddThreeColorScale(cells);
+            sheet.Cells[1, 1].Value = "Retention";
 
-            condition.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-            condition.LowValue.Value = 0.5;
-            condition.LowValue.Color = Color.DeepSkyBlue;
-            condition.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-            condition.MiddleValue.Value = 1.0;
-            condition.MiddleValue.Color = Color.LightGreen;
-            condition.HighValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-            condition.HighValue.Value = 1.5;
-            condition.HighValue.Color = Color.Orange;
+            const int rowH = 3;
+            const int rowV = rowH + 2;
+            const int colT = 1;
+            const int colD = 2;
+            const int colA = 6;
+
+            // Target
+            {
+                sheet.Cells[rowH + 0, colT].Value = "Target";
+                sheet.Cells[rowH + 0, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[rowH + 0, colT, rowH + 1, colT].Merge = true;
+            }
+
+            // Effective Dose
+            {
+                var (r0, r1) = (rowH + 0, rowH + 1);
+                var (c0, c1, c2) = (colD + 0, colD + 1, colD + 2);
+                sheet.Cells[r0, c0].Value = "Whole Body Effective Dose";
+                sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r0, c0, r0, c2].Merge = true;
+                sheet.Cells[r1, c0].Value = "OIR";
+                sheet.Cells[r1, c1].Value = "FlexID";
+                sheet.Cells[r1, c2].Value = "Diff";
+                sheet.Cells[r1, c0, r1, c2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c2].Style.WrapText = true;
+            }
+
+            // Activity
+            void WriteActivityHeader(int c, string header)
+            {
+                var (r0, r1) = (rowH + 0, rowH + 1);
+                var (c0, c1) = (c + 0, c + 1);
+                sheet.Cells[r0, c0].Value = header;
+                sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r0, c0, r0, c1].Merge = true;
+                sheet.Cells[r1, c0].Value = "Diff (min)";
+                sheet.Cells[r1, c1].Value = "Diff (max)";
+                sheet.Cells[r1, c0, r1, c1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[r1, c0, r1, c1].Style.WrapText = true;
+            }
+            WriteActivityHeader(colA + 0, "Whole Body");
+            WriteActivityHeader(colA + 2, "Urine");
+            WriteActivityHeader(colA + 4, "Faeces");
+            WriteActivityHeader(colA + 6, "Alimentary Tract");
+            WriteActivityHeader(colA + 8, "Lungs");
+            WriteActivityHeader(colA + 10, "Skeleton");
+            WriteActivityHeader(colA + 12, "Liver");
+            WriteActivityHeader(colA + 14, "Thyroid");
+
+            var r = rowV;
+            foreach (var res in results)
+            {
+                // Target
+                sheet.Cells[r, 1].Value = res.Target;
+
+                if (res.HasErrors)
+                {
+                    sheet.Cells[r, 2, r, 4].Value = "-";
+                    sheet.Cells[r, 6, r, 11].Value = "-";
+                    r++;
+                    continue;
+                }
+
+                // Effective Dose
+                {
+                    var cellEffDoseE = sheet.Cells[r, colD + 0];
+                    var cellEffDoseA = sheet.Cells[r, colD + 1];
+                    var cellEffDoseR = sheet.Cells[r, colD + 2];
+                    cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
+                    cellEffDoseA.Value = res.ActualDose.EffectiveDose;
+                    cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
+                    cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
+                    cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
+                    cellEffDoseR.Style.Numberformat.Format = "??0.0%";
+                }
+
+                // Activity
+                void WriteActivityValue(int c, (double Min, double Max) minmax)
+                {
+                    object GetValue(double value) =>
+                        double.IsInfinity(value) ? (object)"-" : value;
+
+                    var cell1 = sheet.Cells[r, c + 0];
+                    var cell2 = sheet.Cells[r, c + 1];
+                    cell1.Value = GetValue(minmax.Min);
+                    cell2.Value = GetValue(minmax.Max);
+                    cell1.Style.Numberformat.Format = "??0.0%";
+                    cell2.Style.Numberformat.Format = "??0.0%";
+                }
+                WriteActivityValue(colA + 0, res.FractionsWholeBody);
+                WriteActivityValue(colA + 2, res.FractionsUrine);
+                WriteActivityValue(colA + 4, res.FractionsFaeces);
+                WriteActivityValue(colA + 6, res.FractionsAtract);
+                WriteActivityValue(colA + 8, res.FractionsLungs);
+                WriteActivityValue(colA + 10, res.FractionsSkeleton);
+                WriteActivityValue(colA + 12, res.FractionsLiver);
+                WriteActivityValue(colA + 14, res.FractionsThyroid);
+
+                r++;
+            }
+
+            sheet.Cells[rowV, colD, r - 1, colD + 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowV, colA, r - 1, colA + 15].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            // 預託実効線量のFlexID/OIR比にカラースケールを設定。
+            var cellsDose = sheet.Cells[rowV, colD + 2, r - 1, colD + 2];
+            SetPercentColorScale(cellsDose);
+
+            // 残留放射能のFlexID/OIR比にカラースケールを設定。
+            var cellsActivity = sheet.Cells[rowV, colA, r - 1, colA + 15];
+            SetPercentColorScale(cellsActivity);
+
+            sheet.Column(1).AutoFit();
+            //sheet.Cells.AutoFitColumns(0);  // Autofit columns for all cells
+
+            // ウインドウ枠の固定を設定。
+            sheet.View.FreezePanes(rowV, colD);
         }
 
         /// <summary>
@@ -374,10 +384,10 @@ namespace ResultChecker
 
             const int rowH = 4;
             const int rowT = rowH + 1;
-            const int colE = 23;  // 1;
-            const int colA = 33;  // 11;
-            const int colD = 14;  // 21;
-            const int colC = 1;   // 30;
+            const int colE = 24;
+            const int colA = 34;
+            const int colD = 14;
+            const int colC = 1;
 
             sheet.Cells[rowH - 1, colE + 0].Value = "OIR";
             sheet.Cells[rowH, colE + 0].Value = "Time, days";
@@ -391,6 +401,7 @@ namespace ResultChecker
             sheet.Cells[rowH, colE + 8].Value = "Thyroid";
             sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.WrapText = true;
             sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             sheet.Cells[rowH - 1, colA + 0].Value = "FlexID";
             sheet.Cells[rowH, colA + 0].Value = "Time, days";
@@ -404,18 +415,21 @@ namespace ResultChecker
             sheet.Cells[rowH, colA + 8].Value = "Thyroid";
             sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.WrapText = true;
             sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             sheet.Cells[rowH - 1, colD + 0].Value = "Difference";
-            sheet.Cells[rowH, colD + 0].Value = "Whole Body";
-            sheet.Cells[rowH, colD + 1].Value = "Urine";
-            sheet.Cells[rowH, colD + 2].Value = "Faeces";
-            sheet.Cells[rowH, colD + 3].Value = "Alimentary Tract";
-            sheet.Cells[rowH, colD + 4].Value = "Lungs";
-            sheet.Cells[rowH, colD + 5].Value = "Skeleton";
-            sheet.Cells[rowH, colD + 6].Value = "Liver";
-            sheet.Cells[rowH, colD + 7].Value = "Thyroid";
-            sheet.Cells[rowH, colD + 0, rowH, colD + 7].Style.WrapText = true;
-            sheet.Cells[rowH, colD + 0, rowH, colD + 7].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colD + 0].Value = "Time, days";
+            sheet.Cells[rowH, colD + 1].Value = "Whole Body";
+            sheet.Cells[rowH, colD + 2].Value = "Urine";
+            sheet.Cells[rowH, colD + 3].Value = "Faeces";
+            sheet.Cells[rowH, colD + 4].Value = "Alimentary Tract";
+            sheet.Cells[rowH, colD + 5].Value = "Lungs";
+            sheet.Cells[rowH, colD + 6].Value = "Skeleton";
+            sheet.Cells[rowH, colD + 7].Value = "Liver";
+            sheet.Cells[rowH, colD + 8].Value = "Thyroid";
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.WrapText = true;
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             sheet.Row(rowH).Height *= 3;
             //sheet.Cells[rowH, colE, rowH, colE + 3].AutoFitColumns(0);
@@ -465,14 +479,16 @@ namespace ResultChecker
                 cellLiverA     /**/.Value = actualAct.Liver    /**/?? (object)"-";
                 cellThyroidA   /**/.Value = actualAct.Thyroid  /**/?? (object)"-";
 
-                var cellWholeBodyR /**/= sheet.Cells[r, colD + 0];
-                var cellUrineR     /**/= sheet.Cells[r, colD + 1];
-                var cellFaecesR    /**/= sheet.Cells[r, colD + 2];
-                var cellAtractR    /**/= sheet.Cells[r, colD + 3];
-                var cellLungsR     /**/= sheet.Cells[r, colD + 4];
-                var cellSkeletonR  /**/= sheet.Cells[r, colD + 5];
-                var cellLiverR     /**/= sheet.Cells[r, colD + 6];
-                var cellThyroidR   /**/= sheet.Cells[r, colD + 7];
+                var cellTimeR      /**/= sheet.Cells[r, colD + 0];
+                var cellWholeBodyR /**/= sheet.Cells[r, colD + 1];
+                var cellUrineR     /**/= sheet.Cells[r, colD + 2];
+                var cellFaecesR    /**/= sheet.Cells[r, colD + 3];
+                var cellAtractR    /**/= sheet.Cells[r, colD + 4];
+                var cellLungsR     /**/= sheet.Cells[r, colD + 5];
+                var cellSkeletonR  /**/= sheet.Cells[r, colD + 6];
+                var cellLiverR     /**/= sheet.Cells[r, colD + 7];
+                var cellThyroidR   /**/= sheet.Cells[r, colD + 8];
+                cellTimeR      /**/.Value = expectAct.EndTime;
                 cellWholeBodyR/**/.Formula = $"{cellWholeBodyA.Address}/{cellWholeBodyE.Address}";
                 cellUrineR    /**/.Formula = $"IFERROR({cellUrineA    /**/.Address}/{cellUrineE    /**/.Address},\"-\")";
                 cellFaecesR   /**/.Formula = $"IFERROR({cellFaecesA   /**/.Address}/{cellFaecesE   /**/.Address},\"-\")";
@@ -490,10 +506,13 @@ namespace ResultChecker
 
             var cellsE = sheet.Cells[sr, colE + 1, er, colE + 8];
             var cellsA = sheet.Cells[sr, colA + 1, er, colA + 8];
-            var cellsD = sheet.Cells[sr, colD, er, colD + 7];
+            var cellsD = sheet.Cells[sr, colD + 1, er, colD + 8];
             cellsE.Style.Numberformat.Format = "0.0E+00";
             cellsA.Style.Numberformat.Format = "0.0E+00";
-            cellsD.Style.Numberformat.Format = "0.0%";
+            cellsD.Style.Numberformat.Format = "??0.0%";
+            cellsE.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cellsA.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cellsD.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             // 時間メッシュ毎の残留放射能のFlexID/OIR比にカラースケールを設定。
             SetPercentColorScale(cellsD);
@@ -587,6 +606,9 @@ namespace ResultChecker
             var serieThyroidA = chartThyroid.Series.Add(thyroidA, timesA);
             SetExpectSerieStyle(serieThyroidE, "Thyroid");
             SetActualSerieStyle(serieThyroidA, "Thyroid");
+
+            // ウインドウ枠の固定を設定。
+            sheet.View.FreezePanes(rowT, colD + 1);
         }
 
         static ExcelScatterChart SetActivityChartStyle(ExcelScatterChart chart, int row, int col, int nrow, int ncol)
