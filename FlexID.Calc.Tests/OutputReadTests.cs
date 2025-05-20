@@ -30,13 +30,15 @@ namespace FlexID.Calc.Tests
                 var path = Path.Combine(expectDir, nuclide, $"{target}_{suffix}.out");
                 var data = new OutputDataReader(path).Read();
 
-                Assert.AreEqual(nuclide, data.Blocks[0].Header);
                 if (type == OutputType.Dose || type == OutputType.DoseRate)
                 {
-                    Assert.AreEqual(1, data.Blocks.Length);
+                    Assert.AreEqual(2, data.Blocks.Length);
+                    Assert.AreEqual(nuclide + " (Male)", data.Blocks[0].Header);
+                    Assert.AreEqual(nuclide + " (Female)", data.Blocks[1].Header);
                 }
                 else
                 {
+                    Assert.AreEqual(nuclide, data.Blocks[0].Header);
                     Assert.AreEqual(1 + progeny.Length, data.Blocks.Length);
                     Assert.AreEqual(nuclide, data.Blocks[0].Header);
                     CollectionAssert.AreEqual(progeny, data.Blocks.Skip(1).Select(n => n.Header).ToArray());
