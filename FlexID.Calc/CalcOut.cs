@@ -157,9 +157,9 @@ namespace FlexID.Calc
                     .Where(o => o.SourceRegion == "Blood").Select(o => o.Index).ToArray();
 
                 var otherSourceRegions = nuclide.OtherSourceRegions.Select(sr => data.SourceRegions.First(s => s.Name == sr)).ToArray();
-                var massOtherAM = otherSourceRegions.Select(s => s.MaleMass).Sum();
-                var massOtherAF = otherSourceRegions.Select(s => s.FemaleMass).Sum();
-                var massOther = (massOtherAM + massOtherAF) / 2;    // 男女平均
+                var massOtherM = otherSourceRegions.Select(s => s.MaleMass).Sum();
+                var massOtherF = otherSourceRegions.Select(s => s.FemaleMass).Sum();
+                var massOther = (massOtherM + massOtherF) / 2;    // 男女平均
 
                 (int, double)[] GetIndexes(string[] sregions, double bloodFraction, bool considerOther = true)
                 {
@@ -174,9 +174,9 @@ namespace FlexID.Calc
                         .Select(sr =>
                         {
                             var sourceRegion = data.SourceRegions.First(s => s.Name == sr);
-                            var massRateAM = sourceRegion.MaleMass / massOtherAM;
-                            var massRateAF = sourceRegion.FemaleMass / massOtherAF;
-                            var massRate = (massRateAM + massRateAF) / 2;
+                            var massRateM = sourceRegion.MaleMass / massOtherM;
+                            var massRateF = sourceRegion.FemaleMass / massOtherF;
+                            var massRate = (massRateM + massRateF) / 2;
                             return massRate;
                         }).Sum();
 

@@ -128,9 +128,14 @@ namespace FlexID.Calc
         public string SourceRegion;
 
         /// <summary>
-        /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数。
+        /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数(男性)。
         /// </summary>
-        public double[] S_Coefficients;
+        public double[] S_CoefficientsM;
+
+        /// <summary>
+        /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数(女性)。
+        /// </summary>
+        public double[] S_CoefficientsF;
     }
 
     [DebuggerDisplay("{Name}")]
@@ -243,9 +248,14 @@ namespace FlexID.Calc
         public double[] TargetWeights;
 
         /// <summary>
-        /// 核種毎のS係数データ表。
+        /// 核種毎のS係数データ表(男性)。
         /// </summary>
-        public List<Dictionary<string, double[]>> SCoeffTables = new List<Dictionary<string, double[]>>();
+        public List<Dictionary<string, double[]>> SCoeffTablesM = new List<Dictionary<string, double[]>>();
+
+        /// <summary>
+        /// 核種毎のS係数データ表(女性)。
+        /// </summary>
+        public List<Dictionary<string, double[]>> SCoeffTablesF = new List<Dictionary<string, double[]>>();
 
         /// <summary>
         /// 全ての臓器。

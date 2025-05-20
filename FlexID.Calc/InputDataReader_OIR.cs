@@ -1118,8 +1118,10 @@ namespace FlexID.Calc
             foreach (var nuclide in data.Nuclides)
             {
                 // 核種に対応するS係数データを読み込む。
-                var tableSCoeff = ReadSCoeff(data, nuclide);
-                data.SCoeffTables.Add(tableSCoeff);
+                var tableSCoeffM = ReadSCoeff(data, nuclide, Sex.Male);
+                var tableSCoeffF = ReadSCoeff(data, nuclide, Sex.Female);
+                data.SCoeffTablesM.Add(tableSCoeffM);
+                data.SCoeffTablesF.Add(tableSCoeffF);
 
                 foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
                 {
@@ -1128,7 +1130,8 @@ namespace FlexID.Calc
                         continue;
 
                     // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
-                    organ.S_Coefficients = tableSCoeff[sourceRegion];
+                    organ.S_CoefficientsM = tableSCoeffM[sourceRegion];
+                    organ.S_CoefficientsF = tableSCoeffF[sourceRegion];
                 }
             }
         }
@@ -1138,21 +1141,19 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="data"></param>
         /// <param name="nuclide">対象核種。線源領域の名称が設定される。</param>
-        /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
-        private static Dictionary<string, double[]> ReadSCoeff(InputData data, NuclideData nuclide)
+        /// <param name="sex">S係数を計算する性別。</param>
+        /// <returns>キーが線源領域の名称、値が各標的領域に対する成人のS係数、となる辞書。</returns>
+        private static Dictionary<string, double[]> ReadSCoeff(InputData data, NuclideData nuclide, Sex sex)
         {
-            if (safdataAM is null || safdataAF is null)
+            var safdata = sex == Sex.Male ? safdataAM : safdataAF;
+            if (safdata is null)
                 throw Program.Error($"Cannot read SAF data.");
 
             var nuc = nuclide.Name;
 
-            var calcScoeffAM = new CalcScoeff(safdataAM);
-            calcScoeffAM.InterpolationMethod = "PCHIP";
-            calcScoeffAM.CalcS(nuc);
-
-            var calcScoeffAF = new CalcScoeff(safdataAF);
-            calcScoeffAF.InterpolationMethod = "PCHIP";
-            calcScoeffAF.CalcS(nuc);
+            var calcScoeff = new CalcScoeff(safdata);
+            calcScoeff.InterpolationMethod = "PCHIP";
+            calcScoeff.CalcS(nuc);
 
             var sources = data.SourceRegions.Select(s => s.Name).ToArray();
             var targets = data.TargetRegions;
@@ -1166,43 +1167,30 @@ namespace FlexID.Calc
 
             for (int indexT = 0; indexT < targetsCount; indexT++)
             {
-                double GetValueAM(int indexS) => calcScoeffAM.OutTotal[indexT + targetsCount * indexS];
-                double GetValueAF(int indexS) => calcScoeffAF.OutTotal[indexT + targetsCount * indexS];
+                double GetValue(int indexS) => calcScoeff.OutTotal[indexT + targetsCount * indexS];
 
                 for (int indexS = 0; indexS < sourcesCount; indexS++)
                 {
                     var sourceRegion = sources[indexS];
-                    var scoeffAM = GetValueAM(indexS);
-                    var scoeffAF = GetValueAF(indexS);
+                    var scoeff = GetValue(indexS);
 
-                    // ここでS係数の男女平均を取る。
-                    var scoeff = (scoeffAM + scoeffAF) / 2;
                     table[sourceRegion][indexT] = scoeff;
                 }
 
                 // 線源領域'Other'のS係数を計算する。
-                var massOtherAM = 0.0;
-                var massOtherAF = 0.0;
-                var scoeffOtherAM = 0.0;
-                var scoeffOtherAF = 0.0;
+                var massOther = 0.0;
+                var scoeffOther = 0.0;
                 foreach (var indexS in indexOtherSources)
                 {
-                    var sourceRegion = sources[indexS];
-                    var massAM = data.SourceRegions[indexS].MaleMass;
-                    var massAF = data.SourceRegions[indexS].FemaleMass;
-                    var scoeffAM = GetValueAM(indexS);
-                    var scoeffAF = GetValueAF(indexS);
+                    var sourceRegion = data.SourceRegions[indexS];
+                    var mass = sourceRegion.GetMass(sex);
+                    var scoeff = GetValue(indexS);
 
-                    massOtherAM += massAM;
-                    massOtherAF += massAF;
-                    scoeffOtherAM += massAM * scoeffAM;
-                    scoeffOtherAF += massAF * scoeffAF;
+                    massOther += mass;
+                    scoeffOther += mass * scoeff;
                 }
-                if (massOtherAM != 0) scoeffOtherAM /= massOtherAM;
-                if (massOtherAF != 0) scoeffOtherAF /= massOtherAF;
+                if (massOther != 0) scoeffOther /= massOther;
 
-                // ここでS係数の男女平均を取る。
-                var scoeffOther = (scoeffOtherAM + scoeffOtherAF) / 2;
                 columnOther[indexT] = scoeffOther;
             }
 

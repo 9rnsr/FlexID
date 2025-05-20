@@ -153,7 +153,7 @@ namespace FlexID.Calc
 
                 foreach (var organ in dataLo.Organs)
                 {
-                    organsSee[organ.Index] = organ.S_Coefficients;
+                    organsSee[organ.Index] = organ.S_CoefficientsM;
                 }
             }
 
@@ -171,8 +171,8 @@ namespace FlexID.Calc
                         var sourcesCount = nuclide.SourceRegions.Length;
 
                         int indexN = dataLo.Nuclides.IndexOf(nuclide);
-                        var tableLo = dataLo.SCoeffTables[indexN];
-                        var tableHi = dataHi.SCoeffTables[indexN];
+                        var tableLo = dataLo.SCoeffTablesM[indexN];
+                        var tableHi = dataHi.SCoeffTablesM[indexN];
 
                         for (int indexS = 0; indexS < sourcesCount; indexS++)
                         {

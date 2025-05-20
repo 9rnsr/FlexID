@@ -110,7 +110,7 @@ namespace FlexID.Calc
 
                 // 核種に対応するS係数データを読み込む。
                 var tableSCoeff = ReadSee(data, age, nuclide);
-                data.SCoeffTables.Add(tableSCoeff);
+                data.SCoeffTablesM.Add(tableSCoeff);
 
                 // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
                 while (true)
@@ -172,7 +172,7 @@ namespace FlexID.Calc
 
                         // コンパートメントの放射能を各標的領域に振り分けるためのS係数データを関連付ける。
                         organ.SourceRegion = sourceRegion;
-                        organ.S_Coefficients = tableSCoeff[sourceRegion];
+                        organ.S_CoefficientsM = tableSCoeff[sourceRegion];
                     }
 
                     if (organ.Func == OrganFunc.exc)
@@ -280,7 +280,7 @@ namespace FlexID.Calc
         /// <param name="data"></param>
         /// <param name="age">被ばく評価期間の開始年齢</param>
         /// <param name="nuclide">対象核種。線源領域の名称が設定される。</param>
-        /// <returns>キーが線源領域の名称、値が各標的領域に対する成人男女平均のS係数、となる辞書。</returns>
+        /// <returns>キーが線源領域の名称、値が各標的領域に対するS係数、となる辞書。</returns>
         private static Dictionary<string, double[]> ReadSee(InputData data, string age, NuclideData nuclide)
         {
             var nuc = nuclide.Name;

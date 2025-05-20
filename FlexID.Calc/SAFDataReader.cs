@@ -24,6 +24,10 @@ namespace FlexID.Calc
         public double FemaleMass;
 
         public int FemaleID;
+
+        public double GetMass(Sex sex) => sex == Sex.Male ? MaleMass : FemaleMass;
+
+        public int GetID(Sex sex) => sex == Sex.Male ? MaleID : FemaleID;
     }
 
     /// <summary>
