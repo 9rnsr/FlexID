@@ -324,7 +324,7 @@ namespace ResultChecker
                     cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
                     cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                     cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
-                    cellEffDoseR.Style.Numberformat.Format = "0.0%";
+                    cellEffDoseR.Style.Numberformat.Format = "??0.0%";
                 }
 
                 // Activity
@@ -337,8 +337,8 @@ namespace ResultChecker
                     var cell2 = sheet.Cells[r, c + 1];
                     cell1.Value = GetValue(minmax.Min);
                     cell2.Value = GetValue(minmax.Max);
-                    cell1.Style.Numberformat.Format = "0.0%";
-                    cell2.Style.Numberformat.Format = "0.0%";
+                    cell1.Style.Numberformat.Format = "??0.0%";
+                    cell2.Style.Numberformat.Format = "??0.0%";
                 }
                 WriteActivityValue(colA + 0, res.FractionsWholeBody);
                 WriteActivityValue(colA + 2, res.FractionsUrine);
@@ -352,6 +352,9 @@ namespace ResultChecker
                 r++;
             }
 
+            sheet.Cells[rowV, colD, r - 1, colD + 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowV, colA, r - 1, colA + 15].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
             // 預託実効線量のFlexID/OIR比にカラースケールを設定。
             var cellsDose = sheet.Cells[rowV, colD + 2, r - 1, colD + 2];
             SetPercentColorScale(cellsDose);
@@ -362,6 +365,9 @@ namespace ResultChecker
 
             sheet.Column(1).AutoFit();
             //sheet.Cells.AutoFitColumns(0);  // Autofit columns for all cells
+
+            // ウインドウ枠の固定を設定。
+            sheet.View.FreezePanes(rowV, colD);
         }
 
         /// <summary>
