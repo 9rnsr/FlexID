@@ -384,10 +384,10 @@ namespace ResultChecker
 
             const int rowH = 4;
             const int rowT = rowH + 1;
-            const int colE = 23;  // 1;
-            const int colA = 33;  // 11;
-            const int colD = 14;  // 21;
-            const int colC = 1;   // 30;
+            const int colE = 24;
+            const int colA = 34;
+            const int colD = 14;
+            const int colC = 1;
 
             sheet.Cells[rowH - 1, colE + 0].Value = "OIR";
             sheet.Cells[rowH, colE + 0].Value = "Time, days";
@@ -401,6 +401,7 @@ namespace ResultChecker
             sheet.Cells[rowH, colE + 8].Value = "Thyroid";
             sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.WrapText = true;
             sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             sheet.Cells[rowH - 1, colA + 0].Value = "FlexID";
             sheet.Cells[rowH, colA + 0].Value = "Time, days";
@@ -414,18 +415,21 @@ namespace ResultChecker
             sheet.Cells[rowH, colA + 8].Value = "Thyroid";
             sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.WrapText = true;
             sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             sheet.Cells[rowH - 1, colD + 0].Value = "Difference";
-            sheet.Cells[rowH, colD + 0].Value = "Whole Body";
-            sheet.Cells[rowH, colD + 1].Value = "Urine";
-            sheet.Cells[rowH, colD + 2].Value = "Faeces";
-            sheet.Cells[rowH, colD + 3].Value = "Alimentary Tract";
-            sheet.Cells[rowH, colD + 4].Value = "Lungs";
-            sheet.Cells[rowH, colD + 5].Value = "Skeleton";
-            sheet.Cells[rowH, colD + 6].Value = "Liver";
-            sheet.Cells[rowH, colD + 7].Value = "Thyroid";
-            sheet.Cells[rowH, colD + 0, rowH, colD + 7].Style.WrapText = true;
-            sheet.Cells[rowH, colD + 0, rowH, colD + 7].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colD + 0].Value = "Time, days";
+            sheet.Cells[rowH, colD + 1].Value = "Whole Body";
+            sheet.Cells[rowH, colD + 2].Value = "Urine";
+            sheet.Cells[rowH, colD + 3].Value = "Faeces";
+            sheet.Cells[rowH, colD + 4].Value = "Alimentary Tract";
+            sheet.Cells[rowH, colD + 5].Value = "Lungs";
+            sheet.Cells[rowH, colD + 6].Value = "Skeleton";
+            sheet.Cells[rowH, colD + 7].Value = "Liver";
+            sheet.Cells[rowH, colD + 8].Value = "Thyroid";
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.WrapText = true;
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             sheet.Row(rowH).Height *= 3;
             //sheet.Cells[rowH, colE, rowH, colE + 3].AutoFitColumns(0);
@@ -475,14 +479,16 @@ namespace ResultChecker
                 cellLiverA     /**/.Value = actualAct.Liver    /**/?? (object)"-";
                 cellThyroidA   /**/.Value = actualAct.Thyroid  /**/?? (object)"-";
 
-                var cellWholeBodyR /**/= sheet.Cells[r, colD + 0];
-                var cellUrineR     /**/= sheet.Cells[r, colD + 1];
-                var cellFaecesR    /**/= sheet.Cells[r, colD + 2];
-                var cellAtractR    /**/= sheet.Cells[r, colD + 3];
-                var cellLungsR     /**/= sheet.Cells[r, colD + 4];
-                var cellSkeletonR  /**/= sheet.Cells[r, colD + 5];
-                var cellLiverR     /**/= sheet.Cells[r, colD + 6];
-                var cellThyroidR   /**/= sheet.Cells[r, colD + 7];
+                var cellTimeR      /**/= sheet.Cells[r, colD + 0];
+                var cellWholeBodyR /**/= sheet.Cells[r, colD + 1];
+                var cellUrineR     /**/= sheet.Cells[r, colD + 2];
+                var cellFaecesR    /**/= sheet.Cells[r, colD + 3];
+                var cellAtractR    /**/= sheet.Cells[r, colD + 4];
+                var cellLungsR     /**/= sheet.Cells[r, colD + 5];
+                var cellSkeletonR  /**/= sheet.Cells[r, colD + 6];
+                var cellLiverR     /**/= sheet.Cells[r, colD + 7];
+                var cellThyroidR   /**/= sheet.Cells[r, colD + 8];
+                cellTimeR      /**/.Value = expectAct.EndTime;
                 cellWholeBodyR/**/.Formula = $"{cellWholeBodyA.Address}/{cellWholeBodyE.Address}";
                 cellUrineR    /**/.Formula = $"IFERROR({cellUrineA    /**/.Address}/{cellUrineE    /**/.Address},\"-\")";
                 cellFaecesR   /**/.Formula = $"IFERROR({cellFaecesA   /**/.Address}/{cellFaecesE   /**/.Address},\"-\")";
@@ -500,10 +506,13 @@ namespace ResultChecker
 
             var cellsE = sheet.Cells[sr, colE + 1, er, colE + 8];
             var cellsA = sheet.Cells[sr, colA + 1, er, colA + 8];
-            var cellsD = sheet.Cells[sr, colD, er, colD + 7];
+            var cellsD = sheet.Cells[sr, colD + 1, er, colD + 8];
             cellsE.Style.Numberformat.Format = "0.0E+00";
             cellsA.Style.Numberformat.Format = "0.0E+00";
-            cellsD.Style.Numberformat.Format = "0.0%";
+            cellsD.Style.Numberformat.Format = "??0.0%";
+            cellsE.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cellsA.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cellsD.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             // 時間メッシュ毎の残留放射能のFlexID/OIR比にカラースケールを設定。
             SetPercentColorScale(cellsD);
@@ -597,6 +606,9 @@ namespace ResultChecker
             var serieThyroidA = chartThyroid.Series.Add(thyroidA, timesA);
             SetExpectSerieStyle(serieThyroidE, "Thyroid");
             SetActualSerieStyle(serieThyroidA, "Thyroid");
+
+            // ウインドウ枠の固定を設定。
+            sheet.View.FreezePanes(rowT, colD + 1);
         }
 
         static ExcelScatterChart SetActivityChartStyle(ExcelScatterChart chart, int row, int col, int nrow, int ncol)
