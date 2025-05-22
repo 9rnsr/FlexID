@@ -338,6 +338,8 @@ namespace ResultChecker
                 if (expectAct.Urine is double expectUrine &&
                     actualAct.Urine is double actualUrine)
                 {
+                    actualUrine = double.Parse(actualUrine.ToString("0.0E+00"));
+
                     var fracUrine = actualUrine / expectUrine;
                     fractionsUrine = (Math.Min(fractionsUrine.min, fracUrine),
                                       Math.Max(fractionsUrine.max, fracUrine));
@@ -345,6 +347,8 @@ namespace ResultChecker
                 if (expectAct.Faeces is double expectFaeces &&
                     actualAct.Faeces is double actualFaeces)
                 {
+                    actualFaeces = double.Parse(actualFaeces.ToString("0.0E+00"));
+
                     var fracFaeces = actualFaeces / expectFaeces;
                     fractionsFaeces = (Math.Min(fractionsFaeces.min, fracFaeces),
                                        Math.Max(fractionsFaeces.max, fracFaeces));
@@ -352,6 +356,8 @@ namespace ResultChecker
                 if (expectAct.Atract is double expectAtract &&
                     actualAct.Atract is double actualAtract)
                 {
+                    actualAtract = double.Parse(actualAtract.ToString("0.0E+00"));
+
                     var fracAtract = actualAtract / expectAtract;
                     fractionsAtract = (Math.Min(fractionsAtract.min, fracAtract),
                                        Math.Max(fractionsAtract.max, fracAtract));
@@ -359,6 +365,8 @@ namespace ResultChecker
                 if (expectAct.Lungs is double expectLungs &&
                     actualAct.Lungs is double actualLungs)
                 {
+                    actualLungs = double.Parse(actualLungs.ToString("0.0E+00"));
+
                     var fracLungs = actualLungs / expectLungs;
                     fractionsLungs = (Math.Min(fractionsLungs.min, fracLungs),
                                       Math.Max(fractionsLungs.max, fracLungs));
@@ -366,6 +374,8 @@ namespace ResultChecker
                 if (expectAct.Skeleton is double expectSkeleton &&
                     actualAct.Skeleton is double actualSkeleton)
                 {
+                    actualSkeleton = double.Parse(actualSkeleton.ToString("0.0E+00"));
+
                     var fracSkeleton = actualSkeleton / expectSkeleton;
                     fractionsSkeleton = (Math.Min(fractionsSkeleton.min, fracSkeleton),
                                          Math.Max(fractionsSkeleton.max, fracSkeleton));
@@ -373,6 +383,8 @@ namespace ResultChecker
                 if (expectAct.Liver is double expectLiver &&
                     actualAct.Liver is double actualLiver)
                 {
+                    actualLiver = double.Parse(actualLiver.ToString("0.0E+00"));
+
                     var fracLiver = actualLiver / expectLiver;
                     fractionsLiver = (Math.Min(fractionsLiver.min, fracLiver),
                                       Math.Max(fractionsLiver.max, fracLiver));
@@ -380,6 +392,8 @@ namespace ResultChecker
                 if (expectAct.Thyroid is double expectThyroid &&
                     actualAct.Thyroid is double actualThyroid)
                 {
+                    actualThyroid = double.Parse(actualThyroid.ToString("0.0E+00"));
+
                     var fracThyroid = actualThyroid / expectThyroid;
                     fractionsThyroid = (Math.Min(fractionsThyroid.min, fracThyroid),
                                         Math.Max(fractionsThyroid.max, fracThyroid));

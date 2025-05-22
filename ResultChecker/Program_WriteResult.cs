@@ -151,7 +151,7 @@ namespace ResultChecker
 
                         cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
                         cellEffDoseA.Value = res.ActualDose.EffectiveDose;
-                        cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
+                        cellEffDoseR.Formula = $"VALUE(TEXT({cellEffDoseA.Address},\"0.0E+00\"))/{cellEffDoseE.Address}";
                         cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                         cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
                         cellEffDoseR.Style.Numberformat.Format = "??0.0%";
@@ -195,8 +195,8 @@ namespace ResultChecker
                             var cellEquivDoseAM = sheet.Cells[r + 4, colE + i];
                             var cellEquivDoseAF = sheet.Cells[r + 5, colE + i];
 
-                            cellEquivDoseRM.Formula = $"IFERROR({cellEquivDoseAM.Address}/{cellEquivDoseEM.Address},\"-\")";
-                            cellEquivDoseRF.Formula = $"IFERROR({cellEquivDoseAF.Address}/{cellEquivDoseEF.Address},\"-\")";
+                            cellEquivDoseRM.Formula = $"IFERROR(VALUE(TEXT({cellEquivDoseAM.Address},\"0.0E+00\"))/{cellEquivDoseEM.Address},\"-\")";
+                            cellEquivDoseRF.Formula = $"IFERROR(VALUE(TEXT({cellEquivDoseAF.Address},\"0.0E+00\"))/{cellEquivDoseEF.Address},\"-\")";
                             cellEquivDoseEM.Value = res.ExpectDose.EquivalentDosesMale[i];
                             cellEquivDoseEF.Value = res.ExpectDose.EquivalentDosesFemale[i];
                             cellEquivDoseAM.Value = res.ActualDose.EquivalentDosesMale[i];
@@ -321,7 +321,7 @@ namespace ResultChecker
                     var cellEffDoseR = sheet.Cells[r, colD + 2];
                     cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
                     cellEffDoseA.Value = res.ActualDose.EffectiveDose;
-                    cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
+                    cellEffDoseR.Formula = $"VALUE(TEXT({cellEffDoseA.Address},\"0.0E+00\"))/{cellEffDoseE.Address}";
                     cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                     cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
                     cellEffDoseR.Style.Numberformat.Format = "??0.0%";
@@ -489,14 +489,14 @@ namespace ResultChecker
                 var cellLiverR     /**/= sheet.Cells[r, colD + 7];
                 var cellThyroidR   /**/= sheet.Cells[r, colD + 8];
                 cellTimeR      /**/.Value = expectAct.EndTime;
-                cellWholeBodyR/**/.Formula = $"{cellWholeBodyA.Address}/{cellWholeBodyE.Address}";
-                cellUrineR    /**/.Formula = $"IFERROR({cellUrineA    /**/.Address}/{cellUrineE    /**/.Address},\"-\")";
-                cellFaecesR   /**/.Formula = $"IFERROR({cellFaecesA   /**/.Address}/{cellFaecesE   /**/.Address},\"-\")";
-                cellAtractR   /**/.Formula = $"IFERROR({cellAtractA   /**/.Address}/{cellAtractE   /**/.Address},\"-\")";
-                cellLungsR    /**/.Formula = $"IFERROR({cellLungsA    /**/.Address}/{cellLungsE    /**/.Address},\"-\")";
-                cellSkeletonR /**/.Formula = $"IFERROR({cellSkeletonA /**/.Address}/{cellSkeletonE /**/.Address},\"-\")";
-                cellLiverR    /**/.Formula = $"IFERROR({cellLiverA    /**/.Address}/{cellLiverE    /**/.Address},\"-\")";
-                cellThyroidR  /**/.Formula = $"IFERROR({cellThyroidA  /**/.Address}/{cellThyroidE  /**/.Address},\"-\")";
+                cellWholeBodyR/**/.Formula = $"VALUE(TEXT({cellWholeBodyA.Address},\"0.0E+00\"))/{cellWholeBodyE.Address}";
+                cellUrineR    /**/.Formula = $"IFERROR(VALUE(TEXT({cellUrineA    /**/.Address},\"0.0E+00\"))/{cellUrineE    /**/.Address},\"-\")";
+                cellFaecesR   /**/.Formula = $"IFERROR(VALUE(TEXT({cellFaecesA   /**/.Address},\"0.0E+00\"))/{cellFaecesE   /**/.Address},\"-\")";
+                cellAtractR   /**/.Formula = $"IFERROR(VALUE(TEXT({cellAtractA   /**/.Address},\"0.0E+00\"))/{cellAtractE   /**/.Address},\"-\")";
+                cellLungsR    /**/.Formula = $"IFERROR(VALUE(TEXT({cellLungsA    /**/.Address},\"0.0E+00\"))/{cellLungsE    /**/.Address},\"-\")";
+                cellSkeletonR /**/.Formula = $"IFERROR(VALUE(TEXT({cellSkeletonA /**/.Address},\"0.0E+00\"))/{cellSkeletonE /**/.Address},\"-\")";
+                cellLiverR    /**/.Formula = $"IFERROR(VALUE(TEXT({cellLiverA    /**/.Address},\"0.0E+00\"))/{cellLiverE    /**/.Address},\"-\")";
+                cellThyroidR  /**/.Formula = $"IFERROR(VALUE(TEXT({cellThyroidA  /**/.Address},\"0.0E+00\"))/{cellThyroidE  /**/.Address},\"-\")";
 
                 nrow++;
             }
