@@ -63,70 +63,69 @@ public class MainRoutine_OIR
     {
         var logPath = OutputPath + ".log";
 
-        using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
-        using (var writer = new StreamWriter(stream, Encoding.UTF8))
+        using var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+        using var writer = new StreamWriter(stream, Encoding.UTF8);
+
+        WriteOutNuclides(data, writer);
+
+        writer.WriteLine();
+        writer.WriteLine($"Zero inflow organs:");
+
+        foreach (var nuclide in data.Nuclides)
         {
-            WriteOutNuclides(data, writer);
+            foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+            {
+                if (organ.IsDecayCompartment)
+                    continue;
+                if (organ.IsZeroInflow && organ.Func != OrganFunc.inp)
+                    writer.WriteLine($"  {nuclide.Name} / {organ.Name}");
+            }
+        }
+
+        var printScoeff = data.TryGetBooleanParameter("PrintScoefficients", false);
+
+        var sourceRegions = data.SourceRegions.Select(s => s.Name).ToArray();
+        var otherSourceRegion = "Other";
+
+        foreach (var nuclide in data.Nuclides)
+        {
+            var indexN = data.Nuclides.IndexOf(nuclide);
+            var scoeffTableM = data.SCoeffTablesM[indexN];
+            var scoeffTableF = data.SCoeffTablesF[indexN];
 
             writer.WriteLine();
-            writer.WriteLine($"Zero inflow organs:");
+            writer.WriteLine($"Nuclide: {nuclide.Name}");
 
-            foreach (var nuclide in data.Nuclides)
+            if (printScoeff)
             {
-                foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
-                {
-                    if (organ.IsDecayCompartment)
-                        continue;
-                    if (organ.IsZeroInflow && organ.Func != OrganFunc.inp)
-                        writer.WriteLine($"  {nuclide.Name} / {organ.Name}");
-                }
+                writer.WriteLine();
+                writer.WriteLine($"S-Coefficients (Adult Male):");
+                foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableM, sourceRegions, data.TargetRegions))
+                    writer.WriteLine(line);
+
+                writer.WriteLine();
+                writer.WriteLine($"S-Coefficients (Adult Female):");
+                foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableF, sourceRegions, data.TargetRegions))
+                    writer.WriteLine(line);
             }
 
-            var printScoeff = data.TryGetBooleanParameter("PrintScoefficients", false);
+            writer.WriteLine();
+            writer.WriteLine($"Source regions those are part of '{otherSourceRegion}':");
+            writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));
+            writer.WriteLine();
+            writer.WriteLine($"S-Coefficient values from '{otherSourceRegion}' to each target regions:");
+            writer.WriteLine($"{"  T/S",-10} {otherSourceRegion + "(Male)",-14} {otherSourceRegion + "(Female)",-14}");
 
-            var sourceRegions = data.SourceRegions.Select(s => s.Name).ToArray();
-            var otherSourceRegion = "Other";
+            var scoeffOtherM = scoeffTableM[otherSourceRegion];
+            var scoeffOtherF = scoeffTableF[otherSourceRegion];
 
-            foreach (var nuclide in data.Nuclides)
+            foreach (var targetRegion in data.TargetRegions)
             {
-                var indexN = data.Nuclides.IndexOf(nuclide);
-                var scoeffTableM = data.SCoeffTablesM[indexN];
-                var scoeffTableF = data.SCoeffTablesF[indexN];
+                var indexT = Array.IndexOf(data.TargetRegions, targetRegion);
+                var scoeffM = scoeffOtherM[indexT];
+                var scoeffF = scoeffOtherF[indexT];
 
-                writer.WriteLine();
-                writer.WriteLine($"Nuclide: {nuclide.Name}");
-
-                if (printScoeff)
-                {
-                    writer.WriteLine();
-                    writer.WriteLine($"S-Coefficients (Adult Male):");
-                    foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableM, sourceRegions, data.TargetRegions))
-                        writer.WriteLine(line);
-
-                    writer.WriteLine();
-                    writer.WriteLine($"S-Coefficients (Adult Female):");
-                    foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableF, sourceRegions, data.TargetRegions))
-                        writer.WriteLine(line);
-                }
-
-                writer.WriteLine();
-                writer.WriteLine($"Source regions those are part of '{otherSourceRegion}':");
-                writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));
-                writer.WriteLine();
-                writer.WriteLine($"S-Coefficient values from '{otherSourceRegion}' to each target regions:");
-                writer.WriteLine($"{"  T/S",-10} {otherSourceRegion + "(Male)",-14} {otherSourceRegion + "(Female)",-14}");
-
-                var scoeffOtherM = scoeffTableM[otherSourceRegion];
-                var scoeffOtherF = scoeffTableF[otherSourceRegion];
-
-                foreach (var targetRegion in data.TargetRegions)
-                {
-                    var indexT = Array.IndexOf(data.TargetRegions, targetRegion);
-                    var scoeffM = scoeffOtherM[indexT];
-                    var scoeffF = scoeffOtherF[indexT];
-
-                    writer.WriteLine($"{targetRegion,-10} {scoeffM:0.00000000E+00} {scoeffF:0.00000000E+00}");
-                }
+                writer.WriteLine($"{targetRegion,-10} {scoeffM:0.00000000E+00} {scoeffF:0.00000000E+00}");
             }
         }
     }

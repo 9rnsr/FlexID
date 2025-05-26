@@ -504,8 +504,8 @@ public class Model : BindableBase
             var targetPath = $"{BasePath}_{GetSuffix(type)}.out";
             try
             {
-                using (var reader = new OutputDataReader(targetPath))
-                    newOutput = reader.Read();
+                using var reader = new OutputDataReader(targetPath);
+                newOutput = reader.Read();
             }
             catch (InvalidDataException) { }
         }

@@ -110,60 +110,58 @@ public class TimeMesh
     /// <exception cref="FormatException"></exception>
     public TimeMesh(string file)
     {
-        var boundaries = new List<TimeMeshBoundary>();
+        using var reader = new StreamReader(file);
 
-        using (var reader = new StreamReader(file))
+        string ReadLine()
         {
-            string ReadLine()
-            {
-                while (true)
-                {
-                    var ln = reader.ReadLine();
-                    if (ln is null)
-                        return ln;
-
-                    // コメント行や行末コメントを除去する
-                    var icomment = ln.IndexOf('#');
-                    if (icomment != -1)
-                        ln = ln.Substring(0, icomment);
-                    ln = ln.Trim();
-                    if (ln.Length != 0)
-                        return ln;
-                }
-            }
-
-            // ヘッダ行を読み飛ばす
-            ReadLine();
-
-            var prevEnd = 0L;
-            var prevEndStr = "";
             while (true)
             {
-                var ln = ReadLine();
+                var ln = reader.ReadLine();
                 if (ln is null)
-                    break;
+                    return ln;
 
-                var columns = ln.Split(',');
-                if (columns.Length != 2)
-                    throw new FormatException("Two columns required.");
-                var currEnd = ToSeconds(columns[0]);
-                var currStep = ToSeconds(columns[1]);
-                if (currEnd <= 0 || currStep <= 0)
-                    throw new FormatException("Mesh period and step should be positive value.");
-
-                var interval = currEnd - prevEnd;
-                if (interval < currStep)
-                    throw new FormatException("Mesh interval is less than step value.");
-                if (interval % currStep != 0)
-                    throw new FormatException($"Mesh interval ({columns[0]} - {prevEndStr}) should be equal to multiple of step value {columns[1]}.");
-
-                boundaries.Add(new TimeMeshBoundary(currEnd, currStep));
-                prevEnd = currEnd;
-                prevEndStr = columns[0];
+                // コメント行や行末コメントを除去する
+                var icomment = ln.IndexOf('#');
+                if (icomment != -1)
+                    ln = ln.Substring(0, icomment);
+                ln = ln.Trim();
+                if (ln.Length != 0)
+                    return ln;
             }
-            if (boundaries.Count < 1)
-                throw new FormatException("At least one mesh boundary is required.");
         }
+
+        // ヘッダ行を読み飛ばす
+        ReadLine();
+
+        var boundaries = new List<TimeMeshBoundary>();
+        var prevEnd = 0L;
+        var prevEndStr = "";
+        while (true)
+        {
+            var ln = ReadLine();
+            if (ln is null)
+                break;
+
+            var columns = ln.Split(',');
+            if (columns.Length != 2)
+                throw new FormatException("Two columns required.");
+            var currEnd = ToSeconds(columns[0]);
+            var currStep = ToSeconds(columns[1]);
+            if (currEnd <= 0 || currStep <= 0)
+                throw new FormatException("Mesh period and step should be positive value.");
+
+            var interval = currEnd - prevEnd;
+            if (interval < currStep)
+                throw new FormatException("Mesh interval is less than step value.");
+            if (interval % currStep != 0)
+                throw new FormatException($"Mesh interval ({columns[0]} - {prevEndStr}) should be equal to multiple of step value {columns[1]}.");
+
+            boundaries.Add(new TimeMeshBoundary(currEnd, currStep));
+            prevEnd = currEnd;
+            prevEndStr = columns[0];
+        }
+        if (boundaries.Count < 1)
+            throw new FormatException("At least one mesh boundary is required.");
 
         this.boundaries = boundaries.ToArray();
     }

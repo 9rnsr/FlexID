@@ -489,61 +489,57 @@ class CalcOut : IDisposable
         if (data.OutputDose && !IsMaleOnly)
         {
             // 線量について、女性の出力を男性の出力ファイルに追記していく。
-            using (var wDose = new StreamWriter(DosePath, append: true))
-            {
-                wDose.WriteLine();
+            using var wDose = new StreamWriter(DosePath, append: true);
 
-                var femaleFile = DosePath + ".f";
-                foreach (var ln in File.ReadLines(femaleFile))
-                    wDose.WriteLine(ln);
-                File.Delete(femaleFile);
-            }
+            wDose.WriteLine();
+
+            var femaleFile = DosePath + ".f";
+            foreach (var ln in File.ReadLines(femaleFile))
+                wDose.WriteLine(ln);
+            File.Delete(femaleFile);
         }
         if (data.OutputDoseRate && !IsMaleOnly)
         {
             // 線量率について、女性の出力を男性の出力ファイルに追記していく。
-            using (var wRate = new StreamWriter(DoseRatePath, append: true))
-            {
-                wRate.WriteLine();
+            using var wRate = new StreamWriter(DoseRatePath, append: true);
 
-                var femaleFile = DoseRatePath + ".f";
-                foreach (var ln in File.ReadLines(femaleFile))
-                    wRate.WriteLine(ln);
-                File.Delete(femaleFile);
-            }
+            wRate.WriteLine();
+
+            var femaleFile = DoseRatePath + ".f";
+            foreach (var ln in File.ReadLines(femaleFile))
+                wRate.WriteLine(ln);
+            File.Delete(femaleFile);
         }
 
         var nuclideCount = data.Nuclides.Count;
         if (nuclideCount >= 2 && data.OutputRetention)
         {
             // 残留放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
-            using (var wRete = new StreamWriter(RetentionPath, append: true))
-            {
-                for (int n = 1; n < nuclideCount; n++)
-                {
-                    wRete.WriteLine();
+            using var wRete = new StreamWriter(RetentionPath, append: true);
 
-                    var progenyFile = RetentionPath + $".{n}";
-                    foreach (var ln in File.ReadLines(progenyFile))
-                        wRete.WriteLine(ln);
-                    File.Delete(progenyFile);
-                }
+            for (int n = 1; n < nuclideCount; n++)
+            {
+                wRete.WriteLine();
+
+                var progenyFile = RetentionPath + $".{n}";
+                foreach (var ln in File.ReadLines(progenyFile))
+                    wRete.WriteLine(ln);
+                File.Delete(progenyFile);
             }
         }
         if (nuclideCount >= 2 && data.OutputCumulative)
         {
             // 積算放射能について、子孫核種の出力を親核種の出力ファイルに追記していく。
-            using (var wCumu = new StreamWriter(CumulativePath, append: true))
-            {
-                for (int n = 1; n < nuclideCount; n++)
-                {
-                    wCumu.WriteLine();
+            using var wCumu = new StreamWriter(CumulativePath, append: true);
 
-                    var progenyFile = CumulativePath + $".{n}";
-                    foreach (var ln in File.ReadLines(progenyFile))
-                        wCumu.WriteLine(ln);
-                    File.Delete(progenyFile);
-                }
+            for (int n = 1; n < nuclideCount; n++)
+            {
+                wCumu.WriteLine();
+
+                var progenyFile = CumulativePath + $".{n}";
+                foreach (var ln in File.ReadLines(progenyFile))
+                    wCumu.WriteLine(ln);
+                File.Delete(progenyFile);
             }
         }
 
@@ -553,13 +549,12 @@ class CalcOut : IDisposable
 
     public void IterOut(List<(double time, int iter)> iterLog, string IterPath)
     {
-        using (var w = new StreamWriter(IterPath, false, Encoding.UTF8))
+        using var w = new StreamWriter(IterPath, false, Encoding.UTF8);
+
+        w.WriteLine("   time(day)    Iteration");
+        foreach (var (time, iter) in iterLog)
         {
-            w.WriteLine("   time(day)    Iteration");
-            foreach (var (time, iter) in iterLog)
-            {
-                w.WriteLine("  {0:0.00000E+00}     {1,3:0}", time, iter);
-            }
+            w.WriteLine("  {0:0.00000E+00}     {1,3:0}", time, iter);
         }
     }
 }
