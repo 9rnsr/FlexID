@@ -1,0 +1,406 @@
+[title]
+Te-117 Inhalation:Type-M
+
+[nuclide]
+  Te-117  Sb-117
+
+
+[Te-117:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # plasma
+  acc   Blood2                Blood         # red blood cells
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver                 Liver
+  acc   Thyroid               Thyroid
+  acc   Kidneys               Kidneys
+  acc   ST                    Other
+
+[Te-117:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fA    = 0.06
+  $fA_Re = 0.3          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood1                $sr
+  INT-F                   Blood1                $sr
+  bb-F                    Blood1                $sr
+  bbseq-F                 Blood1                $sr
+  BB-F                    Blood1                $sr
+  BBseq-F                 Blood1                $sr
+  ET2-F                   Blood1                $sr
+  ETseq-F                 Blood1                $sr
+  LNET-F                  Blood1                $sr
+  LNTH-F                  Blood1                $sr
+
+  ALV-S                   Blood1                $ss
+  INT-S                   Blood1                $ss
+  bb-S                    Blood1                $ss
+  bbseq-S                 Blood1                $ss
+  BB-S                    Blood1                $ss
+  BBseq-S                 Blood1                $ss
+  ET2-S                   Blood1                $ss
+  ETseq-S                 Blood1                $ss
+  LNET-S                  Blood1                $ss
+  LNTH-S                  Blood1                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.73 Table 4.7
+  Blood1                  UB-con                    0.751
+  Blood1                  Kidneys                   0.0404
+  Blood1                  Liver                     0.1213
+  Blood1                  Blood2                    0.1011
+  Blood1                  ST                        0.0768
+  Blood1                  C-bone-S                  0.0202
+  Blood1                  T-bone-S                  0.0404
+  Blood1                  Thyroid                   0.0040
+  Blood2                  Blood1                    0.0693
+  Liver                   SI-conRe                  0.0693
+  Thyroid                 Blood1                    0.0693
+  Kidneys                 Blood1                    0.0693
+  ST                      Blood1                    0.0693
+  C-bone-S                Blood1                    0.0116
+  T-bone-S                Blood1                    0.0116
+  C-bone-S                C-bone-V                  0.000693
+  T-bone-S                T-bone-V                  0.000693
+  C-bone-V                Blood1                    0.000082
+  T-bone-V                Blood1                    0.000493
+
+
+[Sb-117:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Thyroid               Thyroid
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Sb-117:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.05
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# from parent to progeny
+  Te-117/ET1-F            ET1-F                     ---
+  Te-117/ET2-F            ET2-F                     ---
+  Te-117/ETseq-F          ETseq-F                   ---
+  Te-117/LNET-F           LNET-F                    ---
+  Te-117/BB-F             BB-F                      ---
+  Te-117/BBseq-F          BBseq-F                   ---
+  Te-117/bb-F             bb-F                      ---
+  Te-117/bbseq-F          bbseq-F                   ---
+  Te-117/ALV-F            ALV-F                     ---
+  Te-117/INT-F            INT-F                     ---
+  Te-117/LNTH-F           LNTH-F                    ---
+  Te-117/ET1-S            ET1-S                     ---
+  Te-117/ET2-S            ET2-S                     ---
+  Te-117/ETseq-S          ETseq-S                   ---
+  Te-117/LNET-S           LNET-S                    ---
+  Te-117/BB-S             BB-S                      ---
+  Te-117/BBseq-S          BBseq-S                   ---
+  Te-117/bb-S             bb-S                      ---
+  Te-117/bbseq-S          bbseq-S                   ---
+  Te-117/ALV-S            ALV-S                     ---
+  Te-117/INT-S            INT-S                     ---
+  Te-117/LNTH-S           LNTH-S                    ---
+  Te-117/Environment      Environment               ---
+
+  Te-117/Oralcavity       Oralcavity                ---
+  Te-117/Oesophagus-f     Oesophagus-f              ---
+  Te-117/Oesophagus-s     Oesophagus-s              ---
+  Te-117/St-con           St-con                    ---
+  Te-117/SI-con           SI-con                    ---
+  Te-117/SI-conRe         SI-conRe                  ---
+  Te-117/RC-con           RC-con                    ---
+  Te-117/LC-con           LC-con                    ---
+  Te-117/RS-con           RS-con                    ---
+  Te-117/Faeces           Faeces                    ---
+  Te-117/UB-con           UB-con                    ---
+  Te-117/Urine            Urine                     ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
+
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.60 Table 3.3
+  Plasma                  Thyroid                   0.3
+  Plasma                  UB-con                    9.0
+  Plasma                  Liver1                    4.0
+  Plasma                  Kidneys                   0.25
+  Plasma                  RBC                       3.0
+  Plasma                  ST0                      74.91
+  Plasma                  ST1                       4.5
+  Plasma                  ST2                       0.04
+  Plasma                  C-bone-S                  2.0
+  Plasma                  T-bone-S                  2.0
+  Thyroid                 Plasma                    0.139
+  RBC                     Plasma                    0.693
+  Liver1                  Plasma                    0.437
+  Liver1                  SI-conRe                  0.243
+  Liver1                  Liver2                    0.0139
+  Liver2                  Plasma                    0.000693
+  Kidneys                 Plasma                    0.231
+  ST0                     Plasma                    1.39
+  ST1                     Plasma                    0.0139
+  ST2                     Plasma                    0.000693
+  C-bone-S                Plasma                    0.343
+  T-bone-S                Plasma                    0.343
+  C-bone-S                C-bone-V                  0.00347
+  T-bone-S                T-bone-V                  0.00347
+  C-bone-V                Plasma                    0.0000821
+  T-bone-V                Plasma                    0.000493
+
+# ICRP Publ.137 p.83 Para.177
+# > (177) Antimony atoms produced in soft tissue compartments in the tellurium
+# > model that are ambiguous with regard to the characteristic model for antimony
+# > (compartments representing liver and other soft tissues are assumed to transfer to
+# > the central blood compartment of that model (plasma) at the rate 0.693 d⁻¹
+# > (t½=1 d). This is the highest rate of removal from all soft tissue compartments in
+# > the characteristic model for antimony.
+# > (177) テルルモデルにおける軟部組織コンパートメントで生成されるアンチモン原子のうち、
+# > アンチモンの特性モデルとは明確に区別できないもの(肝臓やその他の軟部組織を表す
+# > コンパートメント)は、そのモデルの中央血液コンパートメント(血漿)へ0.693 d⁻¹ (t½=1 d)
+# > の速度で移動すると仮定される。これは、アンチモンの特性モデルにおけるすべての
+# > 軟部組織コンパートメントからの除去速度の中で最も高い。
+
+  Te-117/Blood1           Plasma                    ---
+  Te-117/Blood2           RBC                       ---
+  Te-117/C-bone-S         C-bone-S                  ---
+  Te-117/C-bone-V         C-bone-V                  ---
+  Te-117/T-bone-S         T-bone-S                  ---
+  Te-117/T-bone-V         T-bone-V                  ---
+  Te-117/Liver            Plasma                    0.693
+  Te-117/Thyroid          Thyroid                   ---
+  Te-117/Kidneys          Kidneys                   ---
+  Te-117/ST               Plasma                    0.693
