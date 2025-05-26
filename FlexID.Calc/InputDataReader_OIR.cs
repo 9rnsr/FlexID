@@ -774,7 +774,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         var decayPaths = new List<(Organ from, Organ to, bool hasCoeff)>();
         var decayChains = new Dictionary<Organ, DecayChain>();
-        var decayNuclides = data.Nuclides.ToDictionary(n => n, n => GetDecayNuclides(n));
+        var decayNuclides = data.Nuclides.ToDictionary(n => n, GetDecayNuclides);
 
         // organFromから始まる崩壊系列の情報を取得する。
         DecayChain GetDecayChain(Organ organFrom)

@@ -29,7 +29,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 4: Duplicated [title] section.", e.Message);
     }
 
@@ -52,7 +52,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Missing [title] section.", e.Message);
     }
 
@@ -64,7 +64,7 @@ public class InputErrorTests
             "[title]",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 2: Reach to EOF while reading title section.", e.Message);
     }
 
@@ -81,7 +81,7 @@ public class InputErrorTests
             "[nuclide]",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 4: Unrecognized line in [title] section.", e.Message);
     }
 
@@ -107,7 +107,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 7: Duplicated [nuclide] section.", e.Message);
     }
 
@@ -130,7 +130,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Missing [nuclide] section.", e.Message);
     }
 
@@ -145,7 +145,7 @@ public class InputErrorTests
             "[nuclide]",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("None of nuclides defined.", e.Message);
     }
 
@@ -171,7 +171,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 11: Duplicated [Sr-90:compartment] section.", e.Message);
     }
 
@@ -194,7 +194,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Missing [Sr-90:compartment] section.", e.Message);
     }
 
@@ -214,7 +214,7 @@ public class InputErrorTests
             "[Sr-90:transfer]",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("None of compartments defined for nuclide 'Sr-90'.", e.Message);
     }
 
@@ -241,7 +241,7 @@ public class InputErrorTests
             "  ST0        ST1   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 15: Duplicated [Sr-90:transfer] section.", e.Message);
     }
 
@@ -264,7 +264,7 @@ public class InputErrorTests
             "#   input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Missing [Sr-90:transfer] section.", e.Message);
     }
 
@@ -286,7 +286,7 @@ public class InputErrorTests
             "[Sr-90:transfer]",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("None of transfers defined for nuclide 'Sr-90'.", e.Message);
     }
 
@@ -310,7 +310,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 6: 'aaa' is not nuclide name.", e.Message);
     }
 
@@ -333,7 +333,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Duplicated nuclide definition for 'Sr-90'.", e.Message);
     }
 
@@ -357,7 +357,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 6: Duplicated nuclide definition for 'Sr-90'.", e.Message);
     }
 
@@ -380,7 +380,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Nuclide definition should have at least 2 values.", e.Message);
     }
 
@@ -403,7 +403,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Cannot get nuclide Lambda.", e.Message);
     }
 
@@ -426,7 +426,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Nuclide Lambda should be positive.", e.Message);
     }
 
@@ -450,7 +450,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Daughter name and branching fraction should be separated with '/'.", e.Message);
     }
 
@@ -474,7 +474,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Daughter name should not be empty.", e.Message);
     }
 
@@ -498,7 +498,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Cannot get branching fraction.", e.Message);
     }
 
@@ -522,7 +522,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 5: Branching fraction should be positive.", e.Message);
     }
 
@@ -545,7 +545,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 8: Compartment definition should have 3 values.", e.Message);
     }
 
@@ -568,7 +568,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 9: Unrecognized compartment function 'add'.", e.Message);
     }
 
@@ -592,7 +592,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 9: Duplicated 'inp' compartment.", e.Message);
     }
 
@@ -615,7 +615,7 @@ public class InputErrorTests
             "  ST0    ST1   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Missing 'inp' compartment.", e.Message);
     }
 
@@ -646,7 +646,7 @@ public class InputErrorTests
             "  Sr-90/ST0  ST0   ---"
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 16: Cannot define 'inp' compartment which belongs to progeny nuclide.", e.Message);
     }
 
@@ -669,7 +669,7 @@ public class InputErrorTests
             "  input      ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 9: Unknown source region name 'Abcde'.", e.Message);
     }
 
@@ -692,7 +692,7 @@ public class InputErrorTests
             "  input    # ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 12: Transfer path definition should have 3 values.", e.Message);
     }
 
@@ -715,7 +715,7 @@ public class InputErrorTests
             "  input  ST0   abc%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 12: Transfer coefficient should be evaluated to a number, not 'abc%'.", e.Message);
     }
 
@@ -739,7 +739,7 @@ public class InputErrorTests
             "  Y-90/ST0   ST0   100",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 13: Undefined nuclide 'Y-90'.", e.Message);
     }
 
@@ -763,7 +763,7 @@ public class InputErrorTests
             "  ST0   Y-90/ST0   100",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 13: Undefined nuclide 'Y-90'.", e.Message);
     }
 
@@ -793,7 +793,7 @@ public class InputErrorTests
             "  ST0  Sr-90/ST0   ---",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 19: Cannot set transfer path to a compartment which is not belong to 'Y-90'.", e.Message);
     }
 
@@ -817,7 +817,7 @@ public class InputErrorTests
             "  ST1    ST0   100",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 13: Undefined compartment 'ST1'.", e.Message);
     }
 
@@ -841,7 +841,7 @@ public class InputErrorTests
             "  ST0    ST1   100",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 13: Undefined compartment 'ST1'.", e.Message);
     }
 
@@ -865,7 +865,7 @@ public class InputErrorTests
             "  ST0        ST0   100",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 13: Cannot set transfer path to itself.", e.Message);
     }
 
@@ -889,7 +889,7 @@ public class InputErrorTests
             "  input      ST0   50%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 13: Duplicated transfer path from 'input' to 'ST0'.", e.Message);
     }
 
@@ -913,7 +913,7 @@ public class InputErrorTests
             "  ST0    input     100",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 13: Cannot set input path to inp 'input'.", e.Message);
     }
 
@@ -938,7 +938,7 @@ public class InputErrorTests
             "  Excreta  ST0     100",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 14: Cannot set output path from exc 'Excreta'.", e.Message);
     }
 
@@ -968,7 +968,7 @@ public class InputErrorTests
             "  Sr-90/input ST0  ---",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 19: Cannot set decay path from inp 'Sr-90/input'.", e.Message);
     }
 
@@ -1000,7 +1000,7 @@ public class InputErrorTests
             "  Sr-90/mix-Blood   ST0  ---",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 21: Cannot set decay path from mix 'Sr-90/mix-Blood'.", e.Message);
     }
 
@@ -1030,7 +1030,7 @@ public class InputErrorTests
             "  Sr-90/ST0   ST0   100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 19: Require transfer rate [/d] from acc 'Sr-90/ST0'.", e.Message);
     }
 
@@ -1053,7 +1053,7 @@ public class InputErrorTests
             "  input  ST0        ---",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 12: Require fraction of output activity [%] from inp 'input'.", e.Message);
     }
 
@@ -1079,7 +1079,7 @@ public class InputErrorTests
             "  mix-Blood  ST0    ---",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 15: Require fraction of output activity [%] from mix 'mix-Blood'.", e.Message);
     }
 
@@ -1104,7 +1104,7 @@ public class InputErrorTests
             "  ST0    ST1        100%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 14: Require transfer rate [/d] from acc 'ST0'.", e.Message);
     }
 
@@ -1129,7 +1129,7 @@ public class InputErrorTests
             "  ST0    ST1        -30",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Line 14: Transfer coefficient should be positive.", e.Message);
     }
 
@@ -1154,7 +1154,7 @@ public class InputErrorTests
             "  input  ST1        36.8528%",
         ]);
 
-        var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+        var e = Assert.ThrowsException<ApplicationException>(reader.Read);
         Assert.AreEqual("Total [%] of transfer paths from 'input' is  not 100%, but 99.999%.", e.Message);
     }
 }

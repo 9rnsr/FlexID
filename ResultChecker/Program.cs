@@ -448,11 +448,11 @@ internal partial class Program
             {
                 var effectiveDose = double.Parse(columns[1]);
 
-                var equivalentDosesMale = columns.Skip(3).Select(v => double.Parse(v)).ToArray();
+                var equivalentDosesMale = columns.Skip(3).Select(double.Parse).ToArray();
 
                 line = reader.ReadLine();
                 columns = line.Split('\t');
-                var equivalentDosesFemale = columns.Skip(3).Select(v => double.Parse(v)).ToArray();
+                var equivalentDosesFemale = columns.Skip(3).Select(double.Parse).ToArray();
 
                 return new Dose
                 {

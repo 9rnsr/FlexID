@@ -81,9 +81,9 @@ public class CalcScoeff
                 var pchipP = CubicSpline.InterpolatePchip(safdata.EnergyP, SAFphoton);
                 var pchipE = CubicSpline.InterpolatePchip(safdata.EnergyE, SAFelectron);
 
-                CalcSAFa = Ei => pchipA.Interpolate(Ei);
-                CalcSAFp = Ei => pchipP.Interpolate(Ei);
-                CalcSAFe = Ei => pchipE.Interpolate(Ei);
+                CalcSAFa = pchipA.Interpolate;
+                CalcSAFp = pchipP.Interpolate;
+                CalcSAFe = pchipE.Interpolate;
             }
             else if (InterpolationMethod == "線形補間")
             {

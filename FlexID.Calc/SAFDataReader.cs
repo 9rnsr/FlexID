@@ -331,7 +331,7 @@ public class SAFDataReader
             if (parts.Length != ncols + 4)
                 throw new InvalidDataException(filePath);
 
-            data.SAFalpha[r] = [.. parts.Skip(2).Take(ncols).Select(v => double.Parse(v))];
+            data.SAFalpha[r] = [.. parts.Skip(2).Take(ncols).Select(double.Parse)];
         }
     }
 
@@ -369,7 +369,7 @@ public class SAFDataReader
             if (parts.Length != ncols + 4)
                 throw new InvalidDataException(filePath);
 
-            data.SAFphoton[r] = [.. parts.Skip(2).Take(ncols).Select(v => double.Parse(v))];
+            data.SAFphoton[r] = [.. parts.Skip(2).Take(ncols).Select(double.Parse)];
         }
     }
 
@@ -407,7 +407,7 @@ public class SAFDataReader
             if (parts.Length != ncols + 4)
                 throw new InvalidDataException(filePath);
 
-            data.SAFelectron[r] = [.. parts.Skip(2).Take(ncols).Select(v => double.Parse(v))];
+            data.SAFelectron[r] = [.. parts.Skip(2).Take(ncols).Select(double.Parse)];
         }
     }
 
@@ -458,7 +458,7 @@ public class SAFDataReader
             if (parts.Length != ncols + 2)
                 throw new InvalidDataException(filePath);
 
-            var values = parts.Skip(2).Select(v => double.Parse(v)).ToArray();
+            var values = parts.Skip(2).Select(double.Parse).ToArray();
 
             for (int c = 0; c < ncols; c++)
             {
