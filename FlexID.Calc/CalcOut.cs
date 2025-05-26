@@ -352,10 +352,10 @@ class CalcOut : IDisposable
     /// 出力時間メッシュにおける残留放射能を出力。
     /// </summary>
     /// <param name="outT"></param>
-    /// <param name="Act"></param>
+    /// <param name="act"></param>
     /// <param name="iter"></param>
     /// <param name="maskExcreta"></param>
-    public void ActivityOut(double outT, Activity Act, int iter, bool maskExcreta = false)
+    public void ActivityOut(double outT, Activity act, int iter, bool maskExcreta = false)
     {
         foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
         foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
@@ -373,8 +373,8 @@ class CalcOut : IDisposable
                 if (organ.Func != OrganFunc.acc)
                     continue;
 
-                var retention = Act.OutNow[organ.Index].end;
-                var cumulative = Act.OutTotalFromIntake[organ.Index];
+                var retention = act.OutNow[organ.Index].end;
+                var cumulative = act.OutTotalFromIntake[organ.Index];
 
                 reteWholeBody += retention;
                 cumuWholeBody += cumulative;
@@ -387,8 +387,8 @@ class CalcOut : IDisposable
             {
                 if (indexes.Length == 0)
                     return;
-                var rete = indexes.Select(x => Act.OutNow[x.index].end * x.Rate).Sum();
-                var cumu = indexes.Select(x => Act.OutTotalFromIntake[x.index] * x.Rate).Sum();
+                var rete = indexes.Select(x => act.OutNow[x.index].end * x.Rate).Sum();
+                var cumu = indexes.Select(x => act.OutTotalFromIntake[x.index] * x.Rate).Sum();
 
                 wsRete[i].Write("  {0:0.00000000E+00}", rete);
                 wsCumu[i].Write("  {0:0.00000000E+00}", cumu);
@@ -408,8 +408,8 @@ class CalcOut : IDisposable
             if (organ.IsZeroInflow)
                 continue;
 
-            var retention = Act.OutNow[organ.Index].end;
-            var cumulative = Act.OutTotalFromIntake[organ.Index];
+            var retention = act.OutNow[organ.Index].end;
+            var cumulative = act.OutTotalFromIntake[organ.Index];
 
             var wrRete = wsOrgansRete[organ.Index];
             var wrCumu = wsOrgansCumu[organ.Index];
@@ -547,9 +547,9 @@ class CalcOut : IDisposable
         //IterOut(CalcTimeMesh, iterLog, IterPath);
     }
 
-    public void IterOut(List<(double time, int iter)> iterLog, string IterPath)
+    public void IterOut(List<(double time, int iter)> iterLog, string iterPath)
     {
-        using var w = new StreamWriter(IterPath, false, Encoding.UTF8);
+        using var w = new StreamWriter(iterPath, false, Encoding.UTF8);
 
         w.WriteLine("   time(day)    Iteration");
         foreach (var (time, iter) in iterLog)

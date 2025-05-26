@@ -55,11 +55,11 @@ public class CalcScoeff
         var (WRneutron, SAFneutron) =
             safdata.SAFneutron.TryGetValue(nuc, out var n) ? n : (0.0, null);
 
-        for (int TScount = 0; TScount < safdata.Count; TScount++)
+        for (int countTS = 0; countTS < safdata.Count; countTS++)
         {
-            var SAFalpha = safdata.SAFalpha[TScount];
-            var SAFphoton = safdata.SAFphoton[TScount];
-            var SAFelectron = safdata.SAFelectron[TScount];
+            var SAFalpha = safdata.SAFalpha[countTS];
+            var SAFphoton = safdata.SAFphoton[countTS];
+            var SAFelectron = safdata.SAFelectron[countTS];
 
             // β線計算の終了判定フラグ
             bool finishBeta = false;
@@ -184,7 +184,7 @@ public class CalcScoeff
                 else if (jcode == "N")
                 {
                     // 中性子
-                    var SAFn = SAFneutron?[TScount] ??
+                    var SAFn = SAFneutron?[countTS] ??
                         throw new InvalidDataException("neutron SAF");
 
                     ScoeffN += Yi * Ei * SAFn * WRneutron * ToJoule;
@@ -197,12 +197,12 @@ public class CalcScoeff
 
             // 全ての放射線についてのS係数
             var Scoeff = ScoeffP + ScoeffE + ScoeffB + ScoeffA + ScoeffN;
-            OutTotal[TScount] = Scoeff;
-            OutP[TScount] = ScoeffP;
-            OutE[TScount] = ScoeffE;
-            OutB[TScount] = ScoeffB;
-            OutA[TScount] = ScoeffA;
-            OutN[TScount] = ScoeffN;
+            OutTotal[countTS] = Scoeff;
+            OutP[countTS] = ScoeffP;
+            OutE[countTS] = ScoeffE;
+            OutB[countTS] = ScoeffB;
+            OutA[countTS] = ScoeffA;
+            OutN[countTS] = ScoeffN;
         }
     }
 

@@ -5,38 +5,38 @@ static class SubRoutine
     /// <summary>
     /// inputから各臓器に初期値を振り分ける
     /// </summary>
-    /// <param name="Act"></param>
+    /// <param name="act"></param>
     /// <param name="data"></param>
-    public static void Init(Activity Act, InputData data)
+    public static void Init(Activity act, InputData data)
     {
-        Act.CalcPre = new OrganActivity[data.Organs.Count];
-        Act.CalcNow = new OrganActivity[data.Organs.Count];
+        act.CalcPre = new OrganActivity[data.Organs.Count];
+        act.CalcNow = new OrganActivity[data.Organs.Count];
 
-        Act.IterPre = new OrganActivity[data.Organs.Count];
-        Act.IterNow = new OrganActivity[data.Organs.Count];
+        act.IterPre = new OrganActivity[data.Organs.Count];
+        act.IterNow = new OrganActivity[data.Organs.Count];
 
-        Act.OutNow = new OrganActivity[data.Organs.Count];
-        Act.OutTotalFromIntake = new double[data.Organs.Count];
+        act.OutNow = new OrganActivity[data.Organs.Count];
+        act.OutTotalFromIntake = new double[data.Organs.Count];
 
         // 全ての組織における計算結果を初期化する
         foreach (var organ in data.Organs)
         {
-            Act.CalcPre[organ.Index].ini = 0;
-            Act.CalcPre[organ.Index].ave = 0;
-            Act.CalcPre[organ.Index].end = 0;
-            Act.CalcPre[organ.Index].total = 0;
+            act.CalcPre[organ.Index].ini = 0;
+            act.CalcPre[organ.Index].ave = 0;
+            act.CalcPre[organ.Index].end = 0;
+            act.CalcPre[organ.Index].total = 0;
 
-            Act.CalcNow[organ.Index].ini = 0;
-            Act.CalcNow[organ.Index].ave = 0;
-            Act.CalcNow[organ.Index].end = 0;
-            Act.CalcNow[organ.Index].total = 0;
+            act.CalcNow[organ.Index].ini = 0;
+            act.CalcNow[organ.Index].ave = 0;
+            act.CalcNow[organ.Index].end = 0;
+            act.CalcNow[organ.Index].total = 0;
 
-            Act.OutNow[organ.Index].ini = 0;
-            Act.OutNow[organ.Index].ave = 0;
-            Act.OutNow[organ.Index].end = 0;
-            Act.OutNow[organ.Index].total = 0;
+            act.OutNow[organ.Index].ini = 0;
+            act.OutNow[organ.Index].ave = 0;
+            act.OutNow[organ.Index].end = 0;
+            act.OutNow[organ.Index].total = 0;
 
-            Act.OutTotalFromIntake[organ.Index] = 0;
+            act.OutTotalFromIntake[organ.Index] = 0;
         }
 
         foreach (var organ in data.Organs)
@@ -49,13 +49,13 @@ static class SubRoutine
             if (inflowFromInp != null)
             {
                 var init = inflowFromInp.Rate;
-                Act.CalcNow[organ.Index].ini = init;
-                Act.CalcNow[organ.Index].ave = init;
-                Act.CalcNow[organ.Index].end = init;
-                Act.CalcNow[organ.Index].total = 0;
+                act.CalcNow[organ.Index].ini = init;
+                act.CalcNow[organ.Index].ave = init;
+                act.CalcNow[organ.Index].end = init;
+                act.CalcNow[organ.Index].total = 0;
 
                 // 初期配分結果の出力に使用される。
-                Act.OutNow[organ.Index] = Act.CalcNow[organ.Index];
+                act.OutNow[organ.Index] = act.CalcNow[organ.Index];
             }
         }
     }
@@ -64,9 +64,9 @@ static class SubRoutine
     /// 排泄
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
+    /// <param name="act">計算結果</param>
     /// <param name="dT">ΔT[day]</param>
-    public static void Excretion(Organ organ, Activity Act, double dT)
+    public static void Excretion(Organ organ, Activity act, double dT)
     {
         double ini = 0;
         double ave = 0;
@@ -89,22 +89,22 @@ static class SubRoutine
                 beforeBio = organ.NuclideDecay; // TODO: なぜ娘核種のλを乗算するのか？
 
             // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ini += Act.IterPre[inflowOrgan.Index].ini * beforeBio * inflow.Rate;
-            ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
-            end += Act.IterPre[inflowOrgan.Index].end * beforeBio * inflow.Rate;
+            ini += act.IterPre[inflowOrgan.Index].ini * beforeBio * inflow.Rate;
+            ave += act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+            end += act.IterPre[inflowOrgan.Index].end * beforeBio * inflow.Rate;
         }
 
         // 蓄積した核種の壊変による減衰を適用する。
         var alpha = organ.NuclideDecay;
-        Accumulation(alpha, dT, ave, in Act.CalcPre[organ.Index], ref Act.IterNow[organ.Index]);
+        Accumulation(alpha, dT, ave, in act.CalcPre[organ.Index], ref act.IterNow[organ.Index]);
     }
 
     /// <summary>
     /// 混合
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
-    public static void Mix(Organ organ, Activity Act)
+    /// <param name="act">計算結果</param>
+    public static void Mix(Organ organ, Activity act)
     {
         double ini = 0;
         double ave = 0;
@@ -116,43 +116,43 @@ static class SubRoutine
             var beforeBio = inflow.Organ.BioDecay;
 
             // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ini += Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-            ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-            end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+            ini += act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
+            ave += act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
+            end += act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
         }
-        Act.IterNow[organ.Index].ini = ini;
-        Act.IterNow[organ.Index].ave = ave;
-        Act.IterNow[organ.Index].end = end;
+        act.IterNow[organ.Index].ini = ini;
+        act.IterNow[organ.Index].ave = ave;
+        act.IterNow[organ.Index].end = end;
 
         // 混合コンパートメントでは、流入放射能は全て接続先へ流出するため、
         // 計算時間メッシュ期間における積算放射能をゼロと計算する。
-        Act.IterNow[organ.Index].total = 0;
+        act.IterNow[organ.Index].total = 0;
     }
 
     /// <summary>
     /// 入力
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
-    public static void Input(Organ organ, Activity Act)
+    /// <param name="act">計算結果</param>
+    public static void Input(Organ organ, Activity act)
     {
         // 初期振り分けはしたので0を設定するだけ。
-        Act.IterNow[organ.Index].ini = 0;
-        Act.IterNow[organ.Index].ave = 0;
-        Act.IterNow[organ.Index].end = 0;
+        act.IterNow[organ.Index].ini = 0;
+        act.IterNow[organ.Index].ave = 0;
+        act.IterNow[organ.Index].end = 0;
 
         // 入力コンパートメントでは、全ての放射能は初期配分によって接続先へ流出するため、
         // 計算時間メッシュ期間における積算放射能をゼロと計算する。
-        Act.IterNow[organ.Index].total = 0;
+        act.IterNow[organ.Index].total = 0;
     }
 
     /// <summary>
     /// 蓄積(OIR)
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
+    /// <param name="act">計算結果</param>
     /// <param name="dT">ΔT[day]</param>
-    public static void Accumulation_OIR(Organ organ, Activity Act, double dT)
+    public static void Accumulation_OIR(Organ organ, Activity act, double dT)
     {
         // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
         var alpha = organ.NuclideDecay + organ.BioDecay;
@@ -173,11 +173,11 @@ static class SubRoutine
                 beforeBio = organ.NuclideDecay; // TODO: なぜ娘核種のλを乗算するのか？
 
             // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+            ave += act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
         }
         #endregion
 
-        Accumulation(alpha, dT, ave, in Act.CalcPre[organ.Index], ref Act.IterNow[organ.Index]);
+        Accumulation(alpha, dT, ave, in act.CalcPre[organ.Index], ref act.IterNow[organ.Index]);
     }
 
     /// <summary>
@@ -185,12 +185,12 @@ static class SubRoutine
     /// </summary>
     /// <param name="organLo">補間期間下限側の対象コンパートメント</param>
     /// <param name="organHi">補間期間上限側の対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
+    /// <param name="act">計算結果</param>
     /// <param name="dT">ΔT[day]</param>
     /// <param name="ageDay">評価時刻における年齢[day]</param>
     /// <param name="daysLo">補間期間下限側の年齢[day]</param>
     /// <param name="daysHi">補間期間上限側の年齢[day]</param>
-    public static void Accumulation_EIR(Organ organLo, Organ organHi, Activity Act, double dT, double ageDay, int daysLo, int daysHi)
+    public static void Accumulation_EIR(Organ organLo, Organ organHi, Activity act, double dT, double ageDay, int daysLo, int daysHi)
     {
         // 当該臓器の生物学的崩壊定数[/day]
         var bioDecay = organLo.BioDecay;
@@ -240,14 +240,14 @@ static class SubRoutine
                 beforeBio = organLo.NuclideDecay * organLo.Inflows[i].Rate; // TODO: なぜ娘核種のλを乗算するのか？
 
             // 放射能[Bq/day] = 流入元臓器の放射能[Bq/day] * 流入元臓器の生物学的崩壊定数 * 流入割合
-            ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio;
+            ave += act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio;
         }
         #endregion
 
         // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
         var alpha = organLo.NuclideDecay + bioDecay;
 
-        Accumulation(alpha, dT, ave, in Act.CalcPre[organLo.Index], ref Act.IterNow[organLo.Index]);
+        Accumulation(alpha, dT, ave, in act.CalcPre[organLo.Index], ref act.IterNow[organLo.Index]);
     }
 
     /// <summary>
