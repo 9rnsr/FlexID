@@ -20,15 +20,15 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private Dictionary<string, string> inputParameters;
 
-    private Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
+    private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
 
     private List<NuclideData> nuclides;
 
-    private Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
+    private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
 
-    private Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers = [];
+    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers = [];
 
-    private List<Dictionary<string, double[]>> SCoeffTables = [];
+    private readonly List<Dictionary<string, double[]>> SCoeffTables = [];
 
     /// <summary>
     /// コンストラクタ。

@@ -12,28 +12,28 @@ class CalcOut : IDisposable
     public string CumulativePath { get; }
 
     // 線量の出力ファイル用
-    private TextWriter wDoseM;
-    private TextWriter wDoseF;
+    private readonly TextWriter wDoseM;
+    private readonly TextWriter wDoseF;
 
     // 線量率の出力ファイル用
-    private TextWriter wRateM;
-    private TextWriter wRateF;
+    private readonly TextWriter wRateM;
+    private readonly TextWriter wRateF;
 
     // 残留放射能の出力ファイル用
-    private TextWriter[] wsRete;
+    private readonly TextWriter[] wsRete;
 
     // 積算放射能の出力ファイル用
-    private TextWriter[] wsCumu;
+    private readonly TextWriter[] wsCumu;
 
-    private TextWriter[] wsOrgansRete;
-    private TextWriter[] wsOrgansCumu;
+    private readonly TextWriter[] wsOrgansRete;
+    private readonly TextWriter[] wsOrgansCumu;
 
     /// <summary>
     /// 計算処理が正常に終了した場合に<c>true</c>を設定する。
     /// </summary>
     private bool IsFinished = false;
 
-    private bool IsMaleOnly;
+    private readonly bool IsMaleOnly;
 
     // StreamWriter.Nullはスレッドセーフでなくテストで問題を発生し得るため、
     // ここでスレッドセーフなラッパーを作り、これを計算処理で使用する。

@@ -12,7 +12,7 @@ class TestFiles
         testFilesDir = File.ReadLines(Path.Combine(assemblyDir, "TestFiles")).First();
     }
 
-    private static string testFilesDir;
+    private static readonly string testFilesDir;
 
     public static string Combine(params string[] paths)
     {

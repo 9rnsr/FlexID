@@ -2,7 +2,7 @@ namespace FlexID.Calc;
 
 using System.Text.RegularExpressions;
 
-public struct TimeMeshBoundary
+public readonly struct TimeMeshBoundary
 {
     public long EndOfPeriod { get; }
 
@@ -26,7 +26,7 @@ public struct TimeMeshBoundary
 /// </summary>
 public class TimeMesh
 {
-    private static Regex patternPeriod =
+    private static readonly Regex patternPeriod =
         new(@"^ *(?<num>\d+) *(?<unit>days|months|years) *$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <summary>
@@ -53,7 +53,7 @@ public class TimeMesh
         }
     }
 
-    private static Regex patternTime = new(
+    private static readonly Regex patternTime = new(
         @"^ *(?<num>\d+) *(?<unit>s(?:ec(?:ond)?s?)?|m(?:in(?:ute)?s?)?|h(?:ours?)?|d(?:ays?)?|y(?:ears?)?) *$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

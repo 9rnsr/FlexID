@@ -11,7 +11,7 @@ internal partial class Program
     /// <summary>
     /// OIRデータが格納されたディレクトリ。
     /// </summary>
-    static string ExpectDir = "Expect";
+    static readonly string ExpectDir = "Expect";
 
     /// <summary>
     /// 処理結果の出力ディレクトリ。
