@@ -1,0 +1,14 @@
+Radionuclide	Sb-115
+Route of Intake	Injection
+Material	Injection, fA=5E-2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Thyroid*	Skeleton*	Liver*
+0.041667	2.7E-1	5.4E-3	8.4E-4	1.2E-2	1.2E-2
+0.083333	7.0E-2	1.4E-3	2.4E-4	3.3E-3	3.3E-3
+0.125	1.9E-2	4.0E-4	6.8E-5	9.4E-4	9.3E-4
+0.25	3.8E-4	8.5E-6	1.5E-6	2.1E-5	2.0E-5
+0.375	7.6E-6	1.8E-7	3.4E-8	4.5E-7	4.2E-7
+0.5	1.5E-7	3.9E-9	7.5E-10	9.7E-9	8.8E-9
+0.625	3.1E-9	-	-	2.1E-10	1.8E-10
