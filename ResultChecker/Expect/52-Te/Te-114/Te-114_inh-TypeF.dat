@@ -1,0 +1,11 @@
+Radionuclide	Te-114
+Route of Intake	Inhalation
+Material	Aerosols Type F, Tellurium chloride, tellurium dioxide, fA=0.3
+AMTD/AMAD, µm	5
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	5.3E-2	1.3E-2	2.0E-3	7.8E-6	7.7E-4	1.1E-3
+0.083333	3.3E-3	8.6E-4	1.0E-4	6.6E-7	5.7E-5	8.3E-5
+0.125	2.1E-4	5.8E-5	6.7E-6	5.4E-8	4.1E-6	6.0E-6
+0.25	5.5E-8	1.7E-8	2.0E-9	-	1.3E-9	2.0E-9
