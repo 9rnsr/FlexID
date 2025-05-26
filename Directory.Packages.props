@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Costura.Fody" Version="6.0.0" />
+    <PackageVersion Include="PolySharp" Version="1.15.0" />
     <PackageVersion Include="System.Memory" Version="4.6.0" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Sprache" Version="2.3.1" />

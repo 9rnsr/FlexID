@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Costura.Fody" PrivateAssets="all" />
+    <PackageReference Include="PolySharp" PrivateAssets="all" />
     <PackageReference Include="EPPlus" />
   </ItemGroup>
 

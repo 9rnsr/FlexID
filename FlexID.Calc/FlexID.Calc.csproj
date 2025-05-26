@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Costura.Fody" PrivateAssets="all" />
+    <PackageReference Include="PolySharp" PrivateAssets="all" />
     <PackageReference Include="MathNet.Numerics" />
     <PackageReference Include="Sprache" />
     <PackageReference Include="System.Memory" />
