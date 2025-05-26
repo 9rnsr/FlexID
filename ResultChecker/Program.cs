@@ -66,11 +66,11 @@ internal partial class Program
                     continue;
                 }
 
-                if (arg[0] == '@')
+                if (arg is ['@', .. var file])
                 {
                     var head = args.AsSpan(0, i);
                     var tail = args.AsSpan(i + 1);
-                    var newArgs = File.ReadAllText(arg[1..])
+                    var newArgs = File.ReadAllText(file)
                         .Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
                     args = [.. head, .. newArgs, .. tail];
                     i--;
@@ -112,7 +112,7 @@ internal partial class Program
                     continue;
                 }
 
-                if (arg.Length == 2 && arg[0] == '-' || arg.StartsWith("--"))
+                if (arg is ['-', _] or ['-', '-', ..])
                 {
                     Console.Error.WriteLine($"error: unknown option '{arg}'");
                     Usage();
