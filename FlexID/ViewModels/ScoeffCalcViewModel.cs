@@ -29,7 +29,7 @@ public class NuclideItem : BindableBase
 
 public class ScoeffCalcViewModel : BindableBase
 {
-    private CompositeDisposable Disposables { get; } = new CompositeDisposable();
+    private CompositeDisposable Disposables { get; } = [];
 
     public ReactivePropertySlim<string> OutputFilePath { get; } = new ReactivePropertySlim<string>();
 
@@ -41,7 +41,7 @@ public class ScoeffCalcViewModel : BindableBase
 
     public ReactivePropertySlim<bool> IdacDoseCompatible { get; } = new ReactivePropertySlim<bool>(false);
 
-    public ObservableCollection<NuclideItem> Nuclides { get; } = new ObservableCollection<NuclideItem>();
+    public ObservableCollection<NuclideItem> Nuclides { get; } = [];
 
     public ReactiveCommandSlim SelectOutputFilePathCommand { get; }
 
@@ -109,7 +109,7 @@ public class ScoeffCalcViewModel : BindableBase
         if (safdata is null)
             throw new Exception("There are multiple files of the same type.");
 
-        return Task.WhenAll(nuclides.Select(nuc => Task.Run(() =>
+        return Task.WhenAll([.. nuclides.Select(nuc => Task.Run(() =>
         {
             var calcS = new CalcScoeff(safdata);
 
@@ -130,6 +130,6 @@ public class ScoeffCalcViewModel : BindableBase
                 calcS.WriteOutTotalResult(scoeffFilePath);
             }
 
-        })).ToArray());
+        }))]);
     }
 }

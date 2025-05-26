@@ -12,11 +12,11 @@ using Reactive.Bindings.Extensions;
 
 public class InputEIRViewModel : BindableBase
 {
-    private CompositeDisposable Disposables { get; } = new CompositeDisposable();
+    private CompositeDisposable Disposables { get; } = [];
 
     public ReactivePropertySlim<string> OutputFilePath { get; } = new ReactivePropertySlim<string>();
 
-    public ObservableCollection<string> Nuclides { get; } = new ObservableCollection<string>();
+    public ObservableCollection<string> Nuclides { get; } = [];
 
     public ReactivePropertySlim<string> SelectedNuclide { get; } = new ReactivePropertySlim<string>();
 
@@ -24,7 +24,7 @@ public class InputEIRViewModel : BindableBase
 
     public ReactivePropertySlim<bool> CalcProgeny { get; } = new ReactivePropertySlim<bool>();
 
-    public ObservableCollection<InputData> Inputs { get; } = new ObservableCollection<InputData>();
+    public ObservableCollection<InputData> Inputs { get; } = [];
 
     public ReactivePropertySlim<InputData> SelectedInput { get; } = new ReactivePropertySlim<InputData>();
 
@@ -34,24 +34,24 @@ public class InputEIRViewModel : BindableBase
 
     public ReactivePropertySlim<string> CommitmentPeriod { get; } = new ReactivePropertySlim<string>();
 
-    public IReadOnlyList<string> CommitmentPeriodUnits { get; } = new List<string>
-    {
+    public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
+    [
         "days",
         "months",
         "years",
-    }.AsReadOnly();
+    ];
 
     public ReactivePropertySlim<string> SelectedCommitmentPeriodUnit { get; }
 
-    public IReadOnlyList<string> IntakeAges { get; } = new List<string>
-    {
+    public IReadOnlyList<string> IntakeAges { get; } =
+    [
         "3months old",
         "1years old",
         "5years old",
         "10years old",
         "15years old",
         "Adult",
-    }.AsReadOnly();
+    ];
 
     public ReactivePropertySlim<string> SelectedIntakeAge { get; }
 
@@ -82,7 +82,7 @@ public class InputEIRViewModel : BindableBase
             var nuc = input.Nuclide;
             if (!cacheNucInps.TryGetValue(nuc, out var inputs))
             {
-                inputs = new List<InputData>();
+                inputs = [];
                 cacheNucInps.Add(nuc, inputs);
             }
             inputs.Add(input);
@@ -94,7 +94,7 @@ public class InputEIRViewModel : BindableBase
         var selectedInputs = SelectedNuclide.Select(nuc =>
         {
             if (nuc is null)
-                return new List<InputData>();
+                return [];
             return cacheNucInps[nuc];
         });
 

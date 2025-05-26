@@ -24,7 +24,7 @@ public class OutputData
         TimeStepUnit = timesUnit;
         DataValueUnit = valuesUnit;
         TimeSteps = timeSteps.AsReadOnly();
-        Blocks = blocks.ToArray();
+        Blocks = [.. blocks];
     }
 
     public OutputType Type { get; }
@@ -47,8 +47,7 @@ public class OutputBlockData
     public OutputBlockData(string header, IEnumerable<OutputCompartmentData> compartments)
     {
         Header = header;
-
-        Compartments = compartments.ToArray();
+        Compartments = [.. compartments];
     }
 
     public string Header { get; }
@@ -62,7 +61,7 @@ public class OutputCompartmentData
     public OutputCompartmentData(string name, IEnumerable<double> values)
     {
         Name = name;
-        Values = values.ToList().AsReadOnly();
+        Values = [.. values];
     }
 
     public string Name { get; }
@@ -129,7 +128,7 @@ public class OutputDataReader : IDisposable
         if (!line.StartsWith("FlexID output: "))
             throw new InvalidDataException("unrecognized file format");
 
-        line = line.Substring("FlexID output: ".Length);
+        line = line["FlexID output: ".Length..];
         var (type, unit) =
             line == "RetentionActivity" ? (OutputType.RetentionActivity, "Bq/Bq") :
             line == "CumulativeActivity" ? (OutputType.CumulativeActivity, "Bq") :
@@ -146,12 +145,12 @@ public class OutputDataReader : IDisposable
         line = reader.ReadLine();
         if (line is null || !line.StartsWith("Radionuclide: "))
             throw new InvalidCastException("unrecognized file format");
-        var nuclides = line.Substring("Radionuclide: ".Length).Split(new[] { ", " }, StringSplitOptions.None);
+        var nuclides = line["Radionuclide: ".Length..].Split([", "], StringSplitOptions.None);
 
         line = reader.ReadLine();
         if (line is null || !line.StartsWith("Units: "))
             throw new InvalidCastException("unrecognized file format");
-        var units = line.Substring("Units: ".Length).Split(new[] { ", " }, StringSplitOptions.None);
+        var units = line["Units: ".Length..].Split([", "], StringSplitOptions.None);
 
         timesUnit = "day";
         valuesUnit =
@@ -173,7 +172,7 @@ public class OutputDataReader : IDisposable
         }
 
         var outputHeaders = type == OutputType.Dose || type == OutputType.DoseRate
-            ? new[] { nuclides[0] + " (Male)", nuclides[0] + " (Female)" } : nuclides;
+            ? [nuclides[0] + " (Male)", nuclides[0] + " (Female)"] : nuclides;
 
         var blocks = new List<OutputBlockData>(outputHeaders.Length);
         foreach (var outputHeader in outputHeaders)

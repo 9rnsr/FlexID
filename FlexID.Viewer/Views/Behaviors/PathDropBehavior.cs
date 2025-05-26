@@ -125,7 +125,7 @@ public class PathDropBehavior : Behavior<Control>
     {
         void ResolveLinkPath()
         {
-            paths = paths.Select(ShortcutFile.Resolve).ToArray();
+            paths = [.. paths.Select(ShortcutFile.Resolve)];
         }
 
         if (paths.Any())

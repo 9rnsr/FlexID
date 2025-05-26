@@ -18,15 +18,15 @@ public class Model : BindableBase
     {
         #region コンター表示
 
-        organs = new List<string>();
-        organMap = new Dictionary<string, string>();
+        organs = [];
+        organMap = [];
 
-        unsetOrganValues = new Dictionary<string, double>();
-        unsetOrganColors = new Dictionary<string, string>();
+        unsetOrganValues = [];
+        unsetOrganColors = [];
 
         foreach (var line in File.ReadLines(@"lib/FixList.txt"))
         {
-            var parts = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             var organ = parts[0];
 
             organs.Add(organ);
@@ -105,7 +105,7 @@ public class Model : BindableBase
     /// <summary>
     /// 検出された出力ファイル種別のリスト。
     /// </summary>
-    public ObservableCollection<OutputType> OutputTypes { get; } = new ObservableCollection<OutputType>();
+    public ObservableCollection<OutputType> OutputTypes { get; } = [];
 
     /// <summary>
     /// インプットのタイトル。
@@ -130,7 +130,7 @@ public class Model : BindableBase
     /// <summary>
     /// 核種リスト。
     /// </summary>
-    public ObservableCollection<string> Nuclides { get; } = new ObservableCollection<string>();
+    public ObservableCollection<string> Nuclides { get; } = [];
 
     #endregion
 
@@ -158,7 +158,7 @@ public class Model : BindableBase
     /// <summary>
     /// 現在の出力タイムステップにおける各コンパートメントの数値。
     /// </summary>
-    public ObservableCollection<CalcData> DataValues { get; } = new ObservableCollection<CalcData>();
+    public ObservableCollection<CalcData> DataValues { get; } = [];
 
     /// <summary>
     /// モデル図に表示するための、統一臓器名とその合算された数値。
@@ -222,7 +222,7 @@ public class Model : BindableBase
         get => timeSteps;
         private set => SetProperty(ref timeSteps, value);
     }
-    private IReadOnlyList<double> timeSteps = Array.Empty<double>();
+    private IReadOnlyList<double> timeSteps = [];
 
     /// <summary>
     /// 現在スライダーが示している出力タイムステップのインデックス。
@@ -286,7 +286,7 @@ public class Model : BindableBase
 
     #region グラフ表示
 
-    public ObservableCollection<RegionData> Regions { get; } = new ObservableCollection<RegionData>();
+    public ObservableCollection<RegionData> Regions { get; } = [];
 
     public PlotModel PlotModel { get; } = new PlotModel();
 
@@ -443,7 +443,7 @@ public class Model : BindableBase
         ContourMin = 0;
         ContourUnit = "-";
 
-        TimeSteps = Array.Empty<double>();
+        TimeSteps = [];
         CurrentTimeIndex = -1;
         CurrentTimeStep = 0;
 

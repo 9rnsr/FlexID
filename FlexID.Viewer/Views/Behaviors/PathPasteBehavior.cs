@@ -51,7 +51,7 @@ public class PathPasteBehavior : Behavior<TextBox>
             if (paths is null || paths.Length != 1)
                 return;
 
-            paths = paths.Select(ShortcutFile.Resolve).ToArray();
+            paths = [.. paths.Select(ShortcutFile.Resolve)];
 
             var tb = (TextBox)sender;
             var path = string.Join("\n", paths);    // 複数ファイルは改行で区切る。

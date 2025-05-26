@@ -3,13 +3,13 @@ namespace FlexID.Calc.Tests;
 [TestClass]
 public class OutputReadTests
 {
-    static readonly (OutputType type, string suffix)[] types = new[]
-    {
+    static readonly (OutputType type, string suffix)[] types =
+    [
         (OutputType.RetentionActivity,   "Retention"),
         (OutputType.CumulativeActivity,  "Cumulative"),
         (OutputType.Dose,                "Dose"),
         (OutputType.DoseRate,            "DoseRate"),
-    };
+    ];
 
     [TestMethod]
     [DataRow("Ba-133_ing-Insoluble")]

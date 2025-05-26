@@ -30,7 +30,7 @@ class ProgressPresenter
     private readonly Task task;
     private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-    private readonly List<ItemData> items = new List<ItemData>();
+    private readonly List<ItemData> items = [];
     private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim();
 
     private string windmill = "/";

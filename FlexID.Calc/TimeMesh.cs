@@ -123,7 +123,7 @@ public class TimeMesh
                 // コメント行や行末コメントを除去する
                 var icomment = ln.IndexOf('#');
                 if (icomment != -1)
-                    ln = ln.Substring(0, icomment);
+                    ln = ln[..icomment];
                 ln = ln.Trim();
                 if (ln.Length != 0)
                     return ln;
@@ -163,7 +163,7 @@ public class TimeMesh
         if (boundaries.Count < 1)
             throw new FormatException("At least one mesh boundary is required.");
 
-        this.boundaries = boundaries.ToArray();
+        this.boundaries = [.. boundaries];
     }
 
     public TimeMesh(IEnumerable<TimeMeshBoundary> boundaries)
@@ -182,7 +182,7 @@ public class TimeMesh
             start = b.EndOfPeriod;
         }
 
-        this.boundaries = boundaries.ToArray();
+        this.boundaries = [.. boundaries];
     }
 
     /// <summary>

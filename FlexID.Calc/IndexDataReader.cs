@@ -85,8 +85,8 @@ public class IndexDataReader
 
         string line;
         line = r.ReadLine();
-        //var first = int.Parse(line.Substring(0, 4));
-        //var last = int.Parse(line.Substring(4, 8));
+        //var first = int.Parse(line[..4]);
+        //var last = int.Parse(line[4..12]);
 
         var daughters = new List<IndexDaughterData>();
 
@@ -95,7 +95,7 @@ public class IndexDataReader
             int icol = 0;
             string GetColumn(int w)
             {
-                var res = line.Substring(icol, w);
+                var res = line[icol..(icol + w)];
                 icol += w;
                 return res;
             }
@@ -169,7 +169,7 @@ public class IndexDataReader
                 LocationACK = pointer3,
                 LocationNSF = pointer4,
 
-                Daughters = daughters.Where(d => d.Daughter != "").ToArray(),
+                Daughters = [.. daughters.Where(d => d.Daughter != "")],
 
                 EnergyAlpha = E_alpha,
                 EnergyElectron = E_electron,

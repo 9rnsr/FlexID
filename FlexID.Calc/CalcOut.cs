@@ -67,8 +67,8 @@ class CalcOut : IDisposable
         wRateF = data.OutputDoseRate && !IsMaleOnly ? CreateWriter(DoseRatePath, ".f") : NullWriter;
 
         // 残留放射能の出力ファイルを用意する。
-        wsRete = (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count)).ToArray();
-        wsCumu = (data.OutputCumulative ? CreateWriters(CumulativePath) : NullWriters(data.Nuclides.Count)).ToArray();
+        wsRete = [.. (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count))];
+        wsCumu = [.. (data.OutputCumulative ? CreateWriters(CumulativePath) : NullWriters(data.Nuclides.Count))];
 
         TextWriter CreateWriter(string path, string suffix = null)
         {
@@ -107,8 +107,8 @@ class CalcOut : IDisposable
 
         // 残留放射能の数値を出力するTextWriterを
         // コンパートメント毎にorgan.Indexでアクセスできるようにする。
-        wsOrgansRete = GetOrganWriters(wsRete).ToArray();
-        wsOrgansCumu = GetOrganWriters(wsCumu).ToArray();
+        wsOrgansRete = [.. GetOrganWriters(wsRete)];
+        wsOrgansCumu = [.. GetOrganWriters(wsCumu)];
 
         IEnumerable<TextWriter> GetOrganWriters(TextWriter[] ws)
         {
@@ -181,7 +181,7 @@ class CalcOut : IDisposable
                 // コンパートメントとして明示されている集合コンパートメントの構成要素を得る。
                 var explicits = compartmentsAcc.Where(o => sregions.Contains(o.SourceRegion)).ToArray();
                 if (!explicits.Any())   // 構成要素が1つも明示されていない＝集合コンパートメントなしとする。
-                    return Array.Empty<(int, double)>();
+                    return [];
 
                 // 線源領域Otherに含まれる集合コンパートメント構成要素の、Other全体に対する質量比を得る。
                 var otherFraction = sregions
@@ -202,7 +202,7 @@ class CalcOut : IDisposable
                     .Concat(bloodIndexes.Select(i => (i, bloodFraction)));
                 if (considerOther)
                     indexes = indexes.Concat(otherIndexes.Select(i => (i, otherFraction)));
-                return indexes.ToArray();
+                return [.. indexes];
             }
 
             nuclide.AtractIndexes   /**/= GetIndexes(sregionsAtract,   /**/ 0.07);

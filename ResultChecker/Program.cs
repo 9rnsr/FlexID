@@ -68,11 +68,11 @@ internal partial class Program
 
                 if (arg[0] == '@')
                 {
-                    var head = args.AsSpan(0, i).ToArray();
-                    var tail = args.AsSpan(i + 1).ToArray();
-                    var newArgs = File.ReadAllText(arg.Substring(1))
+                    var head = args.AsSpan(0, i);
+                    var tail = args.AsSpan(i + 1);
+                    var newArgs = File.ReadAllText(arg[1..])
                         .Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
-                    args = head.Concat(newArgs).Concat(tail).ToArray();
+                    args = [.. head, .. newArgs, .. tail];
                     i--;
                     continue;
                 }
@@ -124,7 +124,7 @@ internal partial class Program
                 try
                 {
                     if (patterns is null)
-                        patterns = new List<Regex>();
+                        patterns = [];
                     patterns.Add(new Regex(pattern, RegexOptions.IgnoreCase));
                 }
                 catch
@@ -141,18 +141,16 @@ internal partial class Program
         if (RunCalculation)
         {
             // パターンに合致するインプットを計算対象として収集する。
-            targets = GetInputs()
+            targets = [.. GetInputs()
                 .Select(inputPath => (target: Path.GetFileNameWithoutExtension(inputPath), inputPath))
-                .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)
-                .ToArray();
+                .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)];
         }
         else
         {
             // 出力ディレクトリにあるログファイルから、処理対象を収集する。
-            targets = Directory.EnumerateFiles(OutputDir, "*.log")
+            targets = [.. Directory.EnumerateFiles(OutputDir, "*.log")
                 .Select(logFile => (target: Path.GetFileNameWithoutExtension(logFile), inputPath: ""))
-                .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)
-                .ToArray();
+                .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)];
         }
         if (targets.Length == 0)
         {
@@ -174,7 +172,7 @@ internal partial class Program
         if (RunCalculation)
         {
             // 並列処理で計算を実施する。
-            Task.WaitAll(targets.Select(x => factory.StartNew(() => Process(x.target, x.inputPath))).ToArray());
+            Task.WaitAll([.. targets.Select(x => factory.StartNew(() => Process(x.target, x.inputPath)))]);
         }
         else
         {
@@ -566,8 +564,8 @@ internal partial class Program
         return new Dose
         {
             EffectiveDose = resultWholeBody,
-            EquivalentDosesMale = equivalentDoses.Select(d => d.Male).ToArray(),
-            EquivalentDosesFemale = equivalentDoses.Select(d => d.Female).ToArray(),
+            EquivalentDosesMale = [.. equivalentDoses.Select(d => d.Male)],
+            EquivalentDosesFemale = [.. equivalentDoses.Select(d => d.Female)],
         };
     }
 

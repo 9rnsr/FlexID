@@ -6,8 +6,7 @@ using static InputErrorTestHelpers;
 public class InputOtherCalcTests
 {
     List<string> ExpectOtherSourceRegions(InputData data) =>
-        data.SourceRegions.Where(s => s.MaleID != 0 || s.FemaleID != 0)
-                          .Select(sr => sr.Name).ToList();
+        [.. data.SourceRegions.Where(s => s.MaleID != 0 || s.FemaleID != 0).Select(sr => sr.Name)];
 
     void Include(List<string> list, string item)
     {
@@ -29,8 +28,8 @@ public class InputOtherCalcTests
     [TestMethod]
     public void TestAdjustNothing()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -43,7 +42,7 @@ public class InputOtherCalcTests
             "",
             "[Sr-90:transfer]",
             "  input  ST0        100%",
-        });
+        ]);
 
         var data = reader.Read();
         var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
@@ -70,8 +69,8 @@ public class InputOtherCalcTests
     [TestMethod]
     public void TestAdjustOther()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -90,7 +89,7 @@ public class InputOtherCalcTests
             "",
             "[Sr-90:transfer]",
             "  input  ST0        100%",
-        });
+        ]);
 
         var data = reader.Read();
         var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
@@ -105,8 +104,8 @@ public class InputOtherCalcTests
     [TestMethod]
     public void TestAdjustOtherByParameterOfInput()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -129,7 +128,7 @@ public class InputOtherCalcTests
             "",
             "[Sr-90:transfer]",
             "  input  ST0        100%",
-        });
+        ]);
 
         var data = reader.Read();
         var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
@@ -151,8 +150,8 @@ public class InputOtherCalcTests
     [TestMethod]
     public void TestAdjustOtherByParameterOfNuclide()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -175,7 +174,7 @@ public class InputOtherCalcTests
             "",
             "[Sr-90:transfer]",
             "  input  ST0        100%",
-        });
+        ]);
 
         var data = reader.Read();
         var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
@@ -197,8 +196,8 @@ public class InputOtherCalcTests
     [TestMethod]
     public void TestAdjustOtherByParameterOfNuclideAndInput()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -225,7 +224,7 @@ public class InputOtherCalcTests
             "",
             "[Sr-90:transfer]",
             "  input  ST0        100%",
-        });
+        ]);
 
         var data = reader.Read();
         var expectOtherSourceRegions = ExpectOtherSourceRegions(data);

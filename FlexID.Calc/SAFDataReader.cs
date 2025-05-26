@@ -97,7 +97,7 @@ public class SAFDataReader
         string line;
         while ((line = r.ReadLine()) != null)
         {
-            string[] fields = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            string[] fields = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             yield return fields[0];
 
             var dataCount = int.Parse(fields[2]);
@@ -118,7 +118,7 @@ public class SAFDataReader
         string line;
         while ((line = r.ReadLine()) != null)
         {
-            string[] fields = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            string[] fields = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             if (fields[0] != nuclideName)
                 continue;
 
@@ -148,7 +148,7 @@ public class SAFDataReader
         string line;
         while ((line = r.ReadLine()) != null)
         {
-            string[] fields = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            string[] fields = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             if (fields[0] != nuclideName)
                 continue;
 
@@ -184,7 +184,7 @@ public class SAFDataReader
         reader.ReadLine();
         reader.ReadLine();
 
-        var parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+        var parts = reader.ReadLine().Split([" "], StringSplitOptions.RemoveEmptyEntries);
         var count = int.Parse(parts[0]);
 
         reader.ReadLine();
@@ -192,7 +192,7 @@ public class SAFDataReader
         var results = new SourceRegionData[count];
         for (int i = 0; i < count; i++)
         {
-            parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            parts = reader.ReadLine().Split([" "], StringSplitOptions.RemoveEmptyEntries);
             results[i] = new SourceRegionData
             {
                 Name = parts[0],
@@ -215,7 +215,7 @@ public class SAFDataReader
         reader.ReadLine();
         reader.ReadLine();
 
-        var parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+        var parts = reader.ReadLine().Split([" "], StringSplitOptions.RemoveEmptyEntries);
         var count = int.Parse(parts[0]);
 
         reader.ReadLine();
@@ -223,7 +223,7 @@ public class SAFDataReader
         var results = new TargetRegionData[count];
         for (int i = 0; i < count; i++)
         {
-            parts = reader.ReadLine().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            parts = reader.ReadLine().Split([" "], StringSplitOptions.RemoveEmptyEntries);
             results[i] = new TargetRegionData
             {
                 Name = parts[0],
@@ -279,7 +279,7 @@ public class SAFDataReader
 
     private static (int numT, int numS, double[] Energies) GetHeader(string line)
     {
-        var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
         var numT = int.Parse(parts[0]);
         var numS = int.Parse(parts[1]);
         var energies = new List<double>(parts.Length - 2);
@@ -327,12 +327,11 @@ public class SAFDataReader
             if ((line = reader.ReadLine()) is null)
                 throw new InvalidDataException(filePath);
 
-            var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(["<-", " "], StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length != ncols + 4)
                 throw new InvalidDataException(filePath);
 
-            var values = parts.Skip(2).Take(ncols).Select(v => double.Parse(v));
-            data.SAFalpha[r] = values.ToArray();
+            data.SAFalpha[r] = [.. parts.Skip(2).Take(ncols).Select(v => double.Parse(v))];
         }
     }
 
@@ -366,12 +365,11 @@ public class SAFDataReader
             if ((line = reader.ReadLine()) is null)
                 throw new InvalidDataException(filePath);
 
-            var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(["<-", " "], StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length != ncols + 4)
                 throw new InvalidDataException(filePath);
 
-            var values = parts.Skip(2).Take(ncols).Select(v => double.Parse(v));
-            data.SAFphoton[r] = values.ToArray();
+            data.SAFphoton[r] = [.. parts.Skip(2).Take(ncols).Select(v => double.Parse(v))];
         }
     }
 
@@ -405,12 +403,11 @@ public class SAFDataReader
             if ((line = reader.ReadLine()) is null)
                 throw new InvalidDataException(filePath);
 
-            var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(["<-", " "], StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length != ncols + 4)
                 throw new InvalidDataException(filePath);
 
-            var values = parts.Skip(2).Take(ncols).Select(v => double.Parse(v));
-            data.SAFelectron[r] = values.ToArray();
+            data.SAFelectron[r] = [.. parts.Skip(2).Take(ncols).Select(v => double.Parse(v))];
         }
     }
 
@@ -425,7 +422,7 @@ public class SAFDataReader
 
         line = reader.ReadLine();
         var nuclides = line
-            .Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries)
+            .Split(["<-", " "], StringSplitOptions.RemoveEmptyEntries)
             .Skip(1).ToArray();     // 不要な列を除去
 
         line = reader.ReadLine();
@@ -444,7 +441,7 @@ public class SAFDataReader
         var ncols = nuclides.Length;
 
         var SAFs = new double[ncols][];
-        data.SAFneutron = new Dictionary<string, (double, double[])>();
+        data.SAFneutron = [];
         for (int c = 0; c < ncols; c++)
         {
             SAFs[c] = new double[nrows];
@@ -457,7 +454,7 @@ public class SAFDataReader
             if ((line = reader.ReadLine()) is null)
                 throw new InvalidDataException(filePath);
 
-            var parts = line.Split(new string[] { "<-", " " }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(["<-", " "], StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length != ncols + 2)
                 throw new InvalidDataException(filePath);
 
