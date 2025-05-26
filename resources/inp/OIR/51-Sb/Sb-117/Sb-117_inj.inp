@@ -1,0 +1,98 @@
+[title]
+Sb-117 Injection
+
+[nuclide]
+  Sb-117
+
+
+[Sb-117:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Thyroid               Thyroid
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Sb-117:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+  $fA    = 0.05
+  $fA_Re = 0.05         # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Plasma                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.60 Table 3.3
+  Plasma                  Thyroid                   0.3
+  Plasma                  UB-con                    9.0
+  Plasma                  Liver1                    4.0
+  Plasma                  Kidneys                   0.25
+  Plasma                  RBC                       3.0
+  Plasma                  ST0                      74.91
+  Plasma                  ST1                       4.5
+  Plasma                  ST2                       0.04
+  Plasma                  C-bone-S                  2.0
+  Plasma                  T-bone-S                  2.0
+  Thyroid                 Plasma                    0.139
+  RBC                     Plasma                    0.693
+  Liver1                  Plasma                    0.437
+  Liver1                  SI-conRe                  0.243
+  Liver1                  Liver2                    0.0139
+  Liver2                  Plasma                    0.000693
+  Kidneys                 Plasma                    0.231
+  ST0                     Plasma                    1.39
+  ST1                     Plasma                    0.0139
+  ST2                     Plasma                    0.000693
+  C-bone-S                Plasma                    0.343
+  T-bone-S                Plasma                    0.343
+  C-bone-S                C-bone-V                  0.00347
+  T-bone-S                T-bone-V                  0.00347
+  C-bone-V                Plasma                    0.0000821
+  T-bone-V                Plasma                    0.000493
