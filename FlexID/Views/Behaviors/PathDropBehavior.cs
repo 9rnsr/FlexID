@@ -36,8 +36,7 @@ public class PathDropBehavior : Behavior<TextBox>
 
     private void TextBox_Drop(object sender, DragEventArgs e)
     {
-        var files = e.Data.GetData(DataFormats.FileDrop, false) as string[];
-        if (files != null)
+        if (e.Data.GetData(DataFormats.FileDrop, false) is string[] files)
             AssociatedObject.Text = files[0];
     }
 }

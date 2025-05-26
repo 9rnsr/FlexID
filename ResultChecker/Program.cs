@@ -123,8 +123,7 @@ internal partial class Program
                 var pattern = arg;
                 try
                 {
-                    if (patterns is null)
-                        patterns = [];
+                    patterns ??= [];
                     patterns.Add(new Regex(pattern, RegexOptions.IgnoreCase));
                 }
                 catch
@@ -267,8 +266,6 @@ internal partial class Program
 
     static Result CalcAndSummary(string target, string inputPath, string outputDir)
     {
-        var nuclide = target.Split('_')[0];
-
         var outputPath = Path.Combine(outputDir, target);
 
         // 計算時間メッシュはFlexID.Calcに付属のものを使用する。

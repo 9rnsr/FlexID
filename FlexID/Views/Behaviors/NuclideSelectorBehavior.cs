@@ -89,7 +89,6 @@ public class NuclideSelectorBehavior : Behavior<ListView>
             // フォーカス位置を最初の項目に移動する。
             e.Handled = true;
 
-            var lv = AssociatedObject;
             SelectAndFocusItem(index: 0);
             return;
         }

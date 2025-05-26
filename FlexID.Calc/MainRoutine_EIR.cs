@@ -122,7 +122,7 @@ public class MainRoutine_EIR
 
                     // 各標的領域への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
                     var see = sourcesSee[offsetS + indexS];
-                    see = see ?? (sourcesSee[offsetS + indexS] = new double[31]);
+                    see ??= (sourcesSee[offsetS + indexS] = new double[31]);
 
                     // 線源領域に対応する全てのコンパートメントに、
                     // 補間されたS係数値が書き込まれる予定の配列を割り当てる。
@@ -242,8 +242,6 @@ public class MainRoutine_EIR
             // 預託期間を超える計算は行わない
             if (commitmentPeriod < calcNowT)
                 break;
-
-            var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
 
             // ΔT[sec]
             var calcDeltaT = calcNowT - calcPreT;

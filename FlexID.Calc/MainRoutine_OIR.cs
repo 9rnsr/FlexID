@@ -263,8 +263,6 @@ public class MainRoutine_OIR
             if (commitmentPeriod < calcNowT)
                 break;
 
-            var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
-
             // ΔT[sec]
             var calcDeltaT = calcNowT - calcPreT;
             var calcDeltaDay = TimeMesh.SecondsToDays(calcDeltaT);

@@ -79,9 +79,8 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <returns></returns>
     public InputData Read()
     {
-        var line = GetNextLine();
-        if (line is null)
-            throw Program.Error("Reach to EOF while reading input file.");
+        var line = GetNextLine()
+            ?? throw Program.Error("Reach to EOF while reading input file.");
 
         while (true)
         {
@@ -182,10 +181,8 @@ public class InputDataReader_OIR : InputDataReaderBase
         if (inputTitle != null)
             throw Program.Error($"Line {LineNum}: Duplicated [title] section.");
 
-        var title = GetNextLine();
-        if (title is null)
-            throw Program.Error($"Line {LineNum}: Reach to EOF while reading title section.");
-        inputTitle = title;
+        inputTitle = GetNextLine()
+            ?? throw Program.Error($"Line {LineNum}: Reach to EOF while reading title section.");
 
         var line = GetNextLine();
         if (!CheckSectionHeader(line))
@@ -281,8 +278,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 // インデックスファイルから娘核種と分岐比の情報を自動取得する。
                 autoMode = true;
 
-                if (indexTable is null)
-                    indexTable = IndexDataReader.ReadNDX().ToDictionary(x => x.Nuclide, x => x);
+                indexTable ??= IndexDataReader.ReadNDX().ToDictionary(x => x.Nuclide, x => x);
 
                 foreach (var nuc in values)
                 {
@@ -383,9 +379,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                 // 全ての娘核種の名前が[nuclide]セクションで定義されていることを確認する。
                 nuclide.Branches = [.. branches.Select(b =>
                 {
-                    var daughter = GetNuclide(b.Daughter);
-                    if (daughter is null)
-                        throw Program.Error($"Line {lineNum}: Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
+                    var daughter = GetNuclide(b.Daughter)
+                        ?? throw Program.Error($"Line {lineNum}: Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
                     return (Daughter: daughter, (double)b.Fraction);
                 })];
             }
@@ -1037,29 +1032,27 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         // 崩壊系列を構成するコンパートメント間の壊変経路を追加定義する。
         // 壊変経路は一本道ではなく、fromNuclideから始まる有効非巡回グラフ(DAG)を構成する点に注意。
-        foreach (var path in decayTransfers)
+        foreach (var (parent, daughter) in decayTransfers)
         {
-            var from = path.Parent == fromNuclide ? organFrom
-                   : decayCompartments.FirstOrDefault(o => o?.Nuclide == path.Parent);
-            var to = decayCompartments.FirstOrDefault(o => o?.Nuclide == path.Daughter);
+            var from = parent == fromNuclide ? organFrom
+                   : decayCompartments.FirstOrDefault(o => o?.Nuclide == parent);
+            var to = decayCompartments.FirstOrDefault(o => o?.Nuclide == daughter);
 
             // 壊変経路が既に設定されている＝インプットで明示的に定義されている場合は何もしない。
             if (from != null && to != null && to.Inflows.Any(inflow => inflow.Organ == from))
                 continue;
 
-            if (from is null)
-                from = chain.AddDecayCompartment(data, path.Parent);
-            if (to is null)
-                to = chain.AddDecayCompartment(data, path.Daughter);
+            from ??= chain.AddDecayCompartment(data, parent);
+            to ??= chain.AddDecayCompartment(data, daughter);
 
-            var branch = from.Nuclide.Branches.First(b => b.Daughter == to.Nuclide);
+            var (_, fraction) = from.Nuclide.Branches.First(b => b.Daughter == to.Nuclide);
 
             to.Inflows.Add(new Inflow
             {
                 ID = from.ID,
 
                 // 壊変経路では、親からの分岐比を移行割合としてとする。
-                Rate = branch.Fraction,
+                Rate = fraction,
 
                 // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
                 Organ = from,

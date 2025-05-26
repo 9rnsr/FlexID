@@ -24,7 +24,7 @@ public class InputParser<T>
 
     public InputParser(Visitor<T> visitor)
     {
-        Parser<string> OrEmpty<X>(Parser<X> parser) =>
+        static Parser<string> OrEmpty<X>(Parser<X> parser) =>
             parser.Optional().Select(x => x.IsDefined ? x.Get().ToString() : "");
 
         Identifier =
@@ -188,7 +188,7 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
         if (!result.WasSuccessful)
             throw Program.Error($"Line {lineNum}: Transfer coefficient should be evaluated to a number, not '{input}'.");
 
-        var (expr, isRate) = result.Value;
+        //var (expr, isRate) = result.Value;
         //Debug.WriteLine($"Line {lineNum} '{input}' ==> {expr * (isRate ? 100 : 1)}{(isRate ? "%" : "")}");
         return result.Value;
     }
@@ -206,7 +206,7 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
         var value = decimal.Parse(input, NumberStyles.Float);
         var isRate = (unit == "%");
         if (isRate)
-            value = value / 100;
+            value /= 100;
         return (value, isRate);
     }
 

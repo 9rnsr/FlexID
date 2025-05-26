@@ -48,9 +48,8 @@ public class InputDataReader_EIR : InputDataReaderBase
         // 読み取り位置をファイル先頭に戻す。
         ResetPosition();
 
-        var title = GetNextLine();
-        if (title is null)
-            throw Program.Error("Reach to EOF while reading input file.");
+        var title = GetNextLine()
+            ?? throw Program.Error("Reach to EOF while reading input file.");
 
         var data = new InputData();
 
@@ -97,9 +96,8 @@ public class InputDataReader_EIR : InputDataReaderBase
                 // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
                 while (true)
                 {
-                    var ln = GetNextLine();
-                    if (ln is null)
-                        throw Program.Error("Reach to EOF while reading input file.");
+                    var ln = GetNextLine()
+                        ?? throw Program.Error("Reach to EOF while reading input file.");
                     if (ln == age)
                         break;
                 }
@@ -112,9 +110,8 @@ public class InputDataReader_EIR : InputDataReaderBase
             // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
             while (true)
             {
-                var ln = GetNextLine();
-                if (ln is null)
-                    throw Program.Error("Reach to EOF while reading input file.");
+                var ln = GetNextLine()
+                    ?? throw Program.Error("Reach to EOF while reading input file.");
                 if (ln == "end" || ln == "next")
                     break;
 
