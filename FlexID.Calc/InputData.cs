@@ -350,20 +350,20 @@ public abstract class InputDataReaderBase : IDisposable
         LineNum++;
         if (line is null)
             return null;
-        line = line.Trim();
+
+        var span = line.AsSpan().Trim();
+
+        // コメントを除去する。
+        var indexComment = span.IndexOf('#');
+        if (indexComment != -1)
+            span = span[..indexComment].TrimEnd();
 
         // 空行を読み飛ばす。
-        if (line.Length == 0)
+        if (span.IsEmpty)
             goto Lagain;
 
-        // コメント行を読み飛ばす。
-        if (line.StartsWith("#"))
-            goto Lagain;
-
-        // 行末コメントを除去する。
-        var trailingComment = line.IndexOf("#");
-        if (trailingComment != -1)
-            line = line[..trailingComment].TrimEnd();
+        if (span.Length < line.Length)
+            line = span.ToString();
         return line;
     }
 
