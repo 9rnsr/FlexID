@@ -14,7 +14,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         safdataAF = SAFDataReader.ReadSAF(Sex.Female);
     }
 
-    private readonly InputEvaluator evaluator = new InputEvaluator();
+    private readonly InputEvaluator evaluator = new();
 
     private string inputTitle;
 

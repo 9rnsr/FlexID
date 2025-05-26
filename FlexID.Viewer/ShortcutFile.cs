@@ -10,7 +10,7 @@ static class CLSID
     /// <summary>
     /// Windowsシステムが提供するShellLinkオブジェクトのCLSID
     /// </summary>
-    public static readonly Guid ShellLink = new Guid("00021401-0000-0000-C000-000000000046");
+    public static readonly Guid ShellLink = new("00021401-0000-0000-C000-000000000046");
 
     public static readonly Type ShellLinkType = Type.GetTypeFromCLSID(ShellLink);
 }

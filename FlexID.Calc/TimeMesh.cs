@@ -27,7 +27,7 @@ public struct TimeMeshBoundary
 public class TimeMesh
 {
     private static Regex patternPeriod =
-        new Regex(@"^ *(?<num>\d+) *(?<unit>days|months|years) *$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        new(@"^ *(?<num>\d+) *(?<unit>days|months|years) *$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <summary>
     /// 預託期間を秒数に換算する。
@@ -53,7 +53,7 @@ public class TimeMesh
         }
     }
 
-    private static Regex patternTime = new Regex(
+    private static Regex patternTime = new(
         @"^ *(?<num>\d+) *(?<unit>s(?:ec(?:ond)?s?)?|m(?:in(?:ute)?s?)?|h(?:ours?)?|d(?:ays?)?|y(?:ears?)?) *$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

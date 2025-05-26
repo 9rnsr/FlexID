@@ -4,7 +4,7 @@ namespace FlexID.Calc.Tests;
 public class InputEvaluatorTests
 {
     const int LineNum = 0;
-    readonly InputEvaluator evaluator = new InputEvaluator();
+    readonly InputEvaluator evaluator = new();
 
     [TestMethod]
     public void DefineVariable()

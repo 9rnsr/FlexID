@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 internal partial class Program
 {
-    static Regex patternMaterial = new Regex(
+    static Regex patternMaterial = new(
        @"^(?<RouteOfIntake>Injection|Ingestion|Inhalation), (?<Material>.+?)(?:, (?<ParticleSize>[\d\.]+) µm)?$");
 
     static (string routeOfIntake, string material, string particleSize) DecomposeMaterial(string mat)

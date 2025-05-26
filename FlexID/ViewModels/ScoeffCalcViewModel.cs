@@ -31,15 +31,15 @@ public class ScoeffCalcViewModel : BindableBase
 {
     private CompositeDisposable Disposables { get; } = [];
 
-    public ReactivePropertySlim<string> OutputFilePath { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> OutputFilePath { get; } = new();
 
-    public ReactivePropertySlim<bool> CalcMale { get; } = new ReactivePropertySlim<bool>(true);
+    public ReactivePropertySlim<bool> CalcMale { get; } = new(true);
 
-    public ReactivePropertySlim<bool> CalcFemale { get; } = new ReactivePropertySlim<bool>(true);
+    public ReactivePropertySlim<bool> CalcFemale { get; } = new(true);
 
-    public ReactivePropertySlim<bool> CalcPchip { get; } = new ReactivePropertySlim<bool>(true);
+    public ReactivePropertySlim<bool> CalcPchip { get; } = new(true);
 
-    public ReactivePropertySlim<bool> IdacDoseCompatible { get; } = new ReactivePropertySlim<bool>(false);
+    public ReactivePropertySlim<bool> IdacDoseCompatible { get; } = new(false);
 
     public ObservableCollection<NuclideItem> Nuclides { get; } = [];
 

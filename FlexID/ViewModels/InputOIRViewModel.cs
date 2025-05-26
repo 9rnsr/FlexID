@@ -14,25 +14,25 @@ public class InputOIRViewModel : BindableBase
 {
     private CompositeDisposable Disposables { get; } = [];
 
-    public ReactivePropertySlim<string> OutputFilePath { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> OutputFilePath { get; } = new();
 
     public ObservableCollection<string> Nuclides { get; } = [];
 
-    public ReactivePropertySlim<string> SelectedNuclide { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> SelectedNuclide { get; } = new();
 
     public ReadOnlyReactivePropertySlim<bool> HasProgeny { get; }
 
-    public ReactivePropertySlim<bool> CalcProgeny { get; } = new ReactivePropertySlim<bool>();
+    public ReactivePropertySlim<bool> CalcProgeny { get; } = new();
 
     public ObservableCollection<InputData> Inputs { get; } = [];
 
-    public ReactivePropertySlim<InputData> SelectedInput { get; } = new ReactivePropertySlim<InputData>();
+    public ReactivePropertySlim<InputData> SelectedInput { get; } = new();
 
-    public ReactivePropertySlim<string> CalcTimeMeshFilePath { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> CalcTimeMeshFilePath { get; } = new();
 
-    public ReactivePropertySlim<string> OutTimeMeshFilePath { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> OutTimeMeshFilePath { get; } = new();
 
-    public ReactivePropertySlim<string> CommitmentPeriod { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> CommitmentPeriod { get; } = new();
 
     public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
     [

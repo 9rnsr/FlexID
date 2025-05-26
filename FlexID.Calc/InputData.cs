@@ -395,9 +395,9 @@ public abstract class InputDataReaderBase : IDisposable
     /// 核種名に合致する正規表現。
     /// 準安定核種について、一般的な表記(m1, m2)とICRP-07データのもの(m, n)の両方を受け付けるようにしている。
     /// </summary>
-    protected static readonly Regex patternNuclide = new Regex(@"^[A-Za-z]+-\d+(?:[a-z]|m\d)?$", RegexOptions.Compiled);
+    protected static readonly Regex patternNuclide = new(@"^[A-Za-z]+-\d+(?:[a-z]|m\d)?$", RegexOptions.Compiled);
 
-    private static readonly Regex patternBar = new Regex("^-+$", RegexOptions.Compiled);
+    private static readonly Regex patternBar = new("^-+$", RegexOptions.Compiled);
 
     protected static bool IsBar(string s) => patternBar.IsMatch(s);
 }

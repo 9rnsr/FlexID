@@ -20,7 +20,7 @@ class StringifyVisitor : Visitor<string>
 [TestClass]
 public class InputParserTests
 {
-    InputParser<string> parser = new InputParser<string>(new StringifyVisitor());
+    InputParser<string> parser = new(new StringifyVisitor());
 
     (Func<string, string> Success, Action<string> Failure) MakeTesters(Parser<string> parser) =>
         (input => parser.End().Parse(input), input => Assert.ThrowsException<ParseException>(() => parser.End().Parse(input)));
