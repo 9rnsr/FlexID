@@ -1,0 +1,435 @@
+[title]
+Te-133 Ingestion
+
+[nuclide]
+  Te-133  I-133  Xe-133m  Xe-133
+
+
+[Te-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # plasma
+  acc   Blood2                Blood         # red blood cells
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver                 Liver
+  acc   Thyroid               Thyroid
+  acc   Kidneys               Kidneys
+  acc   ST                    Other
+
+[Te-133:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  $fA    = 0.3
+  $fA_Re = 0.3          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.73 Table 4.7
+  Blood1                  UB-con                    0.751
+  Blood1                  Kidneys                   0.0404
+  Blood1                  Liver                     0.1213
+  Blood1                  Blood2                    0.1011
+  Blood1                  ST                        0.0768
+  Blood1                  C-bone-S                  0.0202
+  Blood1                  T-bone-S                  0.0404
+  Blood1                  Thyroid                   0.0040
+  Blood2                  Blood1                    0.0693
+  Liver                   SI-conRe                  0.0693
+  Thyroid                 Blood1                    0.0693
+  Kidneys                 Blood1                    0.0693
+  ST                      Blood1                    0.0693
+  C-bone-S                Blood1                    0.0116
+  T-bone-S                Blood1                    0.0116
+  C-bone-S                C-bone-V                  0.000693
+  T-bone-S                T-bone-V                  0.000693
+  C-bone-V                Blood1                    0.000082
+  T-bone-V                Blood1                    0.000493
+
+
+[I-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # inorganic iodine in blood
+  acc   Blood2                Blood         #   organic iodine in blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   St-wall               St-wall
+  acc   Other1                Other
+  acc   Other2                Other
+  acc   Other3                Other
+  acc   Other4                Other
+
+[I-133:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Te-133/Oralcavity       Oralcavity                ---
+  Te-133/Oesophagus-f     Oesophagus-f              ---
+  Te-133/Oesophagus-s     Oesophagus-s              ---
+  Te-133/St-con           St-con                    ---
+  Te-133/SI-con           SI-con                    ---
+  Te-133/SI-conRe         SI-conRe                  ---
+  Te-133/RC-con           RC-con                    ---
+  Te-133/LC-con           LC-con                    ---
+  Te-133/RS-con           RS-con                    ---
+  Te-133/Faeces           Faeces                    ---
+  Te-133/UB-con           UB-con                    ---
+  Te-133/Urine            Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.137 p.106 Fig.5.2
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-sRe          St-conRe               2160
+  St-conRe                SI-conRe                 20.57
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.108 Table 5.4
+  Blood1                  Thyroid1                  7.26
+  Blood1                  UB-con                   11.84
+  Blood1                  S-glands                  5.16
+  Blood1                  St-wall                   8.60
+  Blood1                  Other1                  600
+  Blood1                  Kidneys1                 25
+  Blood1                  Liver1                   15
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  Thyroid1                Thyroid2                 95
+  Thyroid1                Blood1                   36
+  Thyroid2                Blood2                    0.0077
+  Thyroid2                Blood1                    0
+  Other1                  Blood1                  330
+  Other1                  Other2                   35
+  Other2                  Other1                   56
+  Kidneys1                Blood1                  100
+  Liver1                  Blood1                  100
+  Blood2                  Other3                   15
+  Other3                  Blood2                   21
+  Other3                  Other4                    1.2
+  Other4                  Other3                    0.62
+  Other4                  Blood1                    0.14
+  Blood2                  Kidneys2                  3.6
+  Kidneys2                Blood2                   21
+  Kidneys2                Blood1                    0.14
+  Blood2                  Liver2                   21
+  Liver2                  Blood2                   21
+  Liver2                  Blood1                    0.14
+  Liver2                  RC-con                    0.08
+
+# ICRP Publ.137 p.83 Para.178
+# > (178) Iodine atoms are produced at the following sites in the tellurium model that
+# > are not clearly identifiable with specific compartments of the model assigned to
+# > iodine: Blood 2 (red blood cells), and compartments of bone, liver, kidneys, thyroid,
+# > and other soft tissues (other). The following rates of transfer from these sites to the
+# > blood iodide pool of the characteristic model for iodine are assigned: from compartments
+# > of liver or kidneys, 100 d⁻¹ (the rate of loss from the liver iodide and kidney
+# > iodide compartments in the model for iodine); from compartments of blood (other
+# > than the central blood compartment), 1000 d⁻¹; from compartments of other soft
+# > tissues or bone surfaces, 200 d⁻¹ (the highest transfer coefficient to blood in the
+# > model for iodine); from thyroid, 36 d⁻¹ (the transfer coefficient from the thyroid
+# > iodide pool to the blood iodide pool in the model for iodine); and from trabecular
+# > and cortical bone volume compartments, the reference rates of trabecular and cortical
+# > bone turnover. Iodine produced in the central blood pool of the tellurium model
+# > is assigned to the blood iodide pool in the model for iodine.
+# > (178) テルルモデルにおいて、ヨウ素原子は、モデルの特定のヨウ素部位と明確に識別できない
+# > 以下の部位で生成される：血液2（赤血球）、骨、肝臓、腎臓、甲状腺、およびその他の軟部組織
+# > （その他）の部位。これらの部位からヨウ素の特性モデルの血液ヨウ化物プールへの移行速度は、
+# > 以下のように割り当てられる：
+# >   肝臓または腎臓の部位から：100 d⁻¹（ヨウ素の特性モデルの肝臓ヨウ化物および腎臓ヨウ化物部位からの損失速度）、
+# >   血液の部位（中心血液部位以外）から：1000 d⁻¹、
+# >   その他の軟部組織または骨表面の部位から：200 d⁻¹（ヨウ素の特性モデルの血液への最高移行係数）、
+# >   甲状腺からは36 d⁻¹（ヨウ素モデルにおける甲状腺ヨウ化物プールから血中ヨウ化物プールへの移行係数）、
+# >   そして海綿骨および皮質骨容積コンパートメントからは、海綿骨および皮質骨の代謝回転率の基準値。
+# > テルルモデルの中央血中プールで生成されたヨウ素は、ヨウ素モデルの血中ヨウ化物プールに割り当てられます。
+
+  Te-133/Blood1           Blood1                    ---
+  Te-133/Blood2           Blood1                 1000
+  Te-133/C-bone-S         Blood1                  200
+  Te-133/C-bone-V         Blood1                $(0.03 / 365.25)
+  Te-133/T-bone-S         Blood1                  200
+  Te-133/T-bone-V         Blood1                $(0.18 / 365.25)
+  Te-133/Liver            Blood1                  100
+  Te-133/Thyroid          Blood1                   36
+  Te-133/Kidneys          Blood1                  100
+  Te-133/ST               Blood1                  200
+
+
+[Xe-133m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   UB-con                UB-cont
+
+  acc   Blood                 Blood
+  exc   Exhaled               ---
+
+[Xe-133m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 Para.38
+# > (38) Noble gases produced in compartments of the respiratory tract and in the
+# > alimentary tract models by radioactive decay are assumed to escape from these
+# > compartments directly to the environment at a rate of 100 d⁻¹, without transfer to
+# > the blood compartment and without transfer between compartments of respiratory
+# > tract and alimentary tract models. It is assumed that progeny of such noble gases
+# > formed within the body follow the rules stated in Para. 37.
+# > (38) 呼吸器系および消化器系モデルにおいて放射性崩壊により生成される希ガスは、
+# > これらの部位から100 d⁻¹の速度で直接環境へ放出され、血液系への移行や呼吸器系と
+# > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
+# > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
+
+  Te-133/Oralcavity       Exhaled                 100
+  Te-133/Oesophagus-f     Exhaled                 100
+  Te-133/Oesophagus-s     Exhaled                 100
+  Te-133/St-con           Exhaled                 100
+  Te-133/SI-con           Exhaled                 100
+  Te-133/SI-conRe         Exhaled                 100
+  Te-133/RC-con           Exhaled                 100
+  Te-133/LC-con           Exhaled                 100
+  Te-133/RS-con           Exhaled                 100
+  Te-133/UB-con           UB-con                    ---
+
+  I-133/Oralcavity        Exhaled                 100
+  I-133/OralcavityRe      Exhaled                 100
+  I-133/Oesophagus-f      Exhaled                 100
+  I-133/Oesophagus-s      Exhaled                 100
+  I-133/Oesophagus-sRe    Exhaled                 100
+  I-133/St-con            Exhaled                 100
+  I-133/St-conRe          Exhaled                 100
+  I-133/SI-con            Exhaled                 100
+  I-133/SI-conRe          Exhaled                 100
+  I-133/RC-con            Exhaled                 100
+  I-133/LC-con            Exhaled                 100
+  I-133/RS-con            Exhaled                 100
+  I-133/UB-con            UB-con                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
+# ICRP Publ.137 p.84 Para.179
+# > (179) A generic biokinetic model is applied in the OIR series to xenon isotopes
+# > produced by decay of a radionuclide in systemic compartments. Xenon produced in
+# > bone is assumed to transfer to blood at the rate 100 d⁻¹ if produced in bone surfaces,
+# > and 0.36 d⁻¹ if produced in bone volume. These rates are taken from the model for
+# > radon introduced in Publication 67 (ICRP, 1993), and applied in the OIR series to
+# > radon produced in bone surfaces and non-exchangeable bone volume, respectively,
+# > by decay of a radium isotope. Xenon produced in a soft tissue compartment is
+# > assumed to transfer to blood with a half-time of 20 min. Xenon produced in the
+# > central blood compartment in the model for tellurium, antimony, or iodine is
+# > assigned to the blood compartment of the xenon model. Xenon produced in any
+# > other blood compartment in the tellurium, antimony, or iodine model is assumed to
+# > transfer to blood in the xenon model at the rate 1000 d⁻¹. Xenon entering the blood
+# > compartment of the xenon model or produced in that compartment is assumed to be
+# > removed from the body (exhaled) at the rate 1000 d⁻¹. Partial recycling of xenon to
+# > tissues via arterial blood is not depicted explicitly in this model for xenon as a
+# > progeny radionuclide, but is considered in the assignment of the half-times in tissues.
+# > The model is intended to yield a conservative average residence time of xenon atoms
+# > in the body after their production in systemic pools.
+# > (179) OIRシリーズでは、放射性核種の崩壊によって全身コンパートメントで生成される
+# > キセノン同位体に対して、一般的な生体速度論モデルが適用されている。骨で生成される
+# > キセノンは、骨表面で生成される場合は100 d⁻¹の速度で血液に、骨体積で生成される場合は
+# > 0.36 d⁻¹の速度で血液に移行すると仮定される。これらの速度は、Publication 67 (ICRP, 1993)で
+# > 導入されたラドンのモデルから採用されており、OIRシリーズでは、ラジウム同位体の崩壊によって
+# > それぞれ骨表面および非交換性骨体積で生成されるラドンに適用されている。軟部組織
+# > コンパートメントで生成されるキセノンは、半減期20分で血液に移行すると仮定される。
+# > テルル、アンチモン、またはヨウ素のモデルにおいて中心血液コンパートメントで生成される
+# > キセノンは、キセノンモデルの血液コンパートメントに割り当てられる。テルル、アンチモン、
+# > またはヨウ素モデルにおける他の血液コンパートメントで生成されたキセノンは、
+# > キセノンモデルにおいて1000 d⁻¹の速度で血液に移行すると仮定されます。キセノンモデルの
+# > 血液コンパートメントに入るキセノン、またはそのコンパートメントで生成されるキセノンは、
+# > 1000 d⁻¹の速度で体外に排出（呼気）されると仮定されます。動脈血を介したキセノンの
+# > 部分的な組織への再循環は、子孫放射性核種としてのキセノンのこのモデルでは明示的に
+# > 示されていませんが、組織における半減期の割り当てにおいては考慮されています。
+# > このモデルは、全身プールで生成された後のキセノン原子の体内における平均滞留時間を
+# > 保守的に算出することを目的としています。
+
+  Te-133/Blood1           Blood                     ---
+  Te-133/Blood2           Blood                  1000
+  Te-133/C-bone-S         Blood                   100
+  Te-133/C-bone-V         Blood                   100
+  Te-133/T-bone-S         Blood                   100
+  Te-133/T-bone-V         Blood                   100
+  Te-133/Liver            Blood                  1000
+  Te-133/Thyroid          Blood                  1000
+  Te-133/Kidneys          Blood                  1000
+  Te-133/ST               Blood                 $(0.693 / (20/60/24))   # 半減期20分
+
+  I-133/Blood1            Blood                     ---
+  I-133/Liver1            Blood                  1000
+  I-133/Liver2            Blood                  1000
+  I-133/Kidneys1          Blood                  1000
+  I-133/Kidneys2          Blood                  1000
+  I-133/Thyroid1          Blood                  1000
+  I-133/Thyroid2          Blood                  1000
+  I-133/S-glands          Blood                  1000
+  I-133/St-wall           Blood                  1000
+  I-133/Other1            Blood                  1000
+  I-133/Other2            Blood                  1000
+
+  Blood                   Exhaled                1000
+
+
+[Xe-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   UB-con                UB-cont
+
+  acc   Blood                 Blood
+  exc   Exhaled               ---
+
+[Xe-133:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 Para.38
+  Te-133/Oralcavity       Exhaled                 100
+  Te-133/Oesophagus-f     Exhaled                 100
+  Te-133/Oesophagus-s     Exhaled                 100
+  Te-133/St-con           Exhaled                 100
+  Te-133/SI-con           Exhaled                 100
+  Te-133/SI-conRe         Exhaled                 100
+  Te-133/RC-con           Exhaled                 100
+  Te-133/LC-con           Exhaled                 100
+  Te-133/RS-con           Exhaled                 100
+  Te-133/UB-con           UB-con                    ---
+
+  I-133/Oralcavity        Exhaled                 100
+  I-133/OralcavityRe      Exhaled                 100
+  I-133/Oesophagus-f      Exhaled                 100
+  I-133/Oesophagus-s      Exhaled                 100
+  I-133/Oesophagus-sRe    Exhaled                 100
+  I-133/St-con            Exhaled                 100
+  I-133/St-conRe          Exhaled                 100
+  I-133/SI-con            Exhaled                 100
+  I-133/SI-conRe          Exhaled                 100
+  I-133/RC-con            Exhaled                 100
+  I-133/LC-con            Exhaled                 100
+  I-133/RS-con            Exhaled                 100
+  I-133/UB-con            UB-con                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
+# ICRP Publ.137 p.84 Para.179
+  Te-133/Blood1           Blood                     ---
+  Te-133/Blood2           Blood                  1000
+  Te-133/C-bone-S         Blood                   100
+  Te-133/C-bone-V         Blood                   100
+  Te-133/T-bone-S         Blood                   100
+  Te-133/T-bone-V         Blood                   100
+  Te-133/Liver            Blood                  1000
+  Te-133/Thyroid          Blood                  1000
+  Te-133/Kidneys          Blood                  1000
+  Te-133/ST               Blood                 $(0.693 / (20/60/24))   # 半減期20分
+
+  I-133/Blood1            Blood                     ---
+  I-133/Liver1            Blood                  1000
+  I-133/Liver2            Blood                  1000
+  I-133/Kidneys1          Blood                  1000
+  I-133/Kidneys2          Blood                  1000
+  I-133/Thyroid1          Blood                  1000
+  I-133/Thyroid2          Blood                  1000
+  I-133/S-glands          Blood                  1000
+  I-133/St-wall           Blood                  1000
+  I-133/Other1            Blood                  1000
+  I-133/Other2            Blood                  1000
+
+  Xe-133m/UB-con          UB-con                    ---
+  Xe-133m/Blood           Blood                     ---
+  Xe-133m/Exhaled         Exhaled                   ---
+
+  Blood                   Exhaled                1000
