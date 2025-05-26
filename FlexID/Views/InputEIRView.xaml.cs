@@ -1,15 +1,14 @@
+namespace FlexID.Views;
+
 using System.Windows.Controls;
 
-namespace FlexID.Views
+/// <summary>
+/// Interaction logic for InputEIRView
+/// </summary>
+public partial class InputEIRView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for InputEIRView
-    /// </summary>
-    public partial class InputEIRView : UserControl
+    public InputEIRView()
     {
-        public InputEIRView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

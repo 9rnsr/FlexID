@@ -1,15 +1,14 @@
+namespace FlexID.Views;
+
 using System.Windows.Controls;
 
-namespace FlexID.Views
+/// <summary>
+/// Interaction logic for ScoeffCalc
+/// </summary>
+public partial class ScoeffCalcView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for ScoeffCalc
-    /// </summary>
-    public partial class ScoeffCalcView : UserControl
+    public ScoeffCalcView()
     {
-        public ScoeffCalcView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

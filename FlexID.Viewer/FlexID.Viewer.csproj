@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <ImplicitUsings>true</ImplicitUsings>
 
     <UseWPF>true</UseWPF>
     <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -19,6 +20,8 @@
     <PackageReference Include="OxyPlot.Wpf" />
     <PackageReference Include="Prism.DryIoc" />
     <PackageReference Include="ReactiveProperty" />
+
+    <Using Include="System.Diagnostics"/>
   </ItemGroup>
 
   <ItemGroup>

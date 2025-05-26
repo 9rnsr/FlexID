@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -15,6 +16,8 @@
     <PackageReference Include="Sprache" />
     <PackageReference Include="System.Memory" />
     <PackageReference Include="System.ValueTuple" />
+
+    <Using Include="System.Diagnostics"/>
   </ItemGroup>
 
   <ItemGroup>

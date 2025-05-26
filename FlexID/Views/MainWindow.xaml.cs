@@ -1,25 +1,24 @@
+namespace FlexID;
+
 using System.Windows;
 
-namespace FlexID
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        SizeToContent = SizeToContent.Height;
+
+        InitializeComponent();
+
+        ContentRendered += MainWindow_ContentRendered;
+
+        void MainWindow_ContentRendered(object sender, System.EventArgs e)
         {
-            SizeToContent = SizeToContent.Height;
-
-            InitializeComponent();
-
-            ContentRendered += MainWindow_ContentRendered;
-
-            void MainWindow_ContentRendered(object sender, System.EventArgs e)
-            {
-                ContentRendered -= MainWindow_ContentRendered;
-                SizeToContent = SizeToContent.Manual;
-            }
+            ContentRendered -= MainWindow_ContentRendered;
+            SizeToContent = SizeToContent.Manual;
         }
     }
 }
