@@ -10,20 +10,21 @@ namespace FlexID.Calc.Tests
         private string TestDir => TestFiles.Combine("TrialCalc");
 
         [TestMethod]
-        [DataRow("Ba-133_ing-Insoluble")]
-        [DataRow("Ba-133_ing-Soluble")]
-        [DataRow("Ba-133_inh-TypeF")]
-        [DataRow("Ba-133_inh-TypeM")]
-        [DataRow("Ba-133_inh-TypeS")]
-        [DataRow("Sr-90_ing-Other")]
-        [DataRow("Sr-90_ing-Titanate")]
-        [DataRow("Sr-90_inh-TypeF")]
-        [DataRow("Sr-90_inh-TypeM")]
-        [DataRow("Sr-90_inh-TypeS")]
-        public void Test_OIR(string target)
+        [DataRow("56-Ba/Ba-133/Ba-133_ing-Insoluble")]
+        [DataRow("56-Ba/Ba-133/Ba-133_ing-Soluble")]
+        [DataRow("56-Ba/Ba-133/Ba-133_inh-TypeF")]
+        [DataRow("56-Ba/Ba-133/Ba-133_inh-TypeM")]
+        [DataRow("56-Ba/Ba-133/Ba-133_inh-TypeS")]
+        [DataRow("38-Sr/Sr-90/Sr-90_ing-Other")]
+        [DataRow("38-Sr/Sr-90/Sr-90_ing-Titanate")]
+        [DataRow("38-Sr/Sr-90/Sr-90_inh-TypeF")]
+        [DataRow("38-Sr/Sr-90/Sr-90_inh-TypeM")]
+        [DataRow("38-Sr/Sr-90/Sr-90_inh-TypeS")]
+        public void Test_OIR(string path)
         {
+            var target = Path.GetFileNameWithoutExtension(path);
             var nuclide = target.Split('_')[0];
-            var inputPath = Path.Combine("inp", "OIR", nuclide, target + ".inp");
+            var inputPath = Path.Combine("inp", "OIR", path + ".inp");
 
             var expectDir = Path.Combine(TestDir, "Expect_OIR", nuclide);
             var resultDir = Path.Combine(TestDir, "Result_OIR~", nuclide);
