@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Expect/*.dat" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Expect/**/*.dat" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

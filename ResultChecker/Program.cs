@@ -13,33 +13,18 @@ namespace ResultChecker
 {
     internal partial class Program
     {
-        /// <summary>
-        /// OIRデータが格納されたディレクトリ。
-        /// </summary>
-        static string ExpectDir = "Expect";
-
-        /// <summary>
-        /// 処理結果の出力ディレクトリ。
-        /// </summary>
-        static string OutputDir;
-
-        /// <summary>
-        /// 処理結果の出力ファイル名。
-        /// </summary>
-        static string OutputFileName;
-
-        /// <summary>
-        /// 結果取得するための計算を実行するかどうか。
-        /// </summary>
-        static bool RunCalculation;
-
         static async Task<int> Main(string[] args)
         {
-            List<Regex> patterns = null;
+            // 処理結果の出力ディレクトリ。
+            var outputDir = "out";
 
-            OutputDir = "out";
-            OutputFileName = "summary.xlsx";
-            RunCalculation = true;
+            // 処理結果の出力ファイル名。
+            var outputFileName = "summary.xlsx";
+
+            // 結果取得するための計算を実行するかどうか。
+            var runCalculation = true;
+
+            List<Regex> patterns = null;
 
             if (args.Length >= 1)
             {
@@ -91,29 +76,29 @@ namespace ResultChecker
                     if (GetOption(out var output, "-o", "--out"))
                     {
                         // オプション値から出力ディレクトリと出力ファイル名の両方を設定する。
-                        OutputDir = Path.GetDirectoryName(output);
-                        OutputFileName = Path.GetFileName(output);
+                        outputDir = Path.GetDirectoryName(output);
+                        outputFileName = Path.GetFileName(output);
                         continue;
                     }
                     if (GetOption(out var outDir, "-od", "--output-dir"))
                     {
-                        OutputDir = outDir;
+                        outputDir = outDir;
                         continue;
                     }
                     if (GetOption(out var outFile, "-of", "--output-file"))
                     {
-                        OutputFileName = outFile;
+                        outputFileName = outFile;
                         continue;
                     }
 
                     if (IsOption("--run"))
                     {
-                        RunCalculation = true;
+                        runCalculation = true;
                         continue;
                     }
                     if (IsOption("--no-run"))
                     {
-                        RunCalculation = false;
+                        runCalculation = false;
                         continue;
                     }
 
@@ -142,30 +127,17 @@ namespace ResultChecker
                 }
             }
 
-            (string target, string inputPath)[] targets;
-            if (RunCalculation)
-            {
-                // パターンに合致するインプットを計算対象として収集する。
-                targets = GetInputs()
-                    .Select(inputPath => (target: Path.GetFileNameWithoutExtension(inputPath), inputPath))
-                    .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)
-                    .ToArray();
-            }
-            else
-            {
-                // 出力ディレクトリにあるログファイルから、処理対象を収集する。
-                targets = Directory.EnumerateFiles(OutputDir, "*.log")
-                    .Select(logFile => (target: Path.GetFileNameWithoutExtension(logFile), inputPath: ""))
-                    .Where(x => patterns?.Any(pattern => pattern.IsMatch(x.target)) ?? true)
-                    .ToArray();
-            }
+            // パターンに合致する処理対象を収集する。
+            var targets = GetTargets(outputDir, runCalculation)
+                .Where(target => patterns?.Any(pattern => pattern.IsMatch(target.Name)) ?? true)
+                .ToArray();
             if (targets.Length == 0)
             {
                 Console.Error.WriteLine($"error: there is no targets.");
                 return -1;
             }
 
-            Directory.CreateDirectory(OutputDir);
+            Directory.CreateDirectory(outputDir);
 
             var results = new ConcurrentBag<Result>();
 
@@ -176,55 +148,56 @@ namespace ResultChecker
 
             var presenter = new ProgressPresenter(targets.Length);
 
-            if (RunCalculation)
+            if (runCalculation)
             {
                 // 並列処理で計算を実施する。
-                Task.WaitAll(targets.Select(x => factory.StartNew(() => Process(x.target, x.inputPath))).ToArray());
+                Task.WaitAll(targets.Select(target => factory.StartNew(() => Process(target))).ToArray());
             }
             else
             {
                 // 同期処理で出力の取得と進捗表示を実施する。
                 presenter.Update();
-                foreach (var (target, inputPath) in targets)
+                foreach (var target in targets)
                 {
-                    Process(target, inputPath);
+                    Process(target);
                     presenter.Update();
                 }
                 presenter.Update();
             }
 
-            void Process(string target, string inputPath)
+            void Process(Target target)
             {
                 try
                 {
-                    presenter.Start(target);
+                    presenter.Start(target.Name);
 
-                    var result = RunCalculation
-                        ? CalcAndSummary(target, inputPath, OutputDir)
-                        : GetResult(target);
+                    if (runCalculation)
+                        RunCalc(target, outputDir);
+
+                    var result = GetResult(target);
                     results.Add(result);
 
-                    presenter.Stop(target, $"\x1B[36mOK\x1B[0m");
+                    presenter.Stop(target.Name, $"\x1B[36mOK\x1B[0m");
                 }
                 catch (Exception ex)
                 {
                     // 何らかのエラーが発生した場合。
                     results.Add(new Result { Target = target, HasErrors = true });
 
-                    presenter.Stop(target, $"\x1B[31mNG\x1B[0m", ex.Message);
+                    presenter.Stop(target.Name, $"\x1B[31mNG\x1B[0m", ex.Message);
                 }
 
                 // 1ケースの計算が終了するごとにGCを呼ばないと、並列計算数がだんだん減ってしまう。
-                if (RunCalculation)
+                if (runCalculation)
                     GC.Collect();
             }
 
             await presenter.WaitForExit();
 
-            var outputFilePath = Path.Combine(OutputDir, OutputFileName);
-            var sortedResults = results.OrderBy(r => r.Target).ToArray();
+            var outputFilePath = Path.Combine(outputDir, outputFileName);
+            var sortedResults = results.OrderBy(r => r.Target.Name).ToArray();
 
-            Console.Write($"\nGenerate {OutputFileName} ...");
+            Console.Write($"\nGenerate {outputFileName} ...");
             WriteSummaryExcel(outputFilePath, sortedResults);
             Console.WriteLine($"done");
 
@@ -251,11 +224,31 @@ namespace ResultChecker
         }
 
         /// <summary>
+        /// 計算および比較の対象。
+        /// </summary>
+        struct Target
+        {
+            public string Name;
+
+            public string Nuclide => Name.Split('_')[0];
+
+            public string TargetPath;
+
+            public string ExpectDosePath;
+
+            public string ExpectRetentionPath;
+
+            public string ResultDosePath;
+
+            public string ResultRetentionPath;
+        }
+
+        /// <summary>
         /// 計算および比較の結果。
         /// </summary>
         struct Result
         {
-            public string Target;
+            public Target Target;
 
             public bool HasErrors;
 
@@ -272,11 +265,16 @@ namespace ResultChecker
             public (double Min, double Max) FractionsThyroid;
         }
 
-        static Result CalcAndSummary(string target, string inputPath, string outputDir)
+        /// <summary>
+        /// 計算を実行する。
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="outputDir"></param>
+        static void RunCalc(Target target, string outputDir)
         {
-            var nuclide = target.Split('_')[0];
+            var nuclide = target.Nuclide;
 
-            var outputPath = Path.Combine(outputDir, target);
+            var outputPath = Path.Combine(outputDir, target.Name);
 
             // 計算時間メッシュはFlexID.Calcに付属のものを使用する。
             var cTimeMeshFile = @"lib\TimeMesh\time.dat";
@@ -286,7 +284,7 @@ namespace ResultChecker
 
             var commitmentPeriod = "50years";
 
-            var data = new InputDataReader_OIR(inputPath).Read();
+            var data = new InputDataReader_OIR(target.TargetPath).Read();
             data.OutputDose = true;
             data.OutputDoseRate = false;
             data.OutputRetention = true;
@@ -299,11 +297,14 @@ namespace ResultChecker
             main.CommitmentPeriod /**/= commitmentPeriod;
 
             main.Main(data);
-
-            return GetResult(target);
         }
 
-        static Result GetResult(string target)
+        /// <summary>
+        /// 計算と比較の結果を取得する。
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        static Result GetResult(Target target)
         {
             var result = new Result() { Target = target };
 
@@ -421,10 +422,12 @@ namespace ResultChecker
         /// <param name="mat"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static Dose GetExpectDoses(string target, string mat)
+        static Dose GetExpectDoses(Target target, string mat)
         {
-            var nuclide = target.Split('_')[0];
-            var filePath = Path.Combine(ExpectDir, $"{nuclide}.dat");
+            var nuclide = target.Nuclide;
+            var filePath = target.ExpectDosePath
+                ?? throw new FileNotFoundException("expect retention file", $"{nuclide}.dat");
+
             var (routeOfIntake, _, _) = DecomposeMaterial(mat);
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -482,10 +485,10 @@ namespace ResultChecker
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        static Dose GetResultDoses(string target)
+        static Dose GetResultDoses(Target target)
         {
-            var nuclide = target.Split('_')[0];
-            var filePath = Path.Combine(OutputDir, $"{target}_Dose.out");
+            var nuclide = target.Nuclide;
+            var filePath = target.ResultDosePath;
 
             // 組織加重係数データを読み込む。
             var (ts, ws) = InputDataReaderBase.ReadTissueWeights(Path.Combine("lib", "OIR", "wT.txt"));
@@ -603,10 +606,10 @@ namespace ResultChecker
         /// <param name="target"></param>
         /// <param name="resultNuc"></param>
         /// <returns></returns>
-        static List<Retention> GetResultRetentions(string target, string resultNuc)
+        static List<Retention> GetResultRetentions(Target target, string resultNuc)
         {
-            var nuclide = target.Split('_')[0];
-            var filePath = Path.Combine(OutputDir, $"{target}_Retention.out");
+            var nuclide = target.Nuclide;
+            var filePath = target.ResultRetentionPath;
 
             var retentions = new List<Retention>();
 
@@ -678,10 +681,11 @@ namespace ResultChecker
         /// <param name="retentionNuc">残留放射能データが対応する核種名</param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static List<Retention> GetExpectRetentions(string target, out string mat, out string retentionNuc)
+        static List<Retention> GetExpectRetentions(Target target, out string mat, out string retentionNuc)
         {
-            var nuclide = target.Split('_')[0];
-            var filePath = Path.Combine(ExpectDir, $"{target}.dat");
+            var nuclide = target.Nuclide;
+            var filePath = target.ExpectRetentionPath
+                ?? throw new FileNotFoundException("expect retention file", $"{target.Name}.dat");
 
             mat = "";
 
