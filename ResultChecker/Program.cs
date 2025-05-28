@@ -13,28 +13,18 @@ namespace ResultChecker
 {
     internal partial class Program
     {
-        /// <summary>
-        /// 処理結果の出力ディレクトリ。
-        /// </summary>
-        static string OutputDir;
-
-        /// <summary>
-        /// 処理結果の出力ファイル名。
-        /// </summary>
-        static string OutputFileName;
-
-        /// <summary>
-        /// 結果取得するための計算を実行するかどうか。
-        /// </summary>
-        static bool RunCalculation;
-
         static async Task<int> Main(string[] args)
         {
-            List<Regex> patterns = null;
+            // 処理結果の出力ディレクトリ。
+            var outputDir = "out";
 
-            OutputDir = "out";
-            OutputFileName = "summary.xlsx";
-            RunCalculation = true;
+            // 処理結果の出力ファイル名。
+            var outputFileName = "summary.xlsx";
+
+            // 結果取得するための計算を実行するかどうか。
+            var runCalculation = true;
+
+            List<Regex> patterns = null;
 
             if (args.Length >= 1)
             {
@@ -86,29 +76,29 @@ namespace ResultChecker
                     if (GetOption(out var output, "-o", "--out"))
                     {
                         // オプション値から出力ディレクトリと出力ファイル名の両方を設定する。
-                        OutputDir = Path.GetDirectoryName(output);
-                        OutputFileName = Path.GetFileName(output);
+                        outputDir = Path.GetDirectoryName(output);
+                        outputFileName = Path.GetFileName(output);
                         continue;
                     }
                     if (GetOption(out var outDir, "-od", "--output-dir"))
                     {
-                        OutputDir = outDir;
+                        outputDir = outDir;
                         continue;
                     }
                     if (GetOption(out var outFile, "-of", "--output-file"))
                     {
-                        OutputFileName = outFile;
+                        outputFileName = outFile;
                         continue;
                     }
 
                     if (IsOption("--run"))
                     {
-                        RunCalculation = true;
+                        runCalculation = true;
                         continue;
                     }
                     if (IsOption("--no-run"))
                     {
-                        RunCalculation = false;
+                        runCalculation = false;
                         continue;
                     }
 
@@ -138,7 +128,7 @@ namespace ResultChecker
             }
 
             // パターンに合致する処理対象を収集する。
-            var targets = GetTargets(OutputDir, RunCalculation)
+            var targets = GetTargets(outputDir, runCalculation)
                 .Where(target => patterns?.Any(pattern => pattern.IsMatch(target.Name)) ?? true)
                 .ToArray();
             if (targets.Length == 0)
@@ -147,7 +137,7 @@ namespace ResultChecker
                 return -1;
             }
 
-            Directory.CreateDirectory(OutputDir);
+            Directory.CreateDirectory(outputDir);
 
             var results = new ConcurrentBag<Result>();
 
@@ -158,7 +148,7 @@ namespace ResultChecker
 
             var presenter = new ProgressPresenter(targets.Length);
 
-            if (RunCalculation)
+            if (runCalculation)
             {
                 // 並列処理で計算を実施する。
                 Task.WaitAll(targets.Select(target => factory.StartNew(() => Process(target))).ToArray());
@@ -181,8 +171,8 @@ namespace ResultChecker
                 {
                     presenter.Start(target.Name);
 
-                    if (RunCalculation)
-                        RunCalc(target, OutputDir);
+                    if (runCalculation)
+                        RunCalc(target, outputDir);
 
                     var result = GetResult(target);
                     results.Add(result);
@@ -198,16 +188,16 @@ namespace ResultChecker
                 }
 
                 // 1ケースの計算が終了するごとにGCを呼ばないと、並列計算数がだんだん減ってしまう。
-                if (RunCalculation)
+                if (runCalculation)
                     GC.Collect();
             }
 
             await presenter.WaitForExit();
 
-            var outputFilePath = Path.Combine(OutputDir, OutputFileName);
+            var outputFilePath = Path.Combine(outputDir, outputFileName);
             var sortedResults = results.OrderBy(r => r.Target.Name).ToArray();
 
-            Console.Write($"\nGenerate {OutputFileName} ...");
+            Console.Write($"\nGenerate {outputFileName} ...");
             WriteSummaryExcel(outputFilePath, sortedResults);
             Console.WriteLine($"done");
 
