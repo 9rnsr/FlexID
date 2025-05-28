@@ -32,7 +32,7 @@ namespace ResultChecker
                     if (res.HasErrors)
                         continue;
 
-                    var sheetRes = package.Workbook.Worksheets.Add(res.Target);
+                    var sheetRes = package.Workbook.Worksheets.Add(res.Target.Name);
                     WriteResultSheet(sheetRes, res);
                 }
 
@@ -132,7 +132,7 @@ namespace ResultChecker
                 // Target
                 {
                     cells = sheet.Cells[r, colT];
-                    cells.Value = res.Target;
+                    cells.Value = res.Target.Name;
                     cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 }
 
@@ -304,7 +304,7 @@ namespace ResultChecker
             foreach (var res in results)
             {
                 // Target
-                sheet.Cells[r, 1].Value = res.Target;
+                sheet.Cells[r, 1].Value = res.Target.Name;
 
                 if (res.HasErrors)
                 {
@@ -380,7 +380,7 @@ namespace ResultChecker
             var expectActs = GetExpectRetentions(result.Target, out _, out var retentionNuc);
             var actualActs = GetResultRetentions(result.Target, retentionNuc);
 
-            sheet.Cells[1, 1].Value = result.Target;
+            sheet.Cells[1, 1].Value = result.Target.Name;
 
             const int rowH = 4;
             const int rowT = rowH + 1;
