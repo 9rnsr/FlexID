@@ -43,7 +43,7 @@ namespace ResultChecker
                     ? Directory.EnumerateFiles(inputDir, "*.inp", SearchOption.AllDirectories)
                     : Directory.EnumerateFiles(outputDir, "*.log");
 
-                var expects = Directory.EnumerateFiles(expectDir, "*.dat")
+                var expects = Directory.EnumerateFiles(expectDir, "*.dat", SearchOption.AllDirectories)
                     .Select(path => (Name: Path.GetFileNameWithoutExtension(path), Path: path)).ToArray();
 
                 return targets.Select(targetPath =>
