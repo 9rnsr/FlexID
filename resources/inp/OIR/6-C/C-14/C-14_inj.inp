@@ -1,0 +1,103 @@
+[title]
+C-14 Injection
+
+[nuclide]
+  C-14
+
+
+[C-14:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood0                Blood         # Generic model
+  acc   Blood1                Blood         # CO2 model
+  acc   Blood2                Blood         # CO2 model
+  acc   Sys-Tis(short)        Other
+  acc   Sys-Tis(long)         Other
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   ST3                   Other
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  exc   Exhalation            ---
+  exc   Excreta(skin)         ---
+
+[C-14:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.53 Table 3.3 / Ingested materials, All chemical forms
+  $fA = 0.99 # ≒1
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood0                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood0                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.66 Table 3.5
+  Blood1                  Exhalation               36.2
+  Blood1                  Excreta(skin)             0.3
+  Blood1                  UB-con                    0.65
+  Blood1                  RC-con                    0.15
+  Blood1                  ST0                      60
+  Blood1                  ST1                       1.8
+  Blood1                  ST2                       0.3
+  Blood1                  ST3                       0.44
+  Blood1                  T-bone-S                  0.09
+  Blood1                  C-bone-S                  0.06
+  Blood1                  T-bone-V                  0.006
+  Blood1                  C-bone-V                  0.004
+  ST0                     Blood1                   49.91
+  ST1                     Blood1                    1.331
+  ST2                     Blood1                    0.2218
+  ST3                     Blood1                    0.01664
+  ST1                     Blood2                    0.05545
+  ST2                     Blood2                    0.009242
+  ST3                     Blood2                    0.0006931
+  Blood2                  UB-con                 1000
+  T-bone-S                Blood1                    0.01733
+  C-bone-S                Blood1                    0.01733
+  T-bone-V                Blood1                    0.000493
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.134 p.68 Table 3.6
+  Blood0                  Sys-Tis(short)            1.2
+  Blood0                  Sys-Tis(long)             0.3
+  Blood0                  UB-con                    1.5
+  Sys-Tis(short)          Blood1                    0.0693
+  Sys-Tis(short)          Blood0                    0.0924
+  Sys-Tis(short)          RC-con                    0.0693
+  Sys-Tis(long)           Blood1                    0.0099
