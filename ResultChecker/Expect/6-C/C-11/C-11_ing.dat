@@ -1,0 +1,12 @@
+Radionuclide	C-11
+Route of Intake	Ingestion
+Material	All chemical forms, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*
+0.041667	1.3E-1	6.4E-2	4.7E-3
+0.083333	1.7E-2	4.1E-3	8.1E-4
+0.125	2.1E-3	3.1E-4	1.1E-4
+0.25	4.1E-6	2.9E-7	1.8E-7
+0.375	8.0E-9	3.5E-10	2.8E-10
