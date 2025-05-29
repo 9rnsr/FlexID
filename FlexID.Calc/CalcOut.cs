@@ -391,7 +391,7 @@ namespace FlexID.Calc
                 {
                     if (indexes.Length == 0)
                         return;
-                    var rete = indexes.Select(x => Act.OutNow[x.index].end * x.Rate).Sum();
+                    var rete = indexes.Select(x => (Act.OutNow[x.index].end < 1E-10 ? 0 : Act.OutNow[x.index].end) * x.Rate).Sum();
                     var cumu = indexes.Select(x => Act.OutTotalFromIntake[x.index] * x.Rate).Sum();
 
                     wsRete[i].Write("  {0:0.00000000E+00}", rete);
