@@ -1,0 +1,12 @@
+Radionuclide	C-11
+Route of Intake	Inhalation
+Material	Aerosols Barium carbonate, fA=0.99
+AMTD/AMAD, µm	5
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*
+0.041667	8.9E-2	1.1E-2	1.4E-3	7.0E-4
+0.083333	9.8E-3	7.9E-4	1.1E-4	7.3E-5
+0.125	1.1E-3	7.0E-5	1.1E-5	8.2E-6
+0.25	1.8E-6	8.9E-8	1.2E-8	1.4E-8
+0.375	3.0E-9	-	-	-
