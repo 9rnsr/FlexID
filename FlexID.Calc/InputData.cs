@@ -136,6 +136,8 @@ namespace FlexID.Calc
         /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数(女性)。
         /// </summary>
         public double[] S_CoefficientsF;
+
+        public override string ToString() => $"{Nuclide.Name}/{Name}";
     }
 
     [DebuggerDisplay("{Name}")]

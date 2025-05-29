@@ -936,6 +936,10 @@ namespace FlexID.Calc
                         //   ↓ ↓
                         //   Progeny_N/organDecay
 
+
+                        // TODO: organFromから始まるDecayChainを新規作成する代わりに、
+                        // organToから始まる、またはorganToを途中に含む既存のDecayChainを見つけ、その親としてorganFromを挿入する、とか？
+
                         var decayChain = GetDecayChain(organFrom);
                         if (hasCoeff)
                         {
