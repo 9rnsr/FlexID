@@ -391,7 +391,18 @@ namespace FlexID.Calc
                 {
                     if (indexes.Length == 0)
                         return;
-                    var rete = indexes.Select(x => (Act.OutNow[x.index].end < 1E-10 ? 0 : Act.OutNow[x.index].end) * x.Rate).Sum();
+#if true
+                    var rete = indexes
+                        // 各線源領域を構成するコンパートメントの残留放射能を合算する。
+                        .GroupBy(x => data.Organs[x.index].SourceRegion)
+                        .Select(g => (activity: g.Select(x => Act.OutNow[x.index].end).Sum(), Rate: g.First().Rate))
+                        // 個別の線源領域の残留放射能に対するカットオフを適用する。
+                        .Select(x => (x.activity < 1E-10 ? 0 : x.activity) * x.Rate)
+                        // 合算を行う。
+                        .Sum();
+#else
+                    var rete = indexes.Select(x => Act.OutNow[x.index].end * x.Rate).Sum();
+#endif
                     var cumu = indexes.Select(x => Act.OutTotalFromIntake[x.index] * x.Rate).Sum();
 
                     wsRete[i].Write("  {0:0.00000000E+00}", rete);
