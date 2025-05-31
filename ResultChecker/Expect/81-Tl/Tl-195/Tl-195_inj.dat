@@ -1,0 +1,21 @@
+Radionuclide	Tl-195
+Route of Intake	Injection
+Material	Injection, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Urine (24-hour sample)	Faeces (24-hour sample)	Alimentary Tract*	Skeleton*	Liver*
+0.041667	5.5E-1	-	-	1.9E-2	8.3E-2	2.9E-2
+0.083333	3.0E-1	-	-	1.1E-2	4.5E-2	1.6E-2
+0.125	1.7E-1	-	-	6.2E-3	2.5E-2	8.8E-3
+0.25	2.7E-2	-	-	1.2E-3	4.1E-3	1.4E-3
+0.375	4.6E-3	-	-	2.1E-4	6.8E-4	2.4E-4
+0.5	7.6E-4	-	-	3.9E-5	1.1E-4	3.9E-5
+0.625	1.3E-4	-	-	6.9E-6	1.9E-5	6.5E-6
+0.75	2.1E-5	-	-	1.2E-6	3.1E-6	1.1E-6
+0.875	3.4E-6	-	-	2.1E-7	5.1E-7	1.8E-7
+1	5.7E-7	1.4E-8	5.9E-9	3.7E-8	8.4E-8	2.9E-8
+1.125	9.5E-8	-	-	6.3E-9	1.4E-8	4.8E-9
+1.25	1.6E-8	-	-	1.1E-9	2.3E-9	8.0E-10
+1.375	2.6E-9	-	-	1.8E-10	3.8E-10	1.3E-10
+1.5	4.3E-10	-	-	-	-	-
