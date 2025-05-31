@@ -1,0 +1,208 @@
+[title]
+Tl-197 Ingestion
+
+[nuclide]
+  Tl-197  Hg-197
+
+
+[Tl-197:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other                 Other
+
+[Tl-197:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote§ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.346 Table 37.3
+  Plasma                  Liver                    10
+  Plasma                  Kidneys                  10
+  Plasma                  RBC                       5
+  Plasma                  T-bone-S                 15
+  Plasma                  C-bone-S                 15
+  Plasma                  Other                   140
+  Plasma                  UB-con                    1.5
+  Plasma                  RC-con                    3.5
+  RBC                     Plasma                    3.7
+  Liver                   Plasma                    2.5
+  Kidneys                 Plasma                    2.5
+  T-bone-S                Plasma                    2.5
+  C-bone-S                Plasma                    2.5
+  Other                   Plasma                    2.5
+
+
+[Hg-197:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+ #acc   Plasma0               Blood     # Gas,Vapor only
+  acc   Plasma1               Blood
+  acc   Plasma2               Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Kidneys               Kidneys
+  acc   Liver                 Liver
+  acc   Brain1                Brain
+  acc   Brain2                Brain
+  acc   Other1                Other
+  acc   Other2                Other
+  exc   OtherExcreta          ---
+
+[Hg-197:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.1
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Tl-197/Oralcavity       Oralcavity                ---
+  Tl-197/Oesophagus-f     Oesophagus-f              ---
+  Tl-197/Oesophagus-s     Oesophagus-s              ---
+  Tl-197/St-con           St-con                    ---
+  Tl-197/SI-con           SI-con                    ---
+  Tl-197/SI-conRe         SI-conRe                  ---
+  Tl-197/RC-con           RC-con                    ---
+  Tl-197/LC-con           LC-con                    ---
+  Tl-197/RS-con           RS-con                    ---
+  Tl-197/Faeces           Faeces                    ---
+  Tl-197/UB-con           UB-con                    ---
+  Tl-197/Urine            Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma1               $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma1               $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.339 Table 36.5
+  Plasma1                 RBC                       0.48
+  Plasma1                 Plasma2                   2.4
+  Plasma1                 Kidneys                   7.2
+  Plasma1                 Liver                     4.8
+  Plasma1                 Brain1                    0.048
+  Plasma1                 T-bone-S                  0.024
+  Plasma1                 C-bone-S                  0.024
+  Plasma1                 Other1                    5.184
+  Plasma1                 Other2                    0.72
+  Plasma1                 SI-conRe                  1.92
+  Plasma1                 OtherExcreta              1.2
+  RBC                     Plasma1                   0.33
+  Plasma2                 Plasma1                   0.6
+  Kidneys                 UB-con                    0.0198
+  Liver                   SI-conRe                  0.1733
+  Brain1                  Plasma1                   0.0329
+  Brain1                  Brain2                    0.00173
+  Brain2                  Plasma1                   0.00038
+  T-bone-S                Plasma1                   0.0347
+  C-bone-S                Plasma1                   0.0347
+  Other1                  Plasma1                   0.0347
+  Other2                  Plasma1                   0.00693
+
+# ICRP Publ.151 p.346 Para.709
+# > (709) Progeny of thallium addressed in this publication are isotopes of thallium,
+# > mercury, and gold. The model for thallium as a parent is applied to thallium produced
+# > by decay of another isotope of thallium. The characteristic models for gold
+# > and divalent mercury are applied to these elements as members of chains headed by
+# > thallium with added transfer coefficients needed to solve the linked biokinetic models
+# > of chains headed by thallium. The following transfer rates to the central blood
+# > compartment are added to the characteristic model for mercury or gold: 1000 d⁻¹
+# > if produced in a blood compartment not contained in the progeny’s model; and at the
+# > following element-specific rates if produced in any other ambiguous compartment:
+# > mercury, 0.0347 d⁻¹; and gold, 0.0693 d⁻¹.
+# > (709) 本刊行物で扱うタリウムの子孫元素は、タリウム、水銀、および金の同位体である。
+# > タリウムを親元素とするモデルは、タリウムの他の同位体の崩壊によって生成されるタリウムに
+# > 適用される。金および二価水銀の特性モデルは、タリウムを先頭とする連鎖のメンバーとして
+# > これらの元素に適用され、タリウムを先頭とする連鎖の連結生体運動モデルを解くために
+# > 必要な移動係数が加算される。水銀または金の特性モデルには、中心血液コンパートメントへの
+# > 以下の移動速度が追加される：
+# >   子孫元素のモデルに含まれない血液コンパートメントで生成される場合、1000 d⁻¹；
+# >   その他のあいまいなコンパートメントで生成される場合、以下の元素固有の移動速度：水銀：0.0347 d⁻¹；金：0.0693 d⁻¹。
+
+  Tl-197/Plasma           Plasma1                1000
+  Tl-197/RBC              Plasma1                1000
+  Tl-197/C-bone-S         C-bone-S                  ---
+  Tl-197/T-bone-S         T-bone-S                  ---
+  Tl-197/Liver            Liver                     ---
+  Tl-197/Kidneys          Kidneys                   ---
+  Tl-197/Other            Plasma1                   0.0347
