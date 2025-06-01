@@ -1,0 +1,10 @@
+Radionuclide	Au-186
+Route of Intake	Inhalation
+Material	Aerosols Type S, Elemental gold, gold-labelled Teflon, fA=1E-3
+AMTD/AMAD, µm	5
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.7E-2	5.7E-3	1.6E-3	2.7E-7	3.9E-7
+0.083333	3.4E-4	1.3E-4	3.0E-5	9.0E-9	1.3E-8
+0.125	6.8E-6	3.0E-6	6.0E-7	2.5E-10	3.8E-10
