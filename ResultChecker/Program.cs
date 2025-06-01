@@ -426,7 +426,7 @@ namespace ResultChecker
         {
             var nuclide = target.Nuclide;
             var filePath = target.ExpectDosePath
-                ?? throw new FileNotFoundException("expect retention file", $"{nuclide}.dat");
+                ?? throw new FileNotFoundException("expect dose file", $"{nuclide}.dat");
 
             var (routeOfIntake, _, _) = DecomposeMaterial(mat);
 
