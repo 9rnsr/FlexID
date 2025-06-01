@@ -159,6 +159,12 @@ namespace FlexID.Calc
             if (!nuclides.Any())
                 throw Program.Error($"None of nuclides defined.");
 
+            foreach (var undefinedNuc in nuclideOrgans.Keys.Except(nuclides.Select(n => n.Name)))
+                throw Program.Error($"Undefined nuclide '{undefinedNuc}' is used to define compartments.");
+
+            foreach (var undefinedNuc in nuclideTransfers.Keys.Except(nuclides.Select(n => n.Name)))
+                throw Program.Error($"Undefined nuclide '{undefinedNuc}' is used to define transfers.");
+
             // 全てのコンパートメントを定義する。
             DefineCompartments(data);
 

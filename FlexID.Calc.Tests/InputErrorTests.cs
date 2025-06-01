@@ -154,6 +154,25 @@ namespace FlexID.Calc.Tests
         }
 
         [TestMethod]
+        public void SectionCompartmentNuclideUndefined()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  Sr-90",
+                "",
+                "[Pu-249:compartment]",
+                "  inp    input     ---",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Undefined nuclide 'Pu-249' is used to define compartments.", e.Message);
+        }
+
+        [TestMethod]
         public void SectionCompartmentDuplicated()
         {
             var reader = CreateReader(new[]
@@ -220,6 +239,25 @@ namespace FlexID.Calc.Tests
 
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("None of compartments defined for nuclide 'Sr-90'.", e.Message);
+        }
+
+        [TestMethod]
+        public void SectionTransferNuclideUndefined()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  Sr-90",
+                "",
+                "[Pu-249:transfer]",
+                "  xxx    yyy    100",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Undefined nuclide 'Pu-249' is used to define transfers.", e.Message);
         }
 
         [TestMethod]
