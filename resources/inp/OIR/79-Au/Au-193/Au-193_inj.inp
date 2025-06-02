@@ -1,0 +1,225 @@
+[title]
+Au-193 Injection
+
+[nuclide]
+  Au-193  Pt-193
+
+
+[Au-193:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other1                Other
+  acc   Other2                Other
+
+[Au-193:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+  $fA    = 0.1
+  $fA_Re = 0.1          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.321 Table 35.3
+  Blood1                  Blood2                    0.1
+  Blood1                  Kidneys                   0.1
+  Blood1                  Liver                     0.1
+  Blood1                  Other1                    0.18
+  Blood1                  Other2                    0.1
+  Blood1                  UB-con                    0.3
+  Blood1                  RC-con                    0.1
+  Blood1                  T-bone-S                  0.01
+  Blood1                  C-bone-S                  0.01
+  Blood2                  Blood1                    0.139
+  Kidneys                 UB-con                    0.0693
+  Liver                   Blood1                    0.0693
+  Other1                  Blood1                    0.0693
+  Other2                  Blood1                    0.0139
+  T-bone-S                Blood1                    0.0693
+  C-bone-S                Blood1                    0.0693
+
+
+[Pt-193:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Pt-193:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.305 Table 34.2 / Ingested materials, Soluble forms
+  $fA_MaxValueOfIng = 0.01
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Au-193/Oralcavity       Oralcavity                ---
+  Au-193/Oesophagus-f     Oesophagus-f              ---
+  Au-193/Oesophagus-s     Oesophagus-s              ---
+  Au-193/St-con           St-con                    ---
+  Au-193/SI-con           SI-con                    ---
+  Au-193/SI-conRe         SI-conRe                  ---
+  Au-193/RC-con           RC-con                    ---
+  Au-193/LC-con           LC-con                    ---
+  Au-193/RS-con           RS-con                    ---
+  Au-193/Faeces           Faeces                    ---
+  Au-193/UB-con           UB-con                    ---
+  Au-193/Urine            Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.308 Table 34.3
+  Blood1                  SI-conRe                  3.0
+  Blood1                  UB-con                   23
+  Blood1                  Liver1                   12
+  Blood1                  UrinaryPath              10.67
+  Blood1                  OtherKidneyTis            0.33
+  Blood1                  Blood2                   27
+  Blood1                  ST0                      15
+  Blood1                  ST1                       2.5
+  Blood1                  ST2                       2.5
+  Blood1                  C-bone-S                  1.0
+  Blood1                  T-bone-S                  3.0
+  Blood2                  Blood1                    0.6931
+  Liver1                  Blood1                    0.09704
+  Liver1                  SI-conRe                  0.03466
+  Liver1                  Liver2                    0.006931
+  Liver2                  Blood1                    0.003798
+  UrinaryPath             UB-con                    0.1386
+  OtherKidneyTis          Blood1                    0.003798
+  ST0                     Blood1                    0.09902
+  ST1                     Blood1                    0.0231
+  ST2                     Blood1                    0.0009495
+  C-bone-S                Blood1                    0.07922
+  T-bone-S                Blood1                    0.07922
+  C-bone-S                C-bone-V                  0.0198
+  T-bone-S                T-bone-V                  0.0198
+  C-bone-V                Blood1                    0.0000821
+  T-bone-V                Blood1                    0.000493
+
+# ICRP Publ.151 p.320 Para.651
+# > (651) Progeny of gold addressed in this publication are radioisotopes of gold,
+# > rhenium, osmium, iridium, and platinum. The model for gold as a parent is applied
+# > to gold as a progeny of gold. The models for rhenium, osmium, iridium, and platinum
+# > as progeny of gold are expansions of the characteristic models for these elements
+# > with added compartments and associated transfer coefficients needed to solve
+# > the linked biokinetic models for chains headed by gold (see Annex B). If produced in
+# > an ambiguous compartment (i.e. a compartment not explicitly named in the progeny’s
+# > model), the progeny is assumed to transfer at a specified rate to the central
+# > blood compartment of its characteristic biokinetic model, and to follow that model
+# > thereafter. The following transfer rates to the central blood compartment are
+# > assigned to rhenium, osmium, iridium, and platinum produced in an ambiguous
+# > compartment: 1000 d⁻¹ if produced in a blood compartment; and at the following
+# > element-specific rates if produced in a tissue compartment: rhenium, 0.462 d⁻¹;
+# > osmium or platinum, 0.09902 d⁻¹; and iridium, 0.0693 d⁻¹.
+# > (651) 本刊行物で扱う金の子孫元素は、金、レニウム、オスミウム、イリジウム、および
+# > 白金の放射性同位元素である。親元素としての金のモデルは、金の子孫元素としての金に
+# > 適用される。金の子孫元素としてのレニウム、オスミウム、イリジウム、および白金のモデルは、
+# > これらの元素の特性モデルの拡張版であり、金を先頭とする連鎖の連結生体動態モデルを
+# > 解くために必要なコンパートメントと関連する移動係数が追加されている（付録B参照）。
+# > あいまいなコンパートメント（すなわち、子孫元素のモデルで明示的に名前が付けられていない
+# > コンパートメント）で生成された場合、子孫元素は、その特性生体動態モデルの
+# > 中心血液コンパートメントに特定の速度で移行し、その後はそのモデルに従うと仮定される。
+# > 不明瞭なコンパートメントで生成されたレニウム、オスミウム、イリジウム、および白金の
+# > 中心血液コンパートメントへの移行速度は、血液コンパートメントで生成された場合は1000 d⁻¹、
+# > 組織コンパートメントで生成された場合は以下の元素固有の移行速度となる：
+# > レニウム：0.462 d⁻¹、オスミウムまたは白金：0.09902 d⁻¹、イリジウム：0.0693 d⁻¹。
+
+  Au-193/Blood1           Blood1                    ---
+  Au-193/Blood2           Blood2                    ---
+  Au-193/C-bone-S         C-bone-S                  ---
+  Au-193/T-bone-S         T-bone-S                  ---
+  Au-193/Liver            Blood1                    0.09902
+  Au-193/Kidneys          Blood1                    0.09902
+  Au-193/Other1           Blood1                    0.09902
+  Au-193/Other2           Blood1                    0.09902
