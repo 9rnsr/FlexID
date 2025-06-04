@@ -1,0 +1,331 @@
+[title]
+S-38 Inhalation:Type-F
+
+[nuclide]
+  S-38  Cl-38
+
+
+[S-38:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+# ICRP Publ.134 p.108 Fig.5.1 inorganic sulpher
+  acc   Blood                 Blood
+  acc   Cartilage             Cartilage
+  acc   RedMarrow             R-marrow
+  acc   Other                 Other
+
+[S-38:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 30
+  $ss = 0
+  $fb = 0               # footnote*
+  $sb = 0               # footnote*
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote††
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Blood                 $( (1 - fb) * sr )
+  INT-F                   Blood                 $( (1 - fb) * sr )
+  bb-F                    Blood                 $( (1 - fb) * sr )
+  bbseq-F                 Blood                 $( (1 - fb) * sr )
+  BB-F                    Blood                 $( (1 - fb) * sr )
+  BBseq-F                 Blood                 $( (1 - fb) * sr )
+  ET2-F                   Blood                 $( (1 - fb) * sr )
+  ETseq-F                 Blood                 $( (1 - fb) * sr )
+  LNET-F                  Blood                 $( (1 - fb) * sr )
+  LNTH-F                  Blood                 $( (1 - fb) * sr )
+
+  ALV-S                   Blood                 $( (1 - fb) * ss )
+  INT-S                   Blood                 $( (1 - fb) * ss )
+  bb-S                    Blood                 $( (1 - fb) * ss )
+  bbseq-S                 Blood                 $( (1 - fb) * ss )
+  BB-S                    Blood                 $( (1 - fb) * ss )
+  BBseq-S                 Blood                 $( (1 - fb) * ss )
+  ET2-S                   Blood                 $( (1 - fb) * ss )
+  ETseq-S                 Blood                 $( (1 - fb) * ss )
+  LNET-S                  Blood                 $( (1 - fb) * ss )
+  LNTH-S                  Blood                 $( (1 - fb) * ss )
+
+  ALV-B                   Blood                 $sb
+  INT-B                   Blood                 $sb
+  bb-B                    Blood                 $sb
+  bbseq-B                 Blood                 $sb
+  BB-B                    Blood                 $sb
+  BBseq-B                 Blood                 $sb
+  ET2-B                   Blood                 $sb
+  ETseq-B                 Blood                 $sb
+  LNET-B                  Blood                 $sb
+  LNTH-B                  Blood                 $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.108 Table 5.4
+  Blood                   RedMarrow                 0.075
+  Blood                   Cartilage                 0.25
+  Blood                   Other                     0.175
+  Blood                   UB-con                    1.8
+  Blood                   RC-con                    0.2
+  RedMarrow               Blood                     0.3
+  Cartilage               Blood                     0.1
+  Other                   Blood                     3.5
+
+
+# ICRP Publ.134 p.110 Para.217
+# > (217) The only radioactive progeny of a sulphur isotope addressed in this publication
+# > is 38Cl (t½=37.24 min), produced by decay of 38S. It is assumed for dosimetric
+# > purposes that 38Cl decays at its site of production in the body.
+# > (217) 本稿で扱う硫黄同位体の放射性子孫核種は、38Sの崩壊によって生成される38Cl（t½=37.24分）
+# > のみである。線量評価の目的上、38Clは体内で生成した部位で崩壊すると仮定する。
+
+[Cl-38:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+# ICRP Publ.134 p.108 Fig.5.1 inorganic sulpher
+  acc   Blood                 Blood
+  acc   Cartilage             Cartilage
+  acc   RedMarrow             R-marrow
+  acc   Other                 Other
+
+[Cl-38:transfer]
+  S-38/ET1-F              ET1-F                     ---
+  S-38/ET2-F              ET2-F                     ---
+  S-38/ETseq-F            ETseq-F                   ---
+  S-38/LNET-F             LNET-F                    ---
+  S-38/BB-F               BB-F                      ---
+  S-38/BBseq-F            BBseq-F                   ---
+  S-38/bb-F               bb-F                      ---
+  S-38/bbseq-F            bbseq-F                   ---
+  S-38/ALV-F              ALV-F                     ---
+  S-38/INT-F              INT-F                     ---
+  S-38/LNTH-F             LNTH-F                    ---
+  S-38/ET1-S              ET1-S                     ---
+  S-38/ET2-S              ET2-S                     ---
+  S-38/ETseq-S            ETseq-S                   ---
+  S-38/LNET-S             LNET-S                    ---
+  S-38/BB-S               BB-S                      ---
+  S-38/BBseq-S            BBseq-S                   ---
+  S-38/bb-S               bb-S                      ---
+  S-38/bbseq-S            bbseq-S                   ---
+  S-38/ALV-S              ALV-S                     ---
+  S-38/INT-S              INT-S                     ---
+  S-38/LNTH-S             LNTH-S                    ---
+  S-38/ET2-B              ET2-B                     ---
+  S-38/ETseq-B            ETseq-B                   ---
+  S-38/LNET-B             LNET-B                    ---
+  S-38/BB-B               BB-B                      ---
+  S-38/BBseq-B            BBseq-B                   ---
+  S-38/bb-B               bb-B                      ---
+  S-38/bbseq-B            bbseq-B                   ---
+  S-38/ALV-B              ALV-B                     ---
+  S-38/INT-B              INT-B                     ---
+  S-38/LNTH-B             LNTH-B                    ---
+  S-38/Environment        Environment               ---
+
+  S-38/Oralcavity         Oralcavity                ---
+  S-38/Oesophagus-f       Oesophagus-f              ---
+  S-38/Oesophagus-s       Oesophagus-s              ---
+  S-38/St-con             St-con                    ---
+  S-38/SI-con             SI-con                    ---
+  S-38/SI-conRe           SI-conRe                  ---
+  S-38/RC-con             RC-con                    ---
+  S-38/LC-con             LC-con                    ---
+  S-38/RS-con             RS-con                    ---
+  S-38/Faeces             Faeces                    ---
+  S-38/UB-con             UB-con                    ---
+  S-38/Urine              Urine                     ---
+
+  S-38/Blood              Blood                     ---
+  S-38/Cartilage          Cartilage                 ---
+  S-38/RedMarrow          RedMarrow                 ---
+  S-38/Other              Other                     ---

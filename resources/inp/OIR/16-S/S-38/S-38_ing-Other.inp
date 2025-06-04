@@ -1,0 +1,122 @@
+[title]
+S-38 Ingestion:Other
+
+[nuclide]
+  S-38  Cl-38
+
+
+[S-38:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+# ICRP Publ.134 p.108 Fig.5.1 inorganic sulpher
+  acc   Blood                 Blood
+  acc   Cartilage             Cartilage
+  acc   RedMarrow             R-marrow
+  acc   Other                 Other
+
+[S-38:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.104 Table 5.3 / Ingested materials, All other forms
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote††
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.108 Table 5.4
+  Blood                   RedMarrow                 0.075
+  Blood                   Cartilage                 0.25
+  Blood                   Other                     0.175
+  Blood                   UB-con                    1.8
+  Blood                   RC-con                    0.2
+  RedMarrow               Blood                     0.3
+  Cartilage               Blood                     0.1
+  Other                   Blood                     3.5
+
+
+# ICRP Publ.134 p.110 Para.217
+# > (217) The only radioactive progeny of a sulphur isotope addressed in this publication
+# > is 38Cl (t½=37.24 min), produced by decay of 38S. It is assumed for dosimetric
+# > purposes that 38Cl decays at its site of production in the body.
+# > (217) 本稿で扱う硫黄同位体の放射性子孫核種は、38Sの崩壊によって生成される38Cl（t½=37.24分）
+# > のみである。線量評価の目的上、38Clは体内で生成した部位で崩壊すると仮定する。
+
+[Cl-38:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+# ICRP Publ.134 p.108 Fig.5.1 inorganic sulpher
+  acc   Blood                 Blood
+  acc   Cartilage             Cartilage
+  acc   RedMarrow             R-marrow
+  acc   Other                 Other
+
+[Cl-38:transfer]
+  S-38/Oralcavity         Oralcavity                ---
+  S-38/Oesophagus-f       Oesophagus-f              ---
+  S-38/Oesophagus-s       Oesophagus-s              ---
+  S-38/St-con             St-con                    ---
+  S-38/SI-con             SI-con                    ---
+  S-38/SI-conRe           SI-conRe                  ---
+  S-38/RC-con             RC-con                    ---
+  S-38/LC-con             LC-con                    ---
+  S-38/RS-con             RS-con                    ---
+  S-38/Faeces             Faeces                    ---
+  S-38/UB-con             UB-con                    ---
+  S-38/Urine              Urine                     ---
+
+  S-38/Blood              Blood                     ---
+  S-38/Cartilage          Cartilage                 ---
+  S-38/RedMarrow          RedMarrow                 ---
+  S-38/Other              Other                     ---
