@@ -1199,6 +1199,31 @@ namespace FlexID.Calc.Tests
             var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
             Assert.AreEqual("Total [%] of transfer paths from 'input' is  not 100%, but 99.999%.", e.Message);
         }
+
+        [TestMethod]
+        public void TransferCoefficientDivideByZero()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "  Sr-90  6.596156E-05",
+                "",
+                "[Sr-90:compartment]",
+                "  inp    input      ---",
+                "  acc    ST0        ---",
+                "  acc    ST1        ---",
+                "",
+                "[Sr-90:transfer]",
+                "  input  ST0        100%",
+                "  ST0    ST1      $(10 / 0)",
+            });
+
+            var e = Assert.ThrowsException<ApplicationException>(() => reader.Read());
+            Assert.AreEqual("Line 14: Transfer coefficient evaluation failed: divide by zero.", e.Message);
+        }
     }
 
     class InputErrorTestHelpers
