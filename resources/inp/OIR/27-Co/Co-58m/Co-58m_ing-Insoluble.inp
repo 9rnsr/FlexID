@@ -1,0 +1,220 @@
+[title]
+Co-58m Ingestion:Insoluble
+
+[nuclide]
+  Co-58m  Co-58
+
+
+[Co-58m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+
+[Co-58m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.156 Table 8.2 / Ingested materials, Insoluble forms
+  $fA    = 5E-2
+  $fA_Re = 0.1          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.169 Table 8.3
+  Blood1                  Liver1                   70
+  Blood1                  UB-con                   60
+  Blood1                  RC-con                    4.0
+  Blood1                  ST0                      18
+  Blood1                  ST1                      10
+  Blood1                  ST2                       4.0
+  Blood1                  C-bone-S                  6.0
+  Blood1                  T-bone-S                  6.0
+  Blood1                  Kidneys1                  9.0
+  Blood1                  Kidneys2                  1.0
+  Blood1                  Blood2                   12
+  Blood2                  Blood1                    0.693
+  Liver1                  SI-conRe                  0.0924
+  Liver1                  Blood1                    0.347
+  Liver1                  Liver2                    0.0231
+  Liver2                  Blood1                    0.0019
+  ST0                     Blood1                    0.099
+  ST1                     Blood1                    0.0139
+  ST2                     Blood1                    0.00095
+  C-bone-S                Blood1                    0.0842
+  C-bone-S                C-bone-V                  0.0149
+  T-bone-S                Blood1                    0.0842
+  T-bone-S                T-bone-V                  0.0149
+  C-bone-V                Blood1                    0.0000821
+  T-bone-V                Blood1                    0.000493
+  Kidneys1                UB-con                    0.462
+  Kidneys2                Blood1                    0.0019
+
+
+[Co-58:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+
+[Co-58:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.156 Table 8.2 / Ingested materials, All chemical forms
+  $fA_MaxValueOfIng = 0.1
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Co-58m/Oralcavity       Oralcavity                ---
+  Co-58m/Oesophagus-f     Oesophagus-f              ---
+  Co-58m/Oesophagus-s     Oesophagus-s              ---
+  Co-58m/St-con           St-con                    ---
+  Co-58m/SI-con           SI-con                    ---
+  Co-58m/SI-conRe         SI-conRe                  ---
+  Co-58m/RC-con           RC-con                    ---
+  Co-58m/LC-con           LC-con                    ---
+  Co-58m/RS-con           RS-con                    ---
+  Co-58m/Faeces           Faeces                    ---
+  Co-58m/UB-con           UB-con                    ---
+  Co-58m/Urine            Urine                     ---
+
+  Co-58m/Blood1           Blood1                    ---
+  Co-58m/Blood2           Blood2                    ---
+  Co-58m/ST0              ST0                       ---
+  Co-58m/ST1              ST1                       ---
+  Co-58m/ST2              ST2                       ---
+  Co-58m/C-bone-S         C-bone-S                  ---
+  Co-58m/C-bone-V         C-bone-V                  ---
+  Co-58m/T-bone-S         T-bone-S                  ---
+  Co-58m/T-bone-V         T-bone-V                  ---
+  Co-58m/Liver1           Liver1                    ---
+  Co-58m/Liver2           Liver2                    ---
+  Co-58m/Kidneys1         Kidneys1                  ---
+  Co-58m/Kidneys2         Kidneys2                  ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.169 Table 8.3
+  Blood1                  Liver1                   70
+  Blood1                  UB-con                   60
+  Blood1                  RC-con                    4.0
+  Blood1                  ST0                      18
+  Blood1                  ST1                      10
+  Blood1                  ST2                       4.0
+  Blood1                  C-bone-S                  6.0
+  Blood1                  T-bone-S                  6.0
+  Blood1                  Kidneys1                  9.0
+  Blood1                  Kidneys2                  1.0
+  Blood1                  Blood2                   12
+  Blood2                  Blood1                    0.693
+  Liver1                  SI-conRe                  0.0924
+  Liver1                  Blood1                    0.347
+  Liver1                  Liver2                    0.0231
+  Liver2                  Blood1                    0.0019
+  ST0                     Blood1                    0.099
+  ST1                     Blood1                    0.0139
+  ST2                     Blood1                    0.00095
+  C-bone-S                Blood1                    0.0842
+  C-bone-S                C-bone-V                  0.0149
+  T-bone-S                Blood1                    0.0842
+  T-bone-S                T-bone-V                  0.0149
+  C-bone-V                Blood1                    0.0000821
+  T-bone-V                Blood1                    0.000493
+  Kidneys1                UB-con                    0.462
+  Kidneys2                Blood1                    0.0019
