@@ -1,0 +1,11 @@
+Radionuclide	Co-62m
+Route of Intake	Ingestion
+Material	All chemical forms, fA=0.1
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	5.1E-2	5.0E-2	2.7E-5	1.3E-4
+0.083333	2.5E-3	2.4E-3	3.8E-6	2.0E-5
+0.125	1.3E-4	1.2E-4	3.2E-7	1.7E-6
+0.25	1.6E-8	1.5E-8	-	4.0E-10
