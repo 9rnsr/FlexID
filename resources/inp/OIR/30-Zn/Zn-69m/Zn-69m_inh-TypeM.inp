@@ -1,0 +1,426 @@
+[title]
+Zn-69m Inhalation:Type-M
+
+[nuclide]
+  Zn-69m  Zn-69
+
+
+[Zn-69m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   Muscle                Muscle
+  acc   Kidneys               Kidneys
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  exc   Excreta               ---
+
+[Zn-69m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fA    = 0.1
+  $fA_Re = 0.5          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
+
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.199 Table 9.4
+  Plasma                  Liver1                   60
+  Plasma                  Kidneys                   4
+  Plasma                  Pancreas                  3
+  Plasma                  Muscle                    2
+  Plasma                  RBC                       1.5
+  Plasma                  ST0                      40
+  Plasma                  ST1                      30
+  Plasma                  ST2                       0.4
+  Plasma                  UB-con                    0.13
+  Plasma                  Excreta                   0.13
+  Plasma                  SI-conRe                  0.2
+  Plasma                  T-bone-S                  0.15
+  Plasma                  C-bone-S                  0.3
+  Liver1                  Plasma                   10
+  Liver1                  SI-conRe                  0.067
+  Liver1                  Liver2                   10
+  Liver2                  Plasma                    0.6
+  Kidneys                 Plasma                    0.7
+  Pancreas                Plasma                    1.5
+  Pancreas                SI-conRe                  1.0
+  Muscle                  Plasma                    0.005
+  RBC                     Plasma                    0.14
+  ST0                     Plasma                   10
+  ST1                     Plasma                    3
+  ST2                     Plasma                    0.01
+  T-bone-S                Plasma                    0.01
+  C-bone-S                Plasma                    0.01
+  T-bone-S                T-bone-V                  0.00053
+  C-bone-S                C-bone-V                  0.00053
+  T-bone-V                Plasma                    0.000493
+  C-bone-V                Plasma                    0.0000821
+
+
+[Zn-69:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   Muscle                Muscle
+  acc   Kidneys               Kidneys
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  exc   Excreta               ---
+
+[Zn-69:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.5
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# from parent to progeny
+  Zn-69m/ET1-F            ET1-F                     ---
+  Zn-69m/ET2-F            ET2-F                     ---
+  Zn-69m/ETseq-F          ETseq-F                   ---
+  Zn-69m/LNET-F           LNET-F                    ---
+  Zn-69m/BB-F             BB-F                      ---
+  Zn-69m/BBseq-F          BBseq-F                   ---
+  Zn-69m/bb-F             bb-F                      ---
+  Zn-69m/bbseq-F          bbseq-F                   ---
+  Zn-69m/ALV-F            ALV-F                     ---
+  Zn-69m/INT-F            INT-F                     ---
+  Zn-69m/LNTH-F           LNTH-F                    ---
+  Zn-69m/ET1-S            ET1-S                     ---
+  Zn-69m/ET2-S            ET2-S                     ---
+  Zn-69m/ETseq-S          ETseq-S                   ---
+  Zn-69m/LNET-S           LNET-S                    ---
+  Zn-69m/BB-S             BB-S                      ---
+  Zn-69m/BBseq-S          BBseq-S                   ---
+  Zn-69m/bb-S             bb-S                      ---
+  Zn-69m/bbseq-S          bbseq-S                   ---
+  Zn-69m/ALV-S            ALV-S                     ---
+  Zn-69m/INT-S            INT-S                     ---
+  Zn-69m/LNTH-S           LNTH-S                    ---
+  Zn-69m/Environment      Environment               ---
+
+  Zn-69m/Oralcavity       Oralcavity                ---
+  Zn-69m/Oesophagus-f     Oesophagus-f              ---
+  Zn-69m/Oesophagus-s     Oesophagus-s              ---
+  Zn-69m/St-con           St-con                    ---
+  Zn-69m/SI-con           SI-con                    ---
+  Zn-69m/SI-conRe         SI-conRe                  ---
+  Zn-69m/RC-con           RC-con                    ---
+  Zn-69m/LC-con           LC-con                    ---
+  Zn-69m/RS-con           RS-con                    ---
+  Zn-69m/Faeces           Faeces                    ---
+  Zn-69m/UB-con           UB-con                    ---
+  Zn-69m/Urine            Urine                     ---
+
+  Zn-69m/Plasma           Plasma                    ---
+  Zn-69m/ST0              ST0                       ---
+  Zn-69m/ST1              ST1                       ---
+  Zn-69m/ST2              ST2                       ---
+  Zn-69m/Liver1           Liver1                    ---
+  Zn-69m/Liver2           Liver2                    ---
+  Zn-69m/Pancreas         Pancreas                  ---
+  Zn-69m/Muscle           Muscle                    ---
+  Zn-69m/Kidneys          Kidneys                   ---
+  Zn-69m/RBC              RBC                       ---
+  Zn-69m/C-bone-S         C-bone-S                  ---
+  Zn-69m/C-bone-V         C-bone-V                  ---
+  Zn-69m/T-bone-S         T-bone-S                  ---
+  Zn-69m/T-bone-V         T-bone-V                  ---
+  Zn-69m/Excreta          Excreta                   ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
+
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.199 Table 9.4
+  Plasma                  Liver1                   60
+  Plasma                  Kidneys                   4
+  Plasma                  Pancreas                  3
+  Plasma                  Muscle                    2
+  Plasma                  RBC                       1.5
+  Plasma                  ST0                      40
+  Plasma                  ST1                      30
+  Plasma                  ST2                       0.4
+  Plasma                  UB-con                    0.13
+  Plasma                  Excreta                   0.13
+  Plasma                  SI-conRe                  0.2
+  Plasma                  T-bone-S                  0.15
+  Plasma                  C-bone-S                  0.3
+  Liver1                  Plasma                   10
+  Liver1                  SI-conRe                  0.067
+  Liver1                  Liver2                   10
+  Liver2                  Plasma                    0.6
+  Kidneys                 Plasma                    0.7
+  Pancreas                Plasma                    1.5
+  Pancreas                SI-conRe                  1.0
+  Muscle                  Plasma                    0.005
+  RBC                     Plasma                    0.14
+  ST0                     Plasma                   10
+  ST1                     Plasma                    3
+  ST2                     Plasma                    0.01
+  T-bone-S                Plasma                    0.01
+  C-bone-S                Plasma                    0.01
+  T-bone-S                T-bone-V                  0.00053
+  C-bone-S                C-bone-V                  0.00053
+  T-bone-V                Plasma                    0.000493
+  C-bone-V                Plasma                    0.0000821
