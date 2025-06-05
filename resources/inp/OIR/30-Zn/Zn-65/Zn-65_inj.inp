@@ -1,0 +1,107 @@
+[title]
+Zn-65 Injection
+
+[nuclide]
+  Zn-65
+
+
+[Zn-65:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   Muscle                Muscle
+  acc   Kidneys               Kidneys
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  exc   Excreta               ---
+
+[Zn-65:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  $fA    = 0.5
+  $fA_Re = 0.5          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Plasma                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.199 Table 9.4
+  Plasma                  Liver1                   60
+  Plasma                  Kidneys                   4
+  Plasma                  Pancreas                  3
+  Plasma                  Muscle                    2
+  Plasma                  RBC                       1.5
+  Plasma                  ST0                      40
+  Plasma                  ST1                      30
+  Plasma                  ST2                       0.4
+  Plasma                  UB-con                    0.13
+  Plasma                  Excreta                   0.13
+  Plasma                  SI-conRe                  0.2
+  Plasma                  T-bone-S                  0.15
+  Plasma                  C-bone-S                  0.3
+  Liver1                  Plasma                   10
+  Liver1                  SI-conRe                  0.067
+  Liver1                  Liver2                   10
+  Liver2                  Plasma                    0.6
+  Kidneys                 Plasma                    0.7
+  Pancreas                Plasma                    1.5
+  Pancreas                SI-conRe                  1.0
+  Muscle                  Plasma                    0.005
+  RBC                     Plasma                    0.14
+  ST0                     Plasma                   10
+  ST1                     Plasma                    3
+  ST2                     Plasma                    0.01
+  T-bone-S                Plasma                    0.01
+  C-bone-S                Plasma                    0.01
+  T-bone-S                T-bone-V                  0.00053
+  C-bone-S                C-bone-V                  0.00053
+  T-bone-V                Plasma                    0.000493
+  C-bone-V                Plasma                    0.0000821
