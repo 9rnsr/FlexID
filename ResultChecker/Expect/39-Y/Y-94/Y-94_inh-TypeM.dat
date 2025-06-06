@@ -1,0 +1,12 @@
+Radionuclide	Y-94
+Route of Intake	Inhalation
+Material	Aerosols Type M, Oxide, phosphate, all unspecified forms, fA=2E-5
+AMTD/AMAD, µm	5
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	8.8E-2	3.0E-2	8.2E-3	2.4E-5	1.3E-5
+0.083333	9.3E-3	3.7E-3	8.2E-4	5.4E-6	2.2E-6
+0.125	1.0E-3	4.3E-4	8.6E-5	9.0E-7	3.2E-7
+0.25	1.2E-6	6.5E-7	1.0E-7	2.2E-9	6.6E-10
+0.375	1.5E-9	8.5E-10	1.0E-10	-	-
