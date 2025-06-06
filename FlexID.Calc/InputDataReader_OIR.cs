@@ -837,24 +837,25 @@ namespace FlexID.Calc
                         //   Progeny_N/organDecay
 
                         var decayChainOfFrom = decayChains.FirstOrDefault(dc => dc.DecayCompartments.Any(o => o.Organ == organFrom));
-                        var decayChainOfTo = decayChains.FirstOrDefault(dc => dc.DecayCompartments.Any(o => o.Organ == organTo));
+                        //var decayChainOfTo = hasCoeff ? null : decayChains.FirstOrDefault(dc => dc.DecayCompartments.Any(o => o.Organ == organTo));
                         DecayChain decayChain = null;
 
-                        if (decayChainOfFrom != null && decayChainOfTo != null)
+                        //if (decayChainOfFrom != null && decayChainOfTo != null)
+                        //{
+                        //    if (decayChainOfFrom != decayChainOfTo)
+                        //        throw Program.Error($"Line {lineNum}: Cannot set decay path from '{from}' to '{to}' because they belong to different chains.");
+                        //
+                        //    decayChain = decayChainOfFrom;
+                        //}
+                        /*else */
+                        if (decayChainOfFrom != null)
                         {
-                            if (decayChainOfFrom != decayChainOfTo)
-                                throw Program.Error($"Line {lineNum}: Cannot set decay path from '{from}' to '{to}' because they belong to different chains.");
-
                             decayChain = decayChainOfFrom;
                         }
-                        else if (decayChainOfFrom != null)
-                        {
-                            decayChain = decayChainOfFrom;
-                        }
-                        else if (decayChainOfTo != null)
-                        {
-                            decayChain = decayChainOfTo;
-                        }
+                        //else if (decayChainOfTo != null)
+                        //{
+                        //    decayChain = decayChainOfTo;
+                        //}
                         else
                         {
                             decayChain = new DecayChain(data.Nuclides);

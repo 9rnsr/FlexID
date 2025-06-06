@@ -377,5 +377,117 @@ namespace FlexID.Calc.Tests
             CollectionAssert.AreEquivalent(GetInflows(organs[8]), new[] { "Sb-129/Blood", "Te-129m/<decay from Sb-129/Blood>" });
             CollectionAssert.AreEquivalent(GetInflows(organs[9]), new[] { "Te-129m/Blood", "Te-129/<decay from Te-129m/Blood>" });
         }
+
+        [TestMethod]
+        public void Test()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "Sr-90 Ingestion:Other",
+                "",
+                "[nuclide]",
+                "  Sr-90  Y-90",
+                "",
+                "[Sr-90:compartment]",
+                "  inp   input   ---",
+                "  acc   Blood   Blood",
+                "  acc   ST0     Other",
+                "",
+                "[Sr-90:transfer]",
+                "  input         Blood  100%",
+                "  Blood         ST0      7.5",
+                "",
+                "[Y-90:compartment]",
+                "  acc   Blood1  Blood",
+                "  acc   ST0     Other",
+                "",
+                "[Y-90:transfer]",
+                "  Sr-90/Blood   Blood1   ---",     // 直接の壊変経路(A)
+                "  Sr-90/ST0     Blood1   0.23105", // 間接の壊変経路(B: Aとは関係ない)
+            });
+
+            var data = reader.Read();
+        }
+
+        [TestMethod]
+        public void Test2()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "Sr-90 Ingestion:Other",
+                "",
+                "[nuclide]",
+                "  Sr-90  Y-90",
+                "",
+                "[Sr-90:compartment]",
+                "  inp   input           ---",
+                "  acc   Exch-C-bone-V   C-bone-V",
+                "  acc   Noch-C-bone-V   C-bone-V",
+                "",
+                "[Sr-90:transfer]",
+                "  input  Exch-C-bone-V  50%",
+                "  input  Noch-C-bone-V  50%",
+                "",
+                "[Y-90:compartment]",
+                "  acc   C-bone-V   C-bone-V",
+                "",
+                "[Y-90:transfer]",
+                "  Sr-90/Exch-C-bone-V   C-bone-V   ---",   // 壊変経路の合流
+                "  Sr-90/Noch-C-bone-V   C-bone-V   ---",   // 壊変経路の合流
+            });
+
+            var data = reader.Read();
+
+            // TODO: 2つのDecayChainが途中で1つの壊変移行先コンパートメントを共有することで合流した場合に、
+            // そこで生成される子孫核種を落とす先も共有されている必要がある。
+        }
+
+        [TestMethod]
+        public void Test3()
+        {
+            // Os-181 --> Re-181 --> W-181 --> (Ta-181)
+
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "[nuclide]",
+                "Os-181  Re-181  W-181",
+                "",
+                "[Os-181:compartment]",
+                "  inp   input           ---",
+                "  acc   Exch-C-bone-V   C-bone-V",
+                "  acc   Noch-C-bone-V   C-bone-V",
+                "",
+                "[Os-181:transfer]",
+                "  input  Exch-C-bone-V  50%",
+                "  input  Noch-C-bone-V  50%",
+                "",
+                "[Re-181:compartment]",
+                "  acc   C-bone-V   C-bone-V",
+                "",
+                "[Re-181:transfer]",
+                "  Os-181/Exch-C-bone-V   C-bone-V   ---",   // 壊変経路の合流
+                "  Os-181/Noch-C-bone-V   C-bone-V   ---",   // 壊変経路の合流
+                "",
+                "[W-181:compartment]",
+                "  acc   Blood   Blood",
+                "",
+                "[W-181:transfer]",
+                "  Re-181/C-bone-V        Blood    100",
+            });
+
+            var data = reader.Read();
+            var organs = data.Organs;
+
+            // TODO:
+            // Os-181/Exch-C-bone-Vから落ちてきたW-181と
+            // Os-181/Noch-C-bone-Vから落ちてきたW-181の それぞれを受けるW-181のDecayCompartmentが
+            // 2つ生成されてしまう。ただしそのうちの1つ W-181/<decay from Os-181/Exch-C-bone-V> が
+            // W-181/Blood への移行速度付き壊変経路に使用されて、残る1つは倍増したW-181を受けるだけになっている。
+        }
     }
 }
