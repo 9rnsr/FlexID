@@ -680,102 +680,24 @@ namespace FlexID.Calc
             /// </summary>
             /// <param name="organRoot"></param>
             /// <param name="decayNuclides">子孫核種の配列。</param>
-            public DecayChain(Organ organRoot, NuclideData[] decayNuclides)
+            public DecayChain(IReadOnlyList<NuclideData> nuclides)
             {
-                RootCompartment = organRoot;
-                DecayNuclides = decayNuclides;
-                DecayCompartments = new Organ[decayNuclides.Length];
+                Nuclides = nuclides;
+                DecayCompartments = new (int, Organ)[nuclides.Count];
             }
 
-            public Organ RootCompartment;
+            public IReadOnlyList<NuclideData> Nuclides;
 
-            public NuclideData[] DecayNuclides;
-
-            public Organ[] DecayCompartments;
+            public (int LineNum, Organ Organ)[] DecayCompartments;
 
             /// <summary>
             /// 指定の子孫核種に対応する壊変コンパートメントを取得する。
             /// </summary>
             /// <param name="progeny"></param>
             /// <returns></returns>
-            public ref Organ GetDecayCompartment(NuclideData progeny)
+            public ref (int LineNum, Organ Organ) GetDecayCompartment(NuclideData progeny)
             {
-                var i = Array.IndexOf(DecayNuclides, progeny);
-                if (i == -1)
-                {
-                    var rootNuc = RootCompartment.Nuclide.Name;
-                    throw Program.Error($"Cannot find progeny nuclide '{progeny.Name}' in decay chain starts from '{rootNuc}'.");
-                }
-                return ref DecayCompartments[i];
-            }
-
-            /// <summary>
-            /// 崩壊系列を構成する全ての移行経路を取得する。
-            /// </summary>
-            /// <returns></returns>
-            public IReadOnlyList<(NuclideData Parent, NuclideData Daughter)> GetDecayTransfers()
-            {
-                var nuclides = DecayNuclides.Prepend(RootCompartment.Nuclide);
-
-                var results = new List<(NuclideData Parent, NuclideData Daughter)>();
-                foreach (var parent in nuclides)
-                {
-                    foreach (var daughter in DecayNuclides)
-                    {
-                        if (parent == daughter)
-                            continue;
-                        if (parent.Branches.Any(b => b.Daughter == daughter))
-                            results.Add((parent, daughter));
-                    }
-                }
-                return results;
-            }
-
-            /// <summary>
-            /// 指定の子孫核種に対応する壊変コンパートメントを追加する。
-            /// </summary>
-            /// <param name="data"></param>
-            /// <param name="progeny"></param>
-            /// <returns>追加した壊変コンパートメント</returns>
-            public Organ AddDecayCompartment(InputData data, NuclideData progeny)
-            {
-                ref var organDecay = ref GetDecayCompartment(progeny);
-                if (organDecay != null)
-                    throw Program.Error($"Decay compartment is already used.");
-
-                var organFrom = RootCompartment;
-                var fromNuclide = organFrom.Nuclide;
-
-                var index = data.Organs.Count;
-                organDecay = new Organ
-                {
-                    Nuclide = progeny,
-                    ID = index + 1,
-                    Index = index,
-                    Name = $"Decay-{fromNuclide.Name}/{organFrom.Name}",
-                    Func = OrganFunc.acc,
-                    BioDecay = 1.0,     // accは後で設定する。
-                    Inflows = new List<Inflow>(),
-                    IsDecayCompartment = true,
-                };
-                data.Organs.Add(organDecay);
-
-                var sourceRegion = organFrom.SourceRegion;
-                if (sourceRegion != null)
-                {
-                    // 親核種のコンパートメントに設定された線源領域が、
-                    // 子孫核種の動態モデルおいても明示的に設定されているかどうかを調べる。
-                    var explicitUsed = data.Organs.Where(o => o.Nuclide == progeny)
-                                                  .Any(o => o.SourceRegion == sourceRegion);
-
-                    // 明示的に設定されていない場合は、ambiguous compartmentを'Other'に割り当てる。
-                    if (!explicitUsed)
-                        sourceRegion = "Other";
-
-                    organDecay.SourceRegion = sourceRegion;
-                }
-
-                return organDecay;
+                return ref DecayCompartments[Nuclides.IndexOf(progeny)];
             }
         }
 
@@ -785,30 +707,9 @@ namespace FlexID.Calc
         /// <param name="data"></param>
         private void DefineTransfers(InputData data)
         {
-            var decayPaths = new List<(Organ from, Organ to, bool hasCoeff)>();
-            var decayChains = new Dictionary<Organ, DecayChain>();
+            // var decayPaths = new List<(Organ from, Organ to, bool hasCoeff)>();
+            var decayChains = new List<DecayChain>();
             var decayNuclides = data.Nuclides.ToDictionary(n => n, n => GetDecayNuclides(n));
-
-            // organFromから始まる崩壊系列の情報を取得する。
-            DecayChain GetDecayChain(Organ organFrom)
-            {
-                var fromFunc = organFrom.Func;
-                if (fromFunc != OrganFunc.acc && fromFunc != OrganFunc.exc)
-                    return null;
-                if (organFrom.IsDecayCompartment)
-                    return null;
-
-                var progenies = decayNuclides[organFrom.Nuclide];
-                if (progenies.Length == 0)
-                    return null;
-
-                if (!decayChains.TryGetValue(organFrom, out var decayChain))
-                {
-                    decayChain = new DecayChain(organFrom, progenies);
-                    decayChains[organFrom] = decayChain;
-                }
-                return decayChain;
-            }
 
             foreach (var nuclide in nuclides)
             {
@@ -897,31 +798,24 @@ namespace FlexID.Calc
                     //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
                     //    throw Program.Error($"Line {lineNum}: Cannot set transfer path from 'mix' to 'mix'.");
 
-                    if (organFrom.IsInstantOutflow)
+                    if (!isDecayPath)
+                    {
+                        if (organFrom.IsInstantOutflow && !hasCoeff)
+                        {
+                            // inpまたはmixからの同核種での移行経路では、移行割合の入力を要求する。
+                            // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
+                            throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{from}'.");
+                        }
+                    }
+                    else
                     {
                         // inpやmixから娘核種への壊変経路は定義できない。
-                        if (isDecayPath)
+                        if (organFrom.IsInstantOutflow)
                             throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{from}'.");
 
-                        // inpまたはmixからの同核種での移行経路では、移行割合の入力を要求する。
-                        // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
-                        else if (!hasCoeff)
-                            throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{from}'.");
-                    }
-
-                    if (isDecayPath)
-                    {
                         // 分岐比が不明な壊変経路は定義できない。
                         if (!decayNuclides[fromNuclide].Contains(toNuclide))
                             throw Program.Error($"Line {lineNum}: There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
-
-                        var paths = decayPaths.Where(path => path.from == organFrom);
-
-                        // organFromから、同じ子孫核種への2つ以上の壊変経路は定義できない。
-                        if (paths.Any(path => path.to.Nuclide == toNuclide))
-                            throw Program.Error($"Line {lineNum}: Multiple decay paths from {fromFunc} '{from}' to nuclide '{toNuclide.Name}'.");
-
-                        decayPaths.Add((organFrom, organTo, hasCoeff));
 
                         // 次のような壊変経路を、
                         //   Parent/organFrom --(coeff)--> Progeny_i/organTo  ①移行速度あり
@@ -942,20 +836,59 @@ namespace FlexID.Calc
                         //   ↓ ↓
                         //   Progeny_N/organDecay
 
-                        var decayChain = GetDecayChain(organFrom);
-                        if (hasCoeff)
+                        var decayChainOfFrom = decayChains.FirstOrDefault(dc => dc.DecayCompartments.Any(o => o.Organ == organFrom));
+                        var decayChainOfTo = decayChains.FirstOrDefault(dc => dc.DecayCompartments.Any(o => o.Organ == organTo));
+                        DecayChain decayChain = null;
+
+                        if (decayChainOfFrom != null && decayChainOfTo != null)
                         {
-                            // 以降の処理を核種が同じコンパートメント間organDecay -> organToの経路設定にすり替える。
-                            var organDecay = decayChain.AddDecayCompartment(data, toNuclide);
-                            organFrom = organDecay;
+                            if (decayChainOfFrom != decayChainOfTo)
+                                throw Program.Error($"Line {lineNum}: Cannot set decay path from '{from}' to '{to}' because they belong to different chains.");
+
+                            decayChain = decayChainOfFrom;
+                        }
+                        else if (decayChainOfFrom != null)
+                        {
+                            decayChain = decayChainOfFrom;
+                        }
+                        else if (decayChainOfTo != null)
+                        {
+                            decayChain = decayChainOfTo;
                         }
                         else
                         {
-                            // organToを崩壊系列でorganDecayが占める位置に設定する。
-                            ref var organDecay = ref decayChain.GetDecayCompartment(toNuclide);
-                            if (organDecay != null)
-                                throw Program.Error($"Line {lineNum}: Decay compartment '{to}' conflicts with the implicitly deined one.");
-                            organDecay = organTo;
+                            decayChain = new DecayChain(data.Nuclides);
+                            decayChains.Add(decayChain);
+                        }
+
+                        ref var decayFrom = ref decayChain.GetDecayCompartment(fromNuclide);
+                        ref var decayTo = ref decayChain.GetDecayCompartment(toNuclide);
+
+                        if (decayFrom.Organ is null)
+                            decayFrom = (lineNum, organFrom);
+
+                        // 崩壊系列において、同じ親核種からの2つ以上の壊変経路は定義できない。
+                        if (decayFrom.Organ != organFrom)
+                            throw Program.Error($"Line {lineNum}: Conflict with the already defined decay path " +
+                                                $"from '{fromNuclide.Name}' to '{toNuclide.Name}' at Line {decayFrom.LineNum}.");
+
+                        // 崩壊系列において、同じ子孫核種への2つ以上の壊変経路(係数あり・なしも差異とみなす)は定義できない。
+                        if (decayTo.Organ != null && (hasCoeff || decayTo.Organ != organTo))
+                            throw Program.Error($"Line {lineNum}: Conflict with the already defined decay path" +
+                                                $" from '{fromNuclide.Name}' to '{toNuclide.Name}' at Line {decayTo.LineNum}.");
+
+                        if (hasCoeff)
+                        {
+                            decayTo = (lineNum, CreateDecayCompartment(data, toNuclide));
+
+                            // 以降の処理を核種が同じコンパートメント間decayTo.Organ -> organToの経路設定にすり替える。
+                            organFrom = decayTo.Organ;
+                        }
+                        else
+                        {
+                            // 崩壊系列でorganTo.Organが占める位置にorganToを設定する。
+                            if (decayTo.Organ is null)
+                                decayTo = (lineNum, organTo);
 
                             // transfersCorrectには核種が異なるコンパートメント間の壊変経路を追加しない。
                             continue;
@@ -1031,10 +964,30 @@ namespace FlexID.Calc
             }
 
             // 核種が異なるコンパートメントへの流入経路と、移行割合を設定する。
-            foreach (var decayChain in decayChains.Values)
+            foreach (var decayChain in decayChains)
             {
                 DefineDecayTransfers(data, decayChain);
             }
+        }
+
+        private Organ CreateDecayCompartment(InputData data, NuclideData nuclide)
+        {
+            var index = data.Organs.Count;
+
+            var organDecay = new Organ
+            {
+                Nuclide = nuclide,
+                ID = index + 1,
+                Index = index,
+                Name = "", // 後で設定する。
+                Func = OrganFunc.acc,
+                BioDecay = 1.0,     // accは後で設定する。
+                Inflows = new List<Inflow>(),
+                IsDecayCompartment = true,
+            };
+            data.Organs.Add(organDecay);
+
+            return organDecay;
         }
 
         /// <summary>
@@ -1043,40 +996,76 @@ namespace FlexID.Calc
         /// <param name="data"></param>
         private void DefineDecayTransfers(InputData data, DecayChain chain)
         {
-            var organFrom = chain.RootCompartment;
-            var fromNuclide = organFrom.Nuclide;
-            var decayTransfers = chain.GetDecayTransfers();
-            var decayCompartments = chain.DecayCompartments;
+            var froms = chain.DecayCompartments.Select(o => o.Organ).Where(o => o != null).ToList();
+
+            var decayCompartmentName = $"<decay from {froms[0].Nuclide.Name}/{froms[0].Name}>";
 
             // 崩壊系列を構成するコンパートメント間の壊変経路を追加定義する。
             // 壊変経路は一本道ではなく、fromNuclideから始まる有効非巡回グラフ(DAG)を構成する点に注意。
-            foreach (var path in decayTransfers)
+            while (froms.Count != 0)
             {
-                var from = path.Parent == fromNuclide ? organFrom
-                       : decayCompartments.FirstOrDefault(o => o?.Nuclide == path.Parent);
-                var to = decayCompartments.FirstOrDefault(o => o?.Nuclide == path.Daughter);
+                var organFrom = froms[0];
 
-                // 壊変経路が既に設定されている＝インプットで明示的に定義されている場合は何もしない。
-                if (from != null && to != null && to.Inflows.Any(inflow => inflow.Organ == from))
-                    continue;
-
-                if (from is null)
-                    from = chain.AddDecayCompartment(data, path.Parent);
-                if (to is null)
-                    to = chain.AddDecayCompartment(data, path.Daughter);
-
-                var branch = from.Nuclide.Branches.First(b => b.Daughter == to.Nuclide);
-
-                to.Inflows.Add(new Inflow
+                var parent = organFrom.Nuclide;
+                foreach (var daughter in parent.Branches.Select(b => b.Daughter))
                 {
-                    ID = from.ID,
+                    ref var decayTo = ref chain.GetDecayCompartment(daughter);
+                    var organTo = decayTo.Organ;
 
-                    // 壊変経路では、親からの分岐比を移行割合としてとする。
-                    Rate = branch.Fraction,
+                    // 壊変経路が既に設定されている場合は何もしない。
+                    if (organTo != null && organTo.Inflows.Any(inflow => inflow.Organ == organFrom))
+                        continue;
 
-                    // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
-                    Organ = from,
-                });
+                    if (organTo is null)
+                    {
+                        (_, organTo) = decayTo = (0, CreateDecayCompartment(data, daughter));
+                        froms.Add(organTo);
+                    }
+
+                    var branch = organFrom.Nuclide.Branches.First(b => b.Daughter == organTo.Nuclide);
+
+                    organTo.Inflows.Add(new Inflow
+                    {
+                        ID = organFrom.ID,
+
+                        // 壊変経路では、親からの分岐比を移行割合としてとする。
+                        Rate = branch.Fraction,
+
+                        // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
+                        Organ = organFrom,
+                    });
+
+                    if (organTo.IsDecayCompartment)
+                    {
+                        organTo.Name = decayCompartmentName;
+
+                        var sourceRegion = organFrom.SourceRegion;
+                        if (sourceRegion != null)
+                        {
+                            // 親核種のコンパートメントに設定された線源領域が、
+                            // 子孫核種の動態モデルおいても明示的に設定されているかどうかを調べる。
+                            var explicitUsed = data.Organs.Where(o => o.Nuclide == daughter)
+                                                          .Any(o => o.SourceRegion == sourceRegion);
+
+                            // 明示的に設定されていない場合は、ambiguous compartmentを'Other'に割り当てる。
+                            if (!explicitUsed)
+                                sourceRegion = "Other";
+
+                            organTo.SourceRegion = sourceRegion;
+                        }
+                    }
+                    else
+                    {
+                        // TODO: 以下の制約をチェックする？
+                        // from       to
+                        // ---        ---
+                        // Something  Something
+                        // Something  Other
+                        // Other      Other
+                    }
+                }
+
+                froms.RemoveAt(0);
             }
         }
 
