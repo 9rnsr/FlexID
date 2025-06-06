@@ -26,6 +26,8 @@ namespace FlexID.Calc
         /// 流入割合
         /// </summary>
         public double Rate;
+
+        public override string ToString() => $"{Organ} =>{Rate}";
     }
 
     /// <summary>
@@ -57,7 +59,7 @@ namespace FlexID.Calc
     /// <summary>
     /// 臓器(コンパートメント)を表現する。
     /// </summary>
-    [DebuggerDisplay("{Func} {Name} ({Nuclide})")]
+    [DebuggerDisplay(@"\{{Func}, {ToString(),nq}\}")]
     public class Organ
     {
         /// <summary>
@@ -136,9 +138,10 @@ namespace FlexID.Calc
         /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数(女性)。
         /// </summary>
         public double[] S_CoefficientsF;
+
+        public override string ToString() => $"{Nuclide}/{Name}";
     }
 
-    [DebuggerDisplay("{Name}")]
     public class NuclideData
     {
         /// <summary>
@@ -215,6 +218,8 @@ namespace FlexID.Calc
             "ExcludeOtherSourceRegions",
             "IncludeOtherSourceRegions"
         };
+
+        public override string ToString() => Name;
     }
 
     public class InputData
