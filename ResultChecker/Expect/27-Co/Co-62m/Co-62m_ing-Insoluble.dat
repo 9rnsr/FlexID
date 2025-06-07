@@ -1,0 +1,11 @@
+Radionuclide	Co-62m
+Route of Intake	Ingestion
+Material	Insoluble oxides, fA=5E-2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	5.1E-2	5.1E-2	1.3E-5	6.1E-5
+0.083333	2.5E-3	2.5E-3	1.8E-6	9.4E-6
+0.125	1.3E-4	1.2E-4	1.6E-7	8.2E-7
+0.25	1.6E-8	1.5E-8	-	1.9E-10
