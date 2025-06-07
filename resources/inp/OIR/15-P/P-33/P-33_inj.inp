@@ -1,0 +1,104 @@
+[title]
+P-33 Injection
+
+[nuclide]
+  P-33
+
+
+[P-33:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   ST0                   Other         # Rapid turnover
+  acc   ST1                   Other         # Intermediate turnover
+  acc   ST2                   Other         # Slow turnover
+
+[P-33:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.84 Table 4.2 / Ingested materials, All unspecified forms
+  $fA    = 0.8
+  $fA_Re = 0.8          # footnote¶
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Plasma                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.92 Table 4.3
+  Plasma                  UB-con                    4.4
+  Plasma                  RC-con                    0.2
+  Plasma                  T-bone-S                  4.44
+  Plasma                  C-bone-S                  3.56
+  Plasma                  ST0                      10.18
+  Plasma                  ST1                      10.18
+  Plasma                  ST2                       0.1
+  Plasma                  RBC                       2.4
+  Plasma                  Kidneys1                  0.4
+  Plasma                  Kidneys2                  0.14
+  Plasma                  Liver1                    4.0
+  RBC                     Plasma                    0.6931
+  ST0                     Plasma                    0.3466
+  ST1                     Plasma                    0.03466
+  ST2                     Plasma                    0.00038
+  Kidneys1                UB-con                    0.6931
+  Kidneys2                Plasma                    0.03466
+  Liver1                  Liver2                    0.3466
+  Liver1                  Plasma                    1.04
+  Liver2                  Plasma                    0.03466
+  C-bone-S                Plasma                    0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  T-bone-S                Plasma                    0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  Exch-C-bone-V           C-bone-S                  0.002773
+  Exch-C-bone-V           Noch-C-bone-V             0.004159
+  Exch-T-bone-V           T-bone-S                  0.002773
+  Exch-T-bone-V           Noch-T-bone-V             0.004159
+  Noch-C-bone-V           Plasma                    0.0000821
+  Noch-T-bone-V           Plasma                    0.000493
