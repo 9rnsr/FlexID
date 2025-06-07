@@ -1,0 +1,585 @@
+[title]
+Zn-72 Inhalation:Type-M
+
+[nuclide]
+  Zn-72  Ga-72
+
+
+[Zn-72:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   Muscle                Muscle
+  acc   Kidneys               Kidneys
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  exc   Excreta               ---
+
+[Zn-72:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fb = 0               # footnote*
+  $sb = 0               # footnote*
+  $fA    = 0.1
+  $fA_Re = 0.5          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.199 Table 9.4
+  Plasma                  Liver1                   60
+  Plasma                  Kidneys                   4
+  Plasma                  Pancreas                  3
+  Plasma                  Muscle                    2
+  Plasma                  RBC                       1.5
+  Plasma                  ST0                      40
+  Plasma                  ST1                      30
+  Plasma                  ST2                       0.4
+  Plasma                  UB-con                    0.13
+  Plasma                  Excreta                   0.13
+  Plasma                  SI-conRe                  0.2
+  Plasma                  T-bone-S                  0.15
+  Plasma                  C-bone-S                  0.3
+  Liver1                  Plasma                   10
+  Liver1                  SI-conRe                  0.067
+  Liver1                  Liver2                   10
+  Liver2                  Plasma                    0.6
+  Kidneys                 Plasma                    0.7
+  Pancreas                Plasma                    1.5
+  Pancreas                SI-conRe                  1.0
+  Muscle                  Plasma                    0.005
+  RBC                     Plasma                    0.14
+  ST0                     Plasma                   10
+  ST1                     Plasma                    3
+  ST2                     Plasma                    0.01
+  T-bone-S                Plasma                    0.01
+  C-bone-S                Plasma                    0.01
+  T-bone-S                T-bone-V                  0.00053
+  C-bone-S                C-bone-V                  0.00053
+  T-bone-V                Plasma                    0.000493
+  C-bone-V                Plasma                    0.0000821
+
+
+[Ga-72:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Pancreas              Pancreas
+  acc   Spleen                Spleen
+  acc   SkeletalMuscle        Muscle
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[Ga-72:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.162 Table 17.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.001
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# from parent to progeny
+  Zn-72/ET1-F             ET1-F                     ---
+  Zn-72/ET2-F             ET2-F                     ---
+  Zn-72/ETseq-F           ETseq-F                   ---
+  Zn-72/LNET-F            LNET-F                    ---
+  Zn-72/BB-F              BB-F                      ---
+  Zn-72/BBseq-F           BBseq-F                   ---
+  Zn-72/bb-F              bb-F                      ---
+  Zn-72/bbseq-F           bbseq-F                   ---
+  Zn-72/ALV-F             ALV-F                     ---
+  Zn-72/INT-F             INT-F                     ---
+  Zn-72/LNTH-F            LNTH-F                    ---
+  Zn-72/ET1-S             ET1-S                     ---
+  Zn-72/ET2-S             ET2-S                     ---
+  Zn-72/ETseq-S           ETseq-S                   ---
+  Zn-72/LNET-S            LNET-S                    ---
+  Zn-72/BB-S              BB-S                      ---
+  Zn-72/BBseq-S           BBseq-S                   ---
+  Zn-72/bb-S              bb-S                      ---
+  Zn-72/bbseq-S           bbseq-S                   ---
+  Zn-72/ALV-S             ALV-S                     ---
+  Zn-72/INT-S             INT-S                     ---
+  Zn-72/LNTH-S            LNTH-S                    ---
+  Zn-72/ET2-B             ET2-B                     ---
+  Zn-72/ETseq-B           ETseq-B                   ---
+  Zn-72/LNET-B            LNET-B                    ---
+  Zn-72/BB-B              BB-B                      ---
+  Zn-72/BBseq-B           BBseq-B                   ---
+  Zn-72/bb-B              bb-B                      ---
+  Zn-72/bbseq-B           bbseq-B                   ---
+  Zn-72/ALV-B             ALV-B                     ---
+  Zn-72/INT-B             INT-B                     ---
+  Zn-72/LNTH-B            LNTH-B                    ---
+  Zn-72/Environment       Environment               ---
+
+  Zn-72/Oralcavity        Oralcavity                ---
+  Zn-72/Oesophagus-f      Oesophagus-f              ---
+  Zn-72/Oesophagus-s      Oesophagus-s              ---
+  Zn-72/St-con            St-con                    ---
+  Zn-72/SI-con            SI-con                    ---
+  Zn-72/SI-conRe          SI-conRe                  ---
+  Zn-72/RC-con            RC-con                    ---
+  Zn-72/LC-con            LC-con                    ---
+  Zn-72/RS-con            RS-con                    ---
+  Zn-72/Faeces            Faeces                    ---
+  Zn-72/UB-con            UB-con                    ---
+  Zn-72/Urine             Urine                     ---
+
+# ICRP Publ.134 p.201 Para.437
+# > (437) ... Blood in the gallium model is identified with the plasma compartment
+# > of the zinc model. Gallium produced in compartments of the systemic model for zinc
+# > (Fig. 9.1) other than plasma are assumed to be transferred to the blood compartment
+# > of the gallium model with the following half-times: 1 min for RBCs; 5 d for liver,
+# > spleen, pancreas, and muscle; 0.5 d for kidneys and compartments of other soft
+# > tissue; 2 d for bone surface compartments; and the bone turnover half-time for
+# > bone volume compartments. The subsequent behaviour of gallium that reaches the
+# > blood compartment is determined by the gallium model described above.
+# > (437) ...ガリウムモデルにおける血液は、亜鉛モデルの血漿コンパートメントと同一視される。
+# > 亜鉛全身モデル（図9.1）の血漿以外のコンパートメントで生成されたガリウムは、以下の半減期で
+# > ガリウムモデルの血液コンパートメントに移行すると仮定する。赤血球では1分、
+# > 肝臓、脾臓、膵臓、筋肉では5日、腎臓およびその他の軟部組織コンパートメントでは0.5日、
+# > 骨表面コンパートメントでは2日、骨体積コンパートメントでは骨代謝の半減期である。
+# > 血液コンパートメントに到達したガリウムのその後の挙動は、上記のガリウムモデルによって決定される。
+
+  Zn-72/Plasma            Blood                     ---
+  Zn-72/RBC               Blood                 $(0.693 / (1/60/24))    # 半減期1分
+  Zn-72/Liver1            Blood                 $(0.693 / 5)            # 半減期5日
+  Zn-72/Liver2            Blood                 $(0.693 / 5)            # 半減期5日
+ #Zn-72/Spleen            Blood                 $(0.693 / 5)            # 半減期5日     # Znモデルに脾臓はない
+  Zn-72/Pancreas          Blood                 $(0.693 / 5)            # 半減期5日
+  Zn-72/Muscle            Blood                 $(0.693 / 5)            # 半減期5日
+  Zn-72/Kidneys           Blood                 $(0.693 / 0.5)          # 半減期0.5日
+  Zn-72/ST0               Blood                 $(0.693 / 0.5)          # 半減期0.5日
+  Zn-72/ST1               Blood                 $(0.693 / 0.5)          # 半減期0.5日
+  Zn-72/ST2               Blood                 $(0.693 / 0.5)          # 半減期0.5日
+  Zn-72/C-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
+  Zn-72/T-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
+  Zn-72/C-bone-V          Blood                 $( 3% / 365.25)         # 成人の骨ターンオーバー
+  Zn-72/T-bone-V          Blood                 $(18% / 365.25)         # 成人の骨ターンオーバー
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Blood                 $( (1 - fb) * sr )
+  INT-F                   Blood                 $( (1 - fb) * sr )
+  bb-F                    Blood                 $( (1 - fb) * sr )
+  bbseq-F                 Blood                 $( (1 - fb) * sr )
+  BB-F                    Blood                 $( (1 - fb) * sr )
+  BBseq-F                 Blood                 $( (1 - fb) * sr )
+  ET2-F                   Blood                 $( (1 - fb) * sr )
+  ETseq-F                 Blood                 $( (1 - fb) * sr )
+  LNET-F                  Blood                 $( (1 - fb) * sr )
+  LNTH-F                  Blood                 $( (1 - fb) * sr )
+
+  ALV-S                   Blood                 $( (1 - fb) * ss )
+  INT-S                   Blood                 $( (1 - fb) * ss )
+  bb-S                    Blood                 $( (1 - fb) * ss )
+  bbseq-S                 Blood                 $( (1 - fb) * ss )
+  BB-S                    Blood                 $( (1 - fb) * ss )
+  BBseq-S                 Blood                 $( (1 - fb) * ss )
+  ET2-S                   Blood                 $( (1 - fb) * ss )
+  ETseq-S                 Blood                 $( (1 - fb) * ss )
+  LNET-S                  Blood                 $( (1 - fb) * ss )
+  LNTH-S                  Blood                 $( (1 - fb) * ss )
+
+  ALV-B                   Blood                 $sb
+  INT-B                   Blood                 $sb
+  bb-B                    Blood                 $sb
+  bbseq-B                 Blood                 $sb
+  BB-B                    Blood                 $sb
+  BBseq-B                 Blood                 $sb
+  ET2-B                   Blood                 $sb
+  ETseq-B                 Blood                 $sb
+  LNET-B                  Blood                 $sb
+  LNTH-B                  Blood                 $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.201 Para.437
+# > (437) ... The gallium model includes compartments representing blood,
+# > liver, kidneys, spleen, pancreas, muscle, trabecular bone surface, trabecular bone
+# > marrow, cortical bone surface, and cortical bone marrow, and two compartments
+# > representing other soft tissue. Gallium is assumed to leave blood at a rate of 5 d⁻¹,
+# > with 20% depositing on bone surface, 10% in marrow, 6% in liver, 8% in kidneys,
+# > 4% in muscle, 1% in spleen, 0.1% in pancreas, 3% in right colon contents, 10% in a
+# > soft tissue compartment with relatively slow transfer back to blood (t½=1 y), and the
+# > remainder (37.9%) in a soft tissue compartment with relatively fast transfer back to
+# > blood (t½=0.5 d). The bone and marrow deposits are assumed to be equally divided
+# > between trabecular and cortical bone. Gallium is removed from liver, spleen, pancreas,
+# > and muscle to blood with a half-time of 5 d; from kidneys to urinary bladder
+# > contents with a half-time of 0.5 d; and from bone surface and marrow to blood with a
+# > half-time of 2 d.  ...
+# > (437) ... ガリウムモデルは、血液、肝臓、腎臓、脾臓、膵臓、筋肉、海綿骨表面、海綿骨髄、
+# > 皮質骨表面、皮質骨髄を表すコンパートメントと、その他の軟部組織を表す2つのコンパートメントから
+# > 構成される。ガリウムは5 d⁻¹の速度で血液から消失すると仮定され、20%が骨表面に沈着し、
+# > 10%が骨髄に、6%が肝臓に、8%が腎臓に、4%が筋肉に、1%が脾臓に、0.1%が膵臓に、3%が右結腸内容物に
+# > 沈着し、10%が比較的ゆっくりと血液に戻る軟部組織区画（t½=1年）に沈着し、残り（37.9%）は
+# > 比較的速く血液に戻る軟部組織区画（t½=0.5日）に沈着する。骨髄への沈着は、海綿骨と皮質骨に
+# > 均等に分配されると仮定される。ガリウムは、肝臓、脾臓、膵臓、筋肉から血液へは半減期5日で、
+# > 腎臓から膀胱内容物へは半減期0.5日で沈着する。骨表面および骨髄から血液へは、半減期2日で移行する。
+# > ...
+
+  Blood                   Liver                 $(5 *  6%)                          # == 0.3
+  Blood                   Kidneys               $(5 *  8%)                          # == 0.4
+  Blood                   T-bone-S              $(5 * 20% * 0.5)                    # == 0.5
+  Blood                   C-bone-S              $(5 * 20% * 0.5)                    # == 0.5
+  Blood                   T-marrow              $(5 * 10% * 0.5)                    # == 0.25   # <--
+  Blood                   C-marrow              $(5 * 10% * 0.5)                    # == 0.25   # <--
+  Blood                   SkeletalMuscle        $(5 *  4%)                          # == 0.2
+  Blood                   Spleen                $(5 *  1%)                          # == 0.05
+  Blood                   Pancreas              $(5 *  0.1%)                        # == 0.005
+  Blood                   RC-con                $(5 *  3%)                          # == 0.15
+  Blood                   ST0                   $(5 * 37.9%)                        # == 1.895  # <--
+  Blood                   ST1                   $(5 * 10%)                          # == 0.5
+  ST0                     Blood                 $(0.693 / 0.5)      # 半減期0.5日   # == 1.39
+  ST1                     Blood                 $(0.693 / 365.25)   # 半減期1年     # == 0.0019
+  Liver                   Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
+  Spleen                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
+  Pancreas                Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
+  SkeletalMuscle          Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
+  Kidneys                 UB-con                $(0.693 / 0.5)      # 半減期0.5日   # == 1.39
+  T-bone-S                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
+  C-bone-S                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
+  T-marrow                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
+  C-marrow                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
+
+# インプット作成者注：Publ.134 Para.437 と Publ.151 Table 17.3 を比較すると、
+# - Publ.134では骨髄が海綿骨と皮質骨に均等に分かれていると仮定されているのに対して、
+#   Publ.151では赤色骨髄に纏められている。
+# - 上記を反映してか、血液から骨髄への流出が、
+#   Publ.134では 5 d⁻¹ * 10% = 0.5 d⁻¹ なのに対して、
+#   Publ.151では 0.25 d⁻¹ になっており、半分の速度に設定されている。
+# - また骨髄への流出速度低下を補填するように、血液からST0(比較的早く血液に戻る軟部組織区画)への流出が、
+#   Publ.134では 5 * 37.9% = 1.895 d⁻¹ なのに対して、
+#   Publ.151では 2.145 d⁻¹ になっており、速度増加されている。
+
+# # ICRP Publ.151 p.164 Table 17.3
+#   Blood                   RC-con                    0.15
+#   Blood                   Liver                     0.3
+#   Blood                   Kidneys                   0.4
+#   Blood                   Spleen                    0.05
+#   Blood                   T-bone-S                  0.5
+#   Blood                   C-bone-S                  0.5
+#   Blood                   RedMarrow                 0.25      # <--
+#   Blood                   SkeletalMuscle            0.2
+#   Blood                   Pancreas                  0.005
+#   Blood                   ST0                       2.145     # <--
+#   Blood                   ST1                       0.5
+#   Liver                   Blood                     0.139
+#   Kidneys                 UB-con                    1.39
+#   Spleen                  Blood                     0.139
+#   T-bone-S                Blood                     0.347
+#   C-bone-S                Blood                     0.347
+#   RedMarrow               Blood                     0.347
+#   SkeletalMuscle          Blood                     0.139
+#   Pancreas                Blood                     0.139
+#   ST0                     Blood                     1.39
+#   ST1                     Blood                     0.0019
