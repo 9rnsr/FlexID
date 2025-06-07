@@ -1,0 +1,72 @@
+[title]
+S-35 Ingestion:Other
+
+[nuclide]
+  S-35
+
+
+[S-35:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+# ICRP Publ.134 p.108 Fig.5.1 inorganic sulpher
+  acc   Blood                 Blood
+  acc   Cartilage             Cartilage
+  acc   RedMarrow             R-marrow
+  acc   Other                 Other
+
+[S-35:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.104 Table 5.3 / Ingested materials, All other forms
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote††
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.108 Table 5.4
+  Blood                   RedMarrow                 0.075
+  Blood                   Cartilage                 0.25
+  Blood                   Other                     0.175
+  Blood                   UB-con                    1.8
+  Blood                   RC-con                    0.2
+  RedMarrow               Blood                     0.3
+  Cartilage               Blood                     0.1
+  Other                   Blood                     3.5
