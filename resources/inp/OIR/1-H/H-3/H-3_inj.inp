@@ -1,0 +1,71 @@
+[title]
+H-3 Ingestion:Insoluble
+
+[nuclide]
+  H-3
+
+
+[H-3:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ExtravasHTO           Other
+  acc   OBT1                  Other
+  acc   OBT2                  Other
+  exc   Breath(discharge)     ---
+  exc   Skin(discharge)       ---
+
+[H-3:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.21 Table 2.3 / Ingested materials, Relatively insoluble forms
+  $fA = 0.1
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.35 Table 2.5 & footnote†
+  Blood                   ExtravasHTO             400
+  ExtravasHTO             OBT1                      0.0006
+  ExtravasHTO             OBT2                      0.00008
+  Blood                   UB-con                    0.385       # = 55% of 0.7/d
+  Blood                   RC-con                    0.028       # =  4% of 0.7/d
+  Blood                   Breath(discharge)         0.084       # = 12% of 0.7/d
+  Blood                   Skin(discharge)           0.203       # = 29% of 0.7/d
+  ExtravasHTO             Blood                    44
+  OBT1                    ExtravasHTO               0.01733
+  OBT2                    ExtravasHTO               0.0019
