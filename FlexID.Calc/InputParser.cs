@@ -1,4 +1,5 @@
 using Sprache;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using static Sprache.Parse;
@@ -185,7 +186,19 @@ namespace FlexID.Calc
         {
             this.lineNum = lineNum;
 
-            var result = parser.Coefficient.Token().End().TryParse(input);
+            IResult<(decimal v, bool r)> result;
+            try
+            {
+                result = parser.Coefficient.Token().End().TryParse(input);
+            }
+            catch (DivideByZeroException ex)
+            {
+                throw Program.Error($"Line {lineNum}: Transfer coefficient evaluation failed: divide by zero.");
+            }
+            catch (ArithmeticException ex)
+            {
+                throw Program.Error($"Line {lineNum}: Transfer coefficient evaluation failed: {ex.Message}.");
+            }
             if (!result.WasSuccessful)
                 throw Program.Error($"Line {lineNum}: Transfer coefficient should be evaluated to a number, not '{input}'.");
 
