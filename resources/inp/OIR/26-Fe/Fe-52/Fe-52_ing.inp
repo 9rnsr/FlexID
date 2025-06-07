@@ -1,0 +1,378 @@
+[title]
+Fe-52 Ingestion:Unspecified
+
+[nuclide]
+  Fe-52  Mn-52m  Mn-52
+
+
+[Fe-52:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   OtherPlasma           Blood
+  acc   PlasmaTrans           Blood
+  acc   RBC                   Blood
+  acc   Liver1(Hepato)        Liver
+  acc   Liver2(RE)            Liver
+  acc   Spleen                Spleen
+  acc   MarrowSynthe          R-marrow
+  acc   MarrowTransit         R-marrow
+  acc   MarrowStorage         R-marrow
+  acc   Other1(Trans)         Other
+  acc   Other2(Parenc)        Other
+  acc   Other3(RE)            Other
+  exc   Excreta               ---
+
+[Fe-52:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.136 Table 7.2 / Ingested materials, All unspecified forms
+  $fA    = 0.1
+  $fA_Re = 0.1          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  OtherPlasma           $(fA    * 6 / (1 - fA   ))
+  SI-conRe                OtherPlasma           $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.143 Table 7.3
+  OtherPlasma             PlasmaTrans              70
+  OtherPlasma             UB-con                    0.01
+  OtherPlasma             RC-con                    0.1
+  PlasmaTrans             MarrowSynthe              9.43
+  PlasmaTrans             Liver1(Hepato)            0.555
+  PlasmaTrans             Other1(Trans)             1.11
+  RBC                     OtherPlasma               0.000833
+  RBC                     MarrowTransit             0.00729
+  RBC                     RC-con                    0.0002
+  RBC                     UB-con                    0.000015
+  MarrowSynthe            RBC                       0.243
+  MarrowSynthe            MarrowTransit             0.104
+  MarrowTransit           OtherPlasma               1.39
+  MarrowTransit           MarrowStorage             0.0635
+  MarrowTransit           Liver2(RE)                0.0106
+  MarrowTransit           Spleen                    0.017
+  MarrowTransit           Other3(RE)                0.0635
+  MarrowStorage           MarrowTransit             0.0038
+  Liver2(RE)              MarrowTransit             0.0038
+  Spleen                  MarrowTransit             0.0038
+  Other3(RE)              MarrowTransit             0.0038
+  Liver1(Hepato)          PlasmaTrans               0.00364
+  Liver1(Hepato)          SI-conRe                  0.00037
+  Other1(Trans)           PlasmaTrans               0.888
+  Other1(Trans)           Other2(Parenc)            0.222
+  Other2(Parenc)          Other1(Trans)             0.00127
+  Other2(Parenc)          Excreta                   0.00057
+  Other2(Parenc)          UB-con                    0.00003
+
+
+[Mn-52m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Brain                 Brain
+  acc   Kidneys               Kidneys
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Spleen                Spleen        # only for progeny of Fe
+  acc   RedMarrow             R-marrow      # only for progeny of Fe
+
+[Mn-52m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.119 Table 14.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.05
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Fe-52/Oralcavity        Oralcavity                ---
+  Fe-52/Oesophagus-f      Oesophagus-f              ---
+  Fe-52/Oesophagus-s      Oesophagus-s              ---
+  Fe-52/St-con            St-con                    ---
+  Fe-52/SI-con            SI-con                    ---
+  Fe-52/SI-conRe          SI-conRe                  ---
+  Fe-52/RC-con            RC-con                    ---
+  Fe-52/LC-con            LC-con                    ---
+  Fe-52/RS-con            RS-con                    ---
+  Fe-52/Faeces            Faeces                    ---
+  Fe-52/UB-con            UB-con                    ---
+  Fe-52/Urine             Urine                     ---
+
+# ICRP Publ.134 p.145 para.297
+  Fe-52/OtherPlasma       Plasma                    ---
+  Fe-52/PlasmaTrans       Plasma                $(0.693 / (1/60/24))    # 半減期1分
+  Fe-52/RBC               Plasma                $(0.693 / 83.2)         # 半減期83.2日
+  Fe-52/Liver1(Hepato)    Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Liver2(RE)        Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Spleen            Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/MarrowSynthe      Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/MarrowTransit     Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/MarrowStorage     Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Other1(Trans)     Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Other2(Parenc)    Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Other3(RE)        Plasma                $(0.693 / 2)            # 半減期2日
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.145 Para.297
+  Plasma                  Liver1                $(1000 * 30%)
+  Plasma                  Kidneys               $(1000 *  5%)
+  Plasma                  Pancreas              $(1000 *  5%)
+  Plasma                  UB-con                $(1000 *  0.2%)
+  Plasma                  RC-con                $(1000 *  1%)
+  Plasma                  ST0                   $(1000 * 39.18%)
+  Plasma                  ST1                   $(1000 * 14.60%)
+  Plasma                  ST2                   $(1000 *  4.00%)
+  Plasma                  C-bone-S              $(1000 *  0.5% * 0.5)
+  Plasma                  T-bone-S              $(1000 *  0.5% * 0.5)
+  Plasma                  Brain                 $(1000 *  0.1%)
+  Plasma                  RBC                   $(1000 *  0.02%)
+  Liver1                  SI-conRe              $(0.693 / 2 * 20%)      # 半減期2日の20%
+  Liver1                  Liver2                $(0.693 / 2 * 80%)      # 半減期2日の80%
+  Liver2                  Plasma                $(0.693 / 2)            # 半減期2日
+  Kidneys                 Plasma                $(0.693 / 2)            # 半減期2日
+  Pancreas                Plasma                $(0.693 / 1 * 0.5)      # 半減期1日の50%
+  Pancreas                SI-conRe              $(0.693 / 1 * 0.5)      # 半減期1日の50%
+  ST0                     Plasma                $(0.693 / (30/60/24))   # 半減期30分
+  ST1                     Plasma                $(0.693 / 2)            # 半減期2日
+  ST2                     Plasma                $(0.693 / 40)           # 半減期40日
+  C-bone-S                Plasma                $(0.693 / 40 * 99%)
+  C-bone-S                C-bone-V              $(0.693 / 40 *  1%)
+  T-bone-S                Plasma                $(0.693 / 40 * 99%)
+  T-bone-S                T-bone-V              $(0.693 / 40 *  1%)
+  C-bone-V                Plasma                $( 3% / 365.25)         # 成人の骨ターンオーバー
+  T-bone-V                Plasma                $(18% / 365.25)         # 成人の骨ターンオーバー
+  Brain                   Plasma                $(0.693 / 150)          # 半減期150日
+  RBC                     Plasma                $(0.693 /  83.2)        # 半減期 83.2日
+
+  Plasma                  Spleen                $(1000 * 0.3%)
+  Plasma                  RedMarrow             $(1000 * 0.1%)
+  Spleen                  Plasma                $(0.693 / (30/60/24))   # use ST0 -> Plasma
+  RedMarrow               Plasma                $(0.693 / (30/60/24))   # use ST0 -> Plasma
+
+
+[Mn-52:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Brain                 Brain
+  acc   Kidneys               Kidneys
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Pancreas              Pancreas
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Spleen                Spleen        # only for progeny of Fe
+  acc   RedMarrow             R-marrow      # only for progeny of Fe
+
+[Mn-52:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.119 Table 14.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.05
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Fe-52/Oralcavity        Oralcavity                ---
+  Fe-52/Oesophagus-f      Oesophagus-f              ---
+  Fe-52/Oesophagus-s      Oesophagus-s              ---
+  Fe-52/St-con            St-con                    ---
+  Fe-52/SI-con            SI-con                    ---
+  Fe-52/SI-conRe          SI-conRe                  ---
+  Fe-52/RC-con            RC-con                    ---
+  Fe-52/LC-con            LC-con                    ---
+  Fe-52/RS-con            RS-con                    ---
+  Fe-52/Faeces            Faeces                    ---
+  Fe-52/UB-con            UB-con                    ---
+  Fe-52/Urine             Urine                     ---
+
+# ICRP Publ.134 p.145 para.297
+  Fe-52/OtherPlasma       Plasma                    ---
+  Fe-52/PlasmaTrans       Plasma                $(0.693 / (1/60/24))    # 半減期1分
+  Fe-52/RBC               Plasma                $(0.693 / 83.2)         # 半減期83.2日
+  Fe-52/Liver1(Hepato)    Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Liver2(RE)        Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Spleen            Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/MarrowSynthe      Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/MarrowTransit     Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/MarrowStorage     Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Other1(Trans)     Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Other2(Parenc)    Plasma                $(0.693 / 2)            # 半減期2日
+  Fe-52/Other3(RE)        Plasma                $(0.693 / 2)            # 半減期2日
+
+  Mn-52m/Plasma           Plasma                    ---
+  Mn-52m/RBC              RBC                       ---
+  Mn-52m/C-bone-S         C-bone-S                  ---
+  Mn-52m/C-bone-V         C-bone-V                  ---
+  Mn-52m/T-bone-S         T-bone-S                  ---
+  Mn-52m/T-bone-V         T-bone-V                  ---
+  Mn-52m/Brain            Brain                     ---
+  Mn-52m/Kidneys          Kidneys                   ---
+  Mn-52m/Liver1           Liver1                    ---
+  Mn-52m/Liver2           Liver2                    ---
+  Mn-52m/Pancreas         Pancreas                  ---
+  Mn-52m/ST0              ST0                       ---
+  Mn-52m/ST1              ST1                       ---
+  Mn-52m/ST2              ST2                       ---
+  Mn-52m/Spleen           Spleen                    ---
+  Mn-52m/RedMarrow        RedMarrow                 ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.145 Para.297
+  Plasma                  Liver1                $(1000 * 30%)
+  Plasma                  Kidneys               $(1000 *  5%)
+  Plasma                  Pancreas              $(1000 *  5%)
+  Plasma                  UB-con                $(1000 *  0.2%)
+  Plasma                  RC-con                $(1000 *  1%)
+  Plasma                  ST0                   $(1000 * 39.18%)
+  Plasma                  ST1                   $(1000 * 14.60%)
+  Plasma                  ST2                   $(1000 *  4.00%)
+  Plasma                  C-bone-S              $(1000 *  0.5% * 0.5)
+  Plasma                  T-bone-S              $(1000 *  0.5% * 0.5)
+  Plasma                  Brain                 $(1000 *  0.1%)
+  Plasma                  RBC                   $(1000 *  0.02%)
+  Liver1                  SI-conRe              $(0.693 / 2 * 20%)      # 半減期2日の20%
+  Liver1                  Liver2                $(0.693 / 2 * 80%)      # 半減期2日の80%
+  Liver2                  Plasma                $(0.693 / 2)            # 半減期2日
+  Kidneys                 Plasma                $(0.693 / 2)            # 半減期2日
+  Pancreas                Plasma                $(0.693 / 1 * 0.5)      # 半減期1日の50%
+  Pancreas                SI-conRe              $(0.693 / 1 * 0.5)      # 半減期1日の50%
+  ST0                     Plasma                $(0.693 / (30/60/24))   # 半減期30分
+  ST1                     Plasma                $(0.693 / 2)            # 半減期2日
+  ST2                     Plasma                $(0.693 / 40)           # 半減期40日
+  C-bone-S                Plasma                $(0.693 / 40 * 99%)
+  C-bone-S                C-bone-V              $(0.693 / 40 *  1%)
+  T-bone-S                Plasma                $(0.693 / 40 * 99%)
+  T-bone-S                T-bone-V              $(0.693 / 40 *  1%)
+  C-bone-V                Plasma                $( 3% / 365.25)         # 成人の骨ターンオーバー
+  T-bone-V                Plasma                $(18% / 365.25)         # 成人の骨ターンオーバー
+  Brain                   Plasma                $(0.693 / 150)          # 半減期150日
+  RBC                     Plasma                $(0.693 /  83.2)        # 半減期 83.2日
+
+  Plasma                  Spleen                $(1000 * 0.3%)
+  Plasma                  RedMarrow             $(1000 * 0.1%)
+  Spleen                  Plasma                $(0.693 / (30/60/24))   # use ST0 -> Plasma
+  RedMarrow               Plasma                $(0.693 / (30/60/24))   # use ST0 -> Plasma
