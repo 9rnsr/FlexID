@@ -1,0 +1,201 @@
+[title]
+Ca-47 Injection
+
+[nuclide]
+  Ca-47  Sc-47
+
+
+[Ca-47:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Ca-47:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
+  $fA = 0.4
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.121 Table 6.3
+  Blood                   UB-con                    0.60
+  Blood                   RC-con                    0.45
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       8.70
+  Blood                   ST1                       1.50
+  Blood                   ST2                       0.00075
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.9
+  ST1                     Blood                     0.1733
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.002773
+  Exch-T-bone-V           Noch-T-bone-V             0.004159
+  Exch-C-bone-V           C-bone-S                  0.002773
+  Exch-C-bone-V           Noch-C-bone-V             0.004159
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
+
+
+[Sc-47:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys               Kidneys
+  acc   Spleen                Spleen
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   T-marrow              T-marrow
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[Sc-47:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.30 Part.3
+  $fA    = 1E-4
+  $fA_Re = 1E-4
+
+# from parent to progeny
+  Ca-47/Oralcavity        Oralcavity                ---
+  Ca-47/Oesophagus-f      Oesophagus-f              ---
+  Ca-47/Oesophagus-s      Oesophagus-s              ---
+  Ca-47/St-con            St-con                    ---
+  Ca-47/SI-con            SI-con                    ---
+  Ca-47/RC-con            RC-con                    ---
+  Ca-47/LC-con            LC-con                    ---
+  Ca-47/RS-con            RS-con                    ---
+  Ca-47/Faeces            Faeces                    ---
+  Ca-47/UB-con            UB-con                    ---
+  Ca-47/Urine             Urine                     ---
+
+  Ca-47/Blood             Blood1                    ---
+  Ca-47/C-bone-S          C-bone-S                  ---
+  Ca-47/Exch-C-bone-V     C-bone-V                  ---
+  Ca-47/Noch-C-bone-V     C-bone-V                  ---
+  Ca-47/T-bone-S          T-bone-S                  ---
+  Ca-47/Exch-T-bone-V     T-bone-V                  ---
+  Ca-47/Noch-T-bone-V     T-bone-V                  ---
+  Ca-47/ST0               Blood1                $(0.693 / 3)
+  Ca-47/ST1               Blood1                $(0.693 / 3)
+  Ca-47/ST2               Blood1                $(0.693 / 3)
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.134 Para.244-257
+# ICRP Publ.89 Table 9.5
+  Blood1                  Blood2                $(3 * 15%      )
+  Blood1                  Liver1                $(3 * 20%      )
+  Blood1                  Kidneys               $(3 *  3%      )
+  Blood1                  UB-con                $(3 *  1.8%    )
+  Blood1                  T-marrow              $(3 *  5%      )
+  Blood1                  C-marrow              $(3 *  5%      )
+  Blood1                  Spleen                $(3 *  2%      )
+  Blood1                  ST0                   $(3 * 20%      )
+  Blood1                  ST1                   $(3 * 18.2%    )
+  Blood1                  T-bone-S              $(3 * 10% * 0.5)
+  Blood1                  C-bone-S              $(3 * 10% * 0.5)
+  Blood2                  Blood1                $(0.693 / 1.5      )
+  Liver1                  SI-conRe              $(0.693 /   3 * 25%)
+  Liver1                  Blood1                $(0.693 /   3 * 50%)
+  Liver1                  Liver2                $(0.693 /   3 * 25%)
+  Liver2                  Blood1                $(0.693 / 100      )
+  Kidneys                 Blood1                $(0.693 /  20      )
+  T-marrow                Blood1                $(0.693 / 100      )
+  C-marrow                Blood1                $(0.693 / 100      )
+  Spleen                  Blood1                $(0.693 / 365.25   )
+  ST0                     Blood1                $(0.693 /   3      )
+  ST1                     Blood1                $(0.693 / 100      )
+  T-bone-S                Blood1                $(0.18 / 365.25 * 1.5 * 2/3)
+  T-bone-S                T-bone-V              $(0.18 / 365.25 * 1.5 * 1/3)
+  T-bone-V                Blood1                $(0.18 / 365.25            )
+  C-bone-S                Blood1                $(0.03 / 365.25 * 1.5 * 2/3)
+  C-bone-S                C-bone-V              $(0.03 / 365.25 * 1.5 * 1/3)
+  C-bone-V                Blood1                $(0.03 / 365.25            )
