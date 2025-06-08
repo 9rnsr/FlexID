@@ -1,0 +1,696 @@
+[title]
+Sr-81 Inhalation:Type-F
+
+[nuclide]
+  Sr-81  Rb-81m  Rb-81  Kr-81m  Kr-81
+
+
+[Sr-81:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Sr-81:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 30
+  $ss =  0
+  $fA = 0.25
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood                 $sr
+  INT-F                   Blood                 $sr
+  bb-F                    Blood                 $sr
+  bbseq-F                 Blood                 $sr
+  BB-F                    Blood                 $sr
+  BBseq-F                 Blood                 $sr
+  ET2-F                   Blood                 $sr
+  ETseq-F                 Blood                 $sr
+  LNET-F                  Blood                 $sr
+  LNTH-F                  Blood                 $sr
+
+  ALV-S                   Blood                 $ss
+  INT-S                   Blood                 $ss
+  bb-S                    Blood                 $ss
+  bbseq-S                 Blood                 $ss
+  BB-S                    Blood                 $ss
+  BBseq-S                 Blood                 $ss
+  ET2-S                   Blood                 $ss
+  ETseq-S                 Blood                 $ss
+  LNET-S                  Blood                 $ss
+  LNTH-S                  Blood                 $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+  Blood                   ST1                       1.5
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
+
+
+[Rb-81m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Muscle                Muscle
+  acc   OtherTissue           Other
+  exc   Excreta(sweat)        ---
+
+[Rb-81m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.30 Part.2
+# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA = fr * fA_MaxValueOfIng
+
+# from parent to progeny
+  Sr-81/ET1-F             ET1-F                     ---
+  Sr-81/ET2-F             ET2-F                     ---
+  Sr-81/ETseq-F           ETseq-F                   ---
+  Sr-81/LNET-F            LNET-F                    ---
+  Sr-81/BB-F              BB-F                      ---
+  Sr-81/BBseq-F           BBseq-F                   ---
+  Sr-81/bb-F              bb-F                      ---
+  Sr-81/bbseq-F           bbseq-F                   ---
+  Sr-81/ALV-F             ALV-F                     ---
+  Sr-81/INT-F             INT-F                     ---
+  Sr-81/LNTH-F            LNTH-F                    ---
+  Sr-81/ET1-S             ET1-S                     ---
+  Sr-81/ET2-S             ET2-S                     ---
+  Sr-81/ETseq-S           ETseq-S                   ---
+  Sr-81/LNET-S            LNET-S                    ---
+  Sr-81/BB-S              BB-S                      ---
+  Sr-81/BBseq-S           BBseq-S                   ---
+  Sr-81/bb-S              bb-S                      ---
+  Sr-81/bbseq-S           bbseq-S                   ---
+  Sr-81/ALV-S             ALV-S                     ---
+  Sr-81/INT-S             INT-S                     ---
+  Sr-81/LNTH-S            LNTH-S                    ---
+  Sr-81/Environment       Environment               ---
+
+  Sr-81/Oralcavity        Oralcavity                ---
+  Sr-81/Oesophagus-f      Oesophagus-f              ---
+  Sr-81/Oesophagus-s      Oesophagus-s              ---
+  Sr-81/St-con            St-con                    ---
+  Sr-81/SI-con            SI-con                    ---
+  Sr-81/RC-con            RC-con                    ---
+  Sr-81/LC-con            LC-con                    ---
+  Sr-81/RS-con            RS-con                    ---
+  Sr-81/Faeces            Faeces                    ---
+  Sr-81/UB-con            UB-con                    ---
+  Sr-81/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.224 Para.484
+# > (484) The model for rubidium as a progeny of strontium is a condensed version of
+# > a proposed model for rubidium as a parent radionuclide (Leggett and Williams,
+# > 1988). The model is based on the same principles as the model for caesium, a chemical
+# > and physiological analogue of rubidium, described elsewhere in the OIR series.
+# > That is, the biokinetics of systemic rubidium is predicted on the basis of the distribution
+# > of cardiac output, experimentally determined tissue-specific extraction fractions,
+# > and the steady-state distribution of stable rubidium in the body. The reference
+# > division of cardiac output in the adult male tabulated in Publication 89 (ICRP, 2002)
+# > is applied here. The present version of the model depicts blood plasma as a central
+# > compartment that exchanges rubidium with RBCs, trabecular bone surface, cortical
+# > bone surface, muscle, and a compartment representing all other soft tissue. Rates of
+# > transfer of rubidium from plasma are as follows: 6 d⁻¹ to RBCs, 255 d⁻¹ to muscle,
+# > 5.6 d⁻¹ to cortical bone surface, 8.4 d⁻¹ to trabecular bone surface, 855 d⁻¹ to other
+# > tissue, 3.9 d⁻¹ to urinary bladder contents, 1.2 d⁻¹ to right colon contents, and
+# > 0.1 d⁻¹ to excreta (loss in sweat). Transfer rates from RBCs or tissues to plasma
+# > are as follows: 0.35 d⁻¹ from RBCs, 1.14 d⁻¹ from muscle, 1.68 d⁻¹ from bone surface
+# > compartments, and 10.3 d⁻¹ from other tissue. Rubidium produced by decay of
+# > strontium in blood is assigned to plasma. Rubidium produced in exchangeable or
+# > non-exchangeable bone volume compartments of the strontium model are transferred
+# > to plasma at the rate of bone turnover. Rubidium produced in soft tissue
+# > compartments of the strontium model (ST0, ST1, or ST2) are transferred to
+# > plasma at a rate of 10.3 d⁻¹. The subsequent behaviour of rubidium that reaches
+# > plasma is determined by the model for rubidium described above.
+# > (484) ストロンチウムの子孫核種としてのルビジウムのモデルは、親核種としての
+# > ルビジウムのモデル（Leggett and Williams, 1988）の簡略版である。このモデルは、
+# > OIRシリーズの他の箇所で説明されている、ルビジウムの化学的および生理学的類似体である
+# > セシウムのモデルと同じ原理に基づいている。すなわち、全身ルビジウムの生体内動態は、
+# > 心拍出量の分布、実験的に決定された組織特異的抽出率、および体内の安定したルビジウムの
+# > 定常分布に基づいて予測される。ここでは、Publication 89（ICRP, 2002）に示されている
+# > 成人男性の心拍出量の基準区分が適用される。現在のモデルでは、血漿を中心コンパートメントとして
+# > 描き、赤血球、海綿骨表面、皮質骨表面、筋肉、そしてその他すべての軟部組織とルビジウムを交換する。
+# > 血漿からのルビジウムの移動速度は、赤血球に6 d⁻¹、筋肉に255 d⁻¹、皮質骨表面に5.6 d⁻¹、
+# > 海綿骨表面に8.4 d⁻¹、その他の組織に855 d⁻¹、膀胱内容物に3.9 d⁻¹、右結腸内容物に1.2 d⁻¹、
+# > 排泄物（汗による損失）に0.1 d⁻¹である。赤血球または組織から血漿への移行速度は、
+# > 赤血球から0.35 d⁻¹、筋肉から1.14 d⁻¹、骨表面コンパートメントから1.68 d⁻¹、
+# > その他の組織から10.3 d⁻¹である。血液中のストロンチウムの崩壊によって生成されたルビジウムは
+# > 血漿に移行する。ストロンチウムモデルの交換性または非交換性骨容積コンパートメントで
+# > 生成されたルビジウムは、骨代謝の速度で血漿に移行する。ストロンチウムモデルの
+# > 軟部組織コンパートメント（ST0、ST1、またはST2）で生成されたルビジウムは、
+# > 10.3 d⁻¹の速度で血漿に移行する。血漿に到達したルビジウムのその後の挙動は、
+# > 上記のルビジウムモデルによって決定される。
+
+  Plasma                  RBC                       6
+  Plasma                  Muscle                  255
+  Plasma                  C-bone-S                  5.6
+  Plasma                  T-bone-S                  8.4
+  Plasma                  OtherTissue             855
+  Plasma                  UB-con                    3.9
+  Plasma                  RC-con                    1.2
+  Plasma                  Excreta(sweat)            0.1
+  RBC                     Plasma                    0.35
+  Muscle                  Plasma                    1.14
+  C-bone-S                Plasma                    1.68
+  T-bone-S                Plasma                    1.68
+  OtherTissue             Plasma                   10.3
+
+  Sr-81/Blood             Plasma                    ---
+  Sr-81/C-bone-S          C-bone-S                  ---
+  Sr-81/Exch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-81/Noch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-81/T-bone-S          T-bone-S                  ---
+  Sr-81/Exch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-81/Noch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-81/ST0               Plasma                   10.3
+  Sr-81/ST1               Plasma                   10.3
+  Sr-81/ST2               Plasma                   10.3
+
+
+[Rb-81:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Muscle                Muscle
+  acc   OtherTissue           Other
+  exc   Excreta(sweat)        ---
+
+[Rb-81:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.30 Part.2
+# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA = fr * fA_MaxValueOfIng
+
+# from parent to progeny
+  Sr-81/ET1-F             ET1-F                     ---
+  Sr-81/ET2-F             ET2-F                     ---
+  Sr-81/ETseq-F           ETseq-F                   ---
+  Sr-81/LNET-F            LNET-F                    ---
+  Sr-81/BB-F              BB-F                      ---
+  Sr-81/BBseq-F           BBseq-F                   ---
+  Sr-81/bb-F              bb-F                      ---
+  Sr-81/bbseq-F           bbseq-F                   ---
+  Sr-81/ALV-F             ALV-F                     ---
+  Sr-81/INT-F             INT-F                     ---
+  Sr-81/LNTH-F            LNTH-F                    ---
+  Sr-81/ET1-S             ET1-S                     ---
+  Sr-81/ET2-S             ET2-S                     ---
+  Sr-81/ETseq-S           ETseq-S                   ---
+  Sr-81/LNET-S            LNET-S                    ---
+  Sr-81/BB-S              BB-S                      ---
+  Sr-81/BBseq-S           BBseq-S                   ---
+  Sr-81/bb-S              bb-S                      ---
+  Sr-81/bbseq-S           bbseq-S                   ---
+  Sr-81/ALV-S             ALV-S                     ---
+  Sr-81/INT-S             INT-S                     ---
+  Sr-81/LNTH-S            LNTH-S                    ---
+  Sr-81/Environment       Environment               ---
+
+  Sr-81/Oralcavity        Oralcavity                ---
+  Sr-81/Oesophagus-f      Oesophagus-f              ---
+  Sr-81/Oesophagus-s      Oesophagus-s              ---
+  Sr-81/St-con            St-con                    ---
+  Sr-81/SI-con            SI-con                    ---
+  Sr-81/RC-con            RC-con                    ---
+  Sr-81/LC-con            LC-con                    ---
+  Sr-81/RS-con            RS-con                    ---
+  Sr-81/Faeces            Faeces                    ---
+  Sr-81/UB-con            UB-con                    ---
+  Sr-81/Urine             Urine                     ---
+
+  Rb-81m/Plasma           Plasma                    ---
+  Rb-81m/RBC              RBC                       ---
+  Rb-81m/C-bone-S         C-bone-S                  ---
+  Rb-81m/T-bone-S         T-bone-S                  ---
+  Rb-81m/Muscle           Muscle                    ---
+  Rb-81m/OtherTissue      OtherTissue               ---
+  Rb-81m/Excreta(sweat)   Excreta(sweat)            ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.224 Para.484
+  Plasma                  RBC                       6
+  Plasma                  Muscle                  255
+  Plasma                  C-bone-S                  5.6
+  Plasma                  T-bone-S                  8.4
+  Plasma                  OtherTissue             855
+  Plasma                  UB-con                    3.9
+  Plasma                  RC-con                    1.2
+  Plasma                  Excreta(sweat)            0.1
+  RBC                     Plasma                    0.35
+  Muscle                  Plasma                    1.14
+  C-bone-S                Plasma                    1.68
+  T-bone-S                Plasma                    1.68
+  OtherTissue             Plasma                   10.3
+
+  Sr-81/Blood             Plasma                    ---
+  Sr-81/C-bone-S          C-bone-S                  ---
+  Sr-81/Exch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-81/Noch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-81/T-bone-S          T-bone-S                  ---
+  Sr-81/Exch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-81/Noch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-81/ST0               Plasma                   10.3
+  Sr-81/ST1               Plasma                   10.3
+  Sr-81/ST2               Plasma                   10.3
+
+
+# ICRP Publ.134 p.224 Para.485
+# > (485) The model for krypton produced by serial decay of strontium and rubidium
+# > in systemic compartments is similar to the model applied in the OIR series to radon
+# > produced in vivo by decay of a parent radionuclide (ICRP, 2017, see radon section in
+# > OIR Part 3). Krypton is assumed to follow the bone model for radon introduced in
+# > Publication 67 (ICRP, 1993), but is assigned a higher rate of removal from soft tissues
+# > to blood than is assumed for radon. Specifically, krypton produced in
+# > non-exchangeable bone volume, exchangeable bone volume, or bone surface transfers
+# > to blood at rates of 0.36 d⁻¹, 1.5 d⁻¹, or 100 d⁻¹, respectively. Krypton produced in a
+# > soft tissue compartment transfers to blood with a half-time of 15 min, compared with
+# > an assumed half-time of 30 min for radon produced by radioactive decay in soft
+# > tissues. Krypton entering blood is assumed to be removed from the body (exhaled)
+# > at a rate of 1000 d⁻¹, corresponding to a half-time of 1 min. Recycling of krypton to
+# > tissues via arterial blood is not depicted explicitly but is considered in the assignment
+# > of effective half-times in tissues. The model is intended to yield a conservative average
+# > residence time of krypton atoms produced in systemic pools by decay of a parent
+# > radionuclide. It is recognised that the residence time of krypton in the body following
+# > production in tissues depends on the distribution of the parent radionuclide.
+# > (485) ストロンチウムおよびルビジウムの連続崩壊によって全身コンパートメントで生成される
+# > クリプトンのモデルは、OIRシリーズにおいて親放射性核種の崩壊によって体内で生成される
+# > ラドンに適用されたモデルと類似している（ICRP, 2017、OIRパート3のラドンのセクションを参照）。
+# > クリプトンは、Publication 67（ICRP, 1993）で導入されたラドンの骨モデルに従うと仮定されているが、
+# > 軟部組織から血液への除去率はラドンの場合よりも高いと仮定されている。具体的には、
+# > 非交換性骨量、交換性骨量、または骨表面で生成されたクリプトンは、それぞれ
+# > 0.36 d⁻¹、1.5 d⁻¹、または100 d⁻¹の速度で血液に移行する。軟部組織区画で生成されたクリプトンは、
+# > 半減期15分で血液中に移行する。これに対し、軟部組織における放射性崩壊によって生成される
+# > ラドンの半減期は30分と想定されている。血液中に入ったクリプトンは、1000 d⁻¹の速度で
+# > 体内から排出（呼気）されると仮定し、これは半減期1分に相当する。動脈血を介したクリプトンの
+# > 組織への再循環は明示的には示されていないが、組織における実効半減期の割り当てにおいて
+# > 考慮されている。このモデルは、親放射性核種の崩壊によって全身プールに生成されるクリプトン原子の
+# > 平均滞留時間を保守的に算出することを目的としています。組織で生成されたクリプトンの
+# > 体内滞留時間は、親放射性核種の分布に依存することが認識されています。
+
+[Kr-81m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   UB-con                UB-cont
+
+  acc   Blood                 Blood
+  exc   Exhaled               ---
+
+[Kr-81m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 Para.38
+# > (38) Noble gases produced in compartments of the respiratory tract and in the
+# > alimentary tract models by radioactive decay are assumed to escape from these
+# > compartments directly to the environment at a rate of 100 d⁻¹, without transfer to
+# > the blood compartment and without transfer between compartments of respiratory
+# > tract and alimentary tract models. It is assumed that progeny of such noble gases
+# > formed within the body follow the rules stated in Para. 37.
+# > (38) 呼吸器系および消化器系モデルにおいて放射性崩壊により生成される希ガスは、
+# > これらの部位から100 d⁻¹の速度で直接環境へ放出され、血液系への移行や呼吸器系と
+# > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
+# > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
+
+  Sr-81/ET1-F             Exhaled                 100
+  Sr-81/ET2-F             Exhaled                 100
+  Sr-81/ETseq-F           Exhaled                 100
+  Sr-81/LNET-F            Exhaled                 100
+  Sr-81/BB-F              Exhaled                 100
+  Sr-81/BBseq-F           Exhaled                 100
+  Sr-81/bb-F              Exhaled                 100
+  Sr-81/bbseq-F           Exhaled                 100
+  Sr-81/ALV-F             Exhaled                 100
+  Sr-81/INT-F             Exhaled                 100
+  Sr-81/LNTH-F            Exhaled                 100
+  Sr-81/ET1-S             Exhaled                 100
+  Sr-81/ET2-S             Exhaled                 100
+  Sr-81/ETseq-S           Exhaled                 100
+  Sr-81/LNET-S            Exhaled                 100
+  Sr-81/BB-S              Exhaled                 100
+  Sr-81/BBseq-S           Exhaled                 100
+  Sr-81/bb-S              Exhaled                 100
+  Sr-81/bbseq-S           Exhaled                 100
+  Sr-81/ALV-S             Exhaled                 100
+  Sr-81/INT-S             Exhaled                 100
+  Sr-81/LNTH-S            Exhaled                 100
+
+  Sr-81/Oralcavity        Exhaled                 100
+  Sr-81/Oesophagus-f      Exhaled                 100
+  Sr-81/Oesophagus-s      Exhaled                 100
+  Sr-81/St-con            Exhaled                 100
+  Sr-81/SI-con            Exhaled                 100
+  Sr-81/RC-con            Exhaled                 100
+  Sr-81/LC-con            Exhaled                 100
+  Sr-81/RS-con            Exhaled                 100
+  Sr-81/UB-con            UB-con                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
+# ICRP Publ.134 p.224 Para.485
+  Sr-81/Blood             Blood                     ---     # ?
+  Sr-81/Noch-C-bone-V     Blood                     0.36
+  Sr-81/Noch-T-bone-V     Blood                     0.36
+  Sr-81/Exch-C-bone-V     Blood                     1.5
+  Sr-81/Exch-T-bone-V     Blood                     1.5
+  Sr-81/C-bone-S          Blood                   100
+  Sr-81/T-bone-S          Blood                   100
+  Sr-81/ST0               Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-81/ST1               Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-81/ST2               Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Rb-81m/RBC              Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Rb-81m/Muscle           Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Rb-81m/OtherTissue      Blood                 $(0.693 / (15/60/25))   # 半減期15分
+
+  Blood                   Exhaled                1000   # ≒半減期1分
+
+
+[Kr-81:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   UB-con                UB-cont
+
+  acc   Blood                 Blood
+  exc   Exhaled               ---
+
+[Kr-81:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Kr-81m/UB-con           UB-con                    ---
+  Kr-81m/Blood            Blood                     ---
+  Kr-81m/Exhaled          Exhaled                   ---
+
+# ICRP Publ.130 Para.38
+  Sr-81/ET1-F             Exhaled                 100
+  Sr-81/ET2-F             Exhaled                 100
+  Sr-81/ETseq-F           Exhaled                 100
+  Sr-81/LNET-F            Exhaled                 100
+  Sr-81/BB-F              Exhaled                 100
+  Sr-81/BBseq-F           Exhaled                 100
+  Sr-81/bb-F              Exhaled                 100
+  Sr-81/bbseq-F           Exhaled                 100
+  Sr-81/ALV-F             Exhaled                 100
+  Sr-81/INT-F             Exhaled                 100
+  Sr-81/LNTH-F            Exhaled                 100
+  Sr-81/ET1-S             Exhaled                 100
+  Sr-81/ET2-S             Exhaled                 100
+  Sr-81/ETseq-S           Exhaled                 100
+  Sr-81/LNET-S            Exhaled                 100
+  Sr-81/BB-S              Exhaled                 100
+  Sr-81/BBseq-S           Exhaled                 100
+  Sr-81/bb-S              Exhaled                 100
+  Sr-81/bbseq-S           Exhaled                 100
+  Sr-81/ALV-S             Exhaled                 100
+  Sr-81/INT-S             Exhaled                 100
+  Sr-81/LNTH-S            Exhaled                 100
+
+  Sr-81/Oralcavity        Exhaled                 100
+  Sr-81/Oesophagus-f      Exhaled                 100
+  Sr-81/Oesophagus-s      Exhaled                 100
+  Sr-81/St-con            Exhaled                 100
+  Sr-81/SI-con            Exhaled                 100
+  Sr-81/RC-con            Exhaled                 100
+  Sr-81/LC-con            Exhaled                 100
+  Sr-81/RS-con            Exhaled                 100
+  Sr-81/UB-con            UB-con                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
+# ICRP Publ.134 p.224 Para.485
+  Sr-81/Blood             Blood                     ---     # ?
+  Sr-81/Noch-C-bone-V     Blood                     0.36
+  Sr-81/Noch-T-bone-V     Blood                     0.36
+  Sr-81/Exch-C-bone-V     Blood                     1.5
+  Sr-81/Exch-T-bone-V     Blood                     1.5
+  Sr-81/C-bone-S          Blood                   100
+  Sr-81/T-bone-S          Blood                   100
+  Sr-81/ST0               Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-81/ST1               Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-81/ST2               Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Rb-81m/RBC              Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Rb-81m/Muscle           Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Rb-81m/OtherTissue      Blood                 $(0.693 / (15/60/25))   # 半減期15分
+
+  Blood                   Exhaled                1000   # ≒半減期1分

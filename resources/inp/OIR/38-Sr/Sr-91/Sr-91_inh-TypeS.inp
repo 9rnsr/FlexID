@@ -1,0 +1,638 @@
+[title]
+Sr-91 Inhalation:Type-S
+
+[nuclide]
+  Sr-91  Y-91m  Y-91
+
+
+[Sr-91:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Sr-91:transfer]
+#-----------------------+---------------------+------------------------
+# From                  | To                  | Transfer Coef.[/d or %]
+#-----------------------+---------------------+------------------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fA = 0.0025
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood                 $sr
+  INT-F                   Blood                 $sr
+  bb-F                    Blood                 $sr
+  bbseq-F                 Blood                 $sr
+  BB-F                    Blood                 $sr
+  BBseq-F                 Blood                 $sr
+  ET2-F                   Blood                 $sr
+  ETseq-F                 Blood                 $sr
+  LNET-F                  Blood                 $sr
+  LNTH-F                  Blood                 $sr
+
+  ALV-S                   Blood                 $ss
+  INT-S                   Blood                 $ss
+  bb-S                    Blood                 $ss
+  bbseq-S                 Blood                 $ss
+  BB-S                    Blood                 $ss
+  BBseq-S                 Blood                 $ss
+  ET2-S                   Blood                 $ss
+  ETseq-S                 Blood                 $ss
+  LNET-S                  Blood                 $ss
+  LNTH-S                  Blood                 $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+  Blood                   ST1                       1.5
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
+
+
+[Y-91m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont       # Re-Absorption
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+
+[Y-91m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 p.45 Para.37
+#   For all radionuclides with the exception of noble gases:
+#   • The parameter values (sr, ss) describing absorption of the inhaled parent from the
+#     respiratory tract into blood are applied to all members of the decay chain
+#     formed in the respiratory tract.
+#
+#   • The default absorption fraction, fA, for a progeny radionuclide produced in the
+#     respiratory tract following inhalation of a parent, or produced in the alimentary
+#     tract following transfer of activity from the respiratory tract to the alimentary
+#     tract, is the product of the fraction of inhaled material with rapid
+#     dissolution (fr) for the assigned absorption type, and the reference value of
+#     fA for the progeny radionuclide when ingested as a parent radionuclide. If
+#     the progeny radionuclide has multiple reference values of fA when ingested
+#     as a parent, corresponding to different chemical or physical forms, the default
+#     value of fA is the product of fr for the absorption type and the highest reference
+#     value provided.
+#
+# ICRP Publ.130 p.79 Para.149
+#   Some of the biokinetic models used in this series of reports to predict the
+#   systemic behaviour of radionuclides depict secretion from systemic compartments
+#   into the contents of the alimentary tract. Activity transferred from systemic compartments
+#   into the small intestine or higher segments of the alimentary tract is
+#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
+#   fraction fA for the secreted activity is the reference fA for ingestion of the
+#   radionuclide. If multiple reference values of fA are given for different forms of the
+#   ingested radionuclide, the default fA for the secreted activity is the highest reference
+#   value provided for X.
+#
+# ICRP Publ.134 p.242 Table 11.2 / Ingested material, All chemical forms
+  $fA_MaxValueOfIng = 1E-4
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# from parent to progeny
+  Sr-91/ET1-F             ET1-F                     ---
+  Sr-91/ET2-F             ET2-F                     ---
+  Sr-91/ETseq-F           ETseq-F                   ---
+  Sr-91/LNET-F            LNET-F                    ---
+  Sr-91/BB-F              BB-F                      ---
+  Sr-91/BBseq-F           BBseq-F                   ---
+  Sr-91/bb-F              bb-F                      ---
+  Sr-91/bbseq-F           bbseq-F                   ---
+  Sr-91/ALV-F             ALV-F                     ---
+  Sr-91/INT-F             INT-F                     ---
+  Sr-91/LNTH-F            LNTH-F                    ---
+  Sr-91/ET1-S             ET1-S                     ---
+  Sr-91/ET2-S             ET2-S                     ---
+  Sr-91/ETseq-S           ETseq-S                   ---
+  Sr-91/LNET-S            LNET-S                    ---
+  Sr-91/BB-S              BB-S                      ---
+  Sr-91/BBseq-S           BBseq-S                   ---
+  Sr-91/bb-S              bb-S                      ---
+  Sr-91/bbseq-S           bbseq-S                   ---
+  Sr-91/ALV-S             ALV-S                     ---
+  Sr-91/INT-S             INT-S                     ---
+  Sr-91/LNTH-S            LNTH-S                    ---
+  Sr-91/Environment       Environment               ---
+
+  Sr-91/Oralcavity        Oralcavity                ---
+  Sr-91/Oesophagus-f      Oesophagus-f              ---
+  Sr-91/Oesophagus-s      Oesophagus-s              ---
+  Sr-91/St-con            St-con                    ---
+  Sr-91/SI-con            SI-con                    ---
+  Sr-91/RC-con            RC-con                    ---
+  Sr-91/LC-con            LC-con                    ---
+  Sr-91/RS-con            RS-con                    ---
+  Sr-91/Faeces            Faeces                    ---
+  Sr-91/UB-con            UB-con                    ---
+  Sr-91/Urine             Urine                     ---
+
+  Sr-91/Blood             Blood1                    ---
+
+# ICRP Publ.134 p.223-224 Para.483
+#   Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
+#   is assumed to transfer to blood with a half-time of 3 d (the shortest removal half-time
+#   from compartments of other soft tissue in the model for yttrium as a parent), and then
+#   to follow the kinetics of yttrium as a parent radionuclide.
+#
+  Sr-91/ST0               Blood1                    0.23105     # = ln(2)/3
+  Sr-91/ST1               Blood1                    0.23105     # = ln(2)/3
+  Sr-91/ST2               Blood1                    0.23105     # = ln(2)/3
+
+  Sr-91/C-bone-S          C-bone-S                  ---
+  Sr-91/Exch-C-bone-V     C-bone-V                  ---
+  Sr-91/Noch-C-bone-V     C-bone-V                  ---
+  Sr-91/T-bone-S          T-bone-S                  ---
+  Sr-91/Exch-T-bone-V     T-bone-V                  ---
+  Sr-91/Noch-T-bone-V     T-bone-V                  ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood1                $sr
+  INT-F                   Blood1                $sr
+  bb-F                    Blood1                $sr
+  bbseq-F                 Blood1                $sr
+  BB-F                    Blood1                $sr
+  BBseq-F                 Blood1                $sr
+  ET2-F                   Blood1                $sr
+  ETseq-F                 Blood1                $sr
+  LNET-F                  Blood1                $sr
+  LNTH-F                  Blood1                $sr
+
+  ALV-S                   Blood1                $ss
+  INT-S                   Blood1                $ss
+  bb-S                    Blood1                $ss
+  bbseq-S                 Blood1                $ss
+  BB-S                    Blood1                $ss
+  BBseq-S                 Blood1                $ss
+  ET2-S                   Blood1                $ss
+  ETseq-S                 Blood1                $ss
+  LNET-S                  Blood1                $ss
+  LNTH-S                  Blood1                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-conRe                  0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+
+[Y-91:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont       # Re-Absorption
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+
+[Y-91:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.242 Table 11.2 / Ingested material, All chemical forms
+  $fA_MaxValueOfIng = 1E-4
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# from parent to progeny
+  Sr-91/ET1-F             ET1-F                     ---
+  Sr-91/ET2-F             ET2-F                     ---
+  Sr-91/ETseq-F           ETseq-F                   ---
+  Sr-91/LNET-F            LNET-F                    ---
+  Sr-91/BB-F              BB-F                      ---
+  Sr-91/BBseq-F           BBseq-F                   ---
+  Sr-91/bb-F              bb-F                      ---
+  Sr-91/bbseq-F           bbseq-F                   ---
+  Sr-91/ALV-F             ALV-F                     ---
+  Sr-91/INT-F             INT-F                     ---
+  Sr-91/LNTH-F            LNTH-F                    ---
+  Sr-91/ET1-S             ET1-S                     ---
+  Sr-91/ET2-S             ET2-S                     ---
+  Sr-91/ETseq-S           ETseq-S                   ---
+  Sr-91/LNET-S            LNET-S                    ---
+  Sr-91/BB-S              BB-S                      ---
+  Sr-91/BBseq-S           BBseq-S                   ---
+  Sr-91/bb-S              bb-S                      ---
+  Sr-91/bbseq-S           bbseq-S                   ---
+  Sr-91/ALV-S             ALV-S                     ---
+  Sr-91/INT-S             INT-S                     ---
+  Sr-91/LNTH-S            LNTH-S                    ---
+  Sr-91/Environment       Environment               ---
+
+  Sr-91/Oralcavity        Oralcavity                ---
+  Sr-91/Oesophagus-f      Oesophagus-f              ---
+  Sr-91/Oesophagus-s      Oesophagus-s              ---
+  Sr-91/St-con            St-con                    ---
+  Sr-91/SI-con            SI-con                    ---
+  Sr-91/RC-con            RC-con                    ---
+  Sr-91/LC-con            LC-con                    ---
+  Sr-91/RS-con            RS-con                    ---
+  Sr-91/Faeces            Faeces                    ---
+  Sr-91/UB-con            UB-con                    ---
+  Sr-91/Urine             Urine                     ---
+
+# ICRP Publ.134 p.223-224 Para.483
+  Sr-91/Blood             Blood1                    ---
+  Sr-91/ST0               Blood1                    0.23105     # = ln(2)/3
+  Sr-91/ST1               Blood1                    0.23105     # = ln(2)/3
+  Sr-91/ST2               Blood1                    0.23105     # = ln(2)/3
+  Sr-91/C-bone-S          C-bone-S                  ---
+  Sr-91/Exch-C-bone-V     C-bone-V                  ---
+  Sr-91/Noch-C-bone-V     C-bone-V                  ---
+  Sr-91/T-bone-S          T-bone-S                  ---
+  Sr-91/Exch-T-bone-V     T-bone-V                  ---
+  Sr-91/Noch-T-bone-V     T-bone-V                  ---
+
+  Y-91m/Blood1            Blood1                    ---
+  Y-91m/Blood2            Blood2                    ---
+  Y-91m/ST0               ST0                       ---
+  Y-91m/ST1               ST1                       ---
+  Y-91m/Liver0            Liver0                    ---
+  Y-91m/Liver1            Liver1                    ---
+  Y-91m/Kidneys           Kidneys                   ---
+  Y-91m/C-bone-S          C-bone-S                  ---
+  Y-91m/C-bone-V          C-bone-V                  ---
+  Y-91m/T-bone-S          T-bone-S                  ---
+  Y-91m/T-bone-V          T-bone-V                  ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood1                $sr
+  INT-F                   Blood1                $sr
+  bb-F                    Blood1                $sr
+  bbseq-F                 Blood1                $sr
+  BB-F                    Blood1                $sr
+  BBseq-F                 Blood1                $sr
+  ET2-F                   Blood1                $sr
+  ETseq-F                 Blood1                $sr
+  LNET-F                  Blood1                $sr
+  LNTH-F                  Blood1                $sr
+
+  ALV-S                   Blood1                $ss
+  INT-S                   Blood1                $ss
+  bb-S                    Blood1                $ss
+  bbseq-S                 Blood1                $ss
+  BB-S                    Blood1                $ss
+  BBseq-S                 Blood1                $ss
+  ET2-S                   Blood1                $ss
+  ETseq-S                 Blood1                $ss
+  LNET-S                  Blood1                $ss
+  LNTH-S                  Blood1                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-conRe                  0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821

@@ -1,0 +1,219 @@
+[title]
+Sr-82 Ingestion:StrontiumTitanate
+
+[nuclide]
+  Sr-82  Rb-82
+
+
+[Sr-82:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Sr-82:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
+  $fA = 0.01
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+  Blood                   ST1                       1.5
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
+
+
+[Rb-82:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Muscle                Muscle
+  acc   OtherTissue           Other
+  exc   Excreta(sweat)        ---
+
+[Rb-82:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.30 Part.2
+# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA = fA_MaxValueOfIng
+
+# from parent to progeny
+  Sr-82/Oralcavity        Oralcavity                ---
+  Sr-82/Oesophagus-f      Oesophagus-f              ---
+  Sr-82/Oesophagus-s      Oesophagus-s              ---
+  Sr-82/St-con            St-con                    ---
+  Sr-82/SI-con            SI-con                    ---
+  Sr-82/RC-con            RC-con                    ---
+  Sr-82/LC-con            LC-con                    ---
+  Sr-82/RS-con            RS-con                    ---
+  Sr-82/Faeces            Faeces                    ---
+  Sr-82/UB-con            UB-con                    ---
+  Sr-82/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.224 Para.484
+# > (484) The model for rubidium as a progeny of strontium is a condensed version of
+# > a proposed model for rubidium as a parent radionuclide (Leggett and Williams,
+# > 1988). The model is based on the same principles as the model for caesium, a chemical
+# > and physiological analogue of rubidium, described elsewhere in the OIR series.
+# > That is, the biokinetics of systemic rubidium is predicted on the basis of the distribution
+# > of cardiac output, experimentally determined tissue-specific extraction fractions,
+# > and the steady-state distribution of stable rubidium in the body. The reference
+# > division of cardiac output in the adult male tabulated in Publication 89 (ICRP, 2002)
+# > is applied here. The present version of the model depicts blood plasma as a central
+# > compartment that exchanges rubidium with RBCs, trabecular bone surface, cortical
+# > bone surface, muscle, and a compartment representing all other soft tissue. Rates of
+# > transfer of rubidium from plasma are as follows: 6 d⁻¹ to RBCs, 255 d⁻¹ to muscle,
+# > 5.6 d⁻¹ to cortical bone surface, 8.4 d⁻¹ to trabecular bone surface, 855 d⁻¹ to other
+# > tissue, 3.9 d⁻¹ to urinary bladder contents, 1.2 d⁻¹ to right colon contents, and
+# > 0.1 d⁻¹ to excreta (loss in sweat). Transfer rates from RBCs or tissues to plasma
+# > are as follows: 0.35 d⁻¹ from RBCs, 1.14 d⁻¹ from muscle, 1.68 d⁻¹ from bone surface
+# > compartments, and 10.3 d⁻¹ from other tissue. Rubidium produced by decay of
+# > strontium in blood is assigned to plasma. Rubidium produced in exchangeable or
+# > non-exchangeable bone volume compartments of the strontium model are transferred
+# > to plasma at the rate of bone turnover. Rubidium produced in soft tissue
+# > compartments of the strontium model (ST0, ST1, or ST2) are transferred to
+# > plasma at a rate of 10.3 d⁻¹. The subsequent behaviour of rubidium that reaches
+# > plasma is determined by the model for rubidium described above.
+# > (484) ストロンチウムの子孫核種としてのルビジウムのモデルは、親核種としての
+# > ルビジウムのモデル（Leggett and Williams, 1988）の簡略版である。このモデルは、
+# > OIRシリーズの他の箇所で説明されている、ルビジウムの化学的および生理学的類似体である
+# > セシウムのモデルと同じ原理に基づいている。すなわち、全身ルビジウムの生体内動態は、
+# > 心拍出量の分布、実験的に決定された組織特異的抽出率、および体内の安定したルビジウムの
+# > 定常分布に基づいて予測される。ここでは、Publication 89（ICRP, 2002）に示されている
+# > 成人男性の心拍出量の基準区分が適用される。現在のモデルでは、血漿を中心コンパートメントとして
+# > 描き、赤血球、海綿骨表面、皮質骨表面、筋肉、そしてその他すべての軟部組織とルビジウムを交換する。
+# > 血漿からのルビジウムの移動速度は、赤血球に6 d⁻¹、筋肉に255 d⁻¹、皮質骨表面に5.6 d⁻¹、
+# > 海綿骨表面に8.4 d⁻¹、その他の組織に855 d⁻¹、膀胱内容物に3.9 d⁻¹、右結腸内容物に1.2 d⁻¹、
+# > 排泄物（汗による損失）に0.1 d⁻¹である。赤血球または組織から血漿への移行速度は、
+# > 赤血球から0.35 d⁻¹、筋肉から1.14 d⁻¹、骨表面コンパートメントから1.68 d⁻¹、
+# > その他の組織から10.3 d⁻¹である。血液中のストロンチウムの崩壊によって生成されたルビジウムは
+# > 血漿に移行する。ストロンチウムモデルの交換性または非交換性骨容積コンパートメントで
+# > 生成されたルビジウムは、骨代謝の速度で血漿に移行する。ストロンチウムモデルの
+# > 軟部組織コンパートメント（ST0、ST1、またはST2）で生成されたルビジウムは、
+# > 10.3 d⁻¹の速度で血漿に移行する。血漿に到達したルビジウムのその後の挙動は、
+# > 上記のルビジウムモデルによって決定される。
+
+  Plasma                  RBC                       6
+  Plasma                  Muscle                  255
+  Plasma                  C-bone-S                  5.6
+  Plasma                  T-bone-S                  8.4
+  Plasma                  OtherTissue             855
+  Plasma                  UB-con                    3.9
+  Plasma                  RC-con                    1.2
+  Plasma                  Excreta(sweat)            0.1
+  RBC                     Plasma                    0.35
+  Muscle                  Plasma                    1.14
+  C-bone-S                Plasma                    1.68
+  T-bone-S                Plasma                    1.68
+  OtherTissue             Plasma                   10.3
+
+  Sr-82/Blood             Plasma                    ---
+  Sr-82/C-bone-S          C-bone-S                  ---
+  Sr-82/Exch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-82/Noch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-82/T-bone-S          T-bone-S                  ---
+  Sr-82/Exch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-82/Noch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-82/ST0               Plasma                   10.3
+  Sr-82/ST1               Plasma                   10.3
+  Sr-82/ST2               Plasma                   10.3
