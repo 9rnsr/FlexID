@@ -1,0 +1,379 @@
+[title]
+Y-87m Ingestion
+
+[nuclide]
+  Y-87m  Y-87  Sr-87m
+
+
+[Y-87m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont       # Re-Absorption
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+
+[Y-87m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  $fA    = 1E-4
+  $fA_Re = 1E-4
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-conRe                  0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+
+[Y-87:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont       # Re-Absorption
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+
+[Y-87:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  $fA_MaxValueOfIng = 1E-4
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Y-87m/Oralcavity        Oralcavity                ---
+  Y-87m/Oesophagus-f      Oesophagus-f              ---
+  Y-87m/Oesophagus-s      Oesophagus-s              ---
+  Y-87m/St-con            St-con                    ---
+  Y-87m/SI-con            SI-con                    ---
+  Y-87m/SI-conRe          SI-conRe                  ---
+  Y-87m/RC-con            RC-con                    ---
+  Y-87m/LC-con            LC-con                    ---
+  Y-87m/RS-con            RS-con                    ---
+  Y-87m/Faeces            Faeces                    ---
+  Y-87m/UB-con            UB-con                    ---
+  Y-87m/Urine             Urine                     ---
+
+  Y-87m/Blood1            Blood1                    ---
+  Y-87m/Blood2            Blood2                    ---
+  Y-87m/ST0               ST0                       ---
+  Y-87m/ST1               ST1                       ---
+  Y-87m/Liver0            Liver0                    ---
+  Y-87m/Liver1            Liver1                    ---
+  Y-87m/Kidneys           Kidneys                   ---
+  Y-87m/C-bone-S          C-bone-S                  ---
+  Y-87m/C-bone-V          C-bone-V                  ---
+  Y-87m/T-bone-S          T-bone-S                  ---
+  Y-87m/T-bone-V          T-bone-V                  ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-conRe                  0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+
+[Sr-87m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver                 Liver         # only for progeny of Y
+  acc   Kidneys               Kidneys       # only for progeny of Y
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Sr-87m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
+  $fA_MaxValueOfIng = 0.25
+
+  $fA = fA_MaxValueOfIng
+
+# from parent to progeny
+  Y-87m/Oralcavity        Oralcavity                ---
+  Y-87m/Oesophagus-f      Oesophagus-f              ---
+  Y-87m/Oesophagus-s      Oesophagus-s              ---
+  Y-87m/St-con            St-con                    ---
+  Y-87m/SI-con            SI-con                    ---
+  Y-87m/SI-conRe          SI-con                    ---
+  Y-87m/RC-con            RC-con                    ---
+  Y-87m/LC-con            LC-con                    ---
+  Y-87m/RS-con            RS-con                    ---
+  Y-87m/Faeces            Faeces                    ---
+  Y-87m/UB-con            UB-con                    ---
+  Y-87m/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+ #Blood                   ST1                       1.5     # only for progeny of Y
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
+
+# ICRP Publ.134 p.254 Para.530-531
+# > (530) The model for strontium produced in systemic compartments after intake of
+# > an yttrium parent is an extension of the characteristic model for strontium described
+# > elsewhere in this publication. That model is extended for application to strontium as
+# > a progeny of yttrium by adding individual compartments representing liver and
+# > kidneys, which are represented explicitly in the model for yttrium. Each of these
+# > compartments is assumed to exchange strontium with blood. Parameter values
+# > describing rates of uptake and removal of strontium by liver and kidneys are set
+# > for reasonable agreement with postmortem measurements from human subjects
+# > injected with 85Sr during late stages of various terminal illnesses (Schulert et al.,
+# > 1959). The transfer coefficients from blood to liver and kidneys are both set at
+# > 0.05 d⁻¹. The transfer coefficient from blood to the intermediate-term soft tissue
+# > compartment in the characteristic model for strontium is reduced from 1.5 d⁻¹ to
+# > 1.4 d⁻¹ to leave the total outflow rate from blood unchanged. The removal half-times
+# > from liver and kidneys to blood are set at 6 d and 2 d, respectively.
+# > (530) イットリウム親化合物の摂取後に全身コンパートメントで生成されるストロンチウムのモデルは、
+# > 本書の他の箇所で説明されているストロンチウムの特性モデルの拡張である。このモデルは、
+# > イットリウムのモデルで明示的に表現されている肝臓と腎臓を表す個々のコンパートメントを
+# > 追加することにより、イットリウムの子孫としてのストロンチウムへの適用のために拡張されている。
+# > これらのコンパートメントはそれぞれ、血液とストロンチウムを交換すると仮定される。
+# > 肝臓と腎臓によるストロンチウムの吸収および除去速度を表すパラメータ値は、様々な末期疾患の
+# > 後期に85Srを注入された被験者の死後測定値と妥当に一致するように設定されている（Schulert et al., 1959）。
+# > 血液から肝臓および腎臓への移行係数は、いずれも0.05 d⁻¹に設定されている。ストロンチウムの
+# > 特性モデルにおける血液から中間期軟部組織コンパートメントへの移行係数は、血液からの総流出速度を
+# > 変えずに、1.5 d⁻¹から1.4 d⁻¹に減少した。肝臓および腎臓から血液への除去半減期は、
+# > それぞれ6日および2日と設定した。
+
+  Blood                   Liver                     0.05
+  Blood                   Kidneys                   0.05
+  Blood                   ST1                       1.4
+  Liver                   Blood                     6
+  Kidneys                 Blood                     2
+
+# > (531) The blood compartment of the strontium model (named Blood) is identified
+# > with the compartment Blood 1 of the yttrium model (Fig. 11.1). Thus, strontium
+# > produced in Blood 1 by decay of yttrium is assumed to be produced in Blood in the
+# > strontium model. Strontium produced by radioactive decay in compartments of the
+# > yttrium model that are not identifiable with compartments of the strontium model is
+# > treated as follows. Strontium produced in Blood 2 of the yttrium model is assumed to
+# > transfer to Blood in the strontium model at a rate of 1000 d⁻¹ (t½～1 min).
+# > Strontium produced in either of the two liver compartments of the yttrium model
+# > is assumed to transfer to Blood in the strontium model with a half-time of 6 d, which
+# > is the removal half-time of strontium from the liver in the strontium model described
+# > above. Strontium produced in either of the two compartments of other soft tissues in
+# > the yttrium model is assumed to transfer to Blood in the strontium model at a rate of
+# > 2.5 d⁻¹, which is the shortest removal half-time from the soft tissue compartments in
+# > the characteristic model for strontium. Strontium reaching Blood in the strontium
+# > model subsequently follows the model for strontium described above. The single
+# > kidney compartment in the model for strontium as a progeny of yttrium is identified
+# > with the single kidney compartment in the model for yttrium. Strontium produced in
+# > that compartment by decay of yttrium is assumed to behave as if entering the compartment
+# > as a parent radionuclide.
+# > (531) ストロンチウムモデルの血液コンパートメント（血液）は、イットリウムモデルの
+# > 血液1コンパートメントと同一視される（図11.1）。したがって、イットリウムの崩壊によって
+# > 血液1で生成されたストロンチウムは、ストロンチウムモデルの血液でも生成されると仮定される。
+# > イットリウムモデルのコンパートメントと同一視できないコンパートメントにおける放射性崩壊によって
+# > 生成されたストロンチウムは、以下のように扱われる。イットリウムモデルの血液2で生成された
+# > ストロンチウムは、ストロンチウムモデルの血液に1000 d⁻¹（t½～1分）の速度で移行すると仮定される。
+# > イットリウムモデルの肝臓の2つのコンパートメントのいずれかで生成されたストロンチウムは、
+# > ストロンチウムモデルにおいて半減期6日で血液に移行すると仮定されます。これは、上記の
+# > ストロンチウムモデルにおける肝臓からのストロンチウムの半減期です。イットリウムモデルの
+# > 他の軟部組織の2つのコンパートメントのいずれかで生成されたストロンチウムは、
+# > ストロンチウムモデルにおいて2.5日⁻¹の速度で血液に移行すると仮定されます。これは、
+# > ストロンチウムの特性モデルにおける軟部組織コンパートメントからの最短の半減期です。
+# > ストロンチウムモデルにおいて血液に到達するストロンチウムは、その後、上記の
+# > ストロンチウムのモデルに従います。イットリウムの子孫としてのストロンチウムのモデルにおける
+# > 単一の腎臓コンパートメントは、イットリウムのモデルにおける単一の腎臓コンパートメントと
+# > 同一です。イットリウムの崩壊によってその区画内で生成されたストロンチウムは、
+# > 親放射性核種としてその区画内に入るかのように振舞うと想定されます。
+
+  Y-87m/Blood1            Blood                     ---
+  Y-87m/Blood2            Blood                  1000
+  Y-87m/ST0               Blood                     2.5
+  Y-87m/ST1               Blood                     2.5
+  Y-87m/Liver0            Blood                     6
+  Y-87m/Liver1            Blood                     6
+  Y-87m/Kidneys           Kidneys                   ---
+  Y-87m/C-bone-S          C-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
+  Y-87m/C-bone-V          Blood                 $( 3% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+  Y-87m/T-bone-S          T-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
+  Y-87m/T-bone-V          Blood                 $(18% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
