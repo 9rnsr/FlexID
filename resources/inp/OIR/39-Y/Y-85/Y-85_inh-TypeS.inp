@@ -1,0 +1,677 @@
+[title]
+Y-85 Inhalation:Type-S
+
+[nuclide]
+  Y-85  Sr-85m  Sr-85
+
+
+[Y-85:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont       # Re-Absorption
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+
+[Y-85:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.242 Table 11.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 1
+  $ss = 1E-4
+  $fA    = 1E-6
+  $fA_Re = 1E-4
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood1                $sr
+  INT-F                   Blood1                $sr
+  bb-F                    Blood1                $sr
+  bbseq-F                 Blood1                $sr
+  BB-F                    Blood1                $sr
+  BBseq-F                 Blood1                $sr
+  ET2-F                   Blood1                $sr
+  ETseq-F                 Blood1                $sr
+  LNET-F                  Blood1                $sr
+  LNTH-F                  Blood1                $sr
+
+  ALV-S                   Blood1                $ss
+  INT-S                   Blood1                $ss
+  bb-S                    Blood1                $ss
+  bbseq-S                 Blood1                $ss
+  BB-S                    Blood1                $ss
+  BBseq-S                 Blood1                $ss
+  ET2-S                   Blood1                $ss
+  ETseq-S                 Blood1                $ss
+  LNET-S                  Blood1                $ss
+  LNTH-S                  Blood1                $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-conRe                  0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+
+[Sr-85m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver                 Liver         # only for progeny of Y
+  acc   Kidneys               Kidneys       # only for progeny of Y
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Sr-85m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
+  $fA_MaxValueOfIng = 0.25
+
+  $fA = fr * fA_MaxValueOfIng
+
+# from parent to progeny
+  Y-85/ET1-F              ET1-F                     ---
+  Y-85/ET2-F              ET2-F                     ---
+  Y-85/ETseq-F            ETseq-F                   ---
+  Y-85/LNET-F             LNET-F                    ---
+  Y-85/BB-F               BB-F                      ---
+  Y-85/BBseq-F            BBseq-F                   ---
+  Y-85/bb-F               bb-F                      ---
+  Y-85/bbseq-F            bbseq-F                   ---
+  Y-85/ALV-F              ALV-F                     ---
+  Y-85/INT-F              INT-F                     ---
+  Y-85/LNTH-F             LNTH-F                    ---
+  Y-85/ET1-S              ET1-S                     ---
+  Y-85/ET2-S              ET2-S                     ---
+  Y-85/ETseq-S            ETseq-S                   ---
+  Y-85/LNET-S             LNET-S                    ---
+  Y-85/BB-S               BB-S                      ---
+  Y-85/BBseq-S            BBseq-S                   ---
+  Y-85/bb-S               bb-S                      ---
+  Y-85/bbseq-S            bbseq-S                   ---
+  Y-85/ALV-S              ALV-S                     ---
+  Y-85/INT-S              INT-S                     ---
+  Y-85/LNTH-S             LNTH-S                    ---
+  Y-85/Environment        Environment               ---
+
+  Y-85/Oralcavity         Oralcavity                ---
+  Y-85/Oesophagus-f       Oesophagus-f              ---
+  Y-85/Oesophagus-s       Oesophagus-s              ---
+  Y-85/St-con             St-con                    ---
+  Y-85/SI-con             SI-con                    ---
+  Y-85/SI-conRe           SI-con                    ---
+  Y-85/RC-con             RC-con                    ---
+  Y-85/LC-con             LC-con                    ---
+  Y-85/RS-con             RS-con                    ---
+  Y-85/Faeces             Faeces                    ---
+  Y-85/UB-con             UB-con                    ---
+  Y-85/Urine              Urine                     ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood                 $sr
+  INT-F                   Blood                 $sr
+  bb-F                    Blood                 $sr
+  bbseq-F                 Blood                 $sr
+  BB-F                    Blood                 $sr
+  BBseq-F                 Blood                 $sr
+  ET2-F                   Blood                 $sr
+  ETseq-F                 Blood                 $sr
+  LNET-F                  Blood                 $sr
+  LNTH-F                  Blood                 $sr
+
+  ALV-S                   Blood                 $ss
+  INT-S                   Blood                 $ss
+  bb-S                    Blood                 $ss
+  bbseq-S                 Blood                 $ss
+  BB-S                    Blood                 $ss
+  BBseq-S                 Blood                 $ss
+  ET2-S                   Blood                 $ss
+  ETseq-S                 Blood                 $ss
+  LNET-S                  Blood                 $ss
+  LNTH-S                  Blood                 $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+ #Blood                   ST1                       1.5     # only for progeny of Y
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
+
+# ICRP Publ.134 p.254 Para.530-531
+# > (530) The model for strontium produced in systemic compartments after intake of
+# > an yttrium parent is an extension of the characteristic model for strontium described
+# > elsewhere in this publication. That model is extended for application to strontium as
+# > a progeny of yttrium by adding individual compartments representing liver and
+# > kidneys, which are represented explicitly in the model for yttrium. Each of these
+# > compartments is assumed to exchange strontium with blood. Parameter values
+# > describing rates of uptake and removal of strontium by liver and kidneys are set
+# > for reasonable agreement with postmortem measurements from human subjects
+# > injected with 85Sr during late stages of various terminal illnesses (Schulert et al.,
+# > 1959). The transfer coefficients from blood to liver and kidneys are both set at
+# > 0.05 d⁻¹. The transfer coefficient from blood to the intermediate-term soft tissue
+# > compartment in the characteristic model for strontium is reduced from 1.5 d⁻¹ to
+# > 1.4 d⁻¹ to leave the total outflow rate from blood unchanged. The removal half-times
+# > from liver and kidneys to blood are set at 6 d and 2 d, respectively.
+# > (530) イットリウム親化合物の摂取後に全身コンパートメントで生成されるストロンチウムのモデルは、
+# > 本書の他の箇所で説明されているストロンチウムの特性モデルの拡張である。このモデルは、
+# > イットリウムのモデルで明示的に表現されている肝臓と腎臓を表す個々のコンパートメントを
+# > 追加することにより、イットリウムの子孫としてのストロンチウムへの適用のために拡張されている。
+# > これらのコンパートメントはそれぞれ、血液とストロンチウムを交換すると仮定される。
+# > 肝臓と腎臓によるストロンチウムの吸収および除去速度を表すパラメータ値は、様々な末期疾患の
+# > 後期に85Srを注入された被験者の死後測定値と妥当に一致するように設定されている（Schulert et al., 1959）。
+# > 血液から肝臓および腎臓への移行係数は、いずれも0.05 d⁻¹に設定されている。ストロンチウムの
+# > 特性モデルにおける血液から中間期軟部組織コンパートメントへの移行係数は、血液からの総流出速度を
+# > 変えずに、1.5 d⁻¹から1.4 d⁻¹に減少した。肝臓および腎臓から血液への除去半減期は、
+# > それぞれ6日および2日と設定した。
+
+  Blood                   Liver                     0.05
+  Blood                   Kidneys                   0.05
+  Blood                   ST1                       1.4
+  Liver                   Blood                     6
+  Kidneys                 Blood                     2
+
+# > (531) The blood compartment of the strontium model (named Blood) is identified
+# > with the compartment Blood 1 of the yttrium model (Fig. 11.1). Thus, strontium
+# > produced in Blood 1 by decay of yttrium is assumed to be produced in Blood in the
+# > strontium model. Strontium produced by radioactive decay in compartments of the
+# > yttrium model that are not identifiable with compartments of the strontium model is
+# > treated as follows. Strontium produced in Blood 2 of the yttrium model is assumed to
+# > transfer to Blood in the strontium model at a rate of 1000 d⁻¹ (t½～1 min).
+# > Strontium produced in either of the two liver compartments of the yttrium model
+# > is assumed to transfer to Blood in the strontium model with a half-time of 6 d, which
+# > is the removal half-time of strontium from the liver in the strontium model described
+# > above. Strontium produced in either of the two compartments of other soft tissues in
+# > the yttrium model is assumed to transfer to Blood in the strontium model at a rate of
+# > 2.5 d⁻¹, which is the shortest removal half-time from the soft tissue compartments in
+# > the characteristic model for strontium. Strontium reaching Blood in the strontium
+# > model subsequently follows the model for strontium described above. The single
+# > kidney compartment in the model for strontium as a progeny of yttrium is identified
+# > with the single kidney compartment in the model for yttrium. Strontium produced in
+# > that compartment by decay of yttrium is assumed to behave as if entering the compartment
+# > as a parent radionuclide.
+# > (531) ストロンチウムモデルの血液コンパートメント（血液）は、イットリウムモデルの
+# > 血液1コンパートメントと同一視される（図11.1）。したがって、イットリウムの崩壊によって
+# > 血液1で生成されたストロンチウムは、ストロンチウムモデルの血液でも生成されると仮定される。
+# > イットリウムモデルのコンパートメントと同一視できないコンパートメントにおける放射性崩壊によって
+# > 生成されたストロンチウムは、以下のように扱われる。イットリウムモデルの血液2で生成された
+# > ストロンチウムは、ストロンチウムモデルの血液に1000 d⁻¹（t½～1分）の速度で移行すると仮定される。
+# > イットリウムモデルの肝臓の2つのコンパートメントのいずれかで生成されたストロンチウムは、
+# > ストロンチウムモデルにおいて半減期6日で血液に移行すると仮定されます。これは、上記の
+# > ストロンチウムモデルにおける肝臓からのストロンチウムの半減期です。イットリウムモデルの
+# > 他の軟部組織の2つのコンパートメントのいずれかで生成されたストロンチウムは、
+# > ストロンチウムモデルにおいて2.5日⁻¹の速度で血液に移行すると仮定されます。これは、
+# > ストロンチウムの特性モデルにおける軟部組織コンパートメントからの最短の半減期です。
+# > ストロンチウムモデルにおいて血液に到達するストロンチウムは、その後、上記の
+# > ストロンチウムのモデルに従います。イットリウムの子孫としてのストロンチウムのモデルにおける
+# > 単一の腎臓コンパートメントは、イットリウムのモデルにおける単一の腎臓コンパートメントと
+# > 同一です。イットリウムの崩壊によってその区画内で生成されたストロンチウムは、
+# > 親放射性核種としてその区画内に入るかのように振舞うと想定されます。
+
+  Y-85/Blood1             Blood                     ---
+  Y-85/Blood2             Blood                  1000
+  Y-85/ST0                Blood                     2.5
+  Y-85/ST1                Blood                     2.5
+  Y-85/Liver0             Blood                     6
+  Y-85/Liver1             Blood                     6
+  Y-85/Kidneys            Kidneys                   ---
+  Y-85/C-bone-S           C-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
+  Y-85/C-bone-V           Blood                 $( 3% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+  Y-85/T-bone-S           T-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
+  Y-85/T-bone-V           Blood                 $(18% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+
+
+[Sr-85:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   Liver                 Liver         # only for progeny of Y
+  acc   Kidneys               Kidneys       # only for progeny of Y
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Sr-85:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
+  $fA_MaxValueOfIng = 0.25
+
+  $fA = fr * fA_MaxValueOfIng
+
+# from parent to progeny
+  Y-85/ET1-F              ET1-F                     ---
+  Y-85/ET2-F              ET2-F                     ---
+  Y-85/ETseq-F            ETseq-F                   ---
+  Y-85/LNET-F             LNET-F                    ---
+  Y-85/BB-F               BB-F                      ---
+  Y-85/BBseq-F            BBseq-F                   ---
+  Y-85/bb-F               bb-F                      ---
+  Y-85/bbseq-F            bbseq-F                   ---
+  Y-85/ALV-F              ALV-F                     ---
+  Y-85/INT-F              INT-F                     ---
+  Y-85/LNTH-F             LNTH-F                    ---
+  Y-85/ET1-S              ET1-S                     ---
+  Y-85/ET2-S              ET2-S                     ---
+  Y-85/ETseq-S            ETseq-S                   ---
+  Y-85/LNET-S             LNET-S                    ---
+  Y-85/BB-S               BB-S                      ---
+  Y-85/BBseq-S            BBseq-S                   ---
+  Y-85/bb-S               bb-S                      ---
+  Y-85/bbseq-S            bbseq-S                   ---
+  Y-85/ALV-S              ALV-S                     ---
+  Y-85/INT-S              INT-S                     ---
+  Y-85/LNTH-S             LNTH-S                    ---
+  Y-85/Environment        Environment               ---
+
+  Y-85/Oralcavity         Oralcavity                ---
+  Y-85/Oesophagus-f       Oesophagus-f              ---
+  Y-85/Oesophagus-s       Oesophagus-s              ---
+  Y-85/St-con             St-con                    ---
+  Y-85/SI-con             SI-con                    ---
+  Y-85/SI-conRe           SI-con                    ---
+  Y-85/RC-con             RC-con                    ---
+  Y-85/LC-con             LC-con                    ---
+  Y-85/RS-con             RS-con                    ---
+  Y-85/Faeces             Faeces                    ---
+  Y-85/UB-con             UB-con                    ---
+  Y-85/Urine              Urine                     ---
+
+  Sr-85m/Blood            Blood                     ---
+  Sr-85m/ST0              ST0                       ---
+  Sr-85m/ST1              ST1                       ---
+  Sr-85m/ST2              ST2                       ---
+  Sr-85m/C-bone-S         C-bone-S                  ---
+  Sr-85m/Exch-C-bone-V    Exch-C-bone-V             ---
+  Sr-85m/Noch-C-bone-V    Noch-C-bone-V             ---
+  Sr-85m/T-bone-S         T-bone-S                  ---
+  Sr-85m/Exch-T-bone-V    Exch-T-bone-V             ---
+  Sr-85m/Noch-T-bone-V    Noch-T-bone-V             ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood                 $sr
+  INT-F                   Blood                 $sr
+  bb-F                    Blood                 $sr
+  bbseq-F                 Blood                 $sr
+  BB-F                    Blood                 $sr
+  BBseq-F                 Blood                 $sr
+  ET2-F                   Blood                 $sr
+  ETseq-F                 Blood                 $sr
+  LNET-F                  Blood                 $sr
+  LNTH-F                  Blood                 $sr
+
+  ALV-S                   Blood                 $ss
+  INT-S                   Blood                 $ss
+  bb-S                    Blood                 $ss
+  bbseq-S                 Blood                 $ss
+  BB-S                    Blood                 $ss
+  BBseq-S                 Blood                 $ss
+  ET2-S                   Blood                 $ss
+  ETseq-S                 Blood                 $ss
+  LNET-S                  Blood                 $ss
+  LNTH-S                  Blood                 $ss
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.220 Table 10.3
+  Blood                   UB-con                    1.73
+  Blood                   RC-con                    0.525
+  Blood                   T-bone-S                  2.08
+  Blood                   C-bone-S                  1.67
+  Blood                   ST0                       7.5
+ #Blood                   ST1                       1.5     # only for progeny of Y
+  Blood                   ST2                       0.003
+  T-bone-S                Blood                     0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Blood                     0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Blood                     2.50
+  ST1                     Blood                     0.116
+  ST2                     Blood                     0.00038
+  Exch-T-bone-V           T-bone-S                  0.0043
+  Exch-T-bone-V           Noch-T-bone-V             0.0043
+  Exch-C-bone-V           C-bone-S                  0.0043
+  Exch-C-bone-V           Noch-C-bone-V             0.0043
+  Noch-C-bone-V           Blood                     0.0000821
+  Noch-T-bone-V           Blood                     0.000493
+
+# ICRP Publ.134 p.254 Para.530-531
+  Blood                   Liver                     0.05
+  Blood                   Kidneys                   0.05
+  Blood                   ST1                       1.4
+  Liver                   Blood                     6
+  Kidneys                 Blood                     2
+
+  Y-85/Blood1             Blood                     ---
+  Y-85/Blood2             Blood                  1000
+  Y-85/ST0                Blood                     2.5
+  Y-85/ST1                Blood                     2.5
+  Y-85/Liver0             Blood                     6
+  Y-85/Liver1             Blood                     6
+  Y-85/Kidneys            Kidneys                   ---
+  Y-85/C-bone-S           C-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
+  Y-85/C-bone-V           Blood                 $( 3% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+  Y-85/T-bone-S           T-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
+  Y-85/T-bone-V           Blood                 $(18% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
