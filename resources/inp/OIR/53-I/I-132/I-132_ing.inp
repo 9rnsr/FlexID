@@ -1,0 +1,113 @@
+[title]
+I-132 Ingestion
+
+[nuclide]
+  I-132
+
+
+[I-132:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood         # inorganic iodine in blood
+  acc   Blood2                Blood         #   organic iodine in blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   St-wall               St-wall
+  acc   Other1                Other
+  acc   Other2                Other
+  acc   Other3                Other
+  acc   Other4                Other
+
+[I-132:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.137 p.106 Fig.5.2
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-sRe          St-conRe               2160
+  St-conRe                SI-conRe                 20.57
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.108 Table 5.4
+  Blood1                  Thyroid1                  7.26
+  Blood1                  UB-con                   11.84
+  Blood1                  S-glands                  5.16
+  Blood1                  St-wall                   8.60
+  Blood1                  Other1                  600
+  Blood1                  Kidneys1                 25
+  Blood1                  Liver1                   15
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  Thyroid1                Thyroid2                 95
+  Thyroid1                Blood1                   36
+  Thyroid2                Blood2                    0.0077
+  Thyroid2                Blood1                    0
+  Other1                  Blood1                  330
+  Other1                  Other2                   35
+  Other2                  Other1                   56
+  Kidneys1                Blood1                  100
+  Liver1                  Blood1                  100
+  Blood2                  Other3                   15
+  Other3                  Blood2                   21
+  Other3                  Other4                    1.2
+  Other4                  Other3                    0.62
+  Other4                  Blood1                    0.14
+  Blood2                  Kidneys2                  3.6
+  Kidneys2                Blood2                   21
+  Kidneys2                Blood1                    0.14
+  Blood2                  Liver2                   21
+  Liver2                  Blood2                   21
+  Liver2                  Blood1                    0.14
+  Liver2                  RC-con                    0.08

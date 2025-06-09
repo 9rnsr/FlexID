@@ -217,6 +217,9 @@ I-131 Inhalation:Type-F
   exc   Exhaled               ---
 
 [Xe-131m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -267,6 +270,9 @@ I-131 Inhalation:Type-F
   I-131/RS-con            Exhaled                 100
   I-131/UB-con            UB-con                    ---
 
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
 # ICRP Publ.137 Para.252
 # > (252) A generic biokinetic model is applied in this publication to xenon isotopes
 # > produced by decay of radionuclides in systemic pools. Xenon produced in bone is
@@ -303,6 +309,3 @@ I-131 Inhalation:Type-F
   I-131/Other1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
   I-131/Other2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
   Blood                   Exhaled                1000
-
-# ???
-  UB-con                  Exhaled                  12
