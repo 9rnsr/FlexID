@@ -1,0 +1,10 @@
+Radionuclide	Sb-128m
+Route of Intake	Ingestion
+Material	All chemical forms, fA=5E-2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Thyroid*	Skeleton*	Liver*
+0.041667	1.9E-2	1.9E-2	1.6E-7	3.7E-6	4.5E-6
+0.083333	3.3E-4	3.3E-4	1.0E-8	1.8E-7	2.0E-7
+0.125	6.2E-6	6.1E-6	3.4E-10	5.4E-9	5.8E-9
