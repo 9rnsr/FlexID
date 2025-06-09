@@ -1,0 +1,18 @@
+Radionuclide	Te-133m
+Route of Intake	Inhalation
+Material	Gas or vapour Type F, Unspecified gas or vapour , fA=0.3
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Urine (24-hour sample)	Faeces (24-hour sample)	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	4.7E-1	-	-	9.0E-2	8.9E-2	2.5E-4	2.5E-2	3.6E-2
+0.083333	2.2E-1	-	-	4.2E-2	2.5E-2	1.5E-4	1.3E-2	1.9E-2
+0.125	1.0E-1	-	-	1.9E-2	1.0E-2	8.6E-5	6.3E-3	9.3E-3
+0.25	1.0E-2	-	-	1.8E-3	9.7E-4	1.2E-5	6.6E-4	1.0E-3
+0.375	9.8E-4	-	-	1.7E-4	9.1E-5	1.6E-6	6.9E-5	1.1E-4
+0.5	9.6E-5	-	-	1.7E-5	8.5E-6	2.0E-7	7.2E-6	1.2E-5
+0.625	9.4E-6	-	-	1.7E-6	7.9E-7	2.3E-8	7.4E-7	1.2E-6
+0.75	9.3E-7	-	-	1.7E-7	7.4E-8	2.7E-9	7.7E-8	1.3E-7
+0.875	9.1E-8	-	-	1.6E-8	7.0E-9	3.0E-10	8.0E-9	1.4E-8
+1	9.0E-9	5.6E-9	3.5E-10	1.6E-9	6.6E-10	-	8.4E-10	1.4E-9
+1.125	8.9E-10	-	-	1.5E-10	-	-	-	1.5E-10
