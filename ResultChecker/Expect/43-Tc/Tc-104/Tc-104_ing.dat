@@ -1,0 +1,12 @@
+Radionuclide	Tc-104
+Route of Intake	Ingestion
+Material	All forms, fA=0.9
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Thyroid*	Skeleton*	Liver*
+0.041667	1.0E-1	7.1E-2	8.8E-4	1.3E-3	2.9E-3
+0.083333	1.0E-2	4.8E-3	1.4E-4	2.2E-4	6.0E-4
+0.125	1.1E-3	4.0E-4	1.6E-5	2.8E-5	8.2E-5
+0.25	1.1E-6	4.2E-7	1.4E-8	4.1E-8	1.1E-7
+0.375	1.2E-9	3.4E-10	-	-	-

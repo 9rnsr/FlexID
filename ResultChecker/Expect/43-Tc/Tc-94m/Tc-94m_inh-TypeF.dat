@@ -1,0 +1,18 @@
+Radionuclide	Tc-94m
+Route of Intake	Inhalation
+Material	Aerosols Type F, Pertechnetate, Tc-DTPA, fA=0.9
+AMTD/AMAD, µm	5
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Urine (24-hour sample)	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	3.6E-1	-	6.3E-2	5.5E-3	2.7E-3	3.6E-3	9.7E-3
+0.083333	1.6E-1	-	2.6E-2	2.3E-3	1.2E-3	2.1E-3	6.1E-3
+0.125	7.1E-2	-	1.2E-2	1.0E-3	5.5E-4	1.1E-3	3.3E-3
+0.25	6.1E-3	-	1.3E-3	8.1E-5	4.9E-5	1.4E-4	3.5E-4
+0.375	5.2E-4	-	1.3E-4	6.6E-6	4.2E-6	1.6E-5	3.1E-5
+0.5	4.5E-5	-	1.4E-5	5.3E-7	3.6E-7	1.7E-6	2.5E-6
+0.625	3.9E-6	-	1.3E-6	4.3E-8	3.1E-8	1.7E-7	2.0E-7
+0.75	3.4E-7	-	1.3E-7	3.4E-9	2.6E-9	1.6E-8	1.6E-8
+0.875	3.0E-8	-	1.2E-8	2.8E-10	2.2E-10	1.5E-9	1.3E-9
+1	2.6E-9	5.4E-10	1.1E-9	-	-	-	-
+1.125	2.3E-10	-	-	-	-	-	-

@@ -1,0 +1,119 @@
+[title]
+Tc-98 Injection
+
+[nuclide]
+  Tc-98
+
+
+[Tc-98:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   S-glands              S-glands
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Tc-98:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+  $fA    = 0.9
+  $fA_Re = 0.9          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood                   100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.76 Table 3.4
+# ICRP Publ.130 p.77 Para.143
+# ICRP Publ.134 p.334 Fig.15.1
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-sRe          St-conRe               2160
+  St-conRe                SI-conRe                 20.57
+  SI-conRe                RC-con                    6
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.334 Table 15.3
+  Blood                   Thyroid1                  7.0
+  Blood                   ST0                      71.88
+  Blood                   ST1                       3.0
+  Blood                   ST2                       0.18
+  Blood                   UB-con                    1.7
+  Blood                   S-glands                  2.6
+  Blood                   St-wall                   4.3
+  Blood                   Kidneys1                  0.7
+  Blood                   Kidneys2                  0.04
+  Blood                   Liver1                    4.5
+  Blood                   RC-wall                   3.4
+  Blood                   T-bone-S                  0.35
+  Blood                   C-bone-S                  0.35
+  Thyroid1                Blood                   100
+  Thyroid1                Thyroid2                  1.0
+  Thyroid2                Blood                     1.0
+  ST0                     Blood                    50
+  ST1                     Blood                     0.462
+  ST2                     Blood                     0.0347
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  Kidneys1                UB-con                    8.32
+  Kidneys2                Blood                     0.0347
+  Liver1                  Blood                     8.234
+  Liver1                  Liver2                    0.0832
+  Liver2                  Blood                     0.0347
+  RC-wall                 RC-con                    1.39
+  T-bone-S                Blood                     0.457
+  T-bone-S                T-bone-V                  0.00462
+  C-bone-S                Blood                     0.457
+  C-bone-S                C-bone-V                  0.00462
+  T-bone-V                Blood                     0.000493
+  C-bone-V                Blood                     0.0000821
