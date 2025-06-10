@@ -1,11 +1,11 @@
 [title]
-Tl-204 Inhalation:Type-F
+Tl-200 Inhalation:Type-M
 
 [nuclide]
-  Tl-204
+  Tl-200
 
 
-[Tl-204:compartment]
+[Tl-200:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -66,18 +66,18 @@ Tl-204 Inhalation:Type-F
   acc   Kidneys               Kidneys
   acc   Other                 Other
 
-[Tl-204:transfer]
+[Tl-200:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.151 p.344 Table 37.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 30
-  $ss =  0
+# ICRP Publ.151 p.344 Table 37.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
   $fb = 0               # footnote*
   $sb = 0
-  $fA    = 0.99 # ≒1
+  $fA    = 0.2
   $fA_Re = 0.99 # ≒1   # footnote§ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
