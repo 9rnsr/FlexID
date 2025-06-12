@@ -27,20 +27,20 @@ I-126 Ingestion
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Blood1                Blood         # inorganic iodine in blood
-  acc   Blood2                Blood         #   organic iodine in blood
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   Kidneys1              Kidneys
-  acc   Kidneys2              Kidneys
-  acc   Thyroid1              Thyroid
-  acc   Thyroid2              Thyroid
+  acc   Blood1                Blood         # inorganic
+  acc   Blood2                Blood         #   organic
+  acc   Liver1                Liver         # inorganic
+  acc   Liver2                Liver         #   organic
+  acc   Kidneys1              Kidneys       # inorganic
+  acc   Kidneys2              Kidneys       #   organic
+  acc   Thyroid1              Thyroid       # inorganic
+  acc   Thyroid2              Thyroid       #   organic
   acc   S-glands              S-glands
   acc   St-wall               St-wall
-  acc   Other1                Other
-  acc   Other2                Other
-  acc   Other3                Other
-  acc   Other4                Other
+  acc   Other1                Other         # inorganic
+  acc   Other2                Other         # inorganic
+  acc   Other3                Other         #   organic
+  acc   Other4                Other         #   organic
 
 [I-126:transfer]
 #-----------------------+---------------------+--------------
