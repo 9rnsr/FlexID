@@ -28,8 +28,8 @@ P-33 Injection
   acc   RBC                   Blood
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   Kidneys1              Kidneys       # Urinary path
-  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   C-bone-S              C-bone-S
   acc   Exch-C-bone-V         C-bone-V
   acc   Noch-C-bone-V         C-bone-V
@@ -80,15 +80,15 @@ P-33 Injection
   Plasma                  ST1                      10.18
   Plasma                  ST2                       0.1
   Plasma                  RBC                       2.4
-  Plasma                  Kidneys1                  0.4
-  Plasma                  Kidneys2                  0.14
+  Plasma                  UrinaryPath               0.4
+  Plasma                  OtherKidneyTis            0.14
   Plasma                  Liver1                    4.0
   RBC                     Plasma                    0.6931
   ST0                     Plasma                    0.3466
   ST1                     Plasma                    0.03466
   ST2                     Plasma                    0.00038
-  Kidneys1                UB-con                    0.6931
-  Kidneys2                Plasma                    0.03466
+  UrinaryPath             UB-con                    0.6931
+  OtherKidneyTis          Plasma                    0.03466
   Liver1                  Liver2                    0.3466
   Liver1                  Plasma                    1.04
   Liver2                  Plasma                    0.03466
