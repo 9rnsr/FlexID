@@ -30,8 +30,8 @@ Bi-210 Ingestion
   acc   T-bone-S              T-bone-S
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   Kidneys1              Kidneys       # Urinary path
-  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -75,8 +75,8 @@ Bi-210 Ingestion
   Plasma                  ST1                       4.2
   Plasma                  ST2                       1.3
   Plasma                  Liver1                   30
-  Plasma                  Kidneys1                 30
-  Plasma                  Kidneys2                  5.0
+  Plasma                  UrinaryPath              30
+  Plasma                  OtherKidneyTis            5.0
   Plasma                  C-bone-S                  2.5
   Plasma                  T-bone-S                  2.5
   RBC                     Plasma                    0.173
@@ -87,8 +87,8 @@ Bi-210 Ingestion
   Liver1                  SI-conRe                  0.208
   Liver1                  Liver2                    0.139
   Liver2                  Plasma                    0.0693
-  Kidneys1                UB-con                    0.693
-  Kidneys2                Plasma                    0.139
+  UrinaryPath             UB-con                    0.693
+  OtherKidneyTis          Plasma                    0.139
   C-bone-S                Plasma                    0.0347
   T-bone-S                Plasma                    0.0347
 
@@ -118,8 +118,8 @@ Bi-210 Ingestion
   acc   BoneSurface-C         C-bone-S      # ICRP Publ.137 p.289 Para.605
   acc   BoneSurface-T         T-bone-S      # ICRP Publ.137 p.289 Para.605
   acc   RedMarrow             R-marrow
-  acc   Kidneys1              Kidneys
-  acc   Kidneys2              Kidneys
+  acc   UrinaryPath           Kidneys       # Kidneys1, ICRP Publ.137 p.287 Para.595
+  acc   OtherKidneyTis        Kidneys       # Kidneys2, ICRP Publ.137 p.287 Para.595
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Ovaries               Ovaries
@@ -215,8 +215,8 @@ Bi-210 Ingestion
   Bi-210/T-bone-S         Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
   Bi-210/Liver1           Liver1                    ---
   Bi-210/Liver2           Liver2                    ---
-  Bi-210/Kidneys1         Kidneys1                  ---
-  Bi-210/Kidneys2         Kidneys2                  ---
+  Bi-210/UrinaryPath      UrinaryPath               ---
+  Bi-210/OtherKidneyTis   OtherKidneyTis            ---
   Bi-210/ST0              Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
   Bi-210/ST1              Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
   Bi-210/ST2              Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
@@ -248,13 +248,13 @@ Bi-210 Ingestion
 
 # ICRP Publ.137 p.285 Table 11.3
   Plasma2                 Plasma1                 800
-  Plasma2                 Kidneys1                200
+  Plasma2                 UrinaryPath             200
   Plasma1                 Plasma3                   4
   Plasma1                 RBC                       6
   Plasma1                 Liver1                   17.5
   Plasma1                 Liver2                   17.5
-  Plasma1                 Kidneys1                  5
-  Plasma1                 Kidneys2                  5
+  Plasma1                 UrinaryPath               5
+  Plasma1                 OtherKidneyTis            5
   Plasma1                 Skin                      5
   Plasma1                 RedMarrow                 4
   Plasma1                 BoneSurface               1.5
@@ -266,8 +266,8 @@ Bi-210 Ingestion
   RBC                     Plasma1                   0.099
   Liver1                  SI-conRe                  0.139
   Liver2                  Plasma1                   0.099
-  Kidneys1                UB-con                    0.173
-  Kidneys2                Plasma1                   0.099
+  UrinaryPath             UB-con                    0.173
+  OtherKidneyTis          Plasma1                   0.099
   Skin                    Plasma1                   0.00693
   Skin                    Excreta                   0.00693
   RedMarrow               Plasma1                   0.099
@@ -338,8 +338,8 @@ Bi-210 Ingestion
   Bi-210/T-bone-S         T-bone-S                  ---
   Bi-210/Liver1           Liver                     ---
   Bi-210/Liver2           Plasma                    2.5     # 移行元を自明でない軟組織とする
-  Bi-210/Kidneys1         Kidneys                   ---
- #Bi-210/Kidneys2         ???????                   ---     # ???
+  Bi-210/UrinaryPath      Kidneys                   ---
+ #Bi-210/OtherKidneyTis   ???????                   ---     # ???
   Bi-210/ST0              Plasma                    2.5     # 移行元を自明でない軟組織とする
   Bi-210/ST1              Plasma                    2.5     # 移行元を自明でない軟組織とする
   Bi-210/ST2              Plasma                    2.5     # 移行元を自明でない軟組織とする

@@ -56,8 +56,8 @@ Po-210 Inhalation:Type-M
   acc   BoneSurface-C         C-bone-S      # ICRP Publ.137 p.289 Para.605
   acc   BoneSurface-T         T-bone-S      # ICRP Publ.137 p.289 Para.605
   acc   RedMarrow             R-marrow
-  acc   Kidneys1              Kidneys
-  acc   Kidneys2              Kidneys
+  acc   UrinaryPath           Kidneys       # Kidneys1, ICRP Publ.137 p.287 Para.595
+  acc   OtherKidneyTis        Kidneys       # Kidneys2, ICRP Publ.137 p.287 Para.595
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Ovaries               Ovaries
@@ -170,13 +170,13 @@ Po-210 Inhalation:Type-M
 
 # ICRP Publ.137 p.285 Table 11.3
   Plasma2                 Plasma1                 800
-  Plasma2                 Kidneys1                200
+  Plasma2                 UrinaryPath             200
   Plasma1                 Plasma3                   4
   Plasma1                 RBC                       6
   Plasma1                 Liver1                   17.5
   Plasma1                 Liver2                   17.5
-  Plasma1                 Kidneys1                  5
-  Plasma1                 Kidneys2                  5
+  Plasma1                 UrinaryPath               5
+  Plasma1                 OtherKidneyTis            5
   Plasma1                 Skin                      5
   Plasma1                 RedMarrow                 4
   Plasma1                 BoneSurface               1.5
@@ -188,8 +188,8 @@ Po-210 Inhalation:Type-M
   RBC                     Plasma1                   0.099
   Liver1                  SI-conRe                  0.139
   Liver2                  Plasma1                   0.099
-  Kidneys1                UB-con                    0.173
-  Kidneys2                Plasma1                   0.099
+  UrinaryPath             UB-con                    0.173
+  OtherKidneyTis          Plasma1                   0.099
   Skin                    Plasma1                   0.00693
   Skin                    Excreta                   0.00693
   RedMarrow               Plasma1                   0.099
