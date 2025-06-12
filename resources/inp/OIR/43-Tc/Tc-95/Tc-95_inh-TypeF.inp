@@ -56,8 +56,8 @@ Tc-95 Inhalation:Type-F
   acc   Blood                 Blood
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   Kidneys1              Kidneys
-  acc   Kidneys2              Kidneys
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   Thyroid1              Thyroid
   acc   Thyroid2              Thyroid
   acc   S-glands              S-glands
@@ -185,8 +185,8 @@ Tc-95 Inhalation:Type-F
   Blood                   UB-con                    1.7
   Blood                   S-glands                  2.6
   Blood                   St-wall                   4.3
-  Blood                   Kidneys1                  0.7
-  Blood                   Kidneys2                  0.04
+  Blood                   UrinaryPath               0.7
+  Blood                   OtherKidneyTis            0.04
   Blood                   Liver1                    4.5
   Blood                   RC-wall                   3.4
   Blood                   T-bone-S                  0.35
@@ -199,8 +199,8 @@ Tc-95 Inhalation:Type-F
   ST2                     Blood                     0.0347
   S-glands                OralcavityRe             50
   St-wall                 St-conRe                 50
-  Kidneys1                UB-con                    8.32
-  Kidneys2                Blood                     0.0347
+  UrinaryPath             UB-con                    8.32
+  OtherKidneyTis          Blood                     0.0347
   Liver1                  Blood                     8.234
   Liver1                  Liver2                    0.0832
   Liver2                  Blood                     0.0347
