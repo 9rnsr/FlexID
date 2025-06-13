@@ -1,0 +1,83 @@
+[title]
+Au-200 Injection
+
+[nuclide]
+  Au-200
+
+
+[Au-200:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other1                Other
+  acc   Other2                Other
+
+[Au-200:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+  $fA    = 0.1
+  $fA_Re = 0.1          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.321 Table 35.3
+  Blood1                  Blood2                    0.1
+  Blood1                  Kidneys                   0.1
+  Blood1                  Liver                     0.1
+  Blood1                  Other1                    0.18
+  Blood1                  Other2                    0.1
+  Blood1                  UB-con                    0.3
+  Blood1                  RC-con                    0.1
+  Blood1                  T-bone-S                  0.01
+  Blood1                  C-bone-S                  0.01
+  Blood2                  Blood1                    0.139
+  Kidneys                 UB-con                    0.0693
+  Liver                   Blood1                    0.0693
+  Other1                  Blood1                    0.0693
+  Other2                  Blood1                    0.0139
+  T-bone-S                Blood1                    0.0693
+  C-bone-S                Blood1                    0.0693
