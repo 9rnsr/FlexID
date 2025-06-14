@@ -1,0 +1,265 @@
+[title]
+Os-180 Injection
+
+[nuclide]
+  Os-180  Re-180
+
+
+[Os-180:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Os-180:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.298 Table 33.2 / Ingested materials, All forms
+  $fA    = 0.01
+  $fA_Re = 0.01         # footnote§ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.301 Table 33.3
+  Blood1                  SI-conRe                  3.0
+  Blood1                  UB-con                   23
+  Blood1                  Liver1                   12
+  Blood1                  UrinaryPath              10.67
+  Blood1                  OtherKidneyTis            0.33
+  Blood1                  Blood2                   27
+  Blood1                  ST0                      15
+  Blood1                  ST1                       2.5
+  Blood1                  ST2                       2.5
+  Blood1                  C-bone-S                  1.0
+  Blood1                  T-bone-S                  3.0
+  Blood2                  Blood1                    0.6931
+  Liver1                  Blood1                    0.09704
+  Liver1                  SI-conRe                  0.03466
+  Liver1                  Liver2                    0.006931
+  Liver2                  Blood1                    0.003798
+  UrinaryPath             UB-con                    0.1386
+  OtherKidneyTis          Blood1                    0.003798
+  ST0                     Blood1                    0.09902
+  ST1                     Blood1                    0.0231
+  ST2                     Blood1                    0.0009495
+  C-bone-S                Blood1                    0.07922
+  T-bone-S                Blood1                    0.07922
+  C-bone-S                C-bone-V                  0.0198
+  T-bone-S                T-bone-V                  0.0198
+  C-bone-V                Blood1                    0.0000821
+  T-bone-V                Blood1                    0.000493
+
+
+[Re-180:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-wall               St-wall
+  acc   St-con                St-cont
+  acc   St-conRe              St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-wall               RC-wall
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   S-glands              S-glands
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Re-180:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.288 Table 32.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.9
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Os-180/Oralcavity       Oralcavity                ---
+  Os-180/Oesophagus-f     Oesophagus-f              ---
+  Os-180/Oesophagus-s     Oesophagus-s              ---
+  Os-180/St-con           St-con                    ---
+  Os-180/SI-con           SI-con                    ---
+  Os-180/SI-conRe         SI-conRe                  ---
+  Os-180/RC-con           RC-con                    ---
+  Os-180/LC-con           LC-con                    ---
+  Os-180/RS-con           RS-con                    ---
+  Os-180/Faeces           Faeces                    ---
+  Os-180/UB-con           UB-con                    ---
+  Os-180/Urine            Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  OralcavityRe            Oesophagus-sRe          720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  Oesophagus-sRe          St-conRe               2160
+  St-con                  SI-con                   20.57
+  St-conRe                SI-conRe                 20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.290 Table 32.3
+  Blood                   Thyroid1                  7.0
+  Blood                   ST0                      71.88
+  Blood                   ST1                       3.0
+  Blood                   ST2                       0.18
+  Blood                   UB-con                    1.7
+  Blood                   S-glands                  2.6
+  Blood                   St-wall                   4.3
+  Blood                   UrinaryPath               0.7
+  Blood                   OtherKidneyTis            0.04
+  Blood                   Liver1                    4.5
+  Blood                   RC-wall                   3.4
+  Blood                   T-bone-S                  0.35
+  Blood                   C-bone-S                  0.35
+  Thyroid1                Blood                   100
+  Thyroid1                Thyroid2                  1.0
+  Thyroid2                Blood                     1.0
+  ST0                     Blood                    50
+  ST1                     Blood                     0.462
+  ST2                     Blood                     0.0347
+  S-glands                OralcavityRe             50
+  St-wall                 St-conRe                 50
+  UrinaryPath             UB-con                    8.32
+  OtherKidneyTis          Blood                     0.0347
+  Liver1                  Blood                     8.234
+  Liver1                  Liver2                    0.0832
+  Liver2                  Blood                     0.0347
+  RC-wall                 RC-con                    1.39
+  T-bone-S                Blood                     0.457
+  T-bone-S                T-bone-V                  0.00462
+  C-bone-S                Blood                     0.457
+  C-bone-S                C-bone-V                  0.00462
+  T-bone-V                Blood                     0.000493
+  C-bone-V                Blood                     0.0000821
+
+# ICRP Publ.151 p.299 Para.588
+# > (588) Progeny of osmium addressed in this publication are isotopes of osmium,
+# > rhenium, tungsten, and iridium. The characteristic models for osmium and iridium
+# > are applied without change to these elements as progeny of osmium. The models for
+# > rhenium and tungsten as progeny of osmium are expansions of the characteristic
+# > models for these elements used in this publication, with added compartments and
+# > associated transfer coefficients needed to solve the linked biokinetic models for
+# > chains headed by osmium (see Annex B). If produced in an ambiguous compartment
+# > (i.e. a compartment not explicitly named in the model for rhenium or tungsten), the
+# > progeny is assumed to transfer at a specified rate to the central blood compartment
+# > of its characteristic biokinetic model, and to follow that model thereafter. The following
+# > transfer rates to the central blood compartment are assigned to rhenium or
+# > tungsten produced in an ambiguous compartment: 1000 d⁻¹ if produced in a blood
+# > compartment; at the rate of bone turnover if produced in a bone volume
+# > compartment; and at the following element-specific rates if produced in any other
+# > ambiguous compartment: rhenium, 0.462 d⁻¹; and tungsten, 8.32 d⁻¹.
+# > (588) 本刊行物で扱うオスミウムの子孫元素は、オスミウム、レニウム、タングステン、
+# > およびイリジウムの同位体である。オスミウムとイリジウムの特性モデルは、オスミウムの
+# > 子孫元素としてのこれらの元素にもそのまま適用される。オスミウムの子孫元素としての
+# > レニウムとタングステンのモデルは、本刊行物で使用されているこれらの元素の特性モデルの
+# > 拡張版であり、オスミウムを先頭とする連鎖の連結生体動態モデルを解くために必要な
+# > コンパートメントと関連する移動係数が追加されている（付録B参照）。
+# > あいまいなコンパートメント（すなわち、レニウムまたはタングステンのモデルで明示的に
+# > 名前が付けられていないコンパートメント）で生成された場合、子孫元素は、
+# > その特性生体動態モデルの中央血液コンパートメントに指定された速度で移行し、その後は
+# > そのモデルに従うと仮定される。不明瞭なコンパートメントで生成されたレニウムまたは
+# > タングステンの中心血液コンパートメントへの移行速度は、血液コンパートメントで
+# > 生成された場合は1000 d⁻¹、骨量コンパートメントで生成された場合は骨代謝の速度、
+# > その他の不明瞭なコンパートメントで生成された場合は、以下の元素固有の移行速度と
+# > なります：レニウム：0.462 d⁻¹、タングステン：8.32 d⁻¹。
+
+  Os-180/Blood1           Blood                     ---
+  Os-180/Blood2           Blood                  1000
+  Os-180/C-bone-S         C-bone-S                  ---
+  Os-180/C-bone-V         C-bone-V                  ---
+  Os-180/T-bone-S         T-bone-S                  ---
+  Os-180/T-bone-V         T-bone-V                  ---
+  Os-180/Liver1           Liver1                    ---
+  Os-180/Liver2           Liver2                    ---
+  Os-180/UrinaryPath      UrinaryPath               ---
+  Os-180/OtherKidneyTis   OtherKidneyTis            ---
+  Os-180/ST0              Blood                     0.462
+  Os-180/ST1              Blood                     0.462
+  Os-180/ST2              Blood                     0.462
