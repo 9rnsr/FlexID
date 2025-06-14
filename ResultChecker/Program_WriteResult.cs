@@ -451,7 +451,7 @@ namespace ResultChecker
                 var cellLiverE     /**/= sheet.Cells[r, colE + 7];
                 var cellThyroidE   /**/= sheet.Cells[r, colE + 8];
                 cellTimeE      /**/.Value = expectAct.EndTime;
-                cellWholeBodyE /**/.Value = expectAct.WholeBody;
+                cellWholeBodyE /**/.Value = expectAct.WholeBody/**/?? (object)"-";
                 cellUrineE     /**/.Value = expectAct.Urine    /**/?? (object)"-";
                 cellFaecesE    /**/.Value = expectAct.Faeces   /**/?? (object)"-";
                 cellAtractE    /**/.Value = expectAct.Atract   /**/?? (object)"-";
@@ -470,7 +470,7 @@ namespace ResultChecker
                 var cellLiverA     /**/= sheet.Cells[r, colA + 7];
                 var cellThyroidA   /**/= sheet.Cells[r, colA + 8];
                 cellTimeA      /**/.Value = actualAct.EndTime;
-                cellWholeBodyA /**/.Value = actualAct.WholeBody;
+                cellWholeBodyA /**/.Value = actualAct.WholeBody/**/?? (object)"-";
                 cellUrineA     /**/.Value = actualAct.Urine    /**/?? (object)"-";
                 cellFaecesA    /**/.Value = actualAct.Faeces   /**/?? (object)"-";
                 cellAtractA    /**/.Value = actualAct.Atract   /**/?? (object)"-";
@@ -489,7 +489,7 @@ namespace ResultChecker
                 var cellLiverR     /**/= sheet.Cells[r, colD + 7];
                 var cellThyroidR   /**/= sheet.Cells[r, colD + 8];
                 cellTimeR      /**/.Value = expectAct.EndTime;
-                cellWholeBodyR/**/.Formula = $"{cellWholeBodyA.Address}/{cellWholeBodyE.Address}";
+                cellWholeBodyR/**/.Formula = $"IFERROR({cellWholeBodyA/**/.Address}/{cellWholeBodyE/**/.Address},\"-\")";
                 cellUrineR    /**/.Formula = $"IFERROR({cellUrineA    /**/.Address}/{cellUrineE    /**/.Address},\"-\")";
                 cellFaecesR   /**/.Formula = $"IFERROR({cellFaecesA   /**/.Address}/{cellFaecesE   /**/.Address},\"-\")";
                 cellAtractR   /**/.Formula = $"IFERROR({cellAtractA   /**/.Address}/{cellAtractE   /**/.Address},\"-\")";

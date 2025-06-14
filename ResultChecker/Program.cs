@@ -332,10 +332,13 @@ namespace ResultChecker
                 //    $"{(actualAct.Urine != null ? $"{actualAct.Urine:0.00000000E+00}" : "-"),-14}," +
                 //    $"{(actualAct.Faeces != null ? $"{actualAct.Faeces:0.00000000E+00}" : "-"),-14}");
 
-                var fracWholeBody = actualAct.WholeBody / expectAct.WholeBody;
-                fractionsWholeBody = (Math.Min(fractionsWholeBody.min, fracWholeBody),
-                                      Math.Max(fractionsWholeBody.max, fracWholeBody));
-
+                if (expectAct.WholeBody is double expectWholeBody &&
+                    actualAct.WholeBody is double actualWholeBody)
+                {
+                    var fracWholeBody = actualWholeBody / expectWholeBody;
+                    fractionsWholeBody = (Math.Min(fractionsWholeBody.min, fracWholeBody),
+                                          Math.Max(fractionsWholeBody.max, fracWholeBody));
+                }
                 if (expectAct.Urine is double expectUrine &&
                     actualAct.Urine is double actualUrine)
                 {
@@ -589,7 +592,7 @@ namespace ResultChecker
             public double StartTime;
             public double EndTime;
 
-            public double WholeBody;
+            public double? WholeBody;
             public double? Urine;
             public double? Faeces;
             public double? Atract;
@@ -656,7 +659,7 @@ namespace ResultChecker
                     {
                         StartTime /**/= data.TimeSteps[istep - 1],
                         EndTime   /**/= data.TimeSteps[istep],
-                        WholeBody /**/= GetValue(resultWholeBody).Value,
+                        WholeBody /**/= GetValue(resultWholeBody),
                         Urine     /**/= GetValue(resultUrine),
                         Faeces    /**/= GetValue(resultFaeces),
                         Atract    /**/= GetValue(resultAtract),
@@ -756,7 +759,7 @@ namespace ResultChecker
                     {
                         StartTime /**/= startTime,
                         EndTime   /**/= endTime,
-                        WholeBody /**/= GetValue(indexWholeBody).Value,
+                        WholeBody /**/= GetValue(indexWholeBody),
                         Urine     /**/= GetValue(indexUrine),
                         Faeces    /**/= GetValue(indexFaeces),
                         Atract    /**/= GetValue(indexAtract),
