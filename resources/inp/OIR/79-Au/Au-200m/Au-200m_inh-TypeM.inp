@@ -343,15 +343,6 @@ Au-200m Inhalation:Type-M
   Au-200m/UB-con          UB-con                    ---
   Au-200m/Urine           Urine                     ---
 
-  Au-200m/Blood1          Blood1                    ---
-  Au-200m/Blood2          Blood2                    ---
-  Au-200m/C-bone-S        C-bone-S                  ---
-  Au-200m/T-bone-S        T-bone-S                  ---
-  Au-200m/Liver           Liver                     ---
-  Au-200m/Kidneys         Kidneys                   ---
-  Au-200m/Other1          Other1                    ---
-  Au-200m/Other2          Other2                    ---
-
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
   ALV-F                   bb-F                      0.002
@@ -471,3 +462,20 @@ Au-200m Inhalation:Type-M
   Other2                  Blood1                    0.0139
   T-bone-S                Blood1                    0.0693
   C-bone-S                Blood1                    0.0693
+
+# ICRP Publ.151 p.320 Para.651
+# > (651) Progeny of gold addressed in this publication are radioisotopes of gold,
+# > rhenium, osmium, iridium, and platinum. The model for gold as a parent is applied
+# > to gold as a progeny of gold. ...
+# > (651) 本刊行物で扱う金の子孫元素は、金、レニウム、オスミウム、イリジウム、および
+# > 白金の放射性同位元素である。親元素としての金のモデルは、金の子孫元素としての金に
+# > 適用される。 ...
+
+  Au-200m/Blood1          Blood1                    ---
+  Au-200m/Blood2          Blood2                    ---
+  Au-200m/C-bone-S        C-bone-S                  ---
+  Au-200m/T-bone-S        T-bone-S                  ---
+  Au-200m/Liver           Liver                     ---
+  Au-200m/Kidneys         Kidneys                   ---
+  Au-200m/Other1          Other1                    ---
+  Au-200m/Other2          Other2                    ---

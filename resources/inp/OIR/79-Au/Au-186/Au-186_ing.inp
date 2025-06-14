@@ -102,14 +102,14 @@ Au-186 Ingestion
 
   acc   Blood1                Blood
   acc   Blood2                Blood
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   UrinaryPath           Kidneys
-  acc   OtherKidneyTis        Kidneys
   acc   C-bone-S              C-bone-S
   acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -244,14 +244,14 @@ Au-186 Ingestion
 
   acc   Blood1                Blood
   acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   UrinaryPath           Kidneys
   acc   OtherKidneyTis        Kidneys
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   ST0                   Other         # rapid turnover
   acc   ST1                   Other         # intermediate turnover
   acc   ST2                   Other         # slow turnover
@@ -339,19 +339,45 @@ Au-186 Ingestion
   Au-186/Other1           Blood1                    0.0693
   Au-186/Other2           Blood1                    0.0693
 
+# ICRP Publ.151 p.307 Para.601
+# > (601) Progeny of platinum addressed in this publication are isotopes of platinum,
+# > rhenium, osmium, iridium, and gold. The characteristic models for platinum,
+# > osmium, and iridium used in this publication are applied to these elements as progeny
+# > of platinum. The models for rhenium and gold as progeny of platinum are
+# > expansions of the characteristic models for these elements with added compartments
+# > and associated transfer coefficients needed to solve the linked biokinetic models for
+# > chains headed by platinum (see Annex B). The following transfer rates to the central
+# > blood compartment are assigned to rhenium or gold produced in an ambiguous
+# > compartment (i.e. a compartment of a preceding chain member that is not a compartment
+# > in the characteristic model for the progeny: 1000 d⁻¹ if produced in a blood
+# > compartment; at the rate of bone turnover if produced in a bone volume compartment;
+# > and at the following element-specific rates if produced in any other ambiguous
+# > compartment: rhenium, 0.462 d⁻¹; and gold, 0.0693 d⁻¹).
+# > (601) 本刊行物で扱う白金の子孫元素は、白金、レニウム、オスミウム、イリジウム、および
+# > 金の同位体である。本刊行物で用いられる白金、オスミウム、およびイリジウムの特性モデルは、
+# > 白金の子孫元素としてのこれらの元素に適用される。白金の子孫元素としてのレニウムと
+# > 金のモデルは、これらの元素の特性モデルを拡張したもので、白金を先頭とする連鎖の
+# > 連結生体反応速度論モデルを解くために必要なコンパートメントと関連する移動係数が追加された
+# > ものである（付録B参照）。不明瞭なコンパートメント（すなわち、子孫元素の特性モデル
+# > におけるコンパートメントではない、先行する連鎖メンバーのコンパートメント）で生成された
+# > レニウムまたは金には、中心血液コンパートメントへの移行速度として以下が割り当てられる。
+# > 血液コンパートメントで生成された場合は1000 d⁻¹、骨量コンパートメントで生成された場合は
+# > 骨代謝の速度、その他の不明瞭なコンパートメントで生成された場合は、以下の元素固有の
+# > 移行速度が割り当てられる。レニウム：0.462 d⁻¹、金：0.0693 d⁻¹。
+
   Pt-186/Blood1           Blood1                    ---
   Pt-186/Blood2           Blood2                    ---
   Pt-186/C-bone-S         C-bone-S                  ---
   Pt-186/C-bone-V         C-bone-V                  ---
   Pt-186/T-bone-S         T-bone-S                  ---
   Pt-186/T-bone-V         T-bone-V                  ---
-  Pt-186/UrinaryPath      UrinaryPath               ---
-  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
   Pt-186/Liver1           Liver1                    ---
   Pt-186/Liver2           Liver2                    ---
-  Pt-186/ST0              Blood1                    0.0693
-  Pt-186/ST1              Blood1                    0.0693
-  Pt-186/ST2              Blood1                    0.0693
+  Pt-186/UrinaryPath      UrinaryPath               ---
+  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
+  Pt-186/ST0              ST0                       ---
+  Pt-186/ST1              ST1                       ---
+  Pt-186/ST2              ST2                       ---
 
 
 [Ir-186:compartment]
@@ -373,14 +399,14 @@ Au-186 Ingestion
 
   acc   Blood1                Blood
   acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   UrinaryPath           Kidneys
   acc   OtherKidneyTis        Kidneys
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   ST0                   Other         # rapid turnover
   acc   ST1                   Other         # intermediate turnover
   acc   ST2                   Other         # slow turnover
@@ -468,30 +494,31 @@ Au-186 Ingestion
   Au-186/Other1           Blood1                    0.0693
   Au-186/Other2           Blood1                    0.0693
 
+# ICRP Publ.151 p.307 Para.601
   Pt-186/Blood1           Blood1                    ---
   Pt-186/Blood2           Blood2                    ---
   Pt-186/C-bone-S         C-bone-S                  ---
   Pt-186/C-bone-V         C-bone-V                  ---
   Pt-186/T-bone-S         T-bone-S                  ---
   Pt-186/T-bone-V         T-bone-V                  ---
-  Pt-186/UrinaryPath      UrinaryPath               ---
-  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
   Pt-186/Liver1           Liver1                    ---
   Pt-186/Liver2           Liver2                    ---
-  Pt-186/ST0              Blood1                    0.0693
-  Pt-186/ST1              Blood1                    0.0693
-  Pt-186/ST2              Blood1                    0.0693
+  Pt-186/UrinaryPath      UrinaryPath               ---
+  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
+  Pt-186/ST0              ST0                       ---
+  Pt-186/ST1              ST1                       ---
+  Pt-186/ST2              ST2                       ---
 
   Ir-186m/Blood1          Blood1                    ---
   Ir-186m/Blood2          Blood2                    ---
+  Ir-186m/C-bone-S        C-bone-S                  ---
+  Ir-186m/C-bone-V        C-bone-V                  ---
+  Ir-186m/T-bone-S        T-bone-S                  ---
+  Ir-186m/T-bone-V        T-bone-V                  ---
   Ir-186m/Liver1          Liver1                    ---
   Ir-186m/Liver2          Liver2                    ---
   Ir-186m/UrinaryPath     UrinaryPath               ---
   Ir-186m/OtherKidneyTis  OtherKidneyTis            ---
-  Ir-186m/T-bone-S        T-bone-S                  ---
-  Ir-186m/T-bone-V        T-bone-V                  ---
-  Ir-186m/C-bone-S        C-bone-S                  ---
-  Ir-186m/C-bone-V        C-bone-V                  ---
   Ir-186m/ST0             ST0                       ---
   Ir-186m/ST1             ST1                       ---
   Ir-186m/ST2             ST2                       ---
@@ -517,8 +544,8 @@ Au-186 Ingestion
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   C-bone-S              C-bone-S
-  acc   T-bone-S              T-bone-S
   acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
@@ -611,47 +638,48 @@ Au-186 Ingestion
   Au-186/Other1           Blood1                    0.09902
   Au-186/Other2           Blood1                    0.09902
 
+# ICRP Publ.151 p.307 Para.601
   Pt-186/Blood1           Blood1                    ---
   Pt-186/Blood2           Blood2                    ---
   Pt-186/C-bone-S         C-bone-S                  ---
   Pt-186/C-bone-V         C-bone-V                  ---
   Pt-186/T-bone-S         T-bone-S                  ---
   Pt-186/T-bone-V         T-bone-V                  ---
-  Pt-186/UrinaryPath      UrinaryPath               ---
-  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
   Pt-186/Liver1           Liver1                    ---
   Pt-186/Liver2           Liver2                    ---
-  Pt-186/ST0              Blood1                    0.09902
-  Pt-186/ST1              Blood1                    0.09902
-  Pt-186/ST2              Blood1                    0.09902
+  Pt-186/UrinaryPath      UrinaryPath               ---
+  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
+  Pt-186/ST0              ST0                       ---
+  Pt-186/ST1              ST1                       ---
+  Pt-186/ST2              ST2                       ---
 
   Ir-186m/Blood1          Blood1                    ---
   Ir-186m/Blood2          Blood2                    ---
-  Ir-186m/T-bone-S        C-bone-S                  ---
-  Ir-186m/T-bone-V        C-bone-V                  ---
-  Ir-186m/C-bone-S        T-bone-S                  ---
-  Ir-186m/C-bone-V        T-bone-V                  ---
-  Ir-186m/UrinaryPath     UrinaryPath               ---
-  Ir-186m/OtherKidneyTis  OtherKidneyTis            ---
+  Ir-186m/C-bone-S        C-bone-S                  ---
+  Ir-186m/C-bone-V        C-bone-V                  ---
+  Ir-186m/T-bone-S        T-bone-S                  ---
+  Ir-186m/T-bone-V        T-bone-V                  ---
   Ir-186m/Liver1          Liver1                    ---
   Ir-186m/Liver2          Liver2                    ---
-  Ir-186m/ST0             Blood1                    0.09902
-  Ir-186m/ST1             Blood1                    0.09902
-  Ir-186m/ST2             Blood1                    0.09902
+  Ir-186m/UrinaryPath     UrinaryPath               ---
+  Ir-186m/OtherKidneyTis  OtherKidneyTis            ---
+  Ir-186m/ST0             ST0                       ---
+  Ir-186m/ST1             ST1                       ---
+  Ir-186m/ST2             ST2                       ---
 
   Ir-186/Blood1           Blood1                    ---
   Ir-186/Blood2           Blood2                    ---
-  Ir-186/T-bone-S         C-bone-S                  ---
-  Ir-186/T-bone-V         C-bone-V                  ---
-  Ir-186/C-bone-S         T-bone-S                  ---
-  Ir-186/C-bone-V         T-bone-V                  ---
-  Ir-186/UrinaryPath      UrinaryPath               ---
-  Ir-186/OtherKidneyTis   OtherKidneyTis            ---
+  Ir-186/C-bone-S         C-bone-S                  ---
+  Ir-186/C-bone-V         C-bone-V                  ---
+  Ir-186/T-bone-S         T-bone-S                  ---
+  Ir-186/T-bone-V         T-bone-V                  ---
   Ir-186/Liver1           Liver1                    ---
   Ir-186/Liver2           Liver2                    ---
-  Ir-186/ST0              Blood1                    0.09902
-  Ir-186/ST1              Blood1                    0.09902
-  Ir-186/ST2              Blood1                    0.09902
+  Ir-186/UrinaryPath      UrinaryPath               ---
+  Ir-186/OtherKidneyTis   OtherKidneyTis            ---
+  Ir-186/ST0              ST0                       ---
+  Ir-186/ST1              ST1                       ---
+  Ir-186/ST2              ST2                       ---
 
 
 [Os-182:compartment]
@@ -674,8 +702,8 @@ Au-186 Ingestion
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   C-bone-S              C-bone-S
-  acc   T-bone-S              T-bone-S
   acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
@@ -768,19 +796,20 @@ Au-186 Ingestion
   Au-186/Other1           Blood1                    0.09902
   Au-186/Other2           Blood1                    0.09902
 
+# ICRP Publ.151 p.307 Para.601
   Pt-186/Blood1           Blood1                    ---
   Pt-186/Blood2           Blood2                    ---
   Pt-186/C-bone-S         C-bone-S                  ---
   Pt-186/C-bone-V         C-bone-V                  ---
   Pt-186/T-bone-S         T-bone-S                  ---
   Pt-186/T-bone-V         T-bone-V                  ---
-  Pt-186/UrinaryPath      UrinaryPath               ---
-  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
   Pt-186/Liver1           Liver1                    ---
   Pt-186/Liver2           Liver2                    ---
-  Pt-186/ST0              Blood1                    0.09902
-  Pt-186/ST1              Blood1                    0.09902
-  Pt-186/ST2              Blood1                    0.09902
+  Pt-186/UrinaryPath      UrinaryPath               ---
+  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
+  Pt-186/ST0              ST0                       ---
+  Pt-186/ST1              ST1                       ---
+  Pt-186/ST2              ST2                       ---
 
 
 [Re-182m:compartment]
@@ -806,17 +835,17 @@ Au-186 Ingestion
   exc   Urine                 ---
 
   acc   Blood                 Blood
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   UrinaryPath           Kidneys
-  acc   OtherKidneyTis        Kidneys
-  acc   Thyroid1              Thyroid
-  acc   Thyroid2              Thyroid
-  acc   S-glands              S-glands
   acc   C-bone-S              C-bone-S
   acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
+  acc   S-glands              S-glands
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -913,30 +942,32 @@ Au-186 Ingestion
   Au-186/Other1           Blood                     0.462
   Au-186/Other2           Blood                     0.462
 
+# ICRP Publ.151 p.307 Para.601
   Pt-186/Blood1           Blood                     ---
   Pt-186/Blood2           Blood                  1000
   Pt-186/C-bone-S         C-bone-S                  ---
   Pt-186/C-bone-V         C-bone-V                  ---
   Pt-186/T-bone-S         T-bone-S                  ---
   Pt-186/T-bone-V         T-bone-V                  ---
-  Pt-186/UrinaryPath      UrinaryPath               ---
-  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
   Pt-186/Liver1           Liver1                    ---
   Pt-186/Liver2           Liver2                    ---
+  Pt-186/UrinaryPath      UrinaryPath               ---
+  Pt-186/OtherKidneyTis   OtherKidneyTis            ---
   Pt-186/ST0              Blood                     0.462
   Pt-186/ST1              Blood                     0.462
   Pt-186/ST2              Blood                     0.462
 
+# ICRP Publ.151 p.299 Para.588
   Os-182/Blood1           Blood                     ---
   Os-182/Blood2           Blood                  1000
   Os-182/C-bone-S         C-bone-S                  ---
-  Os-182/T-bone-S         C-bone-V                  ---
-  Os-182/C-bone-V         T-bone-S                  ---
+  Os-182/C-bone-V         C-bone-V                  ---
+  Os-182/T-bone-S         T-bone-S                  ---
   Os-182/T-bone-V         T-bone-V                  ---
-  Os-182/UrinaryPath      UrinaryPath               ---
-  Os-182/OtherKidneyTis   OtherKidneyTis            ---
   Os-182/Liver1           Liver1                    ---
   Os-182/Liver2           Liver2                    ---
+  Os-182/UrinaryPath      UrinaryPath               ---
+  Os-182/OtherKidneyTis   OtherKidneyTis            ---
   Os-182/ST0              Blood                     0.462
   Os-182/ST1              Blood                     0.462
   Os-182/ST2              Blood                     0.462
