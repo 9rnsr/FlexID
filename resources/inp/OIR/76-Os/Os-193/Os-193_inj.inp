@@ -1,0 +1,249 @@
+[title]
+Os-193 Injection
+
+[nuclide]
+  Os-193  Ir-193m
+
+
+[Os-193:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[Os-193:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.298 Table 33.2 / Ingested materials, All forms
+  $fA    = 0.01
+  $fA_Re = 0.01         # footnote§ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.301 Table 33.3
+  Blood1                  SI-conRe                  3.0
+  Blood1                  UB-con                   23
+  Blood1                  Liver1                   12
+  Blood1                  UrinaryPath              10.67
+  Blood1                  OtherKidneyTis            0.33
+  Blood1                  Blood2                   27
+  Blood1                  ST0                      15
+  Blood1                  ST1                       2.5
+  Blood1                  ST2                       2.5
+  Blood1                  C-bone-S                  1.0
+  Blood1                  T-bone-S                  3.0
+  Blood2                  Blood1                    0.6931
+  Liver1                  Blood1                    0.09704
+  Liver1                  SI-conRe                  0.03466
+  Liver1                  Liver2                    0.006931
+  Liver2                  Blood1                    0.003798
+  UrinaryPath             UB-con                    0.1386
+  OtherKidneyTis          Blood1                    0.003798
+  ST0                     Blood1                    0.09902
+  ST1                     Blood1                    0.0231
+  ST2                     Blood1                    0.0009495
+  C-bone-S                Blood1                    0.07922
+  T-bone-S                Blood1                    0.07922
+  C-bone-S                C-bone-V                  0.0198
+  T-bone-S                T-bone-V                  0.0198
+  C-bone-V                Blood1                    0.0000821
+  T-bone-V                Blood1                    0.000493
+
+
+[Ir-193m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
+  acc   ST0                   Other         # rapid turnover
+  acc   ST1                   Other         # intermediate turnover
+  acc   ST2                   Other         # slow turnover
+
+[Ir-193m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.188 Table 8.2 / Ingested materials, All unspecified forms
+  $fA_MaxValueOfIng = 0.01
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Os-193/Oralcavity       Oralcavity                ---
+  Os-193/Oesophagus-f     Oesophagus-f              ---
+  Os-193/Oesophagus-s     Oesophagus-s              ---
+  Os-193/St-con           St-con                    ---
+  Os-193/SI-con           SI-con                    ---
+  Os-193/SI-conRe         SI-conRe                  ---
+  Os-193/RC-con           RC-con                    ---
+  Os-193/LC-con           LC-con                    ---
+  Os-193/RS-con           RS-con                    ---
+  Os-193/Faeces           Faeces                    ---
+  Os-193/UB-con           UB-con                    ---
+  Os-193/Urine            Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.193 Table 8.4
+  Blood1                  SI-conRe                  4.0
+  Blood1                  UB-con                   12
+  Blood1                  Liver1                   12
+  Blood1                  UrinaryPath               4.0
+  Blood1                  OtherKidneyTis            2.0
+  Blood1                  Blood2                   27
+  Blood1                  ST0                      15
+  Blood1                  ST1                      15
+  Blood1                  ST2                       1.0
+  Blood1                  C-bone-S                  2.0
+  Blood1                  T-bone-S                  6.0
+  Blood2                  Blood1                    0.693
+  Liver1                  Blood1                    0.0231
+  Liver1                  SI-conRe                  0.0462
+  Liver1                  Liver2                    0.0693
+  Liver2                  Blood1                    0.00693
+  UrinaryPath             UB-con                    0.139
+  OtherKidneyTis          Blood1                    0.00693
+  ST0                     Blood1                    0.0693
+  ST1                     Blood1                    0.00693
+  ST2                     Blood1                    0.00095
+  C-bone-S                Blood1                    0.0185
+  T-bone-S                Blood1                    0.0185
+  C-bone-S                C-bone-V                  0.00462
+  T-bone-S                T-bone-V                  0.00462
+  C-bone-V                Blood1                    0.0000821
+  T-bone-V                Blood1                    0.000493
+
+# ICRP Publ.151 p.299 Para.588
+# > (588) Progeny of osmium addressed in this publication are isotopes of osmium,
+# > rhenium, tungsten, and iridium. The characteristic models for osmium and iridium
+# > are applied without change to these elements as progeny of osmium. The models for
+# > rhenium and tungsten as progeny of osmium are expansions of the characteristic
+# > models for these elements used in this publication, with added compartments and
+# > associated transfer coefficients needed to solve the linked biokinetic models for
+# > chains headed by osmium (see Annex B). If produced in an ambiguous compartment
+# > (i.e. a compartment not explicitly named in the model for rhenium or tungsten), the
+# > progeny is assumed to transfer at a specified rate to the central blood compartment
+# > of its characteristic biokinetic model, and to follow that model thereafter. The following
+# > transfer rates to the central blood compartment are assigned to rhenium or
+# > tungsten produced in an ambiguous compartment: 1000 d⁻¹ if produced in a blood
+# > compartment; at the rate of bone turnover if produced in a bone volume
+# > compartment; and at the following element-specific rates if produced in any other
+# > ambiguous compartment: rhenium, 0.462 d⁻¹; and tungsten, 8.32 d⁻¹.
+# > (588) 本刊行物で扱うオスミウムの子孫元素は、オスミウム、レニウム、タングステン、
+# > およびイリジウムの同位体である。オスミウムとイリジウムの特性モデルは、オスミウムの
+# > 子孫元素としてのこれらの元素にもそのまま適用される。オスミウムの子孫元素としての
+# > レニウムとタングステンのモデルは、本刊行物で使用されているこれらの元素の特性モデルの
+# > 拡張版であり、オスミウムを先頭とする連鎖の連結生体動態モデルを解くために必要な
+# > コンパートメントと関連する移動係数が追加されている（付録B参照）。
+# > あいまいなコンパートメント（すなわち、レニウムまたはタングステンのモデルで明示的に
+# > 名前が付けられていないコンパートメント）で生成された場合、子孫元素は、
+# > その特性生体動態モデルの中央血液コンパートメントに指定された速度で移行し、その後は
+# > そのモデルに従うと仮定される。不明瞭なコンパートメントで生成されたレニウムまたは
+# > タングステンの中心血液コンパートメントへの移行速度は、血液コンパートメントで
+# > 生成された場合は1000 d⁻¹、骨量コンパートメントで生成された場合は骨代謝の速度、
+# > その他の不明瞭なコンパートメントで生成された場合は、以下の元素固有の移行速度と
+# > なります：レニウム：0.462 d⁻¹、タングステン：8.32 d⁻¹。
+
+  Os-193/Blood1           Blood1                    ---
+  Os-193/Blood2           Blood2                    ---
+  Os-193/C-bone-S         C-bone-S                  ---
+  Os-193/C-bone-V         C-bone-V                  ---
+  Os-193/T-bone-S         T-bone-S                  ---
+  Os-193/T-bone-V         T-bone-V                  ---
+  Os-193/Liver1           Liver1                    ---
+  Os-193/Liver2           Liver2                    ---
+  Os-193/UrinaryPath      UrinaryPath               ---
+  Os-193/OtherKidneyTis   OtherKidneyTis            ---
+  Os-193/ST0              ST0                       ---
+  Os-193/ST1              ST1                       ---
+  Os-193/ST2              ST2                       ---
