@@ -1,0 +1,12 @@
+Radionuclide	Pt-184
+Route of Intake	Ingestion
+Material	Soluble inorganic forms, fA=1E-2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	9.0E-2	9.0E-2	4.3E-6	8.9E-6
+0.083333	8.2E-3	8.1E-3	1.1E-6	2.5E-6
+0.125	7.4E-4	7.4E-4	1.6E-7	3.8E-7
+0.25	5.4E-7	5.4E-7	2.2E-10	5.5E-10
+0.375	4.0E-10	3.9E-10	-	-
