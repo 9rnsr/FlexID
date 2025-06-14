@@ -761,7 +761,7 @@ Au-186 Inhalation:Type-F
   Liver1                  Liver2                    0.0693
   Liver2                  Blood1                    0.00693
   UrinaryPath             UB-con                    0.139
-  OtherKidneyTis          Blood1                    .00693
+  OtherKidneyTis          Blood1                    0.00693
   ST0                     Blood1                    0.0693
   ST1                     Blood1                    0.00693
   ST2                     Blood1                    0.00095
@@ -790,8 +790,8 @@ Au-186 Inhalation:Type-F
   Pt-186/T-bone-V         T-bone-V                  ---
   Pt-186/UrinaryPath      UrinaryPath               ---
   Pt-186/OtherKidneyTis   OtherKidneyTis            ---
-  Pt-186/Liver1           Blood1                    0.0693
-  Pt-186/Liver2           Blood1                    0.0693
+  Pt-186/Liver1           Liver1                    ---
+  Pt-186/Liver2           Liver2                    ---
   Pt-186/ST0              Blood1                    0.0693
   Pt-186/ST1              Blood1                    0.0693
   Pt-186/ST2              Blood1                    0.0693
@@ -1041,7 +1041,7 @@ Au-186 Inhalation:Type-F
   Liver1                  Liver2                    0.0693
   Liver2                  Blood1                    0.00693
   UrinaryPath             UB-con                    0.139
-  OtherKidneyTis          Blood1                    .00693
+  OtherKidneyTis          Blood1                    0.00693
   ST0                     Blood1                    0.0693
   ST1                     Blood1                    0.00693
   ST2                     Blood1                    0.00095
@@ -1070,8 +1070,8 @@ Au-186 Inhalation:Type-F
   Pt-186/T-bone-V         T-bone-V                  ---
   Pt-186/UrinaryPath      UrinaryPath               ---
   Pt-186/OtherKidneyTis   OtherKidneyTis            ---
-  Pt-186/Liver1           Blood1                    0.0693
-  Pt-186/Liver2           Blood1                    0.0693
+  Pt-186/Liver1           Liver1                    ---
+  Pt-186/Liver2           Liver2                    ---
   Pt-186/ST0              Blood1                    0.0693
   Pt-186/ST1              Blood1                    0.0693
   Pt-186/ST2              Blood1                    0.0693
@@ -1364,8 +1364,8 @@ Au-186 Inhalation:Type-F
   Pt-186/T-bone-V         T-bone-V                  ---
   Pt-186/UrinaryPath      UrinaryPath               ---
   Pt-186/OtherKidneyTis   OtherKidneyTis            ---
-  Pt-186/Liver1           Blood1                    0.09902
-  Pt-186/Liver2           Blood1                    0.09902
+  Pt-186/Liver1           Liver1                    ---
+  Pt-186/Liver2           Liver2                    ---
   Pt-186/ST0              Blood1                    0.09902
   Pt-186/ST1              Blood1                    0.09902
   Pt-186/ST2              Blood1                    0.09902
@@ -1378,8 +1378,8 @@ Au-186 Inhalation:Type-F
   Ir-186m/C-bone-V        T-bone-V                  ---
   Ir-186m/UrinaryPath     UrinaryPath               ---
   Ir-186m/OtherKidneyTis  OtherKidneyTis            ---
-  Ir-186m/Liver1          Blood1                    0.09902
-  Ir-186m/Liver2          Blood1                    0.09902
+  Ir-186m/Liver1          Liver1                    ---
+  Ir-186m/Liver2          Liver2                    ---
   Ir-186m/ST0             Blood1                    0.09902
   Ir-186m/ST1             Blood1                    0.09902
   Ir-186m/ST2             Blood1                    0.09902
@@ -1392,8 +1392,8 @@ Au-186 Inhalation:Type-F
   Ir-186/C-bone-V         T-bone-V                  ---
   Ir-186/UrinaryPath      UrinaryPath               ---
   Ir-186/OtherKidneyTis   OtherKidneyTis            ---
-  Ir-186/Liver1           Blood1                    0.09902
-  Ir-186/Liver2           Blood1                    0.09902
+  Ir-186/Liver1           Liver1                    ---
+  Ir-186/Liver2           Liver2                    ---
   Ir-186/ST0              Blood1                    0.09902
   Ir-186/ST1              Blood1                    0.09902
   Ir-186/ST2              Blood1                    0.09902
@@ -1672,8 +1672,8 @@ Au-186 Inhalation:Type-F
   Pt-186/T-bone-V         T-bone-V                  ---
   Pt-186/UrinaryPath      UrinaryPath               ---
   Pt-186/OtherKidneyTis   OtherKidneyTis            ---
-  Pt-186/Liver1           Blood1                    0.09902
-  Pt-186/Liver2           Blood1                    0.09902
+  Pt-186/Liver1           Liver1                    ---
+  Pt-186/Liver2           Liver2                    ---
   Pt-186/ST0              Blood1                    0.09902
   Pt-186/ST1              Blood1                    0.09902
   Pt-186/ST2              Blood1                    0.09902
@@ -1968,8 +1968,8 @@ Au-186 Inhalation:Type-F
   Pt-186/T-bone-V         T-bone-V                  ---
   Pt-186/UrinaryPath      UrinaryPath               ---
   Pt-186/OtherKidneyTis   OtherKidneyTis            ---
-  Pt-186/Liver1           Blood                     0.462
-  Pt-186/Liver2           Blood                     0.462
+  Pt-186/Liver1           Liver1                    ---
+  Pt-186/Liver2           Liver2                    ---
   Pt-186/ST0              Blood                     0.462
   Pt-186/ST1              Blood                     0.462
   Pt-186/ST2              Blood                     0.462
@@ -1982,8 +1982,8 @@ Au-186 Inhalation:Type-F
   Os-182/T-bone-V         T-bone-V                  ---
   Os-182/UrinaryPath      UrinaryPath               ---
   Os-182/OtherKidneyTis   OtherKidneyTis            ---
-  Os-182/Liver1           Blood                     0.462
-  Os-182/Liver2           Blood                     0.462
+  Os-182/Liver1           Liver1                    ---
+  Os-182/Liver2           Liver2                    ---
   Os-182/ST0              Blood                     0.462
   Os-182/ST1              Blood                     0.462
   Os-182/ST2              Blood                     0.462
