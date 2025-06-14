@@ -815,10 +815,10 @@ Au-190 Inhalation:Type-M
   Pt-190/C-bone-V         C-bone-V                  ---
   Pt-190/T-bone-S         T-bone-S                  ---
   Pt-190/T-bone-V         T-bone-V                  ---
-  Pt-190/Liver1           Blood1                    0.09902
-  Pt-190/Liver2           Blood1                    0.09902
-  Pt-190/UrinaryPath      Blood1                    0.09902
-  Pt-190/OtherKidneyTis   Blood1                    0.09902
+  Pt-190/Liver1           Liver1                    ---
+  Pt-190/Liver2           Liver2                    ---
+  Pt-190/UrinaryPath      UrinaryPath               ---
+  Pt-190/OtherKidneyTis   OtherKidneyTis            ---
   Pt-190/ST0              Blood1                    0.09902
   Pt-190/ST1              Blood1                    0.09902
   Pt-190/ST2              Blood1                    0.09902
