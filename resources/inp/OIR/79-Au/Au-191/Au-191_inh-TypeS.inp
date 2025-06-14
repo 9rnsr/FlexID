@@ -277,14 +277,14 @@ Au-191 Inhalation:Type-S
 
   acc   Blood1                Blood
   acc   Blood2                Blood
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   UrinaryPath           Kidneys
-  acc   OtherKidneyTis        Kidneys
   acc   C-bone-S              C-bone-S
   acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
