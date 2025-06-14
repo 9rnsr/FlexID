@@ -761,7 +761,7 @@ Au-186 Inhalation:Type-S
   Liver1                  Liver2                    0.0693
   Liver2                  Blood1                    0.00693
   UrinaryPath             UB-con                    0.139
-  OtherKidneyTis          Blood1                    .00693
+  OtherKidneyTis          Blood1                    0.00693
   ST0                     Blood1                    0.0693
   ST1                     Blood1                    0.00693
   ST2                     Blood1                    0.00095
@@ -1041,7 +1041,7 @@ Au-186 Inhalation:Type-S
   Liver1                  Liver2                    0.0693
   Liver2                  Blood1                    0.00693
   UrinaryPath             UB-con                    0.139
-  OtherKidneyTis          Blood1                    .00693
+  OtherKidneyTis          Blood1                    0.00693
   ST0                     Blood1                    0.0693
   ST1                     Blood1                    0.00693
   ST2                     Blood1                    0.00095
