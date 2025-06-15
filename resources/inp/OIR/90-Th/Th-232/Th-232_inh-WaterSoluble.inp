@@ -337,17 +337,17 @@ Th-232 Inhalation:WaterSoluble
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
   acc   T-marrow              T-marrow      # only for progeny of Thorium chain
-  acc   Liver1                Liver         # fast turnover
-  acc   Liver2                Liver         # slow turnover
+  acc   Liver1                Liver         # Para.694, fast
+  acc   Liver2                Liver         # Para.694, slow
   acc   Spleen                Spleen        # only for progeny of Thorium chain
-  acc   Kidneys1              Kidneys       # fast turnover
-  acc   Kidneys2              Kidneys       # slow turnover
+  acc   Kidneys1              Kidneys       # Para.694, fast
+  acc   Kidneys2              Kidneys       # Para.694, slow
   acc   Testes                Testes        # only for progeny of Thorium chain
   acc   Ovaries               Ovaries       # only for progeny of Thorium chain
   acc   Skin                  Skin          # only for progeny of Thorium chain
-  acc   ST0                   Other         # rapid turnover
-  acc   ST1                   Other         # intermediate turnover
-  acc   ST2                   Other         # slow turnover
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
 
 
 [Ra-228:transfer]
@@ -603,15 +603,15 @@ Th-232 Inhalation:WaterSoluble
   Th-232/T-bone-S         T-bone-S                  ---
   Th-232/T-bone-V         Noch-T-bone-V             ---     # Publ.137 Para.812
   Th-232/T-marrow         T-marrow                  ---     # only for progeny of Thorium chain
-  Th-232/Liver1           Liver1                    ---
-  Th-232/Liver2           Liver2                    ---
-  Th-232/UrinaryPath      Kidneys1                  ---
-  Th-232/OtherKidneyTis   Kidneys2                  ---
+  Th-232/Liver1           Blood                     6.98
+  Th-232/Liver2           Blood                     6.98
+  Th-232/UrinaryPath      Blood                     6.98
+  Th-232/OtherKidneyTis   Blood                     6.98
   Th-232/Testes           Testes                    ---     # only for progeny of Thorium chain
   Th-232/Ovaries          Ovaries                   ---     # only for progeny of Thorium chain
-  Th-232/ST0              ST0                       ---
-  Th-232/ST1              ST1                       ---
-  Th-232/ST2              ST2                       ---
+  Th-232/ST0              Blood                     6.98
+  Th-232/ST1              Blood                     6.98
+  Th-232/ST2              Blood                     6.98
 
 
 [Ac-228:compartment]
@@ -934,15 +934,15 @@ Th-232 Inhalation:WaterSoluble
   Th-232/T-bone-S         T-bone-S                  ---
   Th-232/T-bone-V         T-bone-V                  ---
   Th-232/T-marrow         T-marrow                  ---
-  Th-232/Liver1           Liver1                    ---
-  Th-232/Liver2           Liver2                    ---
-  Th-232/UrinaryPath      Kidneys1                  ---
-  Th-232/OtherKidneyTis   Kidneys2                  ---
+  Th-232/Liver1           Blood                     1.386
+  Th-232/Liver2           Blood                     1.386
+  Th-232/UrinaryPath      Blood                     1.386
+  Th-232/OtherKidneyTis   Blood                     1.386
   Th-232/Testes           Testes                    ---
   Th-232/Ovaries          Ovaries                   ---
-  Th-232/ST0              ST0                       ---
-  Th-232/ST1              ST1                       ---
-  Th-232/ST2              ST2                       ---
+  Th-232/ST0              Blood                     1.386
+  Th-232/ST1              Blood                     1.386
+  Th-232/ST2              Blood                     1.386
 
   Ra-228/Blood            Blood                     ---
   Ra-228/C-bone-S         C-bone-S                  ---
