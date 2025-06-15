@@ -467,8 +467,8 @@ Th-232 Injection
   Blood                   ST1                   $(1.67 - (0.100 + 0.100/3))
   Blood                   Skin                  $(0.100)
   Blood                   Spleen                $(0.100 / 3)
-  Skin                    Blood                     0.0319
-  Spleen                  Blood                     0.0319
+  Skin                    Blood                     0.0139
+  Spleen                  Blood                     0.0139
 
 # ICRP Publ.137 p.333 Para.714
 # > (714) ... If actinium is produced in a
