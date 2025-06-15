@@ -603,8 +603,8 @@ Th-232 Inhalation:Type-F
   Th-232/T-bone-S         T-bone-S                  ---
   Th-232/T-bone-V         Noch-T-bone-V             ---     # Publ.137 Para.812
   Th-232/T-marrow         T-marrow                  ---     # only for progeny of Thorium chain
-  Th-232/Liver1           Blood                     6.98
-  Th-232/Liver2           Blood                     6.98
+  Th-232/Liver1           Liver1                    ---
+  Th-232/Liver2           Liver2                    ---
   Th-232/UrinaryPath      Blood                     6.98
   Th-232/OtherKidneyTis   Blood                     6.98
   Th-232/Testes           Testes                    ---     # only for progeny of Thorium chain
@@ -934,8 +934,8 @@ Th-232 Inhalation:Type-F
   Th-232/T-bone-S         T-bone-S                  ---
   Th-232/T-bone-V         T-bone-V                  ---
   Th-232/T-marrow         T-marrow                  ---
-  Th-232/Liver1           Blood                     1.386
-  Th-232/Liver2           Blood                     1.386
+  Th-232/Liver1           Liver1                    ---
+  Th-232/Liver2           Liver2                    ---
   Th-232/UrinaryPath      Blood                     1.386
   Th-232/OtherKidneyTis   Blood                     1.386
   Th-232/Testes           Testes                    ---
