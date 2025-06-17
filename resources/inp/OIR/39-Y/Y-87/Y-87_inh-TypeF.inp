@@ -402,11 +402,11 @@ Y-87 Inhalation:Type-F
 # > 変えずに、1.5 d⁻¹から1.4 d⁻¹に減少した。肝臓および腎臓から血液への除去半減期は、
 # > それぞれ6日および2日と設定した。
 
+  Blood                   ST1                       1.4     # fixed
   Blood                   Liver                     0.05
   Blood                   Kidneys                   0.05
-  Blood                   ST1                       1.4
-  Liver                   Blood                     6
-  Kidneys                 Blood                     2
+  Liver                   Blood                 $(0.693/6)
+  Kidneys                 Blood                 $(0.693/2)
 
 # > (531) The blood compartment of the strontium model (named Blood) is identified
 # > with the compartment Blood 1 of the yttrium model (Fig. 11.1). Thus, strontium
