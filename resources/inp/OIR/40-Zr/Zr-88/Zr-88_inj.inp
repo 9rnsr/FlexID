@@ -1,0 +1,223 @@
+[title]
+Zr-88 Injection
+
+[nuclide]
+  Zr-88  Y-88
+
+
+[Zr-88:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[Zr-88:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
+  $fA    = 0.002
+  $fA_Re = 0.002        # footnote¶
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.274 Table 12.3
+  Blood1                  Blood2                    2.0
+  Blood1                  Liver0                    0.075
+  Blood1                  Kidneys                   0.0125
+  Blood1                  ST0                       2.0
+  Blood1                  ST1                       0.0375
+  Blood1                  UB-con                    0.1
+  Blood1                  SI-conRe                  0.025
+  Blood1                  T-bone-S                  0.375
+  Blood1                  C-bone-S                  0.375
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.116
+  Liver0                  Blood1                    0.116
+  Liver0                  Liver1                    0.462
+  Liver1                  Blood1                    0.01
+  Kidneys                 Blood1                    0.01
+  ST0                     Blood1                    0.462
+  ST1                     Blood1                    0.02
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+
+[Y-88:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont       # Re-Absorption
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[Y-88:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  $fA_MaxValueOfIng = 1E-4
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Zr-88/Oralcavity        Oralcavity                ---
+  Zr-88/Oesophagus-f      Oesophagus-f              ---
+  Zr-88/Oesophagus-s      Oesophagus-s              ---
+  Zr-88/St-con            St-con                    ---
+  Zr-88/SI-con            SI-con                    ---
+  Zr-88/SI-conRe          SI-conRe                  ---
+  Zr-88/RC-con            RC-con                    ---
+  Zr-88/LC-con            LC-con                    ---
+  Zr-88/RS-con            RS-con                    ---
+  Zr-88/Faeces            Faeces                    ---
+  Zr-88/UB-con            UB-con                    ---
+  Zr-88/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.252 Table 11.3
+  Blood1                  Blood2                    0.498
+  Blood1                  Liver0                    1.66
+  Blood1                  Kidneys                   0.166
+  Blood1                  ST0                       3.652
+  Blood1                  ST1                       1.328
+  Blood1                  UB-con                    2.49
+  Blood1                  SI-conRe                  0.166
+  Blood1                  T-bone-S                  3.32
+  Blood1                  C-bone-S                  3.32
+  Blood2                  Blood1                    0.462
+  Liver0                  SI-conRe                  0.0231
+  Liver0                  Blood1                    0.0924
+  Liver0                  Liver1                    0.116
+  Liver1                  Blood1                    0.0019
+  Kidneys                 Blood1                    0.0019
+  ST0                     Blood1                    0.231
+  ST1                     Blood1                    0.0019
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.134 p.275 Para.577
+# > (577) Chain members addressed in the derivation of dose coefficients for internally
+# > deposited zirconium isotopes include isotopes of yttrium, strontium, and niobium.
+# > The characteristic systemic models for yttrium, zirconium, and niobium all have the
+# > same model structure. An yttrium or niobium atom produced in a given compartment
+# > by radioactive decay after intake of a zirconium parent is assumed to behave as
+# > if it had entered that compartment as a parent radionuclide. The model for strontium
+# > produced in systemic compartments after intake of a zirconium parent is the same as
+# > the model for strontium produced after intake of an yttrium parent, as described in
+# > the section on yttrium (Section 11.2.3.).
+# > (577) 体内に沈着したジルコニウム同位体の線量係数の導出において扱われる連鎖メンバーには、
+# > イットリウム、ストロンチウム、およびニオブの同位体が含まれる。イットリウム、ジルコニウム、
+# > およびニオブの特性全身モデルはすべて同じモデル構造を有する。ジルコニウム親核種の摂取後に
+# > 放射性崩壊によって特定のコンパートメント内で生成されたイットリウムまたはニオブ原子は、
+# > あたかも親核種としてそのコンパートメントに入ったかのように振舞うと仮定される。
+# > ジルコニウム親核種の摂取後に全身コンパートメント内で生成されるストロンチウムのモデルは、
+# > イットリウムの項（11.2.3項）で説明したイットリウム親核種の摂取後に生成される
+# > ストロンチウムのモデルと同じである。
+
+  Zr-88/Blood1            Blood1                    ---
+  Zr-88/Blood2            Blood2                    ---
+  Zr-88/C-bone-S          C-bone-S                  ---
+  Zr-88/C-bone-V          C-bone-V                  ---
+  Zr-88/T-bone-S          T-bone-S                  ---
+  Zr-88/T-bone-V          T-bone-V                  ---
+  Zr-88/Liver0            Liver0                    ---
+  Zr-88/Liver1            Liver1                    ---
+  Zr-88/Kidneys           Kidneys                   ---
+  Zr-88/ST0               ST0                       ---
+  Zr-88/ST1               ST1                       ---
