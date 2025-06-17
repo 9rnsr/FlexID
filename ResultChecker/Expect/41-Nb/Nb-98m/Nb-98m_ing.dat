@@ -1,0 +1,18 @@
+Radionuclide	Nb-98m
+Route of Intake	Ingestion
+Material	All forms, fA=1E-2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Faeces (24-hour sample)	Alimentary Tract*	Skeleton*	Liver*
+0.041667	4.5E-1	-	4.5E-1	2.3E-5	3.2E-5
+0.083333	2.0E-1	-	2.0E-1	2.9E-5	4.0E-5
+0.125	8.8E-2	-	8.8E-2	2.1E-5	2.9E-5
+0.25	7.7E-3	-	7.6E-3	3.4E-6	4.5E-6
+0.375	6.7E-4	-	6.6E-4	3.7E-7	4.7E-7
+0.5	5.8E-5	-	5.7E-5	3.6E-8	4.4E-8
+0.625	4.9E-6	-	4.9E-6	3.4E-9	4.0E-9
+0.75	4.1E-7	-	4.1E-7	1.4E-10	3.7E-10
+0.875	3.4E-8	-	3.4E-8	-	-
+1	2.8E-9	7.6E-10	2.7E-9	-	-
+1.125	2.3E-10	-	-	-	-
