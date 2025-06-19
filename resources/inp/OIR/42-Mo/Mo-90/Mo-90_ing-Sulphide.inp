@@ -1,0 +1,203 @@
+[title]
+Mo-90 Ingestion:Sulphide
+
+[nuclide]
+  Mo-90  Nb-90
+
+
+[Mo-90:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver                 Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
+  acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
+
+[Mo-90:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.305 Table 14.2 / Ingested material, Sulphide
+  $fA    = 0.05
+  $fA_Re = 0.9          # footnote¶
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.310 Table 14.3
+  Blood1                  Blood2                   12.5
+  Blood1                  Liver                    14.2
+  Blood1                  UB-con                    6.5
+  Blood2                  UrinaryPath               1.7
+  Blood2                  OtherKidneyTis            0.115
+  Blood2                  OtherTissue               1.73
+  Liver                   RC-con                    0.0048
+  Liver                   Blood2                    0.0122
+  OtherKidneyTis          Blood2                    0.0474
+  OtherTissue             Blood2                    0.0323
+  UrinaryPath             UB-con                    1.40
+
+
+[Nb-90:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[Nb-90:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.01
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Mo-90/Oralcavity        Oralcavity                ---
+  Mo-90/Oesophagus-f      Oesophagus-f              ---
+  Mo-90/Oesophagus-s      Oesophagus-s              ---
+  Mo-90/St-con            St-con                    ---
+  Mo-90/SI-con            SI-con                    ---
+  Mo-90/SI-conRe          SI-conRe                  ---
+  Mo-90/RC-con            RC-con                    ---
+  Mo-90/LC-con            LC-con                    ---
+  Mo-90/RS-con            RS-con                    ---
+  Mo-90/Faeces            Faeces                    ---
+  Mo-90/UB-con            UB-con                    ---
+  Mo-90/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.294 Table 13.3
+  Blood1                  Blood2                    3.2
+  Blood1                  Liver0                    0.24
+  Blood1                  Kidneys                   0.04
+  Blood1                  ST0                       3.2
+  Blood1                  ST1                       0.12
+  Blood1                  UB-con                    0.88
+  Blood1                  SI-conRe                  0.08
+  Blood1                  T-bone-S                  0.12
+  Blood1                  C-bone-S                  0.12
+  Blood2                  Blood1                    1.39
+  Liver0                  SI-conRe                  0.0578
+  Liver0                  Blood1                    0.0578
+  Liver0                  Liver1                    0.231
+  Liver1                  Blood1                    0.005
+  Kidneys                 Blood1                    0.005
+  ST0                     Blood1                    1.39
+  ST1                     Blood1                    0.01
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.134 p.314 Para.665
+# > (665) No information was found on the behaviour of niobium produced in vivo
+# > following intake of a molybdenum parent. For modelling convenience, the compartment
+# > of the molybdenum model called Blood 1 is identified with the central blood
+# > compartment of the characteristic model for niobium (also named Blood 1; see
+# > Fig. 13.1). It is assumed that niobium produced in Blood 2 of the molybdenum
+# > model transfers to Blood 1 of the niobium model at a rate of 1000 d⁻¹. Niobium
+# > produced in a tissue compartment of the molybdenum model is assumed to transfer
+# > to Blood 1 in the niobium model at a rate of 1.39 d⁻¹; the highest rate of transfer to
+# > blood from an ‘other tissue’ compartment of the niobium model. After reaching
+# > Blood 1 in the niobium model, niobium is assumed to follow its characteristic systemic
+# > model.
+# > (665) モリブデン親化合物の摂取後に体内で生成されたニオブの挙動に関する情報は得られていない。
+# > モデリングの便宜上、モリブデンモデルの Blood 1 と呼ばれるコンパートメントは、ニオブの
+# > 特性モデルの中央血液コンパートメント（Blood 1とも呼ばれる、Fig. 13.1 参照）と同一視される。
+# > モリブデンモデルの Blood 2 で生成されたニオブは、1000 d⁻¹の速度でニオブモデルの Blood 1 に
+# > 移動すると考えられる。モリブデンモデルの組織コンパートメントで生成されたニオブは、
+# > ニオブモデルの Blood 1 に1.39 d⁻¹の速度で移動すると仮定される。これは、ニオブモデルの
+# > 「他の組織」コンパートメントから血液への最高移行速度である。ニオブモデルの Blood 1 に
+# > 到達した後、ニオブはその特性全身モデルに従うと仮定される。
+
+  Mo-90/Blood1            Blood1                    ---
+  Mo-90/Blood2            Blood1                 1000
+  Mo-90/Liver             Blood1                    1.39
+  Mo-90/UrinaryPath       Blood1                    1.39
+  Mo-90/OtherKidneyTis    Blood1                    1.39
+  Mo-90/OtherTissue       Blood1                    1.39
