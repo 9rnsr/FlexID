@@ -1,0 +1,11 @@
+Radionuclide	Mo-101
+Route of Intake	Ingestion
+Material	Sulphide, fA=5E-2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Liver*
+0.041667	5.9E-2	5.8E-2	5.3E-5
+0.083333	3.3E-3	3.3E-3	1.2E-5
+0.125	2.0E-4	1.9E-4	1.3E-6
+0.25	3.8E-8	3.7E-8	5.7E-10
