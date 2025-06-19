@@ -33,6 +33,16 @@ Mo-99 Inhalation:Type-S
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -40,6 +50,7 @@ Mo-99 Inhalation:Type-S
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -50,8 +61,8 @@ Mo-99 Inhalation:Type-S
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   Liver                 Liver
-  acc   KidneyUrinaryPath     Kidneys
-  acc   KidneyOtherTissue     Kidneys
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
 [Mo-99:transfer]
@@ -60,17 +71,13 @@ Mo-99 Inhalation:Type-S
 #-----------------------+---------------------+--------------
 
 # ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type S
-#
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The parameter values (sr, ss) describing absorption of the inhaled parent from the
-#     respiratory tract into blood are applied to all members of the decay chain
-#     formed in the respiratory tract.
-#
   $fr = 0.01
   $sr = 3
   $ss = 1E-4
-  $fA = 0.009
+  $fb = 0               # footnote*
+  $sb = 0               # footnote*
+  $fA    = 0.009
+  $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
@@ -120,27 +127,62 @@ Mo-99 Inhalation:Type-S
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Blood1                $sr
-  INT-F                   Blood1                $sr
-  bb-F                    Blood1                $sr
-  bbseq-F                 Blood1                $sr
-  BB-F                    Blood1                $sr
-  BBseq-F                 Blood1                $sr
-  ET2-F                   Blood1                $sr
-  ETseq-F                 Blood1                $sr
-  LNET-F                  Blood1                $sr
-  LNTH-F                  Blood1                $sr
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   Blood1                $ss
-  INT-S                   Blood1                $ss
-  bb-S                    Blood1                $ss
-  bbseq-S                 Blood1                $ss
-  BB-S                    Blood1                $ss
-  BBseq-S                 Blood1                $ss
-  ET2-S                   Blood1                $ss
-  ETseq-S                 Blood1                $ss
-  LNET-S                  Blood1                $ss
-  LNTH-S                  Blood1                $ss
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Blood1                $( (1 - fb) * sr )
+  INT-F                   Blood1                $( (1 - fb) * sr )
+  bb-F                    Blood1                $( (1 - fb) * sr )
+  bbseq-F                 Blood1                $( (1 - fb) * sr )
+  BB-F                    Blood1                $( (1 - fb) * sr )
+  BBseq-F                 Blood1                $( (1 - fb) * sr )
+  ET2-F                   Blood1                $( (1 - fb) * sr )
+  ETseq-F                 Blood1                $( (1 - fb) * sr )
+  LNET-F                  Blood1                $( (1 - fb) * sr )
+  LNTH-F                  Blood1                $( (1 - fb) * sr )
+
+  ALV-S                   Blood1                $( (1 - fb) * ss )
+  INT-S                   Blood1                $( (1 - fb) * ss )
+  bb-S                    Blood1                $( (1 - fb) * ss )
+  bbseq-S                 Blood1                $( (1 - fb) * ss )
+  BB-S                    Blood1                $( (1 - fb) * ss )
+  BBseq-S                 Blood1                $( (1 - fb) * ss )
+  ET2-S                   Blood1                $( (1 - fb) * ss )
+  ETseq-S                 Blood1                $( (1 - fb) * ss )
+  LNET-S                  Blood1                $( (1 - fb) * ss )
+  LNTH-S                  Blood1                $( (1 - fb) * ss )
+
+  ALV-B                   Blood1                $sb
+  INT-B                   Blood1                $sb
+  bb-B                    Blood1                $sb
+  bbseq-B                 Blood1                $sb
+  BB-B                    Blood1                $sb
+  BBseq-B                 Blood1                $sb
+  ET2-B                   Blood1                $sb
+  ETseq-B                 Blood1                $sb
+  LNET-B                  Blood1                $sb
+  LNTH-B                  Blood1                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -149,12 +191,14 @@ Mo-99 Inhalation:Type-S
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood1                $(fA * 6 / (1 - fA))
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
@@ -163,14 +207,14 @@ Mo-99 Inhalation:Type-S
   Blood1                  Blood2                   12.5
   Blood1                  Liver                    14.2
   Blood1                  UB-con                    6.5
-  Blood2                  KidneyUrinaryPath         1.7
-  Blood2                  KidneyOtherTissue         0.115
+  Blood2                  UrinaryPath               1.7
+  Blood2                  OtherKidneyTis            0.115
   Blood2                  OtherTissue               1.73
   Liver                   RC-con                    0.0048
   Liver                   Blood2                    0.0122
-  KidneyOtherTissue       Blood2                    0.0474
+  OtherKidneyTis          Blood2                    0.0474
   OtherTissue             Blood2                    0.0323
-  KidneyUrinaryPath       UB-con                    1.40
+  UrinaryPath             UB-con                    1.40
 
 
 [Tc-99m:compartment]
@@ -199,6 +243,16 @@ Mo-99 Inhalation:Type-S
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -220,17 +274,17 @@ Mo-99 Inhalation:Type-S
   exc   Urine                 ---
 
   acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   S-glands              S-glands
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Kidneys1              Kidneys
   acc   Kidneys2              Kidneys
-  acc   Thyroid1              Thyroid
-  acc   Thyroid2              Thyroid
-  acc   S-glands              S-glands
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -240,28 +294,6 @@ Mo-99 Inhalation:Type-S
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The default absorption fraction, fA, for a progeny radionuclide produced by
-#     decay in the contents of the alimentary tract (in the small intestine or a higher
-#     compartment) following ingestion of a parent radionuclide, or produced in a
-#     systemic compartment and subsequently transferred into the alimentary tract
-#     content, is the reference value of fA for the progeny radionuclide when ingested
-#     as a parent. If the radionuclide has multiple reference values corresponding to
-#     different chemical or physical forms, the default value of fA is the highest reference
-#     value provided.
-#
-# ICRP Publ.130 p.79 Para.149
-#   Some of the biokinetic models used in this series of reports to predict the
-#   systemic behaviour of radionuclides depict secretion from systemic compartments
-#   into the contents of the alimentary tract. Activity transferred from systemic compartments
-#   into the small intestine or higher segments of the alimentary tract is
-#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
-#   fraction fA for the secreted activity is the reference fA for ingestion of the
-#   radionuclide. If multiple reference values of fA are given for different forms of the
-#   ingested radionuclide, the default fA for the secreted activity is the highest reference
-#   value provided for X.
-#
 # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.9
 
@@ -291,26 +323,30 @@ Mo-99 Inhalation:Type-S
   Mo-99/ALV-S             ALV-S                     ---
   Mo-99/INT-S             INT-S                     ---
   Mo-99/LNTH-S            LNTH-S                    ---
+  Mo-99/ET2-B             ET2-B                     ---
+  Mo-99/ETseq-B           ETseq-B                   ---
+  Mo-99/LNET-B            LNET-B                    ---
+  Mo-99/BB-B              BB-B                      ---
+  Mo-99/BBseq-B           BBseq-B                   ---
+  Mo-99/bb-B              bb-B                      ---
+  Mo-99/bbseq-B           bbseq-B                   ---
+  Mo-99/ALV-B             ALV-B                     ---
+  Mo-99/INT-B             INT-B                     ---
+  Mo-99/LNTH-B            LNTH-B                    ---
+  Mo-99/Environment       Environment               ---
 
   Mo-99/Oralcavity        Oralcavity                ---
   Mo-99/Oesophagus-f      Oesophagus-f              ---
   Mo-99/Oesophagus-s      Oesophagus-s              ---
   Mo-99/St-con            St-con                    ---
   Mo-99/SI-con            SI-con                    ---
+  Mo-99/SI-conRe          SI-conRe                  ---
   Mo-99/RC-con            RC-con                    ---
   Mo-99/LC-con            LC-con                    ---
   Mo-99/RS-con            RS-con                    ---
   Mo-99/Faeces            Faeces                    ---
   Mo-99/UB-con            UB-con                    ---
   Mo-99/Urine             Urine                     ---
-
-# ICRP Publ.134 p.313 Para.664
-  Mo-99/Blood1            Blood                     ---
-  Mo-99/Blood2            Blood                  1000       # t½ = 1 min
-  Mo-99/Liver             Liver2                    ---
-  Mo-99/KidneyUrinaryPath Blood                     0.462
-  Mo-99/KidneyOtherTissue Blood                     0.462
-  Mo-99/OtherTissue       Blood                     0.462
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -421,6 +457,48 @@ Mo-99 Inhalation:Type-S
   T-bone-V                Blood                     0.000493
   C-bone-V                Blood                     0.0000821
 
+# ICRP Publ.134 p.313 Para.664
+# > (664) External measurements on normal human subjects indicated that 99mTc
+# > produced in the liver by decay of 99Mo following intravenous administration of
+# > 99Mo as sodium or ammonium molybdate was retained in the liver for an extended
+# > period (Sorensen and Archambault, 1963). In contrast, 99mTc depositing in the liver
+# > after administration as a parent radionuclide was largely removed with a half-time of
+# > a few hours (Sorensen and Archambault, 1963). On the basis of these findings,
+# > technetium produced in the liver by decay of a molybdenum parent is assigned to
+# > the long-term retention compartment of liver in the characteristic model for technetium
+# > described elsewhere in this publication. The removal half-time from that compartment
+# > to blood is 22 d. For modelling convenience, the compartment of the
+# > molybdenum model called Blood 1 is identified with the blood compartment of
+# > the technetium model. Technetium produced in the compartment Blood 2 of the
+# > molybdenum model is assumed to transfer to blood in the technetium model at a
+# > rate of 1000 d⁻¹ (t½=1 min). Technetium produced in a compartment of kidneys or
+# > ‘other tissue’ in the molybdenum model is assumed to transfer to blood in the technetium
+# > model at a rate of 0.462 d⁻¹; the rate of transfer to blood from the intermediate-
+# > term compartment of ‘other tissue’ in the technetium model. After reaching
+# > blood, technetium is assumed to follow its characteristic model.
+# > (664) 健常人を対象とした外部測定では、モリブデン酸ナトリウムまたはモリブデン酸
+# > アンモニウムとして静脈内投与された99Moの崩壊により肝臓で生成された99mTcは、長期間肝臓に
+# > 保持されることが示唆された（Sorensen and Archambault, 1963）。対照的に、親放射性核種として
+# > 投与された後に肝臓に沈着した99mTcは、数時間の半減期で大部分が除去された（Sorensen and 
+# > Archambault, 1963）。これらの知見に基づき、モリブデン親核種の崩壊により肝臓で生成された
+# > テクネチウムは、この刊行物の別の箇所で説明されているテクネチウムの特性モデルにおける
+# > 肝臓の長期保持コンパートメントに割り当てられる。このコンパートメントから血液への
+# > 除去半減期は22日である。モデル化の便宜上、モリブデンモデルの Blood 1 と呼ばれる
+# > コンパートメントは、テクネチウムモデルの血液コンパートメントと同一視される。
+# > モリブデンモデルの Blood 2 コンパートメントで生成されたテクネチウムは、
+# > テクネチウムモデルの血液へ1000 d⁻¹（t½=1分）の速度で移行すると仮定されます。
+# > モリブデンモデルの腎臓または「その他の組織」コンパートメントで生成されたテクネチウムは、
+# > テクネチウムモデルの血液へ0.462 d⁻¹の速度で移行すると仮定されます。これは、
+# > テクネチウムモデルの「その他の組織」の中間コンパートメントから血液への移行速度です。
+# > 血液に到達したテクネチウムは、その特性モデルに従うと仮定されます。
+
+  Mo-99/Blood1            Blood                     ---
+  Mo-99/Blood2            Blood                  1000           # t½ = 1 min
+  Mo-99/Liver             Liver2                    ---
+  Mo-99/UrinaryPath       Blood                     0.462
+  Mo-99/OtherKidneyTis    Blood                     0.462
+  Mo-99/OtherTissue       Blood                     0.462
+
 
 [Tc-99:compartment]
 #-----+---------------------| S-Coefficient
@@ -448,6 +526,16 @@ Mo-99 Inhalation:Type-S
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -469,17 +557,17 @@ Mo-99 Inhalation:Type-S
   exc   Urine                 ---
 
   acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   S-glands              S-glands
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Kidneys1              Kidneys
   acc   Kidneys2              Kidneys
-  acc   Thyroid1              Thyroid
-  acc   Thyroid2              Thyroid
-  acc   S-glands              S-glands
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -489,28 +577,6 @@ Mo-99 Inhalation:Type-S
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The default absorption fraction, fA, for a progeny radionuclide produced by
-#     decay in the contents of the alimentary tract (in the small intestine or a higher
-#     compartment) following ingestion of a parent radionuclide, or produced in a
-#     systemic compartment and subsequently transferred into the alimentary tract
-#     content, is the reference value of fA for the progeny radionuclide when ingested
-#     as a parent. If the radionuclide has multiple reference values corresponding to
-#     different chemical or physical forms, the default value of fA is the highest reference
-#     value provided.
-#
-# ICRP Publ.130 p.79 Para.149
-#   Some of the biokinetic models used in this series of reports to predict the
-#   systemic behaviour of radionuclides depict secretion from systemic compartments
-#   into the contents of the alimentary tract. Activity transferred from systemic compartments
-#   into the small intestine or higher segments of the alimentary tract is
-#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
-#   fraction fA for the secreted activity is the reference fA for ingestion of the
-#   radionuclide. If multiple reference values of fA are given for different forms of the
-#   ingested radionuclide, the default fA for the secreted activity is the highest reference
-#   value provided for X.
-#
 # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.9
 
@@ -540,49 +606,30 @@ Mo-99 Inhalation:Type-S
   Mo-99/ALV-S             ALV-S                     ---
   Mo-99/INT-S             INT-S                     ---
   Mo-99/LNTH-S            LNTH-S                    ---
+  Mo-99/ET2-B             ET2-B                     ---
+  Mo-99/ETseq-B           ETseq-B                   ---
+  Mo-99/LNET-B            LNET-B                    ---
+  Mo-99/BB-B              BB-B                      ---
+  Mo-99/BBseq-B           BBseq-B                   ---
+  Mo-99/bb-B              bb-B                      ---
+  Mo-99/bbseq-B           bbseq-B                   ---
+  Mo-99/ALV-B             ALV-B                     ---
+  Mo-99/INT-B             INT-B                     ---
+  Mo-99/LNTH-B            LNTH-B                    ---
+  Mo-99/Environment       Environment               ---
 
   Mo-99/Oralcavity        Oralcavity                ---
   Mo-99/Oesophagus-f      Oesophagus-f              ---
   Mo-99/Oesophagus-s      Oesophagus-s              ---
   Mo-99/St-con            St-con                    ---
   Mo-99/SI-con            SI-con                    ---
+  Mo-99/SI-conRe          SI-conRe                  ---
   Mo-99/RC-con            RC-con                    ---
   Mo-99/LC-con            LC-con                    ---
   Mo-99/RS-con            RS-con                    ---
   Mo-99/Faeces            Faeces                    ---
   Mo-99/UB-con            UB-con                    ---
   Mo-99/Urine             Urine                     ---
-
-# ICRP Publ.134 p.313 Para.664
-  Mo-99/Blood1            Blood                     ---
-  Mo-99/Blood2            Blood                  1000       # t½ = 1 min
-  Mo-99/Liver             Liver2                    ---
-  Mo-99/KidneyUrinaryPath Blood                     0.462
-  Mo-99/KidneyOtherTissue Blood                     0.462
-  Mo-99/OtherTissue       Blood                     0.462
-
-  Tc-99m/ET1-F            ET1-F                     ---
-  Tc-99m/ET2-F            ET2-F                     ---
-  Tc-99m/ETseq-F          ETseq-F                   ---
-  Tc-99m/LNET-F           LNET-F                    ---
-  Tc-99m/BB-F             BB-F                      ---
-  Tc-99m/BBseq-F          BBseq-F                   ---
-  Tc-99m/bb-F             bb-F                      ---
-  Tc-99m/bbseq-F          bbseq-F                   ---
-  Tc-99m/ALV-F            ALV-F                     ---
-  Tc-99m/INT-F            INT-F                     ---
-  Tc-99m/LNTH-F           LNTH-F                    ---
-  Tc-99m/ET1-S            ET1-S                     ---
-  Tc-99m/ET2-S            ET2-S                     ---
-  Tc-99m/ETseq-S          ETseq-S                   ---
-  Tc-99m/LNET-S           LNET-S                    ---
-  Tc-99m/BB-S             BB-S                      ---
-  Tc-99m/BBseq-S          BBseq-S                   ---
-  Tc-99m/bb-S             bb-S                      ---
-  Tc-99m/bbseq-S          bbseq-S                   ---
-  Tc-99m/ALV-S            ALV-S                     ---
-  Tc-99m/INT-S            INT-S                     ---
-  Tc-99m/LNTH-S           LNTH-S                    ---
 
   Tc-99m/Oralcavity       Oralcavity                ---
   Tc-99m/OralcavityRe     OralcavityRe              ---
@@ -603,17 +650,17 @@ Mo-99 Inhalation:Type-S
   Tc-99m/Urine            Urine                     ---
 
   Tc-99m/Blood            Blood                     ---
+  Tc-99m/C-bone-S         C-bone-S                  ---
+  Tc-99m/C-bone-V         C-bone-V                  ---
+  Tc-99m/T-bone-S         T-bone-S                  ---
+  Tc-99m/T-bone-V         T-bone-V                  ---
+  Tc-99m/S-glands         S-glands                  ---
+  Tc-99m/Thyroid1         Thyroid1                  ---
+  Tc-99m/Thyroid2         Thyroid2                  ---
   Tc-99m/Liver1           Liver1                    ---
   Tc-99m/Liver2           Liver2                    ---
   Tc-99m/Kidneys1         Kidneys1                  ---
   Tc-99m/Kidneys2         Kidneys2                  ---
-  Tc-99m/Thyroid1         Thyroid1                  ---
-  Tc-99m/Thyroid2         Thyroid2                  ---
-  Tc-99m/S-glands         S-glands                  ---
-  Tc-99m/T-bone-S         T-bone-S                  ---
-  Tc-99m/T-bone-V         T-bone-V                  ---
-  Tc-99m/C-bone-S         C-bone-S                  ---
-  Tc-99m/C-bone-V         C-bone-V                  ---
   Tc-99m/ST0              ST0                       ---
   Tc-99m/ST1              ST1                       ---
   Tc-99m/ST2              ST2                       ---
@@ -726,3 +773,11 @@ Mo-99 Inhalation:Type-S
   C-bone-S                C-bone-V                  0.00462
   T-bone-V                Blood                     0.000493
   C-bone-V                Blood                     0.0000821
+
+# ICRP Publ.134 p.313 Para.664
+  Mo-99/Blood1            Blood                     ---
+  Mo-99/Blood2            Blood                  1000           # t½ = 1 min
+  Mo-99/Liver             Liver2                    ---
+  Mo-99/UrinaryPath       Blood                     0.462
+  Mo-99/OtherKidneyTis    Blood                     0.462
+  Mo-99/OtherTissue       Blood                     0.462

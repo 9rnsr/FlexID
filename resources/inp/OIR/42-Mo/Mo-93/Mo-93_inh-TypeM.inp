@@ -33,6 +33,16 @@ Mo-93 Inhalation:Type-M
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -40,6 +50,7 @@ Mo-93 Inhalation:Type-M
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -50,8 +61,8 @@ Mo-93 Inhalation:Type-M
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   Liver                 Liver
-  acc   KidneyUrinaryPath     Kidneys
-  acc   KidneyOtherTissue     Kidneys
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
 [Mo-93:transfer]
@@ -60,17 +71,13 @@ Mo-93 Inhalation:Type-M
 #-----------------------+---------------------+--------------
 
 # ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type M
-#
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The parameter values (sr, ss) describing absorption of the inhaled parent from the
-#     respiratory tract into blood are applied to all members of the decay chain
-#     formed in the respiratory tract.
-#
   $fr = 0.2
   $sr = 3
   $ss = 0.005
-  $fA = 0.18
+  $fb = 0               # footnote*
+  $sb = 0               # footnote*
+  $fA    = 0.18
+  $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.65 Fig.3.4 footnote
@@ -120,27 +127,62 @@ Mo-93 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Blood1                $sr
-  INT-F                   Blood1                $sr
-  bb-F                    Blood1                $sr
-  bbseq-F                 Blood1                $sr
-  BB-F                    Blood1                $sr
-  BBseq-F                 Blood1                $sr
-  ET2-F                   Blood1                $sr
-  ETseq-F                 Blood1                $sr
-  LNET-F                  Blood1                $sr
-  LNTH-F                  Blood1                $sr
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   Blood1                $ss
-  INT-S                   Blood1                $ss
-  bb-S                    Blood1                $ss
-  bbseq-S                 Blood1                $ss
-  BB-S                    Blood1                $ss
-  BBseq-S                 Blood1                $ss
-  ET2-S                   Blood1                $ss
-  ETseq-S                 Blood1                $ss
-  LNET-S                  Blood1                $ss
-  LNTH-S                  Blood1                $ss
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Blood1                $( (1 - fb) * sr )
+  INT-F                   Blood1                $( (1 - fb) * sr )
+  bb-F                    Blood1                $( (1 - fb) * sr )
+  bbseq-F                 Blood1                $( (1 - fb) * sr )
+  BB-F                    Blood1                $( (1 - fb) * sr )
+  BBseq-F                 Blood1                $( (1 - fb) * sr )
+  ET2-F                   Blood1                $( (1 - fb) * sr )
+  ETseq-F                 Blood1                $( (1 - fb) * sr )
+  LNET-F                  Blood1                $( (1 - fb) * sr )
+  LNTH-F                  Blood1                $( (1 - fb) * sr )
+
+  ALV-S                   Blood1                $( (1 - fb) * ss )
+  INT-S                   Blood1                $( (1 - fb) * ss )
+  bb-S                    Blood1                $( (1 - fb) * ss )
+  bbseq-S                 Blood1                $( (1 - fb) * ss )
+  BB-S                    Blood1                $( (1 - fb) * ss )
+  BBseq-S                 Blood1                $( (1 - fb) * ss )
+  ET2-S                   Blood1                $( (1 - fb) * ss )
+  ETseq-S                 Blood1                $( (1 - fb) * ss )
+  LNET-S                  Blood1                $( (1 - fb) * ss )
+  LNTH-S                  Blood1                $( (1 - fb) * ss )
+
+  ALV-B                   Blood1                $sb
+  INT-B                   Blood1                $sb
+  bb-B                    Blood1                $sb
+  bbseq-B                 Blood1                $sb
+  BB-B                    Blood1                $sb
+  BBseq-B                 Blood1                $sb
+  ET2-B                   Blood1                $sb
+  ETseq-B                 Blood1                $sb
+  LNET-B                  Blood1                $sb
+  LNTH-B                  Blood1                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -149,12 +191,14 @@ Mo-93 Inhalation:Type-M
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood1                $(fA * 6 / (1 - fA))
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
@@ -163,14 +207,14 @@ Mo-93 Inhalation:Type-M
   Blood1                  Blood2                   12.5
   Blood1                  Liver                    14.2
   Blood1                  UB-con                    6.5
-  Blood2                  KidneyUrinaryPath         1.7
-  Blood2                  KidneyOtherTissue         0.115
+  Blood2                  UrinaryPath               1.7
+  Blood2                  OtherKidneyTis            0.115
   Blood2                  OtherTissue               1.73
   Liver                   RC-con                    0.0048
   Liver                   Blood2                    0.0122
-  KidneyOtherTissue       Blood2                    0.0474
+  OtherKidneyTis          Blood2                    0.0474
   OtherTissue             Blood2                    0.0323
-  KidneyUrinaryPath       UB-con                    1.40
+  UrinaryPath             UB-con                    1.40
 
 
 [Nb-93m:compartment]
@@ -199,6 +243,16 @@ Mo-93 Inhalation:Type-M
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -216,45 +270,21 @@ Mo-93 Inhalation:Type-M
 
   acc   Blood1                Blood
   acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Kidneys               Kidneys
   acc   ST0                   Other
   acc   ST1                   Other
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
 
 [Nb-93m:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The default absorption fraction, fA, for a progeny radionuclide produced in the
-#     respiratory tract following inhalation of a parent, or produced in the alimentary
-#     tract following transfer of activity from the respiratory tract to the alimentary
-#     tract, is the product of the fraction of inhaled material with rapid
-#     dissolution (fr) for the assigned absorption type, and the reference value of
-#     fA for the progeny radionuclide when ingested as a parent radionuclide. If
-#     the progeny radionuclide has multiple reference values of fA when ingested
-#     as a parent, corresponding to different chemical or physical forms, the default
-#     value of fA is the product of fr for the absorption type and the highest reference
-#     value provided.
-#
-# ICRP Publ.130 p.79 Para.149
-#   Some of the biokinetic models used in this series of reports to predict the
-#   systemic behaviour of radionuclides depict secretion from systemic compartments
-#   into the contents of the alimentary tract. Activity transferred from systemic compartments
-#   into the small intestine or higher segments of the alimentary tract is
-#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
-#   fraction fA for the secreted activity is the reference fA for ingestion of the
-#   radionuclide. If multiple reference values of fA are given for different forms of the
-#   ingested radionuclide, the default fA for the secreted activity is the highest reference
-#   value provided for X.
-#
 # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.01
 
@@ -284,6 +314,16 @@ Mo-93 Inhalation:Type-M
   Mo-93/ALV-S             ALV-S                     ---
   Mo-93/INT-S             INT-S                     ---
   Mo-93/LNTH-S            LNTH-S                    ---
+  Mo-93/ET2-B             ET2-B                     ---
+  Mo-93/ETseq-B           ETseq-B                   ---
+  Mo-93/LNET-B            LNET-B                    ---
+  Mo-93/BB-B              BB-B                      ---
+  Mo-93/BBseq-B           BBseq-B                   ---
+  Mo-93/bb-B              bb-B                      ---
+  Mo-93/bbseq-B           bbseq-B                   ---
+  Mo-93/ALV-B             ALV-B                     ---
+  Mo-93/INT-B             INT-B                     ---
+  Mo-93/LNTH-B            LNTH-B                    ---
   Mo-93/Environment       Environment               ---
 
   Mo-93/Oralcavity        Oralcavity                ---
@@ -291,42 +331,13 @@ Mo-93 Inhalation:Type-M
   Mo-93/Oesophagus-s      Oesophagus-s              ---
   Mo-93/St-con            St-con                    ---
   Mo-93/SI-con            SI-con                    ---
+  Mo-93/SI-conRe          SI-conRe                  ---
   Mo-93/RC-con            RC-con                    ---
   Mo-93/LC-con            LC-con                    ---
   Mo-93/RS-con            RS-con                    ---
   Mo-93/Faeces            Faeces                    ---
   Mo-93/UB-con            UB-con                    ---
   Mo-93/Urine             Urine                     ---
-
-# ICRP Publ.134 p.314 Para.655
-  # > For modelling convenience, the compartment
-  #   of the molybdenum model called Blood 1 is identified with the central blood
-  #   compartment of the characteristic model for niobium (also named Blood 1; see
-  #   Fig. 13.1).
-  # > モデリングの便宜上、モリブデンモデルの Blood 1 と呼ばれる
-  #   コンパートメントは、ニオブの特性モデル（Blood 1 とも呼ばれます。図 13.1 を参照）の
-  #   中央血液コンパートメントと同一視されます。
-  Mo-93/Blood1            Blood1                    ---
-
-  # > It is assumed that niobium produced in Blood 2 of the molybdenum
-  #   model transfers to Blood 1 of the niobium model at a rate of 1000 d⁻¹.
-  # > モリブデンモデルの Blood 2 で生成された
-  #   ニオブは、1000 d⁻¹ の速度でニオブモデルの Blood 1 に移動すると考えられます。
-  Mo-93/Blood2            Blood1                    1000
-
-  # > Niobium produced in a tissue compartment of the molybdenum model is assumed to transfer
-  #   to Blood 1 in the niobium model at a rate of 1.39 d⁻¹; the highest rate of transfer to
-  #   blood from an ‘other tissue’ compartment of the niobium model. After reaching
-  #   Blood 1 in the niobium model, niobium is assumed to follow its characteristic systemic
-  #   model.
-  # > モリブデンモデルの組織コンパートメントで生成されたニオブは、ニオブモデルの Blood 1 に
-  #   1.39 d⁻¹ の速度で移動すると考えられます。これは、ニオブモデルの「他の組織」コンパートメントから
-  #   血液に移動する最高速度です。ニオブモデルで Blood 1 に到達した後、ニオブはその
-  #   特性全身モデルに従うと考えられます。
-  Mo-93/Liver             Blood1                    1.39
-  Mo-93/KidneyUrinaryPath Blood1                    1.39
-  Mo-93/KidneyOtherTissue Blood1                    1.39
-  Mo-93/OtherTissue       Blood1                    1.39
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -354,27 +365,62 @@ Mo-93 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Blood1                $sr
-  INT-F                   Blood1                $sr
-  bb-F                    Blood1                $sr
-  bbseq-F                 Blood1                $sr
-  BB-F                    Blood1                $sr
-  BBseq-F                 Blood1                $sr
-  ET2-F                   Blood1                $sr
-  ETseq-F                 Blood1                $sr
-  LNET-F                  Blood1                $sr
-  LNTH-F                  Blood1                $sr
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   Blood1                $ss
-  INT-S                   Blood1                $ss
-  bb-S                    Blood1                $ss
-  bbseq-S                 Blood1                $ss
-  BB-S                    Blood1                $ss
-  BBseq-S                 Blood1                $ss
-  ET2-S                   Blood1                $ss
-  ETseq-S                 Blood1                $ss
-  LNET-S                  Blood1                $ss
-  LNTH-S                  Blood1                $ss
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Blood1                $( (1 - fb) * sr )
+  INT-F                   Blood1                $( (1 - fb) * sr )
+  bb-F                    Blood1                $( (1 - fb) * sr )
+  bbseq-F                 Blood1                $( (1 - fb) * sr )
+  BB-F                    Blood1                $( (1 - fb) * sr )
+  BBseq-F                 Blood1                $( (1 - fb) * sr )
+  ET2-F                   Blood1                $( (1 - fb) * sr )
+  ETseq-F                 Blood1                $( (1 - fb) * sr )
+  LNET-F                  Blood1                $( (1 - fb) * sr )
+  LNTH-F                  Blood1                $( (1 - fb) * sr )
+
+  ALV-S                   Blood1                $( (1 - fb) * ss )
+  INT-S                   Blood1                $( (1 - fb) * ss )
+  bb-S                    Blood1                $( (1 - fb) * ss )
+  bbseq-S                 Blood1                $( (1 - fb) * ss )
+  BB-S                    Blood1                $( (1 - fb) * ss )
+  BBseq-S                 Blood1                $( (1 - fb) * ss )
+  ET2-S                   Blood1                $( (1 - fb) * ss )
+  ETseq-S                 Blood1                $( (1 - fb) * ss )
+  LNET-S                  Blood1                $( (1 - fb) * ss )
+  LNTH-S                  Blood1                $( (1 - fb) * ss )
+
+  ALV-B                   Blood1                $sb
+  INT-B                   Blood1                $sb
+  bb-B                    Blood1                $sb
+  bbseq-B                 Blood1                $sb
+  BB-B                    Blood1                $sb
+  BBseq-B                 Blood1                $sb
+  ET2-B                   Blood1                $sb
+  ETseq-B                 Blood1                $sb
+  LNET-B                  Blood1                $sb
+  LNTH-B                  Blood1                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -419,3 +465,31 @@ Mo-93 Inhalation:Type-M
   C-bone-S                Blood1                    0.0000821
   C-bone-S                C-bone-V                  0.0000411
   C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.134 p.314 Para.665
+# > (665) No information was found on the behaviour of niobium produced in vivo
+# > following intake of a molybdenum parent. For modelling convenience, the compartment
+# > of the molybdenum model called Blood 1 is identified with the central blood
+# > compartment of the characteristic model for niobium (also named Blood 1; see
+# > Fig. 13.1). It is assumed that niobium produced in Blood 2 of the molybdenum
+# > model transfers to Blood 1 of the niobium model at a rate of 1000 d⁻¹. Niobium
+# > produced in a tissue compartment of the molybdenum model is assumed to transfer
+# > to Blood 1 in the niobium model at a rate of 1.39 d⁻¹; the highest rate of transfer to
+# > blood from an ‘other tissue’ compartment of the niobium model. After reaching
+# > Blood 1 in the niobium model, niobium is assumed to follow its characteristic systemic
+# > model.
+# > (665) モリブデン親化合物の摂取後に体内で生成されたニオブの挙動に関する情報は得られていない。
+# > モデリングの便宜上、モリブデンモデルの Blood 1 と呼ばれるコンパートメントは、ニオブの
+# > 特性モデルの中央血液コンパートメント（Blood 1とも呼ばれる、Fig. 13.1 参照）と同一視される。
+# > モリブデンモデルの Blood 2 で生成されたニオブは、1000 d⁻¹の速度でニオブモデルの Blood 1 に
+# > 移動すると考えられる。モリブデンモデルの組織コンパートメントで生成されたニオブは、
+# > ニオブモデルの Blood 1 に1.39 d⁻¹の速度で移動すると仮定される。これは、ニオブモデルの
+# > 「他の組織」コンパートメントから血液への最高移行速度である。ニオブモデルの Blood 1 に
+# > 到達した後、ニオブはその特性全身モデルに従うと仮定される。
+
+  Mo-93/Blood1            Blood1                    ---
+  Mo-93/Blood2            Blood1                 1000
+  Mo-93/Liver             Blood1                    1.39
+  Mo-93/UrinaryPath       Blood1                    1.39
+  Mo-93/OtherKidneyTis    Blood1                    1.39
+  Mo-93/OtherTissue       Blood1                    1.39
