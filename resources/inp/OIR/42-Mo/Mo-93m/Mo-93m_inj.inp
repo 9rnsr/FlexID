@@ -1,11 +1,11 @@
 [title]
-Mo-93 Ingestion:Other
+Mo-93m Injection
 
 [nuclide]
-  Mo-93  Nb-93m
+  Mo-93m  Mo-93  Nb-93m
 
 
-[Mo-93:compartment]
+[Mo-93m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -31,7 +31,7 @@ Mo-93 Ingestion:Other
   acc   OtherKidneyTis        Kidneys
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
-[Mo-93:transfer]
+[Mo-93m:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
@@ -40,8 +40,8 @@ Mo-93 Ingestion:Other
   $fA    = 0.9
   $fA_Re = 0.9          # footnote¶
 
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -74,6 +74,95 @@ Mo-93 Ingestion:Other
   OtherKidneyTis          Blood2                    0.0474
   OtherTissue             Blood2                    0.0323
   UrinaryPath             UB-con                    1.40
+
+
+[Mo-93:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver                 Liver
+  acc   UrinaryPath           Kidneys
+  acc   OtherKidneyTis        Kidneys
+  acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
+
+[Mo-93:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
+  $fA_MaxValueOfIng = 0.9
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# from parent to progeny
+  Mo-93m/Oralcavity       Oralcavity                ---
+  Mo-93m/Oesophagus-f     Oesophagus-f              ---
+  Mo-93m/Oesophagus-s     Oesophagus-s              ---
+  Mo-93m/St-con           St-con                    ---
+  Mo-93m/SI-con           SI-con                    ---
+  Mo-93m/SI-conRe         SI-conRe                  ---
+  Mo-93m/RC-con           RC-con                    ---
+  Mo-93m/LC-con           LC-con                    ---
+  Mo-93m/RS-con           RS-con                    ---
+  Mo-93m/Faeces           Faeces                    ---
+  Mo-93m/UB-con           UB-con                    ---
+  Mo-93m/Urine            Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.310 Table 14.3
+  Blood1                  Blood2                   12.5
+  Blood1                  Liver                    14.2
+  Blood1                  UB-con                    6.5
+  Blood2                  UrinaryPath               1.7
+  Blood2                  OtherKidneyTis            0.115
+  Blood2                  OtherTissue               1.73
+  Liver                   RC-con                    0.0048
+  Liver                   Blood2                    0.0122
+  OtherKidneyTis          Blood2                    0.0474
+  OtherTissue             Blood2                    0.0323
+  UrinaryPath             UB-con                    1.40
+
+  Mo-93m/Blood1           Blood1                    ---
+  Mo-93m/Blood2           Blood2                    ---
+  Mo-93m/Liver            Liver                     ---
+  Mo-93m/UrinaryPath      UrinaryPath               ---
+  Mo-93m/OtherKidneyTis   OtherKidneyTis            ---
+  Mo-93m/OtherTissue      OtherTissue               ---
 
 
 [Nb-93m:compartment]
@@ -117,18 +206,18 @@ Mo-93 Ingestion:Other
   $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
-  Mo-93/Oralcavity        Oralcavity                ---
-  Mo-93/Oesophagus-f      Oesophagus-f              ---
-  Mo-93/Oesophagus-s      Oesophagus-s              ---
-  Mo-93/St-con            St-con                    ---
-  Mo-93/SI-con            SI-con                    ---
-  Mo-93/SI-conRe          SI-conRe                  ---
-  Mo-93/RC-con            RC-con                    ---
-  Mo-93/LC-con            LC-con                    ---
-  Mo-93/RS-con            RS-con                    ---
-  Mo-93/Faeces            Faeces                    ---
-  Mo-93/UB-con            UB-con                    ---
-  Mo-93/Urine             Urine                     ---
+  Mo-93m/Oralcavity       Oralcavity                ---
+  Mo-93m/Oesophagus-f     Oesophagus-f              ---
+  Mo-93m/Oesophagus-s     Oesophagus-s              ---
+  Mo-93m/St-con           St-con                    ---
+  Mo-93m/SI-con           SI-con                    ---
+  Mo-93m/SI-conRe         SI-conRe                  ---
+  Mo-93m/RC-con           RC-con                    ---
+  Mo-93m/LC-con           LC-con                    ---
+  Mo-93m/RS-con           RS-con                    ---
+  Mo-93m/Faeces           Faeces                    ---
+  Mo-93m/UB-con           UB-con                    ---
+  Mo-93m/Urine            Urine                     ---
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -194,6 +283,13 @@ Mo-93 Ingestion:Other
 # > ニオブモデルの Blood 1 に1.39 d⁻¹の速度で移動すると仮定される。これは、ニオブモデルの
 # > 「他の組織」コンパートメントから血液への最高移行速度である。ニオブモデルの Blood 1 に
 # > 到達した後、ニオブはその特性全身モデルに従うと仮定される。
+
+  Mo-93m/Blood1           Blood1                    ---
+  Mo-93m/Blood2           Blood1                 1000
+  Mo-93m/Liver            Blood1                    1.39
+  Mo-93m/UrinaryPath      Blood1                    1.39
+  Mo-93m/OtherKidneyTis   Blood1                    1.39
+  Mo-93m/OtherTissue      Blood1                    1.39
 
   Mo-93/Blood1            Blood1                    ---
   Mo-93/Blood2            Blood1                 1000

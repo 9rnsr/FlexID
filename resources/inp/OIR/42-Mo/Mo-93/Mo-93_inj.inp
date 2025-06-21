@@ -1,5 +1,5 @@
 [title]
-Mo-93 Ingestion:Other
+Mo-93 Injection
 
 [nuclide]
   Mo-93  Nb-93m
@@ -40,8 +40,8 @@ Mo-93 Ingestion:Other
   $fA    = 0.9
   $fA_Re = 0.9          # footnote¶
 
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+# ICRP Publ.130 p.37 Para.15
+  input                   Blood1                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

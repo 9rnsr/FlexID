@@ -1,11 +1,11 @@
 [title]
-Mo-93 Inhalation:Type-M
+Mo-91 Inhalation:Type-S
 
 [nuclide]
-  Mo-93  Nb-93m
+  Mo-91  Nb-91m  Nb-91
 
 
-[Mo-93:compartment]
+[Mo-91:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -65,18 +65,18 @@ Mo-93 Inhalation:Type-M
   acc   OtherKidneyTis        Kidneys
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
-[Mo-93:transfer]
+[Mo-91:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
+# ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
   $sr = 3
-  $ss = 0.005
+  $ss = 1E-4
   $fb = 0               # footnote*
   $sb = 0               # footnote*
-  $fA    = 0.18
+  $fA    = 0.009
   $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
@@ -217,7 +217,7 @@ Mo-93 Inhalation:Type-M
   UrinaryPath             UB-con                    1.40
 
 
-[Nb-93m:compartment]
+[Nb-91m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -280,7 +280,7 @@ Mo-93 Inhalation:Type-M
   acc   ST0                   Other
   acc   ST1                   Other
 
-[Nb-93m:transfer]
+[Nb-91m:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
@@ -292,52 +292,52 @@ Mo-93 Inhalation:Type-M
   $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
-  Mo-93/ET1-F             ET1-F                     ---
-  Mo-93/ET2-F             ET2-F                     ---
-  Mo-93/ETseq-F           ETseq-F                   ---
-  Mo-93/LNET-F            LNET-F                    ---
-  Mo-93/BB-F              BB-F                      ---
-  Mo-93/BBseq-F           BBseq-F                   ---
-  Mo-93/bb-F              bb-F                      ---
-  Mo-93/bbseq-F           bbseq-F                   ---
-  Mo-93/ALV-F             ALV-F                     ---
-  Mo-93/INT-F             INT-F                     ---
-  Mo-93/LNTH-F            LNTH-F                    ---
-  Mo-93/ET1-S             ET1-S                     ---
-  Mo-93/ET2-S             ET2-S                     ---
-  Mo-93/ETseq-S           ETseq-S                   ---
-  Mo-93/LNET-S            LNET-S                    ---
-  Mo-93/BB-S              BB-S                      ---
-  Mo-93/BBseq-S           BBseq-S                   ---
-  Mo-93/bb-S              bb-S                      ---
-  Mo-93/bbseq-S           bbseq-S                   ---
-  Mo-93/ALV-S             ALV-S                     ---
-  Mo-93/INT-S             INT-S                     ---
-  Mo-93/LNTH-S            LNTH-S                    ---
-  Mo-93/ET2-B             ET2-B                     ---
-  Mo-93/ETseq-B           ETseq-B                   ---
-  Mo-93/LNET-B            LNET-B                    ---
-  Mo-93/BB-B              BB-B                      ---
-  Mo-93/BBseq-B           BBseq-B                   ---
-  Mo-93/bb-B              bb-B                      ---
-  Mo-93/bbseq-B           bbseq-B                   ---
-  Mo-93/ALV-B             ALV-B                     ---
-  Mo-93/INT-B             INT-B                     ---
-  Mo-93/LNTH-B            LNTH-B                    ---
-  Mo-93/Environment       Environment               ---
+  Mo-91/ET1-F             ET1-F                     ---
+  Mo-91/ET2-F             ET2-F                     ---
+  Mo-91/ETseq-F           ETseq-F                   ---
+  Mo-91/LNET-F            LNET-F                    ---
+  Mo-91/BB-F              BB-F                      ---
+  Mo-91/BBseq-F           BBseq-F                   ---
+  Mo-91/bb-F              bb-F                      ---
+  Mo-91/bbseq-F           bbseq-F                   ---
+  Mo-91/ALV-F             ALV-F                     ---
+  Mo-91/INT-F             INT-F                     ---
+  Mo-91/LNTH-F            LNTH-F                    ---
+  Mo-91/ET1-S             ET1-S                     ---
+  Mo-91/ET2-S             ET2-S                     ---
+  Mo-91/ETseq-S           ETseq-S                   ---
+  Mo-91/LNET-S            LNET-S                    ---
+  Mo-91/BB-S              BB-S                      ---
+  Mo-91/BBseq-S           BBseq-S                   ---
+  Mo-91/bb-S              bb-S                      ---
+  Mo-91/bbseq-S           bbseq-S                   ---
+  Mo-91/ALV-S             ALV-S                     ---
+  Mo-91/INT-S             INT-S                     ---
+  Mo-91/LNTH-S            LNTH-S                    ---
+  Mo-91/ET2-B             ET2-B                     ---
+  Mo-91/ETseq-B           ETseq-B                   ---
+  Mo-91/LNET-B            LNET-B                    ---
+  Mo-91/BB-B              BB-B                      ---
+  Mo-91/BBseq-B           BBseq-B                   ---
+  Mo-91/bb-B              bb-B                      ---
+  Mo-91/bbseq-B           bbseq-B                   ---
+  Mo-91/ALV-B             ALV-B                     ---
+  Mo-91/INT-B             INT-B                     ---
+  Mo-91/LNTH-B            LNTH-B                    ---
+  Mo-91/Environment       Environment               ---
 
-  Mo-93/Oralcavity        Oralcavity                ---
-  Mo-93/Oesophagus-f      Oesophagus-f              ---
-  Mo-93/Oesophagus-s      Oesophagus-s              ---
-  Mo-93/St-con            St-con                    ---
-  Mo-93/SI-con            SI-con                    ---
-  Mo-93/SI-conRe          SI-conRe                  ---
-  Mo-93/RC-con            RC-con                    ---
-  Mo-93/LC-con            LC-con                    ---
-  Mo-93/RS-con            RS-con                    ---
-  Mo-93/Faeces            Faeces                    ---
-  Mo-93/UB-con            UB-con                    ---
-  Mo-93/Urine             Urine                     ---
+  Mo-91/Oralcavity        Oralcavity                ---
+  Mo-91/Oesophagus-f      Oesophagus-f              ---
+  Mo-91/Oesophagus-s      Oesophagus-s              ---
+  Mo-91/St-con            St-con                    ---
+  Mo-91/SI-con            SI-con                    ---
+  Mo-91/SI-conRe          SI-conRe                  ---
+  Mo-91/RC-con            RC-con                    ---
+  Mo-91/LC-con            LC-con                    ---
+  Mo-91/RS-con            RS-con                    ---
+  Mo-91/Faeces            Faeces                    ---
+  Mo-91/UB-con            UB-con                    ---
+  Mo-91/Urine             Urine                     ---
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.151 Table A.1
@@ -487,9 +487,279 @@ Mo-93 Inhalation:Type-M
 # > 「他の組織」コンパートメントから血液への最高移行速度である。ニオブモデルの Blood 1 に
 # > 到達した後、ニオブはその特性全身モデルに従うと仮定される。
 
-  Mo-93/Blood1            Blood1                    ---
-  Mo-93/Blood2            Blood1                 1000
-  Mo-93/Liver             Blood1                    1.39
-  Mo-93/UrinaryPath       Blood1                    1.39
-  Mo-93/OtherKidneyTis    Blood1                    1.39
-  Mo-93/OtherTissue       Blood1                    1.39
+  Mo-91/Blood1            Blood1                    ---
+  Mo-91/Blood2            Blood1                 1000
+  Mo-91/Liver             Blood1                    1.39
+  Mo-91/UrinaryPath       Blood1                    1.39
+  Mo-91/OtherKidneyTis    Blood1                    1.39
+  Mo-91/OtherTissue       Blood1                    1.39
+
+
+[Nb-91:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[Nb-91:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.01
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# from parent to progeny
+  Mo-91/ET1-F             ET1-F                     ---
+  Mo-91/ET2-F             ET2-F                     ---
+  Mo-91/ETseq-F           ETseq-F                   ---
+  Mo-91/LNET-F            LNET-F                    ---
+  Mo-91/BB-F              BB-F                      ---
+  Mo-91/BBseq-F           BBseq-F                   ---
+  Mo-91/bb-F              bb-F                      ---
+  Mo-91/bbseq-F           bbseq-F                   ---
+  Mo-91/ALV-F             ALV-F                     ---
+  Mo-91/INT-F             INT-F                     ---
+  Mo-91/LNTH-F            LNTH-F                    ---
+  Mo-91/ET1-S             ET1-S                     ---
+  Mo-91/ET2-S             ET2-S                     ---
+  Mo-91/ETseq-S           ETseq-S                   ---
+  Mo-91/LNET-S            LNET-S                    ---
+  Mo-91/BB-S              BB-S                      ---
+  Mo-91/BBseq-S           BBseq-S                   ---
+  Mo-91/bb-S              bb-S                      ---
+  Mo-91/bbseq-S           bbseq-S                   ---
+  Mo-91/ALV-S             ALV-S                     ---
+  Mo-91/INT-S             INT-S                     ---
+  Mo-91/LNTH-S            LNTH-S                    ---
+  Mo-91/ET2-B             ET2-B                     ---
+  Mo-91/ETseq-B           ETseq-B                   ---
+  Mo-91/LNET-B            LNET-B                    ---
+  Mo-91/BB-B              BB-B                      ---
+  Mo-91/BBseq-B           BBseq-B                   ---
+  Mo-91/bb-B              bb-B                      ---
+  Mo-91/bbseq-B           bbseq-B                   ---
+  Mo-91/ALV-B             ALV-B                     ---
+  Mo-91/INT-B             INT-B                     ---
+  Mo-91/LNTH-B            LNTH-B                    ---
+  Mo-91/Environment       Environment               ---
+
+  Mo-91/Oralcavity        Oralcavity                ---
+  Mo-91/Oesophagus-f      Oesophagus-f              ---
+  Mo-91/Oesophagus-s      Oesophagus-s              ---
+  Mo-91/St-con            St-con                    ---
+  Mo-91/SI-con            SI-con                    ---
+  Mo-91/SI-conRe          SI-conRe                  ---
+  Mo-91/RC-con            RC-con                    ---
+  Mo-91/LC-con            LC-con                    ---
+  Mo-91/RS-con            RS-con                    ---
+  Mo-91/Faeces            Faeces                    ---
+  Mo-91/UB-con            UB-con                    ---
+  Mo-91/Urine             Urine                     ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Blood1                $( (1 - fb) * sr )
+  INT-F                   Blood1                $( (1 - fb) * sr )
+  bb-F                    Blood1                $( (1 - fb) * sr )
+  bbseq-F                 Blood1                $( (1 - fb) * sr )
+  BB-F                    Blood1                $( (1 - fb) * sr )
+  BBseq-F                 Blood1                $( (1 - fb) * sr )
+  ET2-F                   Blood1                $( (1 - fb) * sr )
+  ETseq-F                 Blood1                $( (1 - fb) * sr )
+  LNET-F                  Blood1                $( (1 - fb) * sr )
+  LNTH-F                  Blood1                $( (1 - fb) * sr )
+
+  ALV-S                   Blood1                $( (1 - fb) * ss )
+  INT-S                   Blood1                $( (1 - fb) * ss )
+  bb-S                    Blood1                $( (1 - fb) * ss )
+  bbseq-S                 Blood1                $( (1 - fb) * ss )
+  BB-S                    Blood1                $( (1 - fb) * ss )
+  BBseq-S                 Blood1                $( (1 - fb) * ss )
+  ET2-S                   Blood1                $( (1 - fb) * ss )
+  ETseq-S                 Blood1                $( (1 - fb) * ss )
+  LNET-S                  Blood1                $( (1 - fb) * ss )
+  LNTH-S                  Blood1                $( (1 - fb) * ss )
+
+  ALV-B                   Blood1                $sb
+  INT-B                   Blood1                $sb
+  bb-B                    Blood1                $sb
+  bbseq-B                 Blood1                $sb
+  BB-B                    Blood1                $sb
+  BBseq-B                 Blood1                $sb
+  ET2-B                   Blood1                $sb
+  ETseq-B                 Blood1                $sb
+  LNET-B                  Blood1                $sb
+  LNTH-B                  Blood1                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.294 Table 13.3
+  Blood1                  Blood2                    3.2
+  Blood1                  Liver0                    0.24
+  Blood1                  Kidneys                   0.04
+  Blood1                  ST0                       3.2
+  Blood1                  ST1                       0.12
+  Blood1                  UB-con                    0.88
+  Blood1                  SI-conRe                  0.08
+  Blood1                  T-bone-S                  0.12
+  Blood1                  C-bone-S                  0.12
+  Blood2                  Blood1                    1.39
+  Liver0                  SI-conRe                  0.0578
+  Liver0                  Blood1                    0.0578
+  Liver0                  Liver1                    0.231
+  Liver1                  Blood1                    0.005
+  Kidneys                 Blood1                    0.005
+  ST0                     Blood1                    1.39
+  ST1                     Blood1                    0.01
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.134 p.314 Para.665
+  Mo-91/Blood1            Blood1                    ---
+  Mo-91/Blood2            Blood1                 1000
+  Mo-91/Liver             Blood1                    1.39
+  Mo-91/UrinaryPath       Blood1                    1.39
+  Mo-91/OtherKidneyTis    Blood1                    1.39
+  Mo-91/OtherTissue       Blood1                    1.39
+
+  Nb-91m/Blood1           Blood1                    ---
+  Nb-91m/Blood2           Blood2                    ---
+  Nb-91m/C-bone-S         C-bone-S                  ---
+  Nb-91m/C-bone-V         C-bone-V                  ---
+  Nb-91m/T-bone-S         T-bone-S                  ---
+  Nb-91m/T-bone-V         T-bone-V                  ---
+  Nb-91m/Liver0           Liver0                    ---
+  Nb-91m/Liver1           Liver1                    ---
+  Nb-91m/Kidneys          Kidneys                   ---
+  Nb-91m/ST0              ST0                       ---
+  Nb-91m/ST1              ST1                       ---

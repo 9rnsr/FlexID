@@ -1,0 +1,11 @@
+Radionuclide	Mo-91
+Route of Intake	Ingestion
+Material	All other forms, fA=0.9
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Liver*
+0.041667	6.9E-2	4.6E-2	6.1E-3
+0.083333	4.5E-3	1.7E-3	1.1E-3
+0.125	3.0E-4	7.3E-5	1.0E-4
+0.25	8.6E-8	1.2E-8	4.0E-8
