@@ -191,7 +191,7 @@ Mo-99 Ingestion:Other
   Kidneys2                Blood                     0.0347
   Liver1                  Blood                     8.234
   Liver1                  Liver2                    0.0832
-  Liver2                  Blood                     0.0347
+ #Liver2                  Blood                     0.0347      # only for progeny of Mo
   RC-wall                 RC-con                    1.39
   T-bone-S                Blood                     0.457
   T-bone-S                T-bone-V                  0.00462
@@ -235,6 +235,7 @@ Mo-99 Ingestion:Other
 # > テクネチウムモデルの「その他の組織」の中間コンパートメントから血液への移行速度です。
 # > 血液に到達したテクネチウムは、その特性モデルに従うと仮定されます。
 
+  Liver2                  Blood                 $(0.693 / 22)   # 半減期22日
   Mo-99/Blood1            Blood                     ---
   Mo-99/Blood2            Blood                  1000           # t½ = 1 min
   Mo-99/Liver             Liver2                    ---
@@ -392,7 +393,7 @@ Mo-99 Ingestion:Other
   Kidneys2                Blood                     0.0347
   Liver1                  Blood                     8.234
   Liver1                  Liver2                    0.0832
-  Liver2                  Blood                     0.0347
+ #Liver2                  Blood                     0.0347      # only for progeny of Mo
   RC-wall                 RC-con                    1.39
   T-bone-S                Blood                     0.457
   T-bone-S                T-bone-V                  0.00462
@@ -402,6 +403,7 @@ Mo-99 Ingestion:Other
   C-bone-V                Blood                     0.0000821
 
 # ICRP Publ.134 p.313 Para.664
+  Liver2                  Blood                 $(0.693 / 22)   # 半減期22日
   Mo-99/Blood1            Blood                     ---
   Mo-99/Blood2            Blood                  1000           # t½ = 1 min
   Mo-99/Liver             Liver2                    ---
