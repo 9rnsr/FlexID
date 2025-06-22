@@ -237,6 +237,13 @@ namespace ResultChecker
             public string ParticleSize;
 
             public string NuclideWholeBody;
+            public string NuclideUrine;
+            public string NuclideFaeces;
+            public string NuclideAtract;
+            public string NuclideLungs;
+            public string NuclideSkeleton;
+            public string NuclideLiver;
+            public string NuclideThyroid;
 
             public string TargetPath;
 
@@ -625,8 +632,6 @@ namespace ResultChecker
         /// <returns>時間メッシュ毎の残留放射能データ。</returns>
         static List<Retention> GetResultRetentions(Target target)
         {
-            var nuclide = target.Nuclide;
-            var resultNuc = target.NuclideWholeBody;
             var filePath = target.ResultRetentionPath;
 
             var retentions = new List<Retention>();
@@ -634,32 +639,29 @@ namespace ResultChecker
             using (var reader = new OutputDataReader(filePath))
             {
                 var data = reader.Read();
-                var result = data.Blocks[0];
 
-                if (resultNuc != nuclide)
+                OutputCompartmentData GetCompartmentData(string nuclide, string name)
                 {
-                    // 子孫核種の結果を読み出す。
-                    result = data.Blocks.Where(n => n.Header == resultNuc).FirstOrDefault();
+                    if (nuclide is null)
+                        return null;
+
+                    // 対応する核種の結果を読み出す。
+                    var result = data.Blocks.Where(n => n.Header == nuclide).FirstOrDefault();
                     if (result is null)
-                        throw new InvalidDataException($"Missing retention data of progeny nuclide '{resultNuc}'.");
-                }
+                        throw new InvalidDataException($"Missing retention data of nuclide '{nuclide}'.");
 
-                var compartments = result.Compartments.Select(c => c.Name).ToArray();
-
-                OutputCompartmentData GetCompartmentData(string name)
-                {
-                    var index = Array.IndexOf(compartments, name);
+                    var index = result.Compartments.IndexOf(c => c.Name == name);
                     return index != -1 ? result.Compartments[index] : null;
                 }
 
-                var resultWholeBody /**/= GetCompartmentData("WholeBody");
-                var resultUrine     /**/= GetCompartmentData("Urine");
-                var resultFaeces    /**/= GetCompartmentData("Faeces");
-                var resultAtract    /**/= GetCompartmentData("AlimentaryTract*");
-                var resultLungs     /**/= GetCompartmentData("Lungs*");
-                var resultSkeleton  /**/= GetCompartmentData("Skeleton*");
-                var resultLiver     /**/= GetCompartmentData("Liver*");
-                var resultThyroid   /**/= GetCompartmentData("Thyroid*");
+                var resultWholeBody /**/= GetCompartmentData(target.NuclideWholeBody, /**/"WholeBody");
+                var resultUrine     /**/= GetCompartmentData(target.NuclideUrine,     /**/"Urine");
+                var resultFaeces    /**/= GetCompartmentData(target.NuclideFaeces,    /**/"Faeces");
+                var resultAtract    /**/= GetCompartmentData(target.NuclideAtract,    /**/"AlimentaryTract*");
+                var resultLungs     /**/= GetCompartmentData(target.NuclideLungs,     /**/"Lungs*");
+                var resultSkeleton  /**/= GetCompartmentData(target.NuclideSkeleton,  /**/"Skeleton*");
+                var resultLiver     /**/= GetCompartmentData(target.NuclideLiver,     /**/"Liver*");
+                var resultThyroid   /**/= GetCompartmentData(target.NuclideThyroid,   /**/"Thyroid*");
 
                 if (resultWholeBody is null)
                     throw new InvalidDataException();
@@ -742,12 +744,21 @@ namespace ResultChecker
 
                 // 残留放射能データが子孫核種のものである場合、その名前が
                 // ヘッダに括弧書きされているためこれを取り出す。
-                var headerWholeBody = columns[indexWholeBody];
-                var m = Regex.Match(headerWholeBody, @"Whole Body *\((?<nuc>[^ ]+)\)");
-                if (m.Success)
-                    target.NuclideWholeBody = m.Groups["nuc"].Value;
-                else
-                    target.NuclideWholeBody = nuclide;
+                string GetRetentionNuclide(int index, string header)
+                {
+                    if (index == -1)
+                        return null;
+                    var m = Regex.Match(columns[index], Regex.Escape(header) + @" *\((?<nuc>[^ ]+)\)");
+                    return m.Success ? m.Groups["nuc"].Value : nuclide;
+                }
+                target.NuclideWholeBody /**/= GetRetentionNuclide(indexWholeBody, /**/"Whole Body");
+                target.NuclideUrine     /**/= GetRetentionNuclide(indexUrine,     /**/"Urine (24-hour sample)");
+                target.NuclideFaeces    /**/= GetRetentionNuclide(indexFaeces,    /**/"Faeces (24-hour sample)");
+                target.NuclideAtract    /**/= GetRetentionNuclide(indexAtract,    /**/"Alimentary Tract*");
+                target.NuclideLungs     /**/= GetRetentionNuclide(indexLungs,     /**/"Lungs*");
+                target.NuclideSkeleton  /**/= GetRetentionNuclide(indexSkeleton,  /**/"Skeleton*");
+                target.NuclideLiver     /**/= GetRetentionNuclide(indexLiver,     /**/"Liver*");
+                target.NuclideThyroid   /**/= GetRetentionNuclide(indexThyroid,   /**/"Thyroid*");
 
                 var startTime = 0.0;
 
