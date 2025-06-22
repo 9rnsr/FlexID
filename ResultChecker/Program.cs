@@ -252,11 +252,14 @@ namespace ResultChecker
         /// <summary>
         /// 計算および比較の結果。
         /// </summary>
-        struct Result
+        class Result
         {
             public Target Target;
 
             public bool HasErrors;
+
+            public IReadOnlyList<Retention> ExpectActs;
+            public IReadOnlyList<Retention> ActualActs;
 
             public Dose ExpectDose;
             public Dose ActualDose;
@@ -314,8 +317,8 @@ namespace ResultChecker
         {
             var result = new Result() { Target = target };
 
-            var expectActs = GetExpectRetentions(target);
-            var actualActs = GetResultRetentions(target);
+            result.ExpectActs = GetExpectRetentions(target);
+            result.ActualActs = GetResultRetentions(target);
 
             // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
@@ -328,7 +331,8 @@ namespace ResultChecker
             var fractionsLiver     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsThyroid   /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
 
-            foreach (var (actualAct, expectAct) in actualActs.Zip(expectActs, (a, e) => (a, e)))
+            var activities = result.ActualActs.Zip(result.ExpectActs, (a, e) => (a, e));
+            foreach (var (actualAct, expectAct) in activities)
             {
                 //Console.WriteLine(
                 //    $"{expectAct.EndTime,8}," +
@@ -618,7 +622,7 @@ namespace ResultChecker
         /// *_Retention.outから、Whole Bodyの数値列を読み込む。
         /// </summary>
         /// <param name="target"></param>
-        /// <returns></returns>
+        /// <returns>時間メッシュ毎の残留放射能データ。</returns>
         static List<Retention> GetResultRetentions(Target target)
         {
             var nuclide = target.Nuclide;
@@ -691,7 +695,7 @@ namespace ResultChecker
         /// 全身の残留放射能の数値を取得する。
         /// </summary>
         /// <param name="target"></param>
-        /// <returns></returns>
+        /// <returns>時間メッシュ毎の残留放射能データ。</returns>
         /// <exception cref="InvalidDataException"></exception>
         static List<Retention> GetExpectRetentions(Target target)
         {
