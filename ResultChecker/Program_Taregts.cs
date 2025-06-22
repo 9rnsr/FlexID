@@ -2,30 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace ResultChecker
 {
     internal partial class Program
     {
-        static Regex patternMaterial = new Regex(
-           @"^(?<RouteOfIntake>Injection|Ingestion|Inhalation), (?<Material>.+?)(?:, (?<ParticleSize>[\d\.]+) µm)?$");
-
-        static (string routeOfIntake, string material, string particleSize) DecomposeMaterial(string mat)
-        {
-            var m = patternMaterial.Match(mat);
-            if (!m.Success)
-                throw new InvalidDataException();
-
-            var routeOfIntake = m.Groups["RouteOfIntake"].Value;
-            var particleSize = m.Groups["ParticleSize"].Value;
-            var material = m.Groups["Material"].Value;
-            if (particleSize.Length == 0)
-                particleSize = "-";
-
-            return (routeOfIntake, material, particleSize);
-        }
-
         /// <summary>
         /// FlexIDに整備されているインプットとそれに対応する期待値データを列挙する。
         /// </summary>

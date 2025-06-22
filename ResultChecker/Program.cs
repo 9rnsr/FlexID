@@ -226,11 +226,15 @@ namespace ResultChecker
         /// <summary>
         /// 計算および比較の対象。
         /// </summary>
-        struct Target
+        class Target
         {
             public string Name;
 
             public string Nuclide => Name.Split('_')[0];
+
+            public string RouteOfIntake;
+            public string ChemicalForm;
+            public string ParticleSize;
 
             public string TargetPath;
 
@@ -308,10 +312,11 @@ namespace ResultChecker
         {
             var result = new Result() { Target = target };
 
+            var expectActs = GetExpectRetentions(target, out var retentionNuc);
+            var actualActs = GetResultRetentions(target, retentionNuc);
+
             // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
-            var expectActs = GetExpectRetentions(target, out var mat, out var retentionNuc);
-            var actualActs = GetResultRetentions(target, retentionNuc);
             var fractionsWholeBody /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsUrine     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsFaeces    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
@@ -400,7 +405,7 @@ namespace ResultChecker
             result.FractionsThyroid   /**/= fractionsThyroid;
 
             // 預託実効線量と預託等価線量を取得。
-            result.ExpectDose = GetExpectDoses(target, mat);
+            result.ExpectDose = GetExpectDoses(target);
             result.ActualDose = GetResultDoses(target);
 
             return result;
@@ -422,16 +427,20 @@ namespace ResultChecker
         /// 指定のmaterialに対応する数値を取得する。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="mat"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static Dose GetExpectDoses(Target target, string mat)
+        static Dose GetExpectDoses(Target target)
         {
             var nuclide = target.Nuclide;
             var filePath = target.ExpectDosePath
                 ?? throw new FileNotFoundException("expect dose file", $"{nuclide}.dat");
 
-            var (routeOfIntake, _, _) = DecomposeMaterial(mat);
+            var routeOfIntake = target.RouteOfIntake;
+
+            // 預託線量の期待値を引くための文字列を組み立てる。
+            var mat = $"{target.RouteOfIntake}, {target.ChemicalForm}";
+            if (target.ParticleSize != "-")
+                mat += $", {target.ParticleSize} µm";
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, Encoding.UTF8))
@@ -680,17 +689,14 @@ namespace ResultChecker
         /// 全身の残留放射能の数値を取得する。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="mat"></param>
         /// <param name="retentionNuc">残留放射能データが対応する核種名</param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static List<Retention> GetExpectRetentions(Target target, out string mat, out string retentionNuc)
+        static List<Retention> GetExpectRetentions(Target target, out string retentionNuc)
         {
             var nuclide = target.Nuclide;
             var filePath = target.ExpectRetentionPath
                 ?? throw new FileNotFoundException("expect retention file", $"{target.Name}.dat");
-
-            mat = "";
 
             var retentions = new List<Retention>();
 
@@ -705,18 +711,13 @@ namespace ResultChecker
                     throw new InvalidDataException();
 
                 // 対象の摂取形態。
-                var routeOfIntake = reader.ReadLine().Split('\t')[1];
+                target.RouteOfIntake = reader.ReadLine().Split('\t')[1];
 
                 // 対象の化学形態。
-                var chemicalForm = reader.ReadLine().Split('\t')[1];
+                target.ChemicalForm = reader.ReadLine().Split('\t')[1];
 
                 // 対象の粒子サイズ。
-                var particleSize = reader.ReadLine().Split('\t')[1];
-
-                // 預託線量の期待値を引くための文字列を組み立てる。
-                mat = $"{routeOfIntake}, {chemicalForm}";
-                if (particleSize != "-")
-                    mat += $", {particleSize} µm";
+                target.ParticleSize = reader.ReadLine().Split('\t')[1];
 
                 reader.ReadLine();  // (empty line)
 
