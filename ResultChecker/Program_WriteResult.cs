@@ -377,10 +377,12 @@ namespace ResultChecker
         /// <param name="result"></param>
         static void WriteResultSheet(ExcelWorksheet sheet, Result result)
         {
+            var target = result.Target;
+
             var expectActs = result.ExpectActs;
             var actualActs = result.ActualActs;
 
-            sheet.Cells[1, 1].Value = result.Target.Name;
+            sheet.Cells[1, 1].Value = target.Name;
 
             const int rowH = 4;
             const int rowT = rowH + 1;
@@ -390,6 +392,22 @@ namespace ResultChecker
             const int colC = 1;
 
             sheet.Cells[rowH - 1, colE + 0].Value = "OIR";
+            sheet.Cells[rowH - 1, colA + 0].Value = "FlexID";
+            sheet.Cells[rowH - 1, colD + 0].Value = "Diff";
+
+            string GetCompartmentNuclide(string nuclide) =>
+                nuclide is null ? "-" : nuclide == target.Nuclide ? "" : $"({nuclide})";
+            sheet.Cells[rowH - 1, colD + 1].Value = GetCompartmentNuclide(target.NuclideWholeBody);
+            sheet.Cells[rowH - 1, colD + 2].Value = GetCompartmentNuclide(target.NuclideUrine);
+            sheet.Cells[rowH - 1, colD + 3].Value = GetCompartmentNuclide(target.NuclideFaeces);
+            sheet.Cells[rowH - 1, colD + 4].Value = GetCompartmentNuclide(target.NuclideAtract);
+            sheet.Cells[rowH - 1, colD + 5].Value = GetCompartmentNuclide(target.NuclideLungs);
+            sheet.Cells[rowH - 1, colD + 6].Value = GetCompartmentNuclide(target.NuclideSkeleton);
+            sheet.Cells[rowH - 1, colD + 7].Value = GetCompartmentNuclide(target.NuclideLiver);
+            sheet.Cells[rowH - 1, colD + 8].Value = GetCompartmentNuclide(target.NuclideThyroid);
+            sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.ShrinkToFit = true;
+            sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
             sheet.Cells[rowH, colE + 0].Value = "Time, days";
             sheet.Cells[rowH, colE + 1].Value = "Whole Body";
             sheet.Cells[rowH, colE + 2].Value = "Urine\n(24-hour sample)";
@@ -403,7 +421,6 @@ namespace ResultChecker
             sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-            sheet.Cells[rowH - 1, colA + 0].Value = "FlexID";
             sheet.Cells[rowH, colA + 0].Value = "Time, days";
             sheet.Cells[rowH, colA + 1].Value = "Whole Body";
             sheet.Cells[rowH, colA + 2].Value = "Urine\n(24-hour)";
@@ -417,7 +434,6 @@ namespace ResultChecker
             sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-            sheet.Cells[rowH - 1, colD + 0].Value = "Difference";
             sheet.Cells[rowH, colD + 0].Value = "Time, days";
             sheet.Cells[rowH, colD + 1].Value = "Whole Body";
             sheet.Cells[rowH, colD + 2].Value = "Urine";
