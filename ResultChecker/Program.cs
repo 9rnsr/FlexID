@@ -226,11 +226,24 @@ namespace ResultChecker
         /// <summary>
         /// 計算および比較の対象。
         /// </summary>
-        struct Target
+        class Target
         {
             public string Name;
 
             public string Nuclide => Name.Split('_')[0];
+
+            public string RouteOfIntake;
+            public string ChemicalForm;
+            public string ParticleSize;
+
+            public string NuclideWholeBody;
+            public string NuclideUrine;
+            public string NuclideFaeces;
+            public string NuclideAtract;
+            public string NuclideLungs;
+            public string NuclideSkeleton;
+            public string NuclideLiver;
+            public string NuclideThyroid;
 
             public string TargetPath;
 
@@ -246,11 +259,14 @@ namespace ResultChecker
         /// <summary>
         /// 計算および比較の結果。
         /// </summary>
-        struct Result
+        class Result
         {
             public Target Target;
 
             public bool HasErrors;
+
+            public IReadOnlyList<Retention> ExpectActs;
+            public IReadOnlyList<Retention> ActualActs;
 
             public Dose ExpectDose;
             public Dose ActualDose;
@@ -308,10 +324,11 @@ namespace ResultChecker
         {
             var result = new Result() { Target = target };
 
+            result.ExpectActs = GetExpectRetentions(target);
+            result.ActualActs = GetResultRetentions(target);
+
             // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
-            var expectActs = GetExpectRetentions(target, out var mat, out var retentionNuc);
-            var actualActs = GetResultRetentions(target, retentionNuc);
             var fractionsWholeBody /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsUrine     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsFaeces    /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
@@ -321,7 +338,8 @@ namespace ResultChecker
             var fractionsLiver     /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
             var fractionsThyroid   /**/= (min: double.PositiveInfinity, max: double.NegativeInfinity);
 
-            foreach (var (actualAct, expectAct) in actualActs.Zip(expectActs, (a, e) => (a, e)))
+            var activities = result.ActualActs.Zip(result.ExpectActs, (a, e) => (a, e));
+            foreach (var (actualAct, expectAct) in activities)
             {
                 //Console.WriteLine(
                 //    $"{expectAct.EndTime,8}," +
@@ -400,7 +418,7 @@ namespace ResultChecker
             result.FractionsThyroid   /**/= fractionsThyroid;
 
             // 預託実効線量と預託等価線量を取得。
-            result.ExpectDose = GetExpectDoses(target, mat);
+            result.ExpectDose = GetExpectDoses(target);
             result.ActualDose = GetResultDoses(target);
 
             return result;
@@ -422,16 +440,20 @@ namespace ResultChecker
         /// 指定のmaterialに対応する数値を取得する。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="mat"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static Dose GetExpectDoses(Target target, string mat)
+        static Dose GetExpectDoses(Target target)
         {
             var nuclide = target.Nuclide;
             var filePath = target.ExpectDosePath
                 ?? throw new FileNotFoundException("expect dose file", $"{nuclide}.dat");
 
-            var (routeOfIntake, _, _) = DecomposeMaterial(mat);
+            var routeOfIntake = target.RouteOfIntake;
+
+            // 預託線量の期待値を引くための文字列を組み立てる。
+            var mat = $"{target.RouteOfIntake}, {target.ChemicalForm}";
+            if (target.ParticleSize != "-")
+                mat += $", {target.ParticleSize} µm";
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, Encoding.UTF8))
@@ -607,11 +629,9 @@ namespace ResultChecker
         /// *_Retention.outから、Whole Bodyの数値列を読み込む。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="resultNuc"></param>
-        /// <returns></returns>
-        static List<Retention> GetResultRetentions(Target target, string resultNuc)
+        /// <returns>時間メッシュ毎の残留放射能データ。</returns>
+        static List<Retention> GetResultRetentions(Target target)
         {
-            var nuclide = target.Nuclide;
             var filePath = target.ResultRetentionPath;
 
             var retentions = new List<Retention>();
@@ -619,32 +639,29 @@ namespace ResultChecker
             using (var reader = new OutputDataReader(filePath))
             {
                 var data = reader.Read();
-                var result = data.Blocks[0];
 
-                if (resultNuc != nuclide)
+                OutputCompartmentData GetCompartmentData(string nuclide, string name)
                 {
-                    // 子孫核種の結果を読み出す。
-                    result = data.Blocks.Where(n => n.Header == resultNuc).FirstOrDefault();
+                    if (nuclide is null)
+                        return null;
+
+                    // 対応する核種の結果を読み出す。
+                    var result = data.Blocks.Where(n => n.Header == nuclide).FirstOrDefault();
                     if (result is null)
-                        throw new InvalidDataException($"Missing retention data of progeny nuclide '{resultNuc}'.");
-                }
+                        throw new InvalidDataException($"Missing retention data of nuclide '{nuclide}'.");
 
-                var compartments = result.Compartments.Select(c => c.Name).ToArray();
-
-                OutputCompartmentData GetCompartmentData(string name)
-                {
-                    var index = Array.IndexOf(compartments, name);
+                    var index = result.Compartments.IndexOf(c => c.Name == name);
                     return index != -1 ? result.Compartments[index] : null;
                 }
 
-                var resultWholeBody /**/= GetCompartmentData("WholeBody");
-                var resultUrine     /**/= GetCompartmentData("Urine");
-                var resultFaeces    /**/= GetCompartmentData("Faeces");
-                var resultAtract    /**/= GetCompartmentData("AlimentaryTract*");
-                var resultLungs     /**/= GetCompartmentData("Lungs*");
-                var resultSkeleton  /**/= GetCompartmentData("Skeleton*");
-                var resultLiver     /**/= GetCompartmentData("Liver*");
-                var resultThyroid   /**/= GetCompartmentData("Thyroid*");
+                var resultWholeBody /**/= GetCompartmentData(target.NuclideWholeBody, /**/"WholeBody");
+                var resultUrine     /**/= GetCompartmentData(target.NuclideUrine,     /**/"Urine");
+                var resultFaeces    /**/= GetCompartmentData(target.NuclideFaeces,    /**/"Faeces");
+                var resultAtract    /**/= GetCompartmentData(target.NuclideAtract,    /**/"AlimentaryTract*");
+                var resultLungs     /**/= GetCompartmentData(target.NuclideLungs,     /**/"Lungs*");
+                var resultSkeleton  /**/= GetCompartmentData(target.NuclideSkeleton,  /**/"Skeleton*");
+                var resultLiver     /**/= GetCompartmentData(target.NuclideLiver,     /**/"Liver*");
+                var resultThyroid   /**/= GetCompartmentData(target.NuclideThyroid,   /**/"Thyroid*");
 
                 if (resultWholeBody is null)
                     throw new InvalidDataException();
@@ -680,17 +697,13 @@ namespace ResultChecker
         /// 全身の残留放射能の数値を取得する。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="mat"></param>
-        /// <param name="retentionNuc">残留放射能データが対応する核種名</param>
-        /// <returns></returns>
+        /// <returns>時間メッシュ毎の残留放射能データ。</returns>
         /// <exception cref="InvalidDataException"></exception>
-        static List<Retention> GetExpectRetentions(Target target, out string mat, out string retentionNuc)
+        static List<Retention> GetExpectRetentions(Target target)
         {
             var nuclide = target.Nuclide;
             var filePath = target.ExpectRetentionPath
                 ?? throw new FileNotFoundException("expect retention file", $"{target.Name}.dat");
-
-            mat = "";
 
             var retentions = new List<Retention>();
 
@@ -705,18 +718,13 @@ namespace ResultChecker
                     throw new InvalidDataException();
 
                 // 対象の摂取形態。
-                var routeOfIntake = reader.ReadLine().Split('\t')[1];
+                target.RouteOfIntake = reader.ReadLine().Split('\t')[1];
 
                 // 対象の化学形態。
-                var chemicalForm = reader.ReadLine().Split('\t')[1];
+                target.ChemicalForm = reader.ReadLine().Split('\t')[1];
 
                 // 対象の粒子サイズ。
-                var particleSize = reader.ReadLine().Split('\t')[1];
-
-                // 預託線量の期待値を引くための文字列を組み立てる。
-                mat = $"{routeOfIntake}, {chemicalForm}";
-                if (particleSize != "-")
-                    mat += $", {particleSize} µm";
+                target.ParticleSize = reader.ReadLine().Split('\t')[1];
 
                 reader.ReadLine();  // (empty line)
 
@@ -736,12 +744,21 @@ namespace ResultChecker
 
                 // 残留放射能データが子孫核種のものである場合、その名前が
                 // ヘッダに括弧書きされているためこれを取り出す。
-                var headerWholeBody = columns[indexWholeBody];
-                var m = Regex.Match(headerWholeBody, @"Whole Body *\((?<nuc>[^ ]+)\)");
-                if (m.Success)
-                    retentionNuc = m.Groups["nuc"].Value;
-                else
-                    retentionNuc = nuclide;
+                string GetRetentionNuclide(int index, string header)
+                {
+                    if (index == -1)
+                        return null;
+                    var m = Regex.Match(columns[index], Regex.Escape(header) + @" *\((?<nuc>[^ ]+)\)");
+                    return m.Success ? m.Groups["nuc"].Value : nuclide;
+                }
+                target.NuclideWholeBody /**/= GetRetentionNuclide(indexWholeBody, /**/"Whole Body");
+                target.NuclideUrine     /**/= GetRetentionNuclide(indexUrine,     /**/"Urine (24-hour sample)");
+                target.NuclideFaeces    /**/= GetRetentionNuclide(indexFaeces,    /**/"Faeces (24-hour sample)");
+                target.NuclideAtract    /**/= GetRetentionNuclide(indexAtract,    /**/"Alimentary Tract*");
+                target.NuclideLungs     /**/= GetRetentionNuclide(indexLungs,     /**/"Lungs*");
+                target.NuclideSkeleton  /**/= GetRetentionNuclide(indexSkeleton,  /**/"Skeleton*");
+                target.NuclideLiver     /**/= GetRetentionNuclide(indexLiver,     /**/"Liver*");
+                target.NuclideThyroid   /**/= GetRetentionNuclide(indexThyroid,   /**/"Thyroid*");
 
                 var startTime = 0.0;
 
