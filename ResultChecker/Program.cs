@@ -236,6 +236,8 @@ namespace ResultChecker
             public string ChemicalForm;
             public string ParticleSize;
 
+            public string NuclideWholeBody;
+
             public string TargetPath;
 
             public string ExpectDosePath;
@@ -312,8 +314,8 @@ namespace ResultChecker
         {
             var result = new Result() { Target = target };
 
-            var expectActs = GetExpectRetentions(target, out var retentionNuc);
-            var actualActs = GetResultRetentions(target, retentionNuc);
+            var expectActs = GetExpectRetentions(target);
+            var actualActs = GetResultRetentions(target);
 
             // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
             // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
@@ -616,11 +618,11 @@ namespace ResultChecker
         /// *_Retention.outから、Whole Bodyの数値列を読み込む。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="resultNuc"></param>
         /// <returns></returns>
-        static List<Retention> GetResultRetentions(Target target, string resultNuc)
+        static List<Retention> GetResultRetentions(Target target)
         {
             var nuclide = target.Nuclide;
+            var resultNuc = target.NuclideWholeBody;
             var filePath = target.ResultRetentionPath;
 
             var retentions = new List<Retention>();
@@ -689,10 +691,9 @@ namespace ResultChecker
         /// 全身の残留放射能の数値を取得する。
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="retentionNuc">残留放射能データが対応する核種名</param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        static List<Retention> GetExpectRetentions(Target target, out string retentionNuc)
+        static List<Retention> GetExpectRetentions(Target target)
         {
             var nuclide = target.Nuclide;
             var filePath = target.ExpectRetentionPath
@@ -740,9 +741,9 @@ namespace ResultChecker
                 var headerWholeBody = columns[indexWholeBody];
                 var m = Regex.Match(headerWholeBody, @"Whole Body *\((?<nuc>[^ ]+)\)");
                 if (m.Success)
-                    retentionNuc = m.Groups["nuc"].Value;
+                    target.NuclideWholeBody = m.Groups["nuc"].Value;
                 else
-                    retentionNuc = nuclide;
+                    target.NuclideWholeBody = nuclide;
 
                 var startTime = 0.0;
 
