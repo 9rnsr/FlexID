@@ -960,6 +960,6 @@ Th-232 Inhalation:Type-S
   Ra-228/Testes           Testes                    ---     # only for progeny of Thorium chain
   Ra-228/Ovaries          Ovaries                   ---     # only for progeny of Thorium chain
   Ra-228/Skin             Skin                      ---     # only for progeny of Thorium chain
-  Ra-228/ST0              ST0                       ---
-  Ra-228/ST1              ST1                       ---
-  Ra-228/ST2              ST2                       ---
+  Ra-228/ST0              Blood                     1.386
+  Ra-228/ST1              Blood                     1.386
+  Ra-228/ST2              Blood                     1.386
