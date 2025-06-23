@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -48,6 +49,7 @@ namespace FlexID.Calc
             using (var writer = new StreamWriter(stream, Encoding.UTF8))
             {
                 WriteOutNuclides(data, writer);
+                WriteOutTransfers(data, writer);
                 WriteOutZeroInflows(data, writer);
 
                 InputDataReader_OIR.SetSCoefficients(data);
@@ -143,6 +145,91 @@ namespace FlexID.Calc
                 }
 
                 WriteLine();
+            }
+
+            writer.Flush();
+        }
+
+        private static void WriteOutTransfers(InputData data, TextWriter writer)
+        {
+            writer.WriteLine();
+            writer.WriteLine("Transfers:");
+
+            var transfers = new List<(int group, string from, string to, string coeff)>();
+            var fromLength = 0;
+            var toLength = 0;
+            var coeffAlignment = 0;
+            foreach (var nuclide in data.Nuclides)
+            {
+                var group = data.Nuclides.IndexOf(nuclide);
+
+                var organs = data.Organs.Where(o => o.Nuclide == nuclide);
+                foreach (var organTo in organs)
+                {
+                    foreach (var inflow in organTo.Inflows.Where(i => i.Organ.Nuclide != organTo.Nuclide))
+                    {
+                        var organFrom = inflow.Organ;
+                        var from = $"{organFrom.Nuclide.Name}/{organFrom.Name}";
+                        var to = $"{organTo.Nuclide.Name}/{organTo.Name}";
+
+                        transfers.Add((group, from, to, null));
+
+                        fromLength = Math.Max(fromLength, from.Length + 2);
+                        toLength = Math.Max(toLength, to.Length + 2);
+                    }
+                }
+                foreach (var organTo in organs)
+                {
+                    foreach (var inflow in organTo.Inflows.Where(i => i.Organ.Nuclide == organTo.Nuclide))
+                    {
+                        var organFrom = inflow.Organ;
+                        var from = $"{organFrom.Nuclide.Name}/{organFrom.Name}";
+                        var to = $"{organTo.Nuclide.Name}/{organTo.Name}";
+
+                        var bioDecay = organFrom.BioDecay;
+                        var rate = organFrom.IsInstantOutflow ? $"{inflow.Rate:P}" : $"{inflow.Rate:G}";
+                        var coeff = $"{bioDecay * inflow.Rate:G} = {bioDecay:G} * {rate}";
+                        transfers.Add((group, from, to, coeff));
+
+                        fromLength = Math.Max(fromLength, from.Length + 2);
+                        toLength = Math.Max(toLength, to.Length + 2);
+                        coeffAlignment = Math.Max(toLength, to.Length + 2 + coeff.IndexOf('='));
+                    }
+                }
+            }
+
+            var spacing = new char[Math.Max(fromLength, Math.Max(toLength, coeffAlignment))];
+            spacing.AsSpan().Fill(' ');
+
+            var prevGroup = -1;
+            foreach (var (group, from, to, coeff) in transfers)
+            {
+                if (group != prevGroup)
+                {
+                    if (prevGroup != -1)
+                        writer.WriteLine();
+                    prevGroup = group;
+                }
+
+                writer.Write("  ");
+                writer.Write(from);
+                writer.Write(spacing, 0, fromLength - from.Length);
+
+                writer.Write("-> ");
+                writer.Write(to);
+
+                if (coeff is null)
+                {
+                    writer.Write(spacing, 0, toLength - to.Length);
+                    writer.WriteLine("---");
+                }
+                else
+                {
+                    var coeffLeftLength = coeff.IndexOf('=');
+                    var spacingLength = coeffAlignment - (to.Length + 2 + coeffLeftLength);
+                    writer.Write(spacing, 0, spacingLength);
+                    writer.WriteLine(coeff);
+                }
             }
 
             writer.Flush();
