@@ -946,11 +946,11 @@ Th-232 Inhalation:Type-S
   Ra-228/Blood            Blood                     ---
   Ra-228/C-bone-S         C-bone-S                  ---
   Ra-228/Exch-C-bone-V    Blood                 $(0.03 / 365.25)
-  Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365.25)
+ #Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365.25)
   Ra-228/C-marrow         C-marrow                  ---     # only for progeny of Thorium chain
   Ra-228/T-bone-S         T-bone-S                  ---
   Ra-228/Exch-T-bone-V    Blood                 $(0.18 / 365.25)
-  Ra-228/Noch-T-bone-V    Blood                 $(0.18 / 365.25)
+ #Ra-228/Noch-T-bone-V    Blood                 $(0.18 / 365.25)
   Ra-228/T-marrow         T-marrow                  ---     # only for progeny of Thorium chain
   Ra-228/Liver1           Liver1                    ---
   Ra-228/Liver2           Liver2                    ---
@@ -1298,11 +1298,11 @@ Th-232 Inhalation:Type-S
   Ra-228/Blood            Blood                     ---
   Ra-228/C-bone-S         C-bone-S                  ---
   Ra-228/Exch-C-bone-V    Blood                 $(0.03 / 365.25)
-  Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365.25)
+ #Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365.25)
   Ra-228/C-marrow         C-marrow                  ---     # only for progeny of Thorium chain
   Ra-228/T-bone-S         T-bone-S                  ---
   Ra-228/Exch-T-bone-V    Blood                 $(0.18 / 365.25)
-  Ra-228/Noch-T-bone-V    Blood                 $(0.18 / 365.25)
+ #Ra-228/Noch-T-bone-V    Blood                 $(0.18 / 365.25)
   Ra-228/T-marrow         T-marrow                  ---     # only for progeny of Thorium chain
   Ra-228/Liver1           Liver1                    ---
   Ra-228/Liver2           Liver2                    ---
@@ -1631,9 +1631,9 @@ Th-232 Inhalation:Type-S
   Th-232/OtherKidneyTis   Kidneys2                  ---
   Th-232/Testes           Testes                    ---     # only for progeny of Thorium chain
   Th-232/Ovaries          Ovaries                   ---     # only for progeny of Thorium chain
-  Th-232/ST0              Blood                     6.98
-  Th-232/ST1              Blood                     6.98
-  Th-232/ST2              Blood                     6.98
+ #Th-232/ST0              Blood                     6.98
+ #Th-232/ST1              Blood                     6.98
+ #Th-232/ST2              Blood                     6.98
 
 # Radium model
   Ra-228/Blood            Blood                     ---
@@ -1690,9 +1690,9 @@ Th-232 Inhalation:Type-S
   Th-228/OtherKidneyTis   Kidneys2                  ---
   Th-228/Testes           Testes                    ---     # only for progeny of Thorium chain
   Th-228/Ovaries          Ovaries                   ---     # only for progeny of Thorium chain
-  Th-228/ST0              Blood                     6.98
-  Th-228/ST1              Blood                     6.98
-  Th-228/ST2              Blood                     6.98
+ #Th-228/ST0              Blood                     6.98
+ #Th-228/ST1              Blood                     6.98
+ #Th-228/ST2              Blood                     6.98
 
 
 [Rn-220:compartment]
@@ -1817,81 +1817,81 @@ Th-232 Inhalation:Type-S
   Th-232/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
 
   Ra-228/Blood            Blood                     ---
-  Ra-228/C-bone-S         Blood                   100
+ #Ra-228/C-bone-S         Blood                   100
   Ra-228/Exch-C-bone-V    Blood                     1.5
-  Ra-228/Noch-C-bone-V    Blood                     0.36
-  Ra-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-228/T-bone-S         Blood                   100
+ #Ra-228/Noch-C-bone-V    Blood                     0.36
+ #Ra-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-228/T-bone-S         Blood                   100
   Ra-228/Exch-T-bone-V    Blood                     1.5
-  Ra-228/Noch-T-bone-V    Blood                     0.36
-  Ra-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-228/Noch-T-bone-V    Blood                     0.36
+ #Ra-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
   Ra-228/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-228/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-228/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-228/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-228/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
   Ra-228/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
 
   Ac-228/Blood            Blood                     ---
-  Ac-228/C-bone-S         Blood                   100
-  Ac-228/C-bone-V         Blood                     0.36                # Publ.137 Para.812
-  Ac-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/T-bone-S         Blood                   100
-  Ac-228/T-bone-V         Blood                     0.36                # Publ.137 Para.812
-  Ac-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ac-228/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ac-228/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ac-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/C-bone-S         Blood                   100
+ #Ac-228/C-bone-V         Blood                     0.36                # Publ.137 Para.812
+ #Ac-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/T-bone-S         Blood                   100
+ #Ac-228/T-bone-V         Blood                     0.36                # Publ.137 Para.812
+ #Ac-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ac-228/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ac-228/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ac-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
 
   Th-228/Blood            Blood                     ---
-  Th-228/C-bone-S         Blood                   100
-  Th-228/C-bone-V         Blood                     0.36                # Publ.137 Para.812
-  Th-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/T-bone-S         Blood                   100
-  Th-228/T-bone-V         Blood                     0.36                # Publ.137 Para.812
-  Th-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/UrinaryPath      Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/OtherKidneyTis   Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/C-bone-S         Blood                   100
+ #Th-228/C-bone-V         Blood                     0.36                # Publ.137 Para.812
+ #Th-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/T-bone-S         Blood                   100
+ #Th-228/T-bone-V         Blood                     0.36                # Publ.137 Para.812
+ #Th-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/UrinaryPath      Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/OtherKidneyTis   Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Th-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
 
   Ra-224/Blood            Blood                     ---
-  Ra-224/C-bone-S         Blood                   100
-  Ra-224/Exch-C-bone-V    Blood                     1.5
-  Ra-224/Noch-C-bone-V    Blood                     0.36
-  Ra-224/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-224/T-bone-S         Blood                   100
-  Ra-224/Exch-T-bone-V    Blood                     1.5
-  Ra-224/Noch-T-bone-V    Blood                     0.36
-  Ra-224/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-224/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-224/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-224/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-224/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
-  Ra-224/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-224/C-bone-S         Blood                   100
+ #Ra-224/Exch-C-bone-V    Blood                     1.5
+ #Ra-224/Noch-C-bone-V    Blood                     0.36
+ #Ra-224/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-224/T-bone-S         Blood                   100
+ #Ra-224/Exch-T-bone-V    Blood                     1.5
+ #Ra-224/Noch-T-bone-V    Blood                     0.36
+ #Ra-224/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-224/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-224/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-224/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-224/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-224/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-224/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-224/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-224/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+ #Ra-224/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-224/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+ #Ra-224/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
 
   Blood                   Exhaled                1000       # ≒半減期1分
