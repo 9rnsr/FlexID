@@ -2,7 +2,7 @@
 Th-232 Inhalation:Type-S
 
 [nuclide]
-  Th-232  Ra-228  Ac-228  Th-228  Ra-224
+  Th-232  Ra-228  Ac-228  Th-228  Ra-224  Rn-220
 
 
 [Th-232:compartment]
@@ -1693,3 +1693,205 @@ Th-232 Inhalation:Type-S
   Th-228/ST0              Blood                     6.98
   Th-228/ST1              Blood                     6.98
   Th-228/ST2              Blood                     6.98
+
+
+[Rn-220:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   UB-con                UB-cont
+
+  acc   Blood                 Blood
+  exc   Exhaled               ---
+
+[Rn-220:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.130 Para.38
+# > (38) Noble gases produced in compartments of the respiratory tract and in the
+# > alimentary tract models by radioactive decay are assumed to escape from these
+# > compartments directly to the environment at a rate of 100 d⁻¹, without transfer to
+# > the blood compartment and without transfer between compartments of respiratory
+# > tract and alimentary tract models. It is assumed that progeny of such noble gases
+# > formed within the body follow the rules stated in Para. 37.
+# > (38) 呼吸器系および消化器系モデルにおいて放射性崩壊により生成される希ガスは、
+# > これらの部位から100 d⁻¹の速度で直接環境へ放出され、血液系への移行や呼吸器系と
+# > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
+# > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
+
+  Th-232/ET1-F            Exhaled                 100
+  Th-232/ET2-F            Exhaled                 100
+  Th-232/ETseq-F          Exhaled                 100
+  Th-232/LNET-F           Exhaled                 100
+  Th-232/BB-F             Exhaled                 100
+  Th-232/BBseq-F          Exhaled                 100
+  Th-232/bb-F             Exhaled                 100
+  Th-232/bbseq-F          Exhaled                 100
+  Th-232/ALV-F            Exhaled                 100
+  Th-232/INT-F            Exhaled                 100
+  Th-232/LNTH-F           Exhaled                 100
+  Th-232/ET1-S            Exhaled                 100
+  Th-232/ET2-S            Exhaled                 100
+  Th-232/ETseq-S          Exhaled                 100
+  Th-232/LNET-S           Exhaled                 100
+  Th-232/BB-S             Exhaled                 100
+  Th-232/BBseq-S          Exhaled                 100
+  Th-232/bb-S             Exhaled                 100
+  Th-232/bbseq-S          Exhaled                 100
+  Th-232/ALV-S            Exhaled                 100
+  Th-232/INT-S            Exhaled                 100
+  Th-232/LNTH-S           Exhaled                 100
+  Th-232/ET2-B            Exhaled                 100
+  Th-232/ETseq-B          Exhaled                 100
+  Th-232/LNET-B           Exhaled                 100
+  Th-232/BB-B             Exhaled                 100
+  Th-232/BBseq-B          Exhaled                 100
+  Th-232/bb-B             Exhaled                 100
+  Th-232/bbseq-B          Exhaled                 100
+  Th-232/ALV-B            Exhaled                 100
+  Th-232/INT-B            Exhaled                 100
+  Th-232/LNTH-B           Exhaled                 100
+
+# ICRP Publ.130 Para.129
+# > (129) For calculation purposes, the assumption that noble gases, including radon,
+# > that are formed as progeny within the respiratory tract escape from the body at a rate
+# > of 100 d⁻¹is applied in this series of reports.
+# > (129) 計算のために、この一連の報告書では、呼吸器系内で子孫核種として生成される
+# > ラドンを含む希ガスが100日当たりの速度で体から排出されるという仮定を適用している。
+# →消化管で生成されるラドンも、100 d⁻¹で体から排出されると仮定する。
+
+  Th-232/Oralcavity       Exhaled                 100
+  Th-232/Oesophagus-f     Exhaled                 100
+  Th-232/Oesophagus-s     Exhaled                 100
+  Th-232/St-con           Exhaled                 100
+  Th-232/SI-con           Exhaled                 100
+  Th-232/SI-conRe         Exhaled                 100
+  Th-232/RC-con           Exhaled                 100
+  Th-232/LC-con           Exhaled                 100
+  Th-232/RS-con           Exhaled                 100
+  Th-232/UB-con           UB-con                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Exhaled                  12
+
+# ICRP Publ.137 p.331 Para.711
+# > (711) A generic model structure is applied in the OIR series to radon, xenon, and
+# > krypton produced in systemic compartments by decay of a parent radionuclide.
+# > These gases are assigned the model for transfer of radon from bone to blood introduced
+# > in Publication 67 (ICRP, 1993), but are assigned element-specific rates of
+# > transfer from soft tissues to blood. Specifically, radon, xenon, or krypton produced
+# > in non-exchangeable bone volume, exchangeable bone volume, or bone surfaces
+# > transfers to blood at the rate 0.36 d⁻¹, 1.5 d⁻¹, or 100 d⁻¹, respectively. Radon produced
+# > in a soft tissue compartment transfers to blood with a half-time of 30 min,
+# > compared with a half-time of 20 min for xenon and 15 min for krypton. Radon,
+# > xenon, or krypton produced in blood or entering blood after its production in a
+# > systemic compartment is removed from the body (exhaled) at the rate 1000 d⁻¹,
+# > corresponding to a half-time of 1 min.
+# > (711) OIRシリーズでは、親放射性核種の崩壊によって全身コンパートメントで生成されるラドン、
+# > キセノン、およびクリプトンに、一般的なモデル構造が適用されている。これらのガスには、
+# > Publication 67（ICRP, 1993）で導入された骨から血液へのラドンの移行モデルが適用されるが、
+# > 軟部組織から血液への移行速度は元素ごとに異なる。具体的には、非交換性骨量、交換性骨量、
+# > または骨表面で生成されたラドン、キセノン、またはクリプトンは、それぞれ0.36 d⁻¹、1.5 d⁻¹、
+# > または100 d⁻¹の速度で血液に移行する。軟部組織コンパートメントで生成されたラドンは、
+# > 半減期が30分であるのに対し、キセノンでは半減期が20分、クリプトンは15分である。血液中で
+# > 生成された、または全身コンパートメントで生成された後に血液中に入るラドン、キセノン、
+# > またはクリプトンは、1000 d⁻¹の割合で体外に排出されます（呼気）。これは半減期1分に相当します。
+
+  Th-232/Blood            Blood                     ---
+  Th-232/C-bone-S         Blood                   100
+  Th-232/C-bone-V         Blood                     0.36                # Publ.137 Para.812
+  Th-232/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/T-bone-S         Blood                   100
+  Th-232/T-bone-V         Blood                     0.36                # Publ.137 Para.812
+  Th-232/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/UrinaryPath      Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/OtherKidneyTis   Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-232/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+
+  Ra-228/Blood            Blood                     ---
+  Ra-228/C-bone-S         Blood                   100
+  Ra-228/Exch-C-bone-V    Blood                     1.5
+  Ra-228/Noch-C-bone-V    Blood                     0.36
+  Ra-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-228/T-bone-S         Blood                   100
+  Ra-228/Exch-T-bone-V    Blood                     1.5
+  Ra-228/Noch-T-bone-V    Blood                     0.36
+  Ra-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-228/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-228/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-228/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-228/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+
+  Ac-228/Blood            Blood                     ---
+  Ac-228/C-bone-S         Blood                   100
+  Ac-228/C-bone-V         Blood                     0.36                # Publ.137 Para.812
+  Ac-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/T-bone-S         Blood                   100
+  Ac-228/T-bone-V         Blood                     0.36                # Publ.137 Para.812
+  Ac-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ac-228/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ac-228/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ac-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+
+  Th-228/Blood            Blood                     ---
+  Th-228/C-bone-S         Blood                   100
+  Th-228/C-bone-V         Blood                     0.36                # Publ.137 Para.812
+  Th-228/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/T-bone-S         Blood                   100
+  Th-228/T-bone-V         Blood                     0.36                # Publ.137 Para.812
+  Th-228/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/UrinaryPath      Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/OtherKidneyTis   Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+
+  Ra-224/Blood            Blood                     ---
+  Ra-224/C-bone-S         Blood                   100
+  Ra-224/Exch-C-bone-V    Blood                     1.5
+  Ra-224/Noch-C-bone-V    Blood                     0.36
+  Ra-224/C-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-224/T-bone-S         Blood                   100
+  Ra-224/Exch-T-bone-V    Blood                     1.5
+  Ra-224/Noch-T-bone-V    Blood                     0.36
+  Ra-224/T-marrow         Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-224/Liver1           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-224/Liver2           Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-224/Spleen           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-224/Kidneys1         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-224/Kidneys2         Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-224/Testes           Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-224/Ovaries          Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-224/Skin             Blood                 $(0.693 / (30/60/24))   # 半減期30分    # only for progeny of Thorium chain
+  Ra-224/ST0              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-224/ST1              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+  Ra-224/ST2              Blood                 $(0.693 / (30/60/24))   # 半減期30分
+
+  Blood                   Exhaled                1000       # ≒半減期1分
