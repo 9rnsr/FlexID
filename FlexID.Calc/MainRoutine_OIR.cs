@@ -42,13 +42,20 @@ namespace FlexID.Calc
             if (!calcTimeMesh.Cover(outTimeMesh))
                 throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-            InputDataReader_OIR.SetSCoefficients(data);
+            // ログファイルを出力する。
+            var logPath = OutputPath + ".log";
+            using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8))
+            {
+                WriteOutNuclides(data, writer);
+                WriteOutZeroInflows(data, writer);
+
+                InputDataReader_OIR.SetSCoefficients(data);
+                WriteOutScoefficients(data, writer);
+            }
 
             using (CalcOut = new CalcOut(data, OutputPath))
             {
-                // ログファイルを出力する。
-                WriteOutLog(data);
-
                 // OIRでは、集合コンパートメントを処理するための準備を行う。
                 CalcOut.PrepareCompositeCompartments();
 
@@ -59,21 +66,6 @@ namespace FlexID.Calc
                 CalcOut.CommitmentHeader();
 
                 MainCalc(calcTimeMesh, outTimeMesh, data);
-            }
-        }
-
-        private void WriteOutLog(InputData data)
-        {
-            var logPath = OutputPath + ".log";
-
-            using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
-            using (var writer = new StreamWriter(stream, Encoding.UTF8))
-            {
-                WriteOutNuclides(data, writer);
-
-                WriteOutZeroInflows(data, writer);
-
-                WriteOutScoefficients(data, writer);
             }
         }
 
@@ -152,6 +144,8 @@ namespace FlexID.Calc
 
                 WriteLine();
             }
+
+            writer.Flush();
         }
 
         private static void WriteOutZeroInflows(InputData data, TextWriter writer)
@@ -169,6 +163,8 @@ namespace FlexID.Calc
                         writer.WriteLine($"  {nuclide.Name} / {organ.Name}");
                 }
             }
+
+            writer.Flush();
         }
 
         private static void WriteOutScoefficients(InputData data, TextWriter writer)
@@ -219,6 +215,8 @@ namespace FlexID.Calc
                     writer.WriteLine($"{targetRegion,-10} {scoeffM:0.00000000E+00} {scoeffF:0.00000000E+00}");
                 }
             }
+
+            writer.Flush();
         }
 
         private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, InputData data)
