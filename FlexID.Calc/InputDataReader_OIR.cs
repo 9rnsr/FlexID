@@ -1207,7 +1207,7 @@ namespace FlexID.Calc
                 ID = index + 1,
                 Index = index,
                 Name = "", // 後で設定する。
-                Func = OrganFunc.acc,
+                Func = OrganFunc.acc,   // TODO: excから落ちてくる場合はこれもexcになる必要がある。でないと体外に出たはずの放射能がWholeBodyが余分に加算されてしまう。
                 BioDecay = 1.0,     // accは後で設定する。
                 Inflows = new List<Inflow>(),
                 IsDecayCompartment = true,
