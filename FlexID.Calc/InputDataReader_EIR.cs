@@ -16,7 +16,7 @@ namespace FlexID.Calc
         /// <param name="inputPath">インプットファイルのパス文字列。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
         public InputDataReader_EIR(string inputPath, bool calcProgeny = true)
-            : base(new StreamReader(new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read)), calcProgeny)
+            : this(new StreamReader(File.OpenRead(inputPath)), calcProgeny)
         {
         }
 

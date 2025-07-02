@@ -91,11 +91,8 @@ namespace FlexID.Calc
         /// </summary>
         /// <param name="outputPath">アウトプットファイルのパス文字列。</param>
         public OutputDataReader(string outputPath)
+            : this(new StreamReader(File.OpenRead(outputPath)))
         {
-            var stream = new FileStream(outputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var reader = new StreamReader(stream);
-
-            this.reader = reader;
         }
 
         /// <summary>
