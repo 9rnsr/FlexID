@@ -19,7 +19,11 @@ namespace FlexID.Calc
             safdataAF = SAFDataReader.ReadSAF(Sex.Female);
         }
 
-        private readonly InputEvaluator evaluator = new InputEvaluator();
+        private readonly InputErrors errors;
+        private readonly Dictionary<string, int> compartmentSectionLocs = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> transferSectionLocs = new Dictionary<string, int>();
+
+        private readonly InputEvaluator evaluator;
 
         private string inputTitle;
 
@@ -42,7 +46,7 @@ namespace FlexID.Calc
         /// <param name="inputPath">インプットファイルのパス文字列。</param>
         /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
         public InputDataReader_OIR(string inputPath, bool calcProgeny = true)
-            : base(new StreamReader(new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read)), calcProgeny)
+            : this(new StreamReader(new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read)), calcProgeny)
         {
         }
 
@@ -54,6 +58,8 @@ namespace FlexID.Calc
         public InputDataReader_OIR(StreamReader reader, bool calcProgeny = true)
             : base(reader, calcProgeny)
         {
+            errors = new InputErrors();
+            evaluator = new InputEvaluator(errors);
         }
 
         protected override string GetNextLine()
@@ -71,12 +77,30 @@ namespace FlexID.Calc
 
         private ReadOnlySpan<char> GetSectionHeader(string ln)
         {
+            var olderrors = errors.Count;
+
             if (!CheckSectionHeader(ln))
-                throw Program.Error($"Line {LineNum}: Section header should start with '['");
+                errors.AddError(LineNum, "Section header should start with '['");
             if (!ln.EndsWith("]"))
-                throw Program.Error($"Line {LineNum}: Section header should be closed with ']'.");
+                errors.AddError(LineNum, "Section header should be closed with ']'.");
+
+            // セクションヘッダが見つからないとそれ以上のエラーを報告することは
+            // 難しいため、ここでインプット読み取りを終える。
+            errors.RaiseIfAny(olderrors);
 
             return ln.AsSpan(1, ln.Length - 2).Trim();
+        }
+
+        private string SkipUntilNextSection()
+        {
+            while (true)
+            {
+                var line = base.GetNextLine();
+                if (line is null)
+                    return null;
+                if (CheckSectionHeader(line))
+                    return line;
+            }
         }
 
         /// <summary>
@@ -128,42 +152,68 @@ namespace FlexID.Calc
                     line = GetTransfers(nuc);
                 }
                 else
-                    throw Program.Error($"Line {LineNum}: Unrecognized section $'[{header.ToString()}]'.");
+                {
+                    errors.AddError(LineNum, $"Unrecognized section $'[{header.ToString()}]'.");
+                    line = SkipUntilNextSection();
+                }
 
                 if (line is null)
                     break;
             }
 
-            var data = new InputData();
+            // インプットの構文に従って読み取りができていることを確定する。
+            // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
+            errors.RaiseIfAny();
+
+            foreach (var (lineNum, nuc) in nuclideOrgans.Keys.Except(nuclides?.Select(n => n.Name) ?? Array.Empty<string>())
+                .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
+            {
+                errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define compartments.");
+            }
+
+            foreach (var (lineNum, nuc) in nuclideTransfers.Keys.Except(nuclides?.Select(n => n.Name) ?? Array.Empty<string>())
+                .Select(nuc => (LineNum: transferSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
+            {
+                errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
+            }
 
             if (inputTitle is null)
-                throw Program.Error($"Missing [title] section.");
-            data.Title = inputTitle;
+                errors.AddError(LineNum, "Missing [title] section.");
 
-            data.Parameters = inputParameters ?? new Dictionary<string, string>();
+            if (nuclides is null)
+                errors.AddError(LineNum, "Missing [nuclide] section.");
+            else
+            {
+                var nuclideNames = nuclides.Select(n => n.Name).ToArray();
+
+                foreach (var nuc in nuclideNames.Where(nuc => !nuclideOrgans.ContainsKey(nuc)))
+                    errors.AddError(LineNum, $"Missing [{nuc}:compartment] section.");
+
+                foreach (var nuc in nuclideNames.Where(nuc => !nuclideTransfers.ContainsKey(nuc)))
+                    errors.AddError(LineNum, $"Missing [{nuc}:transfer] section.");
+            }
+
+            // 核種定義に対して[compartment]と[transfer]セクションに過不足がないことを確定する。
+            errors.RaiseIfAny();
 
             // 線源領域と標的領域のデータを読み込む。
             var sourceRegions = SAFDataReader.ReadSourceRegions();
             var targetRegions = SAFDataReader.ReadTargetRegions().Select(t => t.Name).ToArray();
-            data.SourceRegions = sourceRegions;
-            data.TargetRegions = targetRegions;
 
             // 組織加重係数データを読み込む。
             var (ts, ws) = ReadTissueWeights(Path.Combine("lib", "OIR", "wT.txt"));
-            if (!Enumerable.SequenceEqual(data.TargetRegions, ts))
-                throw Program.Error($"Found mismatch of target region names on tissue weighting factor data.");
+            if (!Enumerable.SequenceEqual(targetRegions, ts))
+                errors.AddError($"Found mismatch of target region names on tissue weighting factor data.");
+
+            // 外部データの読み込み処理にエラーがないことを確定する。
+            errors.RaiseIfAny();
+
+            var data = new InputData();
+            data.Title = inputTitle;
+            data.Parameters = inputParameters ?? new Dictionary<string, string>();
+            data.SourceRegions = sourceRegions;
+            data.TargetRegions = targetRegions;
             data.TargetWeights = ws;
-
-            if (nuclides is null)
-                throw Program.Error($"Missing [nuclide] section.");
-            if (!nuclides.Any())
-                throw Program.Error($"None of nuclides defined.");
-
-            foreach (var undefinedNuc in nuclideOrgans.Keys.Except(nuclides.Select(n => n.Name)))
-                throw Program.Error($"Undefined nuclide '{undefinedNuc}' is used to define compartments.");
-
-            foreach (var undefinedNuc in nuclideTransfers.Keys.Except(nuclides.Select(n => n.Name)))
-                throw Program.Error($"Undefined nuclide '{undefinedNuc}' is used to define transfers.");
 
             // 全てのコンパートメントを定義する。
             DefineCompartments(data);
@@ -192,16 +242,28 @@ namespace FlexID.Calc
         private string GetTitle()
         {
             if (inputTitle != null)
-                throw Program.Error($"Line {LineNum}: Duplicated [title] section.");
+            {
+                errors.AddError(LineNum, "Duplicated [title] section.");
+                return SkipUntilNextSection();
+            }
 
+            var sectionLineNum = LineNum;
             var title = GetNextLine();
-            if (title is null)
-                throw Program.Error($"Line {LineNum}: Reach to EOF while reading title section.");
+            if (title is null || CheckSectionHeader(title))
+            {
+                inputTitle = "";
+                errors.AddError(sectionLineNum, "Empty [title] section.");
+                return title;
+            }
+
             inputTitle = title;
 
             var line = GetNextLine();
             if (!CheckSectionHeader(line))
-                throw Program.Error($"Line {LineNum}: Unrecognized line in [title] section.");
+            {
+                errors.AddError(LineNum, "Unrecognized lines in [title] section.");
+                return SkipUntilNextSection();
+            }
 
             return line;
         }
@@ -218,7 +280,10 @@ namespace FlexID.Calc
             if (nuc == "")
             {
                 if (inputParameters != null)
-                    throw Program.Error($"Line {LineNum}: Duplicated [parameter] section.");
+                {
+                    errors.AddError(LineNum, "Duplicated [parameter] section.");
+                    return SkipUntilNextSection();
+                }
                 parameters = new Dictionary<string, string>();
                 parameterNames = InputData.ParameterNames;
                 inputParameters = parameters;
@@ -226,7 +291,10 @@ namespace FlexID.Calc
             else
             {
                 if (nuclideParameters.ContainsKey(nuc))
-                    throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:parameter] section.");
+                {
+                    errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
+                    return SkipUntilNextSection();
+                }
                 parameters = new Dictionary<string, string>();
                 parameterNames = NuclideData.ParameterNames;
                 nuclideParameters.Add(nuc, parameters);
@@ -243,17 +311,20 @@ namespace FlexID.Calc
 
                 var values = line.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
                 if (values.Length != 2)
-                    throw Program.Error($"Line {LineNum}: Parameter definition should have 2 values.");
+                {
+                    errors.AddError(LineNum, "Parameter definition should have 2 values.");
+                    continue;
+                }
 
                 var paramName = values[0].Trim();
                 var paramValue = values[1].Trim();
 
                 if (!parameterNames.Contains(paramName))
-                    throw Program.Error($"Line {LineNum}: Unrecognized parameter '{paramName}' definition.");
-                if (parameters.ContainsKey(paramName))
-                    throw Program.Error($"Line {LineNum}: Duplicated parameter '{paramName}' definition.");
-
-                parameters.Add(paramName, paramValue);
+                    errors.AddError(LineNum, $"Unrecognized parameter '{paramName}' definition.");
+                else if (parameters.ContainsKey(paramName))
+                    errors.AddError(LineNum, $"Duplicated parameter '{paramName}' definition.");
+                else
+                    parameters.Add(paramName, paramValue);
             }
 
             return line;
@@ -266,7 +337,13 @@ namespace FlexID.Calc
         private string GetNuclides()
         {
             if (nuclides != null)
-                throw Program.Error($"Line {LineNum}: Duplicated [nuclide] section.");
+            {
+                errors.AddError(LineNum, "Duplicated [nuclide] section.");
+                return SkipUntilNextSection();
+            }
+
+            var olderrors = errors.Count;
+            var sectionLineNum = LineNum;
 
             nuclides = new List<NuclideData>();
 
@@ -274,7 +351,8 @@ namespace FlexID.Calc
             var autoMode = default(bool?);
 
             Dictionary<string, IndexData> indexTable = null;
-            var branchTable = new Dictionary<NuclideData, (int LineNum, (string Daughter, decimal Fraction)[] Branches)>();
+            var branchTable = new Dictionary<NuclideData, (string Daughter, decimal Fraction)[]>();
+            var nuclideLines = new Dictionary<NuclideData, int>();
 
             string line;
             while (true)
@@ -299,9 +377,15 @@ namespace FlexID.Calc
                     foreach (var nuc in values)
                     {
                         if (!patternNuclide.IsMatch(nuc))
-                            throw Program.Error($"Line {LineNum}: '{nuc}' is not nuclide name.");
+                        {
+                            errors.AddError(LineNum, $"'{nuc}' is not nuclide name.");
+                            continue;
+                        }
                         if (nuclides.Any(n => n.Name == nuc))
-                            throw Program.Error($"Line {LineNum}: Duplicated nuclide definition for '{nuc}'.");
+                        {
+                            errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
+                            continue;
+                        }
 
                         indexTable.TryGetValue(nuc, out var indexData);
 
@@ -320,7 +404,8 @@ namespace FlexID.Calc
                         };
                         nuclides.Add(nuclide);
 
-                        branchTable[nuclide] = (LineNum, branches);
+                        branchTable[nuclide] = branches;
+                        nuclideLines[nuclide] = LineNum;
                     }
                 }
                 else
@@ -329,16 +414,28 @@ namespace FlexID.Calc
                     autoMode = false;
 
                     if (values.Length < 2)
-                        throw Program.Error($"Line {LineNum}: Nuclide definition should have at least 2 values.");
+                    {
+                        errors.AddError(LineNum, "Nuclide definition should have at least 2 values.");
+                        continue;
+                    }
 
                     var nuc = values[0];
                     if (nuclides.Any(n => n.Name == nuc))
-                        throw Program.Error($"Line {LineNum}: Duplicated nuclide definition for '{nuc}'.");
+                    {
+                        errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
+                        continue;
+                    }
 
                     if (!double.TryParse(values[1], out var lambda))
-                        throw Program.Error($"Line {LineNum}: Cannot get nuclide Lambda.");
+                    {
+                        errors.AddError(LineNum, "Cannot get nuclide Lambda.");
+                        continue;
+                    }
                     if (lambda < 0)
-                        throw Program.Error($"Line {LineNum}: Nuclide Lambda should be positive.");
+                    {
+                        errors.AddError(LineNum, "Nuclide Lambda should be positive.");
+                        continue;
+                    }
 
                     var nuclide = new NuclideData
                     {
@@ -355,30 +452,50 @@ namespace FlexID.Calc
 
                         var iSep = part.IndexOf('/');
                         if (iSep == -1)
-                            throw Program.Error($"Line {LineNum}: Daughter name and branching fraction should be separated with '/'.");
+                        {
+                            errors.AddError(LineNum, "Daughter name and branching fraction should be separated with '/'.");
+                            continue;
+                        }
                         if (iSep == 0)
-                            throw Program.Error($"Line {LineNum}: Daughter name should not be empty.");
+                        {
+                            errors.AddError(LineNum, "Daughter name should not be empty.");
+                            continue;
+                        }
 
                         var daughter = part.Substring(0, iSep);
                         var frac = part.Substring(iSep + 1);
 
                         if (!decimal.TryParse(frac, out var fraction))
-                            throw Program.Error($"Line {LineNum}: Cannot get branching fraction.");
+                        {
+                            errors.AddError(LineNum, "Cannot get branching fraction.");
+                            continue;
+                        }
                         if (fraction < 0)
-                            throw Program.Error($"Line {LineNum}: Branching fraction should be positive.");
+                        {
+                            errors.AddError(LineNum, "Branching fraction should be positive.");
+                            continue;
+                        }
 
                         branches[i] = (daughter, fraction);
                     }
-                    branchTable[nuclide] = (LineNum, branches);
+                    branchTable[nuclide] = branches;
+                    nuclideLines[nuclide] = LineNum;
                 }
+            }
+            if (errors.IfAny(olderrors))
+                return line;
+            if (!nuclides.Any())
+            {
+                errors.AddError(sectionLineNum, "Empty [nuclide] section.");
+                return line;
             }
 
             // 壊変する娘核種とその分岐比を設定する。
             foreach (var entry in branchTable)
             {
                 var nuclide = entry.Key;
-                var lineNum = entry.Value.LineNum;
-                var branches = entry.Value.Branches;
+                var lineNum = nuclideLines[nuclide];
+                var branches = entry.Value;
 
                 NuclideData GetNuclide(string nuc)
                     => nuclides.FirstOrDefault(n => n.Name == nuc);
@@ -398,9 +515,9 @@ namespace FlexID.Calc
                     {
                         var daughter = GetNuclide(b.Daughter);
                         if (daughter is null)
-                            throw Program.Error($"Line {lineNum}: Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
+                            errors.AddError(lineNum, $"Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
                         return (Daughter: daughter, (double)b.Fraction);
-                    }).ToArray();
+                    }).Where(b => b.Daughter != null).ToArray();
                 }
             }
 
@@ -414,19 +531,30 @@ namespace FlexID.Calc
 
                 void CycleCheck(NuclideData target)
                 {
+                    var lineNum = nuclideLines[target];
+
                     foreach (var (daughter, _) in target.Branches)
                     {
                         // 自分自身へ壊変する経路が存在しないことを確認する。
                         if (daughter == target)
-                            throw Program.Error($"Nuclide '{target.Name}' has a decay path to itself.");
+                        {
+                            errors.AddError(lineNum, $"Nuclide '{target.Name}' has a decay path to itself.");
+                            continue;
+                        }
 
                         // 親核種に壊変する核種が存在しないことを確認する。
                         if (daughter == root)
-                            throw Program.Error($"Nuclide '{target.Name}' has a decay path to parent nuclide '{root.Name}'.");
+                        {
+                            errors.AddError(lineNum, $"Nuclide '{target.Name}' has a decay path to parent nuclide '{root.Name}'.");
+                            continue;
+                        }
 
                         // 循環する壊変経路がないことを確認する。
                         if (daughter == nuclide)
-                            throw Program.Error($"Nuclide '{nuclide.Name}'  has a cyclic decay path starting from '{target.Name}'.");
+                        {
+                            errors.AddError(nuclideLines[nuclide], $"Nuclide '{nuclide.Name}'  has a cyclic decay path starting from '{target.Name}'.");
+                            continue;
+                        }
 
                         if (tested.Contains(daughter))
                             continue;
@@ -448,7 +576,14 @@ namespace FlexID.Calc
         private string GetCompartments(string nuc)
         {
             if (nuclideOrgans.TryGetValue(nuc, out var organs))
-                throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:compartment] section.");
+            {
+                errors.AddError(LineNum, $"Duplicated [{nuc}:compartment] section.");
+                return SkipUntilNextSection();
+            }
+
+            var olderrors = errors.Count;
+            var sectionLineNum = LineNum;
+            compartmentSectionLocs[nuc] = sectionLineNum;
 
             organs = new List<(int lineNum, Organ)>();
             nuclideOrgans.Add(nuc, organs);
@@ -465,18 +600,26 @@ namespace FlexID.Calc
                 var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (values.Length != 3)
-                    throw Program.Error($"Line {LineNum}: Compartment definition should have 3 values.");
+                {
+                    errors.AddError(LineNum, "Compartment definition should have 3 values.");
+                    continue;
+                }
 
                 var organFn = values[0];        // コンパートメント機能
                 var organName = values[1];      // コンパートメント名
                 var sourceRegion = values[2];   // コンパートメントに対応する線源領域の名称
 
-                var organFunc =
-                    organFn == "inp" ? OrganFunc.inp :
-                    organFn == "acc" ? OrganFunc.acc :
-                    organFn == "mix" ? OrganFunc.mix :
-                    organFn == "exc" ? OrganFunc.exc :
-                    throw Program.Error($"Line {LineNum}: Unrecognized compartment function '{organFn}'.");
+                OrganFunc organFunc;
+                switch (organFn)
+                {
+                    case "inp": organFunc = OrganFunc.inp; break;
+                    case "acc": organFunc = OrganFunc.acc; break;
+                    case "mix": organFunc = OrganFunc.mix; break;
+                    case "exc": organFunc = OrganFunc.exc; break;
+                    default:
+                        errors.AddError(LineNum, $"Unrecognized compartment function '{organFn}'.");
+                        continue;
+                }
 
                 var organ = new Organ
                 {
@@ -494,6 +637,11 @@ namespace FlexID.Calc
 
                 organs.Add((LineNum, organ));
             }
+            if (errors.IfAny(olderrors))
+                return line;
+
+            if (!organs.Any())
+                errors.AddError(sectionLineNum, $"Empty [{nuc}:compartment] section.");
 
             return line;
         }
@@ -507,7 +655,14 @@ namespace FlexID.Calc
         private string GetTransfers(string nuc)
         {
             if (nuclideTransfers.TryGetValue(nuc, out var transfers))
-                throw Program.Error($"Line {LineNum}: Duplicated [{nuc}:transfer] section.");
+            {
+                errors.AddError(LineNum, $"Duplicated [{nuc}:transfer] section.");
+                return SkipUntilNextSection();
+            }
+
+            var olderrors = errors.Count;
+            var sectionLineNum = LineNum;
+            transferSectionLocs[nuc] = sectionLineNum;
 
             transfers = new List<(int, string, string, decimal?, bool)>();
             nuclideTransfers.Add(nuc, transfers);
@@ -524,7 +679,10 @@ namespace FlexID.Calc
                 var values = line.Split(new string[] { " " }, 3, StringSplitOptions.RemoveEmptyEntries);
 
                 if (values.Length != 3)
-                    throw Program.Error($"Line {LineNum}: Transfer path definition should have 3 values.");
+                {
+                    errors.AddError(LineNum, "Transfer path definition should have 3 values.");
+                    continue;
+                }
 
                 var orgamFrom = values[0];
                 var organTo = values[1];
@@ -533,10 +691,19 @@ namespace FlexID.Calc
                 var coeff = default(decimal?);
                 var isRate = false;
                 if (!IsBar(coeffStr))
-                    (coeff, isRate) = evaluator.ReadCoefficient(LineNum, coeffStr);
+                {
+                    if (!evaluator.TryReadCoefficient(LineNum, coeffStr, out var res))
+                        continue;
+                    (coeff, isRate) = res;
+                }
 
                 transfers.Add((LineNum, orgamFrom, organTo, coeff, isRate));
             }
+            if (errors.IfAny(olderrors))
+                return line;
+
+            if (!transfers.Any())
+                errors.AddError(sectionLineNum, $"Empty [{nuc}:transfer] section.");
 
             return line;
         }
@@ -556,14 +723,8 @@ namespace FlexID.Calc
 
                 var nuc = nuclide.Name;
                 if (!nuclideOrgans.TryGetValue(nuc, out var organs))
-                    throw Program.Error($"Missing [{nuc}:compartment] section.");
-                if (!organs.Any())
-                    throw Program.Error($"None of compartments defined for nuclide '{nuc}'.");
-
-                if (!nuclideTransfers.TryGetValue(nuc, out var transfers))
-                    throw Program.Error($"Missing [{nuc}:transfer] section.");
-                if (!transfers.Any())
-                    throw Program.Error($"None of transfers defined for nuclide '{nuc}'.");
+                    continue;
+                var sectionLineNum = compartmentSectionLocs[nuc];
 
                 nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? new Dictionary<string, string>();
 
@@ -600,11 +761,11 @@ namespace FlexID.Calc
                     if (organ.Func == OrganFunc.inp)
                     {
                         if (nuclide.IsProgeny)
-                            throw Program.Error($"Line {lineNum}: Cannot define 'inp' compartment which belongs to progeny nuclide.");
-                        if (input is null)
-                            input = organ;
+                            errors.AddError(lineNum, "Cannot define 'inp' compartment which belongs to progeny nuclide.");
+                        else if (input != null)
+                            errors.AddError(lineNum, "Duplicated 'inp' compartment.");
                         else
-                            throw Program.Error($"Line {lineNum}: Duplicated 'inp' compartment.");
+                            input = organ;
                     }
 
                     organ.Nuclide = nuclide;
@@ -618,7 +779,10 @@ namespace FlexID.Calc
                         // コンパートメントに対応する線源領域の名称が有効であることを確認する。
                         var indexS = Array.IndexOf(validSourceRegions, sourceRegion);
                         if (indexS == -1)
-                            throw Program.Error($"Line {lineNum}: Unknown source region name '{sourceRegion}'.");
+                        {
+                            errors.AddError(lineNum, $"Unknown source region name '{sourceRegion}'.");
+                            continue;
+                        }
 
                         // インプットで明示された線源領域をOtherの内訳から除く。
                         otherSourceRegions.Remove(sourceRegion);
@@ -638,10 +802,13 @@ namespace FlexID.Calc
                 }
 
                 if (!nuclide.IsProgeny && input is null)
-                    throw Program.Error($"Missing 'inp' compartment.");
+                    errors.AddError(sectionLineNum, "Missing 'inp' compartment.");
 
                 nuclide.OtherSourceRegions = otherSourceRegions.ToArray();
             }
+
+            // コンパートメント定義にエラーがないことを確定する。
+            errors.RaiseIfAny();
         }
 
         /// <summary>
@@ -694,22 +861,6 @@ namespace FlexID.Calc
             public Organ[] DecayCompartments;
 
             /// <summary>
-            /// 指定の子孫核種に対応する壊変コンパートメントを取得する。
-            /// </summary>
-            /// <param name="progeny"></param>
-            /// <returns></returns>
-            public ref Organ GetDecayCompartment(NuclideData progeny)
-            {
-                var i = Array.IndexOf(DecayNuclides, progeny);
-                if (i == -1)
-                {
-                    var rootNuc = RootCompartment.Nuclide.Name;
-                    throw Program.Error($"Cannot find progeny nuclide '{progeny.Name}' in decay chain starts from '{rootNuc}'.");
-                }
-                return ref DecayCompartments[i];
-            }
-
-            /// <summary>
             /// 崩壊系列を構成する全ての移行経路を取得する。
             /// </summary>
             /// <returns></returns>
@@ -739,15 +890,11 @@ namespace FlexID.Calc
             /// <returns>追加した壊変コンパートメント</returns>
             public Organ AddDecayCompartment(InputData data, NuclideData progeny)
             {
-                ref var organDecay = ref GetDecayCompartment(progeny);
-                if (organDecay != null)
-                    throw Program.Error($"Decay compartment is already used.");
-
                 var organFrom = RootCompartment;
                 var fromNuclide = organFrom.Nuclide;
 
                 var index = data.Organs.Count;
-                organDecay = new Organ
+                var organDecay = new Organ
                 {
                     Nuclide = progeny,
                     ID = index + 1,
@@ -816,15 +963,21 @@ namespace FlexID.Calc
                     continue;
 
                 var nuc = nuclide.Name;
-                var transfers = nuclideTransfers[nuc];
+                if (!nuclideTransfers.TryGetValue(nuc, out var transfers))
+                    continue;
+
+                var olderrorsN = errors.Count;
+                var sectionLineNum = transferSectionLocs[nuc];
 
                 // 移行経路の定義が正しいことの確認と、
                 // 各コンパートメントから流出する移行係数の総計を求める。
                 var definedTransfers = new HashSet<(string from, string to)>();
-                var transfersCorrect = new List<(Organ from, Organ to, decimal coeff)>();
+                var transfersCorrect = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
                 var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
                 foreach (var (lineNum, from, to, coeff, isRate) in transfers)
                 {
+                    var olderrorsT = errors.Count;
+
                     var fromName = from;
                     var fromNuclide = nuclide;
                     if (from.IndexOf('/') is int i && i != -1)
@@ -833,7 +986,7 @@ namespace FlexID.Calc
                         fromName = from.Substring(i + 1);
                         fromNuclide = nuclides.FirstOrDefault(n => n.Name == fromNuc);
                         if (fromNuclide is null)
-                            throw Program.Error($"Line {lineNum}: Undefined nuclide '{fromNuc}'.");
+                            errors.AddError(lineNum, $"Undefined nuclide '{fromNuc}'.");
                     }
 
                     var toName = to;
@@ -844,29 +997,41 @@ namespace FlexID.Calc
                         toName = to.Substring(j + 1);
                         toNuclide = nuclides.FirstOrDefault(n => n.Name == toNuc);
                         if (toNuclide is null)
-                            throw Program.Error($"Line {lineNum}: Undefined nuclide '{toNuc}'.");
+                            errors.AddError(lineNum, $"Undefined nuclide '{toNuc}'.");
                     }
 
                     // 移行先は定義している核種に属するコンパートメントのみとする。
-                    if (toNuclide != nuclide)
-                        throw Program.Error($"Line {lineNum}: Cannot set transfer path to a compartment which is not belong to '{nuc}'.");
+                    if (toNuclide != null && toNuclide != nuclide)
+                        errors.AddError(lineNum, $"Cannot set transfer path to a compartment which is not belong to '{nuc}'.");
+
+                    // 以降の処理でfromNuclideとtoNuclideの両方が存在していることを確定する。
+                    if (errors.IfAny(olderrorsT))
+                        continue;
 
                     var organFrom = data.Organs.FirstOrDefault(o => o.Name == fromName && o.Nuclide == fromNuclide);
                     var organTo = data.Organs.FirstOrDefault(o => o.Name == toName && o.Nuclide == toNuclide);
 
                     // 移行元と移行先のそれぞれがcompartmentセクションで定義済みかを確認する。
-                    if (organFrom is null)
-                        throw Program.Error($"Line {lineNum}: Undefined compartment '{from}'.");
-                    if (organTo is null)
-                        throw Program.Error($"Line {lineNum}: Undefined compartment '{to}'.");
-
-                    // 自分自身への移行経路は定義できない。
-                    if (organTo == organFrom)
-                        throw Program.Error($"Line {lineNum}: Cannot set transfer path to itself.");
-
-                    // 同じ移行経路が複数回定義されていないことを確認する。
-                    if (!definedTransfers.Add((from, to)))
-                        throw Program.Error($"Line {lineNum}: Duplicated transfer path from '{from}' to '{to}'.");
+                    if (organFrom is null || organTo is null)
+                    {
+                        if (organFrom is null)
+                            errors.AddError(lineNum, $"Undefined compartment '{from}'.");
+                        if (organTo is null)
+                            errors.AddError(lineNum, $"Undefined compartment '{to}'.");
+                    }
+                    else if (organTo == organFrom)
+                    {
+                        // 自分自身への移行経路は定義できない。
+                        errors.AddError(lineNum, "Cannot set transfer path to itself.");
+                    }
+                    else if (!definedTransfers.Add((from, to)))
+                    {
+                        // 同じ移行経路が複数回定義されていないことを確認する。
+                        errors.AddError(lineNum, $"Duplicated transfer path from '{from}' to '{to}'.");
+                    }
+                    // 以降の処理でorganFromとorganToの両方が存在していることを確定する。
+                    if (errors.IfAny(olderrorsT))
+                        continue;
 
                     // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
                     var fromFunc = organFrom.Func;
@@ -876,50 +1041,54 @@ namespace FlexID.Calc
 
                     // inpへの流入は定義できない。
                     if (toFunc == OrganFunc.inp)
-                        throw Program.Error($"Line {lineNum}: Cannot set input path to inp '{to}'.");
+                        errors.AddError(lineNum, $"Cannot set input path to inp '{to}'.");
 
                     if (fromFunc == OrganFunc.acc)
                     {
                         // accからの流出経路では、移行速度の入力を要求する。
                         // なお、ここでパーセント値を設定するのは明らかにおかしいので設定エラーとして弾く。
                         if (!isDecayPath && !hasCoeff || isRate)
-                            throw Program.Error($"Line {lineNum}: Require transfer rate [/d] from {fromFunc} '{from}'.");
+                            errors.AddError(lineNum, $"Require transfer rate [/d] from {fromFunc} '{from}'.");
                     }
 
                     if (fromFunc == OrganFunc.exc)
                     {
                         // excからの流出は(娘核種のexcへの壊変経路を除いて)定義できない。
                         if (!(toFunc == OrganFunc.exc && isDecayPath))
-                            throw Program.Error($"Line {lineNum}: Cannot set output path from exc '{from}'.");
+                            errors.AddError(lineNum, $"Cannot set output path from exc '{from}'.");
                     }
 
                     // TODO: mixからmixへの経路は定義できない。
                     //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
-                    //    throw Program.Error($"Line {lineNum}: Cannot set transfer path from 'mix' to 'mix'.");
+                    //    errors.AddError(lineNum, "Cannot set transfer path from 'mix' to 'mix'.");
 
                     if (organFrom.IsInstantOutflow)
                     {
                         // inpやmixから娘核種への壊変経路は定義できない。
                         if (isDecayPath)
-                            throw Program.Error($"Line {lineNum}: Cannot set decay path from {fromFunc} '{from}'.");
+                            errors.AddError(lineNum, $"Cannot set decay path from {fromFunc} '{from}'.");
 
                         // inpまたはmixからの同核種での移行経路では、移行割合の入力を要求する。
                         // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
                         else if (!hasCoeff)
-                            throw Program.Error($"Line {lineNum}: Require fraction of output activity [%] from {fromFunc} '{from}'.");
+                            errors.AddError(lineNum, $"Require fraction of output activity [%] from {fromFunc} '{from}'.");
                     }
+
+                    // 以降の処理で移行経路の設定位置が有効であることを確定する。
+                    if (errors.IfAny(olderrorsT))
+                        continue;
 
                     if (isDecayPath)
                     {
                         // 分岐比が不明な壊変経路は定義できない。
                         if (!decayNuclides[fromNuclide].Contains(toNuclide))
-                            throw Program.Error($"Line {lineNum}: There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
+                            errors.AddError(lineNum, $"There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
 
                         var paths = decayPaths.Where(path => path.from == organFrom);
 
                         // organFromから、同じ子孫核種への2つ以上の壊変経路は定義できない。
                         if (paths.Any(path => path.to.Nuclide == toNuclide))
-                            throw Program.Error($"Line {lineNum}: Multiple decay paths from {fromFunc} '{from}' to nuclide '{toNuclide.Name}'.");
+                            errors.AddError(lineNum, $"Multiple decay paths from {fromFunc} '{from}' to nuclide '{toNuclide.Name}'.");
 
                         decayPaths.Add((organFrom, organTo, hasCoeff));
 
@@ -943,18 +1112,35 @@ namespace FlexID.Calc
                         //   Progeny_N/organDecay
 
                         var decayChain = GetDecayChain(organFrom);
+
+                        var decayIndex = Array.IndexOf(decayChain.DecayNuclides, toNuclide);
+                        if (decayIndex == -1)
+                        {
+                            var rootNuc = decayChain.RootCompartment.Nuclide.Name;
+                            errors.AddError(lineNum, $"Cannot find progeny nuclide '{toNuclide.Name}' in decay chain starts from '{rootNuc}'.");
+                            continue;
+                        }
+
+                        ref var organDecay = ref decayChain.DecayCompartments[decayIndex];
+                        if (organDecay != null)
+                        {
+                            if (hasCoeff)
+                                errors.AddError(lineNum, $"Decay compartment is already set.");
+                            else
+                                errors.AddError(lineNum, $"Decay compartment '{to}' conflicts with the implicitly deined one.");
+                            continue;
+                        }
+
                         if (hasCoeff)
                         {
+                            organDecay = decayChain.AddDecayCompartment(data, toNuclide);
+
                             // 以降の処理を核種が同じコンパートメント間organDecay -> organToの経路設定にすり替える。
-                            var organDecay = decayChain.AddDecayCompartment(data, toNuclide);
                             organFrom = organDecay;
                         }
                         else
                         {
                             // organToを崩壊系列でorganDecayが占める位置に設定する。
-                            ref var organDecay = ref decayChain.GetDecayCompartment(toNuclide);
-                            if (organDecay != null)
-                                throw Program.Error($"Line {lineNum}: Decay compartment '{to}' conflicts with the implicitly deined one.");
                             organDecay = organTo;
 
                             // transfersCorrectには核種が異なるコンパートメント間の壊変経路を追加しない。
@@ -966,15 +1152,22 @@ namespace FlexID.Calc
                     {
                         // 移行係数が負の値でないことを確認する。
                         if (coeff_v < 0)
-                            throw Program.Error($"Line {lineNum}: Transfer coefficient should be positive.");
+                        {
+                            errors.AddError(lineNum, "Transfer coefficient should be positive.");
+                            continue;
+                        }
 
                         if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
                             sum = 0;
                         sumOfOutflowCoeff[organFrom] = sum + coeff_v;
                     }
 
-                    transfersCorrect.Add((organFrom, organTo, coeff ?? 0));
+                    transfersCorrect.Add((lineNum, organFrom, organTo, coeff ?? 0));
                 }
+
+                // 核種nuclideの動態モデルに入る移行経路にエラーがないことを確定する。
+                if (errors.IfAny(olderrorsN))
+                    continue;
 
                 // あるコンパートメントから同じ核種のまま流出する全ての移行経路について処理する。
                 var outflowGroups = transfersCorrect.GroupBy(t => t.from);
@@ -990,7 +1183,16 @@ namespace FlexID.Calc
                         // 流出放射能に対する移行割合の合計が1.0 == 100%かどうかを確認する。
                         var sum = sumOfOutflowCoeff[organFrom];
                         if (sum != 1)
-                            throw Program.Error($"Total [%] of transfer paths from '{fromName}' is  not 100%, but {sum * 100:G29}%.");
+                        {
+                            var ts = transfersCorrect.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
+                            for (int i = 0; i < ts.Length; i++)
+                            {
+                                var (lineNum, _, _, coeff) = ts[i];
+                                if (i == 0)
+                                    errors.AddError(lineNum, $"Total [%] of transfer paths from '{fromName}' is  not 100%, but {sum * 100:G29}%.");
+                                errors.AddError(lineNum, $"    = {coeff * 100:G29}%");
+                            }
+                        }
                     }
                     else
                     {
@@ -1002,8 +1204,12 @@ namespace FlexID.Calc
                     // GetDecayChain(organFrom);
                 }
 
+                // 核種nuclideの動態モデルに入る移行経路と係数にエラーがないことを確定する。
+                if (errors.IfAny(olderrorsN))
+                    continue;
+
                 // 核種が同じコンパートメントへの流入経路と、移行割合を設定する。
-                foreach (var (organFrom, organTo, coeff) in transfersCorrect)
+                foreach (var (_, organFrom, organTo, coeff) in transfersCorrect)
                 {
                     double inflowRate;
                     if (organFrom.IsInstantOutflow)
@@ -1030,11 +1236,17 @@ namespace FlexID.Calc
                 }
             }
 
+            // 全ての核種について陽に設定された移行経路と係数にエラーがないことを確定する。
+            errors.RaiseIfAny();
+
             // 核種が異なるコンパートメントへの流入経路と、移行割合を設定する。
             foreach (var decayChain in decayChains.Values)
             {
                 DefineDecayTransfers(data, decayChain);
             }
+
+            // 移行経路の定義にエラーがないことを確定する。
+            errors.RaiseIfAny();
         }
 
         /// <summary>

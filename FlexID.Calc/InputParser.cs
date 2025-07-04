@@ -134,6 +134,8 @@ namespace FlexID.Calc
     /// </summary>
     public class InputEvaluator : Visitor<(decimal v, bool r)>
     {
+        private readonly InputErrors errors;
+
         private readonly InputParser<(decimal v, bool r)> parser;
 
         private readonly Dictionary<string, (decimal, bool)> variables = new Dictionary<string, (decimal, bool)>();
@@ -143,9 +145,10 @@ namespace FlexID.Calc
         /// <summary>
         /// コンストラクタ。
         /// </summary>
-        public InputEvaluator()
+        public InputEvaluator(InputErrors errors)
         {
-            parser = new InputParser<(decimal, bool)>(this);
+            this.errors = errors;
+            this.parser = new InputParser<(decimal, bool)>(this);
         }
 
         /// <summary>
@@ -176,42 +179,43 @@ namespace FlexID.Calc
             return true;
         }
 
-        /// <summary>
-        /// 移行経路の定義行において、移行係数部分の解釈を行う。
-        /// </summary>
-        /// <param name="lineNum">インプットの行番号。</param>
-        /// <param name="input">入力文字列。</param>
-        /// <returns>解釈結果と、式が表現するのが割合値かどうかを返す。</returns>
-        public (decimal value, bool isRate) ReadCoefficient(int lineNum, string input)
+        public bool TryReadCoefficient(int lineNum, string input, out (decimal value, bool isRate) result)
         {
             this.lineNum = lineNum;
+            result = default;
 
-            IResult<(decimal v, bool r)> result;
+            IResult<(decimal v, bool r)> r;
             try
             {
-                result = parser.Coefficient.Token().End().TryParse(input);
+                r = parser.Coefficient.Token().End().TryParse(input);
             }
-            catch (DivideByZeroException ex)
+            catch (InputErrorsException ex)
             {
-                throw Program.Error($"Line {lineNum}: Transfer coefficient evaluation failed: divide by zero.");
+                errors.AddErrors(ex);
+                return false;
             }
             catch (ArithmeticException ex)
             {
-                throw Program.Error($"Line {lineNum}: Transfer coefficient evaluation failed: {ex.Message}.");
+                errors.AddError(lineNum, $"Transfer coefficient evaluation failed: {ex.Message}.");
+                return false;
             }
-            if (!result.WasSuccessful)
-                throw Program.Error($"Line {lineNum}: Transfer coefficient should be evaluated to a number, not '{input}'.");
+            if (!r.WasSuccessful)
+            {
+                errors.AddError(lineNum, $"Transfer coefficient should be evaluated to a number, not '{input}'.");
+                return false;
+            }
 
-            var (expr, isRate) = result.Value;
+            var (expr, isRate) = r.Value;
             //Debug.WriteLine($"Line {lineNum} '{input}' ==> {expr * (isRate ? 100 : 1)}{(isRate ? "%" : "")}");
-            return result.Value;
+            result = r.Value;
+            return true;
         }
 
         public (decimal v, bool r) Var(string ident)
         {
             // 定義されていない変数の使用に対してエラーを報告する。
             if (!variables.TryGetValue(ident, out var v))
-                throw Program.Error($"Line {lineNum}: undefined variable '{ident}'.");
+                throw new InputErrorsException(lineNum, $"undefined variable '{ident}'.");
             return v;
         }
 
@@ -228,16 +232,33 @@ namespace FlexID.Calc
 
         public (decimal v, bool r) Neg((decimal v, bool r) oper) => (-oper.v, oper.r);
 
-        public (decimal v, bool r) Add((decimal v, bool r) left, (decimal v, bool r) right) =>
-            left.r == right.r ? (left.v + right.v, left.r)
-                              : throw Program.Error($"Line {lineNum}: addition with inconsistent value units");
+        public (decimal v, bool r) Add((decimal v, bool r) left, (decimal v, bool r) right)
+        {
+            if (left.r != right.r)
+                throw new InputErrorsException(lineNum, "addition with inconsistent value units");
+            return (left.v + right.v, left.r);
+        }
 
-        public (decimal v, bool r) Sub((decimal v, bool r) left, (decimal v, bool r) right) =>
-            left.r == right.r ? (left.v - right.v, left.r)
-                              : throw Program.Error($"Line {lineNum}: subtraction with inconsistent value units");
+        public (decimal v, bool r) Sub((decimal v, bool r) left, (decimal v, bool r) right)
+        {
+            if (left.r != right.r)
+                throw new InputErrorsException(lineNum, "subtraction with inconsistent value units");
+            return (left.v - right.v, left.r);
+        }
 
         public (decimal v, bool r) Mul((decimal v, bool r) left, (decimal v, bool r) right) => (left.v * right.v, left.r && right.r);
 
-        public (decimal v, bool r) Div((decimal v, bool r) left, (decimal v, bool r) right) => (left.v / right.v, left.r && right.r);
+        public (decimal v, bool r) Div((decimal v, bool r) left, (decimal v, bool r) right)
+        {
+            try
+            {
+                var result = checked(left.v / right.v);
+                return (result, left.r && right.r);
+            }
+            catch (DivideByZeroException)
+            {
+                throw new InputErrorsException(lineNum, "Transfer coefficient evaluation failed: divide by zero.");
+            }
+        }
     }
 }
