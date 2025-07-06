@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.IO;
 
 namespace FlexID.Calc.Tests
@@ -72,9 +73,9 @@ namespace FlexID.Calc.Tests
                 var expectFilePath = Path.Combine(expectDir, fileName);
                 var actualFilePath = Path.Combine(resultDir, fileName);
                 if (outputFlag)
-                    CollectionAssert.AreEqual(File.ReadAllLines(expectFilePath), File.ReadAllLines(actualFilePath));
+                    File.ReadAllLines(actualFilePath).ShouldBe(File.ReadAllLines(expectFilePath));
                 else
-                    Assert.IsFalse(File.Exists(actualFilePath));
+                    File.Exists(actualFilePath).ShouldBeFalse();
             }
         }
     }

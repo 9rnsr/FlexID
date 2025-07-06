@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using Sprache;
 using System;
 
@@ -25,7 +26,8 @@ namespace FlexID.Calc.Tests
         InputParser<string> parser = new InputParser<string>(new StringifyVisitor());
 
         (Func<string, string> Success, Action<string> Failure) MakeTesters(Parser<string> parser) =>
-            (input => parser.End().Parse(input), input => Assert.ThrowsException<ParseException>(() => parser.End().Parse(input)));
+            (Success: input => parser.End().Parse(input),
+             Failure: input => new Action(() => parser.End().Parse(input)).ShouldThrow<ParseException>());
 
         [TestMethod]
         public void ParseVar()
@@ -91,16 +93,16 @@ namespace FlexID.Calc.Tests
         {
             var (Success, Failure) = MakeTesters(parser.Expr);
 
-            Assert.AreEqual("(123 * 456)", Success("123*456"));
-            Assert.AreEqual("(123 / 456)", Success(" 123 / 456 "));
-            Assert.AreEqual("((12 * 34) / 56)", Success("12 * 34 / 56"));
-            Assert.AreEqual("(((12 * 34) / 56) * 78)", Success("12 * 34 / 56 * 78"));
+            Success("123*456")          /**/.ShouldBe("(123 * 456)");
+            Success(" 123 / 456 ")      /**/.ShouldBe("(123 / 456)");
+            Success("12 * 34 / 56")     /**/.ShouldBe("((12 * 34) / 56)");
+            Success("12 * 34 / 56 * 78")/**/.ShouldBe("(((12 * 34) / 56) * 78)");
 
-            Assert.AreEqual("(123 + 456)", Success("123+456"));
-            Assert.AreEqual("(123 - 456)", Success(" 123 - 456 "));
-            Assert.AreEqual("((12 + 34) - 56)", Success("12 + 34 - 56"));
-            Assert.AreEqual("(12 + (34 * 56))", Success("12 + 34 * 56"));
-            Assert.AreEqual("((12 * 34) + (56 / 78))", Success("12 * 34 + 56 / 78"));
+            Success("123+456")          /**/.ShouldBe("(123 + 456)");
+            Success(" 123 - 456 ")      /**/.ShouldBe("(123 - 456)");
+            Success("12 + 34 - 56")     /**/.ShouldBe("((12 + 34) - 56)");
+            Success("12 + 34 * 56")     /**/.ShouldBe("(12 + (34 * 56))");
+            Success("12 * 34 + 56 / 78")/**/.ShouldBe("((12 * 34) + (56 / 78))");
         }
 
         [TestMethod]
@@ -108,13 +110,13 @@ namespace FlexID.Calc.Tests
         {
             var (Success, Failure) = MakeTesters(parser.Expr);
 
-            Assert.AreEqual("identifier", /**/ Success("identifier"));
-            Assert.AreEqual("1234",       /**/ Success("1234"));
-            Assert.AreEqual("3.1415",     /**/ Success("3.1415"));
+            Success("ident")    /**/.ShouldBe("ident");
+            Success("1234")     /**/.ShouldBe("1234");
+            Success("3.1415")   /**/.ShouldBe("3.1415");
 
-            Assert.AreEqual("identifier", /**/ Success("(identifier)"));
-            Assert.AreEqual("1234",       /**/ Success("(1234)"));
-            Assert.AreEqual("3.1415",     /**/ Success("(3.1415)"));
+            Success("(ident)")  /**/.ShouldBe("ident");
+            Success("(1234)")   /**/.ShouldBe("1234");
+            Success("(3.1415)") /**/.ShouldBe("3.1415");
 
             Success("-(1.2 + +(a * b) - (-c / +d))");
 
@@ -127,15 +129,15 @@ namespace FlexID.Calc.Tests
         {
             var (Success, Failure) = MakeTesters(parser.Coefficient);
 
-            Assert.AreEqual("123", Success("123"));
-            Assert.AreEqual("123.45", Success("123.45"));
-            Assert.AreEqual("1.23E-04", Success("1.23E-04"));
-            Assert.AreEqual("+123.45", Success("+123.45"));
-            Assert.AreEqual("-1.23E-04", Success("-1.23E-04"));
+            Success("123")      /**/.ShouldBe("123");
+            Success("123.45")   /**/.ShouldBe("123.45");
+            Success("1.23E-04") /**/.ShouldBe("1.23E-04");
+            Success("+123.45")  /**/.ShouldBe("+123.45");
+            Success("-1.23E-04")/**/.ShouldBe("-1.23E-04");
 
-            Assert.AreEqual("a", Success("$a"));
+            Success("$a").ShouldBe("a");
 
-            Assert.AreEqual("((a * 12%) + 1.5)", Success("$(a * 12% + 1.5)"));
+            Success("$(a * 12% + 1.5)").ShouldBe("((a * 12%) + 1.5)");
 
             Failure("a");
             Failure("(a * 12% + 1.5)");

@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 
@@ -54,7 +55,7 @@ namespace FlexID.Calc.Tests
         public void TestToSeconds(string time, long expect)
         {
             var actual = TimeMesh.ToSeconds(time);
-            Assert.AreEqual(expect, actual);
+            actual.ShouldBe(expect);
         }
 
         [TestMethod]
@@ -71,7 +72,7 @@ namespace FlexID.Calc.Tests
         [DataRow("years")]
         public void TestToSecondsError(string time)
         {
-            Assert.ThrowsException<FormatException>(() => TimeMesh.ToSeconds(time));
+            new Action(() => TimeMesh.ToSeconds(time)).ShouldThrow<FormatException>();
         }
 
         [TestMethod]
@@ -92,10 +93,10 @@ namespace FlexID.Calc.Tests
         public void TestCover(TimeMesh coarseMesh, TimeMesh fineMesh)
         {
             // 細かいメッシュは粗いメッシュを網羅する。
-            Assert.IsTrue(fineMesh.Cover(coarseMesh));
+            fineMesh.Cover(coarseMesh).ShouldBeTrue();
 
             // 粗いメッシュは細かいメッシュを網羅しない。
-            Assert.IsFalse(coarseMesh.Cover(fineMesh));
+            coarseMesh.Cover(fineMesh).ShouldBeFalse();
         }
 
         public static IEnumerable<object[]> CoverMeshes()
@@ -157,7 +158,7 @@ namespace FlexID.Calc.Tests
             });
 
             // 細かいメッシュより長い期間を持つ粗いメッシュは網羅できない。
-            Assert.IsFalse(shorterFineMesh.Cover(longerCoarseMesh));
+            shorterFineMesh.Cover(longerCoarseMesh).ShouldBeFalse();
         }
 
         [TestMethod]
@@ -173,7 +174,7 @@ namespace FlexID.Calc.Tests
             });
 
             // 細かいメッシュが、粗いメッシュより長い期間を網羅している。
-            Assert.IsTrue(longerFineMesh.Cover(shorterCoarseMesh));
+            longerFineMesh.Cover(shorterCoarseMesh).ShouldBeTrue();
         }
     }
 }

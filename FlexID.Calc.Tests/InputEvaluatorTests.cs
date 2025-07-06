@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System;
 
 namespace FlexID.Calc.Tests
@@ -12,83 +13,83 @@ namespace FlexID.Calc.Tests
         [TestMethod]
         public void DefineVariable()
         {
-            Assert.ThrowsException<ApplicationException>(() => evaluator.ReadCoefficient(LineNum, "$var"));
+            new Action(() => evaluator.ReadCoefficient(LineNum, "$var")).ShouldThrow<ApplicationException>();
 
-            Assert.IsTrue(evaluator.TryReadVarDecl(LineNum, "$var = 123"));
-            Assert.AreEqual((123m, false), evaluator.ReadCoefficient(LineNum, "$var"));
+            evaluator.TryReadVarDecl(LineNum, "$var = 123").ShouldBeTrue();
+            evaluator.ReadCoefficient(LineNum, "$var").ShouldBe((123m, false));
 
-            Assert.IsTrue(evaluator.TryReadVarDecl(LineNum, "$var = 456.78"));
-            Assert.AreEqual((456.78m, false), evaluator.ReadCoefficient(LineNum, "$var"));
+            evaluator.TryReadVarDecl(LineNum, "$var = 456.78").ShouldBeTrue();
+            evaluator.ReadCoefficient(LineNum, "$var").ShouldBe((456.78m, false));
         }
 
         [TestMethod]
         public void DefineVariable2()
         {
-            Assert.IsTrue(evaluator.TryReadVarDecl(LineNum, "$var = 12.3%"));
-            Assert.AreEqual((0.123m, true), evaluator.ReadCoefficient(LineNum, "$var"));
+            evaluator.TryReadVarDecl(LineNum, "$var = 12.3%").ShouldBeTrue();
+            evaluator.ReadCoefficient(LineNum, "$var").ShouldBe((0.123m, true));
 
             var actual = evaluator.ReadCoefficient(LineNum, "$(var + 45.6%)");
-            Assert.AreEqual((0.123m + 0.456m, true), actual);
+            actual.ShouldBe((0.123m + 0.456m, true));
         }
 
         [TestMethod]
         public void CalcAddSub()
         {
-            Assert.AreEqual((46m, false), evaluator.ReadCoefficient(LineNum, "$(12 + 34)"));
-            Assert.AreEqual((0.46m, true), evaluator.ReadCoefficient(LineNum, "$(12% + 34%)"));
+            evaluator.ReadCoefficient(LineNum, "$(12  + 34 )").ShouldBe((46m, false));
+            evaluator.ReadCoefficient(LineNum, "$(12% + 34%)").ShouldBe((0.46m, true));
 
-            Assert.AreEqual((22m, false), evaluator.ReadCoefficient(LineNum, "$(34 - 12)"));
-            Assert.AreEqual((0.22m, true), evaluator.ReadCoefficient(LineNum, "$(34% - 12%)"));
+            evaluator.ReadCoefficient(LineNum, "$(34  - 12 )").ShouldBe((22m, false));
+            evaluator.ReadCoefficient(LineNum, "$(34% - 12%)").ShouldBe((0.22m, true));
 
             var errorAdd = $"Line {LineNum}: addition with inconsistent value units";
-            Assert.ThrowsException<ApplicationException>(() => evaluator.ReadCoefficient(LineNum, "$(12 + 34%)"), errorAdd);
-            Assert.ThrowsException<ApplicationException>(() => evaluator.ReadCoefficient(LineNum, "$(12% + 34)"), errorAdd);
+            new Action(() => evaluator.ReadCoefficient(LineNum, "$(12  + 34%)")).ShouldThrow<ApplicationException>().Message.ShouldBe(errorAdd);
+            new Action(() => evaluator.ReadCoefficient(LineNum, "$(12% + 34 )")).ShouldThrow<ApplicationException>().Message.ShouldBe(errorAdd);
 
             var errorSub = $"Line {LineNum}: subtraction with inconsistent value units";
-            Assert.ThrowsException<ApplicationException>(() => evaluator.ReadCoefficient(LineNum, "$(12 - 34%)"), errorSub);
-            Assert.ThrowsException<ApplicationException>(() => evaluator.ReadCoefficient(LineNum, "$(12% - 34)"), errorSub);
+            new Action(() => evaluator.ReadCoefficient(LineNum, "$(12  - 34%)")).ShouldThrow<ApplicationException>().Message.ShouldBe(errorSub);
+            new Action(() => evaluator.ReadCoefficient(LineNum, "$(12% - 34 )")).ShouldThrow<ApplicationException>().Message.ShouldBe(errorSub);
         }
 
         [TestMethod]
         public void CalcMulDiv()
         {
-            Assert.AreEqual((408m, false), evaluator.ReadCoefficient(LineNum, "$(12 * 34)"));
-            Assert.AreEqual((0.0408m, true), evaluator.ReadCoefficient(LineNum, "$(12% * 34%)"));
+            evaluator.ReadCoefficient(LineNum, "$(12  * 34 )").ShouldBe((408m, false));
+            evaluator.ReadCoefficient(LineNum, "$(12% * 34%)").ShouldBe((0.0408m, true));
 
-            Assert.AreEqual((2.5m, false), evaluator.ReadCoefficient(LineNum, "$(30 / 12)"));
-            Assert.AreEqual((2.5m, true), evaluator.ReadCoefficient(LineNum, "$(30% / 12%)"));
+            evaluator.ReadCoefficient(LineNum, "$(30  / 12 )").ShouldBe((2.5m, false));
+            evaluator.ReadCoefficient(LineNum, "$(30% / 12%)").ShouldBe((2.5m, true));
 
-            Assert.AreEqual((4.08m, false), evaluator.ReadCoefficient(LineNum, "$(12 * 34%)"));
-            Assert.AreEqual((4.08m, false), evaluator.ReadCoefficient(LineNum, "$(12% * 34)"));
+            evaluator.ReadCoefficient(LineNum, "$(12  * 34%)").ShouldBe((4.08m, false));
+            evaluator.ReadCoefficient(LineNum, "$(12% * 34 )").ShouldBe((4.08m, false));
 
-            Assert.AreEqual((0.025m, false), evaluator.ReadCoefficient(LineNum, "$(30% / 12)"));
-            Assert.AreEqual((250m, false), evaluator.ReadCoefficient(LineNum, "$(30 / 12%)"));
+            evaluator.ReadCoefficient(LineNum, "$(30% / 12 )").ShouldBe((0.025m, false));
+            evaluator.ReadCoefficient(LineNum, "$(30  / 12%)").ShouldBe((250m, false));
         }
 
         [TestMethod]
         public void CalcSItoBlood()
         {
-            Assert.IsTrue(evaluator.TryReadVarDecl(LineNum, "$fA = 1E-4"));
+            evaluator.TryReadVarDecl(LineNum, "$fA = 1E-4").ShouldBeTrue();
 
             var expect = 1E-4m * 6 / (1 - 1E-4m);
             var actual = evaluator.ReadCoefficient(LineNum, "$(fA * 6 / (1 - fA))").value;
-            Assert.AreEqual(expect, actual);
+            actual.ShouldBe(expect);
         }
 
         [TestMethod]
         public void CalcInputToHRTM()
         {
-            Assert.IsTrue(evaluator.TryReadVarDecl(LineNum, "$fr = 0.01"));
+            evaluator.TryReadVarDecl(LineNum, "$fr = 0.01").ShouldBeTrue();
 
             var expectToET2F = 0.002576836m;
             var actualToET2F = evaluator.ReadCoefficient(LineNum, "$(      fr  * (100% - 0.2%) * 25.82% )").value;
-            Assert.AreEqual(expectToET2F, 0.01m * (1.0m - 0.002m) * 0.2582m);
-            Assert.AreEqual(expectToET2F, actualToET2F);
+            expectToET2F.ShouldBe(0.01m * (1.0m - 0.002m) * 0.2582m);
+            actualToET2F.ShouldBe(expectToET2F);
 
             var expectToET2S = 0.255106764m;
             var actualToET2S = evaluator.ReadCoefficient(LineNum, "$( (1 - fr) * (100% - 0.2%) * 25.82% )").value;
-            Assert.AreEqual(expectToET2S, (1m - 0.01m) * (1.0m - 0.002m) * 0.2582m);
-            Assert.AreEqual(expectToET2S, actualToET2S);
+            expectToET2S.ShouldBe((1m - 0.01m) * (1.0m - 0.002m) * 0.2582m);
+            expectToET2S.ShouldBe(actualToET2S);
         }
     }
 }
