@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="MSTest" />
+    <PackageReference Include="Shouldly" />
   </ItemGroup>
 
   <ItemGroup>

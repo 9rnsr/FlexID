@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace FlexID.Calc.Tests
             var nuclide = target.Split('_')[0];
 
             var data = new InputDataReader_OIR(inputPath).Read();
-            Assert.IsNotNull(data);
+            data.ShouldNotBeNull();
         }
 
         public static IEnumerable<object[]> GetTargets()
@@ -34,7 +35,7 @@ namespace FlexID.Calc.Tests
             var inputPath = Path.Combine("inp", "EIR", nuclide, target + ".inp");
 
             var data = new InputDataReader_EIR(inputPath).Read();
-            Assert.IsNotNull(data);
+            data.ShouldNotBeNull();
         }
     }
 }

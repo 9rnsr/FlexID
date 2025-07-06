@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +18,7 @@ namespace FlexID.Calc.Tests
             var paramFilePath = Path.Combine(ParamDir, paramFile);
             var lines = File.ReadAllLines(paramFilePath);
             var param = Program.GetParam(lines);
-            Assert.AreEqual(expect, param);
+            param.ShouldBe(expect);
         }
 
         public static IEnumerable<object[]> ValidCases()
@@ -71,8 +72,9 @@ namespace FlexID.Calc.Tests
         {
             var paramFilePath = Path.Combine(ParamDir, paramFile);
             var lines = File.ReadAllLines(paramFilePath);
-            var e = Assert.ThrowsException<ApplicationException>(() => Program.GetParam(lines));
-            Assert.AreEqual(expect, e.Message);
+
+            var e = new Action(() => Program.GetParam(lines)).ShouldThrow<ApplicationException>();
+            e.Message.ShouldBe(expect);
         }
 
         public static IEnumerable<object[]> ErrorCases()

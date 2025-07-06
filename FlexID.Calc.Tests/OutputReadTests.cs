@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.IO;
 using System.Linq;
 
@@ -30,19 +31,10 @@ namespace FlexID.Calc.Tests
                 var path = Path.Combine(expectDir, nuclide, $"{target}_{suffix}.out");
                 var data = new OutputDataReader(path).Read();
 
-                if (type == OutputType.Dose || type == OutputType.DoseRate)
-                {
-                    Assert.AreEqual(2, data.Blocks.Length);
-                    Assert.AreEqual(nuclide + " (Male)", data.Blocks[0].Header);
-                    Assert.AreEqual(nuclide + " (Female)", data.Blocks[1].Header);
-                }
-                else
-                {
-                    Assert.AreEqual(nuclide, data.Blocks[0].Header);
-                    Assert.AreEqual(1 + progeny.Length, data.Blocks.Length);
-                    Assert.AreEqual(nuclide, data.Blocks[0].Header);
-                    CollectionAssert.AreEqual(progeny, data.Blocks.Skip(1).Select(n => n.Header).ToArray());
-                }
+                data.Blocks.Select(n => n.Header)
+                    .ShouldBe(type == OutputType.Dose || type == OutputType.DoseRate
+                        ? new[] { nuclide + " (Male)", nuclide + " (Female)", }
+                        : new[] { nuclide }.Concat(progeny));
             }
         }
     }

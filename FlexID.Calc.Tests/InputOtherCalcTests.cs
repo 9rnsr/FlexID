@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +25,7 @@ namespace FlexID.Calc.Tests
         {
             // 除外設定：リストに存在する場合に削除する。
             var n = list.RemoveAll(x => x == item);
-            Assert.IsTrue(n == 0 || n == 1);
+            (n == 0 || n == 1).ShouldBeTrue();
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace FlexID.Calc.Tests
             var data = reader.Read();
             var expectOtherSourceRegions = ExpectOtherSourceRegions(data);
 
-            CollectionAssert.AreEquivalent(new[]
+            expectOtherSourceRegions.ShouldBe(new[]
             {
                 "O-mucosa",    "Teeth-V",     "Tonsils",     "Oesophag-w",  "St-wall",
                 "SI-wall",     "RC-wall",     "LC-wall",     "RS-wall",     "LN-ET",
@@ -63,9 +64,9 @@ namespace FlexID.Calc.Tests
                 "Spleen",      "Testes",      "Thymus",      "Thyroid",     "Ureters",
                 "UB-wall",     "Uterus",      "Adipose",     "Cartilage",   "Muscle",
                 "ET1-wall",    "ET2-wall",    "Lung-Tis",
-            }, expectOtherSourceRegions);
+            });
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            data.Nuclides[0].OtherSourceRegions.ShouldBe(expectOtherSourceRegions);
         }
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            data.Nuclides[0].OtherSourceRegions.ShouldBe(expectOtherSourceRegions);
         }
 
         [TestMethod]
@@ -149,7 +150,7 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            data.Nuclides[0].OtherSourceRegions.ShouldBe(expectOtherSourceRegions);
         }
 
         [TestMethod]
@@ -195,7 +196,7 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            data.Nuclides[0].OtherSourceRegions.ShouldBe(expectOtherSourceRegions);
         }
 
         [TestMethod]
@@ -253,7 +254,7 @@ namespace FlexID.Calc.Tests
             Exclude(expectOtherSourceRegions, "C-bone-V");
             Exclude(expectOtherSourceRegions, "T-bone-V");
 
-            CollectionAssert.AreEqual(expectOtherSourceRegions, data.Nuclides[0].OtherSourceRegions);
+            data.Nuclides[0].OtherSourceRegions.ShouldBe(expectOtherSourceRegions);
         }
     }
 }
