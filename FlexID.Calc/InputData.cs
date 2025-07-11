@@ -406,4 +406,57 @@ namespace FlexID.Calc
 
         protected static bool IsBar(string s) => patternBar.IsMatch(s);
     }
+
+    /// <summary>
+    /// インプット読み込み中に見つかったエラーの集合を保持する。
+    /// </summary>
+    public class InputErrors
+    {
+        private readonly List<(int LineNum, string Message)> errors = new List<(int LineNum, string Message)>();
+
+        /// <summary>
+        /// 現在保持されているエラーの数を取得する。
+        /// </summary>
+        public int Count => errors.Count;
+
+        public void AddError(string message) => errors.Add((0, message));
+
+        public void AddError(int lineNum, string message) => errors.Add((lineNum, message));
+
+        public void AddErrors(InputErrorsException exception) => errors.AddRange(exception.Errors);
+
+        public bool IfAny(int olderrors = 0) => errors.Count > olderrors;
+
+        public void RaiseIfAny(int olderrors = 0)
+        {
+            if (IfAny(olderrors))
+                throw new InputErrorsException(errors.ToArray());
+        }
+
+        public void Clear() => errors.Clear();
+    }
+
+    /// <summary>
+    /// インプット読み込み処理で見つかったエラーを例外として上位層に送出する。
+    /// </summary>
+    public class InputErrorsException : ApplicationException
+    {
+        public InputErrorsException(int lineNum, string message)
+            : this(new[] { (lineNum, message) })
+        {
+        }
+
+        public InputErrorsException(IReadOnlyList<(int LineNum, string Message)> errors)
+            : base(string.Join("\n", CreateMessageFromErrors(errors)))
+        {
+            Errors = errors;
+        }
+
+        public IReadOnlyList<(int LineNum, string Message)> Errors { get; }
+
+        public IEnumerable<string> ErrorLines => CreateMessageFromErrors(Errors);
+
+        internal static IEnumerable<string> CreateMessageFromErrors(IEnumerable<(int LineNum, string Message)> errors) =>
+            errors.Select(x => x.LineNum < 1 ? x.Message : $"Line {x.LineNum}: {x.Message}");
+    }
 }

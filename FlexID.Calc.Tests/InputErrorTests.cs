@@ -12,7 +12,7 @@ namespace FlexID.Calc.Tests
     public class InputErrorTests
     {
         [TestMethod]
-        public void SectionTitleDuplicated()
+        public void DuplicatedSectionErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -22,107 +22,57 @@ namespace FlexID.Calc.Tests
                 "[title]",
                 "dummy2",
                 "",
+                "[parameter]",
+                "  OutputDose = true",
+                "",
+                "[parameter]",
+                "  OutputDose = true",
+                "",
                 "[nuclide]",
-                "  Sr-90  6.596156E-05  Y-90/1.0",
+                "  Sr-90  6.596156E-05",
+                "",
+                "[nuclide]",
                 "  Y-90   2.595247E-01",
+                "",
+                "[Sr-90:parameter]",
+                "  ExcludeOtherSourceRegions = x",
+                "",
+                "[Sr-90:parameter]",
+                "  ExcludeOtherSourceRegions = x",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
                 "  acc    ST0       ---",
                 "",
+                "[Sr-90:compartment]",
+                "  acc    ST1       ---",
+                "",
                 "[Sr-90:transfer]",
                 "  input      ST0   100%",
+                "",
+                "[Sr-90:transfer]",
+                "  ST0        ST1   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 4: Duplicated [title] section.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 4: Duplicated [title] section.",
+                "Line 10: Duplicated [parameter] section.",
+                "Line 16: Duplicated [nuclide] section.",
+                "Line 22: Duplicated [Sr-90:parameter] section.",
+                "Line 29: Duplicated [Sr-90:compartment] section.",
+                "Line 35: Duplicated [Sr-90:transfer] section.",
+            });
         }
 
         [TestMethod]
-        public void SectionTitleMissing()
+        public void MissingSectionErrors1()
         {
             var reader = CreateReader(new[]
             {
                 "# [title]",
                 "# dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Missing [title] section.");
-        }
-
-        [TestMethod]
-        public void SectionTitleReachToEnd()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 2: Reach to EOF while reading title section.");
-        }
-
-        [TestMethod]
-        public void SectionTitleUnrecognizedLine()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "unrecognized",
-                "",
-                "[nuclide]",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 4: Unrecognized line in [title] section.");
-        }
-
-        [TestMethod]
-        public void SectionNuclideDuplicated()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[nuclide]",
-                "  Y-90   2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 7: Duplicated [nuclide] section.");
-        }
-
-        [TestMethod]
-        public void SectionNuclideMissing()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
                 "",
                 "# [nuclide]",
                 "#   Sr-90  6.596156E-05",
@@ -135,72 +85,18 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Missing [nuclide] section.");
-        }
-
-        [TestMethod]
-        public void SectionNuclideEmpty()
-        {
-            var reader = CreateReader(new[]
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
             {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
+                "Line 7: Undefined nuclide 'Sr-90' is used to define compartments.",
+                "Line 11: Undefined nuclide 'Sr-90' is used to define transfers.",
+                "Line 13: Missing [title] section.",
+                "Line 13: Missing [nuclide] section.",
             });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("None of nuclides defined.");
         }
 
         [TestMethod]
-        public void SectionCompartmentNuclideUndefined()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90",
-                "",
-                "[Pu-249:compartment]",
-                "  inp    input     ---",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Undefined nuclide 'Pu-249' is used to define compartments.");
-        }
-
-        [TestMethod]
-        public void SectionCompartmentDuplicated()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:compartment]",
-                "  acc    ST1       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 11: Duplicated [Sr-90:compartment] section.");
-        }
-
-        [TestMethod]
-        public void SectionCompartmentMissing()
+        public void MissingSectionErrors2()
         {
             var reader = CreateReader(new[]
             {
@@ -214,105 +110,38 @@ namespace FlexID.Calc.Tests
                 "#   inp    input     ---",
                 "#   acc    ST0       ---",
                 "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Missing [Sr-90:compartment] section.");
-        }
-
-        [TestMethod]
-        public void SectionCompartmentEmpty()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "",
-                "[Sr-90:transfer]",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("None of compartments defined for nuclide 'Sr-90'.");
-        }
-
-        [TestMethod]
-        public void SectionTransferNuclideUndefined()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90",
-                "",
-                "[Pu-249:transfer]",
-                "  xxx    yyy    100",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Undefined nuclide 'Pu-249' is used to define transfers.");
-        }
-
-        [TestMethod]
-        public void SectionTransferDuplicated()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "  acc    ST1       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-                "",
-                "[Sr-90:transfer]",
-                "  ST0        ST1   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 15: Duplicated [Sr-90:transfer] section.");
-        }
-
-        [TestMethod]
-        public void SectionTransferMissing()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
                 "# [Sr-90:transfer]",
                 "#   input      ST0   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Missing [Sr-90:transfer] section.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 13: Missing [Sr-90:compartment] section.",
+                "Line 13: Missing [Sr-90:transfer] section.",
+            });
         }
 
         [TestMethod]
-        public void SectionTransferEmpty()
+        public void EmptySectionErrors1()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "",
+                "[nuclide]",
+            });
+
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 1: Empty [title] section.",
+                "Line 3: Empty [nuclide] section.",
+            });
+        }
+
+        [TestMethod]
+        public void EmptySectionErrors2()
         {
             var reader = CreateReader(new[]
             {
@@ -323,18 +152,41 @@ namespace FlexID.Calc.Tests
                 "  Sr-90  6.596156E-05",
                 "",
                 "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
                 "",
                 "[Sr-90:transfer]",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("None of transfers defined for nuclide 'Sr-90'.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 7: Empty [Sr-90:compartment] section.",
+                "Line 9: Empty [Sr-90:transfer] section.",
+            });
         }
 
         [TestMethod]
-        public void NuclideAutoModeInvalidName()
+        public void TitleSection_UnrecognizedLinesError()
+        {
+            var reader = CreateReader(new[]
+            {
+                "[title]",
+                "dummy",
+                "",
+                "unrecognized",
+                "",
+                "[nuclide]",
+                "  Sr-90"
+            });
+
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 4: Unrecognized lines in [title] section." ,
+            });
+        }
+
+        [TestMethod]
+        public void NuclideSection_AutoModeErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -342,8 +194,9 @@ namespace FlexID.Calc.Tests
                 "dummy",
                 "",
                 "[nuclide]",
-                "  Sr-90  Y-90",
+                "  Sr-90  Y-90",    // set AutoMode = true
                 "  aaa",
+                "  Sr-90",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -353,59 +206,16 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 6: 'aaa' is not nuclide name.");
-        }
-
-        [TestMethod]
-        public void NuclideAutoModeDuplicatedDefinition()
-        {
-            var reader = CreateReader(new[]
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
             {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  Sr-90",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
+                "Line 6: 'aaa' is not nuclide name.",
+                "Line 7: Duplicated nuclide definition for 'Sr-90'.",
             });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Duplicated nuclide definition for 'Sr-90'.");
         }
 
         [TestMethod]
-        public void NuclideDuplicatedDefinition()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05  Y-90/1.0",
-                "  Sr-90  2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 6: Duplicated nuclide definition for 'Sr-90'.");
-        }
-
-        [TestMethod]
-        public void NuclideShouldHaveAtLeast2Values()
+        public void NuclideSection_ManualModeErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -414,29 +224,12 @@ namespace FlexID.Calc.Tests
                 "",
                 "[nuclide]",
                 "  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Nuclide definition should have at least 2 values.");
-        }
-
-        [TestMethod]
-        public void NuclideLambdaIsNotValue()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
                 "  Sr-90  abcdefg",
+                "  Y-90  -6.596156E-05",
+                "  Zr-93  1.241198E-09  abc",
+                "  Nb-90  1.139420E+00  /1.0",
+                "  Mo-90  2.992002E+00  Nb-90/xyz",
+                "  Nb-93m 1.177330E-04  Nb-93/-1.0",
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
@@ -446,131 +239,21 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Cannot get nuclide Lambda.");
-        }
-
-        [TestMethod]
-        public void NuclideLambdaIsNotPositive()
-        {
-            var reader = CreateReader(new[]
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
             {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  -6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
+                "Line 5: Nuclide definition should have at least 2 values.",
+                "Line 6: Cannot get nuclide Lambda.",
+                "Line 7: Nuclide Lambda should be positive.",
+                "Line 8: Daughter name and branching fraction should be separated with '/'.",
+                "Line 9: Daughter name should not be empty.",
+                "Line 10: Cannot get branching fraction.",
+                "Line 11: Branching fraction should be positive.",
             });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Nuclide Lambda should be positive.");
         }
 
         [TestMethod]
-        public void NuclideBranchingIncorrect()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05  abc",
-                "  Y-90   2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Daughter name and branching fraction should be separated with '/'.");
-        }
-
-        [TestMethod]
-        public void NuclideBranchingDaughterIsEmpty()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05  /1.0",
-                "  Y-90   2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Daughter name should not be empty.");
-        }
-
-        [TestMethod]
-        public void NuclideBranchingFractionIsNotValue()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05  Y-90/xyz",
-                "  Y-90   2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Cannot get branching fraction.");
-        }
-
-        [TestMethod]
-        public void NuclideBranchingFractionIsNotPositive()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05  Y-90/-1.0",
-                "  Y-90   2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 5: Branching fraction should be positive.");
-        }
-
-        [TestMethod]
-        public void CompartmentShouldHave3Values()
+        public void CompartmentSection_SyntaxErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -583,64 +266,22 @@ namespace FlexID.Calc.Tests
                 "[Sr-90:compartment]",
                 "  inp    input   # ---",
                 "  acc    ST0       ---",
+                "  add    ST1       ---",
                 "",
                 "[Sr-90:transfer]",
                 "  input      ST0   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 8: Compartment definition should have 3 values.");
-        }
-
-        [TestMethod]
-        public void CompartmentUnrecognizedFunc()
-        {
-            var reader = CreateReader(new[]
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
             {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  add    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
+                "Line 8: Compartment definition should have 3 values.",
+                "Line 10: Unrecognized compartment function 'add'.",
             });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 9: Unrecognized compartment function 'add'.");
         }
 
         [TestMethod]
-        public void CompartmentInpDuplicated()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  inp    input2    ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 9: Duplicated 'inp' compartment.");
-        }
-
-        [TestMethod]
-        public void CompartmentInpMissing()
+        public void CompartmentSection_MissingInpError()
         {
             var reader = CreateReader(new[]
             {
@@ -658,12 +299,15 @@ namespace FlexID.Calc.Tests
                 "  ST0    ST1   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Missing 'inp' compartment.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 7: Missing 'inp' compartment.",
+            });
         }
 
         [TestMethod]
-        public void CompartmentInpInProgeny()
+        public void CompartmentSection_DefineInpErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -676,6 +320,7 @@ namespace FlexID.Calc.Tests
                 "",
                 "[Sr-90:compartment]",
                 "  inp    input     ---",
+                "  inp    input2    ---",
                 "  acc    ST0       ---",
                 "",
                 "[Sr-90:transfer]",
@@ -689,12 +334,16 @@ namespace FlexID.Calc.Tests
                 "  Sr-90/ST0  ST0   ---"
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 16: Cannot define 'inp' compartment which belongs to progeny nuclide.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 10: Duplicated 'inp' compartment.",
+                "Line 17: Cannot define 'inp' compartment which belongs to progeny nuclide.",
+            });
         }
 
         [TestMethod]
-        public void CompartmentHasUnknownSourceRegion()
+        public void CompartmentSection_UnknownSourceRegion()
         {
             var reader = CreateReader(new[]
             {
@@ -712,12 +361,15 @@ namespace FlexID.Calc.Tests
                 "  input      ST0   100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 9: Unknown source region name 'Abcde'.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 9: Unknown source region name 'Abcde'.",
+            });
         }
 
         [TestMethod]
-        public void TransferShouldHave3Values()
+        public void TransferSection_SyntexErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -732,86 +384,20 @@ namespace FlexID.Calc.Tests
                 "  acc    ST0       ---",
                 "",
                 "[Sr-90:transfer]",
-                "  input    # ST0   100%",
+                "  input # ST0   100%",
+                "  input   ST0   abc%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 12: Transfer path definition should have 3 values.");
-        }
-
-        [TestMethod]
-        public void TransferCoefficientIsNotValue()
-        {
-            var reader = CreateReader(new[]
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
             {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input  ST0   abc%",
+                "Line 12: Transfer path definition should have 3 values.",
+                "Line 13: Transfer coefficient should be evaluated to a number, not 'abc%'.",
             });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 12: Transfer coefficient should be evaluated to a number, not 'abc%'.");
         }
 
         [TestMethod]
-        public void TransferFromUndefinedNuclide()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-                "  Y-90/ST0   ST0   100",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 13: Undefined nuclide 'Y-90'.");
-        }
-
-        [TestMethod]
-        public void TransferToUndefinedNuclide()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-                "  ST0   Y-90/ST0   100",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 13: Undefined nuclide 'Y-90'.");
-        }
-
-        [TestMethod]
-        public void TransferInpInProgeny()
+        public void TransferSection_SemanticErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -827,7 +413,13 @@ namespace FlexID.Calc.Tests
                 "  acc    ST0       ---",
                 "",
                 "[Sr-90:transfer]",
-                "  input      ST0   100%",
+                "  input      ST0        100%",
+                "  X-00/ST0   ST0        100",
+                "  ST0        X-00/ST0   100",
+                "  ST1        ST0        100",
+                "  ST0        ST1        100",
+                "  ST0        ST0        100",
+                "  input      ST0        50%",
                 "",
                 "[Y-90:compartment]",
                 "  acc    ST0       ---",
@@ -836,187 +428,21 @@ namespace FlexID.Calc.Tests
                 "  ST0  Sr-90/ST0   ---",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 19: Cannot set transfer path to a compartment which is not belong to 'Y-90'.");
-        }
-
-        [TestMethod]
-        public void TransferFromUndefinedCompartment()
-        {
-            var reader = CreateReader(new[]
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
             {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input  ST0   100%",
-                "  ST1    ST0   100",
+                "Line 14: Undefined nuclide 'X-00'.",
+                "Line 15: Undefined nuclide 'X-00'.",
+                "Line 16: Undefined compartment 'ST1'.",
+                "Line 17: Undefined compartment 'ST1'.",
+                "Line 18: Cannot set transfer path to itself.",
+                "Line 19: Duplicated transfer path from 'input' to 'ST0'.",
+                "Line 25: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
             });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 13: Undefined compartment 'ST1'.");
         }
 
         [TestMethod]
-        public void TransferToUndefinedCompartment()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input  ST0   100%",
-                "  ST0    ST1   100",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 13: Undefined compartment 'ST1'.");
-        }
-
-        [TestMethod]
-        public void TransferToItself()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-                "  ST0        ST0   100",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 13: Cannot set transfer path to itself.");
-        }
-
-        [TestMethod]
-        public void TransferDuplicated()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   50%",
-                "  input      ST0   50%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 13: Duplicated transfer path from 'input' to 'ST0'.");
-        }
-
-        [TestMethod]
-        public void TransferToInp()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input  ST0       100%",
-                "  ST0    input     100",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 13: Cannot set input path to inp 'input'.");
-        }
-
-        [TestMethod]
-        public void TransferFromExc()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "  exc    Excreta   ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input    ST0     100%",
-                "  Excreta  ST0     100",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 14: Cannot set output path from exc 'Excreta'.");
-        }
-
-        [TestMethod]
-        public void TransferDecayFromInp()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05  Y-90/1.0",
-                "  Y-90   2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input     ---",
-                "  acc    ST0       ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input      ST0   100%",
-                "",
-                "[Y-90:compartment]",
-                "  acc    ST0       ---",
-                "",
-                "[Y-90:transfer]",
-                "  Sr-90/input ST0  ---",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 19: Cannot set decay path from inp 'Sr-90/input'.");
-        }
-
-        [TestMethod]
-        public void TransferDecayFromMix()
+        public void TransferSection_PathErrors()
         {
             var reader = CreateReader(new[]
             {
@@ -1031,128 +457,41 @@ namespace FlexID.Calc.Tests
                 "  inp    input      ---",
                 "  acc    ST0        ---",
                 "  mix    mix-Blood  ---",
+                "  exc    Excreta    ---",
                 "",
                 "[Sr-90:transfer]",
-                "  input  ST0        100%",
-                "  ST0    mix-Blood  100",
-                "",
-                "[Y-90:compartment]",
-                "  acc    ST0       ---",
-                "",
-                "[Y-90:transfer]",
-                "  Sr-90/mix-Blood   ST0  ---",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 21: Cannot set decay path from mix 'Sr-90/mix-Blood'.");
-        }
-
-        [TestMethod]
-        public void TransferDecayWithPercent()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05  Y-90/1.0",
-                "  Y-90   2.595247E-01",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input      ---",
-                "  acc    ST0        ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input  ST0        100%",
-                "",
-                "[Y-90:compartment]",
-                "  acc    ST0        ---",
-                "",
-                "[Y-90:transfer]",
-                "  Sr-90/ST0   ST0   100%",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 19: Require transfer rate [/d] from acc 'Sr-90/ST0'.");
-        }
-
-        [TestMethod]
-        public void TransferFractionRequiredFromInp()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input      ---",
-                "  acc    ST0        ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input  ST0        ---",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 12: Require fraction of output activity [%] from inp 'input'.");
-        }
-
-        [TestMethod]
-        public void TransferFractionRequiredFromMix()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
-                "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input      ---",
-                "  mix    mix-Blood  ---",
-                "  acc    ST0        ---",
-                "",
-                "[Sr-90:transfer]",
-                "  input  ST0        100%",
-                "  ST0    mix-Blood  100",
+                "  input      ST0    ---",
                 "  mix-Blood  ST0    ---",
-            });
-
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 15: Require fraction of output activity [%] from mix 'mix-Blood'.");
-        }
-
-        [TestMethod]
-        public void TransferRateRequiredFromAcc()
-        {
-            var reader = CreateReader(new[]
-            {
-                "[title]",
-                "dummy",
+                "  ST0        input  100",
+                "  Excreta    ST0    100",
                 "",
-                "[nuclide]",
-                "  Sr-90  6.596156E-05",
-                "",
-                "[Sr-90:compartment]",
-                "  inp    input      ---",
+                "[Y-90:compartment]",
                 "  acc    ST0        ---",
                 "  acc    ST1        ---",
                 "",
-                "[Sr-90:transfer]",
-                "  input  ST0        100%",
-                "  ST0    ST1        100%",
+                "[Y-90:transfer]",
+                "  Sr-90/input      ST0  ---",
+                "  Sr-90/mix-Blood  ST0  ---",
+                "  Sr-90/ST0        ST0  100%",
+                "  ST0              ST1  100%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 14: Require transfer rate [/d] from acc 'ST0'.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 15: Require fraction of output activity [%] from inp 'input'.",
+                "Line 16: Require fraction of output activity [%] from mix 'mix-Blood'.",
+                "Line 17: Cannot set input path to inp 'input'.",
+                "Line 18: Cannot set output path from exc 'Excreta'.",
+                "Line 25: Cannot set decay path from inp 'Sr-90/input'.",
+                "Line 26: Cannot set decay path from mix 'Sr-90/mix-Blood'.",
+                "Line 27: Require transfer rate [/d] from acc 'Sr-90/ST0'.",
+                "Line 28: Require transfer rate [/d] from acc 'ST0'.",
+            });
         }
 
         [TestMethod]
-        public void TransferCoefficientNegative()
+        public void TransferSection_NegativeCoefficient()
         {
             var reader = CreateReader(new[]
             {
@@ -1172,12 +511,15 @@ namespace FlexID.Calc.Tests
                 "  ST0    ST1        -30",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 14: Transfer coefficient should be positive.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 14: Transfer coefficient should be positive.",
+            });
         }
 
         [TestMethod]
-        public void TransferConsistentUnits()
+        public void Transfersection_SumOfCoefficientsIsNot100Percent()
         {
             var reader = CreateReader(new[]
             {
@@ -1197,12 +539,17 @@ namespace FlexID.Calc.Tests
                 "  input  ST1        36.8528%",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Total [%] of transfer paths from 'input' is  not 100%, but 99.999%.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 13: Total [%] of transfer paths from 'input' is  not 100%, but 99.999%.",
+                "Line 13:     = 63.1462%",
+                "Line 14:     = 36.8528%",
+            });
         }
 
         [TestMethod]
-        public void TransferCoefficientDivideByZero()
+        public void TransferSection_DivideByZeroCoefficient()
         {
             var reader = CreateReader(new[]
             {
@@ -1222,8 +569,11 @@ namespace FlexID.Calc.Tests
                 "  ST0    ST1      $(10 / 0)",
             });
 
-            var e = new Action(() => reader.Read()).ShouldThrow<ApplicationException>();
-            e.Message.ShouldBe("Line 14: Transfer coefficient evaluation failed: divide by zero.");
+            var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+            e.ErrorLines.ShouldBe(new[]
+            {
+                "Line 14: Transfer coefficient evaluation failed: divide by zero.",
+            });
         }
     }
 
