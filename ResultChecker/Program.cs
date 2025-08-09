@@ -455,8 +455,7 @@ namespace ResultChecker
             if (target.ParticleSize != "-")
                 mat += $", {target.ParticleSize} µm";
 
-            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            using (var reader = new StreamReader(File.OpenRead(filePath), Encoding.UTF8))
             {
                 string[] columns;
 
@@ -707,8 +706,7 @@ namespace ResultChecker
 
             var retentions = new List<Retention>();
 
-            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            using (var reader = new StreamReader(File.OpenRead(filePath), Encoding.UTF8))
             {
                 string[] columns;
 
