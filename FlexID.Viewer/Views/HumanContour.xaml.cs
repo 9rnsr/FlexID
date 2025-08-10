@@ -1,15 +1,14 @@
 using System.Windows.Controls;
 
-namespace FlexID.Viewer.Views
+namespace FlexID.Viewer.Views;
+
+/// <summary>
+/// HumanContour.xaml の相互作用ロジック
+/// </summary>
+public partial class HumanContour : UserControl
 {
-    /// <summary>
-    /// HumanContour.xaml の相互作用ロジック
-    /// </summary>
-    public partial class HumanContour : UserControl
+    public HumanContour()
     {
-        public HumanContour()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

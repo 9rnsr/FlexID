@@ -13,6 +13,9 @@
   <ItemGroup>
     <PackageReference Include="MSTest" />
     <PackageReference Include="Shouldly" />
+
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <Using Include="Shouldly" />
   </ItemGroup>
 
   <ItemGroup>

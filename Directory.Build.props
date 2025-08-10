@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
+    <LangVersion>13</LangVersion>
+    <ImplicitUsings>true</ImplicitUsings>
 
     <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
 
