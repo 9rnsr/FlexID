@@ -136,7 +136,7 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
 
     private readonly InputParser<(decimal v, bool r)> parser;
 
-    private readonly Dictionary<string, (decimal, bool)> variables = new();
+    private readonly Dictionary<string, (decimal, bool)> variables = [];
 
     private int lineNum;
 

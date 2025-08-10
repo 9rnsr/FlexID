@@ -73,7 +73,7 @@ public class InputDataReader_EIR : InputDataReaderBase
                 throw Program.Error("Reach to EOF while reading input file.");
 
             // 核種のヘッダ行を読み込む。
-            var values = firstLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var values = firstLine.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
             var nuclide = new NuclideData
             {
@@ -125,7 +125,7 @@ public class InputDataReader_EIR : InputDataReaderBase
                     goto Lcont;
                 }
 
-                values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                values = ln.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
                 if (values.Length != 8)
                     throw Program.Error($"Line {LineNum}: First line of compartment definition should have 8 values.");
@@ -203,7 +203,7 @@ public class InputDataReader_EIR : InputDataReaderBase
                             ln = GetNextLine();
                             if (ln is null)
                                 throw Program.Error("Reach to EOF while reading input file.");
-                            values = ln.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            values = ln.Split([" "], StringSplitOptions.RemoveEmptyEntries);
                             if (values.Length != 2)
                                 throw Program.Error($"Line {LineNum}: Continuous lines of compartment definition should have 2 values.");
 
@@ -231,11 +231,11 @@ public class InputDataReader_EIR : InputDataReaderBase
             {
                 var fraction = branchTable[i + 1];
                 var daughter = data.Nuclides[i + 1];
-                nuclide.Branches = new[] { (daughter, fraction) };
+                nuclide.Branches = [(daughter, fraction)];
             }
             else
             {
-                nuclide.Branches = Array.Empty<(NuclideData, double)>();
+                nuclide.Branches = [];
             }
         }
 
@@ -287,7 +287,7 @@ public class InputDataReader_EIR : InputDataReaderBase
         { }
 
         // 2行目から線源領域の名称を配列で取得。
-        var sources = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
+        var sources = reader.ReadLine()?.Split([" "], StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
         if (sources is null)
             throw Program.Error($"Incorrect SEE file format: {file}");
         if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
@@ -298,7 +298,7 @@ public class InputDataReader_EIR : InputDataReaderBase
         var table = sources.ToDictionary(s => s, s => new double[31]);
         for (int indexT = 0; indexT < 31; indexT++)
         {
-            var values = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var values = reader.ReadLine()?.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             if (values?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
 
             // 各行の1列目から標的領域の名称を取得。

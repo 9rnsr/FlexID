@@ -36,7 +36,7 @@ public class InputEvaluatorTests
     [TestMethod]
     public void DefineVariable()
     {
-        FailureReadCoefficient(LineNum, "$var").ShouldBe(new[] { $"undefined variable 'var'." });
+        FailureReadCoefficient(LineNum, "$var").ShouldBe([$"undefined variable 'var'."]);
 
         evaluator.TryReadVarDecl(LineNum, "$var = 123").ShouldBeTrue();
         SuccessReadCoefficient(LineNum, "$var").ShouldBe((123m, false));

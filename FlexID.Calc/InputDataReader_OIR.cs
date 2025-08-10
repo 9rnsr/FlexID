@@ -15,8 +15,8 @@ public class InputDataReader_OIR : InputDataReaderBase
     }
 
     private readonly InputErrors errors;
-    private readonly Dictionary<string, int> compartmentSectionLocs = new();
-    private readonly Dictionary<string, int> transferSectionLocs = new();
+    private readonly Dictionary<string, int> compartmentSectionLocs = [];
+    private readonly Dictionary<string, int> transferSectionLocs = [];
 
     private readonly InputEvaluator evaluator;
 
@@ -24,15 +24,15 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private Dictionary<string, string> inputParameters;
 
-    private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = new();
+    private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
 
     private List<NuclideData> nuclides;
 
-    private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = new();
+    private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
 
-    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers = new();
+    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers = [];
 
-    private readonly List<Dictionary<string, double[]>> SCoeffTables = new();
+    private readonly List<Dictionary<string, double[]>> SCoeffTables = [];
 
     /// <summary>
     /// コンストラクタ。
@@ -159,13 +159,13 @@ public class InputDataReader_OIR : InputDataReaderBase
         // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
         errors.RaiseIfAny();
 
-        foreach (var (lineNum, nuc) in nuclideOrgans.Keys.Except(nuclides?.Select(n => n.Name) ?? Array.Empty<string>())
+        foreach (var (lineNum, nuc) in nuclideOrgans.Keys.Except(nuclides?.Select(n => n.Name) ?? [])
             .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
         {
             errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define compartments.");
         }
 
-        foreach (var (lineNum, nuc) in nuclideTransfers.Keys.Except(nuclides?.Select(n => n.Name) ?? Array.Empty<string>())
+        foreach (var (lineNum, nuc) in nuclideTransfers.Keys.Except(nuclides?.Select(n => n.Name) ?? [])
             .Select(nuc => (LineNum: transferSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
         {
             errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
@@ -204,7 +204,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var data = new InputData();
         data.Title = inputTitle;
-        data.Parameters = inputParameters ?? new();
+        data.Parameters = inputParameters ?? [];
         data.SourceRegions = sourceRegions;
         data.TargetRegions = targetRegions;
         data.TargetWeights = ws;
@@ -278,7 +278,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 errors.AddError(LineNum, "Duplicated [parameter] section.");
                 return SkipUntilNextSection();
             }
-            parameters = new();
+            parameters = [];
             parameterNames = InputData.ParameterNames;
             inputParameters = parameters;
         }
@@ -289,7 +289,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
                 return SkipUntilNextSection();
             }
-            parameters = new();
+            parameters = [];
             parameterNames = NuclideData.ParameterNames;
             nuclideParameters.Add(nuc, parameters);
         }
@@ -303,7 +303,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (CheckSectionHeader(line))
                 break;
 
-            var values = line.Split(new string[] { "=" }, 2, StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split(["="], 2, StringSplitOptions.RemoveEmptyEntries);
             if (values.Length != 2)
             {
                 errors.AddError(LineNum, "Parameter definition should have 2 values.");
@@ -339,7 +339,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var olderrors = errors.Count;
         var sectionLineNum = LineNum;
 
-        nuclides = new List<NuclideData>();
+        nuclides = [];
 
         // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
         var autoMode = default(bool?);
@@ -358,7 +358,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 break;
 
             // 核種の定義行を読み込む。
-            var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
             if (autoMode == true || autoMode == default && values.All(patternNuclide.IsMatch))
             {
@@ -386,8 +386,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     // インデックスファイルに定義されていないものは安定核種として扱う。
                     var halfLife = indexData?.HalfLife;
                     var lambda = indexData?.Lambda;
-                    var branches = indexData?.Daughters.Select(d => (d.Daughter, d.Branch)).ToArray()
-                                ?? Array.Empty<(string Daughter, decimal Fraction)>();
+                    var branches = indexData?.Daughters.Select(d => (d.Daughter, d.Branch)).ToArray() ?? [];
 
                     var nuclide = new NuclideData
                     {
@@ -579,7 +578,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var sectionLineNum = LineNum;
         compartmentSectionLocs[nuc] = sectionLineNum;
 
-        organs = new List<(int lineNum, Organ)>();
+        organs = [];
         nuclideOrgans.Add(nuc, organs);
 
         string line;
@@ -591,7 +590,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (CheckSectionHeader(line))
                 break;
 
-            var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
             if (values.Length != 3)
             {
@@ -623,7 +622,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 Name = organName,
                 Func = organFunc,
                 BioDecay = 1.0,     // accは後で設定する。
-                Inflows = new List<Inflow>(),
+                Inflows = [],
             };
 
             // 線源領域の名称については、妥当性を後で確認する。
@@ -658,7 +657,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var sectionLineNum = LineNum;
         transferSectionLocs[nuc] = sectionLineNum;
 
-        transfers = new List<(int, string, string, decimal?, bool)>();
+        transfers = [];
         nuclideTransfers.Add(nuc, transfers);
 
         string line;
@@ -670,7 +669,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (CheckSectionHeader(line))
                 break;
 
-            var values = line.Split(new string[] { " " }, 3, StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split([" "], 3, StringSplitOptions.RemoveEmptyEntries);
 
             if (values.Length != 3)
             {
@@ -720,7 +719,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             var sectionLineNum = compartmentSectionLocs[nuc];
 
-            nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? new();
+            nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? [];
 
             data.Nuclides.Add(nuclide);
 
@@ -733,12 +732,12 @@ public class InputDataReader_OIR : InputDataReaderBase
                 .Select(s => s.Name).ToList();
 
             var inpParams = data.Parameters;
-            var inpIncludes = (inpParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            var inpExcludes = (inpParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var inpIncludes = (inpParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var inpExcludes = (inpParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
             var nucParams = nuclide.Parameters;
-            var nucExcludes = (nucParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            var nucIncludes = (nucParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var nucExcludes = (nucParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var nucIncludes = (nucParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
             // Otherについて、以下の優先度で包含・除外指定された線源領域を追加・削除する：
             //  優先度低：インプット全体に共通設定として包含指定されたもの
@@ -896,7 +895,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 Name = $"Decay-{fromNuclide.Name}/{organFrom.Name}",
                 Func = OrganFunc.acc,
                 BioDecay = 1.0,     // accは後で設定する。
-                Inflows = new List<Inflow>(),
+                Inflows = [],
                 IsDecayCompartment = true,
             };
             data.Organs.Add(organDecay);

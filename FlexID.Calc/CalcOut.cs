@@ -181,7 +181,7 @@ class CalcOut : IDisposable
                 // コンパートメントとして明示されている集合コンパートメントの構成要素を得る。
                 var explicits = compartmentsAcc.Where(o => sregions.Contains(o.SourceRegion)).ToArray();
                 if (!explicits.Any())   // 構成要素が1つも明示されていない＝集合コンパートメントなしとする。
-                    return Array.Empty<(int, double)>();
+                    return [];
 
                 // 線源領域Otherに含まれる集合コンパートメント構成要素の、Other全体に対する質量比を得る。
                 var otherFraction = sregions

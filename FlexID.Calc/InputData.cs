@@ -176,27 +176,27 @@ public class NuclideData
     /// <summary>
     /// 消化管に対応するコンパートメント群のインデックスと寄与率。
     /// </summary>
-    public (int Index, double Rate)[] AtractIndexes = Array.Empty<(int, double)>();
+    public (int Index, double Rate)[] AtractIndexes = [];
 
     /// <summary>
     /// 肺に対応するコンパートメント群のインデックスと寄与率。
     /// </summary>
-    public (int Index, double Rate)[] LungsIndexes = Array.Empty<(int, double)>();
+    public (int Index, double Rate)[] LungsIndexes = [];
 
     /// <summary>
     /// 骨格に対応するコンパートメント群のインデックスと寄与率。
     /// </summary>
-    public (int Index, double Rate)[] SkeletonIndexes = Array.Empty<(int, double)>();
+    public (int Index, double Rate)[] SkeletonIndexes = [];
 
     /// <summary>
     /// 肝臓に対応するコンパートメント群のインデックスと寄与率。
     /// </summary>
-    public (int Index, double Rate)[] LiverIndexes = Array.Empty<(int, double)>();
+    public (int Index, double Rate)[] LiverIndexes = [];
 
     /// <summary>
     /// 甲状腺に対応するコンパートメント群のインデックスと寄与率。
     /// </summary>
-    public (int Index, double Rate)[] ThyroidIndexes = Array.Empty<(int, double)>();
+    public (int Index, double Rate)[] ThyroidIndexes = [];
 
     /// <summary>
     /// パラメータ定義。
@@ -206,11 +206,11 @@ public class NuclideData
     /// <summary>
     /// 有効なパラメータ名の配列。
     /// </summary>
-    public static readonly string[] ParameterNames = new[]
-    {
+    public static readonly string[] ParameterNames =
+    [
         "ExcludeOtherSourceRegions",
         "IncludeOtherSourceRegions"
-    };
+    ];
 }
 
 public class InputData
@@ -226,7 +226,7 @@ public class InputData
     /// <summary>
     /// 全ての核種。
     /// </summary>
-    public List<NuclideData> Nuclides = new();
+    public List<NuclideData> Nuclides = [];
 
     /// <summary>
     /// SAFデータにおける各線源領域の情報。
@@ -246,17 +246,17 @@ public class InputData
     /// <summary>
     /// 核種毎のS係数データ表(男性)。
     /// </summary>
-    public List<Dictionary<string, double[]>> SCoeffTablesM = new();
+    public List<Dictionary<string, double[]>> SCoeffTablesM = [];
 
     /// <summary>
     /// 核種毎のS係数データ表(女性)。
     /// </summary>
-    public List<Dictionary<string, double[]>> SCoeffTablesF = new();
+    public List<Dictionary<string, double[]>> SCoeffTablesF = [];
 
     /// <summary>
     /// 全ての臓器。
     /// </summary>
-    public List<Organ> Organs = new();
+    public List<Organ> Organs = [];
 
     /// <summary>
     /// パラメータ定義。
@@ -266,15 +266,15 @@ public class InputData
     /// <summary>
     /// 有効なパラメータ名の配列。
     /// </summary>
-    public static readonly string[] ParameterNames = new[]
-    {
+    public static readonly string[] ParameterNames =
+    [
         "ExcludeOtherSourceRegions",
         "IncludeOtherSourceRegions",
         "OutputDose",
         "OutputDoseRate",
         "OutputRetention",
         "OutputCumulative",
-    };
+    ];
 
     public bool TryGetBooleanParameter(string name, bool defaultValue) =>
         Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : defaultValue;
@@ -381,7 +381,7 @@ public abstract class InputDataReaderBase : IDisposable
         var fileLines = File.ReadLines(fileName);
         foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
         {
-            var values = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             var target = values[0];
             var weight = double.Parse(values[1]);
 
@@ -408,7 +408,7 @@ public abstract class InputDataReaderBase : IDisposable
 /// </summary>
 public class InputErrors
 {
-    private readonly List<(int LineNum, string Message)> errors = new();
+    private readonly List<(int LineNum, string Message)> errors = [];
 
     /// <summary>
     /// 現在保持されているエラーの数を取得する。
@@ -438,7 +438,7 @@ public class InputErrors
 public class InputErrorsException : ApplicationException
 {
     public InputErrorsException(int lineNum, string message)
-        : this(new[] { (lineNum, message) })
+        : this([(lineNum, message)])
     {
     }
 

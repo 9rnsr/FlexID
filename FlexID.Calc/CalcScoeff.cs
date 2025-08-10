@@ -115,7 +115,7 @@ public class CalcScoeff
             foreach (var rad in raddata)
             {
                 // エネルギー毎のSAF算出
-                string[] Rad = rad.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] Rad = rad.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
                 string icode = Rad[0];      // 放射線のタイプ
                 string yield = Rad[1];      // 放射線の収率(/nt)
@@ -145,8 +145,8 @@ public class CalcScoeff
                     double beta = 0;
                     for (int r = 1; r < betdata.Length; r++)
                     {
-                        var betL = betdata[r - 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                        var betH = betdata[r - 0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                        var betL = betdata[r - 1].Split([" "], StringSplitOptions.RemoveEmptyEntries);
+                        var betH = betdata[r - 0].Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
                         var ebinL = double.Parse(betL[0]); // エネルギー幅の下限(MeV)
                         var ebinH = double.Parse(betH[0]); // エネルギー幅の上限(MeV)
@@ -382,8 +382,8 @@ public class CalcScoeff
         var numS = sourceRegions.Length;
         var numT = targetRegions.Length;
 
-        (string name, double MaleMass, double FemaleMass)[] OtherSourceRegions = new[]
-        {
+        (string name, double MaleMass, double FemaleMass)[] OtherSourceRegions =
+        [
             ("O-mucosa",   3.583E-02, 2.245E-02), ("Teeth-V",    5.000E-02, 4.000E-02), ("Tonsils",    3.000E-03, 3.000E-03),
             ("Oesophag-w", 4.000E-02, 3.500E-02), ("St-wall",    1.500E-01, 1.400E-01), ("SI-wall",    6.500E-01, 6.000E-01),
             ("RC-wall",    1.500E-01, 1.450E-01), ("LC-wall",    1.500E-01, 1.450E-01), ("RS-wall",    7.000E-02, 7.000E-02),
@@ -399,7 +399,7 @@ public class CalcScoeff
             ("Uterus",     0.000E+00, 8.000E-02), ("Adipose",    1.723E+01, 2.141E+01), ("Cartilage",  1.100E+00, 9.000E-01),
             ("Muscle",     2.900E+01, 1.750E+01), ("ET1-wall",   2.923E-03, 2.526E-03), ("ET2-wall",   2.923E-03, 2.526E-03),
             ("Lung-Tis",   5.000E-01, 4.200E-01),
-        };
+        ];
 
         string CalcOther(int iT)
         {

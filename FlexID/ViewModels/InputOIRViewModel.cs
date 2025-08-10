@@ -13,11 +13,11 @@ namespace FlexID.ViewModels;
 
 public class InputOIRViewModel : BindableBase
 {
-    private CompositeDisposable Disposables { get; } = new();
+    private CompositeDisposable Disposables { get; } = [];
 
     public ReactivePropertySlim<string> OutputFilePath { get; } = new();
 
-    public ObservableCollection<string> Nuclides { get; } = new();
+    public ObservableCollection<string> Nuclides { get; } = [];
 
     public ReactivePropertySlim<string> SelectedNuclide { get; } = new();
 
@@ -25,7 +25,7 @@ public class InputOIRViewModel : BindableBase
 
     public ReactivePropertySlim<bool> CalcProgeny { get; } = new();
 
-    public ObservableCollection<InputData> Inputs { get; } = new();
+    public ObservableCollection<InputData> Inputs { get; } = [];
 
     public ReactivePropertySlim<InputData> SelectedInput { get; } = new();
 
@@ -35,12 +35,12 @@ public class InputOIRViewModel : BindableBase
 
     public ReactivePropertySlim<string> CommitmentPeriod { get; } = new();
 
-    public IReadOnlyList<string> CommitmentPeriodUnits { get; } = new List<string>
-    {
+    public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
+    [
         "days",
         "months",
         "years",
-    }.AsReadOnly();
+    ];
 
     public ReactivePropertySlim<string> SelectedCommitmentPeriodUnit { get; }
 
@@ -71,7 +71,7 @@ public class InputOIRViewModel : BindableBase
             var nuc = input.Nuclide;
             if (!cacheNucInps.TryGetValue(nuc, out var inputs))
             {
-                inputs = new List<InputData>();
+                inputs = [];
                 cacheNucInps.Add(nuc, inputs);
             }
             inputs.Add(input);
@@ -83,7 +83,7 @@ public class InputOIRViewModel : BindableBase
         var selectedInputs = SelectedNuclide.Select(nuc =>
         {
             if (nuc is null)
-                return new List<InputData>();
+                return [];
             return cacheNucInps[nuc];
         });
 

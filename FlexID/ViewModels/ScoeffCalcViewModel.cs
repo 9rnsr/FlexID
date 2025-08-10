@@ -29,7 +29,7 @@ public class NuclideItem : BindableBase
 
 public class ScoeffCalcViewModel : BindableBase
 {
-    private CompositeDisposable Disposables { get; } = new();
+    private CompositeDisposable Disposables { get; } = [];
 
     public ReactivePropertySlim<string> OutputFilePath { get; } = new();
 
@@ -41,7 +41,7 @@ public class ScoeffCalcViewModel : BindableBase
 
     public ReactivePropertySlim<bool> IdacDoseCompatible { get; } = new(false);
 
-    public ObservableCollection<NuclideItem> Nuclides { get; } = new();
+    public ObservableCollection<NuclideItem> Nuclides { get; } = [];
 
     public ReactiveCommandSlim SelectOutputFilePathCommand { get; }
 

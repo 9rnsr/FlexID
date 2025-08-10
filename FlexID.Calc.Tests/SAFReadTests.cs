@@ -29,8 +29,8 @@ public class SAFReadTests
     public void TestReadSourceRegions()
     {
         var sregions = SAFDataReader.ReadSourceRegions();
-        sregions.Select(s => s.Name).ShouldBe(new[]
-        {
+        sregions.Select(s => s.Name).ShouldBe(
+        [
             "O-cavity",    "O-mucosa",    "Teeth-S",     "Teeth-V",     "Tongue",
             "Tonsils",     "Oesophag-s",  "Oesophag-f",  "Oesophag-w",  "St-cont",
             "St-mucosa",   "St-wall",     "SI-cont",     "SI-mucosa",   "SI-wall",
@@ -47,10 +47,10 @@ public class SAFReadTests
             "Testes",      "Thymus",      "Thyroid",     "Ureters",     "UB-wall",
             "UB-cont",     "Uterus",      "Adipose",     "Cartilage",   "Muscle",
             "ET1-wall",    "ET2-wall",    "Lung-Tis",    "RT-air",
-        });
+        ]);
 
-        sregions.Select(s => s.MaleMass).ShouldBe(new[]
-        {
+        sregions.Select(s => s.MaleMass).ShouldBe(
+        [
             0.0      , 3.583E-02, 0.000E+00, 5.000E-02, 7.300E-02,
             3.000E-03, 0.000E+00, 0.000E+00, 4.000E-02, 2.500E-01,
             4.639E-03, 1.500E-01, 3.500E-01, 3.696E-02, 6.500E-01,
@@ -67,10 +67,10 @@ public class SAFReadTests
             3.500E-02, 2.500E-02, 2.000E-02, 1.600E-02, 5.000E-02,
             2.000E-01, 0.000E+00, 1.723E+01, 1.100E+00, 2.900E+01,
             2.923E-03, 2.923E-03, 5.000E-01, 0.000E+00,
-        });
+        ]);
 
-        sregions.Select(s => s.FemaleMass).ShouldBe(new[]
-        {
+        sregions.Select(s => s.FemaleMass).ShouldBe(
+        [
             0.0      ,  2.245E-02,  0.000E+00,  4.000E-02,  6.000E-02,
             3.000E-03,  0.000E+00,  0.000E+00,  3.500E-02,  2.300E-01,
             4.639E-03,  1.400E-01,  2.800E-01,  3.432E-02,  6.000E-01,
@@ -87,15 +87,15 @@ public class SAFReadTests
             0.000E+00,  2.000E-02,  1.700E-02,  1.500E-02,  4.000E-02,
             2.000E-01,  8.000E-02,  2.141E+01,  9.000E-01,  1.750E+01,
             2.526E-03,  2.526E-03,  4.200E-01,  0.000E+00,
-        });
+        ]);
     }
 
     [TestMethod]
     public void TestReadTargetRegions()
     {
         var tregions = SAFDataReader.ReadTargetRegions();
-        tregions.Select(t => t.Name).ShouldBe(new[]
-        {
+        tregions.Select(t => t.Name).ShouldBe(
+        [
             "O-mucosa",     "Oesophagus",   "St-stem",      "SI-stem",      "RC-stem",
             "LC-stem",      "RS-stem",      "ET1-bas",      "ET2-bas",      "LN-ET",
             "Bronch-bas",   "Bronch-sec",   "Bchiol-sec",   "AI",           "LN-Th",
@@ -105,7 +105,7 @@ public class SAFReadTests
             "Kidneys",      "Spleen",       "GB-wall",      "Ureters",      "UB-wall",
             "Ovaries",      "Testes",       "Prostate",     "Uterus",       "LN-Sys",
             "Skin",         "Adipose",      "Muscle",
-        });
+        ]);
     }
 
     [TestMethod]

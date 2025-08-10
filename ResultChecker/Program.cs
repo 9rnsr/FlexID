@@ -109,7 +109,7 @@ internal partial class Program
                 try
                 {
                     if (patterns is null)
-                        patterns = new List<Regex>();
+                        patterns = [];
                     patterns.Add(new Regex(pattern, RegexOptions.IgnoreCase));
                 }
                 catch

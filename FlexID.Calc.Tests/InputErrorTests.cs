@@ -10,8 +10,8 @@ public class InputErrorTests
     [TestMethod]
     public void DuplicatedSectionErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -48,25 +48,25 @@ public class InputErrorTests
             "",
             "[Sr-90:transfer]",
             "  ST0        ST1   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 4: Duplicated [title] section.",
             "Line 10: Duplicated [parameter] section.",
             "Line 16: Duplicated [nuclide] section.",
             "Line 22: Duplicated [Sr-90:parameter] section.",
             "Line 29: Duplicated [Sr-90:compartment] section.",
             "Line 35: Duplicated [Sr-90:transfer] section.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void MissingSectionErrors1()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "# [title]",
             "# dummy",
             "",
@@ -79,23 +79,23 @@ public class InputErrorTests
             "",
             "[Sr-90:transfer]",
             "  input      ST0   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 7: Undefined nuclide 'Sr-90' is used to define compartments.",
             "Line 11: Undefined nuclide 'Sr-90' is used to define transfers.",
             "Line 13: Missing [title] section.",
             "Line 13: Missing [nuclide] section.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void MissingSectionErrors2()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -108,39 +108,39 @@ public class InputErrorTests
             "",
             "# [Sr-90:transfer]",
             "#   input      ST0   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 13: Missing [Sr-90:compartment] section.",
             "Line 13: Missing [Sr-90:transfer] section.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void EmptySectionErrors1()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "",
             "[nuclide]",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 1: Empty [title] section.",
             "Line 3: Empty [nuclide] section.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void EmptySectionErrors2()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -150,21 +150,21 @@ public class InputErrorTests
             "[Sr-90:compartment]",
             "",
             "[Sr-90:transfer]",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 7: Empty [Sr-90:compartment] section.",
             "Line 9: Empty [Sr-90:transfer] section.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void TitleSection_UnrecognizedLinesError()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -172,20 +172,20 @@ public class InputErrorTests
             "",
             "[nuclide]",
             "  Sr-90"
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 4: Unrecognized lines in [title] section." ,
-        });
+        ]);
     }
 
     [TestMethod]
     public void NuclideSection_AutoModeErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -200,21 +200,21 @@ public class InputErrorTests
             "",
             "[Sr-90:transfer]",
             "  input      ST0   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 6: 'aaa' is not nuclide name.",
             "Line 7: Duplicated nuclide definition for 'Sr-90'.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void NuclideSection_ManualModeErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -233,11 +233,11 @@ public class InputErrorTests
             "",
             "[Sr-90:transfer]",
             "  input      ST0   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 5: Nuclide definition should have at least 2 values.",
             "Line 6: Cannot get nuclide Lambda.",
             "Line 7: Nuclide Lambda should be positive.",
@@ -245,14 +245,14 @@ public class InputErrorTests
             "Line 9: Daughter name should not be empty.",
             "Line 10: Cannot get branching fraction.",
             "Line 11: Branching fraction should be positive.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void CompartmentSection_SyntaxErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -266,21 +266,21 @@ public class InputErrorTests
             "",
             "[Sr-90:transfer]",
             "  input      ST0   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 8: Compartment definition should have 3 values.",
             "Line 10: Unrecognized compartment function 'add'.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void CompartmentSection_MissingInpError()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -293,20 +293,20 @@ public class InputErrorTests
             "",
             "[Sr-90:transfer]",
             "  ST0    ST1   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 7: Missing 'inp' compartment.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void CompartmentSection_DefineInpErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -328,21 +328,21 @@ public class InputErrorTests
             "",
             "[Y-90:transfer]",
             "  Sr-90/ST0  ST0   ---"
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 10: Duplicated 'inp' compartment.",
             "Line 17: Cannot define 'inp' compartment which belongs to progeny nuclide.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void CompartmentSection_UnknownSourceRegion()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -355,20 +355,20 @@ public class InputErrorTests
             "",
             "[Sr-90:transfer]",
             "  input      ST0   100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 9: Unknown source region name 'Abcde'.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void TransferSection_SyntexErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -382,21 +382,21 @@ public class InputErrorTests
             "[Sr-90:transfer]",
             "  input # ST0   100%",
             "  input   ST0   abc%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 12: Transfer path definition should have 3 values.",
             "Line 13: Transfer coefficient should be evaluated to a number, not 'abc%'.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void TransferSection_SemanticErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -422,11 +422,11 @@ public class InputErrorTests
             "",
             "[Y-90:transfer]",
             "  ST0  Sr-90/ST0   ---",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 14: Undefined nuclide 'X-00'.",
             "Line 15: Undefined nuclide 'X-00'.",
             "Line 16: Undefined compartment 'ST1'.",
@@ -434,14 +434,14 @@ public class InputErrorTests
             "Line 18: Cannot set transfer path to itself.",
             "Line 19: Duplicated transfer path from 'input' to 'ST0'.",
             "Line 25: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void TransferSection_PathErrors()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -470,11 +470,11 @@ public class InputErrorTests
             "  Sr-90/mix-Blood  ST0  ---",
             "  Sr-90/ST0        ST0  100%",
             "  ST0              ST1  100%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 15: Require fraction of output activity [%] from inp 'input'.",
             "Line 16: Require fraction of output activity [%] from mix 'mix-Blood'.",
             "Line 17: Cannot set input path to inp 'input'.",
@@ -483,14 +483,14 @@ public class InputErrorTests
             "Line 26: Cannot set decay path from mix 'Sr-90/mix-Blood'.",
             "Line 27: Require transfer rate [/d] from acc 'Sr-90/ST0'.",
             "Line 28: Require transfer rate [/d] from acc 'ST0'.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void TransferSection_NegativeCoefficient()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -505,20 +505,20 @@ public class InputErrorTests
             "[Sr-90:transfer]",
             "  input  ST0        100%",
             "  ST0    ST1        -30",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 14: Transfer coefficient should be positive.",
-        });
+        ]);
     }
 
     [TestMethod]
     public void Transfersection_SumOfCoefficientsIsNot100Percent()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -533,22 +533,22 @@ public class InputErrorTests
             "[Sr-90:transfer]",
             "  input  ST0        63.1462%",
             "  input  ST1        36.8528%",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 13: Total [%] of transfer paths from 'input' is  not 100%, but 99.999%.",
             "Line 13:     = 63.1462%",
             "Line 14:     = 36.8528%",
-        });
+        ]);
     }
 
     [TestMethod]
     public void TransferSection_DivideByZeroCoefficient()
     {
-        var reader = CreateReader(new[]
-        {
+        var reader = CreateReader(
+        [
             "[title]",
             "dummy",
             "",
@@ -563,13 +563,13 @@ public class InputErrorTests
             "[Sr-90:transfer]",
             "  input  ST0        100%",
             "  ST0    ST1      $(10 / 0)",
-        });
+        ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(new[]
-        {
+        e.ErrorLines.ShouldBe(
+        [
             "Line 14: Transfer coefficient evaluation failed: divide by zero.",
-        });
+        ]);
     }
 }
 

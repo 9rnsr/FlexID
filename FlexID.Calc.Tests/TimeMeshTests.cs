@@ -99,28 +99,34 @@ public class TimeMeshTests
         yield return new object[]
         {
             // 全体の期間：365日
-            new TimeMesh(new[] { new TimeMeshBoundary("365d", "5d"), }),
-            new TimeMesh(new[] { new TimeMeshBoundary("365d", "1d"), }),
+            new TimeMesh([new TimeMeshBoundary("365d", "5d"),]),
+            new TimeMesh([new TimeMeshBoundary("365d", "1d"),]),
         };
 
         yield return new object[]
         {
             // 全体の期間：600日
-            new TimeMesh(new[] { new TimeMeshBoundary("100d", "1d"),
-                                 new TimeMeshBoundary("200d", "5d"),
-                                 new TimeMeshBoundary("300d", "10d"),}),
-            new TimeMesh(new[] { new TimeMeshBoundary("600d", "1d"), }),
+            new TimeMesh(
+            [
+                new TimeMeshBoundary("100d", "1d"),
+                new TimeMeshBoundary("200d", "5d"),
+                new TimeMeshBoundary("300d", "10d"),
+            ]),
+            new TimeMesh(
+            [
+                new TimeMeshBoundary("600d", "1d"),
+            ]),
         };
 
         yield return new object[]
         {
             // 全体の期間：75年
-            new TimeMesh(new[]
-            {
+            new TimeMesh(
+            [
                 new TimeMeshBoundary(  "75 years",  "1 day"),
-            }),
-            new TimeMesh(new[]
-            {
+            ]),
+            new TimeMesh(
+            [
                 new TimeMeshBoundary(   "30 mins",  "1 min"),
                 new TimeMeshBoundary(   "50 days",  "3 mins"),
                 new TimeMeshBoundary(  "100 days",  "5 mins"),
@@ -130,7 +136,7 @@ public class TimeMeshTests
                 new TimeMeshBoundary( "2000 days",  "4 hours"),
                 new TimeMeshBoundary( "3650 days", "12 hours"),
                 new TimeMeshBoundary("27375 days", "24 hours"),
-            })
+            ])
         };
 
         yield return new object[]
@@ -143,14 +149,14 @@ public class TimeMeshTests
     [TestMethod]
     public void TestCover_LongerCoerseMesh()
     {
-        var longerCoarseMesh = new TimeMesh(new[]
-        {
+        var longerCoarseMesh = new TimeMesh(
+        [
             new TimeMeshBoundary("10 days", "1 day"),
-        });
-        var shorterFineMesh = new TimeMesh(new[]
-        {
+        ]);
+        var shorterFineMesh = new TimeMesh(
+        [
             new TimeMeshBoundary("8 days", "1 hour"),
-        });
+        ]);
 
         // 細かいメッシュより長い期間を持つ粗いメッシュは網羅できない。
         shorterFineMesh.Cover(longerCoarseMesh).ShouldBeFalse();
@@ -159,14 +165,14 @@ public class TimeMeshTests
     [TestMethod]
     public void TestCover_LongerFineMesh()
     {
-        var shorterCoarseMesh = new TimeMesh(new[]
-        {
+        var shorterCoarseMesh = new TimeMesh(
+        [
             new TimeMeshBoundary("8 days", "1 day"),
-        });
-        var longerFineMesh = new TimeMesh(new[]
-        {
+        ]);
+        var longerFineMesh = new TimeMesh(
+        [
             new TimeMeshBoundary("10 days", "1 hour"),
-        });
+        ]);
 
         // 細かいメッシュが、粗いメッシュより長い期間を網羅している。
         longerFineMesh.Cover(shorterCoarseMesh).ShouldBeTrue();

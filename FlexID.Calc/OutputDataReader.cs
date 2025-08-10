@@ -145,12 +145,12 @@ public class OutputDataReader : IDisposable
         line = reader.ReadLine();
         if (line is null || !line.StartsWith("Radionuclide: "))
             throw new InvalidCastException("unrecognized file format");
-        var nuclides = line.Substring("Radionuclide: ".Length).Split(new[] { ", " }, StringSplitOptions.None);
+        var nuclides = line.Substring("Radionuclide: ".Length).Split([", "], StringSplitOptions.None);
 
         line = reader.ReadLine();
         if (line is null || !line.StartsWith("Units: "))
             throw new InvalidCastException("unrecognized file format");
-        var units = line.Substring("Units: ".Length).Split(new[] { ", " }, StringSplitOptions.None);
+        var units = line.Substring("Units: ".Length).Split([", "], StringSplitOptions.None);
 
         timesUnit = "day";
         valuesUnit =
@@ -172,7 +172,7 @@ public class OutputDataReader : IDisposable
         }
 
         var outputHeaders = type == OutputType.Dose || type == OutputType.DoseRate
-            ? new[] { nuclides[0] + " (Male)", nuclides[0] + " (Female)" } : nuclides;
+            ? [nuclides[0] + " (Male)", nuclides[0] + " (Female)"] : nuclides;
 
         var blocks = new List<OutputBlockData>(outputHeaders.Length);
         foreach (var outputHeader in outputHeaders)

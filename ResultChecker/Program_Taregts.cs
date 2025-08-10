@@ -47,7 +47,7 @@ internal partial class Program
         catch (Exception e) when (e is IOException || e is SystemException)
         {
             // baseDirが存在しない場合など。
-            return Enumerable.Empty<Target>();
+            return [];
         }
     }
 }
