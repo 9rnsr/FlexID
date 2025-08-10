@@ -1,24 +1,23 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace FlexID.VIews.Converters
+namespace FlexID.VIews.Converters;
+
+public class InvertedBooleanConverter : IValueConverter
 {
-    public class InvertedBooleanConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool v)
-                return !v;
+        if (value is bool v)
+            return !v;
 
-            throw new NotSupportedException();
-        }
+        throw new NotSupportedException();
+    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool v)
-                return !v;
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is bool v)
+            return !v;
 
-            throw new NotSupportedException();
-        }
+        throw new NotSupportedException();
     }
 }
