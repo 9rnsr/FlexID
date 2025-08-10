@@ -36,7 +36,7 @@ class ProgressPresenter
     private string windmill = "/";
     private readonly TimeSpan wait = TimeSpan.FromMilliseconds(250);
 
-    private int totalCount;
+    private readonly int totalCount;
     private int finishCount;
     private const int DumpCount = 10;
 #if DEBUG_ParallelRunningCount

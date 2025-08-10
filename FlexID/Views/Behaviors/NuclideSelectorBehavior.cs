@@ -18,8 +18,8 @@ public class NuclideSelectorBehavior : Behavior<ListView>
     }
 
     // 文字入力でマッチする核種名に選択項目を移動する機能。
+    private readonly DispatcherTimer resetNuclideInputTimer;
     private string searchPattern = string.Empty;
-    private DispatcherTimer resetNuclideInputTimer;
     private bool avoidResetTimeout = false;
 
     protected override void OnAttached()

@@ -3,8 +3,8 @@ namespace FlexID.Calc.Tests;
 [TestClass]
 public class ScoeffCalcTests
 {
-    static SAFData safdataAM;
-    static SAFData safdataAF;
+    static readonly SAFData safdataAM;
+    static readonly SAFData safdataAF;
 
     static ScoeffCalcTests()
     {

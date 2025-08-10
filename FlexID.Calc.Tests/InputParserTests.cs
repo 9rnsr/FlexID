@@ -20,9 +20,9 @@ class StringifyVisitor : Visitor<string>
 [TestClass]
 public class InputParserTests
 {
-    InputParser<string> parser = new(new StringifyVisitor());
+    private readonly InputParser<string> parser = new(new StringifyVisitor());
 
-    (Func<string, string> Success, Action<string> Failure) MakeTesters(Parser<string> parser) =>
+    private (Func<string, string> Success, Action<string> Failure) MakeTesters(Parser<string> parser) =>
         (Success: input => parser.End().Parse(input),
          Failure: input => new Action(() => parser.End().Parse(input)).ShouldThrow<ParseException>());
 
