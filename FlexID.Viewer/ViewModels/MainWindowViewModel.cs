@@ -18,19 +18,19 @@ public class MainWindowViewModel : BindableBase
 
     #region 出力ファイル情報
 
-    public ReactivePropertySlim<string> OutputFilePath { get; }
+    public ReactivePropertySlim<string> OutputFilePath { get; } = new("");
 
     public ReactiveCommandSlim<string[]> SelectOutputFilePathCommand { get; }
 
     public ObservableCollection<OutputType> OutputTypes => this.model.OutputTypes;
 
-    public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new ReactivePropertySlim<OutputType?>();
+    public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new();
 
     public ReadOnlyReactivePropertySlim<string> Title { get; }
 
     public ObservableCollection<string> Nuclides => this.model.Nuclides;
 
-    public ReactivePropertySlim<string> SelectedNuclide { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> SelectedNuclide { get; } = new();
 
     #endregion
 
@@ -84,9 +84,9 @@ public class MainWindowViewModel : BindableBase
     /// </summary>
     public ReadOnlyReactiveProperty<bool> IsPlaying { get; }
 
-    public ReactiveCommand PlayCommand { get; } = new ReactiveCommand();
-    public ReactiveCommand NextStepCommand { get; } = new ReactiveCommand();
-    public ReactiveCommand PreviousStepCommand { get; } = new ReactiveCommand();
+    public ReactiveCommand PlayCommand { get; }
+    public ReactiveCommand NextStepCommand { get; }
+    public ReactiveCommand PreviousStepCommand { get; }
 
     #endregion
 
@@ -110,8 +110,6 @@ public class MainWindowViewModel : BindableBase
         this.model = model;
 
         #region 出力ファイル情報
-
-        OutputFilePath = new ReactivePropertySlim<string>("");
 
         SelectOutputFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
         {
@@ -175,9 +173,9 @@ public class MainWindowViewModel : BindableBase
 
         IsPlaying = this.model.ObserveProperty(x => x.IsPlaying).ToReadOnlyReactiveProperty();
 
-        PlayCommand.Subscribe(() => this.model.Playing());
-        NextStepCommand.Subscribe(() => this.model.NextStep());
-        PreviousStepCommand.Subscribe(() => this.model.PreviousStep());
+        PlayCommand = new ReactiveCommand().WithSubscribe(() => this.model.Playing());
+        NextStepCommand = new ReactiveCommand().WithSubscribe(() => this.model.NextStep());
+        PreviousStepCommand = new ReactiveCommand().WithSubscribe(() => this.model.PreviousStep());
 
         #endregion
 

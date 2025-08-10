@@ -18,12 +18,6 @@ public class Model : BindableBase
     {
         #region コンター表示
 
-        organs = new List<string>();
-        organMap = new Dictionary<string, string>();
-
-        unsetOrganValues = new Dictionary<string, double>();
-        unsetOrganColors = new Dictionary<string, string>();
-
         foreach (var line in File.ReadLines(@"lib/FixList.txt"))
         {
             var parts = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -37,8 +31,8 @@ public class Model : BindableBase
             unsetOrganColors.Add(organ, unsetColorCode);
         }
 
-        actualOrganValues = new Dictionary<string, double>(unsetOrganValues);
-        actualOrganColors = new Dictionary<string, string>(unsetOrganColors);
+        actualOrganValues = new(unsetOrganValues);
+        actualOrganColors = new(unsetOrganColors);
 
         OrganValues = unsetOrganValues;
         OrganColors = unsetOrganColors;
@@ -105,7 +99,7 @@ public class Model : BindableBase
     /// <summary>
     /// 検出された出力ファイル種別のリスト。
     /// </summary>
-    public ObservableCollection<OutputType> OutputTypes { get; } = new ObservableCollection<OutputType>();
+    public ObservableCollection<OutputType> OutputTypes { get; } = new();
 
     /// <summary>
     /// インプットのタイトル。
@@ -130,7 +124,7 @@ public class Model : BindableBase
     /// <summary>
     /// 核種リスト。
     /// </summary>
-    public ObservableCollection<string> Nuclides { get; } = new ObservableCollection<string>();
+    public ObservableCollection<string> Nuclides { get; } = new();
 
     #endregion
 
@@ -139,15 +133,15 @@ public class Model : BindableBase
     /// <summary>
     /// モデル図に表示するための、統一臓器名のリスト。
     /// </summary>
-    private readonly List<string> organs;
+    private readonly List<string> organs = new();
 
     /// <summary>
     /// コンパートメント名をキーに、対応する統一臓器名を値にした辞書。
     /// </summary>
-    private readonly Dictionary<string, string> organMap;
+    private readonly Dictionary<string, string> organMap = new();
 
-    private readonly Dictionary<string, double> unsetOrganValues;
-    private readonly Dictionary<string, string> unsetOrganColors;
+    private readonly Dictionary<string, double> unsetOrganValues = new();
+    private readonly Dictionary<string, string> unsetOrganColors = new();
 
     private readonly Dictionary<string, double> actualOrganValues;
     private readonly Dictionary<string, string> actualOrganColors;
@@ -158,7 +152,7 @@ public class Model : BindableBase
     /// <summary>
     /// 現在の出力タイムステップにおける各コンパートメントの数値。
     /// </summary>
-    public ObservableCollection<CalcData> DataValues { get; } = new ObservableCollection<CalcData>();
+    public ObservableCollection<CalcData> DataValues { get; } = new();
 
     /// <summary>
     /// モデル図に表示するための、統一臓器名とその合算された数値。
@@ -286,9 +280,9 @@ public class Model : BindableBase
 
     #region グラフ表示
 
-    public ObservableCollection<RegionData> Regions { get; } = new ObservableCollection<RegionData>();
+    public ObservableCollection<RegionData> Regions { get; } = new();
 
-    public PlotModel PlotModel { get; } = new PlotModel();
+    public PlotModel PlotModel { get; } = new();
 
     private LogarithmicAxis LogAxisX { get; }
     private LogarithmicAxis LogAxisY { get; }

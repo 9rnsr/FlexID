@@ -28,10 +28,10 @@ class ProgressPresenter
     }
 
     private readonly Task task;
-    private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource cancellationTokenSource = new();
 
-    private readonly List<ItemData> items = new List<ItemData>();
-    private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim();
+    private readonly List<ItemData> items = new();
+    private readonly ReaderWriterLockSlim locker = new();
 
     private string windmill = "/";
     private readonly TimeSpan wait = TimeSpan.FromMilliseconds(250);

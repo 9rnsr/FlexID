@@ -13,27 +13,27 @@ namespace FlexID.ViewModels;
 
 public class InputEIRViewModel : BindableBase
 {
-    private CompositeDisposable Disposables { get; } = new CompositeDisposable();
+    private CompositeDisposable Disposables { get; } = new();
 
-    public ReactivePropertySlim<string> OutputFilePath { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> OutputFilePath { get; } = new();
 
-    public ObservableCollection<string> Nuclides { get; } = new ObservableCollection<string>();
+    public ObservableCollection<string> Nuclides { get; } = new();
 
-    public ReactivePropertySlim<string> SelectedNuclide { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> SelectedNuclide { get; } = new();
 
     public ReadOnlyReactivePropertySlim<bool> HasProgeny { get; }
 
-    public ReactivePropertySlim<bool> CalcProgeny { get; } = new ReactivePropertySlim<bool>();
+    public ReactivePropertySlim<bool> CalcProgeny { get; } = new();
 
-    public ObservableCollection<InputData> Inputs { get; } = new ObservableCollection<InputData>();
+    public ObservableCollection<InputData> Inputs { get; } = new();
 
-    public ReactivePropertySlim<InputData> SelectedInput { get; } = new ReactivePropertySlim<InputData>();
+    public ReactivePropertySlim<InputData> SelectedInput { get; } = new();
 
-    public ReactivePropertySlim<string> CalcTimeMeshFilePath { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> CalcTimeMeshFilePath { get; } = new();
 
-    public ReactivePropertySlim<string> OutTimeMeshFilePath { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> OutTimeMeshFilePath { get; } = new();
 
-    public ReactivePropertySlim<string> CommitmentPeriod { get; } = new ReactivePropertySlim<string>();
+    public ReactivePropertySlim<string> CommitmentPeriod { get; } = new();
 
     public IReadOnlyList<string> CommitmentPeriodUnits { get; } = new List<string>
     {

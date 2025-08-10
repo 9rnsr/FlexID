@@ -15,5 +15,5 @@ public class MainWindowViewModel : BindableBase
 
 public class CalcState
 {
-    public ReactivePropertySlim<bool> CanExecute { get; } = new ReactivePropertySlim<bool>(true);
+    public ReactivePropertySlim<bool> CanExecute { get; } = new(true);
 }

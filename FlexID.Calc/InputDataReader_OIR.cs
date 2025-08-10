@@ -15,8 +15,8 @@ public class InputDataReader_OIR : InputDataReaderBase
     }
 
     private readonly InputErrors errors;
-    private readonly Dictionary<string, int> compartmentSectionLocs = new Dictionary<string, int>();
-    private readonly Dictionary<string, int> transferSectionLocs = new Dictionary<string, int>();
+    private readonly Dictionary<string, int> compartmentSectionLocs = new();
+    private readonly Dictionary<string, int> transferSectionLocs = new();
 
     private readonly InputEvaluator evaluator;
 
@@ -24,16 +24,15 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private Dictionary<string, string> inputParameters;
 
-    private Dictionary<string, Dictionary<string, string>> nuclideParameters = new Dictionary<string, Dictionary<string, string>>();
+    private Dictionary<string, Dictionary<string, string>> nuclideParameters = new();
 
     private List<NuclideData> nuclides;
 
-    private Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = new Dictionary<string, List<(int lineNum, Organ)>>();
+    private Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = new();
 
-    private Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers =
-        new Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>>();
+    private Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers = new();
 
-    private List<Dictionary<string, double[]>> SCoeffTables = new List<Dictionary<string, double[]>>();
+    private List<Dictionary<string, double[]>> SCoeffTables = new();
 
     /// <summary>
     /// コンストラクタ。
@@ -205,7 +204,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var data = new InputData();
         data.Title = inputTitle;
-        data.Parameters = inputParameters ?? new Dictionary<string, string>();
+        data.Parameters = inputParameters ?? new();
         data.SourceRegions = sourceRegions;
         data.TargetRegions = targetRegions;
         data.TargetWeights = ws;
@@ -279,7 +278,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 errors.AddError(LineNum, "Duplicated [parameter] section.");
                 return SkipUntilNextSection();
             }
-            parameters = new Dictionary<string, string>();
+            parameters = new();
             parameterNames = InputData.ParameterNames;
             inputParameters = parameters;
         }
@@ -290,7 +289,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
                 return SkipUntilNextSection();
             }
-            parameters = new Dictionary<string, string>();
+            parameters = new();
             parameterNames = NuclideData.ParameterNames;
             nuclideParameters.Add(nuc, parameters);
         }
@@ -721,7 +720,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             var sectionLineNum = compartmentSectionLocs[nuc];
 
-            nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? new Dictionary<string, string>();
+            nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? new();
 
             data.Nuclides.Add(nuclide);
 

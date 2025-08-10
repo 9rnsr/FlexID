@@ -226,7 +226,7 @@ public class InputData
     /// <summary>
     /// 全ての核種。
     /// </summary>
-    public List<NuclideData> Nuclides = new List<NuclideData>();
+    public List<NuclideData> Nuclides = new();
 
     /// <summary>
     /// SAFデータにおける各線源領域の情報。
@@ -246,17 +246,17 @@ public class InputData
     /// <summary>
     /// 核種毎のS係数データ表(男性)。
     /// </summary>
-    public List<Dictionary<string, double[]>> SCoeffTablesM = new List<Dictionary<string, double[]>>();
+    public List<Dictionary<string, double[]>> SCoeffTablesM = new();
 
     /// <summary>
     /// 核種毎のS係数データ表(女性)。
     /// </summary>
-    public List<Dictionary<string, double[]>> SCoeffTablesF = new List<Dictionary<string, double[]>>();
+    public List<Dictionary<string, double[]>> SCoeffTablesF = new();
 
     /// <summary>
     /// 全ての臓器。
     /// </summary>
-    public List<Organ> Organs = new List<Organ>();
+    public List<Organ> Organs = new();
 
     /// <summary>
     /// パラメータ定義。
@@ -396,9 +396,9 @@ public abstract class InputDataReaderBase : IDisposable
     /// 核種名に合致する正規表現。
     /// 準安定核種について、一般的な表記(m1, m2)とICRP-07データのもの(m, n)の両方を受け付けるようにしている。
     /// </summary>
-    protected static readonly Regex patternNuclide = new Regex(@"^[A-Za-z]+-\d+(?:[a-z]|m\d)?$", RegexOptions.Compiled);
+    protected static readonly Regex patternNuclide = new(@"^[A-Za-z]+-\d+(?:[a-z]|m\d)?$", RegexOptions.Compiled);
 
-    private static readonly Regex patternBar = new Regex("^-+$", RegexOptions.Compiled);
+    private static readonly Regex patternBar = new("^-+$", RegexOptions.Compiled);
 
     protected static bool IsBar(string s) => patternBar.IsMatch(s);
 }
@@ -408,7 +408,7 @@ public abstract class InputDataReaderBase : IDisposable
 /// </summary>
 public class InputErrors
 {
-    private readonly List<(int LineNum, string Message)> errors = new List<(int LineNum, string Message)>();
+    private readonly List<(int LineNum, string Message)> errors = new();
 
     /// <summary>
     /// 現在保持されているエラーの数を取得する。
