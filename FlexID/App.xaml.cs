@@ -1,7 +1,7 @@
+using System.Windows;
 using FlexID.ViewModels;
 using FlexID.Views;
 using Prism.Ioc;
-using System.Windows;
 
 namespace FlexID
 {

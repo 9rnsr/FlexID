@@ -1,8 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shouldly;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace FlexID.Calc.Tests
 {
     using static InputErrorTestHelpers;

@@ -1,7 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shouldly;
 using Sprache;
-using System;
 
 namespace FlexID.Calc.Tests
 {

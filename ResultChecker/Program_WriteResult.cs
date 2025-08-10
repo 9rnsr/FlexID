@@ -1,11 +1,9 @@
+using System.Drawing;
 using OfficeOpenXml;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 
 namespace ResultChecker
 {

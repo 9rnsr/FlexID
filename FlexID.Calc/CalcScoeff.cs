@@ -1,8 +1,4 @@
 using MathNet.Numerics.Interpolation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace FlexID.Calc
 {

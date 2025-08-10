@@ -1,8 +1,5 @@
-using FlexID.Calc;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using FlexID.Calc;
 
 namespace FlexID.ViewModels
 {

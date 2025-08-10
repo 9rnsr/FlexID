@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace ResultChecker
 {
     // https://learn.microsoft.com/ja-jp/dotnet/api/system.threading.tasks.taskscheduler

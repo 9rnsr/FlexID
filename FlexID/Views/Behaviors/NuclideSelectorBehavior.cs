@@ -1,8 +1,7 @@
-using Microsoft.Xaml.Behaviors;
-using System;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Microsoft.Xaml.Behaviors;
 
 namespace FlexID.Views.Behaviors
 {

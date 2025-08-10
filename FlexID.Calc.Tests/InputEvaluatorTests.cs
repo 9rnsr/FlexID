@@ -1,9 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace FlexID.Calc.Tests
 {
     [TestClass]

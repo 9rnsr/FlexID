@@ -1,15 +1,11 @@
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows.Media;
 using FlexID.Calc;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace FlexID.Viewer
 {

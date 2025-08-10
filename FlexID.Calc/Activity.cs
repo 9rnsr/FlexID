@@ -1,5 +1,3 @@
-using System;
-
 namespace FlexID.Calc
 {
     /// <summary>

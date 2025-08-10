@@ -1,14 +1,11 @@
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using FlexID.Calc;
 using Microsoft.Win32;
 using OxyPlot;
 using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive.Linq;
 
 namespace FlexID.Viewer.ViewModels
 {

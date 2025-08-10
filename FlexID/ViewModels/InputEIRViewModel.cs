@@ -1,17 +1,13 @@
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows;
 using FlexID.Calc;
 using Microsoft.Win32;
 using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace FlexID.ViewModels
 {
