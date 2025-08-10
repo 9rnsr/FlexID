@@ -450,49 +450,48 @@ internal partial class Program
         if (target.ParticleSize != "-")
             mat += $", {target.ParticleSize} µm";
 
-        using (var reader = new StreamReader(File.OpenRead(filePath), Encoding.UTF8))
+        using var reader = new StreamReader(File.OpenRead(filePath), Encoding.UTF8);
+
+        string[] columns;
+
+        // ファイルの内容が対象核種のものか確認する。
+        columns = reader.ReadLine().Split('\t');
+        if (columns[1] != nuclide)
+            throw new InvalidDataException($"Nuclide '{nuclide}' expected, but {columns[1]}");
+
+        // 数値の単位が[Sv/Bq]であるかを確認する。
+        columns = reader.ReadLine().Split('\t');
+        if (columns[1] != "Sv per Bq")
+            throw new InvalidDataException($"Measurement unit 'Sv per Bq' expected, but '{columns[1]}'.");
+
+        reader.ReadLine();  // (empty line)
+        reader.ReadLine();  // (table header)
+
+        string line;
+        while ((line = reader.ReadLine()) != null)
         {
-            string[] columns;
+            columns = line.Split('\t');
 
-            // ファイルの内容が対象核種のものか確認する。
-            columns = reader.ReadLine().Split('\t');
-            if (columns[1] != nuclide)
-                throw new InvalidDataException($"Nuclide '{nuclide}' expected, but {columns[1]}");
-
-            // 数値の単位が[Sv/Bq]であるかを確認する。
-            columns = reader.ReadLine().Split('\t');
-            if (columns[1] != "Sv per Bq")
-                throw new InvalidDataException($"Measurement unit 'Sv per Bq' expected, but '{columns[1]}'.");
-
-            reader.ReadLine();  // (empty line)
-            reader.ReadLine();  // (table header)
-
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            if (columns[0] == mat ||
+                columns[0] == routeOfIntake)    // Injectionの場合
             {
+                var effectiveDose = double.Parse(columns[1]);
+
+                var equivalentDosesMale = columns.Skip(3).Select(v => double.Parse(v)).ToArray();
+
+                line = reader.ReadLine();
                 columns = line.Split('\t');
+                var equivalentDosesFemale = columns.Skip(3).Select(v => double.Parse(v)).ToArray();
 
-                if (columns[0] == mat ||
-                    columns[0] == routeOfIntake)    // Injectionの場合
+                return new Dose
                 {
-                    var effectiveDose = double.Parse(columns[1]);
-
-                    var equivalentDosesMale = columns.Skip(3).Select(v => double.Parse(v)).ToArray();
-
-                    line = reader.ReadLine();
-                    columns = line.Split('\t');
-                    var equivalentDosesFemale = columns.Skip(3).Select(v => double.Parse(v)).ToArray();
-
-                    return new Dose
-                    {
-                        EffectiveDose = effectiveDose,
-                        EquivalentDosesMale = equivalentDosesMale,
-                        EquivalentDosesFemale = equivalentDosesFemale,
-                    };
-                }
-
-                reader.ReadLine();
+                    EffectiveDose = effectiveDose,
+                    EquivalentDosesMale = equivalentDosesMale,
+                    EquivalentDosesFemale = equivalentDosesFemale,
+                };
             }
+
+            reader.ReadLine();
         }
 
         throw new InvalidDataException($"Missing data for Material '{mat}' and Route of Intake '{routeOfIntake}'.");
@@ -512,92 +511,91 @@ internal partial class Program
         // 組織加重係数データを読み込む。
         var (ts, ws) = InputDataReaderBase.ReadTissueWeights(Path.Combine("lib", "OIR", "wT.txt"));
 
-        using (var reader = new OutputDataReader(filePath))
+        using var reader = new OutputDataReader(filePath);
+
+        var data = reader.Read();
+        var resultM = data.Blocks[0];
+        var resultF = data.Blocks[1];
+
+        // 列データの最終行＝評価期間の最後における線量値を取得する。
+        double GetDose(OutputBlockData result, string targetRegion)
+            => result.Compartments.FirstOrDefault(c => c.Name == targetRegion)?.Values.Last()
+            ?? throw new InvalidDataException($"Missing '{targetRegion}' data column");
+
+        double GetTissueWeight(string targetRegion)
+            => ws[Array.IndexOf(ts, targetRegion)];
+
+        (double Male, double Female) GetResult(string targetRegion, params string[] moreTargetRegions)
         {
-            var data = reader.Read();
-            var resultM = data.Blocks[0];
-            var resultF = data.Blocks[1];
-
-            // 列データの最終行＝評価期間の最後における線量値を取得する。
-            double GetDose(OutputBlockData result, string targetRegion)
-                => result.Compartments.FirstOrDefault(c => c.Name == targetRegion)?.Values.Last()
-                ?? throw new InvalidDataException($"Missing '{targetRegion}' data column");
-
-            double GetTissueWeight(string targetRegion)
-                => ws[Array.IndexOf(ts, targetRegion)];
-
-            (double Male, double Female) GetResult(string targetRegion, params string[] moreTargetRegions)
-            {
-                var doseM = GetDose(resultM, targetRegion);
-                var doseF = GetDose(resultF, targetRegion);
-                if (moreTargetRegions.Length == 0)
-                    return (doseM, doseF);
-
-                // 複数の標的領域の等価線量を組織加重係数で加重平均したものを返す。
-                var wT = GetTissueWeight(targetRegion);
-                var sumOfWeightedDoseM = wT * doseM;
-                var sumOfWeightedDoseF = wT * doseF;
-                var sumOfTissueWeight = wT;
-                foreach (var moreTargetRegion in moreTargetRegions)
-                {
-                    wT = GetTissueWeight(moreTargetRegion);
-                    doseM = GetDose(resultM, moreTargetRegion);
-                    doseF = GetDose(resultF, moreTargetRegion);
-                    sumOfWeightedDoseM += wT * doseM;
-                    sumOfWeightedDoseF += wT * doseF;
-                    sumOfTissueWeight += wT;
-                }
-                doseM = sumOfWeightedDoseM / sumOfTissueWeight;
-                doseF = sumOfWeightedDoseF / sumOfTissueWeight;
+            var doseM = GetDose(resultM, targetRegion);
+            var doseF = GetDose(resultF, targetRegion);
+            if (moreTargetRegions.Length == 0)
                 return (doseM, doseF);
+
+            // 複数の標的領域の等価線量を組織加重係数で加重平均したものを返す。
+            var wT = GetTissueWeight(targetRegion);
+            var sumOfWeightedDoseM = wT * doseM;
+            var sumOfWeightedDoseF = wT * doseF;
+            var sumOfTissueWeight = wT;
+            foreach (var moreTargetRegion in moreTargetRegions)
+            {
+                wT = GetTissueWeight(moreTargetRegion);
+                doseM = GetDose(resultM, moreTargetRegion);
+                doseF = GetDose(resultF, moreTargetRegion);
+                sumOfWeightedDoseM += wT * doseM;
+                sumOfWeightedDoseF += wT * doseF;
+                sumOfTissueWeight += wT;
             }
-
-            // Effective Dose
-            var resultWholeBody = GetDose(resultM, "WholeBody");
-
-            // Equivalent Dose
-            var equivalentDoses = new[]
-            {
-                // OIR Data Viewerで提示されている預託等価線量の領域名と、
-                // それらに対応する標的領域(1つ以上)の名称。
-                /* Bone marrow     */ GetResult("R-marrow"),
-                /* Colon           */ GetResult("RC-stem", "LC-stem", "RS-stem"),
-                /* Lung            */ GetResult("Bronch-bas", "Bronch-sec", "Bchiol-sec", "AI"),
-                /* Stomach         */ GetResult("St-stem"),
-                /* Breast          */ GetResult("Breast"),
-                /* Ovaries         */ GetResult("Ovaries"),
-                /* Testes          */ GetResult("Testes"),
-                /* Urinary bladder */ GetResult("UB-wall"),
-                /* Oesophagus      */ GetResult("Oesophagus"),
-                /* Liver           */ GetResult("Liver"),
-                /* Thyroid         */ GetResult("Thyroid"),
-                /* Bone Surface    */ GetResult("Endost-BS"),
-                /* Brain           */ GetResult("Brain"),
-                /* Salivary glands */ GetResult("S-glands"),
-                /* Skin            */ GetResult("Skin"),
-                /* Adrenals        */ GetResult("Adrenals"),
-                /* ET of HRTM      */ GetResult("ET1-bas", "ET2-bas"),
-                /* Gall bladder    */ GetResult("GB-wall"),
-                /* Heart           */ GetResult("Ht-wall"),
-                /* Kidneys         */ GetResult("Kidneys"),
-                /* Lymphatic nodes */ GetResult("LN-Sys", "LN-Th", "LN-ET"),
-                /* Muscle          */ GetResult("Muscle"),
-                /* Oral mucosa     */ GetResult("O-mucosa"),
-                /* Pancreas        */ GetResult("Pancreas"),
-                /* Prostate        */ GetResult("Prostate"),
-                /* Small intestine */ GetResult("SI-stem"),
-                /* Spleen          */ GetResult("Spleen"),
-                /* Thymus          */ GetResult("Thymus"),
-                /* Uterus          */ GetResult("Uterus"),
-            };
-
-            return new Dose
-            {
-                EffectiveDose = resultWholeBody,
-                EquivalentDosesMale = equivalentDoses.Select(d => d.Male).ToArray(),
-                EquivalentDosesFemale = equivalentDoses.Select(d => d.Female).ToArray(),
-            };
+            doseM = sumOfWeightedDoseM / sumOfTissueWeight;
+            doseF = sumOfWeightedDoseF / sumOfTissueWeight;
+            return (doseM, doseF);
         }
+
+        // Effective Dose
+        var resultWholeBody = GetDose(resultM, "WholeBody");
+
+        // Equivalent Dose
+        var equivalentDoses = new[]
+        {
+            // OIR Data Viewerで提示されている預託等価線量の領域名と、
+            // それらに対応する標的領域(1つ以上)の名称。
+            /* Bone marrow     */ GetResult("R-marrow"),
+            /* Colon           */ GetResult("RC-stem", "LC-stem", "RS-stem"),
+            /* Lung            */ GetResult("Bronch-bas", "Bronch-sec", "Bchiol-sec", "AI"),
+            /* Stomach         */ GetResult("St-stem"),
+            /* Breast          */ GetResult("Breast"),
+            /* Ovaries         */ GetResult("Ovaries"),
+            /* Testes          */ GetResult("Testes"),
+            /* Urinary bladder */ GetResult("UB-wall"),
+            /* Oesophagus      */ GetResult("Oesophagus"),
+            /* Liver           */ GetResult("Liver"),
+            /* Thyroid         */ GetResult("Thyroid"),
+            /* Bone Surface    */ GetResult("Endost-BS"),
+            /* Brain           */ GetResult("Brain"),
+            /* Salivary glands */ GetResult("S-glands"),
+            /* Skin            */ GetResult("Skin"),
+            /* Adrenals        */ GetResult("Adrenals"),
+            /* ET of HRTM      */ GetResult("ET1-bas", "ET2-bas"),
+            /* Gall bladder    */ GetResult("GB-wall"),
+            /* Heart           */ GetResult("Ht-wall"),
+            /* Kidneys         */ GetResult("Kidneys"),
+            /* Lymphatic nodes */ GetResult("LN-Sys", "LN-Th", "LN-ET"),
+            /* Muscle          */ GetResult("Muscle"),
+            /* Oral mucosa     */ GetResult("O-mucosa"),
+            /* Pancreas        */ GetResult("Pancreas"),
+            /* Prostate        */ GetResult("Prostate"),
+            /* Small intestine */ GetResult("SI-stem"),
+            /* Spleen          */ GetResult("Spleen"),
+            /* Thymus          */ GetResult("Thymus"),
+            /* Uterus          */ GetResult("Uterus"),
+        };
+
+        return new Dose
+        {
+            EffectiveDose = resultWholeBody,
+            EquivalentDosesMale = equivalentDoses.Select(d => d.Male).ToArray(),
+            EquivalentDosesFemale = equivalentDoses.Select(d => d.Female).ToArray(),
+        };
     }
 
     /// <summary>
@@ -630,56 +628,55 @@ internal partial class Program
 
         var retentions = new List<Retention>();
 
-        using (var reader = new OutputDataReader(filePath))
+        using var reader = new OutputDataReader(filePath);
+
+        var data = reader.Read();
+
+        OutputCompartmentData GetCompartmentData(string nuclide, string name)
         {
-            var data = reader.Read();
+            if (nuclide is null)
+                return null;
 
-            OutputCompartmentData GetCompartmentData(string nuclide, string name)
+            // 対応する核種の結果を読み出す。
+            var result = data.Blocks.Where(n => n.Header == nuclide).FirstOrDefault();
+            if (result is null)
+                throw new InvalidDataException($"Missing retention data of nuclide '{nuclide}'.");
+
+            var index = result.Compartments.IndexOf(c => c.Name == name);
+            return index != -1 ? result.Compartments[index] : null;
+        }
+
+        var resultWholeBody /**/= GetCompartmentData(target.NuclideWholeBody, /**/"WholeBody");
+        var resultUrine     /**/= GetCompartmentData(target.NuclideUrine,     /**/"Urine");
+        var resultFaeces    /**/= GetCompartmentData(target.NuclideFaeces,    /**/"Faeces");
+        var resultAtract    /**/= GetCompartmentData(target.NuclideAtract,    /**/"AlimentaryTract*");
+        var resultLungs     /**/= GetCompartmentData(target.NuclideLungs,     /**/"Lungs*");
+        var resultSkeleton  /**/= GetCompartmentData(target.NuclideSkeleton,  /**/"Skeleton*");
+        var resultLiver     /**/= GetCompartmentData(target.NuclideLiver,     /**/"Liver*");
+        var resultThyroid   /**/= GetCompartmentData(target.NuclideThyroid,   /**/"Thyroid*");
+
+        if (resultWholeBody is null)
+            throw new InvalidDataException();
+
+        // 経過時間ゼロでの残留放射能＝初期配分の結果を読み飛ばす。
+        for (int istep = 1; istep < data.TimeSteps.Count; istep++)
+        {
+            double? GetValue(OutputCompartmentData res) =>
+                res?.Values[istep] is double v && !double.IsNaN(v) ? v : default(double?);
+
+            retentions.Add(new Retention
             {
-                if (nuclide is null)
-                    return null;
-
-                // 対応する核種の結果を読み出す。
-                var result = data.Blocks.Where(n => n.Header == nuclide).FirstOrDefault();
-                if (result is null)
-                    throw new InvalidDataException($"Missing retention data of nuclide '{nuclide}'.");
-
-                var index = result.Compartments.IndexOf(c => c.Name == name);
-                return index != -1 ? result.Compartments[index] : null;
-            }
-
-            var resultWholeBody /**/= GetCompartmentData(target.NuclideWholeBody, /**/"WholeBody");
-            var resultUrine     /**/= GetCompartmentData(target.NuclideUrine,     /**/"Urine");
-            var resultFaeces    /**/= GetCompartmentData(target.NuclideFaeces,    /**/"Faeces");
-            var resultAtract    /**/= GetCompartmentData(target.NuclideAtract,    /**/"AlimentaryTract*");
-            var resultLungs     /**/= GetCompartmentData(target.NuclideLungs,     /**/"Lungs*");
-            var resultSkeleton  /**/= GetCompartmentData(target.NuclideSkeleton,  /**/"Skeleton*");
-            var resultLiver     /**/= GetCompartmentData(target.NuclideLiver,     /**/"Liver*");
-            var resultThyroid   /**/= GetCompartmentData(target.NuclideThyroid,   /**/"Thyroid*");
-
-            if (resultWholeBody is null)
-                throw new InvalidDataException();
-
-            // 経過時間ゼロでの残留放射能＝初期配分の結果を読み飛ばす。
-            for (int istep = 1; istep < data.TimeSteps.Count; istep++)
-            {
-                double? GetValue(OutputCompartmentData res) =>
-                    res?.Values[istep] is double v && !double.IsNaN(v) ? v : default(double?);
-
-                retentions.Add(new Retention
-                {
-                    StartTime /**/= data.TimeSteps[istep - 1],
-                    EndTime   /**/= data.TimeSteps[istep],
-                    WholeBody /**/= GetValue(resultWholeBody),
-                    Urine     /**/= GetValue(resultUrine),
-                    Faeces    /**/= GetValue(resultFaeces),
-                    Atract    /**/= GetValue(resultAtract),
-                    Lungs     /**/= GetValue(resultLungs),
-                    Skeleton  /**/= GetValue(resultSkeleton),
-                    Liver     /**/= GetValue(resultLiver),
-                    Thyroid   /**/= GetValue(resultThyroid),
-                });
-            }
+                StartTime /**/= data.TimeSteps[istep - 1],
+                EndTime   /**/= data.TimeSteps[istep],
+                WholeBody /**/= GetValue(resultWholeBody),
+                Urine     /**/= GetValue(resultUrine),
+                Faeces    /**/= GetValue(resultFaeces),
+                Atract    /**/= GetValue(resultAtract),
+                Lungs     /**/= GetValue(resultLungs),
+                Skeleton  /**/= GetValue(resultSkeleton),
+                Liver     /**/= GetValue(resultLiver),
+                Thyroid   /**/= GetValue(resultThyroid),
+            });
         }
 
         return retentions;
@@ -701,86 +698,85 @@ internal partial class Program
 
         var retentions = new List<Retention>();
 
-        using (var reader = new StreamReader(File.OpenRead(filePath), Encoding.UTF8))
+        using var reader = new StreamReader(File.OpenRead(filePath), Encoding.UTF8);
+
+        string[] columns;
+
+        // ファイルの内容が対象核種のものか確認する。
+        columns = reader.ReadLine().Split('\t');
+        if (columns[1] != nuclide)
+            throw new InvalidDataException();
+
+        // 対象の摂取形態。
+        target.RouteOfIntake = reader.ReadLine().Split('\t')[1];
+
+        // 対象の化学形態。
+        target.ChemicalForm = reader.ReadLine().Split('\t')[1];
+
+        // 対象の粒子サイズ。
+        target.ParticleSize = reader.ReadLine().Split('\t')[1];
+
+        reader.ReadLine();  // (empty line)
+
+        // Bq/Bqで出力された数値データかどうか確認する。
+        if (reader.ReadLine() != "Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq")
+            throw new InvalidDataException();
+
+        columns = reader.ReadLine().Split('\t');  // (table header)
+        var indexWholeBody /**/= columns.IndexOf(s => s.Contains("Whole Body"));
+        var indexUrine     /**/= columns.IndexOf(s => s.Contains("Urine"));
+        var indexFaeces    /**/= columns.IndexOf(s => s.Contains("Faeces"));
+        var indexAtract    /**/= columns.IndexOf(s => s.Contains("Alimentary Tract"));
+        var indexLungs     /**/= columns.IndexOf(s => s.Contains("Lungs"));
+        var indexSkeleton  /**/= columns.IndexOf(s => s.Contains("Skeleton"));
+        var indexLiver     /**/= columns.IndexOf(s => s.Contains("Liver"));
+        var indexThyroid   /**/= columns.IndexOf(s => s.Contains("Thyroid"));
+
+        // 残留放射能データが子孫核種のものである場合、その名前が
+        // ヘッダに括弧書きされているためこれを取り出す。
+        string GetRetentionNuclide(int index, string header)
         {
-            string[] columns;
+            if (index == -1)
+                return null;
+            var m = Regex.Match(columns[index], Regex.Escape(header) + @" *\((?<nuc>[^ ]+)\)");
+            return m.Success ? m.Groups["nuc"].Value : nuclide;
+        }
+        target.NuclideWholeBody /**/= GetRetentionNuclide(indexWholeBody, /**/"Whole Body");
+        target.NuclideUrine     /**/= GetRetentionNuclide(indexUrine,     /**/"Urine (24-hour sample)");
+        target.NuclideFaeces    /**/= GetRetentionNuclide(indexFaeces,    /**/"Faeces (24-hour sample)");
+        target.NuclideAtract    /**/= GetRetentionNuclide(indexAtract,    /**/"Alimentary Tract*");
+        target.NuclideLungs     /**/= GetRetentionNuclide(indexLungs,     /**/"Lungs*");
+        target.NuclideSkeleton  /**/= GetRetentionNuclide(indexSkeleton,  /**/"Skeleton*");
+        target.NuclideLiver     /**/= GetRetentionNuclide(indexLiver,     /**/"Liver*");
+        target.NuclideThyroid   /**/= GetRetentionNuclide(indexThyroid,   /**/"Thyroid*");
 
-            // ファイルの内容が対象核種のものか確認する。
-            columns = reader.ReadLine().Split('\t');
-            if (columns[1] != nuclide)
-                throw new InvalidDataException();
+        var startTime = 0.0;
 
-            // 対象の摂取形態。
-            target.RouteOfIntake = reader.ReadLine().Split('\t')[1];
+        string line;
+        while ((line = reader.ReadLine()) != null)
+        {
+            columns = line.Split('\t');
 
-            // 対象の化学形態。
-            target.ChemicalForm = reader.ReadLine().Split('\t')[1];
+            var endTime   /**/= double.Parse(columns[0]);
 
-            // 対象の粒子サイズ。
-            target.ParticleSize = reader.ReadLine().Split('\t')[1];
+            double? GetValue(int index) =>
+                index == -1 || columns[index] == "-" ? default(double?) : double.Parse(columns[index]);
 
-            reader.ReadLine();  // (empty line)
-
-            // Bq/Bqで出力された数値データかどうか確認する。
-            if (reader.ReadLine() != "Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq")
-                throw new InvalidDataException();
-
-            columns = reader.ReadLine().Split('\t');  // (table header)
-            var indexWholeBody /**/= columns.IndexOf(s => s.Contains("Whole Body"));
-            var indexUrine     /**/= columns.IndexOf(s => s.Contains("Urine"));
-            var indexFaeces    /**/= columns.IndexOf(s => s.Contains("Faeces"));
-            var indexAtract    /**/= columns.IndexOf(s => s.Contains("Alimentary Tract"));
-            var indexLungs     /**/= columns.IndexOf(s => s.Contains("Lungs"));
-            var indexSkeleton  /**/= columns.IndexOf(s => s.Contains("Skeleton"));
-            var indexLiver     /**/= columns.IndexOf(s => s.Contains("Liver"));
-            var indexThyroid   /**/= columns.IndexOf(s => s.Contains("Thyroid"));
-
-            // 残留放射能データが子孫核種のものである場合、その名前が
-            // ヘッダに括弧書きされているためこれを取り出す。
-            string GetRetentionNuclide(int index, string header)
+            retentions.Add(new Retention
             {
-                if (index == -1)
-                    return null;
-                var m = Regex.Match(columns[index], Regex.Escape(header) + @" *\((?<nuc>[^ ]+)\)");
-                return m.Success ? m.Groups["nuc"].Value : nuclide;
-            }
-            target.NuclideWholeBody /**/= GetRetentionNuclide(indexWholeBody, /**/"Whole Body");
-            target.NuclideUrine     /**/= GetRetentionNuclide(indexUrine,     /**/"Urine (24-hour sample)");
-            target.NuclideFaeces    /**/= GetRetentionNuclide(indexFaeces,    /**/"Faeces (24-hour sample)");
-            target.NuclideAtract    /**/= GetRetentionNuclide(indexAtract,    /**/"Alimentary Tract*");
-            target.NuclideLungs     /**/= GetRetentionNuclide(indexLungs,     /**/"Lungs*");
-            target.NuclideSkeleton  /**/= GetRetentionNuclide(indexSkeleton,  /**/"Skeleton*");
-            target.NuclideLiver     /**/= GetRetentionNuclide(indexLiver,     /**/"Liver*");
-            target.NuclideThyroid   /**/= GetRetentionNuclide(indexThyroid,   /**/"Thyroid*");
+                StartTime /**/= startTime,
+                EndTime   /**/= endTime,
+                WholeBody /**/= GetValue(indexWholeBody),
+                Urine     /**/= GetValue(indexUrine),
+                Faeces    /**/= GetValue(indexFaeces),
+                Atract    /**/= GetValue(indexAtract),
+                Lungs     /**/= GetValue(indexLungs),
+                Skeleton  /**/= GetValue(indexSkeleton),
+                Liver     /**/= GetValue(indexLiver),
+                Thyroid   /**/= GetValue(indexThyroid),
+            });
 
-            var startTime = 0.0;
-
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                columns = line.Split('\t');
-
-                var endTime   /**/= double.Parse(columns[0]);
-
-                double? GetValue(int index) =>
-                    index == -1 || columns[index] == "-" ? default(double?) : double.Parse(columns[index]);
-
-                retentions.Add(new Retention
-                {
-                    StartTime /**/= startTime,
-                    EndTime   /**/= endTime,
-                    WholeBody /**/= GetValue(indexWholeBody),
-                    Urine     /**/= GetValue(indexUrine),
-                    Faeces    /**/= GetValue(indexFaeces),
-                    Atract    /**/= GetValue(indexAtract),
-                    Lungs     /**/= GetValue(indexLungs),
-                    Skeleton  /**/= GetValue(indexSkeleton),
-                    Liver     /**/= GetValue(indexLiver),
-                    Thyroid   /**/= GetValue(indexThyroid),
-                });
-
-                startTime = endTime;
-            }
+            startTime = endTime;
         }
 
         return retentions;

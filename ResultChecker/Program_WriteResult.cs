@@ -14,28 +14,27 @@ internal partial class Program
         // 非商用ライセンスを設定
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-        using (var package = new ExcelPackage())
+        using var package = new ExcelPackage();
+
+        // 預託実効線量と預託等価線量のシートを作成。
+        var sheetEequivDose = package.Workbook.Worksheets.Add("Dose");
+        WriteDoseSheet(sheetEequivDose, sortedResults);
+
+        // (預託実効線量と)残留放射能の要約シートを作成。
+        var sheetSummary = package.Workbook.Worksheets.Add("Retention");
+        WriteRetentionSheet(sheetSummary, sortedResults);
+
+        // 対象毎の残留放射能の確認シートを作成。
+        foreach (var res in sortedResults)
         {
-            // 預託実効線量と預託等価線量のシートを作成。
-            var sheetEequivDose = package.Workbook.Worksheets.Add("Dose");
-            WriteDoseSheet(sheetEequivDose, sortedResults);
+            if (res.HasErrors)
+                continue;
 
-            // (預託実効線量と)残留放射能の要約シートを作成。
-            var sheetSummary = package.Workbook.Worksheets.Add("Retention");
-            WriteRetentionSheet(sheetSummary, sortedResults);
-
-            // 対象毎の残留放射能の確認シートを作成。
-            foreach (var res in sortedResults)
-            {
-                if (res.HasErrors)
-                    continue;
-
-                var sheetRes = package.Workbook.Worksheets.Add(res.Target.Name);
-                WriteResultSheet(sheetRes, res);
-            }
-
-            package.SaveAs(filePath);
+            var sheetRes = package.Workbook.Worksheets.Add(res.Target.Name);
+            WriteResultSheet(sheetRes, res);
         }
+
+        package.SaveAs(filePath);
     }
 
     private static void SetPercentColorScale(ExcelRange cells)

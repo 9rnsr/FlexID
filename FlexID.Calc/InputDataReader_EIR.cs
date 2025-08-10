@@ -281,45 +281,44 @@ public class InputDataReader_EIR : InputDataReaderBase
         var nuc = nuclide.Name;
         var file = $"{nuc}.txt";
 
-        using (var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file)))
+        using var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file));
+
+        while (reader.ReadLine() != age)
+        { }
+
+        // 2行目から線源領域の名称を配列で取得。
+        var sources = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
+        if (sources is null)
+            throw Program.Error($"Incorrect SEE file format: {file}");
+        if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
+            throw Program.Error($"Incorrect SEE file format: {file}");
+        var sourcesCount = sources.Length;
+
+        var targets = new string[31];
+        var table = sources.ToDictionary(s => s, s => new double[31]);
+        for (int indexT = 0; indexT < 31; indexT++)
         {
-            while (reader.ReadLine() != age)
-            { }
+            var values = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            if (values?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
 
-            // 2行目から線源領域の名称を配列で取得。
-            var sources = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
-            if (sources is null)
-                throw Program.Error($"Incorrect SEE file format: {file}");
-            if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
-                throw Program.Error($"Incorrect SEE file format: {file}");
-            var sourcesCount = sources.Length;
+            // 各行の1列目から標的領域の名称を取得。
+            var target = values[0];
+            targets[indexT] = target;
 
-            var targets = new string[31];
-            var table = sources.ToDictionary(s => s, s => new double[31]);
-            for (int indexT = 0; indexT < 31; indexT++)
+            for (int indexS = 0; indexS < sourcesCount; indexS++)
             {
-                var values = reader.ReadLine()?.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (values?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
-
-                // 各行の1列目から標的領域の名称を取得。
-                var target = values[0];
-                targets[indexT] = target;
-
-                for (int indexS = 0; indexS < sourcesCount; indexS++)
-                {
-                    var sourceRegion = sources[indexS];
-                    var scoeff = double.Parse(values[1 + indexS]);
-                    table[sourceRegion][indexT] = scoeff;
-                }
+                var sourceRegion = sources[indexS];
+                var scoeff = double.Parse(values[1 + indexS]);
+                table[sourceRegion][indexT] = scoeff;
             }
-
-            // 核種が考慮する線源領域の名称を設定する。
-            nuclide.SourceRegions = sources;
-
-            if (!Enumerable.SequenceEqual(data.TargetRegions, targets))
-                throw Program.Error($"Found mismatch of target region names between tissue weighting factor data and S-Coefficient data for nuclide {nuc}.");
-
-            return table;
         }
+
+        // 核種が考慮する線源領域の名称を設定する。
+        nuclide.SourceRegions = sources;
+
+        if (!Enumerable.SequenceEqual(data.TargetRegions, targets))
+            throw Program.Error($"Found mismatch of target region names between tissue weighting factor data and S-Coefficient data for nuclide {nuc}.");
+
+        return table;
     }
 }
