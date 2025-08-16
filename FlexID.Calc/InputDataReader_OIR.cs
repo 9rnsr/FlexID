@@ -1030,38 +1030,47 @@ public class InputDataReader_OIR : InputDataReaderBase
                 var isDecayPath = fromNuclide != toNuclide;
                 var hasCoeff = coeff != null;
 
-                // inpへの流入は定義できない。
-                if (toFunc == OrganFunc.inp)
-                    errors.AddError(lineNum, $"Cannot set input path to inp '{to}'.");
-
-                if (fromFunc == OrganFunc.acc)
+                if (isDecayPath)
                 {
-                    // accからの流出経路では、移行速度の入力を要求する。
-                    // なお、ここでパーセント値を設定するのは明らかにおかしいので設定エラーとして弾く。
-                    if (!isDecayPath && !hasCoeff || isRate)
+                    // inpへの流入は定義できない。
+                    if (toFunc == OrganFunc.inp)
+                        errors.AddError(lineNum, $"Cannot set decay path to inp '{to}'.");
+
+                    // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
+                    // パーセント値(移行割合)の設定はエラーとする。
+                    if (fromFunc == OrganFunc.acc && isRate)
                         errors.AddError(lineNum, $"Require transfer rate [/d] from {fromFunc} '{from}'.");
-                }
 
-                if (fromFunc == OrganFunc.exc)
-                {
-                    // excからの流出は(娘核種のexcへの壊変経路を除いて)定義できない。
-                    if (!(toFunc == OrganFunc.exc && isDecayPath))
+                    // excからの壊変経路では、子孫核種のexcへの移行のみ許可する。
+                    if (fromFunc == OrganFunc.exc && toFunc != OrganFunc.exc)
                         errors.AddError(lineNum, $"Cannot set output path from exc '{from}'.");
-                }
 
-                // TODO: mixからmixへの経路は定義できない。
-                //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
-                //    errors.AddError(lineNum, "Cannot set transfer path from 'mix' to 'mix'.");
-
-                if (organFrom.IsInstantOutflow)
-                {
-                    // inpやmixから娘核種への壊変経路は定義できない。
-                    if (isDecayPath)
+                    // inpやmixからの壊変経路は定義できない。
+                    if (organFrom.IsInstantOutflow)
                         errors.AddError(lineNum, $"Cannot set decay path from {fromFunc} '{from}'.");
+                }
+                else
+                {
+                    // inpへの流入は定義できない。
+                    if (toFunc == OrganFunc.inp)
+                        errors.AddError(lineNum, $"Cannot set input path to inp '{to}'.");
+
+                    // accからの流出経路では、移行速度の入力を要求する。
+                    // 係数なし、またはパーセント値(移行割合)の設定はエラーとする。
+                    if (fromFunc == OrganFunc.acc && (!hasCoeff || isRate))
+                        errors.AddError(lineNum, $"Require transfer rate [/d] from {fromFunc} '{from}'.");
+
+                    // excからの流出は定義できない。
+                    if (fromFunc == OrganFunc.exc)
+                        errors.AddError(lineNum, $"Cannot set output path from exc '{from}'.");
+
+                    // TODO: mixからmixへの経路は定義できない。
+                    //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
+                    //    errors.AddError(lineNum, "Cannot set transfer path from 'mix' to 'mix'.");
 
                     // inpまたはmixからの同核種での移行経路では、移行割合の入力を要求する。
                     // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
-                    else if (!hasCoeff)
+                    if (organFrom.IsInstantOutflow && !hasCoeff)
                         errors.AddError(lineNum, $"Require fraction of output activity [%] from {fromFunc} '{from}'.");
                 }
 
