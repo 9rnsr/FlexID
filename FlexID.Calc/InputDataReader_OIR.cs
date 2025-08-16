@@ -901,14 +901,22 @@ public class InputDataReader_OIR : InputDataReaderBase
                     if (funcTo == OrganFunc.inp)
                         errors.AddError(lineNum, $"Cannot set decay path to inp '{to}'.");
 
-                    // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
-                    // パーセント値(移行割合)の設定はエラーとする。
-                    if (funcFrom == OrganFunc.acc && isFrac)
-                        errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{from}'.");
+                    if (funcFrom == OrganFunc.acc)
+                    {
+                        // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
+                        // パーセント値(移行割合)の設定はエラーとする。
+                        if (isFrac)
+                            errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{from}'.");
+
+                        // accからの壊変経路はaccにしか移行できない。
+                        // ただし、excへの係数付きの壊変経路は、実際には途中に壊変コンパートメントとしてのaccが生成されるため許可する。
+                        if (funcTo != OrganFunc.acc && !(funcTo == OrganFunc.exc && hasCoeff))
+                            errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{from}' to non-acc '{to}'.");
+                    }
 
                     // excからの壊変経路では、子孫核種のexcへの移行のみ許可する。
                     if (funcFrom == OrganFunc.exc && funcTo != OrganFunc.exc)
-                        errors.AddError(lineNum, $"Cannot set output path from exc '{from}'.");
+                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{from}' to non-exc '{to}'.");
 
                     // inpやmixからの壊変経路は定義できない。
                     if (organFrom.IsInstantOutflow)

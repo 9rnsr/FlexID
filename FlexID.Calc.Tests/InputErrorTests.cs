@@ -464,12 +464,15 @@ public class InputErrorTests
             "[Y-90:compartment]",
             "  acc    ST0        ---",
             "  acc    ST1        ---",
+            "  exc    Excreta    ---",
             "",
             "[Y-90:transfer]",
             "  Sr-90/input      ST0  ---",
             "  Sr-90/mix-Blood  ST0  ---",
             "  Sr-90/ST0        ST0  100%",
             "  ST0              ST1  100%",
+            "  Sr-90/Excreta    ST0  ---",
+            "  Sr-90/ST0    Excreta  ---",
         ]);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
@@ -479,10 +482,12 @@ public class InputErrorTests
             "Line 16: Require fraction of output activity [%] from mix 'mix-Blood'.",
             "Line 17: Cannot set input path to inp 'input'.",
             "Line 18: Cannot set output path from exc 'Excreta'.",
-            "Line 25: Cannot set decay path from inp 'Sr-90/input'.",
-            "Line 26: Cannot set decay path from mix 'Sr-90/mix-Blood'.",
-            "Line 27: Require transfer rate [/d] from acc 'Sr-90/ST0'.",
-            "Line 28: Require transfer rate [/d] from acc 'ST0'.",
+            "Line 26: Cannot set decay path from inp 'Sr-90/input'.",
+            "Line 27: Cannot set decay path from mix 'Sr-90/mix-Blood'.",
+            "Line 28: Require transfer rate [/d] from acc 'Sr-90/ST0'.",
+            "Line 29: Require transfer rate [/d] from acc 'ST0'.",
+            "Line 30: Cannot set decay path from exc 'Sr-90/Excreta' to non-exc 'ST0'.",
+            "Line 31: Cannot set decay path from acc 'Sr-90/ST0' to non-acc 'Excreta'.",
         ]);
     }
 
