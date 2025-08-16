@@ -30,7 +30,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
 
-    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isRate)>> nuclideTransfers = [];
+    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> nuclideTransfers = [];
 
     private readonly List<Dictionary<string, double[]>> SCoeffTables = [];
 
@@ -681,15 +681,15 @@ public class InputDataReader_OIR : InputDataReaderBase
             var coeffStr = values[2];    // 移行係数、[/d] or [%]
 
             var coeff = default(decimal?);
-            var isRate = false;
+            var isFrac = false;
             if (!IsBar(coeffStr))
             {
                 if (!evaluator.TryReadCoefficient(LineNum, coeffStr, out var res))
                     continue;
-                (coeff, isRate) = res;
+                (coeff, isFrac) = res;
             }
 
-            transfers.Add((LineNum, orgamFrom, organTo, coeff, isRate));
+            transfers.Add((LineNum, orgamFrom, organTo, coeff, isFrac));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -965,7 +965,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             var definedTransfers = new HashSet<(string from, string to)>();
             var transfersCorrect = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
             var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
-            foreach (var (lineNum, from, to, coeff, isRate) in transfers)
+            foreach (var (lineNum, from, to, coeff, isFrac) in transfers)
             {
                 var olderrorsT = errors.Count;
 
@@ -1038,7 +1038,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
                     // パーセント値(移行割合)の設定はエラーとする。
-                    if (fromFunc == OrganFunc.acc && isRate)
+                    if (fromFunc == OrganFunc.acc && isFrac)
                         errors.AddError(lineNum, $"Require transfer rate [/d] from {fromFunc} '{from}'.");
 
                     // excからの壊変経路では、子孫核種のexcへの移行のみ許可する。
@@ -1057,7 +1057,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     // accからの流出経路では、移行速度の入力を要求する。
                     // 係数なし、またはパーセント値(移行割合)の設定はエラーとする。
-                    if (fromFunc == OrganFunc.acc && (!hasCoeff || isRate))
+                    if (fromFunc == OrganFunc.acc && (!hasCoeff || isFrac))
                         errors.AddError(lineNum, $"Require transfer rate [/d] from {fromFunc} '{from}'.");
 
                     // excからの流出は定義できない。
