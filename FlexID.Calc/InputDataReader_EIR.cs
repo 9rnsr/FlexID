@@ -155,7 +155,6 @@ public class InputDataReader_EIR : InputDataReaderBase
                     Name = organName,
                     Func = organFunc,
                     BioDecay = bioDecay,
-                    Inflows = new List<Inflow>(inflowNum),
                 };
 
                 if (!IsBar(sourceRegion))

@@ -622,7 +622,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                 Name = organName,
                 Func = organFunc,
                 BioDecay = 1.0,     // accは後で設定する。
-                Inflows = [],
             };
 
             // 線源領域の名称については、妥当性を後で確認する。
@@ -895,7 +894,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                 Name = $"Decay-{fromNuclide.Name}/{organFrom.Name}",
                 Func = OrganFunc.acc,
                 BioDecay = 1.0,     // accは後で設定する。
-                Inflows = [],
                 IsDecayCompartment = true,
             };
             data.Organs.Add(organDecay);
