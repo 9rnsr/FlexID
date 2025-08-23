@@ -138,6 +138,11 @@ public class Organ
 public class NuclideData
 {
     /// <summary>
+    /// 核種のデータを配列から引くためのインデックス。
+    /// </summary>
+    public int Index;
+
+    /// <summary>
     /// 核種名。
     /// </summary>
     public string Name;

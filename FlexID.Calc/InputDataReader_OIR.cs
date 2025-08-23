@@ -390,6 +390,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     var nuclide = new NuclideData
                     {
+                        Index = nuclides.Count,
                         Name = nuc,
                         HalfLife = halfLife ?? "---",
                         Lambda = lambda ?? 0.0,
@@ -432,6 +433,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                 var nuclide = new NuclideData
                 {
+                    Index = nuclides.Count,
                     Name = nuc,
                     Lambda = lambda,
                     IsProgeny = nuclides.Count > 0,
