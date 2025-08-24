@@ -883,7 +883,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         public Organ AddDecayCompartment(InputData data, NuclideData progeny)
         {
             var organFrom = RootCompartment;
-            var fromNuclide = organFrom.Nuclide;
+            var nuclideFrom = organFrom.Nuclide;
 
             var index = data.Organs.Count;
             var organDecay = new Organ
@@ -891,7 +891,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 Nuclide = progeny,
                 ID = index + 1,
                 Index = index,
-                Name = $"Decay-{fromNuclide.Name}/{organFrom.Name}",
+                Name = $"Decay-{nuclideFrom.Name}/{organFrom.Name}",
                 Func = OrganFunc.acc,
                 BioDecay = 1.0,     // accは後で設定する。
                 IsDecayCompartment = true,
@@ -930,8 +930,8 @@ public class InputDataReader_OIR : InputDataReaderBase
         // organFromから始まる崩壊系列の情報を取得する。
         DecayChain GetDecayChain(Organ organFrom)
         {
-            var fromFunc = organFrom.Func;
-            if (fromFunc != OrganFunc.acc && fromFunc != OrganFunc.exc)
+            var funcFrom = organFrom.Func;
+            if (funcFrom != OrganFunc.acc && funcFrom != OrganFunc.exc)
                 return null;
             if (organFrom.IsDecayCompartment)
                 return null;
@@ -969,38 +969,38 @@ public class InputDataReader_OIR : InputDataReaderBase
             {
                 var olderrorsT = errors.Count;
 
-                var fromName = from;
-                var fromNuclide = nuclide;
+                var nameFrom = from;
+                var nuclideFrom = nuclide;
                 if (from.IndexOf('/') is int i && i != -1)
                 {
-                    var fromNuc = from.Substring(0, i);
-                    fromName = from.Substring(i + 1);
-                    fromNuclide = nuclides.FirstOrDefault(n => n.Name == fromNuc);
-                    if (fromNuclide is null)
-                        errors.AddError(lineNum, $"Undefined nuclide '{fromNuc}'.");
+                    var nucFrom = from.Substring(0, i);
+                    nameFrom = from.Substring(i + 1);
+                    nuclideFrom = nuclides.FirstOrDefault(n => n.Name == nucFrom);
+                    if (nuclideFrom is null)
+                        errors.AddError(lineNum, $"Undefined nuclide '{nucFrom}'.");
                 }
 
-                var toName = to;
-                var toNuclide = nuclide;
+                var nameTo = to;
+                var nuclideTo = nuclide;
                 if (to.IndexOf('/') is int j && j != -1)
                 {
-                    var toNuc = to.Substring(0, j);
-                    toName = to.Substring(j + 1);
-                    toNuclide = nuclides.FirstOrDefault(n => n.Name == toNuc);
-                    if (toNuclide is null)
-                        errors.AddError(lineNum, $"Undefined nuclide '{toNuc}'.");
+                    var nucTo = to.Substring(0, j);
+                    nameTo = to.Substring(j + 1);
+                    nuclideTo = nuclides.FirstOrDefault(n => n.Name == nucTo);
+                    if (nuclideTo is null)
+                        errors.AddError(lineNum, $"Undefined nuclide '{nucTo}'.");
                 }
 
                 // 移行先は定義している核種に属するコンパートメントのみとする。
-                if (toNuclide != null && toNuclide != nuclide)
+                if (nuclideTo != null && nuclideTo != nuclide)
                     errors.AddError(lineNum, $"Cannot set transfer path to a compartment which is not belong to '{nuc}'.");
 
-                // 以降の処理でfromNuclideとtoNuclideの両方が存在していることを確定する。
+                // 以降の処理でnuclideFromとnuclideToの両方が存在していることを確定する。
                 if (errors.IfAny(olderrorsT))
                     continue;
 
-                var organFrom = data.Organs.FirstOrDefault(o => o.Name == fromName && o.Nuclide == fromNuclide);
-                var organTo = data.Organs.FirstOrDefault(o => o.Name == toName && o.Nuclide == toNuclide);
+                var organFrom = data.Organs.FirstOrDefault(o => o.Name == nameFrom && o.Nuclide == nuclideFrom);
+                var organTo = data.Organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
 
                 // 移行元と移行先のそれぞれがcompartmentセクションで定義済みかを確認する。
                 if (organFrom is null || organTo is null)
@@ -1025,53 +1025,53 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
 
                 // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
-                var fromFunc = organFrom.Func;
-                var toFunc = organTo.Func;
-                var isDecayPath = fromNuclide != toNuclide;
+                var funcFrom = organFrom.Func;
+                var funcTo = organTo.Func;
+                var isDecayPath = nuclideFrom != nuclideTo;
                 var hasCoeff = coeff != null;
 
                 if (isDecayPath)
                 {
                     // inpへの流入は定義できない。
-                    if (toFunc == OrganFunc.inp)
+                    if (funcTo == OrganFunc.inp)
                         errors.AddError(lineNum, $"Cannot set decay path to inp '{to}'.");
 
                     // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
                     // パーセント値(移行割合)の設定はエラーとする。
-                    if (fromFunc == OrganFunc.acc && isFrac)
-                        errors.AddError(lineNum, $"Require transfer rate [/d] from {fromFunc} '{from}'.");
+                    if (funcFrom == OrganFunc.acc && isFrac)
+                        errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{from}'.");
 
                     // excからの壊変経路では、子孫核種のexcへの移行のみ許可する。
-                    if (fromFunc == OrganFunc.exc && toFunc != OrganFunc.exc)
+                    if (funcFrom == OrganFunc.exc && funcTo != OrganFunc.exc)
                         errors.AddError(lineNum, $"Cannot set output path from exc '{from}'.");
 
                     // inpやmixからの壊変経路は定義できない。
                     if (organFrom.IsInstantOutflow)
-                        errors.AddError(lineNum, $"Cannot set decay path from {fromFunc} '{from}'.");
+                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{from}'.");
                 }
                 else
                 {
                     // inpへの流入は定義できない。
-                    if (toFunc == OrganFunc.inp)
+                    if (funcTo == OrganFunc.inp)
                         errors.AddError(lineNum, $"Cannot set input path to inp '{to}'.");
 
                     // accからの流出経路では、移行速度の入力を要求する。
                     // 係数なし、またはパーセント値(移行割合)の設定はエラーとする。
-                    if (fromFunc == OrganFunc.acc && (!hasCoeff || isFrac))
-                        errors.AddError(lineNum, $"Require transfer rate [/d] from {fromFunc} '{from}'.");
+                    if (funcFrom == OrganFunc.acc && (!hasCoeff || isFrac))
+                        errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{from}'.");
 
                     // excからの流出は定義できない。
-                    if (fromFunc == OrganFunc.exc)
+                    if (funcFrom == OrganFunc.exc)
                         errors.AddError(lineNum, $"Cannot set output path from exc '{from}'.");
 
                     // TODO: mixからmixへの経路は定義できない。
-                    //if (fromFunc == OrganFunc.mix && toFunc == OrganFunc.mix)
+                    //if (funcFrom == OrganFunc.mix && funcTo == OrganFunc.mix)
                     //    errors.AddError(lineNum, "Cannot set transfer path from 'mix' to 'mix'.");
 
                     // inpまたはmixからの同核種での移行経路では、移行割合の入力を要求する。
                     // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
                     if (organFrom.IsInstantOutflow && !hasCoeff)
-                        errors.AddError(lineNum, $"Require fraction of output activity [%] from {fromFunc} '{from}'.");
+                        errors.AddError(lineNum, $"Require fraction of output activity [%] from {funcFrom} '{from}'.");
                 }
 
                 // 以降の処理で移行経路の設定位置が有効であることを確定する。
@@ -1081,14 +1081,14 @@ public class InputDataReader_OIR : InputDataReaderBase
                 if (isDecayPath)
                 {
                     // 分岐比が不明な壊変経路は定義できない。
-                    if (!decayNuclides[fromNuclide].Contains(toNuclide))
-                        errors.AddError(lineNum, $"There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
+                    if (!decayNuclides[nuclideFrom].Contains(nuclideTo))
+                        errors.AddError(lineNum, $"There is no decay path from {nuclideFrom.Name} to {nuclideTo.Name}.");
 
                     var paths = decayPaths.Where(path => path.from == organFrom);
 
                     // organFromから、同じ子孫核種への2つ以上の壊変経路は定義できない。
-                    if (paths.Any(path => path.to.Nuclide == toNuclide))
-                        errors.AddError(lineNum, $"Multiple decay paths from {fromFunc} '{from}' to nuclide '{toNuclide.Name}'.");
+                    if (paths.Any(path => path.to.Nuclide == nuclideTo))
+                        errors.AddError(lineNum, $"Multiple decay paths from {funcFrom} '{from}' to nuclide '{nuclideTo.Name}'.");
 
                     decayPaths.Add((organFrom, organTo, hasCoeff));
 
@@ -1113,11 +1113,11 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     var decayChain = GetDecayChain(organFrom);
 
-                    var decayIndex = Array.IndexOf(decayChain.DecayNuclides, toNuclide);
+                    var decayIndex = Array.IndexOf(decayChain.DecayNuclides, nuclideTo);
                     if (decayIndex == -1)
                     {
                         var rootNuc = decayChain.RootCompartment.Nuclide.Name;
-                        errors.AddError(lineNum, $"Cannot find progeny nuclide '{toNuclide.Name}' in decay chain starts from '{rootNuc}'.");
+                        errors.AddError(lineNum, $"Cannot find progeny nuclide '{nuclideTo.Name}' in decay chain starts from '{rootNuc}'.");
                         continue;
                     }
 
@@ -1133,7 +1133,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     if (hasCoeff)
                     {
-                        organDecay = decayChain.AddDecayCompartment(data, toNuclide);
+                        organDecay = decayChain.AddDecayCompartment(data, nuclideTo);
 
                         // 以降の処理を核種が同じコンパートメント間organDecay -> organToの経路設定にすり替える。
                         organFrom = organDecay;
@@ -1176,7 +1176,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 if (!outflows.Any())
                     continue;
                 var organFrom = outflows.Key;
-                var fromName = organFrom.Name;
+                var nameFrom = organFrom.Name;
 
                 if (organFrom.IsInstantOutflow)
                 {
@@ -1189,7 +1189,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                         {
                             var (lineNum, _, _, coeff) = ts[i];
                             if (i == 0)
-                                errors.AddError(lineNum, $"Total [%] of transfer paths from '{fromName}' is  not 100%, but {sum * 100:G29}%.");
+                                errors.AddError(lineNum, $"Total [%] of transfer paths from '{nameFrom}' is  not 100%, but {sum * 100:G29}%.");
                             errors.AddError(lineNum, $"    = {coeff * 100:G29}%");
                         }
                     }
@@ -1256,15 +1256,15 @@ public class InputDataReader_OIR : InputDataReaderBase
     private void DefineDecayTransfers(InputData data, DecayChain chain)
     {
         var organFrom = chain.RootCompartment;
-        var fromNuclide = organFrom.Nuclide;
+        var nuclideFrom = organFrom.Nuclide;
         var decayTransfers = chain.GetDecayTransfers();
         var decayCompartments = chain.DecayCompartments;
 
         // 崩壊系列を構成するコンパートメント間の壊変経路を追加定義する。
-        // 壊変経路は一本道ではなく、fromNuclideから始まる有効非巡回グラフ(DAG)を構成する点に注意。
+        // 壊変経路は一本道ではなく、nuclideFromから始まる有効非巡回グラフ(DAG)を構成する点に注意。
         foreach (var path in decayTransfers)
         {
-            var from = path.Parent == fromNuclide ? organFrom
+            var from = path.Parent == nuclideFrom ? organFrom
                    : decayCompartments.FirstOrDefault(o => o?.Nuclide == path.Parent);
             var to = decayCompartments.FirstOrDefault(o => o?.Nuclide == path.Daughter);
 
