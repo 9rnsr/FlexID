@@ -304,15 +304,6 @@ Te-133m Ingestion
   Te-133m/ST              Blood1                  200
 
   Te-133/Blood1           Blood1                    ---
-  Te-133/Blood2           Blood1                 1000
-  Te-133/C-bone-S         Blood1                  200
-  Te-133/C-bone-V         Blood1                $(0.03 / 365.25)
-  Te-133/T-bone-S         Blood1                  200
-  Te-133/T-bone-V         Blood1                $(0.18 / 365.25)
-  Te-133/Liver            Blood1                  100
-  Te-133/Thyroid          Blood1                   36
-  Te-133/Kidneys          Blood1                  100
-  Te-133/ST               Blood1                  200
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -410,29 +401,11 @@ Te-133m Ingestion
   Te-133m/RS-con          Exhaled                 100
   Te-133m/UB-con          UB-con                    ---
 
-  Te-133/Oralcavity       Exhaled                 100
-  Te-133/Oesophagus-f     Exhaled                 100
-  Te-133/Oesophagus-s     Exhaled                 100
-  Te-133/St-con           Exhaled                 100
-  Te-133/SI-con           Exhaled                 100
-  Te-133/SI-conRe         Exhaled                 100
-  Te-133/RC-con           Exhaled                 100
-  Te-133/LC-con           Exhaled                 100
-  Te-133/RS-con           Exhaled                 100
   Te-133/UB-con           UB-con                    ---
 
-  I-133/Oralcavity        Exhaled                 100
   I-133/OralcavityRe      Exhaled                 100
-  I-133/Oesophagus-f      Exhaled                 100
-  I-133/Oesophagus-s      Exhaled                 100
   I-133/Oesophagus-sRe    Exhaled                 100
-  I-133/St-con            Exhaled                 100
   I-133/St-conRe          Exhaled                 100
-  I-133/SI-con            Exhaled                 100
-  I-133/SI-conRe          Exhaled                 100
-  I-133/RC-con            Exhaled                 100
-  I-133/LC-con            Exhaled                 100
-  I-133/RS-con            Exhaled                 100
   I-133/UB-con            UB-con                    ---
 
 # ICRP Publ.130 p.85 Para.172
@@ -487,15 +460,6 @@ Te-133m Ingestion
   Te-133m/ST              Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   Te-133/Blood1           Blood                     ---
-  Te-133/Blood2           Blood                  1000
-  Te-133/C-bone-S         Blood                   100
-  Te-133/C-bone-V         Blood                   100
-  Te-133/T-bone-S         Blood                   100
-  Te-133/T-bone-V         Blood                   100
-  Te-133/Liver            Blood                  1000
-  Te-133/Thyroid          Blood                  1000
-  Te-133/Kidneys          Blood                  1000
-  Te-133/ST               Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   I-133/Blood1            Blood                     ---
   I-133/Liver1            Blood                  1000
@@ -538,29 +502,11 @@ Te-133m Ingestion
   Te-133m/RS-con          Exhaled                 100
   Te-133m/UB-con          UB-con                    ---
 
-  Te-133/Oralcavity       Exhaled                 100
-  Te-133/Oesophagus-f     Exhaled                 100
-  Te-133/Oesophagus-s     Exhaled                 100
-  Te-133/St-con           Exhaled                 100
-  Te-133/SI-con           Exhaled                 100
-  Te-133/SI-conRe         Exhaled                 100
-  Te-133/RC-con           Exhaled                 100
-  Te-133/LC-con           Exhaled                 100
-  Te-133/RS-con           Exhaled                 100
   Te-133/UB-con           UB-con                    ---
 
-  I-133/Oralcavity        Exhaled                 100
   I-133/OralcavityRe      Exhaled                 100
-  I-133/Oesophagus-f      Exhaled                 100
-  I-133/Oesophagus-s      Exhaled                 100
   I-133/Oesophagus-sRe    Exhaled                 100
-  I-133/St-con            Exhaled                 100
   I-133/St-conRe          Exhaled                 100
-  I-133/SI-con            Exhaled                 100
-  I-133/SI-conRe          Exhaled                 100
-  I-133/RC-con            Exhaled                 100
-  I-133/LC-con            Exhaled                 100
-  I-133/RS-con            Exhaled                 100
   I-133/UB-con            UB-con                    ---
 
 # ICRP Publ.130 p.85 Para.172
@@ -579,15 +525,6 @@ Te-133m Ingestion
   Te-133m/ST              Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   Te-133/Blood1           Blood                     ---
-  Te-133/Blood2           Blood                  1000
-  Te-133/C-bone-S         Blood                   100
-  Te-133/C-bone-V         Blood                   100
-  Te-133/T-bone-S         Blood                   100
-  Te-133/T-bone-V         Blood                   100
-  Te-133/Liver            Blood                  1000
-  Te-133/Thyroid          Blood                  1000
-  Te-133/Kidneys          Blood                  1000
-  Te-133/ST               Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   I-133/Blood1            Blood                     ---
   I-133/Liver1            Blood                  1000
