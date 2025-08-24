@@ -110,7 +110,7 @@ public class Organ
     public bool IsInstantOutflow => Func == OrganFunc.inp || Func == OrganFunc.mix;
 
     /// <summary>
-    /// コンパートメントが移行速度付き壊変経路のために自動定義された場合に<see langword="true"/>。
+    /// コンパートメントが壊変経路のために自動定義された場合に<see langword="true"/>。
     /// </summary>
     public bool IsDecayCompartment;
 

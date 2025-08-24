@@ -811,7 +811,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="data"></param>
     private void DefineTransfers(InputData data)
     {
-        var decaySet = new DecaySet(data.Nuclides, errors, data.Organs);
+        var decaySet = new DecaySet(data.Nuclides, errors);
 
         foreach (var nuclide in nuclides)
         {
@@ -1072,7 +1072,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         errors.RaiseIfAny();
 
         // 核種が異なるコンパートメントへの流入経路と、移行割合を設定する。
-        decaySet.DefineDecayTransfers();
+        decaySet.DefineDecayTransfers(data.Organs);
 
         // 移行経路の定義にエラーがないことを確定する。
         errors.RaiseIfAny();

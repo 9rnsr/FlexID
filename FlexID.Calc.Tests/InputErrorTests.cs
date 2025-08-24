@@ -578,7 +578,7 @@ public class InputErrorTests
     }
 }
 
-class InputErrorTestHelpers
+static class InputErrorTestHelpers
 {
     public static InputDataReader_OIR CreateReader(string[] inputLines)
     {
@@ -587,5 +587,12 @@ class InputErrorTestHelpers
         var stream = new MemoryStream(inputFileBytes);
         var reader = new StreamReader(stream);
         return new InputDataReader_OIR(reader);
+    }
+
+    public static IEnumerable<string> GetErrorLines(this InputErrors errors)
+    {
+        try { errors.RaiseIfAny(); }
+        catch (InputErrorsException e) { return e.ErrorLines; }
+        return Enumerable.Empty<string>();
     }
 }
