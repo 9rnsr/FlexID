@@ -1070,8 +1070,8 @@ Tl-195 Inhalation:Type-S
   Hg-195m/RBC             Blood1                 1000
   Hg-195m/C-bone-S        C-bone-S                  ---
   Hg-195m/T-bone-S        T-bone-S                  ---
-  Hg-195m/Kidneys         Liver                     ---
-  Hg-195m/Liver           Kidneys                   ---
+  Hg-195m/Liver           Liver                     ---
+  Hg-195m/Kidneys         Kidneys                   ---
   Hg-195m/Brain1          Blood1                    0.0693
   Hg-195m/Brain2          Blood1                    0.0693
   Hg-195m/Other1          Blood1                    0.0693
@@ -1082,8 +1082,8 @@ Tl-195 Inhalation:Type-S
   Hg-195/RBC              Blood1                 1000
   Hg-195/C-bone-S         C-bone-S                  ---
   Hg-195/T-bone-S         T-bone-S                  ---
-  Hg-195/Kidneys          Liver                     ---
-  Hg-195/Liver            Kidneys                   ---
+  Hg-195/Liver            Liver                     ---
+  Hg-195/Kidneys          Kidneys                   ---
   Hg-195/Brain1           Blood1                    0.0693
   Hg-195/Brain2           Blood1                    0.0693
   Hg-195/Other1           Blood1                    0.0693
