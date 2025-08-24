@@ -1077,14 +1077,7 @@ Tl-195 Inhalation:Type-F
   Hg-195m/Other1          Blood1                    0.0693
   Hg-195m/Other2          Blood1                    0.0693
 
-  Hg-195/Plasma1          Blood1                 1000
-  Hg-195/Plasma2          Blood1                 1000
-  Hg-195/RBC              Blood1                 1000
   Hg-195/C-bone-S         C-bone-S                  ---
   Hg-195/T-bone-S         T-bone-S                  ---
   Hg-195/Liver            Liver                     ---
   Hg-195/Kidneys          Kidneys                   ---
-  Hg-195/Brain1           Blood1                    0.0693
-  Hg-195/Brain2           Blood1                    0.0693
-  Hg-195/Other1           Blood1                    0.0693
-  Hg-195/Other2           Blood1                    0.0693
