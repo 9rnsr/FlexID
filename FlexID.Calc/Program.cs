@@ -1,4 +1,7 @@
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+
+[assembly: InternalsVisibleTo("FlexID.Calc.Tests")]
 
 namespace FlexID.Calc;
 

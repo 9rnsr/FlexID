@@ -13,7 +13,7 @@ public class InputEvaluatorTests
         evaluator = new InputEvaluator(errors);
     }
 
-    private (decimal value, bool isRate) SuccessReadCoefficient(int lineNum, string input)
+    private (decimal value, bool isFrac) SuccessReadCoefficient(int lineNum, string input)
     {
         if (evaluator.TryReadCoefficient(lineNum, input, out var result))
             return result;

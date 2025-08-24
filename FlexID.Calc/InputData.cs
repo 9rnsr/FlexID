@@ -95,7 +95,7 @@ public class Organ
     /// <summary>
     /// 流入経路。
     /// </summary>
-    public List<Inflow> Inflows;
+    public List<Inflow> Inflows = [];
 
     /// <summary>
     /// コンパートメントへの流入がない場合に<see langword="true"/>。

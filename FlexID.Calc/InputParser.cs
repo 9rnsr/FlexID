@@ -177,7 +177,7 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
         return true;
     }
 
-    public bool TryReadCoefficient(int lineNum, string input, out (decimal value, bool isRate) result)
+    public bool TryReadCoefficient(int lineNum, string input, out (decimal value, bool isFrac) result)
     {
         this.lineNum = lineNum;
         result = default;
@@ -203,8 +203,8 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
             return false;
         }
 
-        var (expr, isRate) = r.Value;
-        //Debug.WriteLine($"Line {lineNum} '{input}' ==> {expr * (isRate ? 100 : 1)}{(isRate ? "%" : "")}");
+        var (expr, isFrac) = r.Value;
+        //Debug.WriteLine($"Line {lineNum} '{input}' ==> {expr * (isFrac ? 100 : 1)}{(isFrac ? "%" : "")}");
         result = r.Value;
         return true;
     }
@@ -220,10 +220,10 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
     public (decimal v, bool r) Number(string input, string unit)
     {
         var value = decimal.Parse(input, NumberStyles.Float);
-        var isRate = (unit == "%");
-        if (isRate)
+        var isFrac = (unit == "%");
+        if (isFrac)
             value = value / 100;
-        return (value, isRate);
+        return (value, isFrac);
     }
 
     public (decimal v, bool r) Pos((decimal v, bool r) oper) => (+oper.v, oper.r);

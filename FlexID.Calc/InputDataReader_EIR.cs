@@ -155,7 +155,6 @@ public class InputDataReader_EIR : InputDataReaderBase
                     Name = organName,
                     Func = organFunc,
                     BioDecay = bioDecay,
-                    Inflows = new List<Inflow>(inflowNum),
                 };
 
                 if (!IsBar(sourceRegion))
@@ -252,11 +251,11 @@ public class InputDataReader_EIR : InputDataReaderBase
                 // 流入割合がマイナスの時の処理は親からの分岐比とする。
                 if (inflow.Rate < 0)
                 {
-                    var fromNuclide = inflow.Organ.Nuclide;
-                    var toNuclide = organ.Nuclide;
-                    var branch = fromNuclide.Branches.FirstOrDefault(b => b.Daughter == toNuclide);
+                    var nuclideFrom = inflow.Organ.Nuclide;
+                    var nuclideTo = organ.Nuclide;
+                    var branch = nuclideFrom.Branches.FirstOrDefault(b => b.Daughter == nuclideTo);
                     if (branch == default)
-                        throw Program.Error($": There is no decay path from {fromNuclide.Name} to {toNuclide.Name}.");
+                        throw Program.Error($": There is no decay path from {nuclideFrom.Name} to {nuclideTo.Name}.");
                     inflow.Rate = branch.Fraction;
                 }
             }
