@@ -1991,7 +1991,6 @@ Au-186 Inhalation:Type-S
 
 # ICRP Publ.151 p.307 Para.601
   Pt-186/Blood1           Blood                     ---
-  Pt-186/Blood2           Blood                  1000
   Pt-186/C-bone-S         C-bone-S                  ---
   Pt-186/C-bone-V         C-bone-V                  ---
   Pt-186/T-bone-S         T-bone-S                  ---
@@ -2006,7 +2005,6 @@ Au-186 Inhalation:Type-S
 
 # ICRP Publ.151 p.299 Para.588
   Os-182/Blood1           Blood                     ---
-  Os-182/Blood2           Blood                  1000
   Os-182/C-bone-S         C-bone-S                  ---
   Os-182/C-bone-V         C-bone-V                  ---
   Os-182/T-bone-S         T-bone-S                  ---
@@ -2015,6 +2013,3 @@ Au-186 Inhalation:Type-S
   Os-182/Liver2           Liver2                    ---
   Os-182/UrinaryPath      UrinaryPath               ---
   Os-182/OtherKidneyTis   OtherKidneyTis            ---
-  Os-182/ST0              Blood                     0.462
-  Os-182/ST1              Blood                     0.462
-  Os-182/ST2              Blood                     0.462

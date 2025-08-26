@@ -483,29 +483,6 @@ Te-131 Inhalation:Type-S
   Te-131/INT-S            Exhaled                 100
   Te-131/LNTH-S           Exhaled                 100
 
-  I-131/ET1-F             Exhaled                 100
-  I-131/ET2-F             Exhaled                 100
-  I-131/ETseq-F           Exhaled                 100
-  I-131/LNET-F            Exhaled                 100
-  I-131/BB-F              Exhaled                 100
-  I-131/BBseq-F           Exhaled                 100
-  I-131/bb-F              Exhaled                 100
-  I-131/bbseq-F           Exhaled                 100
-  I-131/ALV-F             Exhaled                 100
-  I-131/INT-F             Exhaled                 100
-  I-131/LNTH-F            Exhaled                 100
-  I-131/ET1-S             Exhaled                 100
-  I-131/ET2-S             Exhaled                 100
-  I-131/ETseq-S           Exhaled                 100
-  I-131/LNET-S            Exhaled                 100
-  I-131/BB-S              Exhaled                 100
-  I-131/BBseq-S           Exhaled                 100
-  I-131/bb-S              Exhaled                 100
-  I-131/bbseq-S           Exhaled                 100
-  I-131/ALV-S             Exhaled                 100
-  I-131/INT-S             Exhaled                 100
-  I-131/LNTH-S            Exhaled                 100
-
   Te-131/Oralcavity       Exhaled                 100
   Te-131/Oesophagus-f     Exhaled                 100
   Te-131/Oesophagus-s     Exhaled                 100
@@ -517,18 +494,9 @@ Te-131 Inhalation:Type-S
   Te-131/RS-con           Exhaled                 100
   Te-131/UB-con           UB-con                    ---
 
-  I-131/Oralcavity        Exhaled                 100
   I-131/OralcavityRe      Exhaled                 100
-  I-131/Oesophagus-f      Exhaled                 100
-  I-131/Oesophagus-s      Exhaled                 100
   I-131/Oesophagus-sRe    Exhaled                 100
-  I-131/St-con            Exhaled                 100
   I-131/St-conRe          Exhaled                 100
-  I-131/SI-con            Exhaled                 100
-  I-131/SI-conRe          Exhaled                 100
-  I-131/RC-con            Exhaled                 100
-  I-131/LC-con            Exhaled                 100
-  I-131/RS-con            Exhaled                 100
   I-131/UB-con            UB-con                    ---
 
 # ICRP Publ.130 p.85 Para.172

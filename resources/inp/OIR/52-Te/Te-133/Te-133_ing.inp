@@ -281,18 +281,9 @@ Te-133 Ingestion
   Te-133/RS-con           Exhaled                 100
   Te-133/UB-con           UB-con                    ---
 
-  I-133/Oralcavity        Exhaled                 100
   I-133/OralcavityRe      Exhaled                 100
-  I-133/Oesophagus-f      Exhaled                 100
-  I-133/Oesophagus-s      Exhaled                 100
   I-133/Oesophagus-sRe    Exhaled                 100
-  I-133/St-con            Exhaled                 100
   I-133/St-conRe          Exhaled                 100
-  I-133/SI-con            Exhaled                 100
-  I-133/SI-conRe          Exhaled                 100
-  I-133/RC-con            Exhaled                 100
-  I-133/LC-con            Exhaled                 100
-  I-133/RS-con            Exhaled                 100
   I-133/UB-con            UB-con                    ---
 
 # ICRP Publ.130 p.85 Para.172
@@ -387,18 +378,9 @@ Te-133 Ingestion
   Te-133/RS-con           Exhaled                 100
   Te-133/UB-con           UB-con                    ---
 
-  I-133/Oralcavity        Exhaled                 100
   I-133/OralcavityRe      Exhaled                 100
-  I-133/Oesophagus-f      Exhaled                 100
-  I-133/Oesophagus-s      Exhaled                 100
   I-133/Oesophagus-sRe    Exhaled                 100
-  I-133/St-con            Exhaled                 100
   I-133/St-conRe          Exhaled                 100
-  I-133/SI-con            Exhaled                 100
-  I-133/SI-conRe          Exhaled                 100
-  I-133/RC-con            Exhaled                 100
-  I-133/LC-con            Exhaled                 100
-  I-133/RS-con            Exhaled                 100
   I-133/UB-con            UB-con                    ---
 
 # ICRP Publ.130 p.85 Para.172

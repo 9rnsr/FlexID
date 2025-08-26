@@ -536,23 +536,7 @@ Sb-129 Ingestion
   Sb-129/ST2              Blood1                  200
 
   Te-129m/Blood1          Blood1                    ---
-  Te-129m/Blood2          Blood1                 1000
-  Te-129m/C-bone-S        Blood1                  200
-  Te-129m/C-bone-V        Blood1                $(0.03 / 365.25)
-  Te-129m/T-bone-S        Blood1                  200
-  Te-129m/T-bone-V        Blood1                $(0.03 / 365.25)
   Te-129m/Liver           Blood1                  100
-  Te-129m/Thyroid         Blood1                   36
-  Te-129m/Kidneys         Blood1                  100
   Te-129m/ST              Blood1                  200
 
   Te-129/Blood1           Blood1                    ---
-  Te-129/Blood2           Blood1                 1000
-  Te-129/C-bone-S         Blood1                  200
-  Te-129/C-bone-V         Blood1                $(0.03 / 365.25)
-  Te-129/T-bone-S         Blood1                  200
-  Te-129/T-bone-V         Blood1                $(0.03 / 365.25)
-  Te-129/Liver            Blood1                  100
-  Te-129/Thyroid          Blood1                   36
-  Te-129/Kidneys          Blood1                  100
-  Te-129/ST               Blood1                  200

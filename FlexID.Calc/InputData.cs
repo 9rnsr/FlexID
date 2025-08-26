@@ -22,6 +22,8 @@ public class Inflow
     /// 流入割合
     /// </summary>
     public double Rate;
+
+    public override string ToString() => $"{Organ} =>{Rate}";
 }
 
 /// <summary>
@@ -53,7 +55,7 @@ public enum OrganFunc
 /// <summary>
 /// 臓器(コンパートメント)を表現する。
 /// </summary>
-[DebuggerDisplay("{Func} {Name} ({Nuclide})")]
+[DebuggerDisplay(@"\{{Func}, {ToString(),nq}\}")]
 public class Organ
 {
     /// <summary>
@@ -108,7 +110,7 @@ public class Organ
     public bool IsInstantOutflow => Func == OrganFunc.inp || Func == OrganFunc.mix;
 
     /// <summary>
-    /// コンパートメントが移行速度付き壊変経路のために自動定義された場合に<see langword="true"/>。
+    /// コンパートメントが壊変経路のために自動定義された場合に<see langword="true"/>。
     /// </summary>
     public bool IsDecayCompartment;
 
@@ -132,11 +134,17 @@ public class Organ
     /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数(女性)。
     /// </summary>
     public double[] S_CoefficientsF;
+
+    public override string ToString() => $"{Nuclide}/{Name}";
 }
 
-[DebuggerDisplay("{Name}")]
 public class NuclideData
 {
+    /// <summary>
+    /// 核種のデータを配列から引くためのインデックス。
+    /// </summary>
+    public int Index;
+
     /// <summary>
     /// 核種名。
     /// </summary>
@@ -211,6 +219,8 @@ public class NuclideData
         "ExcludeOtherSourceRegions",
         "IncludeOtherSourceRegions"
     ];
+
+    public override string ToString() => Name;
 }
 
 public class InputData

@@ -77,6 +77,7 @@ public class InputDataReader_EIR : InputDataReaderBase
 
             var nuclide = new NuclideData
             {
+                Index = data.Nuclides.Count,
                 Name = values[0],
                 Lambda = double.Parse(values[1]),
                 IsProgeny = isProgeny,
