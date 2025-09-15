@@ -280,34 +280,71 @@ public class InputData
     [
         "ExcludeOtherSourceRegions",
         "IncludeOtherSourceRegions",
+        "PrintCompartments",
+        "PrintTransfers",
+        "PrintScoefficients",
         "OutputDose",
         "OutputDoseRate",
         "OutputRetention",
         "OutputCumulative",
     ];
 
-    public bool TryGetBooleanParameter(string name, bool defaultValue) =>
+    internal bool TryGetBooleanParameter(string name, bool defaultValue) =>
         Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : defaultValue;
+
+    public bool PrintCompartments
+    {
+        get => TryGetBooleanParameter("PrintCompartments", false);
+        set => Parameters["PrintCompartments"] = value.ToString();
+    }
+
+    public bool PrintTransfers
+    {
+        get => TryGetBooleanParameter("PrintTransfers", false);
+        set => Parameters["PrintTransfers"] = value.ToString();
+    }
+
+    public bool PrintScoefficients
+    {
+        get => TryGetBooleanParameter("PrintScoefficients", false);
+        set => Parameters["PrintScoefficients"] = value.ToString();
+    }
 
     /// <summary>
     /// 線量の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputDose { get; set; } = true;
+    public bool OutputDose
+    {
+        get => TryGetBooleanParameter("OutputDose", true);
+        set => Parameters["OutputDose"] = value.ToString();
+    }
 
     /// <summary>
     /// 線量率の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputDoseRate { get; set; } = true;
+    public bool OutputDoseRate
+    {
+        get => TryGetBooleanParameter("OutputDoseRate", true);
+        set => Parameters["OutputDoseRate"] = value.ToString();
+    }
 
     /// <summary>
     /// 残留放射能の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputRetention { get; set; } = true;
+    public bool OutputRetention
+    {
+        get => TryGetBooleanParameter("OutputRetention", true);
+        set => Parameters["OutputRetention"] = value.ToString();
+    }
 
     /// <summary>
     /// 積算放射能の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputCumulative { get; set; } = true;
+    public bool OutputCumulative
+    {
+        get => TryGetBooleanParameter("OutputCumulative", true);
+        set => Parameters["OutputCumulative"] = value.ToString();
+    }
 }
 
 public abstract class InputDataReaderBase : IDisposable

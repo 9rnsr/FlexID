@@ -218,14 +218,6 @@ public class InputDataReader_OIR : InputDataReaderBase
         // 流入を持たないコンパートメントをマークする。
         MarkZeroInflows(data);
 
-        bool CheckOutput(string name) => data.TryGetBooleanParameter(name, true);
-
-        // 出力ファイルの設定。
-        data.OutputDose = CheckOutput("OutputDose");
-        data.OutputDoseRate = CheckOutput("OutputDoseRate");
-        data.OutputRetention = CheckOutput("OutputRetention");
-        data.OutputCumulative = CheckOutput("OutputCumulative");
-
         return data;
     }
 
