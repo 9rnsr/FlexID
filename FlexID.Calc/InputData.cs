@@ -292,22 +292,38 @@ public class InputData
     /// <summary>
     /// 線量の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputDose { get; set; } = true;
+    public bool OutputDose
+    {
+        get => TryGetBooleanParameter("OutputDose", true);
+        set => Parameters["OutputDose"] = value.ToString();
+    }
 
     /// <summary>
     /// 線量率の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputDoseRate { get; set; } = true;
+    public bool OutputDoseRate
+    {
+        get => TryGetBooleanParameter("OutputDoseRate", true);
+        set => Parameters["OutputDoseRate"] = value.ToString();
+    }
 
     /// <summary>
     /// 残留放射能の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputRetention { get; set; } = true;
+    public bool OutputRetention
+    {
+        get => TryGetBooleanParameter("OutputRetention", true);
+        set => Parameters["OutputRetention"] = value.ToString();
+    }
 
     /// <summary>
     /// 積算放射能の計算結果をファイルに出力する場合は <see langword="true"/>。
     /// </summary>
-    public bool OutputCumulative { get; set; } = true;
+    public bool OutputCumulative
+    {
+        get => TryGetBooleanParameter("OutputCumulative", true);
+        set => Parameters["OutputCumulative"] = value.ToString();
+    }
 }
 
 public abstract class InputDataReaderBase : IDisposable
