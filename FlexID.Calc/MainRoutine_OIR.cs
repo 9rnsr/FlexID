@@ -45,7 +45,8 @@ public class MainRoutine_OIR
         using (var writer = new StreamWriter(stream, Encoding.UTF8))
         {
             WriteOutNuclides(data, writer);
-            WriteOutZeroInflows(data, writer);
+            WriteOutCompartments(data, writer);
+            WriteOutTransfers(data, writer);
 
             InputDataReader_OIR.SetSCoefficients(data);
             WriteOutScoefficients(data, writer);
@@ -145,19 +146,139 @@ public class MainRoutine_OIR
         writer.Flush();
     }
 
-    private static void WriteOutZeroInflows(InputData data, TextWriter writer)
+    internal static void WriteOutCompartments(InputData data, TextWriter writer)
     {
-        writer.WriteLine();
-        writer.WriteLine($"Zero inflow organs:");
+        if (!data.PrintCompartments)
+            return;
 
+        writer.WriteLine();
+        writer.WriteLine("Compartments:");
+
+        var nuclideLength = data.Nuclides.Max(o => o.Name.Length);
+        var nameLength = data.Organs.Max(o => o.Name.Length);
+
+        var spacing = new char[Math.Max(nuclideLength, nameLength)];
+        spacing.AsSpan().Fill(' ');
+
+        NuclideData prevNuclide = null;
         foreach (var nuclide in data.Nuclides)
         {
-            foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+            var organs = data.Organs.Where(o => o.Nuclide == nuclide);
+
+            if (prevNuclide != null)
+                writer.WriteLine();
+            prevNuclide = nuclide;
+
+            foreach (var organ in organs)
             {
-                if (organ.IsDecayCompartment)
-                    continue;
-                if (organ.IsZeroInflow && organ.Func != OrganFunc.inp)
-                    writer.WriteLine($"  {nuclide.Name} / {organ.Name}");
+                writer.Write("  ");
+                writer.Write(organ.Func.ToString());
+                if (organ.IsZeroInflow)
+                    writer.Write(" Z ");
+                else
+                    writer.Write("   ");
+
+                writer.Write(nuclide.Name);
+                writer.Write(spacing, 0, nuclideLength - nuclide.Name.Length);
+                writer.Write('/');
+                writer.Write(organ.Name);
+
+                if (organ.SourceRegion is not null)
+                {
+                    writer.Write(spacing, 0, nameLength - organ.Name.Length);
+                    writer.Write("   ");
+                    writer.Write(organ.SourceRegion);
+                }
+
+                writer.WriteLine();
+            }
+        }
+
+        writer.Flush();
+    }
+
+    internal static void WriteOutTransfers(InputData data, TextWriter writer)
+    {
+        if (!data.PrintTransfers)
+            return;
+
+        writer.WriteLine();
+        writer.WriteLine("Transfers:");
+
+        var transfers = new List<(int nuclideIndex, string from, string to, string coeff)>();
+        var fromLength = 0;
+        var toLength = 0;
+        var coeffAlignment = 0;
+        foreach (var nuclide in data.Nuclides)
+        {
+            void Add(Organ organFrom, Organ organTo, string coeff)
+            {
+                var from = $"{organFrom.Nuclide.Name}/{organFrom.Name}";
+                var to = $"{organTo.Nuclide.Name}/{organTo.Name}";
+
+                transfers.Add((nuclide.Index, from, to, coeff));
+
+                fromLength = Math.Max(fromLength, from.Length + 2);
+                toLength = Math.Max(toLength, to.Length + 2);
+                if (coeff != null)
+                    coeffAlignment = Math.Max(coeffAlignment, to.Length + 2 + coeff.IndexOf('='));
+            }
+
+            var organs = data.Organs.Where(o => o.Nuclide == nuclide);
+            foreach (var organTo in organs)
+            {
+                foreach (var inflow in organTo.Inflows.Where(i => i.Organ.Nuclide != organTo.Nuclide))
+                {
+                    var organFrom = inflow.Organ;
+                    Add(organFrom, organTo, null);
+                }
+            }
+            foreach (var organTo in organs)
+            {
+                foreach (var inflow in organTo.Inflows.Where(i => i.Organ.Nuclide == organTo.Nuclide))
+                {
+                    var organFrom = inflow.Organ;
+
+                    var bioDecay = organFrom.BioDecay;
+                    var rate = organFrom.IsInstantOutflow ? $"{inflow.Rate:P}" : $"{inflow.Rate:G}";
+                    var coeff = $"{bioDecay * inflow.Rate:G} = {bioDecay:G} * {rate}";
+
+                    Add(organFrom, organTo, coeff);
+                }
+            }
+        }
+
+        var spacing = new char[Math.Max(fromLength, Math.Max(toLength, coeffAlignment))];
+        spacing.AsSpan().Fill(' ');
+
+        var prevNuclideIndex = -1;
+        foreach (var (nuclideIndex, from, to, coeff) in transfers)
+        {
+            if (nuclideIndex != prevNuclideIndex)
+            {
+                if (prevNuclideIndex != -1)
+                    writer.WriteLine();
+                prevNuclideIndex = nuclideIndex;
+            }
+
+            writer.Write("  ");
+            writer.Write(from);
+            writer.Write(spacing, 0, fromLength - from.Length);
+
+            writer.Write("-> ");
+            writer.Write(to);
+
+            if (coeff is null)
+            {
+                writer.Write(spacing, 0, toLength - to.Length);
+                writer.WriteLine("---");
+            }
+            else
+            {
+                var coeffLeftLength = coeff.IndexOf('=');
+                var spacingLength = coeffAlignment - (to.Length + coeffLeftLength);
+                writer.Write(spacing, 0, spacingLength);
+                writer.WriteLine(coeff);
             }
         }
 

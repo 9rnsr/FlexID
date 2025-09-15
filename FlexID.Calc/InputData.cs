@@ -280,6 +280,8 @@ public class InputData
     [
         "ExcludeOtherSourceRegions",
         "IncludeOtherSourceRegions",
+        "PrintCompartments",
+        "PrintTransfers",
         "PrintScoefficients",
         "OutputDose",
         "OutputDoseRate",
@@ -289,6 +291,18 @@ public class InputData
 
     internal bool TryGetBooleanParameter(string name, bool defaultValue) =>
         Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : defaultValue;
+
+    public bool PrintCompartments
+    {
+        get => TryGetBooleanParameter("PrintCompartments", false);
+        set => Parameters["PrintCompartments"] = value.ToString();
+    }
+
+    public bool PrintTransfers
+    {
+        get => TryGetBooleanParameter("PrintTransfers", false);
+        set => Parameters["PrintTransfers"] = value.ToString();
+    }
 
     public bool PrintScoefficients
     {
