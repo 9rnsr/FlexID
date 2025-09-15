@@ -166,7 +166,7 @@ public class MainRoutine_OIR
 
     private static void WriteOutScoefficients(InputData data, TextWriter writer)
     {
-        var printScoeff = data.TryGetBooleanParameter("PrintScoefficients", false);
+        var printScoeff = data.PrintScoefficients;
 
         var sourceRegions = data.SourceRegions.Select(s => s.Name).ToArray();
         var otherSourceRegion = "Other";

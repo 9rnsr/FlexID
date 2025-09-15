@@ -280,14 +280,21 @@ public class InputData
     [
         "ExcludeOtherSourceRegions",
         "IncludeOtherSourceRegions",
+        "PrintScoefficients",
         "OutputDose",
         "OutputDoseRate",
         "OutputRetention",
         "OutputCumulative",
     ];
 
-    public bool TryGetBooleanParameter(string name, bool defaultValue) =>
+    internal bool TryGetBooleanParameter(string name, bool defaultValue) =>
         Parameters.TryGetValue(name, out var str) && bool.TryParse(str, out var value) ? value : defaultValue;
+
+    public bool PrintScoefficients
+    {
+        get => TryGetBooleanParameter("PrintScoefficients", false);
+        set => Parameters["PrintScoefficients"] = value.ToString();
+    }
 
     /// <summary>
     /// 線量の計算結果をファイルに出力する場合は <see langword="true"/>。
