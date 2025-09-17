@@ -1,0 +1,109 @@
+[title]
+Pb-209 Ingestion
+
+[nuclide]
+  Pb-209
+
+
+[Pb-209:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  exc   Excreta(sweat)              ---
+  exc   Excreta(hair,skin,nails)    ---
+
+[Pb-209:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
+  $fA    = 0.2
+  $fA_Re = 0.2          # footnote**
+
+# ICRP Publ.130 p.75 Fig.3.6
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.225 Table 9.3
+  Plasma                  UB-con                    1.75
+  Plasma                  RC-con                    0.7
+  Plasma                  T-bone-S                  4.86
+  Plasma                  C-bone-S                  3.89
+  Plasma                  ST0                      22.16
+  Plasma                  ST1                       0.7
+  Plasma                  ST2                       0.14
+  Plasma                  Liver1                    4.9
+  Plasma                  Kidneys1                  2.45
+  Plasma                  Kidneys2                  0.0245
+  Plasma                  RBC                      28
+  Plasma                  Excreta(sweat)            0.42
+  RBC                     Plasma                    0.139
+  T-bone-S                Plasma                    0.5
+  T-bone-S                Exch-T-bone-V             0.5
+  C-bone-S                Plasma                    0.5
+  C-bone-S                Exch-C-bone-V             0.5
+  Exch-T-bone-V           T-bone-S                  0.0185
+  Exch-T-bone-V           Noch-T-bone-V             0.0046
+  Exch-C-bone-V           C-bone-S                  0.0185
+  Exch-C-bone-V           Noch-C-bone-V             0.0046
+  Noch-T-bone-V           Plasma                    0.000493
+  Noch-C-bone-V           Plasma                    0.0000821
+  Liver1                  Plasma                    0.0312
+  Liver1                  SI-conRe                  0.0312
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.0019
+  Kidneys1                UB-con                    0.139
+  Kidneys2                Plasma                    0.0019
+  ST0                     Plasma                    7.39
+  ST1                     Plasma                    0.00416
+  ST2                     Plasma                    0.00038
+  ST1                     Excreta(hair,skin,nails)  0.00277
