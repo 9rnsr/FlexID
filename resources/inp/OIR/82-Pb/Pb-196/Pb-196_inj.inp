@@ -1,0 +1,273 @@
+[title]
+Pb-196 Injection
+
+[nuclide]
+  Pb-196  Tl-196
+
+
+[Pb-196:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  exc   Excreta(sweat)              ---
+  exc   Excreta(hair,skin,nails)    ---
+
+[Pb-196:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
+  $fA    = 0.2
+  $fA_Re = 0.2          # footnote**
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Plasma                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.225 Table 9.3
+  Plasma                  UB-con                    1.75
+  Plasma                  RC-con                    0.7
+  Plasma                  T-bone-S                  4.86
+  Plasma                  C-bone-S                  3.89
+  Plasma                  ST0                      22.16
+  Plasma                  ST1                       0.7
+  Plasma                  ST2                       0.14
+  Plasma                  Liver1                    4.9
+  Plasma                  Kidneys1                  2.45
+  Plasma                  Kidneys2                  0.0245
+  Plasma                  RBC                      28
+  Plasma                  Excreta(sweat)            0.42
+  RBC                     Plasma                    0.139
+  T-bone-S                Plasma                    0.5
+  T-bone-S                Exch-T-bone-V             0.5
+  C-bone-S                Plasma                    0.5
+  C-bone-S                Exch-C-bone-V             0.5
+  Exch-T-bone-V           T-bone-S                  0.0185
+  Exch-T-bone-V           Noch-T-bone-V             0.0046
+  Exch-C-bone-V           C-bone-S                  0.0185
+  Exch-C-bone-V           Noch-C-bone-V             0.0046
+  Noch-T-bone-V           Plasma                    0.000493
+  Noch-C-bone-V           Plasma                    0.0000821
+  Liver1                  Plasma                    0.0312
+  Liver1                  SI-conRe                  0.0312
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.0019
+  Kidneys1                UB-con                    0.139
+  Kidneys2                Plasma                    0.0019
+  ST0                     Plasma                    7.39
+  ST1                     Plasma                    0.00416
+  ST2                     Plasma                    0.00038
+  ST1                     Excreta(hair,skin,nails)  0.00277
+
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > (481) The following systemic model is applied to thallium produced in vivo following
+# > intake of lead. ...
+# > (481) 鉛摂取後に体内で生成されるタリウムには、以下の全身モデルが適用されます。 ...
+
+[Tl-196:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other                 Other
+
+# 作成者注：Publ.151で示された親としてのタリウムのモデルに対して追加
+
+  acc   RedMarrow             R-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Tl-196:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > ... Thallium leaves the central blood compartment (plasma) at the
+# > rate 200 d⁻¹ (corresponding to a half-time of 5 min) and is distributed as follows:
+# > 2.5% to red blood cells, 0.75% to urinary bladder contents, 1.75% to right colon
+# > contents, 5% to kidneys, 5% to liver, 2.5% to skin, 1.5% to red marrow, 0.2% to
+# > spleen, 0.3% to testes, 0.1% to ovaries, 7.5% to trabecular bone surfaces, 7.5% to
+# > cortical bone surfaces, and 65.4% to remaining soft tissues (other).
+# > ... タリウムは中心血液区画（血漿）から200 d⁻¹（半減期5分に相当）の速度で排出され、
+# > 以下のように分布する：赤血球に2.5%、膀胱内容物に0.75%、右結腸内容物に1.75%、腎臓に5%、
+# > 肝臓に5%、皮膚に2.5%、赤色骨髄に1.5%、脾臓に0.2%、精巣に0.3%、卵巣に0.1%、
+# > 海綿骨表面に7.5%、皮質骨表面に7.5%、残りの軟部組織（その他）に65.4%。
+# > ... Thallium returns from red blood cells to plasma at the rate 3.7 d⁻¹, and from
+# > tissue compartments to plasma at the rate 2.5 d⁻¹.
+# > ... タリウムは、赤血球から血漿へは3.7 d⁻¹の速度で戻り、組織コンパートメントから
+# > 血漿へは2.5 d⁻¹の速度で戻ります。
+
+# 作成者注：Publ.137で示されている移行係数の設定値は、Publ.151で示された親としての
+# タリウムのモデルにおけるPlasmaと軟組織Otherの間の流量を、追加された
+# 5つのコンパートメントに分配する形になっている。
+
+  Plasma                  Liver                 $(200 *  5%)
+  Plasma                  Kidneys               $(200 *  5%)
+  Plasma                  RBC                   $(200 *  2.5%)
+  Plasma                  T-bone-S              $(200 *  7.5%)
+  Plasma                  C-bone-S              $(200 *  7.5%)
+ #Plasma                  Other                 $(200 * 70%)    # == 140    # fix
+  Plasma                  Other                 $(200 * 65.4%)  # == 130.8
+  Plasma                  RedMarrow             $(200 *  1.5%)
+  Plasma                  Skin                  $(200 *  2.5%)
+  Plasma                  Spleen                $(200 *  0.2%)
+  Plasma                  Testes                $(200 *  0.3%)
+  Plasma                  Ovaries               $(200 *  0.1%)
+  Plasma                  UB-con                $(200 *  0.75%)
+  Plasma                  RC-con                $(200 *  1.75%)
+  RBC                     Plasma                    3.7
+  Liver                   Plasma                    2.5
+  Kidneys                 Plasma                    2.5
+  T-bone-S                Plasma                    2.5
+  C-bone-S                Plasma                    2.5
+  Other                   Plasma                    2.5
+  RedMarrow               Plasma                    2.5
+  Skin                    Plasma                    2.5
+  Spleen                  Plasma                    2.5
+  Testes                  Plasma                    2.5
+  Ovaries                 Plasma                    2.5
+
+# from parent to progeny
+  Pb-196/Oralcavity       Tl-196/Oralcavity         ---
+  Pb-196/Oesophagus-f     Tl-196/Oesophagus-f       ---
+  Pb-196/Oesophagus-s     Tl-196/Oesophagus-s       ---
+  Pb-196/St-con           Tl-196/St-con             ---
+  Pb-196/SI-con           Tl-196/SI-con             ---
+  Pb-196/SI-conRe         Tl-196/SI-conRe           ---
+  Pb-196/RC-con           Tl-196/RC-con             ---
+  Pb-196/LC-con           Tl-196/LC-con             ---
+  Pb-196/RS-con           Tl-196/RS-con             ---
+  Pb-196/Faeces           Tl-196/Faeces             ---
+  Pb-196/UB-con           Tl-196/UB-con             ---
+  Pb-196/Urine            Tl-196/Urine              ---
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
+# > in the model for lead (Fig. 9.1).
+# > ... 腎臓と肝臓は、鉛のモデル（図9.1）において、それぞれ腎臓2と肝臓1に相当します。
+# > ... Thallium produced by radioactive
+# > decay in a blood compartment that is not identifiable with a blood compartment of
+# > the thallium model is assumed to transfer to plasma at the rate 1000 d⁻¹. Thallium
+# > produced in a soft tissue compartment not identifiable with a compartment of the
+# > thallium model is assumed to transfer to plasma at the rate 2.5 d⁻¹. Thallium produced
+# > in a compartment of cortical or trabecular bone volume is assumed to transfer
+# > to plasma at the reference turnover rate of that bone type.
+# > ... タリウムモデルの血液コンパートメントと識別できない血液コンパートメント内で
+# > 放射性崩壊によって生成されたタリウムは、1000 d⁻¹の速度で血漿に移行すると仮定されます。
+# > タリウムモデルのコンパートメントと識別できない軟部組織コンパートメントで生成された
+# > タリウムは、2.5 d⁻¹の速度で血漿に移行すると仮定されます。皮質骨または海綿骨の
+# > 体積コンパートメントで生成されたタリウムは、その骨の種類に応じた基準代謝速度で
+# > 血漿に移行すると仮定されます。
+
+  Pb-196/Plasma           Tl-196/Plasma             ---
+  Pb-196/RBC              Tl-196/RBC                ---
+  Pb-196/C-bone-S         Tl-196/C-bone-S           ---
+  Pb-196/T-bone-S         Tl-196/T-bone-S           ---
+  Pb-196/Exch-C-bone-V    Tl-196/Plasma         $(0.03 / 365.25)
+  Pb-196/Exch-T-bone-V    Tl-196/Plasma         $(0.18 / 365.25)
+  Pb-196/Noch-C-bone-V    Tl-196/Plasma         $(0.03 / 365.25)
+  Pb-196/Noch-T-bone-V    Tl-196/Plasma         $(0.18 / 365.25)
+  Pb-196/Liver1           Tl-196/Liver              ---
+  Pb-196/Kidneys2         Tl-196/Kidneys            ---
+
+  Pb-196/ST0              Tl-196/Plasma             2.5
+  Pb-196/ST1              Tl-196/Plasma             2.5
+  Pb-196/ST2              Tl-196/Plasma             2.5
+  Pb-196/Liver2           Tl-196/Plasma             2.5
+  Pb-196/Kidneys1         Tl-196/Plasma             2.5
