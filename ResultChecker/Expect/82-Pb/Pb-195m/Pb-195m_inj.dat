@@ -1,0 +1,11 @@
+Radionuclide	Pb-195m
+Route of Intake	Injection
+Material	Injection, fA=0.2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	6.2E-2	3.0E-3	9.7E-3	7.3E-3
+0.083333	3.8E-3	1.9E-4	6.5E-4	4.8E-4
+0.125	2.4E-4	1.2E-5	4.3E-5	3.2E-5
+0.25	5.7E-8	3.2E-9	1.1E-8	8.7E-9
