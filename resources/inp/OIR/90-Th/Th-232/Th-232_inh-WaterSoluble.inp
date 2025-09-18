@@ -61,10 +61,10 @@ Th-232 Inhalation:WaterSoluble
 
   acc   Blood                 Blood
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   C-marrow              C-marrow
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
   acc   Liver1                Liver         # hepatocytes
   acc   Liver2                Liver         # reticulo-endothelial cells
@@ -323,10 +323,10 @@ Th-232 Inhalation:WaterSoluble
 
   acc   Blood                 Blood
   acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
   acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
   acc   Noch-T-bone-V         T-bone-V
   acc   Liver1                Liver         # Para.694, fast
   acc   Liver2                Liver         # Para.694, slow
@@ -600,10 +600,10 @@ Th-232 Inhalation:WaterSoluble
 
   Th-232/Blood            Ra-228/Blood              ---
   Th-232/C-bone-S         Ra-228/C-bone-S           ---
-  Th-232/C-bone-V         Ra-228/Noch-C-bone-V      ---     # Publ.137 Para.812
-  Th-232/C-marrow         Ra-228/C-marrow           ---
   Th-232/T-bone-S         Ra-228/T-bone-S           ---
+  Th-232/C-bone-V         Ra-228/Noch-C-bone-V      ---     # Publ.137 Para.812
   Th-232/T-bone-V         Ra-228/Noch-T-bone-V      ---     # Publ.137 Para.812
+  Th-232/C-marrow         Ra-228/C-marrow           ---
   Th-232/T-marrow         Ra-228/T-marrow           ---
   Th-232/Liver1           Ra-228/Liver1             ---
   Th-232/Liver2           Ra-228/Liver2             ---
@@ -670,10 +670,10 @@ Th-232 Inhalation:WaterSoluble
 
   acc   Blood                 Blood
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   C-marrow              C-marrow
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
   acc   Liver1                Liver
   acc   Liver2                Liver
@@ -932,10 +932,12 @@ Th-232 Inhalation:WaterSoluble
 
   Th-232/Blood            Ac-228/Blood              ---
   Th-232/C-bone-S         Ac-228/C-bone-S           ---
-  Th-232/C-bone-V         Ac-228/C-bone-V           ---     # Ra-228/Noch-C-bone-Vを経由する
-  Th-232/C-marrow         Ac-228/C-marrow           ---
   Th-232/T-bone-S         Ac-228/T-bone-S           ---
+  Ra-228/Exch-C-bone-V    Ac-228/Blood          $(0.03 / 365.25)
+  Ra-228/Exch-T-bone-V    Ac-228/Blood          $(0.18 / 365.25)
+  Th-232/C-bone-V         Ac-228/C-bone-V           ---     # Ra-228/Noch-C-bone-Vを経由する
   Th-232/T-bone-V         Ac-228/T-bone-V           ---     # Ra-228/Noch-T-bone-Vを経由する
+  Th-232/C-marrow         Ac-228/C-marrow           ---
   Th-232/T-marrow         Ac-228/T-marrow           ---
   Th-232/Liver1           Ac-228/Liver1             ---
   Th-232/Liver2           Ac-228/Liver2             ---
@@ -945,9 +947,6 @@ Th-232 Inhalation:WaterSoluble
   Th-232/Ovaries          Ac-228/Ovaries            ---
   Ra-228/Skin             Ac-228/Skin               ---
   Ra-228/Spleen           Ac-228/Spleen             ---
-
-  Ra-228/Exch-C-bone-V    Ac-228/Blood          $(0.03 / 365.25)
-  Ra-228/Exch-T-bone-V    Ac-228/Blood          $(0.18 / 365.25)
 
   Th-232/ST0              Ac-228/Blood              1.386
   Th-232/ST1              Ac-228/Blood              1.386
@@ -1273,10 +1272,12 @@ Th-232 Inhalation:WaterSoluble
 
   Th-232/Blood            Th-228/Blood              ---
   Th-232/C-bone-S         Th-228/C-bone-S           ---
-  Th-232/C-bone-V         Th-228/C-bone-V           ---     # Ra-228/Noch-C-bone-Vを経由する
-  Th-232/C-marrow         Th-228/C-marrow           ---
   Th-232/T-bone-S         Th-228/T-bone-S           ---
+  Ra-228/Exch-C-bone-V    Th-228/Blood          $(0.03 / 365.25)
+  Ra-228/Exch-T-bone-V    Th-228/Blood          $(0.18 / 365.25)
+  Th-232/C-bone-V         Th-228/C-bone-V           ---     # Ra-228/Noch-C-bone-Vを経由する
   Th-232/T-bone-V         Th-228/T-bone-V           ---     # Ra-228/Noch-T-bone-Vを経由する
+  Th-232/C-marrow         Th-228/C-marrow           ---
   Th-232/T-marrow         Th-228/T-marrow           ---
   Th-232/Liver1           Th-228/Liver1             ---
   Th-232/Liver2           Th-228/Liver2             ---
@@ -1286,9 +1287,6 @@ Th-232 Inhalation:WaterSoluble
   Th-232/Ovaries          Th-228/Ovaries            ---
   Ra-228/Skin             Th-228/Skin               ---
   Ra-228/Spleen           Th-228/Spleen             ---
-
-  Ra-228/Exch-C-bone-V    Th-228/Blood          $(0.03 / 365.25)
-  Ra-228/Exch-T-bone-V    Th-228/Blood          $(0.18 / 365.25)
 
   Th-232/ST0              Th-228/ST0                ---
   Th-232/ST1              Th-228/ST1                ---
@@ -1357,10 +1355,10 @@ Th-232 Inhalation:WaterSoluble
 
   acc   Blood                 Blood
   acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
   acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
   acc   Noch-T-bone-V         T-bone-V
   acc   Liver1                Liver         # Para.694, fast
   acc   Liver2                Liver         # Para.694, slow
@@ -1602,12 +1600,12 @@ Th-232 Inhalation:WaterSoluble
 
   Th-232/Blood            Ra-224/Blood              ---
   Th-232/C-bone-S         Ra-224/C-bone-S           ---
-  Ra-228/Exch-C-bone-V    Ra-224/Exch-C-bone-V      ---
-  Th-232/C-bone-V         Ra-224/Noch-C-bone-V      ---     # Ra-228/Noch-C-bone-Vを経由する
-  Th-232/C-marrow         Ra-224/C-marrow           ---
   Th-232/T-bone-S         Ra-224/T-bone-S           ---
+  Ra-228/Exch-C-bone-V    Ra-224/Exch-C-bone-V      ---
   Ra-228/Exch-T-bone-V    Ra-224/Exch-T-bone-V      ---
+  Th-232/C-bone-V         Ra-224/Noch-C-bone-V      ---     # Ra-228/Noch-C-bone-Vを経由する
   Th-232/T-bone-V         Ra-224/Noch-T-bone-V      ---     # Ra-228/Noch-T-bone-Vを経由する
+  Th-232/C-marrow         Ra-224/C-marrow           ---
   Th-232/T-marrow         Ra-224/T-marrow           ---
   Th-232/Liver1           Ra-224/Liver1             ---
   Th-232/Liver2           Ra-224/Liver2             ---
@@ -1832,13 +1830,12 @@ Th-232 Inhalation:WaterSoluble
 # > またはクリプトンは、1000 d⁻¹の割合で体外に排出されます（呼気）。これは半減期1分に相当します。
 
   Th-232/Blood            Rn-220/Blood              ---
-  Th-232/C-bone-V         Rn-220/Blood              0.36    # Ra-228/Noch-C-bone-Vを経由する
-  Th-232/T-bone-V         Rn-220/Blood              0.36    # Ra-228/Noch-T-bone-Vを経由する
-  Ra-228/Exch-C-bone-V    Rn-220/Blood              0.36
-  Ra-228/Exch-T-bone-V    Rn-220/Blood              0.36
   Th-232/C-bone-S         Rn-220/Blood              0.36
   Th-232/T-bone-S         Rn-220/Blood              0.36
-
+  Ra-228/Exch-C-bone-V    Rn-220/Blood              0.36
+  Ra-228/Exch-T-bone-V    Rn-220/Blood              0.36
+  Th-232/C-bone-V         Rn-220/Blood              0.36    # Ra-228/Noch-C-bone-Vを経由する
+  Th-232/T-bone-V         Rn-220/Blood              0.36    # Ra-228/Noch-T-bone-Vを経由する
   Th-232/C-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
   Th-232/T-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
   Th-232/Liver1           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
@@ -2307,10 +2304,10 @@ Th-232 Inhalation:WaterSoluble
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
   acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
   acc   Noch-T-bone-V         T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
@@ -2624,9 +2621,9 @@ Th-232 Inhalation:WaterSoluble
 # > 1000 d⁻¹と割り当てられる。
 
   Th-232/Blood            Pb-212/Plasma          1000
-  Po-216/Plasma1          Pb-212/Plasma             ---
-  Po-216/Plasma2          Pb-212/Plasma             ---
-  Po-216/Plasma3          Pb-212/Plasma             ---
+  Po-216/Plasma1          Pb-212/Plasma          1000
+  Po-216/Plasma2          Pb-212/Plasma          1000
+  Po-216/Plasma3          Pb-212/Plasma          1000
   Po-216/RBC              Pb-212/RBC                ---
   Th-232/C-bone-S         Pb-212/C-bone-S           ---
   Th-232/T-bone-S         Pb-212/T-bone-S           ---
@@ -3007,6 +3004,9 @@ Th-232 Inhalation:WaterSoluble
 # > 血漿に移行すると仮定されます。
 
   Th-232/Blood            Bi-212/Plasma          1000
+  Po-216/Plasma1          Bi-212/Plasma          1000
+  Po-216/Plasma2          Bi-212/Plasma          1000
+  Po-216/Plasma3          Bi-212/Plasma          1000
   Pb-212/Plasma           Bi-212/Plasma             ---
   Pb-212/RBC              Bi-212/RBC                ---
   Th-232/C-bone-S         Bi-212/C-bone-S           ---
@@ -3373,13 +3373,16 @@ Th-232 Inhalation:WaterSoluble
 
   Th-232/Blood            Po-212/Plasma2         1000
   Pb-212/Plasma           Po-212/Plasma2         1000               # Bi-212/Plasmaを経由する
+  Po-216/Plasma1          Po-212/Plasma1            ---
+  Po-216/Plasma2          Po-212/Plasma2            ---
+  Po-216/Plasma3          Po-212/Plasma3            ---
   Po-216/RBC              Po-212/RBC                ---
   Th-232/C-bone-S         Po-212/C-bone-S           ---
   Th-232/T-bone-S         Po-212/T-bone-S           ---
-  Th-232/C-bone-V         Po-212/Plasma2        $(0.03 / 365.25)    # Ra-228/Noch-C-bone-Vを経由する
-  Th-232/T-bone-V         Po-212/Plasma2        $(0.18 / 365.25)    # Ra-228/Noch-T-bone-Vを経由する
   Ra-228/Exch-C-bone-V    Po-212/Plasma2        $(0.03 / 365.25)
   Ra-228/Exch-T-bone-V    Po-212/Plasma2        $(0.18 / 365.25)
+  Th-232/C-bone-V         Po-212/Plasma2        $(0.03 / 365.25)    # Ra-228/Noch-C-bone-Vを経由する
+  Th-232/T-bone-V         Po-212/Plasma2        $(0.18 / 365.25)    # Ra-228/Noch-T-bone-Vを経由する
   Th-232/C-marrow         Po-212/C-marrow           ---
   Th-232/T-marrow         Po-212/T-marrow           ---
   Th-232/Liver1           Po-212/Liver1             ---
@@ -3744,16 +3747,14 @@ Th-232 Inhalation:WaterSoluble
   Po-216/RBC              Tl-208/RBC                ---
   Th-232/C-bone-S         Tl-208/C-bone-S           ---
   Th-232/T-bone-S         Tl-208/T-bone-S           ---
-  Th-232/C-bone-V         Tl-208/Plasma         $(0.03 / 365.25)    # Ra-228/Noch-C-bone-Vを経由する
-  Th-232/T-bone-V         Tl-208/Plasma         $(0.18 / 365.25)    # Ra-228/Noch-T-bone-Vを経由する
   Ra-228/Exch-C-bone-V    Tl-208/Plasma         $(0.03 / 365.25)
   Ra-228/Exch-T-bone-V    Tl-208/Plasma         $(0.18 / 365.25)
+  Th-232/C-bone-V         Tl-208/Plasma         $(0.03 / 365.25)    # Ra-228/Noch-C-bone-Vを経由する
+  Th-232/T-bone-V         Tl-208/Plasma         $(0.18 / 365.25)    # Ra-228/Noch-T-bone-Vを経由する
   Th-232/C-marrow         Tl-208/C-marrow           ---
   Th-232/T-marrow         Tl-208/T-marrow           ---
   Th-232/Liver1           Tl-208/Liver              ---
-  Th-232/Liver2           Tl-208/Liver              ---
   Th-232/Kidneys1         Tl-208/Kidneys            ---
-  Th-232/Kidneys2         Tl-208/Kidneys            ---
   Th-232/Testes           Tl-208/Testes             ---
   Th-232/Ovaries          Tl-208/Ovaries            ---
   Ra-228/Skin             Tl-208/Skin               ---
@@ -3762,6 +3763,8 @@ Th-232 Inhalation:WaterSoluble
   Th-232/ST0              Tl-208/Plasma             2.5     # Th-228/ST0を経由する
   Th-232/ST1              Tl-208/Plasma             2.5     # Th-228/ST1を経由する
   Th-232/ST2              Tl-208/Plasma             2.5     # Th-228/ST2を経由する
+  Th-232/Liver2           Tl-208/Plasma             2.5
+  Th-232/Kidneys2         Tl-208/Plasma             2.5
   Ra-228/ST0              Tl-208/Plasma             2.5     # Ra-224/ST0を経由する
   Ra-228/ST1              Tl-208/Plasma             2.5     # Ra-224/ST1を経由する
   Ra-228/ST2              Tl-208/Plasma             2.5     # Ra-224/ST2を経由する

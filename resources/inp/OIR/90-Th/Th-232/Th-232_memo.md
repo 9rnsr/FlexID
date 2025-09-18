@@ -1,17 +1,17 @@
 # 体内動態モデル間のコンパートメント対応関係
 
 ```
-Th-232 --> Ra-228 --> Ac-228 --> Th-228 --+
-                                          |
-     +------------------------------------+
-     |
-     +---> Ra-224 --> Rn-220 --> Po-216 --> Pb-212 --+
-                                                     |
-     +-----------------------------------------------+
-     |
-     +---> Bi-212 -+---> Po-212 ---+-> (Pb-208)
-                    \             /
-                     +-> Tl-208 -+
+Th-232 --> Ra-228 --> Ac-228 --> Th-228 -+
+                                          \
+     +-------------------------------------+
+      \
+       +-> Ra-224 --> Rn-220 --> Po-216 -+
+                                          \
+     +-------------------------------------+
+      \
+       +-> Pb-212 --> Bi-212 -+-> Po-212 -+
+                                \           \
+                                 +-> Tl-208 -+-> (Pb-208)
 ```
 
 全身モデル間で同一と扱うコンパートメント。
@@ -19,16 +19,17 @@ Th-232 --> Ra-228 --> Ac-228 --> Th-228 --+
 |Th-232   |Ra-228        |Ac-228   |Th-228   |Ra-224        |Rn-220 |Po-216   |Pb-212        |Bi-212   |Po-212   |Tl-208   |
 |---------|--------------|---------|---------|--------------|-------|---------|--------------|---------|---------|---------|
 |Blood    |Blood         |Blood    |Blood    |Blood         |Blood  |         |              |         |         |         |
-|         |              |         |         |              |       |Plasma1  |↘             |         |Plasma1  |↘        |
-|         |              |         |         |              |       |Plasma2  |Plasma        |Plasma   |Plasma2  |Plasma   |
-|         |              |         |         |              |       |Plasma3  |↗             |         |Plasma3  |↗        |
+|         |              |         |         |              |       |Plasma1  |              |         |Plasma1  |         |
+|         |              |         |         |              |       |Plasma2  |              |         |Plasma2  |         |
+|         |              |         |         |              |       |Plasma3  |              |         |Plasma3  |         |
+|         |              |         |         |              |       |         |Plasma        |Plasma   |         |Plasma   |
 |         |              |         |         |              |       |RBC      |RBC           |RBC      |RBC      |RBC      |
 |C-bone-S |C-bone-S      |C-bone-S |C-bone-S |C-bone-S      |       |C-bone-S |C-bone-S      |C-bone-S |C-bone-S |C-bone-S |
 |T-bone-S |T-bone-S      |T-bone-S |T-bone-S |T-bone-S      |       |T-bone-S |T-bone-S      |T-bone-S |T-bone-S |T-bone-S |
-|C-bone-V |Noch-C-bone-V |C-bone-V |C-bone-V |Noch-C-bone-V |       |         |Noch-C-bone-V |         |         |         |
-|T-bone-V |Noch-T-bone-V |T-bone-V |T-bone-V |Noch-T-bone-V |       |         |Noch-T-bone-V |         |         |         |
 |         |Exch-C-bone-V |         |         |Exch-C-bone-V |       |         |Exch-C-bone-V |         |         |         |
 |         |Exch-T-bone-V |         |         |Exch-T-bone-V |       |         |Exch-T-bone-V |         |         |         |
+|C-bone-V |Noch-C-bone-V |C-bone-V |C-bone-V |Noch-C-bone-V |       |         |Noch-C-bone-V |         |         |         |
+|T-bone-V |Noch-T-bone-V |T-bone-V |T-bone-V |Noch-T-bone-V |       |         |Noch-T-bone-V |         |         |         |
 |C-marrow |C-marrow      |C-marrow |C-marrow |C-marrow      |       |C-marrow |C-marrow      |C-marrow |C-marrow |C-marrow |
 |T-marrow |T-marrow      |T-marrow |T-marrow |T-marrow      |       |T-marrow |T-marrow      |T-marrow |T-marrow |T-marrow |
 |Liver1   |Liver1        |Liver1   |Liver1   |Liver1        |       |Liver1   |Liver1        |Liver1   |Liver1   |Liver    |
