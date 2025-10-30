@@ -1,0 +1,2957 @@
+[title]
+Pb-214 Inhalation:Type-S
+
+[nuclide]
+  Pb-214  Bi-214  Po-214  Tl-210
+  Pb-210  Bi-210  Po-210  Hg-206  Tl-206
+
+
+[Pb-214:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  exc   Excreta(sweat)              ---
+  exc   Excreta(hair,skin,nails)    ---
+
+[Pb-214:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 0.0001
+  $fb = 0.5             # footnote*
+  $sb = 1.7             # footnote*
+  $fA    = 0.002
+  $fA_Re = 0.2          # footnote**
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.65 Fig.3.4 footnote
+  input                   ET1-F                 $(      fr  *                 47.94% )
+  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  input                   ALV-F                 $(      fr  *                  5.32% )
+
+  input                   ET1-S                 $( (1 - fr) *                 47.94% )
+  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  input                   ALV-S                 $( (1 - fr) *                  5.32% )
+
+  input                   Environment           $(                     100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.225 Table 9.3
+  Plasma                  UB-con                    1.75
+  Plasma                  RC-con                    0.7
+  Plasma                  T-bone-S                  4.86
+  Plasma                  C-bone-S                  3.89
+  Plasma                  ST0                      22.16
+  Plasma                  ST1                       0.7
+  Plasma                  ST2                       0.14
+  Plasma                  Liver1                    4.9
+  Plasma                  Kidneys1                  2.45
+  Plasma                  Kidneys2                  0.0245
+  Plasma                  RBC                      28
+  Plasma                  Excreta(sweat)            0.42
+  RBC                     Plasma                    0.139
+  T-bone-S                Plasma                    0.5
+  T-bone-S                Exch-T-bone-V             0.5
+  C-bone-S                Plasma                    0.5
+  C-bone-S                Exch-C-bone-V             0.5
+  Exch-T-bone-V           T-bone-S                  0.0185
+  Exch-T-bone-V           Noch-T-bone-V             0.0046
+  Exch-C-bone-V           C-bone-S                  0.0185
+  Exch-C-bone-V           Noch-C-bone-V             0.0046
+  Noch-T-bone-V           Plasma                    0.000493
+  Noch-C-bone-V           Plasma                    0.0000821
+  Liver1                  Plasma                    0.0312
+  Liver1                  SI-conRe                  0.0312
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.0019
+  Kidneys1                UB-con                    0.139
+  Kidneys2                Plasma                    0.0019
+  ST0                     Plasma                    7.39
+  ST1                     Plasma                    0.00416
+  ST2                     Plasma                    0.00038
+  ST1                     Excreta(hair,skin,nails)  0.00277
+
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > (483) The systemic model for bismuth as a progeny of lead is based on the characteristic
+# > model for bismuth applied in this publication. ...
+# > (483) 鉛の子孫元素としてのビスマスの全身モデルは、本論文で適用されているビスマスの特性モデルに
+# > 基づいています。...
+
+[Bi-214:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > ... The structure of the characteristic
+# > model for bismuth is modified by the addition of compartments
+# > representing red marrow, spleen, skin, testes, and ovaries, which are explicitly identified
+# > in models for some other elements appearing in lead chains. Each of these
+# > compartments is assumed to exchange bismuth with plasma.
+# > ... ビスマスの特性モデルの構造は、鉛連鎖に現れる他のいくつかの元素のモデルで
+# > 明示的に特定されている赤色骨髄、脾臓、皮膚、精巣、および卵巣を表すコンパートメントを追加する
+# > ことによって修正されています。これらのコンパートメントはそれぞれ、血漿とビスマスを交換すると
+# > 仮定されています。
+
+  acc   RedMarrow             R-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Bi-214:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.05
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.258 Table 10.3
+  Plasma                  UB-con                   20
+  Plasma                  RC-con                    4.0
+  Plasma                  RBC                       0.5
+  Plasma                  ST0                     300
+ #Plasma                  ST1                       4.2         # fix
+  Plasma                  ST2                       1.3
+  Plasma                  Liver1                   30
+  Plasma                  Kidneys1                 30
+  Plasma                  Kidneys2                  5.0
+  Plasma                  C-bone-S                  2.5
+  Plasma                  T-bone-S                  2.5
+  RBC                     Plasma                    0.173
+  ST0                     Plasma                   66.54
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.00116
+ #Liver1                  Plasma        # Fig. 10.1 にはあるが、Table 10.3には数値の記載がない。
+  Liver1                  SI-conRe                  0.208
+  Liver1                  Liver2                    0.139
+  Liver2                  Plasma                    0.0693
+  Kidneys1                UB-con                    0.693
+  Kidneys2                Plasma                    0.139
+  C-bone-S                Plasma                    0.0347
+  T-bone-S                Plasma                    0.0347
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > ... Transfer coefficients for
+# > the added compartments are selected for reasonable consistency with the biokinetic
+# > database underlying the characteristic model for bismuth, and with the retention
+# > curve for total soft tissues based on that original model. The specific changes to
+# > the characteristic model for bismuth are as follows: (1) the transfer coefficients
+# > from plasma to the added compartments are 0.3 d⁻¹ for red marrow, 0.3 d⁻¹ for
+# > skin, 0.02 d⁻¹ for spleen, 0.003 d⁻¹ for testes, and 0.001 d⁻¹ for ovaries; (2) the transfer
+# > coefficient from plasma to the other soft tissue compartment with a moderate
+# > turnover rate (0.0347 d⁻¹, equivalent to a half-time of 20 d) is reduced from 4.2 d⁻¹ to
+# > 3.576 d⁻¹; and (3) the assigned transfer coefficient from each of the added compartments
+# > to plasma is 0.0347 d⁻¹.
+# > ... 追加されたコンパートメントの移動係数は、ビスマスの特性モデルの基礎となる
+# > 生体動態データベース、および元のモデルに基づく全軟組織の保持曲線と妥当な整合性を持つように
+# > 選択されています。ビスマスの特性モデルへの具体的な変更点は以下のとおりです。
+# > (1) 血漿から追加されたコンパートメントへの移行係数は、赤色骨髄では0.3 d⁻¹、皮膚では0.3 d⁻¹、
+# > 脾臓では0.02 d⁻¹、精巣では0.003 d⁻¹、卵巣では0.001 d⁻¹です。
+# > (2) 血漿から中程度の代謝率（0.0347 d⁻¹、半減期20日に相当）を持つ他の軟部組織コンパートメントへの
+# > 移行係数は4.2 d⁻¹から3.576 d⁻¹に減少します。
+# > (3) 追加された各コンパートメントから血漿への割り当て移行係数は0.0347 d⁻¹です。
+
+  Plasma                  RedMarrow                 0.3
+  Plasma                  Skin                      0.3
+  Plasma                  Spleen                    0.02
+  Plasma                  Testes                    0.003
+  Plasma                  Ovaries                   0.001
+  Plasma                  ST1                       3.576
+  RedMarrow               Plasma                    0.0347
+  Skin                    Plasma                    0.0347
+  Spleen                  Plasma                    0.0347
+  Testes                  Plasma                    0.0347
+  Ovaries                 Plasma                    0.0347
+
+# from parent to progeny
+  Pb-214/ET1-F            Bi-214/ET1-F              ---
+  Pb-214/ET2-F            Bi-214/ET2-F              ---
+  Pb-214/ETseq-F          Bi-214/ETseq-F            ---
+  Pb-214/LNET-F           Bi-214/LNET-F             ---
+  Pb-214/BB-F             Bi-214/BB-F               ---
+  Pb-214/BBseq-F          Bi-214/BBseq-F            ---
+  Pb-214/bb-F             Bi-214/bb-F               ---
+  Pb-214/bbseq-F          Bi-214/bbseq-F            ---
+  Pb-214/ALV-F            Bi-214/ALV-F              ---
+  Pb-214/INT-F            Bi-214/INT-F              ---
+  Pb-214/LNTH-F           Bi-214/LNTH-F             ---
+  Pb-214/ET1-S            Bi-214/ET1-S              ---
+  Pb-214/ET2-S            Bi-214/ET2-S              ---
+  Pb-214/ETseq-S          Bi-214/ETseq-S            ---
+  Pb-214/LNET-S           Bi-214/LNET-S             ---
+  Pb-214/BB-S             Bi-214/BB-S               ---
+  Pb-214/BBseq-S          Bi-214/BBseq-S            ---
+  Pb-214/bb-S             Bi-214/bb-S               ---
+  Pb-214/bbseq-S          Bi-214/bbseq-S            ---
+  Pb-214/ALV-S            Bi-214/ALV-S              ---
+  Pb-214/INT-S            Bi-214/INT-S              ---
+  Pb-214/LNTH-S           Bi-214/LNTH-S             ---
+  Pb-214/ET2-B            Bi-214/ET2-B              ---
+  Pb-214/ETseq-B          Bi-214/ETseq-B            ---
+  Pb-214/LNET-B           Bi-214/LNET-B             ---
+  Pb-214/BB-B             Bi-214/BB-B               ---
+  Pb-214/BBseq-B          Bi-214/BBseq-B            ---
+  Pb-214/bb-B             Bi-214/bb-B               ---
+  Pb-214/bbseq-B          Bi-214/bbseq-B            ---
+  Pb-214/ALV-B            Bi-214/ALV-B              ---
+  Pb-214/INT-B            Bi-214/INT-B              ---
+  Pb-214/LNTH-B           Bi-214/LNTH-B             ---
+  Pb-214/Environment      Bi-214/Environment        ---
+
+  Pb-214/Oralcavity       Bi-214/Oralcavity         ---
+  Pb-214/Oesophagus-f     Bi-214/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Bi-214/Oesophagus-s       ---
+  Pb-214/St-con           Bi-214/St-con             ---
+  Pb-214/SI-con           Bi-214/SI-con             ---
+  Pb-214/SI-conRe         Bi-214/SI-conRe           ---
+  Pb-214/RC-con           Bi-214/RC-con             ---
+  Pb-214/LC-con           Bi-214/LC-con             ---
+  Pb-214/RS-con           Bi-214/RS-con             ---
+  Pb-214/Faeces           Bi-214/Faeces             ---
+  Pb-214/UB-con           Bi-214/UB-con             ---
+  Pb-214/Urine            Bi-214/Urine              ---
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > ... Bismuth produced in a blood compartment that is not
+# > identifiable with a blood compartment of the bismuth model is assumed to transfer
+# > to plasma at the rate 1000 d⁻¹. Bismuth produced in a trabecular or cortical bone
+# > volume compartment is assumed to transfer to plasma at the reference turnover rate
+# > for that bone type.
+# > ... ビスマスモデルの血液コンパートメントと識別できない血液コンパートメントで
+# > 生成されたビスマスは、1000 d⁻¹の速度で血漿に移行すると仮定されます。海綿骨または
+# > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
+# > 血漿に移行すると仮定されます。
+
+  Pb-214/Plasma           Bi-214/Plasma             ---
+  Pb-214/RBC              Bi-214/RBC                ---
+  Pb-214/C-bone-S         Bi-214/C-bone-S           ---
+  Pb-214/T-bone-S         Bi-214/T-bone-S           ---
+  Pb-214/Noch-C-bone-V    Bi-214/Plasma         $(0.03 / 365.25)
+  Pb-214/Noch-T-bone-V    Bi-214/Plasma         $(0.18 / 365.25)
+  Pb-214/Exch-C-bone-V    Bi-214/Plasma         $(0.03 / 365.25)
+  Pb-214/Exch-T-bone-V    Bi-214/Plasma         $(0.18 / 365.25)
+  Pb-214/Liver1           Bi-214/Liver1             ---
+  Pb-214/Liver2           Bi-214/Liver2             ---
+  Pb-214/Kidneys1         Bi-214/Kidneys1           ---
+  Pb-214/Kidneys2         Bi-214/Kidneys2           ---
+
+  Pb-214/ST0              Bi-214/Plasma          1000       # Publ.151 Annex.B
+  Pb-214/ST1              Bi-214/Plasma          1000       # Publ.151 Annex.B
+  Pb-214/ST2              Bi-214/Plasma          1000       # Publ.151 Annex.B
+
+
+# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
+# > (484) The systemic model for polonium as a member of a lead chain is the same as
+# > the systemic model applied in this publication to polonium as a parent radionuclide
+# > (Section 11), except that no distinction is made in the progeny model between
+# > polonium entering blood from the respiratory and alimentary tracts. ...
+# > (484) 鉛鎖の一員としてのポロニウムの全身モデルは、本書で親核種としてのポロニウムに
+# > 適用されている全身モデル(第11節)と同一である。ただし、子孫核種モデルでは、呼吸器系と
+# > 消化器系から血液に入るポロニウムを区別しない点が異なる。 ...
+
+[Po-214:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma1               Blood
+  acc   Plasma2               Blood
+  acc   Plasma3               Blood
+  acc   RBC                   Blood
+  mix   BoneSurface           ---           # Publ.137 Para.605
+  acc   C-bone-S              C-bone-S      # Publ.137 Para.605
+  acc   T-bone-S              T-bone-S      # Publ.137 Para.605
+  acc   RedMarrow             R-marrow
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+  acc   Other                 Other
+  exc   Excreta               ---           # hair,sweat,skin
+
+[Po-214:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
+  $fA_MaxValueOfIng = 0.1
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma2               $( (1 - fb) * sr )
+  INT-F                   Plasma2               $( (1 - fb) * sr )
+  bb-F                    Plasma2               $( (1 - fb) * sr )
+  bbseq-F                 Plasma2               $( (1 - fb) * sr )
+  BB-F                    Plasma2               $( (1 - fb) * sr )
+  BBseq-F                 Plasma2               $( (1 - fb) * sr )
+  ET2-F                   Plasma2               $( (1 - fb) * sr )
+  ETseq-F                 Plasma2               $( (1 - fb) * sr )
+  LNET-F                  Plasma2               $( (1 - fb) * sr )
+  LNTH-F                  Plasma2               $( (1 - fb) * sr )
+
+  ALV-S                   Plasma2               $( (1 - fb) * ss )
+  INT-S                   Plasma2               $( (1 - fb) * ss )
+  bb-S                    Plasma2               $( (1 - fb) * ss )
+  bbseq-S                 Plasma2               $( (1 - fb) * ss )
+  BB-S                    Plasma2               $( (1 - fb) * ss )
+  BBseq-S                 Plasma2               $( (1 - fb) * ss )
+  ET2-S                   Plasma2               $( (1 - fb) * ss )
+  ETseq-S                 Plasma2               $( (1 - fb) * ss )
+  LNET-S                  Plasma2               $( (1 - fb) * ss )
+  LNTH-S                  Plasma2               $( (1 - fb) * ss )
+
+  ALV-B                   Plasma2               $sb
+  INT-B                   Plasma2               $sb
+  bb-B                    Plasma2               $sb
+  bbseq-B                 Plasma2               $sb
+  BB-B                    Plasma2               $sb
+  BBseq-B                 Plasma2               $sb
+  ET2-B                   Plasma2               $sb
+  ETseq-B                 Plasma2               $sb
+  LNET-B                  Plasma2               $sb
+  LNTH-B                  Plasma2               $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
+# > ... polonium as a progeny transferred to blood from either the respiratory
+# > or alimentary tract is assigned to Plasma 2.
+# > ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
+# > 血漿2に割り当てられる。
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma2       $(fA    * 6 / (1 - fA   ))      # Plasma1をPlasma2に置換
+  SI-conRe                Plasma2       $(fA_Re * 6 / (1 - fA_Re))      # Plasma1をPlasma2に置換
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.285 Table 11.3
+  Plasma2                 Plasma1                 800
+  Plasma2                 Kidneys1                200
+  Plasma1                 Plasma3                   4
+  Plasma1                 RBC                       6
+  Plasma1                 Liver1                   17.5
+  Plasma1                 Liver2                   17.5
+  Plasma1                 Kidneys1                  5
+  Plasma1                 Kidneys2                  5
+  Plasma1                 Skin                      5
+  Plasma1                 RedMarrow                 4
+  Plasma1                 BoneSurface               1.5
+  Plasma1                 Spleen                    2
+  Plasma1                 Testes                    0.1
+  Plasma1                 Ovaries                   0.05
+  Plasma1                 Other                    32.35
+  Plasma3                 Plasma1                   0.099
+  RBC                     Plasma1                   0.099
+  Liver1                  SI-conRe                  0.139
+  Liver2                  Plasma1                   0.099
+  Kidneys1                UB-con                    0.173
+  Kidneys2                Plasma1                   0.099
+  Skin                    Plasma1                   0.00693
+  Skin                    Excreta                   0.00693
+  RedMarrow               Plasma1                   0.099
+  BoneSurface             C-bone-S                 50%          # Publ.137 Para.605
+  BoneSurface             T-bone-S                 50%          # Publ.137 Para.605
+  C-bone-S                Plasma1                   0.0231      # Publ.137 Para.605
+  T-bone-S                Plasma1                   0.0231      # Publ.137 Para.605
+  Spleen                  Plasma1                   0.099
+  Testes                  Plasma1                   0.0139
+  Ovaries                 Plasma1                   0.0139
+  Other                   Plasma1                   0.099
+
+# from parent to progeny
+  Pb-214/ET1-F            Po-214/ET1-F              ---
+  Pb-214/ET2-F            Po-214/ET2-F              ---
+  Pb-214/ETseq-F          Po-214/ETseq-F            ---
+  Pb-214/LNET-F           Po-214/LNET-F             ---
+  Pb-214/BB-F             Po-214/BB-F               ---
+  Pb-214/BBseq-F          Po-214/BBseq-F            ---
+  Pb-214/bb-F             Po-214/bb-F               ---
+  Pb-214/bbseq-F          Po-214/bbseq-F            ---
+  Pb-214/ALV-F            Po-214/ALV-F              ---
+  Pb-214/INT-F            Po-214/INT-F              ---
+  Pb-214/LNTH-F           Po-214/LNTH-F             ---
+  Pb-214/ET1-S            Po-214/ET1-S              ---
+  Pb-214/ET2-S            Po-214/ET2-S              ---
+  Pb-214/ETseq-S          Po-214/ETseq-S            ---
+  Pb-214/LNET-S           Po-214/LNET-S             ---
+  Pb-214/BB-S             Po-214/BB-S               ---
+  Pb-214/BBseq-S          Po-214/BBseq-S            ---
+  Pb-214/bb-S             Po-214/bb-S               ---
+  Pb-214/bbseq-S          Po-214/bbseq-S            ---
+  Pb-214/ALV-S            Po-214/ALV-S              ---
+  Pb-214/INT-S            Po-214/INT-S              ---
+  Pb-214/LNTH-S           Po-214/LNTH-S             ---
+  Pb-214/ET2-B            Po-214/ET2-B              ---
+  Pb-214/ETseq-B          Po-214/ETseq-B            ---
+  Pb-214/LNET-B           Po-214/LNET-B             ---
+  Pb-214/BB-B             Po-214/BB-B               ---
+  Pb-214/BBseq-B          Po-214/BBseq-B            ---
+  Pb-214/bb-B             Po-214/bb-B               ---
+  Pb-214/bbseq-B          Po-214/bbseq-B            ---
+  Pb-214/ALV-B            Po-214/ALV-B              ---
+  Pb-214/INT-B            Po-214/INT-B              ---
+  Pb-214/LNTH-B           Po-214/LNTH-B             ---
+  Pb-214/Environment      Po-214/Environment        ---
+
+  Pb-214/Oralcavity       Po-214/Oralcavity         ---
+  Pb-214/Oesophagus-f     Po-214/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Po-214/Oesophagus-s       ---
+  Pb-214/St-con           Po-214/St-con             ---
+  Pb-214/SI-con           Po-214/SI-con             ---
+  Pb-214/SI-conRe         Po-214/SI-conRe           ---
+  Pb-214/RC-con           Po-214/RC-con             ---
+  Pb-214/LC-con           Po-214/LC-con             ---
+  Pb-214/RS-con           Po-214/RS-con             ---
+  Pb-214/Faeces           Po-214/Faeces             ---
+  Pb-214/UB-con           Po-214/UB-con             ---
+  Pb-214/Urine            Po-214/Urine              ---
+
+# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
+# > ... Polonium produced in a blood compartment
+# > that is not identifiable with a blood compartment of the polonium model is
+# > assumed to transfer to Plasma 2 in the polonium model (Fig. 11.1) at the rate
+# > 1000 d⁻¹. Polonium produced in a soft tissue compartment not identifiable with a
+# > compartment of the polonium model is assumed to move to Plasma 2 with a halftime
+# > of 7 d. Polonium produced in a compartment of cortical or trabecular bone
+# > volume is assumed to transfer to Plasma 2 at the reference rate of turnover of that
+# > bone type.
+# > ... ポロニウムモデルの血液コンパートメントと識別できない血液コンパートメントで
+# > 生成されたポロニウムは、ポロニウムモデル(図11.1)において、
+# > 1000 d⁻¹の速度で血漿2に移行すると仮定される。ポロニウムモデルのコンパートメントに
+# > 識別できない軟部組織コンパートメントで生成されたポロニウムは、7日の半減期で血漿2に
+# > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
+# > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
+
+  Pb-214/Plasma           Po-214/Plasma2         1000
+  Pb-214/RBC              Po-214/RBC                ---
+  Pb-214/C-bone-S         Po-214/C-bone-S           ---
+  Pb-214/T-bone-S         Po-214/T-bone-S           ---
+  Pb-214/Exch-C-bone-V    Po-214/Plasma2        $(0.03 / 365.25)
+  Pb-214/Exch-T-bone-V    Po-214/Plasma2        $(0.18 / 365.25)
+  Pb-214/Noch-C-bone-V    Po-214/Plasma2        $(0.03 / 365.25)
+  Pb-214/Noch-T-bone-V    Po-214/Plasma2        $(0.18 / 365.25)
+  Pb-214/Liver1           Po-214/Liver1             ---
+  Pb-214/Liver2           Po-214/Liver2             ---
+  Pb-214/Kidneys1         Po-214/Kidneys1           ---
+  Pb-214/Kidneys2         Po-214/Kidneys2           ---
+  Bi-214/RedMarrow        Po-214/RedMarrow          ---
+  Bi-214/Testes           Po-214/Testes             ---
+  Bi-214/Ovaries          Po-214/Ovaries            ---
+  Bi-214/Skin             Po-214/Skin               ---
+  Bi-214/Spleen           Po-214/Spleen             ---
+
+  Pb-214/ST0              Po-214/Plasma2        $(0.693 / 7)    # 半減期7日
+  Pb-214/ST1              Po-214/Plasma2        $(0.693 / 7)    # 半減期7日
+  Pb-214/ST2              Po-214/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-214/ST0              Po-214/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-214/ST1              Po-214/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-214/ST2              Po-214/Plasma2        $(0.693 / 7)    # 半減期7日
+
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > (481) The following systemic model is applied to thallium produced in vivo following
+# > intake of lead. ...
+# > (481) 鉛摂取後に体内で生成されるタリウムには、以下の全身モデルが適用されます。 ...
+
+[Tl-210:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other                 Other
+
+# 作成者注：Publ.151で示された親としてのタリウムのモデルに対して追加
+
+  acc   RedMarrow             R-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Tl-210:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > ... Thallium leaves the central blood compartment (plasma) at the
+# > rate 200 d⁻¹ (corresponding to a half-time of 5 min) and is distributed as follows:
+# > 2.5% to red blood cells, 0.75% to urinary bladder contents, 1.75% to right colon
+# > contents, 5% to kidneys, 5% to liver, 2.5% to skin, 1.5% to red marrow, 0.2% to
+# > spleen, 0.3% to testes, 0.1% to ovaries, 7.5% to trabecular bone surfaces, 7.5% to
+# > cortical bone surfaces, and 65.4% to remaining soft tissues (other).
+# > ... タリウムは中心血液区画（血漿）から200 d⁻¹（半減期5分に相当）の速度で排出され、
+# > 以下のように分布する：赤血球に2.5%、膀胱内容物に0.75%、右結腸内容物に1.75%、腎臓に5%、
+# > 肝臓に5%、皮膚に2.5%、赤色骨髄に1.5%、脾臓に0.2%、精巣に0.3%、卵巣に0.1%、
+# > 海綿骨表面に7.5%、皮質骨表面に7.5%、残りの軟部組織（その他）に65.4%。
+# > ... Thallium returns from red blood cells to plasma at the rate 3.7 d⁻¹, and from
+# > tissue compartments to plasma at the rate 2.5 d⁻¹.
+# > ... タリウムは、赤血球から血漿へは3.7 d⁻¹の速度で戻り、組織コンパートメントから
+# > 血漿へは2.5 d⁻¹の速度で戻ります。
+
+# 作成者注：Publ.137で示されている移行係数の設定値は、Publ.151で示された親としての
+# タリウムのモデルにおけるPlasmaと軟組織Otherの間の流量を、追加された
+# 5つのコンパートメントに分配する形になっている。
+
+  Plasma                  Liver                 $(200 *  5%)
+  Plasma                  Kidneys               $(200 *  5%)
+  Plasma                  RBC                   $(200 *  2.5%)
+  Plasma                  T-bone-S              $(200 *  7.5%)
+  Plasma                  C-bone-S              $(200 *  7.5%)
+ #Plasma                  Other                 $(200 * 70%)    # == 140    # fix
+  Plasma                  Other                 $(200 * 65.4%)  # == 130.8
+  Plasma                  RedMarrow             $(200 *  1.5%)
+  Plasma                  Skin                  $(200 *  2.5%)
+  Plasma                  Spleen                $(200 *  0.2%)
+  Plasma                  Testes                $(200 *  0.3%)
+  Plasma                  Ovaries               $(200 *  0.1%)
+  Plasma                  UB-con                $(200 *  0.75%)
+  Plasma                  RC-con                $(200 *  1.75%)
+  RBC                     Plasma                    3.7
+  Liver                   Plasma                    2.5
+  Kidneys                 Plasma                    2.5
+  T-bone-S                Plasma                    2.5
+  C-bone-S                Plasma                    2.5
+  Other                   Plasma                    2.5
+  RedMarrow               Plasma                    2.5
+  Skin                    Plasma                    2.5
+  Spleen                  Plasma                    2.5
+  Testes                  Plasma                    2.5
+  Ovaries                 Plasma                    2.5
+
+# from parent to progeny
+  Pb-214/ET1-F            Tl-210/ET1-F              ---
+  Pb-214/ET2-F            Tl-210/ET2-F              ---
+  Pb-214/ETseq-F          Tl-210/ETseq-F            ---
+  Pb-214/LNET-F           Tl-210/LNET-F             ---
+  Pb-214/BB-F             Tl-210/BB-F               ---
+  Pb-214/BBseq-F          Tl-210/BBseq-F            ---
+  Pb-214/bb-F             Tl-210/bb-F               ---
+  Pb-214/bbseq-F          Tl-210/bbseq-F            ---
+  Pb-214/ALV-F            Tl-210/ALV-F              ---
+  Pb-214/INT-F            Tl-210/INT-F              ---
+  Pb-214/LNTH-F           Tl-210/LNTH-F             ---
+  Pb-214/ET1-S            Tl-210/ET1-S              ---
+  Pb-214/ET2-S            Tl-210/ET2-S              ---
+  Pb-214/ETseq-S          Tl-210/ETseq-S            ---
+  Pb-214/LNET-S           Tl-210/LNET-S             ---
+  Pb-214/BB-S             Tl-210/BB-S               ---
+  Pb-214/BBseq-S          Tl-210/BBseq-S            ---
+  Pb-214/bb-S             Tl-210/bb-S               ---
+  Pb-214/bbseq-S          Tl-210/bbseq-S            ---
+  Pb-214/ALV-S            Tl-210/ALV-S              ---
+  Pb-214/INT-S            Tl-210/INT-S              ---
+  Pb-214/LNTH-S           Tl-210/LNTH-S             ---
+  Pb-214/ET2-B            Tl-210/ET2-B              ---
+  Pb-214/ETseq-B          Tl-210/ETseq-B            ---
+  Pb-214/LNET-B           Tl-210/LNET-B             ---
+  Pb-214/BB-B             Tl-210/BB-B               ---
+  Pb-214/BBseq-B          Tl-210/BBseq-B            ---
+  Pb-214/bb-B             Tl-210/bb-B               ---
+  Pb-214/bbseq-B          Tl-210/bbseq-B            ---
+  Pb-214/ALV-B            Tl-210/ALV-B              ---
+  Pb-214/INT-B            Tl-210/INT-B              ---
+  Pb-214/LNTH-B           Tl-210/LNTH-B             ---
+  Pb-214/Environment      Tl-210/Environment        ---
+
+  Pb-214/Oralcavity       Tl-210/Oralcavity         ---
+  Pb-214/Oesophagus-f     Tl-210/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Tl-210/Oesophagus-s       ---
+  Pb-214/St-con           Tl-210/St-con             ---
+  Pb-214/SI-con           Tl-210/SI-con             ---
+  Pb-214/SI-conRe         Tl-210/SI-conRe           ---
+  Pb-214/RC-con           Tl-210/RC-con             ---
+  Pb-214/LC-con           Tl-210/LC-con             ---
+  Pb-214/RS-con           Tl-210/RS-con             ---
+  Pb-214/Faeces           Tl-210/Faeces             ---
+  Pb-214/UB-con           Tl-210/UB-con             ---
+  Pb-214/Urine            Tl-210/Urine              ---
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
+# > in the model for lead (Fig. 9.1).
+# > ... 腎臓と肝臓は、鉛のモデル（図9.1）において、それぞれ腎臓2と肝臓1に相当します。
+# > ... Thallium produced by radioactive
+# > decay in a blood compartment that is not identifiable with a blood compartment of
+# > the thallium model is assumed to transfer to plasma at the rate 1000 d⁻¹. Thallium
+# > produced in a soft tissue compartment not identifiable with a compartment of the
+# > thallium model is assumed to transfer to plasma at the rate 2.5 d⁻¹. Thallium produced
+# > in a compartment of cortical or trabecular bone volume is assumed to transfer
+# > to plasma at the reference turnover rate of that bone type.
+# > ... タリウムモデルの血液コンパートメントと識別できない血液コンパートメント内で
+# > 放射性崩壊によって生成されたタリウムは、1000 d⁻¹の速度で血漿に移行すると仮定されます。
+# > タリウムモデルのコンパートメントと識別できない軟部組織コンパートメントで生成された
+# > タリウムは、2.5 d⁻¹の速度で血漿に移行すると仮定されます。皮質骨または海綿骨の
+# > 体積コンパートメントで生成されたタリウムは、その骨の種類に応じた基準代謝速度で
+# > 血漿に移行すると仮定されます。
+
+  Pb-214/Plasma           Tl-210/Plasma             ---
+  Pb-214/RBC              Tl-210/RBC                ---
+  Pb-214/C-bone-S         Tl-210/C-bone-S           ---
+  Pb-214/T-bone-S         Tl-210/T-bone-S           ---
+  Pb-214/Exch-C-bone-V    Tl-210/Plasma         $(0.03 / 365.25)
+  Pb-214/Exch-T-bone-V    Tl-210/Plasma         $(0.18 / 365.25)
+  Pb-214/Noch-C-bone-V    Tl-210/Plasma         $(0.03 / 365.25)
+  Pb-214/Noch-T-bone-V    Tl-210/Plasma         $(0.18 / 365.25)
+  Pb-214/Liver1           Tl-210/Liver              ---
+  Pb-214/Kidneys2         Tl-210/Kidneys            ---
+  Bi-214/RedMarrow        Tl-210/RedMarrow          ---
+  Bi-214/Testes           Tl-210/Testes             ---
+  Bi-214/Ovaries          Tl-210/Ovaries            ---
+  Bi-214/Skin             Tl-210/Skin               ---
+  Bi-214/Spleen           Tl-210/Spleen             ---
+
+  Pb-214/ST0              Tl-210/Plasma             2.5
+  Pb-214/ST1              Tl-210/Plasma             2.5
+  Pb-214/ST2              Tl-210/Plasma             2.5
+  Pb-214/Liver2           Tl-210/Plasma             2.5
+  Pb-214/Kidneys1         Tl-210/Plasma             2.5
+  Bi-214/ST0              Tl-210/Plasma             2.5
+  Bi-214/ST1              Tl-210/Plasma             2.5
+  Bi-214/ST2              Tl-210/Plasma             2.5
+
+
+# ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
+# > (482) The systemic model for lead as a progeny of lead is an extension of the
+# > characteristic model for lead described above. ...
+# > (482) 鉛の子孫核種としての鉛の全身モデルは、上述の(訳注：親核種としての)
+# > 鉛の特性モデルの拡張である。 ...
+
+[Pb-210:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  exc   Excreta(sweat)              ---
+  exc   Excreta(hair,skin,nails)    ---
+
+# ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
+# > ... Compartments representing red
+# > marrow, spleen, skin, testes, and ovaries are added to the model structure for consistency
+# > with the models for other lead progeny.
+# >  ... 他の鉛子孫核種のモデルとの整合性を図るため、赤色骨髄、脾臓、皮膚、精巣、および卵巣を
+# > 表すコンパートメントがモデル構造に追加されている。
+
+  acc   RedMarrow             R-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Pb-210:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.2
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.225 Table 9.3
+  Plasma                  UB-con                    1.75
+  Plasma                  RC-con                    0.7
+  Plasma                  T-bone-S                  4.86
+  Plasma                  C-bone-S                  3.89
+ #Plasma                  ST0                      22.16            # fix(1)
+ #Plasma                  ST1                       0.7             # fix(1)
+ #Plasma                  ST2                       0.14            # fix(1)
+  Plasma                  Liver1                    4.9
+  Plasma                  Kidneys1                  2.45
+  Plasma                  Kidneys2                  0.0245
+  Plasma                  RBC                      28
+  Plasma                  Excreta(sweat)            0.42
+  RBC                     Plasma                    0.139
+  T-bone-S                Plasma                    0.5
+  T-bone-S                Exch-T-bone-V             0.5
+  C-bone-S                Plasma                    0.5
+  C-bone-S                Exch-C-bone-V             0.5
+  Exch-T-bone-V           T-bone-S                  0.0185
+  Exch-T-bone-V           Noch-T-bone-V             0.0046
+  Exch-C-bone-V           C-bone-S                  0.0185
+  Exch-C-bone-V           Noch-C-bone-V             0.0046
+  Noch-T-bone-V           Plasma                    0.000493
+  Noch-C-bone-V           Plasma                    0.0000821
+  Liver1                  Plasma                    0.0312
+  Liver1                  SI-conRe                  0.0312
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.0019
+  Kidneys1                UB-con                    0.139
+  Kidneys2                Plasma                    0.0019
+  ST0                     Plasma                    7.39
+  ST1                     Plasma                    0.00416
+  ST2                     Plasma                    0.00038
+  ST1                     Excreta(hair,skin,nails)  0.00277
+
+# ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
+# > ... Each of the added compartments is
+# > assumed to exchange activity with plasma alone. Transfer coefficients between
+# > plasma and these compartments are set for reasonable consistency with the
+# > equilibrium concentration of lead in these compartments relative to the equilibrium
+# > concentration in liver as indicated by results of autopsy studies on human subjects
+# > (Blanchard and Moore, 1970, 1971; Gross et al., 1975; Skerving et al., 1983). The
+# > removal half-time from each of the added compartments is set at 1 y, which is the
+# > long-term removal half-time from liver (t½ from Liver 2 to plasma). It is assumed
+# > that 0.6% of outflow from plasma goes to red marrow, 0.03% goes to spleen, 0.2%
+# > goes to skin, 0.005% goes to testes, and 0.002% goes to ovaries. The transfer coefficients
+# > from plasma to each of the soft tissue compartments Other 0, Other 1, and
+# > Other 2 are reduced by approximately 2.5% to maintain a total outflow rate from
+# > plasma of approximately 70 d⁻¹.
+# > ... 追加された各コンパートメントは、
+# > 血漿のみと放射能を交換すると仮定される。血漿とこれらのコンパートメント間の移動係数は、
+# > ヒトを対象とした剖検研究の結果に示されている肝臓中の平衡濃度に対するこれらの
+# > コンパートメント中の鉛の平衡濃度と妥当な整合性を持つように設定されている（Blanchard
+# > and Moore, 1970, 1971; Gross et al., 1975; Skerving et al., 1983）。追加された
+# > 各コンパートメントからの除去半減期は1年と設定されており、これは肝臓からの
+# > 長期除去半減期（肝臓2から血漿へのt½）である。血漿からの流出量の0.6%が赤色骨髄へ、
+# > 0.03%が脾臓へ、0.2%が皮膚へ、0.005%が精巣へ、0.002%が卵巣へ向かうと仮定する。
+# > 血漿からその他0、その他1、その他2の各軟部組織コンパートメントへの移行係数は、
+# > 血漿からの総流出速度を約70 d⁻¹に維持するために約2.5%減少する。
+
+# 作成者注：
+#   Plasmaからの元々の流出量の総和は
+#      1.75 + 0.7 + 4.86 + 3.89 + 22.16 + 0.7 + 0.14 + 4.9 + 2.45 + 0.0245 + 28 + 0.42 = 69.9945
+#   Plasmaから追加コンパートメントへの流出量＝ST0,1,2への流出量から差し引くべき量は
+#      69.9945 * (0.6% + 0.03% + 0.2% + 0.005% + 0.002%) = 0.585853965
+#   PlasmaからST0,1,2への流出量の減少率は
+#      (22.16 + 0.7 + 0.14 - 0.585853965) / (22.16 + 0.7 + 0.14) ≒ 0.974528088
+#   ※ 1 - 0.974528088 ≒ 2.54%減少 ⇔「約2.5%減少」
+
+  Plasma                  RedMarrow         $(69.9945 * 0.6%)
+  Plasma                  Skin              $(69.9945 * 0.2%)
+  Plasma                  Spleen            $(69.9945 * 0.03%)
+  Plasma                  Testes            $(69.9945 * 0.005%)
+  Plasma                  Ovaries           $(69.9945 * 0.002%)
+  Plasma                  ST0               $(22.16 * 0.974528088)
+  Plasma                  ST1               $( 0.7  * 0.974528088)
+  Plasma                  ST2               $( 0.14 * 0.974528088)
+  RedMarrow               Plasma                    0.0019
+  Skin                    Plasma                    0.0019
+  Spleen                  Plasma                    0.0019
+  Testes                  Plasma                    0.0019
+  Ovaries                 Plasma                    0.0019
+
+# from parent to progeny
+  Pb-214/ET1-F            Pb-210/ET1-F              ---
+  Pb-214/ET2-F            Pb-210/ET2-F              ---
+  Pb-214/ETseq-F          Pb-210/ETseq-F            ---
+  Pb-214/LNET-F           Pb-210/LNET-F             ---
+  Pb-214/BB-F             Pb-210/BB-F               ---
+  Pb-214/BBseq-F          Pb-210/BBseq-F            ---
+  Pb-214/bb-F             Pb-210/bb-F               ---
+  Pb-214/bbseq-F          Pb-210/bbseq-F            ---
+  Pb-214/ALV-F            Pb-210/ALV-F              ---
+  Pb-214/INT-F            Pb-210/INT-F              ---
+  Pb-214/LNTH-F           Pb-210/LNTH-F             ---
+  Pb-214/ET1-S            Pb-210/ET1-S              ---
+  Pb-214/ET2-S            Pb-210/ET2-S              ---
+  Pb-214/ETseq-S          Pb-210/ETseq-S            ---
+  Pb-214/LNET-S           Pb-210/LNET-S             ---
+  Pb-214/BB-S             Pb-210/BB-S               ---
+  Pb-214/BBseq-S          Pb-210/BBseq-S            ---
+  Pb-214/bb-S             Pb-210/bb-S               ---
+  Pb-214/bbseq-S          Pb-210/bbseq-S            ---
+  Pb-214/ALV-S            Pb-210/ALV-S              ---
+  Pb-214/INT-S            Pb-210/INT-S              ---
+  Pb-214/LNTH-S           Pb-210/LNTH-S             ---
+  Pb-214/ET2-B            Pb-210/ET2-B              ---
+  Pb-214/ETseq-B          Pb-210/ETseq-B            ---
+  Pb-214/LNET-B           Pb-210/LNET-B             ---
+  Pb-214/BB-B             Pb-210/BB-B               ---
+  Pb-214/BBseq-B          Pb-210/BBseq-B            ---
+  Pb-214/bb-B             Pb-210/bb-B               ---
+  Pb-214/bbseq-B          Pb-210/bbseq-B            ---
+  Pb-214/ALV-B            Pb-210/ALV-B              ---
+  Pb-214/INT-B            Pb-210/INT-B              ---
+  Pb-214/LNTH-B           Pb-210/LNTH-B             ---
+  Pb-214/Environment      Pb-210/Environment        ---
+
+  Pb-214/Oralcavity       Pb-210/Oralcavity         ---
+  Pb-214/Oesophagus-f     Pb-210/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Pb-210/Oesophagus-s       ---
+  Pb-214/St-con           Pb-210/St-con             ---
+  Pb-214/SI-con           Pb-210/SI-con             ---
+  Pb-214/SI-conRe         Pb-210/SI-conRe           ---
+  Pb-214/RC-con           Pb-210/RC-con             ---
+  Pb-214/LC-con           Pb-210/LC-con             ---
+  Pb-214/RS-con           Pb-210/RS-con             ---
+  Pb-214/Faeces           Pb-210/Faeces             ---
+  Pb-214/UB-con           Pb-210/UB-con             ---
+  Pb-214/Urine            Pb-210/Urine              ---
+
+# ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
+# > ... Lead produced in a soft tissue compartment of a
+# > preceding chain member not identifiable with a compartment of the lead model is
+# > assumed to transfer to plasma at the rate 7.39 d⁻¹; the highest rate of transfer to
+# > plasma in the lead model. Lead produced in a blood compartment of a preceding
+# > chain member that is not identifiable with a blood compartment of the lead model is
+# > assigned the transfer rate 1000 d⁻¹ to plasma.
+# > ... 先行する連鎖メンバーの軟部組織コンパートメントで生成された鉛は、
+# > 鉛モデルのコンパートメントと識別できない場合、血漿へ7.39 d⁻¹の速度で移行すると仮定されます。
+# > これは、鉛モデルにおける血漿への移行速度の最高値です。先行する連鎖メンバーの血液コンパートメントで
+# > 生成された鉛は、鉛モデルの血液コンパートメントと識別できない場合、血漿へ1000 d⁻¹の速度で
+# > 移行すると仮定されます。
+
+  Pb-214/Plasma           Pb-210/Plasma             ---     # Po-214/Plasma2を経由
+  Po-214/Plasma1          Pb-210/Plasma          1000
+  Po-214/Plasma2          Pb-210/Plasma          1000
+  Po-214/Plasma3          Pb-210/Plasma          1000
+  Pb-214/RBC              Pb-210/RBC                ---
+  Pb-214/C-bone-S         Pb-210/C-bone-S           ---
+  Pb-214/T-bone-S         Pb-210/T-bone-S           ---
+  Pb-214/Exch-C-bone-V    Pb-210/Exch-C-bone-V      ---
+  Pb-214/Exch-T-bone-V    Pb-210/Exch-T-bone-V      ---
+  Pb-214/Noch-C-bone-V    Pb-210/Noch-C-bone-V      ---
+  Pb-214/Noch-T-bone-V    Pb-210/Noch-T-bone-V      ---
+  Pb-214/Liver1           Pb-210/Liver1             ---
+  Pb-214/Liver2           Pb-210/Liver2             ---
+  Pb-214/Kidneys1         Pb-210/Kidneys1           ---
+  Pb-214/Kidneys2         Pb-210/Kidneys2           ---
+  Pb-214/Excreta(sweat)            Pb-210/Excreta(sweat)            ---
+  Pb-214/Excreta(hair,skin,nails)  Pb-210/Excreta(hair,skin,nails)  ---
+
+  Pb-214/ST0              Pb-210/ST0                ---
+  Pb-214/ST1              Pb-210/ST1                ---
+  Pb-214/ST2              Pb-210/ST2                ---
+  Bi-214/ST0              Pb-210/Plasma             7.39
+  Bi-214/ST1              Pb-210/Plasma             7.39
+  Bi-214/ST2              Pb-210/Plasma             7.39
+  Po-214/Other            Pb-210/Plasma             7.39
+  Tl-210/Other            Pb-210/Plasma             7.39
+
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > (483) The systemic model for bismuth as a progeny of lead is based on the characteristic
+# > model for bismuth applied in this publication. ...
+# > (483) 鉛の子孫元素としてのビスマスの全身モデルは、本論文で適用されているビスマスの特性モデルに
+# > 基づいています。...
+
+[Bi-210:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > ... The structure of the characteristic
+# > model for bismuth is modified by the addition of compartments
+# > representing red marrow, spleen, skin, testes, and ovaries, which are explicitly identified
+# > in models for some other elements appearing in lead chains. Each of these
+# > compartments is assumed to exchange bismuth with plasma.
+# > ... ビスマスの特性モデルの構造は、鉛連鎖に現れる他のいくつかの元素のモデルで
+# > 明示的に特定されている赤色骨髄、脾臓、皮膚、精巣、および卵巣を表すコンパートメントを追加する
+# > ことによって修正されています。これらのコンパートメントはそれぞれ、血漿とビスマスを交換すると
+# > 仮定されています。
+
+  acc   RedMarrow             R-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Bi-210:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.05
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.258 Table 10.3
+  Plasma                  UB-con                   20
+  Plasma                  RC-con                    4.0
+  Plasma                  RBC                       0.5
+  Plasma                  ST0                     300
+ #Plasma                  ST1                       4.2         # fix
+  Plasma                  ST2                       1.3
+  Plasma                  Liver1                   30
+  Plasma                  Kidneys1                 30
+  Plasma                  Kidneys2                  5.0
+  Plasma                  C-bone-S                  2.5
+  Plasma                  T-bone-S                  2.5
+  RBC                     Plasma                    0.173
+  ST0                     Plasma                   66.54
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.00116
+ #Liver1                  Plasma        # Fig. 10.1 にはあるが、Table 10.3には数値の記載がない。
+  Liver1                  SI-conRe                  0.208
+  Liver1                  Liver2                    0.139
+  Liver2                  Plasma                    0.0693
+  Kidneys1                UB-con                    0.693
+  Kidneys2                Plasma                    0.139
+  C-bone-S                Plasma                    0.0347
+  T-bone-S                Plasma                    0.0347
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > ... Transfer coefficients for
+# > the added compartments are selected for reasonable consistency with the biokinetic
+# > database underlying the characteristic model for bismuth, and with the retention
+# > curve for total soft tissues based on that original model. The specific changes to
+# > the characteristic model for bismuth are as follows: (1) the transfer coefficients
+# > from plasma to the added compartments are 0.3 d⁻¹ for red marrow, 0.3 d⁻¹ for
+# > skin, 0.02 d⁻¹ for spleen, 0.003 d⁻¹ for testes, and 0.001 d⁻¹ for ovaries; (2) the transfer
+# > coefficient from plasma to the other soft tissue compartment with a moderate
+# > turnover rate (0.0347 d⁻¹, equivalent to a half-time of 20 d) is reduced from 4.2 d⁻¹ to
+# > 3.576 d⁻¹; and (3) the assigned transfer coefficient from each of the added compartments
+# > to plasma is 0.0347 d⁻¹.
+# > ... 追加されたコンパートメントの移動係数は、ビスマスの特性モデルの基礎となる
+# > 生体動態データベース、および元のモデルに基づく全軟組織の保持曲線と妥当な整合性を持つように
+# > 選択されています。ビスマスの特性モデルへの具体的な変更点は以下のとおりです。
+# > (1) 血漿から追加されたコンパートメントへの移行係数は、赤色骨髄では0.3 d⁻¹、皮膚では0.3 d⁻¹、
+# > 脾臓では0.02 d⁻¹、精巣では0.003 d⁻¹、卵巣では0.001 d⁻¹です。
+# > (2) 血漿から中程度の代謝率（0.0347 d⁻¹、半減期20日に相当）を持つ他の軟部組織コンパートメントへの
+# > 移行係数は4.2 d⁻¹から3.576 d⁻¹に減少します。
+# > (3) 追加された各コンパートメントから血漿への割り当て移行係数は0.0347 d⁻¹です。
+
+  Plasma                  RedMarrow                 0.3
+  Plasma                  Skin                      0.3
+  Plasma                  Spleen                    0.02
+  Plasma                  Testes                    0.003
+  Plasma                  Ovaries                   0.001
+  Plasma                  ST1                       3.576
+  RedMarrow               Plasma                    0.0347
+  Skin                    Plasma                    0.0347
+  Spleen                  Plasma                    0.0347
+  Testes                  Plasma                    0.0347
+  Ovaries                 Plasma                    0.0347
+
+# from parent to progeny
+  Pb-214/ET1-F            Bi-210/ET1-F              ---
+  Pb-214/ET2-F            Bi-210/ET2-F              ---
+  Pb-214/ETseq-F          Bi-210/ETseq-F            ---
+  Pb-214/LNET-F           Bi-210/LNET-F             ---
+  Pb-214/BB-F             Bi-210/BB-F               ---
+  Pb-214/BBseq-F          Bi-210/BBseq-F            ---
+  Pb-214/bb-F             Bi-210/bb-F               ---
+  Pb-214/bbseq-F          Bi-210/bbseq-F            ---
+  Pb-214/ALV-F            Bi-210/ALV-F              ---
+  Pb-214/INT-F            Bi-210/INT-F              ---
+  Pb-214/LNTH-F           Bi-210/LNTH-F             ---
+  Pb-214/ET1-S            Bi-210/ET1-S              ---
+  Pb-214/ET2-S            Bi-210/ET2-S              ---
+  Pb-214/ETseq-S          Bi-210/ETseq-S            ---
+  Pb-214/LNET-S           Bi-210/LNET-S             ---
+  Pb-214/BB-S             Bi-210/BB-S               ---
+  Pb-214/BBseq-S          Bi-210/BBseq-S            ---
+  Pb-214/bb-S             Bi-210/bb-S               ---
+  Pb-214/bbseq-S          Bi-210/bbseq-S            ---
+  Pb-214/ALV-S            Bi-210/ALV-S              ---
+  Pb-214/INT-S            Bi-210/INT-S              ---
+  Pb-214/LNTH-S           Bi-210/LNTH-S             ---
+  Pb-214/ET2-B            Bi-210/ET2-B              ---
+  Pb-214/ETseq-B          Bi-210/ETseq-B            ---
+  Pb-214/LNET-B           Bi-210/LNET-B             ---
+  Pb-214/BB-B             Bi-210/BB-B               ---
+  Pb-214/BBseq-B          Bi-210/BBseq-B            ---
+  Pb-214/bb-B             Bi-210/bb-B               ---
+  Pb-214/bbseq-B          Bi-210/bbseq-B            ---
+  Pb-214/ALV-B            Bi-210/ALV-B              ---
+  Pb-214/INT-B            Bi-210/INT-B              ---
+  Pb-214/LNTH-B           Bi-210/LNTH-B             ---
+  Pb-214/Environment      Bi-210/Environment        ---
+
+  Pb-214/Oralcavity       Bi-210/Oralcavity         ---
+  Pb-214/Oesophagus-f     Bi-210/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Bi-210/Oesophagus-s       ---
+  Pb-214/St-con           Bi-210/St-con             ---
+  Pb-214/SI-con           Bi-210/SI-con             ---
+  Pb-214/SI-conRe         Bi-210/SI-conRe           ---
+  Pb-214/RC-con           Bi-210/RC-con             ---
+  Pb-214/LC-con           Bi-210/LC-con             ---
+  Pb-214/RS-con           Bi-210/RS-con             ---
+  Pb-214/Faeces           Bi-210/Faeces             ---
+  Pb-214/UB-con           Bi-210/UB-con             ---
+  Pb-214/Urine            Bi-210/Urine              ---
+
+# ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
+# > ... Bismuth produced in a blood compartment that is not
+# > identifiable with a blood compartment of the bismuth model is assumed to transfer
+# > to plasma at the rate 1000 d⁻¹. Bismuth produced in a trabecular or cortical bone
+# > volume compartment is assumed to transfer to plasma at the reference turnover rate
+# > for that bone type.
+# > ... ビスマスモデルの血液コンパートメントと識別できない血液コンパートメントで
+# > 生成されたビスマスは、1000 d⁻¹の速度で血漿に移行すると仮定されます。海綿骨または
+# > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
+# > 血漿に移行すると仮定されます。
+
+  Pb-214/Plasma           Bi-210/Plasma             ---
+  Pb-214/RBC              Bi-210/RBC                ---
+  Pb-214/C-bone-S         Bi-210/C-bone-S           ---
+  Pb-214/T-bone-S         Bi-210/T-bone-S           ---
+  Pb-214/Noch-C-bone-V    Bi-210/Plasma         $(0.03 / 365.25)
+  Pb-214/Noch-T-bone-V    Bi-210/Plasma         $(0.18 / 365.25)
+  Pb-214/Exch-C-bone-V    Bi-210/Plasma         $(0.03 / 365.25)
+  Pb-214/Exch-T-bone-V    Bi-210/Plasma         $(0.18 / 365.25)
+  Pb-214/Liver1           Bi-210/Liver1             ---
+  Pb-214/Liver2           Bi-210/Liver2             ---
+  Pb-214/Kidneys1         Bi-210/Kidneys1           ---
+  Pb-214/Kidneys2         Bi-210/Kidneys2           ---
+  Bi-214/RedMarrow        Bi-210/RedMarrow          ---
+  Bi-214/Skin             Bi-210/Skin               ---
+  Bi-214/Spleen           Bi-210/Spleen             ---
+  Bi-214/Testes           Bi-210/Testes             ---
+  Bi-214/Ovaries          Bi-210/Ovaries            ---
+
+  Pb-214/ST0              Bi-210/Plasma          1000       # Publ.151 Annex.B
+  Pb-214/ST1              Bi-210/Plasma          1000       # Publ.151 Annex.B
+  Pb-214/ST2              Bi-210/Plasma          1000       # Publ.151 Annex.B
+  Bi-214/ST0              Bi-210/ST0                ---
+  Bi-214/ST1              Bi-210/ST1                ---
+  Bi-214/ST2              Bi-210/ST2                ---
+  Po-214/Other            Bi-210/Plasma          1000       # Publ.151 Annex.B
+  Tl-210/Other            Bi-210/Plasma          1000       # Publ.151 Annex.B
+
+
+# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
+# > (484) The systemic model for polonium as a member of a lead chain is the same as
+# > the systemic model applied in this publication to polonium as a parent radionuclide
+# > (Section 11), except that no distinction is made in the progeny model between
+# > polonium entering blood from the respiratory and alimentary tracts. ...
+# > (484) 鉛鎖の一員としてのポロニウムの全身モデルは、本書で親核種としてのポロニウムに
+# > 適用されている全身モデル(第11節)と同一である。ただし、子孫核種モデルでは、呼吸器系と
+# > 消化器系から血液に入るポロニウムを区別しない点が異なる。 ...
+
+[Po-210:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma1               Blood
+  acc   Plasma2               Blood
+  acc   Plasma3               Blood
+  acc   RBC                   Blood
+  mix   BoneSurface           ---           # Publ.137 Para.605
+  acc   C-bone-S              C-bone-S      # Publ.137 Para.605
+  acc   T-bone-S              T-bone-S      # Publ.137 Para.605
+  acc   RedMarrow             R-marrow
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+  acc   Other                 Other
+  exc   Excreta               ---           # hair,sweat,skin
+
+[Po-210:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
+  $fA_MaxValueOfIng = 0.1
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma2               $( (1 - fb) * sr )
+  INT-F                   Plasma2               $( (1 - fb) * sr )
+  bb-F                    Plasma2               $( (1 - fb) * sr )
+  bbseq-F                 Plasma2               $( (1 - fb) * sr )
+  BB-F                    Plasma2               $( (1 - fb) * sr )
+  BBseq-F                 Plasma2               $( (1 - fb) * sr )
+  ET2-F                   Plasma2               $( (1 - fb) * sr )
+  ETseq-F                 Plasma2               $( (1 - fb) * sr )
+  LNET-F                  Plasma2               $( (1 - fb) * sr )
+  LNTH-F                  Plasma2               $( (1 - fb) * sr )
+
+  ALV-S                   Plasma2               $( (1 - fb) * ss )
+  INT-S                   Plasma2               $( (1 - fb) * ss )
+  bb-S                    Plasma2               $( (1 - fb) * ss )
+  bbseq-S                 Plasma2               $( (1 - fb) * ss )
+  BB-S                    Plasma2               $( (1 - fb) * ss )
+  BBseq-S                 Plasma2               $( (1 - fb) * ss )
+  ET2-S                   Plasma2               $( (1 - fb) * ss )
+  ETseq-S                 Plasma2               $( (1 - fb) * ss )
+  LNET-S                  Plasma2               $( (1 - fb) * ss )
+  LNTH-S                  Plasma2               $( (1 - fb) * ss )
+
+  ALV-B                   Plasma2               $sb
+  INT-B                   Plasma2               $sb
+  bb-B                    Plasma2               $sb
+  bbseq-B                 Plasma2               $sb
+  BB-B                    Plasma2               $sb
+  BBseq-B                 Plasma2               $sb
+  ET2-B                   Plasma2               $sb
+  ETseq-B                 Plasma2               $sb
+  LNET-B                  Plasma2               $sb
+  LNTH-B                  Plasma2               $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
+# > ... polonium as a progeny transferred to blood from either the respiratory
+# > or alimentary tract is assigned to Plasma 2.
+# > ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
+# > 血漿2に割り当てられる。
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma2       $(fA    * 6 / (1 - fA   ))      # Plasma1をPlasma2に置換
+  SI-conRe                Plasma2       $(fA_Re * 6 / (1 - fA_Re))      # Plasma1をPlasma2に置換
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.285 Table 11.3
+  Plasma2                 Plasma1                 800
+  Plasma2                 Kidneys1                200
+  Plasma1                 Plasma3                   4
+  Plasma1                 RBC                       6
+  Plasma1                 Liver1                   17.5
+  Plasma1                 Liver2                   17.5
+  Plasma1                 Kidneys1                  5
+  Plasma1                 Kidneys2                  5
+  Plasma1                 Skin                      5
+  Plasma1                 RedMarrow                 4
+  Plasma1                 BoneSurface               1.5
+  Plasma1                 Spleen                    2
+  Plasma1                 Testes                    0.1
+  Plasma1                 Ovaries                   0.05
+  Plasma1                 Other                    32.35
+  Plasma3                 Plasma1                   0.099
+  RBC                     Plasma1                   0.099
+  Liver1                  SI-conRe                  0.139
+  Liver2                  Plasma1                   0.099
+  Kidneys1                UB-con                    0.173
+  Kidneys2                Plasma1                   0.099
+  Skin                    Plasma1                   0.00693
+  Skin                    Excreta                   0.00693
+  RedMarrow               Plasma1                   0.099
+  BoneSurface             C-bone-S                 50%          # Publ.137 Para.605
+  BoneSurface             T-bone-S                 50%          # Publ.137 Para.605
+  C-bone-S                Plasma1                   0.0231      # Publ.137 Para.605
+  T-bone-S                Plasma1                   0.0231      # Publ.137 Para.605
+  Spleen                  Plasma1                   0.099
+  Testes                  Plasma1                   0.0139
+  Ovaries                 Plasma1                   0.0139
+  Other                   Plasma1                   0.099
+
+# from parent to progeny
+  Pb-214/ET1-F            Po-210/ET1-F              ---
+  Pb-214/ET2-F            Po-210/ET2-F              ---
+  Pb-214/ETseq-F          Po-210/ETseq-F            ---
+  Pb-214/LNET-F           Po-210/LNET-F             ---
+  Pb-214/BB-F             Po-210/BB-F               ---
+  Pb-214/BBseq-F          Po-210/BBseq-F            ---
+  Pb-214/bb-F             Po-210/bb-F               ---
+  Pb-214/bbseq-F          Po-210/bbseq-F            ---
+  Pb-214/ALV-F            Po-210/ALV-F              ---
+  Pb-214/INT-F            Po-210/INT-F              ---
+  Pb-214/LNTH-F           Po-210/LNTH-F             ---
+  Pb-214/ET1-S            Po-210/ET1-S              ---
+  Pb-214/ET2-S            Po-210/ET2-S              ---
+  Pb-214/ETseq-S          Po-210/ETseq-S            ---
+  Pb-214/LNET-S           Po-210/LNET-S             ---
+  Pb-214/BB-S             Po-210/BB-S               ---
+  Pb-214/BBseq-S          Po-210/BBseq-S            ---
+  Pb-214/bb-S             Po-210/bb-S               ---
+  Pb-214/bbseq-S          Po-210/bbseq-S            ---
+  Pb-214/ALV-S            Po-210/ALV-S              ---
+  Pb-214/INT-S            Po-210/INT-S              ---
+  Pb-214/LNTH-S           Po-210/LNTH-S             ---
+  Pb-214/ET2-B            Po-210/ET2-B              ---
+  Pb-214/ETseq-B          Po-210/ETseq-B            ---
+  Pb-214/LNET-B           Po-210/LNET-B             ---
+  Pb-214/BB-B             Po-210/BB-B               ---
+  Pb-214/BBseq-B          Po-210/BBseq-B            ---
+  Pb-214/bb-B             Po-210/bb-B               ---
+  Pb-214/bbseq-B          Po-210/bbseq-B            ---
+  Pb-214/ALV-B            Po-210/ALV-B              ---
+  Pb-214/INT-B            Po-210/INT-B              ---
+  Pb-214/LNTH-B           Po-210/LNTH-B             ---
+  Pb-214/Environment      Po-210/Environment        ---
+
+  Pb-214/Oralcavity       Po-210/Oralcavity         ---
+  Pb-214/Oesophagus-f     Po-210/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Po-210/Oesophagus-s       ---
+  Pb-214/St-con           Po-210/St-con             ---
+  Pb-214/SI-con           Po-210/SI-con             ---
+  Pb-214/SI-conRe         Po-210/SI-conRe           ---
+  Pb-214/RC-con           Po-210/RC-con             ---
+  Pb-214/LC-con           Po-210/LC-con             ---
+  Pb-214/RS-con           Po-210/RS-con             ---
+  Pb-214/Faeces           Po-210/Faeces             ---
+  Pb-214/UB-con           Po-210/UB-con             ---
+  Pb-214/Urine            Po-210/Urine              ---
+
+# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
+# > ... Polonium produced in a blood compartment
+# > that is not identifiable with a blood compartment of the polonium model is
+# > assumed to transfer to Plasma 2 in the polonium model (Fig. 11.1) at the rate
+# > 1000 d⁻¹. Polonium produced in a soft tissue compartment not identifiable with a
+# > compartment of the polonium model is assumed to move to Plasma 2 with a halftime
+# > of 7 d. Polonium produced in a compartment of cortical or trabecular bone
+# > volume is assumed to transfer to Plasma 2 at the reference rate of turnover of that
+# > bone type.
+# > ... ポロニウムモデルの血液コンパートメントと識別できない血液コンパートメントで
+# > 生成されたポロニウムは、ポロニウムモデル(図11.1)において、
+# > 1000 d⁻¹の速度で血漿2に移行すると仮定される。ポロニウムモデルのコンパートメントに
+# > 識別できない軟部組織コンパートメントで生成されたポロニウムは、7日の半減期で血漿2に
+# > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
+# > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
+
+  Pb-214/Plasma           Po-210/Plasma2         1000
+  Pb-214/RBC              Po-210/RBC                ---
+  Pb-214/C-bone-S         Po-210/C-bone-S           ---
+  Pb-214/T-bone-S         Po-210/T-bone-S           ---
+  Pb-214/Exch-C-bone-V    Po-210/Plasma2        $(0.03 / 365.25)
+  Pb-214/Exch-T-bone-V    Po-210/Plasma2        $(0.18 / 365.25)
+  Pb-214/Noch-C-bone-V    Po-210/Plasma2        $(0.03 / 365.25)
+  Pb-214/Noch-T-bone-V    Po-210/Plasma2        $(0.18 / 365.25)
+  Pb-214/Liver1           Po-210/Liver1             ---
+  Pb-214/Liver2           Po-210/Liver2             ---
+  Pb-214/Kidneys1         Po-210/Kidneys1           ---
+  Pb-214/Kidneys2         Po-210/Kidneys2           ---
+  Bi-214/RedMarrow        Po-210/RedMarrow          ---
+  Bi-214/Testes           Po-210/Testes             ---
+  Bi-214/Ovaries          Po-210/Ovaries            ---
+  Bi-214/Skin             Po-210/Skin               ---
+  Bi-214/Spleen           Po-210/Spleen             ---
+
+  Pb-214/ST0              Po-210/Plasma2        $(0.693 / 7)    # 半減期7日
+  Pb-214/ST1              Po-210/Plasma2        $(0.693 / 7)    # 半減期7日
+  Pb-214/ST2              Po-210/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-214/ST0              Po-210/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-214/ST1              Po-210/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-214/ST2              Po-210/Plasma2        $(0.693 / 7)    # 半減期7日
+  Po-214/Other            Po-210/Other              ---
+  Tl-210/Other            Po-210/Plasma2        $(0.693 / 7)    # 半減期7日
+
+
+# ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
+# > (479) The systemic model for mercury as a member of a lead chain consists of the
+# > following compartments: Plasma 1 (diffusible mercury), Plasma 2 (protein-bound
+# > mercury), red blood cells, kidneys, liver, spleen, red marrow (active marrow),
+# > testes, ovaries, cortical bone surfaces, trabecular bone surfaces, and compartments
+# > Other 1 and Other 2 representing moderate and slow phases of loss from remaining
+# > soft tissues, respectively. ...
+# > (479) 鉛連鎖の一員としての水銀の全身モデルは、以下のコンパートメントから構成されます。
+# > 血漿1（拡散性水銀）、血漿 2（タンパク質結合水銀）、赤血球、腎臓、肝臓、脾臓、
+# > 赤色骨髄（活性骨髄）、精巣、卵巣、皮質骨表面、海綿骨表面、および残存する軟部組織からの損失が
+# > それぞれ中程度および低速な段階を表すコンパートメント「その他1」と「その他2」です。 ...
+# > ,,, Mercury absorbed to blood or re-entering blood from tissues is assigned to Plasma 1.
+# > ... 血液に吸収された水銀、または組織から血液に再流入する水銀は、血漿1に割り当てられます。
+#
+# 作成者注：Para.479の移行係数についての記述に「皮膚」の言及があるので、これも構成コンパートメントに含まれる。
+
+[Hg-206:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma1               Blood
+  acc   Plasma2               Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+ #acc   Brain1                Brain     # Publ.151 only
+ #acc   Brain2                Brain     # Publ.151 only
+  acc   Other1                Other
+  acc   Other2                Other
+  exc   OtherExcreta          ---
+
+# 作成者注：Publ.151で示された親としての水銀のモデルに対して、
+# Brain1, Brain2がなく、代わりに以下のコンパートメントが追加されている。
+
+  acc   RedMarrow             R-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Hg-206:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 0.1
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma1               $( (1 - fb) * sr )
+  INT-F                   Plasma1               $( (1 - fb) * sr )
+  bb-F                    Plasma1               $( (1 - fb) * sr )
+  bbseq-F                 Plasma1               $( (1 - fb) * sr )
+  BB-F                    Plasma1               $( (1 - fb) * sr )
+  BBseq-F                 Plasma1               $( (1 - fb) * sr )
+  ET2-F                   Plasma1               $( (1 - fb) * sr )
+  ETseq-F                 Plasma1               $( (1 - fb) * sr )
+  LNET-F                  Plasma1               $( (1 - fb) * sr )
+  LNTH-F                  Plasma1               $( (1 - fb) * sr )
+
+  ALV-S                   Plasma1               $( (1 - fb) * ss )
+  INT-S                   Plasma1               $( (1 - fb) * ss )
+  bb-S                    Plasma1               $( (1 - fb) * ss )
+  bbseq-S                 Plasma1               $( (1 - fb) * ss )
+  BB-S                    Plasma1               $( (1 - fb) * ss )
+  BBseq-S                 Plasma1               $( (1 - fb) * ss )
+  ET2-S                   Plasma1               $( (1 - fb) * ss )
+  ETseq-S                 Plasma1               $( (1 - fb) * ss )
+  LNET-S                  Plasma1               $( (1 - fb) * ss )
+  LNTH-S                  Plasma1               $( (1 - fb) * ss )
+
+  ALV-B                   Plasma1               $sb
+  INT-B                   Plasma1               $sb
+  bb-B                    Plasma1               $sb
+  bbseq-B                 Plasma1               $sb
+  BB-B                    Plasma1               $sb
+  BBseq-B                 Plasma1               $sb
+  ET2-B                   Plasma1               $sb
+  ETseq-B                 Plasma1               $sb
+  LNET-B                  Plasma1               $sb
+  LNTH-B                  Plasma1               $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma1               $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma1               $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
+# > ... The total transfer coefficient from Plasma 1 to all destinations is 16.636 h⁻¹, corresponding
+# > to a half-time of 1 h. Outflow from Plasma 1 is divided as follows: 4% to red
+# > blood cells, 12% to Plasma 2, 35% to kidneys, 20% to liver, 10% to small intestine
+# > contents, 3% to red marrow, 0.6% to spleen, 0.2% to skin, 0.03% to testes, 0.01% to
+# > ovaries, 3.5% to Other 2, 5% to excreta (excretion other than urine and faeces), 1%
+# > to cortical bone surfaces, 1% to trabecular bone surfaces, and the remaining 4.66%
+# > to Other 1. Mercury transfers from red blood cells to Plasma 1 with a half-time of
+# > 3 d, from Plasma 2 to Plasma 1 with a half-time of 1 d, from kidneys to urinary
+# > bladder contents with a half-time of 35 d, from bone surface compartments to
+# > Plasma 1 with a half-time of 20 d, from Other 1 to Plasma 1 with a half-time of
+# > 20 d, and from Other 2 to Plasma 1 with a half-time of 100 d. Mercury is removed
+# > from liver with a half-time of 10 d, with outflow from liver equally divided between
+# > Plasma 1 and small intestine contents. Mercury transfers from red marrow, spleen,
+# > skin, testes, and ovaries to Plasma 1 with a half-time of 20 d. Mercury is absorbed
+# > from small intestine contents to Plasma 1 based on the reference absorption fraction
+# > for ingested inorganic mercury, and the unabsorbed portion transfers to the right
+# > colon contents and is eventually excreted in faeces.
+# > ... 血漿1からすべての目的地への総移動係数は16.636 h⁻¹ で、半減期は1時間です。血漿1からの流出は、
+# > 赤血球に4%、血漿2に12%、腎臓に35%、肝臓に20%、小腸内容物に10%、赤色骨髄に3%、脾臓に0.6%、
+# > 皮膚に0.2%、精巣に0.03%、卵巣に0.01%、その他2に3.5%、排泄物（尿と便以外の排泄物）に5%、
+# > 皮質骨表面に1%、海綿骨表面に1%、残りの4.66% がその他1に分配されます。水銀は、
+# > 赤血球から血漿1へは半減期3日で、血漿2から血漿1へは半減期1日で、腎臓から膀胱内容物へは
+# > 半減期35日、骨表面コンパートメントから血漿1へは半減期20日で、その他1から血漿1へは
+# > 半減期20日で、その他2から血漿1へは半減期100日で移行します。
+# > 水銀は、半減期10日で肝臓から除去され、肝臓からの流出は血漿1と小腸内容物に均等に分かれます。
+# > 水銀は、赤色骨髄、脾臓、皮膚、精巣、卵巣から血漿1へ半減期20日で移行します。
+# > 水銀は、摂取された無機水銀の基準吸収率に基づいて小腸内容物から血漿1に吸収され、
+# > 吸収されなかった部分は右結腸内容物に移行し、最終的に糞便中に排泄されます。
+#
+# 作成者注：「Plasma1から全ての目的地への総移動係数の移行係数」は、半減期1時間=ln(2)/1/24=16.636 d⁻¹の誤記と思われる。
+
+  Plasma1                 RBC                   $(16.636 * 4%)      # <- 0.48
+  Plasma1                 Plasma2               $(16.636 * 12%)     # <- 2.4
+  Plasma1                 Kidneys               $(16.636 * 35%)     # <- 7.2
+  Plasma1                 Liver                 $(16.636 * 20%)     # <- 4.8
+  Plasma1                 SI-conRe              $(16.636 * 10%)     # <- 1.92
+  Plasma1                 RedMarrow             $(16.635 * 3%)
+  Plasma1                 Spleen                $(16.635 * 0.6%)
+  Plasma1                 Skin                  $(16.635 * 0.2%)
+  Plasma1                 Testes                $(16.635 * 0.03%)
+  Plasma1                 Ovaries               $(16.635 * 0.01%)
+  Plasma1                 Other2                $(16.636 * 3.5%)    # <- 0.72
+  Plasma1                 OtherExcreta          $(16.636 * 5%)      # <- 1.2
+  Plasma1                 C-bone-S              $(16.636 * 1%)      # <- 0.024
+  Plasma1                 T-bone-S              $(16.636 * 1%)      # <- 0.024
+  Plasma1                 Other1                $(16.636 * 4.66%)   # <- 5.184
+
+  RBC                     Plasma1               $(0.693 / 3)        # <- 0.33
+  Plasma2                 Plasma1               $(0.693 / 1)        # <- 0.6
+  Kidneys                 UB-con                $(0.693 / 35)       # == 0.0198
+  T-bone-S                Plasma1               $(0.693 / 20)       # == 0.0347
+  C-bone-S                Plasma1               $(0.693 / 20)       # == 0.0347
+  Other1                  Plasma1               $(0.693 / 20)       # == 0.0347
+  Other2                  Plasma1               $(0.693 / 100)      # == 0.00693
+  Liver                   Plasma1               $(0.693 / 10 * 50%)                 # Publ.137 only
+  Liver                   SI-conRe              $(0.693 / 10 * 50%) # <- 0.1733
+  RedMarrow               Plasma1               $(0.693 / 20)
+  Spleen                  Plasma1               $(0.693 / 20)
+  Skin                    Plasma1               $(0.693 / 20)
+  Testes                  Plasma1               $(0.693 / 20)
+  Ovaries                 Plasma1               $(0.693 / 20)
+
+# from parent to progeny
+  Pb-214/ET1-F            Hg-206/ET1-F              ---
+  Pb-214/ET2-F            Hg-206/ET2-F              ---
+  Pb-214/ETseq-F          Hg-206/ETseq-F            ---
+  Pb-214/LNET-F           Hg-206/LNET-F             ---
+  Pb-214/BB-F             Hg-206/BB-F               ---
+  Pb-214/BBseq-F          Hg-206/BBseq-F            ---
+  Pb-214/bb-F             Hg-206/bb-F               ---
+  Pb-214/bbseq-F          Hg-206/bbseq-F            ---
+  Pb-214/ALV-F            Hg-206/ALV-F              ---
+  Pb-214/INT-F            Hg-206/INT-F              ---
+  Pb-214/LNTH-F           Hg-206/LNTH-F             ---
+  Pb-214/ET1-S            Hg-206/ET1-S              ---
+  Pb-214/ET2-S            Hg-206/ET2-S              ---
+  Pb-214/ETseq-S          Hg-206/ETseq-S            ---
+  Pb-214/LNET-S           Hg-206/LNET-S             ---
+  Pb-214/BB-S             Hg-206/BB-S               ---
+  Pb-214/BBseq-S          Hg-206/BBseq-S            ---
+  Pb-214/bb-S             Hg-206/bb-S               ---
+  Pb-214/bbseq-S          Hg-206/bbseq-S            ---
+  Pb-214/ALV-S            Hg-206/ALV-S              ---
+  Pb-214/INT-S            Hg-206/INT-S              ---
+  Pb-214/LNTH-S           Hg-206/LNTH-S             ---
+  Pb-214/ET2-B            Hg-206/ET2-B              ---
+  Pb-214/ETseq-B          Hg-206/ETseq-B            ---
+  Pb-214/LNET-B           Hg-206/LNET-B             ---
+  Pb-214/BB-B             Hg-206/BB-B               ---
+  Pb-214/BBseq-B          Hg-206/BBseq-B            ---
+  Pb-214/bb-B             Hg-206/bb-B               ---
+  Pb-214/bbseq-B          Hg-206/bbseq-B            ---
+  Pb-214/ALV-B            Hg-206/ALV-B              ---
+  Pb-214/INT-B            Hg-206/INT-B              ---
+  Pb-214/LNTH-B           Hg-206/LNTH-B             ---
+  Pb-214/Environment      Hg-206/Environment        ---
+
+  Pb-214/Oralcavity       Hg-206/Oralcavity         ---
+  Pb-214/Oesophagus-f     Hg-206/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Hg-206/Oesophagus-s       ---
+  Pb-214/St-con           Hg-206/St-con             ---
+  Pb-214/SI-con           Hg-206/SI-con             ---
+  Pb-214/SI-conRe         Hg-206/SI-conRe           ---
+  Pb-214/RC-con           Hg-206/RC-con             ---
+  Pb-214/LC-con           Hg-206/LC-con             ---
+  Pb-214/RS-con           Hg-206/RS-con             ---
+  Pb-214/Faeces           Hg-206/Faeces             ---
+  Pb-214/UB-con           Hg-206/UB-con             ---
+  Pb-214/Urine            Hg-206/Urine              ---
+
+# ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
+# > ... Plasma 1, kidneys, and liver are identified with plasma,
+# > Kidneys 1, and Liver 1, respectively, in the model for lead (Fig. 9.1).
+# > ... 血漿1、腎臓、肝臓は、鉛のモデル（図9.1）では、それぞれ血漿、腎臓1、肝臓1として識別されます。
+# > ... Mercury produced by radioactive
+# > decay in a blood compartment that is not identifiable with a blood compartment of
+# > the mercury model is assumed to transfer to Plasma 1 at the rate 1000 d⁻¹. Mercury
+# > produced in a soft tissue compartment not identifiable with a compartment in the
+# > model for mercury is assumed to transfer to Plasma 1 with a half-time of 20 d.
+# > Mercury produced in a compartment of cortical or trabecular bone volume is
+# > assumed to transfer to Plasma 1 at the reference turnover rate for that bone type.
+# > ... 水銀モデルの血液コンパートメントと識別できない血液コンパートメントにおいて
+# > 放射性崩壊によって生成された水銀は、1000 d⁻¹の速度で血漿1に移行すると仮定されます。
+# > 水銀モデルのコンパートメントと識別できない軟組織コンパートメントで生成された水銀は、
+# > 半減期20日で血漿1に移行すると仮定されます。皮質骨または海綿骨の体積コンパートメントで
+# > 生成された水銀は、その骨の種類における基準代謝率で血漿1に移行すると仮定されます。
+
+  Pb-214/Plasma           Hg-206/Plasma1            ---         # Po-210/Plasma2を経由
+  Pb-214/RBC              Hg-206/RBC                ---
+  Pb-214/C-bone-S         Hg-206/C-bone-S           ---
+  Pb-214/T-bone-S         Hg-206/T-bone-S           ---
+  Pb-214/Exch-C-bone-V    Hg-206/Plasma1        $(0.03 / 365.25)
+  Pb-214/Exch-T-bone-V    Hg-206/Plasma1        $(0.18 / 365.25)
+  Pb-214/Noch-C-bone-V    Hg-206/Plasma1        $(0.03 / 365.25)
+  Pb-214/Noch-T-bone-V    Hg-206/Plasma1        $(0.18 / 365.25)
+  Pb-214/Liver1           Hg-206/Liver              ---
+  Pb-214/Kidneys1         Hg-206/Kidneys            ---
+  Bi-214/RedMarrow        Hg-206/RedMarrow          ---
+  Bi-214/Testes           Hg-206/Testes             ---
+  Bi-214/Ovaries          Hg-206/Ovaries            ---
+  Bi-214/Skin             Hg-206/Skin               ---
+  Bi-214/Spleen           Hg-206/Spleen             ---
+
+  Pb-214/ST0              Hg-206/Plasma1        $(0.693 / 20)   # Pb-210/ST0を経由
+  Pb-214/ST1              Hg-206/Plasma1        $(0.693 / 20)   # Pb-210/ST1を経由
+  Pb-214/ST2              Hg-206/Plasma1        $(0.693 / 20)   # Pb-210/ST2を経由
+  Pb-214/Liver2           Hg-206/Plasma1        $(0.693 / 20)
+  Pb-214/Kidneys2         Hg-206/Plasma1        $(0.693 / 20)
+  Bi-214/ST0              Hg-206/Plasma1        $(0.693 / 20)
+  Bi-214/ST1              Hg-206/Plasma1        $(0.693 / 20)
+  Bi-214/ST2              Hg-206/Plasma1        $(0.693 / 20)
+  Po-214/Other            Hg-206/Plasma1        $(0.693 / 20)
+  Tl-210/Other            Hg-206/Plasma1        $(0.693 / 20)
+
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > (481) The following systemic model is applied to thallium produced in vivo following
+# > intake of lead. ...
+# > (481) 鉛摂取後に体内で生成されるタリウムには、以下の全身モデルが適用されます。 ...
+
+[Tl-206:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-sur
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-q
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-q
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other                 Other
+
+# 作成者注：Publ.151で示された親としてのタリウムのモデルに対して追加
+
+  acc   RedMarrow             R-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Tl-206:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
+  $fA_MaxValueOfIng = 0.99 # ≒1
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.151 Table A.1
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
+
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Plasma                $( (1 - fb) * sr )
+  INT-F                   Plasma                $( (1 - fb) * sr )
+  bb-F                    Plasma                $( (1 - fb) * sr )
+  bbseq-F                 Plasma                $( (1 - fb) * sr )
+  BB-F                    Plasma                $( (1 - fb) * sr )
+  BBseq-F                 Plasma                $( (1 - fb) * sr )
+  ET2-F                   Plasma                $( (1 - fb) * sr )
+  ETseq-F                 Plasma                $( (1 - fb) * sr )
+  LNET-F                  Plasma                $( (1 - fb) * sr )
+  LNTH-F                  Plasma                $( (1 - fb) * sr )
+
+  ALV-S                   Plasma                $( (1 - fb) * ss )
+  INT-S                   Plasma                $( (1 - fb) * ss )
+  bb-S                    Plasma                $( (1 - fb) * ss )
+  bbseq-S                 Plasma                $( (1 - fb) * ss )
+  BB-S                    Plasma                $( (1 - fb) * ss )
+  BBseq-S                 Plasma                $( (1 - fb) * ss )
+  ET2-S                   Plasma                $( (1 - fb) * ss )
+  ETseq-S                 Plasma                $( (1 - fb) * ss )
+  LNET-S                  Plasma                $( (1 - fb) * ss )
+  LNTH-S                  Plasma                $( (1 - fb) * ss )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > ... Thallium leaves the central blood compartment (plasma) at the
+# > rate 200 d⁻¹ (corresponding to a half-time of 5 min) and is distributed as follows:
+# > 2.5% to red blood cells, 0.75% to urinary bladder contents, 1.75% to right colon
+# > contents, 5% to kidneys, 5% to liver, 2.5% to skin, 1.5% to red marrow, 0.2% to
+# > spleen, 0.3% to testes, 0.1% to ovaries, 7.5% to trabecular bone surfaces, 7.5% to
+# > cortical bone surfaces, and 65.4% to remaining soft tissues (other).
+# > ... タリウムは中心血液区画（血漿）から200 d⁻¹（半減期5分に相当）の速度で排出され、
+# > 以下のように分布する：赤血球に2.5%、膀胱内容物に0.75%、右結腸内容物に1.75%、腎臓に5%、
+# > 肝臓に5%、皮膚に2.5%、赤色骨髄に1.5%、脾臓に0.2%、精巣に0.3%、卵巣に0.1%、
+# > 海綿骨表面に7.5%、皮質骨表面に7.5%、残りの軟部組織（その他）に65.4%。
+# > ... Thallium returns from red blood cells to plasma at the rate 3.7 d⁻¹, and from
+# > tissue compartments to plasma at the rate 2.5 d⁻¹.
+# > ... タリウムは、赤血球から血漿へは3.7 d⁻¹の速度で戻り、組織コンパートメントから
+# > 血漿へは2.5 d⁻¹の速度で戻ります。
+
+# 作成者注：Publ.137で示されている移行係数の設定値は、Publ.151で示された親としての
+# タリウムのモデルにおけるPlasmaと軟組織Otherの間の流量を、追加された
+# 5つのコンパートメントに分配する形になっている。
+
+  Plasma                  Liver                 $(200 *  5%)
+  Plasma                  Kidneys               $(200 *  5%)
+  Plasma                  RBC                   $(200 *  2.5%)
+  Plasma                  T-bone-S              $(200 *  7.5%)
+  Plasma                  C-bone-S              $(200 *  7.5%)
+ #Plasma                  Other                 $(200 * 70%)    # == 140    # fix
+  Plasma                  Other                 $(200 * 65.4%)  # == 130.8
+  Plasma                  RedMarrow             $(200 *  1.5%)
+  Plasma                  Skin                  $(200 *  2.5%)
+  Plasma                  Spleen                $(200 *  0.2%)
+  Plasma                  Testes                $(200 *  0.3%)
+  Plasma                  Ovaries               $(200 *  0.1%)
+  Plasma                  UB-con                $(200 *  0.75%)
+  Plasma                  RC-con                $(200 *  1.75%)
+  RBC                     Plasma                    3.7
+  Liver                   Plasma                    2.5
+  Kidneys                 Plasma                    2.5
+  T-bone-S                Plasma                    2.5
+  C-bone-S                Plasma                    2.5
+  Other                   Plasma                    2.5
+  RedMarrow               Plasma                    2.5
+  Skin                    Plasma                    2.5
+  Spleen                  Plasma                    2.5
+  Testes                  Plasma                    2.5
+  Ovaries                 Plasma                    2.5
+
+# from parent to progeny
+  Pb-214/ET1-F            Tl-206/ET1-F              ---
+  Pb-214/ET2-F            Tl-206/ET2-F              ---
+  Pb-214/ETseq-F          Tl-206/ETseq-F            ---
+  Pb-214/LNET-F           Tl-206/LNET-F             ---
+  Pb-214/BB-F             Tl-206/BB-F               ---
+  Pb-214/BBseq-F          Tl-206/BBseq-F            ---
+  Pb-214/bb-F             Tl-206/bb-F               ---
+  Pb-214/bbseq-F          Tl-206/bbseq-F            ---
+  Pb-214/ALV-F            Tl-206/ALV-F              ---
+  Pb-214/INT-F            Tl-206/INT-F              ---
+  Pb-214/LNTH-F           Tl-206/LNTH-F             ---
+  Pb-214/ET1-S            Tl-206/ET1-S              ---
+  Pb-214/ET2-S            Tl-206/ET2-S              ---
+  Pb-214/ETseq-S          Tl-206/ETseq-S            ---
+  Pb-214/LNET-S           Tl-206/LNET-S             ---
+  Pb-214/BB-S             Tl-206/BB-S               ---
+  Pb-214/BBseq-S          Tl-206/BBseq-S            ---
+  Pb-214/bb-S             Tl-206/bb-S               ---
+  Pb-214/bbseq-S          Tl-206/bbseq-S            ---
+  Pb-214/ALV-S            Tl-206/ALV-S              ---
+  Pb-214/INT-S            Tl-206/INT-S              ---
+  Pb-214/LNTH-S           Tl-206/LNTH-S             ---
+  Pb-214/ET2-B            Tl-206/ET2-B              ---
+  Pb-214/ETseq-B          Tl-206/ETseq-B            ---
+  Pb-214/LNET-B           Tl-206/LNET-B             ---
+  Pb-214/BB-B             Tl-206/BB-B               ---
+  Pb-214/BBseq-B          Tl-206/BBseq-B            ---
+  Pb-214/bb-B             Tl-206/bb-B               ---
+  Pb-214/bbseq-B          Tl-206/bbseq-B            ---
+  Pb-214/ALV-B            Tl-206/ALV-B              ---
+  Pb-214/INT-B            Tl-206/INT-B              ---
+  Pb-214/LNTH-B           Tl-206/LNTH-B             ---
+  Pb-214/Environment      Tl-206/Environment        ---
+
+  Pb-214/Oralcavity       Tl-206/Oralcavity         ---
+  Pb-214/Oesophagus-f     Tl-206/Oesophagus-f       ---
+  Pb-214/Oesophagus-s     Tl-206/Oesophagus-s       ---
+  Pb-214/St-con           Tl-206/St-con             ---
+  Pb-214/SI-con           Tl-206/SI-con             ---
+  Pb-214/SI-conRe         Tl-206/SI-conRe           ---
+  Pb-214/RC-con           Tl-206/RC-con             ---
+  Pb-214/LC-con           Tl-206/LC-con             ---
+  Pb-214/RS-con           Tl-206/RS-con             ---
+  Pb-214/Faeces           Tl-206/Faeces             ---
+  Pb-214/UB-con           Tl-206/UB-con             ---
+  Pb-214/Urine            Tl-206/Urine              ---
+
+# ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
+# > ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
+# > in the model for lead (Fig. 9.1).
+# > ... 腎臓と肝臓は、鉛のモデル（図9.1）において、それぞれ腎臓2と肝臓1に相当します。
+# > ... Thallium produced by radioactive
+# > decay in a blood compartment that is not identifiable with a blood compartment of
+# > the thallium model is assumed to transfer to plasma at the rate 1000 d⁻¹. Thallium
+# > produced in a soft tissue compartment not identifiable with a compartment of the
+# > thallium model is assumed to transfer to plasma at the rate 2.5 d⁻¹. Thallium produced
+# > in a compartment of cortical or trabecular bone volume is assumed to transfer
+# > to plasma at the reference turnover rate of that bone type.
+# > ... タリウムモデルの血液コンパートメントと識別できない血液コンパートメント内で
+# > 放射性崩壊によって生成されたタリウムは、1000 d⁻¹の速度で血漿に移行すると仮定されます。
+# > タリウムモデルのコンパートメントと識別できない軟部組織コンパートメントで生成された
+# > タリウムは、2.5 d⁻¹の速度で血漿に移行すると仮定されます。皮質骨または海綿骨の
+# > 体積コンパートメントで生成されたタリウムは、その骨の種類に応じた基準代謝速度で
+# > 血漿に移行すると仮定されます。
+
+  Pb-214/Plasma           Tl-206/Plasma             ---     # Hg-206/Plasma1を経由
+  Hg-206/Plasma2          Tl-206/Plasma          1000
+  Pb-214/RBC              Tl-206/RBC                ---
+  Pb-214/C-bone-S         Tl-206/C-bone-S           ---
+  Pb-214/T-bone-S         Tl-206/T-bone-S           ---
+  Pb-214/Exch-C-bone-V    Tl-206/Plasma         $(0.03 / 365.25)
+  Pb-214/Exch-T-bone-V    Tl-206/Plasma         $(0.18 / 365.25)
+  Pb-214/Noch-C-bone-V    Tl-206/Plasma         $(0.03 / 365.25)
+  Pb-214/Noch-T-bone-V    Tl-206/Plasma         $(0.18 / 365.25)
+  Pb-214/Liver1           Tl-206/Liver              ---
+  Pb-214/Kidneys2         Tl-206/Kidneys            ---
+  Bi-214/RedMarrow        Tl-206/RedMarrow          ---
+  Bi-214/Testes           Tl-206/Testes             ---
+  Bi-214/Ovaries          Tl-206/Ovaries            ---
+  Bi-214/Skin             Tl-206/Skin               ---
+  Bi-214/Spleen           Tl-206/Spleen             ---
+
+  Pb-214/ST0              Tl-206/Plasma             2.5     # Pb-210/ST0を経由
+  Pb-214/ST1              Tl-206/Plasma             2.5     # Pb-210/ST1を経由
+  Pb-214/ST2              Tl-206/Plasma             2.5     # Pb-210/ST2を経由
+  Pb-214/Liver2           Tl-206/Plasma             2.5
+  Pb-214/Kidneys1         Tl-206/Plasma             2.5
+  Bi-214/ST0              Tl-206/Plasma             2.5     # Bi-210/ST0を経由
+  Bi-214/ST1              Tl-206/Plasma             2.5     # Bi-210/ST1を経由
+  Bi-214/ST2              Tl-206/Plasma             2.5     # Bi-210/ST2を経由
+  Po-214/Other            Tl-206/Plasma             2.5
+  Tl-210/Other            Tl-206/Other              ---
+  Hg-206/Other1           Tl-206/Plasma             2.5
+  Hg-206/Other2           Tl-206/Plasma             2.5
