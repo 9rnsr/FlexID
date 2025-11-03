@@ -131,7 +131,7 @@ Hg-203 Inhalation:Type-F_Gas
   ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
 
-# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.67 Fig.3.5(a)
 # ICRP Publ.130 p.68 Para.107
   ALV-F                   ALV-B                 $(      fb  * sr )
   INT-F                   INT-B                 $(      fb  * sr )

@@ -129,7 +129,7 @@ Au-196 Inhalation:Type-S
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.67 Fig.3.5(a)
 # ICRP Publ.130 p.68 Para.107
   ALV-F                   ALV-B                 $(      fb  * sr )
   INT-F                   INT-B                 $(      fb  * sr )
