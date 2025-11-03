@@ -79,7 +79,7 @@ S-35 Inhalation:Type-S
   $fA_Re = 0.99 # ≒1   # footnote††
 
 # ICRP Publ.130 p.62 Table 3.1
-# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
   input                   ET1-F                 $(      fr  *                 47.94% )
   input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
   input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )

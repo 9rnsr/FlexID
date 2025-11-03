@@ -85,7 +85,7 @@ Hg-203 Inhalation:Type-F_Gas
   $fA_Re = 0.1      # Table 36.3 footnote¶ (re-absorption)
 
 # ICRP Publ.151 p.326 Table 36.2
-# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
 # > Rates shown alongside arrows are reference values in units of d⁻¹. It is assumed that 0.2% of
 # > material deposited in the posterior nasal passage, pharynx, and larynx (ET2), bronchi (BB),
 # > and bronchioles (bb) is retained in the airway wall (ETseq, BBseq, and bbseq, respectively).
