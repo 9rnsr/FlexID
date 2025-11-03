@@ -79,13 +79,13 @@ Hg-203 Inhalation:Type-F_Gas
   $fr = 0.94
   $sr = 1000
   $ss = 0.14
-  $fb = 0.24        # footnote*
-  $sb = 2.1         # footnote*
+  $fb = 0.24        # footnote†
+  $sb = 2.1         # footnote†
   $fA    = 0.094
   $fA_Re = 0.1      # Table 36.3 footnote¶ (re-absorption)
 
 # ICRP Publ.151 p.326 Table 36.2
-# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
 # > Rates shown alongside arrows are reference values in units of d⁻¹. It is assumed that 0.2% of
 # > material deposited in the posterior nasal passage, pharynx, and larynx (ET2), bronchi (BB),
 # > and bronchioles (bb) is retained in the airway wall (ETseq, BBseq, and bbseq, respectively).
@@ -131,7 +131,7 @@ Hg-203 Inhalation:Type-F_Gas
   ET2-S                   Oesophagus-s            100
   ETseq-S                 LNET-S                    0.001
 
-# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.67 Fig.3.5(a)
 # ICRP Publ.130 p.68 Para.107
   ALV-F                   ALV-B                 $(      fb  * sr )
   INT-F                   INT-B                 $(      fb  * sr )
@@ -217,7 +217,7 @@ Hg-203 Inhalation:Type-F_Gas
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
-# ICRP Publ.151 p.339 Table 36.5
+# ICRP Publ.151 p.338 Table 36.4
   Plasma0                 RBC                     100
   Plasma0                 Brain1                   20
   Plasma0                 Kidneys                 100

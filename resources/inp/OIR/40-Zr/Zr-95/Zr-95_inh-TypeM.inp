@@ -85,7 +85,7 @@ Zr-95 Inhalation:Type-M
   $fA_Re = 0.002        # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
-# ICRP Publ.130 p.65 Fig.3.4 footnote
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
   input                   ET1-F                 $(      fr  *                 47.94% )
   input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
   input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
@@ -132,7 +132,7 @@ Zr-95 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.67 Fig.3.5(a)
 # ICRP Publ.130 p.68 Para.107
   ALV-F                   ALV-B                 $(      fb  * sr )
   INT-F                   INT-B                 $(      fb  * sr )
@@ -382,7 +382,7 @@ Zr-95 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.67 Fig.3.5(a)
 # ICRP Publ.130 p.68 Para.107
   ALV-F                   ALV-B                 $(      fb  * sr )
   INT-F                   INT-B                 $(      fb  * sr )
@@ -663,7 +663,7 @@ Zr-95 Inhalation:Type-M
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-# ICRP Publ.130 p.67 Fig.3.5
+# ICRP Publ.130 p.67 Fig.3.5(a)
 # ICRP Publ.130 p.68 Para.107
   ALV-F                   ALV-B                 $(      fb  * sr )
   INT-F                   INT-B                 $(      fb  * sr )
