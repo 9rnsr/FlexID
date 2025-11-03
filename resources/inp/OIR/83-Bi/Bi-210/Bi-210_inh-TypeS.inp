@@ -95,7 +95,7 @@ Bi-210 Inhalation:Type-S
   input                   Environment           $(                     100% - 81.96% )
 
 # ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.151 Table A.1
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
   ALV-F                   bb-F                      0.002
   ALV-F                   INT-F                     0.001
   INT-F                   LNTH-F                    0.00003
@@ -364,7 +364,7 @@ Bi-210 Inhalation:Type-S
   Bi-210/ST2              Plasma2                   0.099       # = ln(2)/7 ≒ Other→Plasma1
 
 # ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.151 Table A.1
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
   ALV-F                   bb-F                      0.002
   ALV-F                   INT-F                     0.001
   INT-F                   LNTH-F                    0.00003
@@ -583,7 +583,7 @@ Bi-210 Inhalation:Type-S
   Bi-210/ST2              Plasma                    2.5     # 移行元を自明でない軟組織とする
 
 # ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.151 Table A.1
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
   ALV-F                   bb-F                      0.002
   ALV-F                   INT-F                     0.001
   INT-F                   LNTH-F                    0.00003
