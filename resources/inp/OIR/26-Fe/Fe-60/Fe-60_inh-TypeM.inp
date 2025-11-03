@@ -109,7 +109,7 @@ Fe-60 Inhalation:Type-M
   input                   Environment           $(                     100% - 81.96% )
 
 # ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.151 Table A.1
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
   ALV-F                   bb-F                      0.002
   ALV-F                   INT-F                     0.001
   INT-F                   LNTH-F                    0.00003
@@ -386,7 +386,7 @@ Fe-60 Inhalation:Type-M
   Fe-60/Other3(RE)        Blood1                $(0.693 / 7)            # 半減期7日
 
 # ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.151 Table A.1
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
   ALV-F                   bb-F                      0.002
   ALV-F                   INT-F                     0.001
   INT-F                   LNTH-F                    0.00003
@@ -679,7 +679,7 @@ Fe-60 Inhalation:Type-M
   Co-60m/Kidneys2         Kidneys2                  ---
 
 # ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.151 Table A.1
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
   ALV-F                   bb-F                      0.002
   ALV-F                   INT-F                     0.001
   INT-F                   LNTH-F                    0.00003
