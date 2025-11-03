@@ -160,7 +160,7 @@ In-111 Inhalation:Type-S
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
-# ICRP Publ.137 p.175 Table 7.3
+# ICRP Publ.151 p.255 Table 27.3
   Plasma                  Transferrin   83
   Plasma                  RBC            0.415
   RBC                     Plasma         0.0554
