@@ -1,0 +1,88 @@
+[title]
+In-111 Injection
+
+[nuclide]
+  In-111
+
+
+[In-111:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   Transferrin           Blood
+  acc   RBC                   Blood
+  acc   BoneMarrow1           R-marrow
+  acc   BoneMarrow2           R-marrow
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[In-111:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.252 Table 27.2 / Ingested materials, All forms
+  $fA    = 0.005
+  $fA_Re = 0.005        # footnote§ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Plasma                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6           # Re-Absorption
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.151 p.255 Table 27.3
+  Plasma                  Transferrin   83
+  Plasma                  RBC            0.415
+  RBC                     Plasma         0.0554
+  Transferrin             BoneMarrow1    0.316
+  Transferrin             Liver1         0.253
+  Transferrin             ST0            0.427
+  Transferrin             ST1            0.586
+  BoneMarrow1             Transferrin    1.10
+  BoneMarrow1             BoneMarrow2    0.475
+  BoneMarrow2             BoneMarrow1    0.00831
+  Liver1                  Transferrin    0.475
+  Liver1                  SI-conRe       0.110
+  Liver1                  Liver2         0.554
+  Liver2                  Liver1         0.00831
+  ST0                     Plasma         2.37
+  ST1                     Plasma         0.00475
+  Plasma                  Kidneys        1.66
+  Kidneys                 Plasma         0.0166
+  Kidneys                 UB-con         0.0268
