@@ -127,6 +127,18 @@ Po-210 Inhalation:Type-F
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
+# ICRP Publ.137 p.286 Para.590
+# > (590) ... Specifically, a compartment called
+# > ‘Plasma 2’ is assumed to receive inflow to blood from the respiratory tract or
+# > wounds, and a compartment called ‘Plasma 1’ is assumed to receive inflow to
+# > blood from all other sources, including polonium that returns from systemic tissues
+# > to blood. 
+# > inflow to blood from the respiratory tract or wounds, 
+# > (590) ...具体的には、「血漿 2」と呼ばれるコンパートメントは呼吸器または創傷から
+# > 血液への流入を受けると想定され、「血漿 1」と呼ばれるコンパートメントは
+# > 全身組織から血液に戻るポロニウムを含む他のすべてのソースからの血液への流入を
+# > 受けると想定されます。
+
   ALV-F                   Plasma2               $sr
   INT-F                   Plasma2               $sr
   bb-F                    Plasma2               $sr
