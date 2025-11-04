@@ -1,0 +1,85 @@
+[title]
+Ba-133 Injection
+
+[nuclide]
+  Ba-133
+
+
+[Ba-133:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+
+[Ba-133:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Insoluble forms
+  $fA = 1E-4
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Plasma                  100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA * 6 / (1 - fA))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.175 Table 7.3
+  Plasma                  UB-con                    2.24
+  Plasma                  RC-con                   20.16
+  Plasma                  T-bone-S                  9.72
+  Plasma                  C-bone-S                  7.78
+  Plasma                  ST0                      23.0
+  Plasma                  ST1                       7.0
+  Plasma                  ST2                       0.14
+  T-bone-S                Plasma                    0.578
+  T-bone-S                Exch-T-bone-V             0.116
+  C-bone-S                Plasma                    0.578
+  C-bone-S                Exch-C-bone-V             0.116
+  ST0                     Plasma                    7.67
+  ST1                     Plasma                    0.693
+  ST2                     Plasma                    0.00038
+  Exch-T-bone-V           T-bone-S                  0.0097
+  Exch-T-bone-V           Noch-T-bone-V             0.0042
+  Exch-C-bone-V           C-bone-S                  0.0097
+  Exch-C-bone-V           Noch-C-bone-V             0.0042
+  Noch-C-bone-V           Plasma                    0.0000821
+  Noch-T-bone-V           Plasma                    0.000493
