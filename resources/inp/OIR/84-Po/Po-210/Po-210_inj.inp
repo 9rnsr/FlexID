@@ -32,14 +32,14 @@ Po-210 Injection
   acc   BoneSurface-C         C-bone-S      # ICRP Publ.137 p.289 Para.605
   acc   BoneSurface-T         T-bone-S      # ICRP Publ.137 p.289 Para.605
   acc   RedMarrow             R-marrow
-  acc   Kidneys1              Kidneys
-  acc   Kidneys2              Kidneys
   acc   Liver1                Liver
   acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Testes                Testes
   acc   Ovaries               Ovaries
   acc   Skin                  Skin
   acc   Spleen                Spleen
-  acc   Testes                Testes
   acc   Other                 Other
   exc   Excreta               ---
 
