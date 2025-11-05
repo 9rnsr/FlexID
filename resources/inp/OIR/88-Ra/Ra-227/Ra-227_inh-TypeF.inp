@@ -48,19 +48,19 @@ Ra-227 Inhalation:Type-F
   exc   Urine                 ---
 
   acc   Blood                 Blood
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   ST2                   Other
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Kidneys1              Kidneys
   acc   Kidneys2              Kidneys
-  acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   Exch-T-bone-V         T-bone-V
-  acc   Noch-T-bone-V         T-bone-V
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
 
 [Ra-227:transfer]
 #-----------------------+---------------------+--------------
