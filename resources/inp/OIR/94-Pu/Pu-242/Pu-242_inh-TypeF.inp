@@ -61,19 +61,19 @@ Pu-242 Inhalation:Type-F
   acc   Blood0                Blood
   acc   Blood1                Blood
   acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   C-marrow              C-marrow
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   T-marrow              T-marrow
   acc   RenalTubules          Kidneys
   acc   OtherKidneys          Kidneys
-  acc   Ovaries               Ovaries
   acc   Testes                Testes
+  acc   Ovaries               Ovaries
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
