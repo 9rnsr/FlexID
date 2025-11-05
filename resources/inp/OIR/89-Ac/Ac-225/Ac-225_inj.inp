@@ -25,18 +25,18 @@ Ac-225 Injection
   exc   Urine                 ---
 
   acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   C-marrow              C-marrow
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   T-marrow              T-marrow
   acc   Kidneys1              Kidneys
   acc   Kidneys2              Kidneys
-  acc   Ovaries               Ovaries
   acc   Testes                Testes
+  acc   Ovaries               Ovaries
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
@@ -73,7 +73,7 @@ Ac-225 Injection
   UB-con                  Urine                    12
 
 # ICRP Publ.141 p.234 Table 18.9
-  Blood                   Liver1                    11.6
+  Blood                   Liver1                   11.6
   Blood                   T-bone-S                  3.49
   Blood                   C-bone-S                  3.49
   Blood                   Kidneys1                  0.466
@@ -82,7 +82,7 @@ Ac-225 Injection
   Blood                   RC-con                    0.303
   Blood                   Testes                    0.0082
   Blood                   Ovaries                   0.0026
-  Blood                   ST0                       10.0
+  Blood                   ST0                      10.0
   Blood                   ST1                       1.67
   Blood                   ST2                       0.466
   Liver1                  SI-conRe                  0.0006
