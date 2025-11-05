@@ -1,0 +1,104 @@
+[title]
+U-235 Ingestion:Insoluble
+
+[nuclide]
+  U-235
+
+
+[U-235:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissue
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[U-235:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.409 Table 15.2 / Ingested materials, Relatively insoluble forms
+  $fA    = 0.002
+  $fA_Re = 0.02     # footnote§
+
+# ICRP Publ.130 p.37 Para.15
+  input                   Oralcavity              100.0%
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.415 Table 15.4
+  Plasma                  ST0                      10.5
+  Plasma                  RBC                       0.245
+  Plasma                  UB-con                   15.43
+  Plasma                  Kidneys1                  2.94
+  Plasma                  Kidneys2                  0.0122
+  Plasma                  RC-con                    0.122
+  Plasma                  Liver1                    0.367
+  Plasma                  ST1                       1.63
+  Plasma                  ST2                       0.0735
+  Plasma                  T-bone-S                  2.04
+  Plasma                  C-bone-S                  1.63
+  ST0                     Plasma                    8.32
+  RBC                     Plasma                    0.347
+  Kidneys1                UB-con                    0.099
+  Kidneys2                Plasma                    0.00038
+  Liver1                  Plasma                    0.092
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.00019
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.000019
+  T-bone-S                Plasma                    0.0693
+  T-bone-S                Exch-T-bone-V             0.0693
+  C-bone-S                Plasma                    0.0693
+  C-bone-S                Exch-C-bone-V             0.0693
+  Noch-T-bone-V           Plasma                    0.000493    # Table 15.4では移行元が"Trabecular bone volume"
+  Noch-C-bone-V           Plasma                    0.0000821   # Table 15.4では移行元が"Cortical bone volume"
+  Exch-T-bone-V           T-bone-S                  0.0173
+  Exch-T-bone-V           Noch-T-bone-V             0.00578
+  Exch-C-bone-V           C-bone-S                  0.0173
+  Exch-C-bone-V           Noch-C-bone-V             0.00578

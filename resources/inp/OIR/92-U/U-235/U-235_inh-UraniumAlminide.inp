@@ -1,0 +1,247 @@
+[title]
+U-235 Inhalation:UraniumAlminide
+
+[nuclide]
+  U-235
+
+
+[U-235:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  inp   input                 ---
+
+  acc   ET1-I                 ET1-sur
+  acc   ET2-I                 ET2-sur
+  acc   ETseq-I               ET2-seq
+  acc   LNET-I                LN-ET
+  acc   BB-I                  Bronchi
+  acc   BBseq-I               Bronchi-q
+  acc   bb-I                  Brchiole
+  acc   bbseq-I               Brchiole-q
+  acc   ALV-I                 ALV
+  acc   INT-I                 ALV
+  acc   LNTH-I                LN-Th
+  acc   ET1-T                 ET1-sur
+  acc   ET2-T                 ET2-sur
+  acc   ETseq-T               ET2-seq
+  acc   LNET-T                LN-ET
+  acc   BB-T                  Bronchi
+  acc   BBseq-T               Bronchi-q
+  acc   bb-T                  Brchiole
+  acc   bbseq-T               Brchiole-q
+  acc   ALV-T                 ALV
+  acc   INT-T                 ALV
+  acc   LNTH-T                LN-Th
+  acc   ET2-B                 ET2-bnd
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-b
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-b
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissue
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[U-235:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.409 Table 15.2 / Inhaled particulate materials, Uranium alminide
+  $sp  = 1E-4       # footnote‡
+  $spt = 0.004      # footnote‡
+  $st  = 0.004      # footnote‡
+  $fb = 0.0         # footnote*
+  $sb = 0           # footnote*
+  $fA    = 0.002
+  $fA_Re = 0.02     # footnote§
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
+  input                   ET1-I                 $(                 47.94% )
+  input                   ET2-I                 $( (100% - 0.2%) * 25.82% )
+  input                   ETseq-I               $(         0.2%  * 25.82% )
+  input                   BB-I                  $( (100% - 0.2%) *  1.78% )
+  input                   BBseq-I               $(         0.2%  *  1.78% )
+  input                   bb-I                  $( (100% - 0.2%) *  1.10% )
+  input                   bbseq-I               $(         0.2%  *  1.10% )
+  input                   ALV-I                 $(                  5.32% )
+
+  input                   Environment           $(          100% - 81.96% )
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
+  ALV-I                   bb-I                      0.002
+  ALV-I                   INT-I                     0.001
+  INT-I                   LNTH-I                    0.00003
+  bb-I                    BB-I                      0.2
+  bbseq-I                 LNTH-I                    0.001
+  BB-I                    ET2-I                    10
+  BBseq-I                 LNTH-I                    0.001
+  ET2-I                   Oesophagus-s            100
+  ETseq-I                 LNET-I                    0.001
+  ET1-I                   Environment               0.6
+  ET1-I                   ET2-I                     1.5
+
+  ALV-T                   bb-T                      0.002
+  ALV-T                   INT-T                     0.001
+  INT-T                   LNTH-T                    0.00003
+  bb-T                    BB-T                      0.2
+  bbseq-T                 LNTH-T                    0.001
+  BB-T                    ET2-T                    10
+  BBseq-T                 LNTH-T                    0.001
+  ET2-T                   Oesophagus-s            100
+  ETseq-T                 LNET-T                    0.001
+  ET1-T                   Environment               0.6
+  ET1-T                   ET2-T                     1.5
+
+# ICRP Publ.130 p.67 Fig.3.5(b)
+# ICRP Publ.130 p.68 Para.107
+  ALV-I                   ALV-T                 $(           spt )
+  INT-I                   INT-T                 $(           spt )
+  bb-I                    bb-T                  $(           spt )
+  bbseq-I                 bbseq-T               $(           spt )
+  BB-I                    BB-T                  $(           spt )
+  BBseq-I                 BBseq-T               $(           spt )
+  ET2-I                   ET2-T                 $(           spt )
+  ETseq-I                 ETseq-T               $(           spt )
+  LNET-I                  LNET-T                $(           spt )
+  LNTH-I                  LNTH-T                $(           spt )
+
+  ALV-I                   ALV-B                 $(      fb  * sp )
+  INT-I                   INT-B                 $(      fb  * sp )
+  bb-I                    bb-B                  $(      fb  * sp )
+  bbseq-I                 bbseq-B               $(      fb  * sp )
+  BB-I                    BB-B                  $(      fb  * sp )
+  BBseq-I                 BBseq-B               $(      fb  * sp )
+  ET2-I                   ET2-B                 $(      fb  * sp )
+  ETseq-I                 ETseq-B               $(      fb  * sp )
+  LNET-I                  LNET-B                $(      fb  * sp )
+  LNTH-I                  LNTH-B                $(      fb  * sp )
+
+  ALV-T                   ALV-B                 $(      fb  * st )
+  INT-T                   INT-B                 $(      fb  * st )
+  bb-T                    bb-B                  $(      fb  * st )
+  bbseq-T                 bbseq-B               $(      fb  * st )
+  BB-T                    BB-B                  $(      fb  * st )
+  BBseq-T                 BBseq-B               $(      fb  * st )
+  ET2-T                   ET2-B                 $(      fb  * st )
+  ETseq-T                 ETseq-B               $(      fb  * st )
+  LNET-T                  LNET-B                $(      fb  * st )
+  LNTH-T                  LNTH-B                $(      fb  * st )
+
+  ALV-I                   Plasma                $( (1 - fb) * sp )
+  INT-I                   Plasma                $( (1 - fb) * sp )
+  bb-I                    Plasma                $( (1 - fb) * sp )
+  bbseq-I                 Plasma                $( (1 - fb) * sp )
+  BB-I                    Plasma                $( (1 - fb) * sp )
+  BBseq-I                 Plasma                $( (1 - fb) * sp )
+  ET2-I                   Plasma                $( (1 - fb) * sp )
+  ETseq-I                 Plasma                $( (1 - fb) * sp )
+  LNET-I                  Plasma                $( (1 - fb) * sp )
+  LNTH-I                  Plasma                $( (1 - fb) * sp )
+
+  ALV-T                   Plasma                $( (1 - fb) * st )
+  INT-T                   Plasma                $( (1 - fb) * st )
+  bb-T                    Plasma                $( (1 - fb) * st )
+  bbseq-T                 Plasma                $( (1 - fb) * st )
+  BB-T                    Plasma                $( (1 - fb) * st )
+  BBseq-T                 Plasma                $( (1 - fb) * st )
+  ET2-T                   Plasma                $( (1 - fb) * st )
+  ETseq-T                 Plasma                $( (1 - fb) * st )
+  LNET-T                  Plasma                $( (1 - fb) * st )
+  LNTH-T                  Plasma                $( (1 - fb) * st )
+
+  ALV-B                   Plasma                $sb
+  INT-B                   Plasma                $sb
+  bb-B                    Plasma                $sb
+  bbseq-B                 Plasma                $sb
+  BB-B                    Plasma                $sb
+  BBseq-B                 Plasma                $sb
+  ET2-B                   Plasma                $sb
+  ETseq-B                 Plasma                $sb
+  LNET-B                  Plasma                $sb
+  LNTH-B                  Plasma                $sb
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.415 Table 15.4
+  Plasma                  ST0                      10.5
+  Plasma                  RBC                       0.245
+  Plasma                  UB-con                   15.43
+  Plasma                  Kidneys1                  2.94
+  Plasma                  Kidneys2                  0.0122
+  Plasma                  RC-con                    0.122
+  Plasma                  Liver1                    0.367
+  Plasma                  ST1                       1.63
+  Plasma                  ST2                       0.0735
+  Plasma                  T-bone-S                  2.04
+  Plasma                  C-bone-S                  1.63
+  ST0                     Plasma                    8.32
+  RBC                     Plasma                    0.347
+  Kidneys1                UB-con                    0.099
+  Kidneys2                Plasma                    0.00038
+  Liver1                  Plasma                    0.092
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.00019
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.000019
+  T-bone-S                Plasma                    0.0693
+  T-bone-S                Exch-T-bone-V             0.0693
+  C-bone-S                Plasma                    0.0693
+  C-bone-S                Exch-C-bone-V             0.0693
+  Noch-T-bone-V           Plasma                    0.000493    # Table 15.4では移行元が"Trabecular bone volume"
+  Noch-C-bone-V           Plasma                    0.0000821   # Table 15.4では移行元が"Cortical bone volume"
+  Exch-T-bone-V           T-bone-S                  0.0173
+  Exch-T-bone-V           Noch-T-bone-V             0.00578
+  Exch-C-bone-V           C-bone-S                  0.0173
+  Exch-C-bone-V           Noch-C-bone-V             0.00578
