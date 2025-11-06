@@ -71,3 +71,202 @@ Pu-239の子孫のうち、親としてのインプットが未作成のもの
 	| Bi-211		Pb-211系列
 	| Po-211		Pb-211系列
 	| Tl-207		Pb-211系列
+
+Puの子孫核種の取り扱い
+→ アクチニドの子孫核種の取り扱い Publ.141 p.232 - 18.2.10. Treatment of radioactive progeny に準拠する。
+
+# ICRP Publ.141 p.232 Para.561
+# > (561) Chain members addressed in the derivation of dose coefficients for the actinides
+# > addressed in this publication include isotopes of thallium, lead, bismuth, polonium,
+# > astatine, radon, francium, radium, actinium, thorium, protactinium, uranium,
+# > neptunium, plutonium, americium, curium, berkelium, californium, einsteinium, and
+# > fermium.
+# > (561) 本刊行物で扱うアクチノイド元素の線量係数の導出で扱う連鎖メンバーには、タリウム、
+# > 鉛、ビスマス、ポロニウム、アスタチン、ラドン、フランシウム、ラジウム、アクチニウム、
+# > トリウム、プロトアクチニウム、ウラン、ネプツニウム、プルトニウム、アメリシウム、
+# > キュリウム、バークリウム、カリホルニウム、アインスタイニウム、およびフェルミウムの
+# > 同位体が含まれる。
+
+# ICRP Publ.141 p.232 Para.562
+# > (562) The models applied here to thallium, lead, bismuth, polonium, and radium
+# > as actinide progeny are the models applied to these elements as progeny of radium
+# > [described in OIR Part 3 (ICRP, 2017)]. The model applied here to uranium as an
+# > actinide progeny is the model applied to uranium as a progeny of thorium [also
+# > described in OIR Part 3 (ICRP, 2017)].
+# > (562) ここでアクチノイド子孫元素としてのタリウム、鉛、ビスマス、ポロニウム、および
+# > ラジウムに適用するモデルは、これらの元素をラジウムの子孫元素として適用するモデルである
+# > （OIRパート3（ICRP, 2017）に記載）。ここでアクチニド子孫核種としてのウランに適用されている
+# > モデルは、トリウムの子孫核種としてのウランに適用されているモデルと同じです
+# > （OIR Part 3 (ICRP, 2017) でも説明されています）。
+
+# ICRP Publ.141 p.235 Para.563
+# > (563) The model applied here to radon as an actinide progeny is a generic model
+# > applied in the OIR series to radon produced by radioactive decay in a systemic
+# > compartment. Radon produced in a compartment identified as non-exchangeable
+# > bone volume, exchangeable bone volume, or bone surface transfers to blood at the
+# > rate 0.36, 1.5, or 100 d⁻¹, respectively; radon produced in a compartment identified
+# > simply as ‘bone volume’ transfers to blood at 0.36 d⁻¹; radon produced in a soft
+# > tissue compartment transfers to blood at 33.3 d⁻¹; and radon produced in blood or
+# > entering blood is removed from the body (exhaled) at 1000 d⁻¹.
+# > (563) ここでアクチニド子孫核種としてのラドンに適用されているモデルは、OIR シリーズにおいて、
+# > 全身コンパートメントでの放射性崩壊によって生成されるラドンに適用されている一般的なモデルです。
+# > 非交換性骨体積、交換性骨体積、または骨表面として識別されるコンパートメントで生成されたラドンは、
+# > それぞれ 0.36、1.5、または 100 d⁻¹ の速度で血液に移行します。単に「骨体積」として識別される
+# > コンパートメントで生成されたラドンは 0.36 d⁻¹ で血液に移行します。軟部組織コンパートメントで
+# > 生成されたラドンは 33.3 d⁻¹ で血液に移行します。血液中で生成されたラドンまたは血液に入った
+# > ラドンは、1000 d⁻¹ で体外に排出されます（呼気）。
+
+# ICRP Publ.141 p.235 Para.564
+# > (564) Radioisotopes of francium and astatine appearing in actinide chains considered
+# > in this publication have short half-lives, and are assumed to decay at their site
+# > of production in systemic tissues or blood.
+# > (564) この刊行物で検討されているアクチニド連鎖中に存在するフランシウムとアスタチンの
+# > 放射性同位体は半減期が短く、全身の組織または血液中の生成部位で崩壊すると考えられます。
+
+# ICRP Publ.141 p.235 Para.565
+# > (565) The model applied here to thorium as an actinide progeny is the model
+# > applied in OIR Part 3 (ICRP, 2017) to thorium as a progeny of radium. Briefly,
+# > two compartments, one representing the spleen and the other representing the skin,
+# > are added to the explicitly identified source regions in the characteristic model for
+# > thorium described in OIR Part 3. The spleen and skin are assumed to receive 0.5%
+# > and 2%, respectively, of thorium leaving the circulation, and to return thorium to
+# > blood with a biological half-time of 2 y. Thorium produced in a compartment that is
+# > not identifiable with a compartment in the thorium model is assumed to transfer to
+# > blood at the following rates: 1000 d⁻¹ if produced in blood; 0.462 d⁻¹ if produced in
+# > soft tissue; and at the rate of bone turnover if produced in a bone volume
+# > compartment.
+# > (565) ここでアクチニド子孫核種としてのトリウムに適用されたモデルは、OIR パート 3
+# > （ICRP、2017）でラジウムの子孫核種としてのトリウムに適用されたモデルである。
+# > 簡単に言うと、OIR パート 3 で説明されているトリウムの特性モデルの明示的に識別された
+# > 線源領域に、脾臓と皮膚を表す 2 つのコンパートメントが追加される。脾臓と皮膚は、
+# > それぞれ循環から出るトリウムの 0.5% と 2% を受け取り、生物学的半減期 2 年でトリウムを
+# > 血液に戻すと仮定される。トリウム モデルのコンパートメントと識別できないコンパートメントで
+# > 生成されたトリウムは、次の速度で血液に移行すると仮定される。血液中で生成された場合は
+# > 1000 d⁻¹、軟組織で生成された場合は 0.462 d⁻¹、骨体積コンパートメントで生成された場合は
+# > 骨代謝の速度。
+
+# ICRP Publ.141 p.235 Para.566
+# > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
+# > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
+# > progeny are modifications of their characteristic models described earlier in this
+# > section. For a given element in this group, two compartments representing the
+# > skin and spleen are added to the explicitly identified source regions in the element’s
+# > characteristic model. These compartments are taken from the intermediate soft tissue
+# > compartment, ST1; that is, the deposition fraction for ST1 is reduced by the deposition
+# > fractions assigned to the spleen and skin, and the removal half-time from ST1 is
+# > assigned to these added compartments. Deposition of the element in the skin is
+# > calculated as its mass fraction of other soft tissue times its deposition fraction in
+# > other soft tissue excluding the rapid-turnover compartment, ST0. The deposition
+# > fraction for the spleen is set at one-third of the deposition fraction for the skin,
+# > considering the relative masses of these tissues and the typically higher concentrations
+# > of the actinides in the spleen than the skin observed in laboratory animals and
+# > humans. If the element is produced in a compartment that is not identifiable with a
+# > compartment in its characteristic model, it is assumed to transfer to the element’s
+# > blood compartment [Blood 1 in the case of plutonium, which has multiple blood
+# > compartments (see Table 18.6)] at the rate 1000 d⁻¹ if produced in a blood compartment,
+# > at the rate of transfer from the fast-turnover soft tissue compartment ST0 to
+# > blood if produced in a soft tissue compartment, and at the rate of bone turnover if
+# > produced in a bone volume compartment.
+# > (566)アクチニド子孫元素としてのアクチニウム、プロトアクチニウム、ネプツニウム、プルトニウム、
+# > アメリシウム、キュリウム、バークリウム、カリホルニウム、アインスタイニウム、およびフェルミウムに
+# > ここ​​で適用するモデルは、本節で前述したそれぞれの特性モデルを修正したものである。
+# > このグループの特定の元素については、皮膚と脾臓を表す2つのコンパートメントが、その元素の
+# > 特性モデルで明示的に特定された発生源領域に追加される。これらのコンパートメントは
+# > 中間軟組織コンパートメントST1から取得される。つまり、ST1の沈着率は脾臓と皮膚に割り当てられた
+# > 沈着率によって減少し、ST1からの除去半減期はこれらの追加されたコンパートメントに割り当てられる。
+# > 皮膚における元素の沈着量は、他の軟組織におけるその元素の質量分率と、急速代謝コンパートメント
+# > ST0を除く他の軟組織におけるその元素の沈着率の積として計算される。脾臓への沈着率は、これらの
+# > 組織の相対的な質量と、実験動物およびヒトにおいて脾臓中のアクチニドの濃度が皮膚よりも一般的に
+# > 高いことを考慮して、皮膚への沈着率の3分の1に設定されている。元素が、その特性モデルの
+# > コンパートメントと識別できないコンパートメントで生成される場合、その元素は、血液コンパートメントで
+# > 生成された場合は1000 d⁻¹の速度で、軟部組織コンパートメントで生成された場合は代謝の速い
+# > 軟部組織コンパートメントST0から血液への移行速度で、骨体積コンパートメントで生成された場合は
+# > 骨代謝の速度で、元素の血液コンパートメント（複数の血液コンパートメントを持つプルトニウムの場合は
+# > 血液1（表18.6を参照））に移行すると仮定される。
+
+# ICRP Publ.141 p.236 Para.567
+# > (567) The model for plutonium as a progeny is further modified by removing the
+# > transfers from blood to ST0 and from blood to Blood 1 (Table 18.6), and adding a
+# > transfer of 0.33 d⁻¹ from Blood 1 to ST0. This simplifies the model for plutonium as
+# > a progeny by eliminating a blood compartment (‘Blood 0’ in Table 18.6). The added
+# > transfer coefficient of 0.33 d⁻¹ from Blood 1 to ST0 implies that ST0 receives 30% of
+# > plutonium leaving Blood 1. Total deposition in ST0 is virtually the same as in the
+# > model for plutonium as a parent, but the rate of accumulation of plutonium in ST0 is
+# > substantially lower in this simplified version of the model.
+# > (567) 子孫としてのプルトニウムのモデルは、血液からST0への移行と血液から血液1への移行
+# > （表18.6）を削除し、血液1からST0への0.33 d⁻¹の移動を追加することでさらに修正されます。
+# > これにより、血液コンパートメント（表18.6の「血液0」）が削除され、子孫としての
+# > プルトニウムのモデルが簡素化されます。血液1からST0への追加された移動係数0.33 d⁻¹は、
+# > 血液1から出たプルトニウムの30%がST0に渡ることを意味します。ST0への総沈着量は親としての
+# > プルトニウムのモデルとほぼ同じですが、この簡素化されたバージョンのモデルでは、ST0への
+# > プルトニウムの蓄積率が大幅に低くなっています。
+
+
+
+
+Puの子孫としてのU ＝ Thの子孫としてのU
+
+ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
+# > (811) The progeny of thorium isotopes addressed in the derivation of dose coefficients
+# > are isotopes of actinium, thorium, protactinium, uranium, radium, radon,
+# > polonium, lead, bismuth, thallium, francium, and astatine. The model for uranium
+# > produced by serial decay of members of a uranium chain is a modification of the
+# > model for uranium as a parent radionuclide (see Section 15). Single compartments
+# > representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
+# > added for consistency with the models for other progeny of thorium. The six added
+# > compartments are taken from the intermediate-term soft tissue compartment ST1 in
+# > the model for uranium as a parent. Deposition of uranium as a progeny in spleen,
+# > trabecular marrow + cortical marrow (i.e. total combined marrow), testes, ovaries,
+# > or skin is calculated as its mass fraction of other soft tissues times the deposition
+# > fraction for ST1 (0.0665 of uranium ‘leaving the circulation’, as defined in Section
+# > 15). Deposition in trabecular marrow is assumed to be three times greater than
+# > deposition in cortical marrow. The derived transfer cofficients from blood to
+# > spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are 0.004 d⁻¹,
+# > 0.075 d⁻¹, 0.025 d⁻¹, 0.001 d⁻¹, 0.0003 d⁻¹, and 0.09 d⁻¹, respectively. The removal
+# > half-time from each added compartment is set at 20 d, the removal half-time from
+# > ST1. The deposition fraction for ST1 is reduced by the sum of deposition fractions
+# > for the six added compartments. Uranium produced in a soft tissue compartment
+# > that is not identifiable with a compartment in the characteristic model for uranium is
+# > assumed to transfer to plasma at the rate 8.32 d⁻¹, the highest rate of loss from any
+# > compartment of other soft tissue in the characteristic model for uranium. Uranium
+# > produced in a bone volume compartment that is ambiguous with regard to the
+# > uranium model (e.g. trabecular or cortical bone volume in the thorium model) is
+# > assumed to be produced in non-exchangeable bone.
+# > (811) 線量係数の導出において扱われるトリウム同位体の子孫核種は、アクチニウム、トリウム、
+# > プロトアクチニウム、ウラン、ラジウム、ラドン、ポロニウム、鉛、ビスマス、タリウム、
+# > フランシウム、およびアスタチンの同位体である。ウラン連鎖の各元素の連続崩壊によって
+# > 生成されるウランのモデルは、ウランを親核種とするモデルを修正したものである（第15節参照）。
+# > トリウムの他の子孫核種のモデルとの整合性を図るため、脾臓、骨梁骨髄、皮質骨髄、精巣、卵巣、
+# > および皮膚を表す個々のコンパートメントが追加されている。追加された6つのコンパートメントは、
+# > ウランを親核種とするモデルの中期軟部組織コンパートメントST1から取得される。脾臓、
+# > 骨梁骨髄＋皮質骨髄（すなわち、骨髄全体）、精巣、卵巣、または皮膚へのウランの子孫核種としての
+# > 沈着量は、他の軟組織におけるウランの質量分率にST1の沈着率（セクション15で定義される
+# > 「循環系から離脱する」ウランの0.0665）を乗じて算出される。骨梁骨髄への沈着量は皮質骨髄への
+# > 沈着量の3倍と仮定する。血液から脾臓、骨梁骨髄、皮質骨髄、精巣、卵巣、および皮膚への導出される
+# > 移動係数は、それぞれ0.004 d⁻¹、0.075 d⁻¹、0.025 d⁻¹、0.001 d⁻¹、0.0003 d⁻¹、および0.09 d⁻¹である。
+# > 追加された各コンパートメントからの除去半減期は、ST1からの除去半減期と同じ20日と設定されます。
+# > ST1の沈着率は、追加された6つのコンパートメントの沈着率の合計によって減少します。
+# > ウランの特性モデルにおけるコンパートメントと識別できない軟組織コンパートメントで生成された
+# > ウランは、8.32 d⁻¹の速度で血漿に移行すると仮定されます。これは、ウランの特性モデルにおける
+# > 他の軟組織コンパートメントからの損失速度としては最高です。ウランモデルにおいて不明瞭な
+# > 骨体積コンパートメント（例えば、トリウムモデルにおける骨梁骨または皮質骨体積）で
+# > 生成されたウランは、非交換性骨で生成されると仮定されます。
+
+		# > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
+		# > thallium, francium, and astatine produced systemically by serial decay of members of
+		# > a thorium chain are the same as the models applied to these elements as progeny of
+		# > radium (see Section 13). The model for thorium as a radium progeny is applied to
+		# > protactinium as a thorium progeny based on the similar systemic behaviours of
+		# > protactinium and thorium in rats (Lanz et al., 1946; Schuppler et al., 1988;
+		# > Durbin, 2011). A radionuclide produced in a bone volume compartment that is
+		# > ambiguous with regard to the model for that element (e.g. radium produced in trabecular
+		# > or cortical bone volume in the thorium model) is assumed to be produced in
+		# > non-exchangeable bone.
+		# > (812) トリウム連鎖の各元素の連続崩壊によって体系的に生成されるアクチニウム、トリウム、
+		# > ラジウム、ラドン、ポロニウム、鉛、ビスマス、タリウム、フランシウム、およびアスタチンの
+		# > モデルは、ラジウムの子孫元素としてのこれらの元素に適用されるモデルと同じである（第13節参照）。
+		# > ラジウムの子孫元素としてのトリウムのモデルは、ラットにおけるプロトアクチニウムとトリウムの
+		# > 類似した全身的挙動に基づいて、トリウムの子孫元素としてのプロトアクチニウムにも適用される
+		# > （Lanz et al., 1946; Schuppler et al., 1988; Durbin, 2011）。骨の体積コンパートメントで
+		# > 生成される放射性核種のうち、その元素のモデルに関してあいまいなもの（例えば、トリウムモデルの
+		# > 骨梁骨または皮質骨の体積で生成されるラジウム）は、交換不可能な骨で生成されるものと想定されます。
