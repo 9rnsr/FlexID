@@ -70,8 +70,8 @@ Pu-239 Inhalation:Type-S
   acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   RenalTubules          Kidneys
-  acc   OtherKidneys          Kidneys
+  acc   Kidneys1              Kidneys       # Renal tubules
+  acc   Kidneys2              Kidneys       # Other kidney
   acc   Testes                Testes
   acc   Ovaries               Ovaries
   acc   ST0                   Other
@@ -225,8 +225,8 @@ Pu-239 Inhalation:Type-S
   Blood1                  T-bone-S                  1.2474E-1
   Blood1                  T-bone-V                  1.3860E-2
   Blood1                  UB-con                    1.5400E-2
-  Blood1                  RenalTubules              7.7000E-3
-  Blood1                  OtherKidneys              3.8500E-4
+  Blood1                  Kidneys1                  7.7000E-3
+  Blood1                  Kidneys2                  3.8500E-4
   Blood1                  RC-con                    1.1550E-2
   Blood1                  Testes                    2.6950E-4
   Blood1                  Ovaries                   0.8470E-4
@@ -236,8 +236,8 @@ Pu-239 Inhalation:Type-S
   Blood2                  UB-con                    3.5000E+0
   Blood2                  Blood1                    6.7550E+1
   Blood2                  ST0                       2.8950E+1
-  RenalTubules            UB-con                    1.7329E-2
-  OtherKidneys            Blood2                    1.2660E-4
+  Kidneys1                UB-con                    1.7329E-2
+  Kidneys2                Blood2                    1.2660E-4
   ST1                     Blood2                    1.3860E-3
   ST2                     Blood2                    1.2660E-4
   Liver0                  SI-conRe                  9.2420E-4
