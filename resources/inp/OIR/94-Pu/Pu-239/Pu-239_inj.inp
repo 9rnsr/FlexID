@@ -2,7 +2,7 @@
 Pu-239 Injection
 
 [nuclide]
-  Pu-239
+  Pu-239  U-235m  U-235
 
 
 [Pu-239:compartment]
@@ -114,3 +114,475 @@ Pu-239 Injection
   T-bone-V                T-marrow                  4.9300E-4
   C-marrow                Blood2                    7.6000E-3
   T-marrow                Blood2                    7.6000E-3
+
+
+# ICRP Publ.141 p.232 Para.561-566
+# > (561) Chain members addressed in the derivation of dose coefficients for the actinides
+# > addressed in this publication include isotopes of thallium, lead, bismuth, polonium,
+# > astatine, radon, francium, radium, actinium, thorium, protactinium, uranium,
+# > neptunium, plutonium, americium, curium, berkelium, californium, einsteinium, and
+# > fermium.
+# > (561) 本刊行物で扱うアクチニド元素の線量係数の導出で扱う連鎖メンバーには、タリウム、
+# > 鉛、ビスマス、ポロニウム、アスタチン、ラドン、フランシウム、ラジウム、アクチニウム、
+# > トリウム、プロトアクチニウム、ウラン、ネプツニウム、プルトニウム、アメリシウム、
+# > キュリウム、バークリウム、カリホルニウム、アインスタイニウム、およびフェルミウムの
+# > 同位体が含まれる。
+# > (562) The models applied here to thallium, lead, bismuth, polonium, and radium
+# > as actinide progeny are the models applied to these elements as progeny of radium
+# > [described in OIR Part 3 (ICRP, 2017)]. The model applied here to uranium as an
+# > actinide progeny is the model applied to uranium as a progeny of thorium [also
+# > described in OIR Part 3 (ICRP, 2017)].
+# > (562) ここでアクチニド子孫元素としてのタリウム、鉛、ビスマス、ポロニウム、および
+# > ラジウムに適用するモデルは、これらの元素をラジウムの子孫元素として適用するモデルである
+# > （OIRパート3（ICRP, 2017）に記載）。ここでアクチニド子孫核種としてのウランに適用されている
+# > モデルは、トリウムの子孫核種としてのウランに適用されているモデルと同じです
+# > （OIR Part 3 (ICRP, 2017) でも説明されています）。
+# ICRP Publ.141 p.235 Para.563
+# > (563) The model applied here to radon as an actinide progeny is a generic model
+# > applied in the OIR series to radon produced by radioactive decay in a systemic
+# > compartment. 
+# > (563) ここでアクチニド子孫核種としてのラドンに適用されているモデルは、OIR シリーズにおいて、
+# > 全身コンパートメントでの放射性崩壊によって生成されるラドンに適用されている一般的なモデルです。
+# > (564) Radioisotopes of francium and astatine appearing in actinide chains considered
+# > in this publication have short half-lives, and are assumed to decay at their site
+# > of production in systemic tissues or blood.
+# > (564) この刊行物で検討されているアクチニド連鎖中に存在するフランシウムとアスタチンの
+# > 放射性同位体は半減期が短く、全身の組織または血液中の生成部位で崩壊すると考えられます。
+# > (565) The model applied here to thorium as an actinide progeny is the model
+# > applied in OIR Part 3 (ICRP, 2017) to thorium as a progeny of radium.
+# > (565) ここでアクチニド子孫核種としてのトリウムに適用されたモデルは、OIR パート 3
+# > （ICRP、2017）でラジウムの子孫核種としてのトリウムに適用されたモデルである。
+# > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
+# > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
+# > progeny are modifications of their characteristic models described earlier in this
+# > section.
+# > (566)アクチニド子孫元素としてのアクチニウム、プロトアクチニウム、ネプツニウム、プルトニウム、
+# > アメリシウム、キュリウム、バークリウム、カリホルニウム、アインスタイニウム、およびフェルミウムに
+# > ここ​​で適用するモデルは、本節で前述したそれぞれの特性モデルを修正したものである。
+
+
+[U-235m:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissue
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+#    ICRP Publ.141 p.232 Para.561-562 / プルトニウム(アクチニド元素)子孫元素としてのウランは、トリウム子孫元素としてのモデルを用いる
+# → ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
+# > ... The model for uranium
+# > produced by serial decay of members of a uranium chain is a modification of the
+# > model for uranium as a parent radionuclide (see Section 15). Single compartments
+# > representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
+# > added for consistency with the models for other progeny of thorium.
+# > ... ウラン連鎖の各元素の連続崩壊によって
+# > 生成されるウランのモデルは、ウランを親核種とするモデルを修正したものである（第15節参照）。
+# > トリウムの他の子孫核種のモデルとの整合性を図るため、脾臓、骨梁骨髄、皮質骨髄、精巣、卵巣、
+# > および皮膚を表す個々のコンパートメントが追加されている。
+
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[U-235m:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.409 Table 15.2 / Ingested materials, Soluble forms
+  $fA_MaxValueOfIng = 0.02
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.415 Table 15.4
+  Plasma                  ST0                      10.5
+  Plasma                  RBC                       0.245
+  Plasma                  UB-con                   15.43
+  Plasma                  Kidneys1                  2.94
+  Plasma                  Kidneys2                  0.0122
+  Plasma                  RC-con                    0.122
+  Plasma                  Liver1                    0.367
+ #Plasma                  ST1                       1.63        # fix
+  Plasma                  ST2                       0.0735
+  Plasma                  T-bone-S                  2.04
+  Plasma                  C-bone-S                  1.63
+  ST0                     Plasma                    8.32
+  RBC                     Plasma                    0.347
+  Kidneys1                UB-con                    0.099
+  Kidneys2                Plasma                    0.00038
+  Liver1                  Plasma                    0.092
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.00019
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.000019
+  T-bone-S                Plasma                    0.0693
+  T-bone-S                Exch-T-bone-V             0.0693
+  C-bone-S                Plasma                    0.0693
+  C-bone-S                Exch-C-bone-V             0.0693
+  Noch-T-bone-V           Plasma                    0.000493    # Table 15.4では移行元が"Trabecular bone volume"
+  Noch-C-bone-V           Plasma                    0.0000821   # Table 15.4では移行元が"Cortical bone volume"
+  Exch-T-bone-V           T-bone-S                  0.0173
+  Exch-T-bone-V           Noch-T-bone-V             0.00578
+  Exch-C-bone-V           C-bone-S                  0.0173
+  Exch-C-bone-V           Noch-C-bone-V             0.00578
+
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
+# > ... The six added
+# > compartments are taken from the intermediate-term soft tissue compartment ST1 in
+# > the model for uranium as a parent. Deposition of uranium as a progeny in spleen,
+# > trabecular marrow + cortical marrow (i.e. total combined marrow), testes, ovaries,
+# > or skin is calculated as its mass fraction of other soft tissues times the deposition
+# > fraction for ST1 (0.0665 of uranium ‘leaving the circulation’, as defined in Section
+# > 15). Deposition in trabecular marrow is assumed to be three times greater than
+# > deposition in cortical marrow. The derived transfer cofficients from blood to
+# > spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are 0.004 d⁻¹,
+# > 0.075 d⁻¹, 0.025 d⁻¹, 0.001 d⁻¹, 0.0003 d⁻¹, and 0.09 d⁻¹, respectively. The removal
+# > half-time from each added compartment is set at 20 d, the removal half-time from
+# > ST1. The deposition fraction for ST1 is reduced by the sum of deposition fractions
+# > for the six added compartments. Uranium produced in a soft tissue compartment
+# > that is not identifiable with a compartment in the characteristic model for uranium is
+# > assumed to transfer to plasma at the rate 8.32 d⁻¹, the highest rate of loss from any
+# > compartment of other soft tissue in the characteristic model for uranium. Uranium
+# > produced in a bone volume compartment that is ambiguous with regard to the
+# > uranium model (e.g. trabecular or cortical bone volume in the thorium model) is
+# > assumed to be produced in non-exchangeable bone.
+# > ... 追加された6つのコンパートメントは、
+# > ウランを親核種とするモデルの中期軟部組織コンパートメントST1から取得される。脾臓、
+# > 骨梁骨髄＋皮質骨髄（すなわち、骨髄全体）、精巣、卵巣、または皮膚へのウランの子孫核種としての
+# > 沈着量は、他の軟組織におけるウランの質量分率にST1の沈着率（セクション15で定義される
+# > 「循環系から離脱する」ウランの0.0665）を乗じて算出される。骨梁骨髄への沈着量は皮質骨髄への
+# > 沈着量の3倍と仮定する。血液から脾臓、骨梁骨髄、皮質骨髄、精巣、卵巣、および皮膚への導出される
+# > 移動係数は、それぞれ0.004 d⁻¹、0.075 d⁻¹、0.025 d⁻¹、0.001 d⁻¹、0.0003 d⁻¹、および0.09 d⁻¹である。
+# > 追加された各コンパートメントからの除去半減期は、ST1からの除去半減期と同じ20日と設定されます。
+# > ST1の沈着率は、追加された6つのコンパートメントの沈着率の合計によって減少します。
+
+  Plasma                  ST1           $(1.63 - (0.004 + 0.075 + 0.025 + 0.001 + 0.003 + 0.09))
+  Plasma                  Spleen                    0.004
+  Plasma                  T-marrow                  0.075
+  Plasma                  C-marrow                  0.025
+  Plasma                  Testes                    0.001
+  Plasma                  Ovaries                   0.003
+  Plasma                  Skin                      0.09
+  C-marrow                Plasma                    0.0347      # 半減期20日
+  T-marrow                Plasma                    0.0347      # 半減期20日
+  Testes                  Plasma                    0.0347      # 半減期20日
+  Ovaries                 Plasma                    0.0347      # 半減期20日
+  Skin                    Plasma                    0.0347      # 半減期20日
+  Spleen                  Plasma                    0.0347      # 半減期20日
+
+# from parent to progeny
+  Pu-239/Oralcavity       U-235m/Oralcavity         ---
+  Pu-239/Oesophagus-f     U-235m/Oesophagus-f       ---
+  Pu-239/Oesophagus-s     U-235m/Oesophagus-s       ---
+  Pu-239/St-con           U-235m/St-con             ---
+  Pu-239/SI-con           U-235m/SI-con             ---
+  Pu-239/SI-conRe         U-235m/SI-conRe           ---
+  Pu-239/RC-con           U-235m/RC-con             ---
+  Pu-239/LC-con           U-235m/LC-con             ---
+  Pu-239/RS-con           U-235m/RS-con             ---
+  Pu-239/Faeces           U-235m/Faeces             ---
+  Pu-239/UB-con           U-235m/UB-con             ---
+  Pu-239/Urine            U-235m/Urine              ---
+
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
+# > ... Uranium produced in a soft tissue compartment
+# > that is not identifiable with a compartment in the characteristic model for uranium is
+# > assumed to transfer to plasma at the rate 8.32 d⁻¹, the highest rate of loss from any
+# > compartment of other soft tissue in the characteristic model for uranium. Uranium
+# > produced in a bone volume compartment that is ambiguous with regard to the
+# > uranium model (e.g. trabecular or cortical bone volume in the thorium model) is
+# > assumed to be produced in non-exchangeable bone.
+# > ウランの特性モデルにおけるコンパートメントと識別できない軟組織コンパートメントで生成された
+# > ウランは、8.32 d⁻¹の速度で血漿に移行すると仮定されます。これは、ウランの特性モデルにおける
+# > 他の軟組織コンパートメントからの損失速度としては最高です。ウランモデルにおいて不明瞭な
+# > 骨体積コンパートメント（例えば、トリウムモデルにおける骨梁骨または皮質骨体積）で
+# > 生成されたウランは、非交換性骨で生成されると仮定されます。
+
+  Pu-239/Blood0           U-235m/Plasma          1000       # 根拠不確定だが、Plasmaへの移行をデフォルトの移行速度で設定した
+  Pu-239/Blood1           U-235m/Plasma          1000       # 根拠不確定だが、Plasmaへの移行をデフォルトの移行速度で設定した
+  Pu-239/Blood2           U-235m/Plasma          1000       # 根拠不確定だが、Plasmaへの移行をデフォルトの移行速度で設定した
+
+  Pu-239/C-bone-S         U-235m/C-bone-S           ---
+  Pu-239/T-bone-S         U-235m/T-bone-S           ---
+  Pu-239/C-bone-V         U-235m/Noch-C-bone-V      ---
+  Pu-239/T-bone-V         U-235m/Noch-T-bone-V      ---
+  Pu-239/C-marrow         U-235m/C-marrow           ---
+  Pu-239/T-marrow         U-235m/T-marrow           ---
+
+  Pu-239/Liver0           U-235m/Plasma             8.32
+  Pu-239/Liver1           U-235m/Plasma             8.32
+  Pu-239/Liver2           U-235m/Plasma             8.32
+  Pu-239/Kidneys1         U-235m/Kidneys1           ---
+  Pu-239/Kidneys2         U-235m/Kidneys2           ---
+  Pu-239/Testes           U-235m/Testes             ---
+  Pu-239/Ovaries          U-235m/Ovaries            ---
+  Pu-239/ST0              U-235m/Plasma             8.32
+  Pu-239/ST1              U-235m/Plasma             8.32
+  Pu-239/ST2              U-235m/Plasma             8.32
+
+
+[U-235:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissue
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+#    ICRP Publ.141 p.232 Para.561-562 / プルトニウム(アクチニド元素)子孫元素としてのウランは、トリウム子孫元素としてのモデルを用いる
+# → ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
+# > ... The model for uranium
+# > produced by serial decay of members of a uranium chain is a modification of the
+# > model for uranium as a parent radionuclide (see Section 15). Single compartments
+# > representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
+# > added for consistency with the models for other progeny of thorium.
+# > ... ウラン連鎖の各元素の連続崩壊によって
+# > 生成されるウランのモデルは、ウランを親核種とするモデルを修正したものである（第15節参照）。
+# > トリウムの他の子孫核種のモデルとの整合性を図るため、脾臓、骨梁骨髄、皮質骨髄、精巣、卵巣、
+# > および皮膚を表す個々のコンパートメントが追加されている。
+
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[U-235:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.409 Table 15.2 / Ingested materials, Soluble forms
+  $fA_MaxValueOfIng = 0.02
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.415 Table 15.4
+  Plasma                  ST0                      10.5
+  Plasma                  RBC                       0.245
+  Plasma                  UB-con                   15.43
+  Plasma                  Kidneys1                  2.94
+  Plasma                  Kidneys2                  0.0122
+  Plasma                  RC-con                    0.122
+  Plasma                  Liver1                    0.367
+ #Plasma                  ST1                       1.63        # fix
+  Plasma                  ST2                       0.0735
+  Plasma                  T-bone-S                  2.04
+  Plasma                  C-bone-S                  1.63
+  ST0                     Plasma                    8.32
+  RBC                     Plasma                    0.347
+  Kidneys1                UB-con                    0.099
+  Kidneys2                Plasma                    0.00038
+  Liver1                  Plasma                    0.092
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.00019
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.000019
+  T-bone-S                Plasma                    0.0693
+  T-bone-S                Exch-T-bone-V             0.0693
+  C-bone-S                Plasma                    0.0693
+  C-bone-S                Exch-C-bone-V             0.0693
+  Noch-T-bone-V           Plasma                    0.000493    # Table 15.4では移行元が"Trabecular bone volume"
+  Noch-C-bone-V           Plasma                    0.0000821   # Table 15.4では移行元が"Cortical bone volume"
+  Exch-T-bone-V           T-bone-S                  0.0173
+  Exch-T-bone-V           Noch-T-bone-V             0.00578
+  Exch-C-bone-V           C-bone-S                  0.0173
+  Exch-C-bone-V           Noch-C-bone-V             0.00578
+
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
+# > ... The six added
+# > compartments are taken from the intermediate-term soft tissue compartment ST1 in
+# > the model for uranium as a parent. Deposition of uranium as a progeny in spleen,
+# > trabecular marrow + cortical marrow (i.e. total combined marrow), testes, ovaries,
+# > or skin is calculated as its mass fraction of other soft tissues times the deposition
+# > fraction for ST1 (0.0665 of uranium ‘leaving the circulation’, as defined in Section
+# > 15). Deposition in trabecular marrow is assumed to be three times greater than
+# > deposition in cortical marrow. The derived transfer cofficients from blood to
+# > spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are 0.004 d⁻¹,
+# > 0.075 d⁻¹, 0.025 d⁻¹, 0.001 d⁻¹, 0.0003 d⁻¹, and 0.09 d⁻¹, respectively. The removal
+# > half-time from each added compartment is set at 20 d, the removal half-time from
+# > ST1. The deposition fraction for ST1 is reduced by the sum of deposition fractions
+# > for the six added compartments. Uranium produced in a soft tissue compartment
+# > that is not identifiable with a compartment in the characteristic model for uranium is
+# > assumed to transfer to plasma at the rate 8.32 d⁻¹, the highest rate of loss from any
+# > compartment of other soft tissue in the characteristic model for uranium. Uranium
+# > produced in a bone volume compartment that is ambiguous with regard to the
+# > uranium model (e.g. trabecular or cortical bone volume in the thorium model) is
+# > assumed to be produced in non-exchangeable bone.
+# > ... 追加された6つのコンパートメントは、
+# > ウランを親核種とするモデルの中期軟部組織コンパートメントST1から取得される。脾臓、
+# > 骨梁骨髄＋皮質骨髄（すなわち、骨髄全体）、精巣、卵巣、または皮膚へのウランの子孫核種としての
+# > 沈着量は、他の軟組織におけるウランの質量分率にST1の沈着率（セクション15で定義される
+# > 「循環系から離脱する」ウランの0.0665）を乗じて算出される。骨梁骨髄への沈着量は皮質骨髄への
+# > 沈着量の3倍と仮定する。血液から脾臓、骨梁骨髄、皮質骨髄、精巣、卵巣、および皮膚への導出される
+# > 移動係数は、それぞれ0.004 d⁻¹、0.075 d⁻¹、0.025 d⁻¹、0.001 d⁻¹、0.0003 d⁻¹、および0.09 d⁻¹である。
+# > 追加された各コンパートメントからの除去半減期は、ST1からの除去半減期と同じ20日と設定されます。
+# > ST1の沈着率は、追加された6つのコンパートメントの沈着率の合計によって減少します。
+
+  Plasma                  ST1           $(1.63 - (0.004 + 0.075 + 0.025 + 0.001 + 0.003 + 0.09))
+  Plasma                  Spleen                    0.004
+  Plasma                  T-marrow                  0.075
+  Plasma                  C-marrow                  0.025
+  Plasma                  Testes                    0.001
+  Plasma                  Ovaries                   0.003
+  Plasma                  Skin                      0.09
+  C-marrow                Plasma                    0.0347      # 半減期20日
+  T-marrow                Plasma                    0.0347      # 半減期20日
+  Testes                  Plasma                    0.0347      # 半減期20日
+  Ovaries                 Plasma                    0.0347      # 半減期20日
+  Skin                    Plasma                    0.0347      # 半減期20日
+  Spleen                  Plasma                    0.0347      # 半減期20日
+
+# from parent to progeny
+  Pu-239/Oralcavity       U-235/Oralcavity          ---
+  Pu-239/Oesophagus-f     U-235/Oesophagus-f        ---
+  Pu-239/Oesophagus-s     U-235/Oesophagus-s        ---
+  Pu-239/St-con           U-235/St-con              ---
+  Pu-239/SI-con           U-235/SI-con              ---
+  Pu-239/SI-conRe         U-235/SI-conRe            ---
+  Pu-239/RC-con           U-235/RC-con              ---
+  Pu-239/LC-con           U-235/LC-con              ---
+  Pu-239/RS-con           U-235/RS-con              ---
+  Pu-239/Faeces           U-235/Faeces              ---
+  Pu-239/UB-con           U-235/UB-con              ---
+  Pu-239/Urine            U-235/Urine               ---
+
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
+# > ... Uranium produced in a soft tissue compartment
+# > that is not identifiable with a compartment in the characteristic model for uranium is
+# > assumed to transfer to plasma at the rate 8.32 d⁻¹, the highest rate of loss from any
+# > compartment of other soft tissue in the characteristic model for uranium. Uranium
+# > produced in a bone volume compartment that is ambiguous with regard to the
+# > uranium model (e.g. trabecular or cortical bone volume in the thorium model) is
+# > assumed to be produced in non-exchangeable bone.
+# > ウランの特性モデルにおけるコンパートメントと識別できない軟組織コンパートメントで生成された
+# > ウランは、8.32 d⁻¹の速度で血漿に移行すると仮定されます。これは、ウランの特性モデルにおける
+# > 他の軟組織コンパートメントからの損失速度としては最高です。ウランモデルにおいて不明瞭な
+# > 骨体積コンパートメント（例えば、トリウムモデルにおける骨梁骨または皮質骨体積）で
+# > 生成されたウランは、非交換性骨で生成されると仮定されます。
+
+  Pu-239/Blood0           U-235/Plasma           1000       # 根拠不確定だが、Plasmaへの移行をデフォルトの移行速度で設定した
+  Pu-239/Blood1           U-235/Plasma           1000       # 根拠不確定だが、Plasmaへの移行をデフォルトの移行速度で設定した
+  Pu-239/Blood2           U-235/Plasma           1000       # 根拠不確定だが、Plasmaへの移行をデフォルトの移行速度で設定した
+  U-235m/Plasma           U-235/Plasma              ---
+  U-235m/RBC              U-235/RBC                 ---
+
+  Pu-239/C-bone-S         U-235/C-bone-S            ---
+  Pu-239/T-bone-S         U-235/T-bone-S            ---
+  Pu-239/C-bone-V         U-235/Noch-C-bone-V       ---     # U-235mのNoch-C-bone-Vを経由する
+  Pu-239/T-bone-V         U-235/Noch-T-bone-V       ---     # U-235mのNoch-T-bone-Vを経由する
+  U-235m/Exch-C-bone-V    U-235/Exch-C-bone-V       ---
+  U-235m/Exch-T-bone-V    U-235/Exch-T-bone-V       ---
+  Pu-239/C-marrow         U-235/C-marrow            ---
+  Pu-239/T-marrow         U-235/T-marrow            ---
+
+  Pu-239/Liver0           U-235/Plasma              8.32
+  Pu-239/Liver1           U-235/Plasma              8.32
+  Pu-239/Liver2           U-235/Plasma              8.32
+  U-235m/Liver1           U-235/Liver1              ---
+  U-235m/Liver2           U-235/Liver2              ---
+  Pu-239/Kidneys1         U-235/Kidneys1            ---
+  Pu-239/Kidneys2         U-235/Kidneys2            ---
+  Pu-239/Testes           U-235/Testes              ---
+  Pu-239/Ovaries          U-235/Ovaries             ---
+  Pu-239/ST0              U-235/Plasma              8.32
+  Pu-239/ST1              U-235/Plasma              8.32
+  Pu-239/ST2              U-235/Plasma              8.32
+  U-235m/ST0              U-235/ST0                 ---
+  U-235m/ST1              U-235/ST1                 ---
+  U-235m/ST2              U-235/ST2                 ---
