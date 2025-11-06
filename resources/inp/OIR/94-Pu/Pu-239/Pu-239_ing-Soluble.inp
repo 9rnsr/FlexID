@@ -2,7 +2,7 @@
 Pu-239 Ingestion:Soluble
 
 [nuclide]
-  Pu-239  U-235m  U-235
+  Pu-239  U-235m  U-235  Th-231
 
 
 [Pu-239:compartment]
@@ -586,3 +586,203 @@ Pu-239 Ingestion:Soluble
   U-235m/ST0              U-235/ST0                 ---
   U-235m/ST1              U-235/ST1                 ---
   U-235m/ST2              U-235/ST2                 ---
+
+
+#    ICRP Publ.141 p.235 Para.565 / プルトニウム(アクチニド元素)子孫核種としてのトリウムは、ラジウム子孫元素としてのモデルを用いる
+# → ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのトリウム
+
+[Th-231:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Liver1                Liver         # hepatocytes
+  acc   Liver2                Liver         # reticulo-endothelial cells
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+#    ICRP Publ.141 p.235 Para.565 / プルトニウム(アクチニド元素)子孫核種としてのトリウムは、ラジウム子孫元素としてのモデルを用いる
+# → ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) The model for thorium as a progeny of radium is a modification of the systemic
+# > model applied in this publication to thorium as a parent radionuclide. Two
+# > compartments, one representing spleen and the other representing skin, are added to
+# > that model.
+# > (715) ラジウムの子孫核種としてのトリウムのモデルは、本論文でトリウムを親核種として
+# > 適用した全身モデルを修正したものである。このモデルには、脾臓と皮膚を表す2つの
+# > コンパートメントが追加されている。
+
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[Th-231:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.137 p.362 Table 14.2 / Ingested materials, All forms
+  $fA_MaxValueOfIng = 5E-4
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.137 p.368 Table 14.3
+  Blood                   Liver1                    0.097
+  Blood                   C-bone-S                  0.6793
+  Blood                   T-bone-S                  0.6793
+  Blood                   UB-con                    0.1067
+  Blood                   Kidneys1                  0.0679
+  Blood                   Kidneys2                  0.0194
+  Blood                   RC-con                    0.0097
+  Blood                   Testes                    0.00068
+  Blood                   Ovaries                   0.00021
+  Blood                   ST0                       0.832
+ #Blood                   ST1                       0.243       # fix
+  Blood                   ST2                       0.0388
+  Liver1                  Blood                     0.000475
+  Liver1                  Liver2                    0.00095
+  Liver1                  SI-conRe                  0.000475
+  C-bone-S                C-marrow                  0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  T-bone-S                T-marrow                  0.000493
+  T-bone-S                T-bone-V                  0.000247
+  Kidneys1                UB-con                    0.0462
+  Kidneys2                Blood                     0.00038
+  Testes                  Blood                     0.00038
+  Ovaries                 Blood                     0.00038
+  ST0                     Blood                     0.462
+  ST1                     Blood                     0.00095
+  ST2                     Blood                     0.000019
+  Liver2                  Blood                     0.000211
+  C-marrow                Blood                     0.0076
+  C-bone-V                C-marrow                  0.0000821
+  T-marrow                Blood                     0.0076
+  T-bone-V                T-marrow                  0.000493
+
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) ... Spleen and skin are assumed to exchange thorium with blood. Parameter
+# > values for these compartments are based on limited data from animal studies and
+# > human autopsy studies (Stover et al., 1960; Thomas et al., 1963; Larsen et al., 1984;
+# > Singh et al., 1983; Stehney and Lucas, 2000; Glover et al., 2001). Spleen and skin are
+# > assumed to receive 0.5% and 2%, respectively, of thorium ‘leaving the circulation’ as
+# > defined in Section 14. The transfer coefficient from blood to the intermediate-term soft
+# > tissue compartment ST1 (Fig. 14.2) is reduced to maintain the original removal halftime
+# > from blood. The assumed removal half-time from spleen and skin to blood is 2 y,
+# > the same as the removal half-time from ST1 to blood.
+# > (715) ... 脾臓と皮膚はトリウムを血液と交換すると仮定されている。
+# > これらのコンパートメントのパラメータ値は、動物実験およびヒト剖検研究から得られた
+# > 限られたデータに基づいている（Stover et al., 1960; Thomas et al., 1963; Larsen et al.,
+# > 1984; Singh et al., 1983; Stehney and Lucas, 2000; Glover et al., 2001）。
+# > 脾臓と皮膚は、第 14 節で定義される「循環系から排出される」トリウムのそれぞれ 0.5% と 2% を
+# > 受け取ると仮定する。血液から中間期の軟部組織コンパートメント ST1 への移行係数（図 14.2）は、
+# > 血液からの元の除去半減期を維持するために低減される。脾臓および皮膚から血液への
+# > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じである。
+
+  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
+  Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
+  Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
+  Spleen                  Blood                 $(0.693 / 2/365.25)
+  Skin                    Blood                 $(0.693 / 2/365.25)
+
+# from parent to progeny
+  Pu-239/Oralcavity       Th-231/Oralcavity         ---
+  Pu-239/Oesophagus-f     Th-231/Oesophagus-f       ---
+  Pu-239/Oesophagus-s     Th-231/Oesophagus-s       ---
+  Pu-239/St-con           Th-231/St-con             ---
+  Pu-239/SI-con           Th-231/SI-con             ---
+  Pu-239/SI-conRe         Th-231/SI-conRe           ---
+  Pu-239/RC-con           Th-231/RC-con             ---
+  Pu-239/LC-con           Th-231/LC-con             ---
+  Pu-239/RS-con           Th-231/RS-con             ---
+  Pu-239/Faeces           Th-231/Faeces             ---
+  Pu-239/UB-con           Th-231/UB-con             ---
+  Pu-239/Urine            Th-231/Urine              ---
+
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) ... Thorium produced in a compartment
+# > of a preceding chain member that is not identifiable with a compartment in
+# > the thorium model is assumed to transfer to the blood compartment of the thorium
+# > model at the following rate: 1000 d⁻¹ if produced in a blood compartment; 0.462 d⁻¹ if
+# > produced in a soft tissue compartment (the highest rate of removal from a compartment
+# > of other soft tissues in the thorium model); and at the rate of bone turnover if
+# > produced in an exchangeable bone volume compartment.
+# > (715) ... トリウムモデル内のコンパートメントと識別できない先行する連鎖メンバーのコンパートメントで
+# > 生成されたトリウムは、トリウムモデルの血液コンパートメントに以下の速度で移行すると仮定する。
+# > 血液コンパートメントで生成された場合は 1000 d⁻¹、軟部組織コンパートメントで生成された
+# > 場合は 0.462 d⁻¹（トリウムモデルにおける他の軟部組織のコンパートメントからの除去速度が
+# > 最も高い）。交換可能な骨体積コンパートメントで生成された場合は骨代謝速度です。
+
+  Pu-239/Blood0           Th-231/Blood              ---
+  Pu-239/Blood1           Th-231/Blood              ---
+  Pu-239/Blood2           Th-231/Blood              ---
+  U-235m/Plasma           Th-231/Blood           1000
+  U-235m/RBC              Th-231/Blood           1000
+
+  Pu-239/C-bone-S         Th-231/C-bone-S           ---
+  Pu-239/T-bone-S         Th-231/T-bone-S           ---
+  Pu-239/C-bone-V         Th-231/C-bone-V           ---     # U-235,U-235mのNoch-C-bone-Vを経由する
+  Pu-239/T-bone-V         Th-231/T-bone-V           ---     # U-235,U-235mのNoch-T-bone-Vを経由する
+  U-235m/Exch-C-bone-V    Th-231/Blood          $(0.03 / 365.25)
+  U-235m/Exch-T-bone-V    Th-231/Blood          $(0.18 / 365.25)
+  Pu-239/C-marrow         Th-231/C-marrow           ---
+  Pu-239/T-marrow         Th-231/T-marrow           ---
+
+  Pu-239/Liver0           Th-231/Blood              0.462
+  Pu-239/Liver1           Th-231/Blood              0.462
+  Pu-239/Liver2           Th-231/Blood              0.462
+  U-235m/Liver1           Th-231/Liver1             ---
+  U-235m/Liver2           Th-231/Liver2             ---
+  Pu-239/Kidneys1         Th-231/Kidneys1           ---
+  Pu-239/Kidneys2         Th-231/Kidneys2           ---
+  Pu-239/Testes           Th-231/Testes             ---
+  Pu-239/Ovaries          Th-231/Ovaries            ---
+  U-235m/Skin             Th-231/Skin               ---
+  U-235m/Spleen           Th-231/Spleen             ---
+  Pu-239/ST0              Th-231/Blood              0.462
+  Pu-239/ST1              Th-231/Blood              0.462
+  Pu-239/ST2              Th-231/Blood              0.462
+  U-235m/ST0              Th-231/Blood              0.462
+  U-235m/ST1              Th-231/Blood              0.462
+  U-235m/ST2              Th-231/Blood              0.462
