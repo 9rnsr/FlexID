@@ -2,7 +2,7 @@
 Pu-239 Inhalation:Type-M
 
 [nuclide]
-  Pu-239  U-235m  U-235  Th-231  Pa-231  Ac-227  Th-227
+  Pu-239  U-235m  U-235  Th-231  Pa-231  Ac-227  Th-227  Fr-223
 
 
 [Pu-239:compartment]
@@ -2464,3 +2464,161 @@ Pu-239 Inhalation:Type-M
   Ac-227/ST0              Th-227/Blood              0.462
   Ac-227/ST1              Th-227/Blood              0.462
   Ac-227/ST2              Th-227/Blood              0.462
+
+
+# ICRP Publ.141 p.235 Para.564
+# > (564) Radioisotopes of francium and astatine appearing in actinide chains considered
+# > in this publication have short half-lives, and are assumed to decay at their site
+# > of production in systemic tissues or blood.
+# > (564) この刊行物で検討されているアクチニド連鎖中に存在するフランシウムとアスタチンの
+# > 放射性同位体は半減期が短く、全身の組織または血液中の生成部位で崩壊すると考えられます。
+
+[Fr-223:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-bnd
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-b
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-b
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+# 親核種Ac-227で明示された線源領域毎にコンパートメントを用意する
+
+  acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+  acc   ST                    Other
+
+[Fr-223:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d or %]
+#-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Pu-239/ET1-F            Fr-223/ET1-F              ---
+  Pu-239/ET2-F            Fr-223/ET2-F              ---
+  Pu-239/ETseq-F          Fr-223/ETseq-F            ---
+  Pu-239/LNET-F           Fr-223/LNET-F             ---
+  Pu-239/BB-F             Fr-223/BB-F               ---
+  Pu-239/BBseq-F          Fr-223/BBseq-F            ---
+  Pu-239/bb-F             Fr-223/bb-F               ---
+  Pu-239/bbseq-F          Fr-223/bbseq-F            ---
+  Pu-239/ALV-F            Fr-223/ALV-F              ---
+  Pu-239/INT-F            Fr-223/INT-F              ---
+  Pu-239/LNTH-F           Fr-223/LNTH-F             ---
+  Pu-239/ET1-S            Fr-223/ET1-S              ---
+  Pu-239/ET2-S            Fr-223/ET2-S              ---
+  Pu-239/ETseq-S          Fr-223/ETseq-S            ---
+  Pu-239/LNET-S           Fr-223/LNET-S             ---
+  Pu-239/BB-S             Fr-223/BB-S               ---
+  Pu-239/BBseq-S          Fr-223/BBseq-S            ---
+  Pu-239/bb-S             Fr-223/bb-S               ---
+  Pu-239/bbseq-S          Fr-223/bbseq-S            ---
+  Pu-239/ALV-S            Fr-223/ALV-S              ---
+  Pu-239/INT-S            Fr-223/INT-S              ---
+  Pu-239/LNTH-S           Fr-223/LNTH-S             ---
+  Pu-239/ET2-B            Fr-223/ET2-B              ---
+  Pu-239/ETseq-B          Fr-223/ETseq-B            ---
+  Pu-239/LNET-B           Fr-223/LNET-B             ---
+  Pu-239/BB-B             Fr-223/BB-B               ---
+  Pu-239/BBseq-B          Fr-223/BBseq-B            ---
+  Pu-239/bb-B             Fr-223/bb-B               ---
+  Pu-239/bbseq-B          Fr-223/bbseq-B            ---
+  Pu-239/ALV-B            Fr-223/ALV-B              ---
+  Pu-239/INT-B            Fr-223/INT-B              ---
+  Pu-239/LNTH-B           Fr-223/LNTH-B             ---
+  Pu-239/Environment      Fr-223/Environment        ---
+
+  Pu-239/Oralcavity       Fr-223/Oralcavity         ---
+  Pu-239/Oesophagus-f     Fr-223/Oesophagus-f       ---
+  Pu-239/Oesophagus-s     Fr-223/Oesophagus-s       ---
+  Pu-239/St-con           Fr-223/St-con             ---
+  Pu-239/SI-con           Fr-223/SI-con             ---
+  Pu-239/SI-conRe         Fr-223/SI-conRe           ---
+  Pu-239/RC-con           Fr-223/RC-con             ---
+  Pu-239/LC-con           Fr-223/LC-con             ---
+  Pu-239/RS-con           Fr-223/RS-con             ---
+  Pu-239/Faeces           Fr-223/Faeces             ---
+  Pu-239/UB-con           Fr-223/UB-con             ---
+  Pu-239/Urine            Fr-223/Urine              ---
+
+  Pu-239/Blood0           Fr-223/Blood              ---
+  Pu-239/Blood1           Fr-223/Blood              ---
+  Pu-239/Blood2           Fr-223/Blood              ---
+  U-235m/Plasma           Fr-223/Blood              ---
+  U-235m/RBC              Fr-223/Blood              ---
+  Th-231/Blood            Fr-223/Blood              ---
+
+  Pu-239/C-bone-S         Fr-223/C-bone-S           ---
+  Pu-239/T-bone-S         Fr-223/T-bone-S           ---
+  Pu-239/C-bone-V         Fr-223/C-bone-V           ---
+  Pu-239/T-bone-V         Fr-223/T-bone-V           ---
+  U-235m/Exch-C-bone-V    Fr-223/C-bone-V           ---
+  U-235m/Exch-T-bone-V    Fr-223/T-bone-V           ---
+  Pu-239/C-marrow         Fr-223/C-marrow           ---
+  Pu-239/T-marrow         Fr-223/T-marrow           ---
+
+  Pu-239/Liver0           Fr-223/Liver              ---
+  Pu-239/Liver1           Fr-223/Liver              ---
+  Pu-239/Liver2           Fr-223/Liver              ---
+  U-235m/Liver1           Fr-223/Liver              ---
+  U-235m/Liver2           Fr-223/Liver              ---
+  Pu-239/Kidneys1         Fr-223/Kidneys            ---
+  Pu-239/Kidneys2         Fr-223/Kidneys            ---
+  Pu-239/Testes           Fr-223/Testes             ---
+  Pu-239/Ovaries          Fr-223/Ovaries            ---
+  U-235m/Skin             Fr-223/Skin               ---
+  U-235m/Spleen           Fr-223/Spleen             ---
+  Pu-239/ST0              Fr-223/ST                 ---
