@@ -6,7 +6,8 @@
 
 [parameter]
 $if parent
-  ${Ra}/fA = 0.2            # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
+  ${Ra}/fA    = 0.2         # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
+  ${Ra}/fA_Re = 0.2         # footnote¶
 $endif
 
 
@@ -28,6 +29,7 @@ $endif
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -62,12 +64,14 @@ $endif
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
