@@ -34,13 +34,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -296,13 +296,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -643,13 +643,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -982,13 +982,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -1328,13 +1328,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -1660,13 +1660,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -1920,13 +1920,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -2276,13 +2276,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -2688,13 +2688,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -3078,13 +3078,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
@@ -3445,13 +3445,13 @@ Th-232 Inhalation:Type-F
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-sur
+  acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
   acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-q
+  acc   BBseq-B               Bronchi-b
   acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-q
+  acc   bbseq-B               Brchiole-b
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
