@@ -9,11 +9,12 @@
   $fr = 0.01
   $sr = 3
   $ss = 1E-4
-  $fb = 0                   # footnote*
-  $sb = 0                   # footnote*
+  $fb = 0.0         # footnote*
+  $sb = 0           # footnote*
 
 $if parent
-  ${Ra}/fA = 0.002          # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type S
+  ${Ra}/fA    = 0.002       # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type S
+  ${Ra}/fA_Re = 0.2         # footnote¶
 $else
   ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
 
@@ -93,6 +94,7 @@ $endif
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -210,12 +212,14 @@ $endif
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
@@ -509,6 +513,7 @@ $endif
   Ra-228/Oesophagus-s     Oesophagus-s              ---
   Ra-228/St-con           St-con                    ---
   Ra-228/SI-con           SI-con                    ---
+  Ra-228/SI-conRe         SI-conRe                  ---
   Ra-228/RC-con           RC-con                    ---
   Ra-228/LC-con           LC-con                    ---
   Ra-228/RS-con           RS-con                    ---
