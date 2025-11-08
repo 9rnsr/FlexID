@@ -16,6 +16,7 @@ Ra-230 Ingestion
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -44,7 +45,8 @@ Ra-230 Ingestion
 #-----------------------+---------------------+--------------
 
 # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
-  $fA = 0.2
+  $fA    = 0.2
+  $fA_Re = 0.2      # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   input                   Oralcavity              100.0%
@@ -56,12 +58,14 @@ Ra-230 Ingestion
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12

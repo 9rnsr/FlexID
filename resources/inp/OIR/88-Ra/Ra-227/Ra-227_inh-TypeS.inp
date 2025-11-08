@@ -33,6 +33,16 @@ Ra-227 Inhalation:Type-S
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+  acc   ET2-B                 ET2-bnd
+  acc   ETseq-B               ET2-seq
+  acc   LNET-B                LN-ET
+  acc   BB-B                  Bronchi
+  acc   BBseq-B               Bronchi-b
+  acc   bb-B                  Brchiole
+  acc   bbseq-B               Brchiole-b
+  acc   ALV-B                 ALV
+  acc   INT-B                 ALV
+  acc   LNTH-B                LN-Th
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
@@ -40,6 +50,7 @@ Ra-227 Inhalation:Type-S
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -71,7 +82,10 @@ Ra-227 Inhalation:Type-S
   $fr = 0.01
   $sr = 3
   $ss = 1E-4
-  $fA = 0.002
+  $fb = 0.0         # footnote*
+  $sb = 0           # footnote*
+  $fA    = 0.002
+  $fA_Re = 0.2      # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -121,27 +135,62 @@ Ra-227 Inhalation:Type-S
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-  ALV-F                   Blood                 $sr
-  INT-F                   Blood                 $sr
-  bb-F                    Blood                 $sr
-  bbseq-F                 Blood                 $sr
-  BB-F                    Blood                 $sr
-  BBseq-F                 Blood                 $sr
-  ET2-F                   Blood                 $sr
-  ETseq-F                 Blood                 $sr
-  LNET-F                  Blood                 $sr
-  LNTH-F                  Blood                 $sr
+# ICRP Publ.130 p.67 Fig.3.5(a)
+# ICRP Publ.130 p.68 Para.107
+  ALV-F                   ALV-B                 $(      fb  * sr )
+  INT-F                   INT-B                 $(      fb  * sr )
+  bb-F                    bb-B                  $(      fb  * sr )
+  bbseq-F                 bbseq-B               $(      fb  * sr )
+  BB-F                    BB-B                  $(      fb  * sr )
+  BBseq-F                 BBseq-B               $(      fb  * sr )
+  ET2-F                   ET2-B                 $(      fb  * sr )
+  ETseq-F                 ETseq-B               $(      fb  * sr )
+  LNET-F                  LNET-B                $(      fb  * sr )
+  LNTH-F                  LNTH-B                $(      fb  * sr )
 
-  ALV-S                   Blood                 $ss
-  INT-S                   Blood                 $ss
-  bb-S                    Blood                 $ss
-  bbseq-S                 Blood                 $ss
-  BB-S                    Blood                 $ss
-  BBseq-S                 Blood                 $ss
-  ET2-S                   Blood                 $ss
-  ETseq-S                 Blood                 $ss
-  LNET-S                  Blood                 $ss
-  LNTH-S                  Blood                 $ss
+  ALV-S                   ALV-B                 $(      fb  * ss )
+  INT-S                   INT-B                 $(      fb  * ss )
+  bb-S                    bb-B                  $(      fb  * ss )
+  bbseq-S                 bbseq-B               $(      fb  * ss )
+  BB-S                    BB-B                  $(      fb  * ss )
+  BBseq-S                 BBseq-B               $(      fb  * ss )
+  ET2-S                   ET2-B                 $(      fb  * ss )
+  ETseq-S                 ETseq-B               $(      fb  * ss )
+  LNET-S                  LNET-B                $(      fb  * ss )
+  LNTH-S                  LNTH-B                $(      fb  * ss )
+
+  ALV-F                   Blood                 $( (1 - fb) * sr )
+  INT-F                   Blood                 $( (1 - fb) * sr )
+  bb-F                    Blood                 $( (1 - fb) * sr )
+  bbseq-F                 Blood                 $( (1 - fb) * sr )
+  BB-F                    Blood                 $( (1 - fb) * sr )
+  BBseq-F                 Blood                 $( (1 - fb) * sr )
+  ET2-F                   Blood                 $( (1 - fb) * sr )
+  ETseq-F                 Blood                 $( (1 - fb) * sr )
+  LNET-F                  Blood                 $( (1 - fb) * sr )
+  LNTH-F                  Blood                 $( (1 - fb) * sr )
+
+  ALV-S                   Blood                 $( (1 - fb) * ss )
+  INT-S                   Blood                 $( (1 - fb) * ss )
+  bb-S                    Blood                 $( (1 - fb) * ss )
+  bbseq-S                 Blood                 $( (1 - fb) * ss )
+  BB-S                    Blood                 $( (1 - fb) * ss )
+  BBseq-S                 Blood                 $( (1 - fb) * ss )
+  ET2-S                   Blood                 $( (1 - fb) * ss )
+  ETseq-S                 Blood                 $( (1 - fb) * ss )
+  LNET-S                  Blood                 $( (1 - fb) * ss )
+  LNTH-S                  Blood                 $( (1 - fb) * ss )
+
+  ALV-B                   Blood                 $sb
+  INT-B                   Blood                 $sb
+  bb-B                    Blood                 $sb
+  bbseq-B                 Blood                 $sb
+  BB-B                    Blood                 $sb
+  BBseq-B                 Blood                 $sb
+  ET2-B                   Blood                 $sb
+  ETseq-B                 Blood                 $sb
+  LNET-B                  Blood                 $sb
+  LNTH-B                  Blood                 $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -150,12 +199,14 @@ Ra-227 Inhalation:Type-S
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood                 $(fA * 6 / (1 - fA))
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
