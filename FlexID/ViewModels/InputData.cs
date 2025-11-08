@@ -94,7 +94,7 @@ public class InputData
             try
             {
                 var reader = new InputDataReader_OIR(inputFile);
-                data = reader.Read();
+                data = reader.ReadRough();
             }
             catch
             {
