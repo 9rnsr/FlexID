@@ -97,6 +97,51 @@ public class InputDataReader_OIR : InputDataReaderBase
         }
     }
 
+    public InputData ReadRough()
+    {
+        var line = GetNextLine();
+        if (line is null)
+            throw Program.Error("Reach to EOF while reading input file.");
+
+        while (true)
+        {
+            var header = GetSectionHeader(line);
+
+            Span<char> buffer = stackalloc char[header.Length];
+            for (int i = 0; i < header.Length; i++)
+                buffer[i] = char.ToLowerInvariant(header[i]);
+
+            if (buffer.SequenceEqual("title".AsSpan()))
+            {
+                line = GetTitle();
+            }
+            else if (buffer.SequenceEqual("nuclide".AsSpan()))
+            {
+                line = GetNuclides();
+            }
+            else
+            {
+                SkipUntilNextSection();
+            }
+
+            if (line is null)
+                break;
+
+            if (inputTitle != null && nuclides != null)
+                break;
+        }
+
+        // インプットの構文に従って読み取りができていることを確定する。
+        // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
+        errors.RaiseIfAny();
+
+        var data = new InputData();
+        data.Title = inputTitle;
+        data.Nuclides.AddRange(nuclides);
+
+        return data;
+    }
+
     /// <summary>
     /// インプットファイルを読み込む。
     /// </summary>

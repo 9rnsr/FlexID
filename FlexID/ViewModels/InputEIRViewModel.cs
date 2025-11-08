@@ -62,6 +62,8 @@ public class InputEIRViewModel : BindableBase
 
     public ReactiveCommandSlim SelectOutTimeMeshFilePathCommand { get; }
 
+    public AsyncReactiveCommand LoadedCommand { get; }
+
     public AsyncReactiveCommand RunCommand { get; }
 
     /// <summary>
@@ -75,38 +77,6 @@ public class InputEIRViewModel : BindableBase
         CommitmentPeriod.Value = "50";
 
         const string InputDirPath = @"inp\EIR";
-        var cacheNucInps = new Dictionary<string, List<InputData>>();
-
-        // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
-        foreach (var input in InputData.GetInputsEIR(InputDirPath))
-        {
-            var nuc = input.Nuclide;
-            if (!cacheNucInps.TryGetValue(nuc, out var inputs))
-            {
-                inputs = [];
-                cacheNucInps.Add(nuc, inputs);
-            }
-            inputs.Add(input);
-        }
-        Nuclides.AddRange(cacheNucInps.Keys.OrderBy(nuc => nuc));
-        SelectedNuclide.Value = Nuclides.FirstOrDefault();
-
-        // 核種に対応する、選択されたインプット群。
-        var selectedInputs = SelectedNuclide.Select(nuc =>
-        {
-            if (nuc is null)
-                return [];
-            return cacheNucInps[nuc];
-        });
-
-        selectedInputs.Subscribe(inputs =>
-        {
-            // インプットの一覧を更新する。
-            Inputs.Clear();
-            Inputs.AddRange(inputs);
-
-            SelectedInput.Value = inputs.FirstOrDefault();
-        }).AddTo(Disposables);
 
         // 子孫核種を持つインプットに対してのみ、子孫核種の計算を選択可能にする。
         HasProgeny = SelectedInput.Select(inp => inp?.HasProgeny ?? false)
@@ -146,6 +116,43 @@ public class InputEIRViewModel : BindableBase
                 OutTimeMeshFilePath.Value = dialog.FileName;
 
         }).AddTo(Disposables);
+
+        LoadedCommand = new AsyncReactiveCommand().WithSubscribe(async () =>
+        {
+            var cacheNucInps = new Dictionary<string, List<InputData>>();
+
+            await Task.Run(() =>
+            {
+                // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
+                foreach (var input in InputData.GetInputsEIR(InputDirPath))
+                {
+                    var nuc = input.Nuclide;
+                    if (!cacheNucInps.TryGetValue(nuc, out var inputs))
+                    {
+                        inputs = [];
+                        cacheNucInps.Add(nuc, inputs);
+                    }
+                    inputs.Add(input);
+                }
+            });
+
+            Nuclides.AddRange(cacheNucInps.Keys.OrderBy(nuc => nuc));
+            SelectedNuclide.Value = Nuclides.FirstOrDefault();
+
+            // 核種に対応する、選択されたインプット群。
+            SelectedNuclide.Subscribe(nuc =>
+            {
+                var inputs = nuc is null ? [] : cacheNucInps[nuc];
+
+                // インプットの一覧を更新する。
+                Inputs.Clear();
+                Inputs.AddRange(inputs);
+
+                SelectedInput.Value = inputs.FirstOrDefault();
+            }).AddTo(Disposables);
+
+            LoadedCommand.Dispose();
+        });
 
         var canRun = calcStatus.CanExecute.CombineLatest(SelectedInput, (b, inp) => b && inp != null);
         RunCommand = canRun.ToAsyncReactiveCommand().WithSubscribe(async () =>
