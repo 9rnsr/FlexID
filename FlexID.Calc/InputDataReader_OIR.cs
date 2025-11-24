@@ -769,6 +769,24 @@ public class InputDataReader_OIR : InputDataReaderBase
                 .Where(s => s.MaleID != 0 || s.FemaleID != 0)
                 .Select(s => s.Name).ToList();
 
+            // Otherから無機質骨の体積組織(C-bone-VとT-bone-V)への分配について制御する。
+            var paramOtherContainsMineralBone =
+                (nuclide.Parameters.GetValueOrDefault("OtherContainsMineralBone") ??
+                    data.Parameters.GetValueOrDefault("OtherContainsMineralBone") ?? "auto").Trim();
+            bool? otherContainsMineralBone;
+            if (bool.TryParse(paramOtherContainsMineralBone, out var v))
+            {
+                otherContainsMineralBone = v;
+            }
+            else
+            {
+                if (!paramOtherContainsMineralBone.Equals("auto", StringComparison.OrdinalIgnoreCase))
+                    errors.AddError($"unrecognized OtherContainsMineralBone parameter: '{paramOtherContainsMineralBone}'");
+                otherContainsMineralBone = null;
+            }
+
+            var otherCompartments = new List<Organ>();
+
             var anyCTmarrow = false;
             var anyRYmarrow = false;
 
@@ -807,6 +825,9 @@ public class InputDataReader_OIR : InputDataReaderBase
                         anyCTmarrow = true;
                     if (sourceRegion == "R-marrow" || sourceRegion == "Y-marrow")
                         anyRYmarrow = true;
+
+                    if (sourceRegion == "Other")
+                        otherCompartments.Add(organ);
                 }
                 else
                 {
@@ -824,6 +845,30 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             if (!nuclide.IsProgeny && input is null)
                 errors.AddError(sectionLineNum, "Missing 'inp' compartment.");
+
+            if (otherContainsMineralBone is null)
+            {
+                // 自動判定を行う場合、線源領域Otherを設定した全てのコンパートメントについて
+                // 名称から"ST"＝Soft Tissue, 軟組織であると示されている場合に、骨体積への分配を抑制する。
+                var allSoftTissue = otherCompartments.All(o => o.Name.StartsWith("ST"));
+                if (allSoftTissue)
+                    otherContainsMineralBone = false;
+                else
+                {
+                    otherContainsMineralBone = true;
+
+                    // STと非STが混合している状態について、警告を提供した方がよい…
+                    // if (otherCompartments.Any(o => o.Name.StartsWith("ST")))
+                    //     ;
+                }
+            }
+            if (otherContainsMineralBone == false)
+            {
+                // sregions_2016-08-12.NDXでID=1となっている
+                // 皮質骨体積と梁骨体積をOtherを構成する線源領域から除く。
+                otherSourceRegions.Remove("C-bone-V");
+                otherSourceRegions.Remove("T-bone-V");
+            }
 
             if (anyCTmarrow)
             {
