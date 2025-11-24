@@ -769,24 +769,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                 .Where(s => s.MaleID != 0 || s.FemaleID != 0)
                 .Select(s => s.Name).ToList();
 
-            var inpParams = data.Parameters;
-            var inpIncludes = (inpParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
-            var inpExcludes = (inpParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
-
-            var nucParams = nuclide.Parameters;
-            var nucExcludes = (nucParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
-            var nucIncludes = (nucParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
-
-            // Otherについて、以下の優先度で包含・除外指定された線源領域を追加・削除する：
-            //  優先度低：インプット全体に共通設定として包含指定されたもの
-            //  ↓        インプット全体に共通設定として除外指定されたもの
-            //  ↓        特定の核種に対して包含指定されたもの
-            //  優先度高：特定の核種に対して除外指定されたもの
-            otherSourceRegions.AddRange(inpIncludes.Except(otherSourceRegions).ToArray());
-            otherSourceRegions.RemoveAll(reg => inpExcludes.Contains(reg));
-            otherSourceRegions.AddRange(nucIncludes.Except(otherSourceRegions).ToArray());
-            otherSourceRegions.RemoveAll(reg => nucExcludes.Contains(reg));
-
             foreach (var (lineNum, organ) in organs)
             {
                 if (organ.Func == OrganFunc.inp)
