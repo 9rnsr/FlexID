@@ -216,6 +216,7 @@ public class NuclideData
     /// </summary>
     public static readonly string[] ParameterNames =
     [
+        "OtherContainsMineralBone"
     ];
 
     public override string ToString() => Name;
@@ -276,6 +277,7 @@ public class InputData
     /// </summary>
     public static readonly string[] ParameterNames =
     [
+        "OtherContainsMineralBone",
         "PrintCompartments",
         "PrintTransfers",
         "PrintScoefficients",
