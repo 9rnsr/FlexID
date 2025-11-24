@@ -769,6 +769,9 @@ public class InputDataReader_OIR : InputDataReaderBase
                 .Where(s => s.MaleID != 0 || s.FemaleID != 0)
                 .Select(s => s.Name).ToList();
 
+            var anyCTmarrow = false;
+            var anyRYmarrow = false;
+
             foreach (var (lineNum, organ) in organs)
             {
                 if (organ.Func == OrganFunc.inp)
@@ -799,6 +802,11 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     // インプットで明示された線源領域をOtherの内訳から除く。
                     otherSourceRegions.Remove(sourceRegion);
+
+                    if (sourceRegion == "C-marrow" || sourceRegion == "T-marrow")
+                        anyCTmarrow = true;
+                    if (sourceRegion == "R-marrow" || sourceRegion == "Y-marrow")
+                        anyRYmarrow = true;
                 }
                 else
                 {
@@ -816,6 +824,18 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             if (!nuclide.IsProgeny && input is null)
                 errors.AddError(sectionLineNum, "Missing 'inp' compartment.");
+
+            if (anyCTmarrow)
+            {
+                // C/T-marrowがコンパートメントとして明示されている場合は、
+                // OtherからR/Y-marrowへの分配を行わないようにする。
+                otherSourceRegions.Remove("R-marrow");
+                otherSourceRegions.Remove("Y-marrow");
+
+                // C/T-marrowとR/Y-marrowの組み合わせが両方同時に使用されている場合はエラーとする。
+                if (anyRYmarrow)
+                    errors.AddError(sectionLineNum, "Both of C/T-marrow and R/Y-marrow source region pairs are used.");
+            }
 
             nuclide.OtherSourceRegions = otherSourceRegions.ToArray();
         }
