@@ -182,7 +182,8 @@
       Grid.Column="1"
       Width="120"
       HorizontalAlignment="Left"
-      ItemsSource="{Binding IntakeAges, Mode=OneTime}" />
+      ItemsSource="{Binding IntakeAges, Mode=OneTime}"
+      SelectedValue="{Binding SelectedIntakeAge.Value}" />
 
     <Grid Grid.Row="9" Grid.ColumnSpan="2">
       <Button
