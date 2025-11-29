@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -62,8 +63,6 @@ public class InputEIRViewModel : BindableBase
 
     public ReactiveCommandSlim SelectOutTimeMeshFilePathCommand { get; }
 
-    public AsyncReactiveCommand LoadedCommand { get; }
-
     public AsyncReactiveCommand RunCommand { get; }
 
     /// <summary>
@@ -75,8 +74,6 @@ public class InputEIRViewModel : BindableBase
         CalcTimeMeshFilePath.Value = @"lib\TimeMesh\time.dat";
         OutTimeMeshFilePath.Value = @"lib\TimeMesh\out-time.dat";
         CommitmentPeriod.Value = "50";
-
-        const string InputDirPath = @"inp\EIR";
 
         // 子孫核種を持つインプットに対してのみ、子孫核種の計算を選択可能にする。
         HasProgeny = SelectedInput.Select(inp => inp?.HasProgeny ?? false)
@@ -117,41 +114,41 @@ public class InputEIRViewModel : BindableBase
 
         }).AddTo(Disposables);
 
-        LoadedCommand = new AsyncReactiveCommand().WithSubscribe(async () =>
+        Task.Run(() =>
         {
+            // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
+            var inputDirPath = Path.Combine(AppContext.BaseDirectory, "inp", "EIR");
+
             var cacheNucInps = new Dictionary<string, List<InputData>>();
 
-            await Task.Run(() =>
+            foreach (var input in InputData.GetInputsEIR(inputDirPath))
             {
-                // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
-                foreach (var input in InputData.GetInputsEIR(InputDirPath))
+                var nuc = input.Nuclide;
+                if (!cacheNucInps.TryGetValue(nuc, out var inputs))
                 {
-                    var nuc = input.Nuclide;
-                    if (!cacheNucInps.TryGetValue(nuc, out var inputs))
-                    {
-                        inputs = [];
-                        cacheNucInps.Add(nuc, inputs);
-                    }
-                    inputs.Add(input);
+                    inputs = [];
+                    cacheNucInps.Add(nuc, inputs);
                 }
-            });
+                inputs.Add(input);
+            }
 
-            Nuclides.AddRange(cacheNucInps.Keys.OrderBy(nuc => nuc));
-            SelectedNuclide.Value = Nuclides.FirstOrDefault();
-
-            // 核種に対応する、選択されたインプット群。
-            SelectedNuclide.Subscribe(nuc =>
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                var inputs = nuc is null ? [] : cacheNucInps[nuc];
+                Nuclides.AddRange(cacheNucInps.Keys.OrderBy(nuc => nuc));
+                SelectedNuclide.Value = Nuclides.FirstOrDefault();
 
-                // インプットの一覧を更新する。
-                Inputs.Clear();
-                Inputs.AddRange(inputs);
+                // 核種に対応する、選択されたインプット群。
+                SelectedNuclide.Subscribe(nuc =>
+                {
+                    var inputs = nuc is null ? [] : cacheNucInps[nuc];
 
-                SelectedInput.Value = inputs.FirstOrDefault();
-            }).AddTo(Disposables);
+                    // インプットの一覧を更新する。
+                    Inputs.Clear();
+                    Inputs.AddRange(inputs);
 
-            LoadedCommand.Dispose();
+                    SelectedInput.Value = inputs.FirstOrDefault();
+                }).AddTo(Disposables);
+            });
         });
 
         var canRun = calcStatus.CanExecute.CombineLatest(SelectedInput, (b, inp) => b && inp != null);

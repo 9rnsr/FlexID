@@ -48,18 +48,21 @@ public class ScoeffCalcViewModel : BindableBase
     public AsyncReactiveCommand RunCommand { get; }
 
     /// <summary>
-    /// 計算対象となる核種群の名前を格納したファイルのパス
-    /// </summary>
-    private const string NuclideListFilePath = @"lib\NuclideList.txt";
-
-    /// <summary>
     /// コンストラクタ。
     /// </summary>
     public ScoeffCalcViewModel(CalcState calcStatus)
     {
         OutputFilePath.Value = @"out\";
 
-        Nuclides.AddRange(SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideItem { Nuclide = nuc }));
+        Task.Run(() =>
+        {
+            var nuclides = SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideItem { Nuclide = nuc });
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Nuclides.AddRange(nuclides);
+            });
+        });
 
         SelectOutputFilePathCommand = new ReactiveCommandSlim().WithSubscribe(() =>
         {
