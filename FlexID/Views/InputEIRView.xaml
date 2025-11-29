@@ -43,7 +43,7 @@
       </Grid.ColumnDefinitions>
       <TextBox Text="{Binding OutputFilePath.Value}">
         <i:Interaction.Behaviors>
-          <vb:PathDropBehavior />
+          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
         </i:Interaction.Behaviors>
       </TextBox>
       <Button
@@ -109,7 +109,7 @@
       </Grid.ColumnDefinitions>
       <TextBox Text="{Binding CalcTimeMeshFilePath.Value}">
         <i:Interaction.Behaviors>
-          <vb:PathDropBehavior />
+          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectCalcTimeMeshFilePathCommand}" />
         </i:Interaction.Behaviors>
       </TextBox>
       <Button
@@ -130,7 +130,7 @@
       </Grid.ColumnDefinitions>
       <TextBox Text="{Binding OutTimeMeshFilePath.Value}">
         <i:Interaction.Behaviors>
-          <vb:PathDropBehavior />
+          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutTimeMeshFilePathCommand}" />
         </i:Interaction.Behaviors>
       </TextBox>
       <Button

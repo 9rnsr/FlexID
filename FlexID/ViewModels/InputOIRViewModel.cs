@@ -45,11 +45,11 @@ public class InputOIRViewModel : BindableBase
 
     public ReactivePropertySlim<string> SelectedCommitmentPeriodUnit { get; }
 
-    public ReactiveCommandSlim SelectOutputFilePathCommand { get; }
+    public ReactiveCommandSlim<string[]> SelectOutputFilePathCommand { get; }
 
-    public ReactiveCommandSlim SelectCalcTimeMeshFilePathCommand { get; }
+    public ReactiveCommandSlim<string[]> SelectCalcTimeMeshFilePathCommand { get; }
 
-    public ReactiveCommandSlim SelectOutTimeMeshFilePathCommand { get; }
+    public ReactiveCommandSlim<string[]> SelectOutTimeMeshFilePathCommand { get; }
 
     public AsyncReactiveCommand RunCommand { get; }
 
@@ -73,30 +73,45 @@ public class InputOIRViewModel : BindableBase
 
         SelectedCommitmentPeriodUnit = new ReactivePropertySlim<string>(CommitmentPeriodUnits.Last());
 
-        SelectOutputFilePathCommand = new ReactiveCommandSlim().WithSubscribe(() =>
+        SelectOutputFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
         {
-            var dialog = new SaveFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory;
-            if (dialog.ShowDialog() == true)
-                OutputFilePath.Value = dialog.FileName;
+            var selected = paths?[0];
+            if (selected is null)
+            {
+                var dialog = new SaveFileDialog();
+                dialog.InitialDirectory = Environment.CurrentDirectory;
+                if (dialog.ShowDialog() == true)
+                    selected = dialog.FileName;
+            }
+            OutputFilePath.Value = selected;
 
         }).AddTo(Disposables);
 
-        SelectCalcTimeMeshFilePathCommand = new ReactiveCommandSlim().WithSubscribe(() =>
+        SelectCalcTimeMeshFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
         {
-            var dialog = new OpenFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory;
-            if (dialog.ShowDialog() == true)
-                CalcTimeMeshFilePath.Value = dialog.FileName;
+            var selected = paths?[0];
+            if (selected is null)
+            {
+                var dialog = new OpenFileDialog();
+                dialog.InitialDirectory = Environment.CurrentDirectory;
+                if (dialog.ShowDialog() == true)
+                    selected = dialog.FileName;
+            }
+            CalcTimeMeshFilePath.Value = selected;
 
         }).AddTo(Disposables);
 
-        SelectOutTimeMeshFilePathCommand = new ReactiveCommandSlim().WithSubscribe(() =>
+        SelectOutTimeMeshFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
         {
-            var dialog = new OpenFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory;
-            if (dialog.ShowDialog() == true)
-                OutTimeMeshFilePath.Value = dialog.FileName;
+            var selected = paths?[0];
+            if (selected is null)
+            {
+                var dialog = new OpenFileDialog();
+                dialog.InitialDirectory = Environment.CurrentDirectory;
+                if (dialog.ShowDialog() == true)
+                    selected = dialog.FileName;
+            }
+            OutTimeMeshFilePath.Value = selected;
 
         }).AddTo(Disposables);
 
