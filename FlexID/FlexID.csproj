@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <LangVersion>preview</LangVersion>
 
     <UseWPF>true</UseWPF>
     <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -13,9 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Costura.Fody" PrivateAssets="all" />
-    <PackageReference Include="Prism.DryIoc" />
-    <PackageReference Include="ReactiveProperty" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
     <PackageReference Include="VirtualizingWrapPanel" />
   </ItemGroup>
 

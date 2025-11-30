@@ -1,106 +1,112 @@
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Reactive.Disposables;
 using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using FlexID.Calc;
 using Microsoft.Win32;
-using Prism.Mvvm;
-using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 
 namespace FlexID.ViewModels;
 
-public class NuclideItem : BindableBase
+public partial class NuclideItem : ObservableObject
 {
-    public string Nuclide
-    {
-        get => _nuclide;
-        set => SetProperty(ref _nuclide, value);
-    }
-    private string _nuclide;
+    [ObservableProperty]
+    public partial string Nuclide { get; set; }
 
-    public bool IsChecked
-    {
-        get => _isChecked;
-        set => SetProperty(ref _isChecked, value);
-    }
-    private bool _isChecked;
+    [ObservableProperty]
+    public partial bool IsChecked { get; set; }
 }
 
-public class ScoeffCalcViewModel : BindableBase
+public partial class ScoeffCalcViewModel : ObservableObject
 {
-    private CompositeDisposable Disposables { get; } = [];
-
-    public ReactivePropertySlim<string> OutputFilePath { get; } = new();
-
-    public ReactivePropertySlim<bool> CalcMale { get; } = new(true);
-
-    public ReactivePropertySlim<bool> CalcFemale { get; } = new(true);
-
-    public ReactivePropertySlim<bool> CalcPchip { get; } = new(true);
-
-    public ReactivePropertySlim<bool> IdacDoseCompatible { get; } = new(false);
-
-    public ObservableCollection<NuclideItem> Nuclides { get; } = [];
-
-    public ReactiveCommandSlim SelectOutputFilePathCommand { get; }
-
-    public AsyncReactiveCommand RunCommand { get; }
-
-    /// <summary>
-    /// 計算対象となる核種群の名前を格納したファイルのパス
-    /// </summary>
-    private const string NuclideListFilePath = @"lib\NuclideList.txt";
-
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public ScoeffCalcViewModel(CalcState calcStatus)
+    public ScoeffCalcViewModel()
     {
-        OutputFilePath.Value = @"out\";
+        OutputFilePath = @"out\";
 
-        Nuclides.AddRange(SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideItem { Nuclide = nuc }));
-
-        SelectOutputFilePathCommand = new ReactiveCommandSlim().WithSubscribe(() =>
+        Task.Run(() =>
         {
-            var dialog = new SaveFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory;
-            if (dialog.ShowDialog() == true)
-                OutputFilePath.Value = dialog.FileName;
+            var nuclides = SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideItem { Nuclide = nuc });
 
-        }).AddTo(Disposables);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Nuclides.AddRange(nuclides);
+            });
+        });
+    }
 
-        RunCommand = calcStatus.CanExecute.ToAsyncReactiveCommand().WithSubscribe(async () =>
+    [ObservableProperty]
+    public partial bool CalcMale { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool CalcFemale { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool CalcPchip { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool IdacDoseCompatible { get; set; } = false;
+
+    public ObservableCollection<NuclideItem> Nuclides { get; } = [];
+
+    [ObservableProperty]
+    public partial string OutputFilePath { get; set; }
+
+    [RelayCommand]
+    private void SelectOutputFilePath()
+    {
+        var dialog = new SaveFileDialog();
+        dialog.InitialDirectory = Environment.CurrentDirectory;
+        if (dialog.ShowDialog() == true)
+            OutputFilePath = dialog.FileName;
+    }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RunCommand))]
+    private partial bool IsBusy { get; set; }
+
+    private bool CanRun => !IsBusy;
+
+    [RelayCommand(CanExecute = nameof(CanRun))]
+    private async Task Run()
+    {
+        try
         {
-            try
-            {
-                var outPath = OutputFilePath.Value;
-                Directory.CreateDirectory(outPath);
+            WeakReferenceMessenger.Default.Send(new BusyState(true));
 
-                var calcAM = CalcMale.Value;
-                var calcAF = CalcFemale.Value;
-                if (!calcAM && !calcAF)
-                    throw new Exception("Select target male and/or female.");
+            var outPath = OutputFilePath;
+            Directory.CreateDirectory(outPath);
 
-                var nuclides = Nuclides.Where(ni => ni.IsChecked).Select(ni => ni.Nuclide).ToArray();
-                if (!nuclides.Any())
-                    throw new Exception("No nuclides selected.");
+            var calcAM = CalcMale;
+            var calcAF = CalcFemale;
+            if (!calcAM && !calcAF)
+                throw new Exception("Select target male and/or female.");
 
-                var interpolationMethod = CalcPchip.Value ? "PCHIP" : "線形補間";
+            var nuclides = Nuclides.Where(ni => ni.IsChecked).Select(ni => ni.Nuclide).ToArray();
+            if (!nuclides.Any())
+                throw new Exception("No nuclides selected.");
 
-                var isIdacDoseCompatible = IdacDoseCompatible.Value;
+            var interpolationMethod = CalcPchip ? "PCHIP" : "線形補間";
 
-                await Task.WhenAll(
-                    calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask,
-                    calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask);
+            var isIdacDoseCompatible = IdacDoseCompatible;
 
-                MessageBox.Show("Finish", "S-Coefficient", MessageBoxButton.OK);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }).AddTo(Disposables);
+            await Task.WhenAll(
+                calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask,
+                calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask);
+
+            MessageBox.Show("Finish", "S-Coefficient", MessageBoxButton.OK);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            WeakReferenceMessenger.Default.Send(new BusyState(false));
+        }
     }
 
     private static Task Run(Sex sex, string interpolationMethod, string[] nuclides, string outPath, bool isIdacDoseCompatible)
@@ -129,7 +135,6 @@ public class ScoeffCalcViewModel : BindableBase
                 var scoeffFilePath = Path.Combine(outPath, target + ".txt");
                 calcS.WriteOutTotalResult(scoeffFilePath);
             }
-
-        })).ToArray());
+        })));
     }
 }

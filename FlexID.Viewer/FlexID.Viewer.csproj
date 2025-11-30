@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <LangVersion>preview</LangVersion>
 
     <UseWPF>true</UseWPF>
     <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -13,12 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Costura.Fody" PrivateAssets="all" />
     <PackageReference Include="MahApps.Metro" />
     <PackageReference Include="MahApps.Metro.IconPacks.Material" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="OxyPlot.Wpf" />
-    <PackageReference Include="Prism.DryIoc" />
-    <PackageReference Include="ReactiveProperty" />
   </ItemGroup>
 
   <ItemGroup>

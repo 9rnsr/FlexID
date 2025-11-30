@@ -54,6 +54,8 @@ public class InputDataReader_EIR : InputDataReaderBase
 
         data.Title = title;
 
+        data.Parameters = [];
+
         data.StartAge =
             age == "Age:3month" /**/? 100 :
             age == "Age:1year"  /**/? 365 :

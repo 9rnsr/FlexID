@@ -3,8 +3,10 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:local="clr-namespace:FlexID.Viewer.Views"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:FlexID.Viewer.ViewModels"
+  d:Background="White"
+  d:DataContext="{d:DesignInstance Type={x:Type vm:ContourViewModel}}"
   d:DesignHeight="430"
   d:DesignWidth="155"
   mc:Ignorable="d">
@@ -32,120 +34,120 @@
 
       <StackPanel>
         <TextBlock x:Name="Genital_text" Text="Genital" />
-        <Rectangle x:Name="Genital" Fill="{Binding OrganColors.Value[Genital]}">
+        <Rectangle x:Name="Genital" Fill="{Binding OrganColors[Genital]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Genital], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Genital], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Rmarrow_text" Text="Red-Marrow" />
-        <Rectangle x:Name="Rmarrow" Fill="{Binding OrganColors.Value[Red-marrow]}">
+        <Rectangle x:Name="Rmarrow" Fill="{Binding OrganColors[Red-marrow]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Red-marrow], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Red-marrow], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Lymph_text" Text="Lymph" />
-        <Rectangle x:Name="Lymph" Fill="{Binding OrganColors.Value[Lymph]}">
+        <Rectangle x:Name="Lymph" Fill="{Binding OrganColors[Lymph]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Lymph], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Lymph], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Bone_text" Text="Bone" />
-        <Rectangle x:Name="Bone" Fill="{Binding OrganColors.Value[Bone]}">
+        <Rectangle x:Name="Bone" Fill="{Binding OrganColors[Bone]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Bone], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Bone], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Skin_text" Text="Skin" />
-        <Rectangle x:Name="Skin" Fill="{Binding OrganColors.Value[Skin]}">
+        <Rectangle x:Name="Skin" Fill="{Binding OrganColors[Skin]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Skin], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Skin], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="EyeLens_text" Text="Eye-lens" />
-        <Rectangle x:Name="EyeLens" Fill="{Binding OrganColors.Value[Eye-lens]}">
+        <Rectangle x:Name="EyeLens" Fill="{Binding OrganColors[Eye-lens]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Eye-lens], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Eye-lens], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Adipose_text" Text="Adipose" />
-        <Rectangle x:Name="Adipose" Fill="{Binding OrganColors.Value[Adipose]}">
+        <Rectangle x:Name="Adipose" Fill="{Binding OrganColors[Adipose]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Adipose], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Adipose], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Thyroid_text" Text="Thyroid" />
-        <Rectangle x:Name="Thyroid" Fill="{Binding OrganColors.Value[Thyroid]}">
+        <Rectangle x:Name="Thyroid" Fill="{Binding OrganColors[Thyroid]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Thyroid], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Thyroid], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Muscle_text" Text="Muscle" />
-        <Rectangle x:Name="Muscle" Fill="{Binding OrganColors.Value[Muscle]}">
+        <Rectangle x:Name="Muscle" Fill="{Binding OrganColors[Muscle]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock Text="{Binding OrganValues.Value[Muscle], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock Text="{Binding OrganValues[Muscle], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Breast_text" Text="Breast" />
-        <Rectangle x:Name="Breast" Fill="{Binding OrganColors.Value[Breast]}">
+        <Rectangle x:Name="Breast" Fill="{Binding OrganColors[Breast]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Breast], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock FontSize="14" Text="{Binding OrganValues[Breast], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Other_text" Text="Other" />
-        <Rectangle x:Name="Other" Fill="{Binding OrganColors.Value[Other]}">
+        <Rectangle x:Name="Other" Fill="{Binding OrganColors[Other]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Other], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock FontSize="14" Text="{Binding OrganValues[Other], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Blood_text" Text="Blood" />
-        <Rectangle x:Name="Blood" Fill="{Binding OrganColors.Value[Blood]}">
+        <Rectangle x:Name="Blood" Fill="{Binding OrganColors[Blood]}">
           <ToolTipService.ToolTip>
             <StackPanel>
-              <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Blood], StringFormat=\{0:0.0000E+00\}}" />
+              <TextBlock FontSize="14" Text="{Binding OrganValues[Blood], StringFormat=\{0:0.0000E+00\}}" />
             </StackPanel>
           </ToolTipService.ToolTip>
         </Rectangle>

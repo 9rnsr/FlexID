@@ -5,13 +5,11 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:prism="http://prismlibrary.com/"
   xmlns:vb="clr-namespace:FlexID.Views.Behaviors"
   xmlns:vm="clr-namespace:FlexID.ViewModels"
   xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
   d:DataContext="{d:DesignInstance vm:ScoeffCalcViewModel}"
   d:Width="500"
-  prism:ViewModelLocator.AutoWireViewModel="True"
   mc:Ignorable="d">
 
   <Grid>
@@ -40,7 +38,7 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding OutputFilePath.Value}">
+      <TextBox Text="{Binding OutputFilePath}">
         <i:Interaction.Behaviors>
           <vb:PathDropBehavior />
         </i:Interaction.Behaviors>
@@ -63,11 +61,11 @@
       <CheckBox
         Grid.Column="0"
         Content="Male"
-        IsChecked="{Binding CalcMale.Value}" />
+        IsChecked="{Binding CalcMale}" />
       <CheckBox
         Grid.Column="1"
         Content="Female"
-        IsChecked="{Binding CalcFemale.Value}" />
+        IsChecked="{Binding CalcFemale}" />
     </UniformGrid>
 
     <Label
@@ -82,11 +80,11 @@
       <RadioButton
         Grid.Column="0"
         Content="PCHIP"
-        IsChecked="{Binding CalcPchip.Value}" />
+        IsChecked="{Binding CalcPchip}" />
       <RadioButton
         Grid.Column="1"
         Content="Linear"
-        IsChecked="{Binding CalcPchip.Value, Converter={StaticResource Inverted}}" />
+        IsChecked="{Binding CalcPchip, Converter={StaticResource Inverted}}" />
     </UniformGrid>
 
     <Label
@@ -105,12 +103,12 @@
         Grid.Column="0"
         Margin="16,4"
         Content="FlexID (*.txt)"
-        IsChecked="{Binding IdacDoseCompatible.Value, Converter={StaticResource Inverted}}" />
+        IsChecked="{Binding IdacDoseCompatible, Converter={StaticResource Inverted}}" />
       <RadioButton
         Grid.Column="1"
         Margin="16,4"
         Content="IDAC-Dose 2.1 compatible (*.csv)"
-        IsChecked="{Binding IdacDoseCompatible.Value}" />
+        IsChecked="{Binding IdacDoseCompatible}" />
     </Grid>
 
     <Label

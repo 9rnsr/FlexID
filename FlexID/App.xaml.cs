@@ -1,7 +1,9 @@
+using System.Collections.ObjectModel;
 using System.Windows;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using FlexID.ViewModels;
 using FlexID.Views;
-using Prism.Ioc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FlexID;
 
@@ -10,15 +12,47 @@ namespace FlexID;
 /// </summary>
 public partial class App
 {
-    protected override void RegisterTypes(IContainerRegistry containerRegistry)
+    public App()
     {
-        containerRegistry.RegisterSingleton<CalcState>();
-        containerRegistry.RegisterForNavigation<InputOIRView>();
-        containerRegistry.RegisterForNavigation<InputEIRView>();
+        Ioc.Default.ConfigureServices(
+            new ServiceCollection()
+            .AddTransient<MainWindow>()
+            .AddTransient<MainViewModel>()
+            .AddTransient<InputOIRView>()
+            .AddTransient<InputOIRViewModel>()
+            .AddTransient<InputEIRView>()
+            .AddTransient<InputEIRViewModel>()
+            .AddTransient<ScoeffCalcView>()
+            .AddTransient<ScoeffCalcViewModel>()
+            .BuildServiceProvider());
     }
 
-    protected override Window CreateShell()
+    protected override void OnStartup(StartupEventArgs e)
     {
-        return Container.Resolve<MainWindow>();
+        base.OnStartup(e);
+
+        var mainWindow = Ioc.Default.GetRequiredService<MainWindow>();
+
+        mainWindow.Show();
+    }
+}
+
+public static class CollectionExtensions
+{
+    public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
+    {
+        foreach (var item in items)
+        {
+            collection.Add(item);
+        }
+    }
+
+    public static void Replace<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
+    {
+        collection.Clear();
+        foreach (var item in items)
+        {
+            collection.Add(item);
+        }
     }
 }

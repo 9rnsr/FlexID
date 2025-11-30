@@ -136,9 +136,10 @@ public class PathDropBehavior : Behavior<Control>
                     break;
 
                 case AllowDropPath.SingleAny:
-                    if (paths.Length == 1)
-                        return paths;
-                    break;
+                    if (paths.Length != 1)
+                        break;
+                    ResolveLinkPath();
+                    return paths;
 
                 case AllowDropPath.SingleExists:
                     if (paths.Length != 1)
@@ -165,9 +166,10 @@ public class PathDropBehavior : Behavior<Control>
                     break;
 
                 case AllowDropPath.MultiAny:
-                    if (paths.Any())
-                        return paths;
-                    break;
+                    if (!paths.Any())
+                        break;
+                    ResolveLinkPath();
+                    return paths;
 
                 case AllowDropPath.MultiExists:
                     ResolveLinkPath();
