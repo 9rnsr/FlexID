@@ -5,18 +5,18 @@
   <ItemGroup>
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Costura.Fody" Version="6.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="System.Memory" Version="4.6.0" />
-    <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
+    <PackageVersion Include="System.Memory" Version="4.6.3" />
+    <PackageVersion Include="System.ValueTuple" Version="4.6.1" />
     <PackageVersion Include="Sprache" Version="2.3.1" />
-    <PackageVersion Include="MahApps.Metro" Version="2.4.10" />
-    <PackageVersion Include="MahApps.Metro.IconPacks.Material" Version="5.0.0" />
+    <PackageVersion Include="MahApps.Metro" Version="2.4.11" />
+    <PackageVersion Include="MahApps.Metro.IconPacks.Material" Version="6.2.1" />
     <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageVersion Include="OxyPlot.Wpf" Version="2.1.2" />
-    <PackageVersion Include="VirtualizingWrapPanel" Version="2.1.1" />
-    <PackageVersion Include="EPPlus" Version="7.3.0" />
-    <PackageVersion Include="MSTest" Version="3.8.2" />
+    <PackageVersion Include="OxyPlot.Wpf" Version="2.2.0" />
+    <PackageVersion Include="VirtualizingWrapPanel" Version="2.3.2" />
+    <PackageVersion Include="EPPlus" Version="8.4.0" />
+    <PackageVersion Include="MSTest" Version="4.0.2" />
   </ItemGroup>
 </Project>

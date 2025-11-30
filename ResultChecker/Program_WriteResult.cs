@@ -12,7 +12,7 @@ internal partial class Program
     static void WriteSummaryExcel(string filePath, Result[] sortedResults)
     {
         // 非商用ライセンスを設定
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        ExcelPackage.License.SetNonCommercialPersonal("FlexID");
 
         using var package = new ExcelPackage();
 
