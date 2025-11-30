@@ -3,11 +3,10 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:local="clr-namespace:FlexID.Viewer.Views"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="clr-namespace:FlexID.Viewer.ViewModels"
   d:Background="White"
-  d:DataContext="{d:DesignInstance Type={x:Type vm:MainWindowViewModel}}"
+  d:DataContext="{d:DesignInstance Type={x:Type vm:ContourViewModel}}"
   mc:Ignorable="d">
 
   <UserControl.Resources>
@@ -63,12 +62,12 @@
         Width="73"
         Height="30"
         Data="M24.99366,2.5 C37.225903,2.5 47.178288,12.261252 47.486313,24.419266 L47.48732,24.499001 2.5,24.499001 2.501009,24.419266 C2.8090341,12.261252 12.761415,2.5 24.99366,2.5 z"
-        Fill="{Binding OrganColors.Value[Brain]}"
+        Fill="{Binding OrganColors[Brain]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Brain" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Brain], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Brain], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -79,12 +78,12 @@
         Width="26"
         Height="19"
         Data="M14.333333,276.82303 L27.749845,257.356 40.778408,257.35561 40.78121,276.83391 z"
-        Fill="{Binding OrganColors.Value[ET1]}"
+        Fill="{Binding OrganColors[ET1]}"
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="ET1" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[ET1], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[ET1], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -95,12 +94,12 @@
         Width="45"
         Height="62"
         Data="M1115.4962,34.219722 L1140.1875,34.219722 1140.1875,86.5 1167.5,86.5 1167.5,14.757928 1115.4962,14.757928 z"
-        Fill="{Binding OrganColors.Value[ET2]}"
+        Fill="{Binding OrganColors[ET2]}"
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="ET2" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[ET2], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[ET2], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -111,7 +110,7 @@
         Width="15.167"
         Height="83.892"
         Data="M138,110.52671 L150,110.52671 150,183.17969 138,188.17969 z"
-        Fill="{Binding OrganColors.Value[Lung]}"
+        Fill="{Binding OrganColors[Lung]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
@@ -124,12 +123,12 @@
         Canvas.Left="112"
         Canvas.Top="109"
         Data="M1032.4574,259.41698 C1032.3669,259.32203 1024.9679,246.97464 1023.1191,242.29447 1019.9828,234.35522 1008.1996,169.87081 1008.1996,169.87081 L1003.667,115.57125 995.00149,115.57106 999.43879,175.66809 C999.43879,175.66809 1009.9362,238.69772 1013.8577,247.14591 1017.1232,254.18098 1024.733,265.882 1024.733,265.882 z"
-        Fill="{Binding OrganColors.Value[Oesophagus]}"
+        Fill="{Binding OrganColors[Oesophagus]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Oesophagus" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Oesophagus], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Oesophagus], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -140,12 +139,12 @@
         Width="50"
         Height="90"
         Data="M55.035555,30.970968 L54.535554,67.970968 34.035554,69.470968 34.535554,47.470968 C34.535554,47.470968 34.62899,33.995479 38.341378,29.151083 42.472523,23.760241 41.697494,23.515412 47.085661,18.995528 52.945369,14.08009 56.035534,14.470968 56.035534,14.470968 z"
-        Fill="{Binding OrganColors.Value[Lung]}"
+        Fill="{Binding OrganColors[Lung]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Lung" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lung], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Lung], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -156,7 +155,7 @@
         Width="45.001"
         Height="40"
         Data="M69.140366,74 L69.140369,88.5 28.102681,108.16667 27.974036,93.833138 z"
-        Fill="{Binding OrganColors.Value[Lung]}"
+        Fill="{Binding OrganColors[Lung]}"
         StrokeThickness="5" />
       <Path
         x:Name="LeftLung"
@@ -165,7 +164,7 @@
         Width="50"
         Height="90"
         Data="M55.370445,30.970968 L54.870444,67.970968 34.370444,69.470968 34.870444,47.470968 C34.870444,47.470968 34.96388,33.995479 38.676268,29.151083 42.807413,23.760241 42.032384,23.515412 47.420551,18.995528 53.280259,14.08009 56.370424,14.470968 56.370424,14.470968 z"
-        Fill="{Binding OrganColors.Value[Lung]}"
+        Fill="{Binding OrganColors[Lung]}"
         RenderTransformOrigin="0.5,0.5"
         StrokeThickness="5">
         <Path.RenderTransform>
@@ -179,7 +178,7 @@
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Lung" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Lung], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Lung], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -190,7 +189,7 @@
         Width="45"
         Height="40"
         Data="M225,84.375 L225,99.875 265,119.375 265,103.25 z"
-        Fill="{Binding OrganColors.Value[Lung]}"
+        Fill="{Binding OrganColors[Lung]}"
         StrokeThickness="5" />
       <Ellipse
         x:Name="Heart"
@@ -198,7 +197,7 @@
         Canvas.Top="184"
         Width="50"
         Height="60"
-        Fill="{Binding OrganColors.Value[Heart]}"
+        Fill="{Binding OrganColors[Heart]}"
         RenderTransformOrigin="0.5,0.5"
         StrokeThickness="5">
         <Ellipse.RenderTransform>
@@ -212,7 +211,7 @@
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Heart" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Heart], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Heart], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Ellipse>
@@ -223,12 +222,12 @@
         Width="73"
         Height="22"
         Data="M63.167634,442.92835 C66.38681,440.79696 94.012124,441.28304 107.87082,441.92189 121.13996,442.53356 150.94713,451.64901 107.20415,459.92151 75.921832,465.83749 63.612045,464.0238 61.33397,458.76184 59.037265,453.45684 60.070006,444.97926 63.167634,442.92835 z"
-        Fill="{Binding OrganColors.Value[Pancreas]}"
+        Fill="{Binding OrganColors[Pancreas]}"
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Pancreas" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Pancreas], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Pancreas], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -239,12 +238,12 @@
         Width="100"
         Height="67"
         Data="M789.22863,303.99254 C792.34236,299.99771 801.74444,287.85523 804.97141,284.45605 808.52751,280.71016 813.29322,278.11619 816.25491,280.31463 820.47088,283.44412 820.66935,292.29724 820.81387,294.20348 821.42416,302.25355 820.01708,321.64727 812.03683,334.19218 803.82299,347.10429 788.98984,345.05399 780.47182,344.74095 770.44682,344.37252 758.29785,341.85064 753.29785,338.85064 748.29785,335.85064 745.30782,329.08941 749.09791,324.83086 751.40682,322.23656 766.21421,318.01404&#xA;777.8568,311.74128 777.8568,311.74128 785.03802,309.36898 789.22863,303.99254 z"
-        Fill="{Binding OrganColors.Value[Stomach]}"
+        Fill="{Binding OrganColors[Stomach]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Stomach" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Stomach], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Stomach], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -255,12 +254,12 @@
         Width="20"
         Height="50"
         Data="M196.62012,259.06077 C196.27107,261.81171 193.5579,287.91036 191.70153,293.07294 190.19536,297.26162 187.57498,304.17924 209.00878,299.00158 216.91284,297.09224 226.65937,273.17415 222.3801,261.69479 216.39965,245.65194 197.19636,254.51936 196.62012,259.06077 z"
-        Fill="{Binding OrganColors.Value[Spleen]}"
+        Fill="{Binding OrganColors[Spleen]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Spleen" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Spleen], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Spleen], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -271,7 +270,7 @@
         Width="40.592"
         Height="36"
         Data="M134.67694,300.52278 C129.62993,303.32247 112.73508,307.76983 108.68949,313.39785 105.74966,317.4876 106.55246,325.73599 106.55246,325.73599 L97.207862,325.73598 C97.207862,325.73598 96.952963,316.32305 99.841099,310.23182 104.15681,301.12975 129.14657,292.69785 129.14657,292.69785 z"
-        Fill="{Binding OrganColors.Value[SI]}"
+        Fill="{Binding OrganColors[SI]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
@@ -286,12 +285,12 @@
         Width="88.52"
         Height="101.869"
         Data="M148.47559,332.10456 L75.220763,332.10456 75.346063,419.62545 65.471233,419.63067 65.471133,322.76077 148.48279,322.77556 z"
-        Fill="{Binding OrganColors.Value[RC]}"
+        Fill="{Binding OrganColors[RC]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Right Colon" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[RC], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[RC], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -300,12 +299,12 @@
         Canvas.Left="109.066"
         Canvas.Top="326"
         Data="M155.85362,335.12059 L237.49965,335.11916 237.49967,432.33234 226.08298,432.33234 226.08298,344.42605 155.85362,344.44262 z"
-        Fill="{Binding OrganColors.Value[LC]}"
+        Fill="{Binding OrganColors[LC]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Left Colon" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[LC], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[LC], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -314,12 +313,12 @@
         Canvas.Left="134.139"
         Canvas.Top="424.105"
         Data="M228.79167,438.20751 L228.79167,456.99901 182.95811,456.99901 182.95811,470.99962 172.29193,470.99962 172.29193,447.99921 217.37994,447.99921 217.37994,438.20718 z"
-        Fill="{Binding OrganColors.Value[RS]}"
+        Fill="{Binding OrganColors[RS]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Rectosigmoid Colon" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[RS], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[RS], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -330,12 +329,12 @@
         Width="105"
         Height="55"
         Data="M124.65055,249.09364 C138.70685,249.53867 171.39682,250.9168 147.39695,264.41727 123.39709,277.91774 82.624756,302.48363 72.788607,299.74782 66.00415,297.86081 50.517067,267.45032 55.01248,260.83744 60.412261,252.89421 110.86051,248.65704 124.65055,249.09364 z"
-        Fill="{Binding OrganColors.Value[Liver]}"
+        Fill="{Binding OrganColors[Liver]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Liver" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Liver], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Liver], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -346,12 +345,12 @@
         Width="25"
         Height="18"
         Data="M224.79474,278.26504 C213.62168,285.06457 208.88838,289.89235 209.10769,293.65284 209.31072,297.13404 210.54186,302.19609 213.91255,301.87838 220.55427,301.25237 229.56488,286.67526 232.25651,282.79008 234.84512,279.05361 232.97859,273.28463 224.79474,278.26504 z"
-        Fill="{Binding OrganColors.Value[GB]}"
+        Fill="{Binding OrganColors[GB]}"
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Gall Bladder" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[GB], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[GB], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -362,12 +361,12 @@
         Width="25"
         Height="50"
         Data="M198.72987,355.95179 C198.32332,350.22274 187.63968,344.86222 183.75135,354.6661 180.56328,362.70438 180.2109,372.84412 181.50163,376.04053 184.73778,384.05465 193.95024,383.0005 196.62661,377.54055 198.45523,373.81006 192.43888,368.04675 192.37694,366.04079 192.32074,364.22067 199.0183,360.01631 198.72987,355.95179 z"
-        Fill="{Binding OrganColors.Value[Kidneys]}"
+        Fill="{Binding OrganColors[Kidneys]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Kidneys" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -378,12 +377,12 @@
         Width="20"
         Height="80"
         Data="M744.45859,531.5928 C753.24108,537.98482 754.89054,538.48833 756.2042,551.49238 757.48665,564.18757 757.31136,580.08283 757.31136,580.08283 L758.06141,604.83284 753.69045,604.83901 753.1451,580.04385 C753.1451,580.04385 752.7483,556.3159 752.14826,552.54184 751.72244,549.86359 752.02734,541.14539 742.72323,538.18503"
-        Fill="{Binding OrganColors.Value[Ureters]}"
+        Fill="{Binding OrganColors[Ureters]}"
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Ureter" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Ureters], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Ureters], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -394,12 +393,12 @@
         Width="25"
         Height="50"
         Data="M160.43149,352.84999 C159.80691,343.73015 175.30711,340.98045 179.4542,352.97452 183.96127,366.00971 183.57949,370.93532 179.33647,379.6487 174.85682,388.848 163.20015,387.97421 161.37847,379.56531 159.7537,372.06534 167.56667,369.51722 167.43852,366.31824 167.31334,363.19323 160.99623,361.09615 160.43149,352.84999 z"
-        Fill="{Binding OrganColors.Value[Kidneys]}"
+        Fill="{Binding OrganColors[Kidneys]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Kidneys" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -410,12 +409,12 @@
         Width="20"
         Height="80"
         Data="M176.79114,360.73404 C176.79114,360.73404 161.76277,366.07618 160.84598,374.07638 160.0617,380.92033 160.16038,406.47212 160.28538,407.22214 160.41038,407.97216 160.07641,436.56308 160.07641,436.56308 L165.4097,436.50058 C165.4097,436.50058 165.39321,408.87817 165.26821,406.94062 165.22717,406.30454 165.41916,379.46472 166.41915,375.67295 167.62622,371.096 176.95601,367.85618 178.206,367.85595"
-        Fill="{Binding OrganColors.Value[Ureters]}"
+        Fill="{Binding OrganColors[Ureters]}"
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Ureter" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[Ureters], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[Ureters], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -426,12 +425,12 @@
         Width="132.25"
         Height="92"
         Data="M82.545883,336.71849 L92.245444,336.71849 92.245444,396.23101 199.65784,396.23101 199.65784,424.23155 71.911811,424.23155 71.911811,415.35741 191.24851,415.35741 191.24851,404.77233 82.04524,404.77233 z"
-        Fill="{Binding OrganColors.Value[SI]}"
+        Fill="{Binding OrganColors[SI]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Small Intestine" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[SI], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[SI], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -442,12 +441,12 @@
         Width="45"
         Height="35"
         Data="M675.23599,617.30662 C668.15772,611.45967 671.81281,596.26637 676.56281,595.76637 681.31281,595.26637 696.66586,595.39514 701.10417,595.94276 705.99893,596.5467 710.12991,610.25751 702.27362,617.57411 697.1649,622.33188 689.10341,629.22764 689.10341,629.22764 z"
-        Fill="{Binding OrganColors.Value[UB]}"
+        Fill="{Binding OrganColors[UB]}"
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
             <TextBlock FontSize="14" Text="Urine Bladder" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues.Value[UB], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock FontSize="14" Text="{Binding OrganValues[UB], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>

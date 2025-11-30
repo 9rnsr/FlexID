@@ -1,202 +1,221 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Reactive.Linq;
 using FlexID.Calc;
 using Microsoft.Win32;
-using OxyPlot;
 using Prism.Mvvm;
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 
 namespace FlexID.Viewer.ViewModels;
 
 public class MainWindowViewModel : BindableBase
 {
-    private readonly Model model;
-
-    #region 出力ファイル情報
-
-    public ReactivePropertySlim<string> OutputFilePath { get; } = new("");
-
-    public ReactiveCommandSlim<string[]> SelectOutputFilePathCommand { get; }
-
-    public ObservableCollection<OutputType> OutputTypes => this.model.OutputTypes;
-
-    public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new();
-
-    public ReadOnlyReactivePropertySlim<string> Title { get; }
-
-    public ObservableCollection<string> Nuclides => this.model.Nuclides;
-
-    public ReactivePropertySlim<string> SelectedNuclide { get; } = new();
-
-    #endregion
-
-    #region コンター表示
-
-    /// <summary>
-    /// DataGridに表示するコンパートメント毎の計算値。
-    /// </summary>
-    public ReadOnlyReactiveCollection<CalcData> DataValues { get; }
-
-    /// <summary>
-    /// モデル図に表示するための、統一臓器名とその合算された数値。
-    /// </summary>
-    public ReadOnlyReactivePropertySlim<Dictionary<string, double>> OrganValues { get; }
-
-    /// <summary>
-    /// モデル図に表示するための、統一臓器名とその色情報。
-    /// </summary>
-    public ReadOnlyReactivePropertySlim<Dictionary<string, string>> OrganColors { get; }
-
-    /// <summary>
-    /// コンターの上限値。
-    /// </summary>
-    public ReactivePropertySlim<double> ContourMax { get; }
-
-    /// <summary>
-    /// コンターの下限値。
-    /// </summary>
-    public ReactivePropertySlim<double> ContourMin { get; }
-
-    /// <summary>
-    /// コンターに表示される単位。
-    /// </summary>
-    public ReadOnlyReactivePropertySlim<string> ContourUnit { get; }
-
-    #endregion
-
-    #region 出力タイムステップスライダー
-
-    public ReadOnlyReactivePropertySlim<IReadOnlyList<double>> TimeSteps { get; }
-    public ReadOnlyReactivePropertySlim<double> StartTimeStep { get; }
-    public ReadOnlyReactivePropertySlim<double> EndTimeStep { get; }
-
-    /// <summary>
-    /// 現在スライダーが示している時間。
-    /// </summary>
-    public ReactiveProperty<double> CurrentTimeStep { get; }
-
-    /// <summary>
-    /// アニメーション再生状態を示す。<see langword="true"/>：再生中、<see langword="false"/>：停止中。
-    /// </summary>
-    public ReadOnlyReactiveProperty<bool> IsPlaying { get; }
-
-    public ReactiveCommand PlayCommand { get; }
-    public ReactiveCommand NextStepCommand { get; }
-    public ReactiveCommand PreviousStepCommand { get; }
-
-    #endregion
-
-    #region グラフ表示
-
-    public ReadOnlyReactiveCollection<RegionData> Regions { get; }
-
-    public PlotModel PlotModel => this.model.PlotModel;
-
-    public ReactivePropertySlim<bool> IsLogAxisX { get; }
-    public ReactivePropertySlim<bool> IsLogAxisY { get; }
-
-    #endregion
-
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    /// <param name="model"></param>
-    public MainWindowViewModel(Model model)
+    public MainWindowViewModel()
     {
-        this.model = model;
+        OutputFilePath.Subscribe(OnOutputFilePathChanged);
 
-        #region 出力ファイル情報
+        SelectOutputFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(SelectOutputFilePath);
 
-        SelectOutputFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(paths =>
-        {
-            var selected = paths?[0] ?? SelectOutputFile();
-            if (selected is string path)
-                OutputFilePath.Value = path;
-        });
+        SelectedOutputType.Subscribe(OnSelectedOutputTypeChanged);
 
-        OutputFilePath
-            .Select(path => this.model.SetTypes(path))
-            .ObserveOnUIDispatcher()
-            .Subscribe(type => SelectedOutputType.Value = type);
-
-        SelectedOutputType.Subscribe(type =>
-        {
-            if (type is OutputType t)
-            {
-                var nuc = SelectedNuclide.Value;
-                var tstep = CurrentTimeStep.Value;
-
-                this.model.SetOutput(t);
-
-                if (!this.model.Nuclides.Contains(nuc))
-                    nuc = this.model.Nuclides.FirstOrDefault();
-                SelectedNuclide.Value = nuc;
-                CurrentTimeStep.Value = tstep;
-            }
-        });
-
-        Title = this.model.ObserveProperty(x => x.Title).ToReadOnlyReactivePropertySlim();
-
-        SelectedNuclide.Subscribe(nuc => this.model.SetNuclide(nuc));
-
-        #endregion
-
-        #region コンター表示
-
-        DataValues = this.model.DataValues.ToReadOnlyReactiveCollection();
-
-        OrganValues = this.model.ObserveProperty(x => x.OrganValues).ToReadOnlyReactivePropertySlim();
-        OrganColors = this.model.ObserveProperty(x => x.OrganColors).ToReadOnlyReactivePropertySlim();
-
-        ContourMax = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMax);
-        ContourMin = this.model.ToReactivePropertySlimAsSynchronized(x => x.ContourMin);
-        ContourUnit = this.model.ObserveProperty(x => x.ContourUnit).ToReadOnlyReactivePropertySlim();
-
-        ContourMax.Subscribe(_ => this.model.SetColors());
-        ContourMin.Subscribe(_ => this.model.SetColors());
-
-        #endregion
-
-        #region 出力タイムステップスライダー
-
-        TimeSteps = this.model.ObserveProperty(x => x.TimeSteps).ToReadOnlyReactivePropertySlim();
-        StartTimeStep = TimeSteps.Select(ts => ts.Count == 0 ? 0 : ts[0]).ToReadOnlyReactivePropertySlim();
-        EndTimeStep = TimeSteps.Select(ts => ts.Count == 0 ? 0 : ts[ts.Count - 1]).ToReadOnlyReactivePropertySlim();
-
-        CurrentTimeStep = this.model.ToReactivePropertyAsSynchronized(x => x.CurrentTimeStep);
-
-        CurrentTimeStep.Subscribe(_ => this.model.SetValues());
-
-        IsPlaying = this.model.ObserveProperty(x => x.IsPlaying).ToReadOnlyReactiveProperty();
-
-        PlayCommand = new ReactiveCommand().WithSubscribe(() => this.model.Playing());
-        NextStepCommand = new ReactiveCommand().WithSubscribe(() => this.model.NextStep());
-        PreviousStepCommand = new ReactiveCommand().WithSubscribe(() => this.model.PreviousStep());
-
-        #endregion
-
-        #region グラフ表示
-
-        Regions = this.model.Regions.ToReadOnlyReactiveCollection();
-
-        IsLogAxisX = this.model.ToReactivePropertySlimAsSynchronized(m => m.IsLogAxisX);
-        IsLogAxisY = this.model.ToReactivePropertySlimAsSynchronized(m => m.IsLogAxisY);
-
-        #endregion
+        SelectedBlock.Subscribe(OnSelectedBlockChanged);
     }
 
     /// <summary>
-    /// ファイルダイアログ操作
+    /// コンター表示用のViewModel。
     /// </summary>
-    private string SelectOutputFile()
+    public ContourViewModel Contour { get; } = new();
+
+    /// <summary>
+    /// グラフ表示用のViewModel。
+    /// </summary>
+    public GraphViewModel Graph { get; } = new();
+
+    /// <summary>
+    /// 出力ファイルのパス文字列。
+    /// </summary>
+    public ReactivePropertySlim<string> OutputFilePath { get; } = new("");
+
+    /// <summary>
+    /// 出力ファイルの選択処理。
+    /// </summary>
+    public ReactiveCommandSlim<string[]> SelectOutputFilePathCommand { get; }
+
+    private void SelectOutputFilePath(string[] paths)
     {
-        var dialog = new OpenFileDialog();
-        dialog.ShowDialog();
+        var selected = paths?[0];
+        if (selected is null)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.ShowDialog();
 
-        if (dialog.FileName != "")
-            return dialog.FileName;
+            if (dialog.FileName != "")
+                selected = dialog.FileName;
+        }
+        if (selected is string path)
+            OutputFilePath.Value = path;
+    }
 
+    /// <summary>
+    /// 表示中の出力ファイルのデータ。
+    /// </summary>
+    public ReactivePropertySlim<OutputData> SelectedOutput { get; } = new();
+
+    /// <summary>
+    /// 出力ファイルリストのベースとなるパス文字列。
+    /// </summary>
+    private string BasePath { get; set; }
+
+    /// <summary>
+    /// 検出された出力ファイル種別のリスト。
+    /// </summary>
+    public ObservableCollection<OutputType> OutputTypes { get; } = [];
+
+    /// <summary>
+    /// 選択された出力ファイル種別。
+    /// </summary>
+    public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new();
+
+    /// <summary>
+    /// 表示中の核種のデータ。
+    /// </summary>
+    public ReactivePropertySlim<OutputBlockData> SelectedBlock { get; } = new();
+
+    /// <summary>
+    /// 出力ファイルの読み込み。
+    /// </summary>
+    /// <param name="path">ファイルのパス文字列。</param>
+    /// <returns>ファイルパスが有効でなかったり、読み込みに失敗した場合は <see langword="null"/> を返す。</returns>
+    private static OutputData ReadOutputData(string path)
+    {
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            try
+            {
+                using var reader = new OutputDataReader(path);
+                return reader.Read();
+            }
+            catch (Exception ex) when (ex is IOException or InvalidDataException) { }
+        }
         return null;
+    }
+
+    /// <summary>
+    /// 出力ファイルのパスから、出力ファイル種別を示す接尾辞を除いた部分をフルパスで返す。
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    private static string GetBasePath(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return null;
+
+        static string StripEndsWith(string value, string pattern)
+        {
+            if (value.EndsWith(pattern))
+                value = value.Substring(0, value.Length - pattern.Length);
+            return value;
+        }
+
+        path = StripEndsWith(path, "_Retention.out");
+        path = StripEndsWith(path, "_Cumulative.out");
+        path = StripEndsWith(path, "_Dose.out");
+        path = StripEndsWith(path, "_DoseRate.out");
+        try
+        {
+            return Path.GetFullPath(path);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 出力ファイル種別に対応する接尾辞を返す。
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
+    private static string GetSuffix(OutputType type)
+    {
+        switch (type)
+        {
+            case OutputType.RetentionActivity:  /**/return "Retention";
+            case OutputType.CumulativeActivity: /**/return "Cumulative";
+            case OutputType.Dose:               /**/return "Dose";
+            case OutputType.DoseRate:           /**/return "DoseRate";
+
+            default:
+            case OutputType.Unknown:
+                throw new NotSupportedException();
+        }
+    }
+
+    private static readonly IReadOnlyList<OutputType> candidateTypes =
+    [
+        OutputType.RetentionActivity,
+        OutputType.CumulativeActivity,
+        OutputType.Dose,
+        OutputType.DoseRate,
+    ];
+
+    private void OnOutputFilePathChanged(string value)
+    {
+        SelectedOutput.Value = ReadOutputData(value);
+        if (SelectedOutput.Value is null)
+        {
+            BasePath = null;
+            OutputTypes.Clear();
+            return;
+        }
+
+        // 設定された出力ファイル名から表示可能な出力データ群を列挙する。
+        var newBasePath = GetBasePath(value);
+        if (newBasePath is not null && newBasePath != BasePath)
+        {
+            OutputTypes.Clear();
+            OutputTypes.AddRange(candidateTypes
+                .Where(t => File.Exists($"{newBasePath}_{GetSuffix(t)}.out")));
+        }
+        BasePath = newBasePath;
+
+        SelectedOutputType.Value = SelectedOutput.Value.Type;
+    }
+
+    private void OnSelectedOutputTypeChanged(OutputType? value)
+    {
+        SelectedBlock.Value = null;
+
+        if (value is not OutputType t)
+            return;
+        if (!OutputTypes.Contains(t))
+            return;
+
+        var block = SelectedBlock.Value;
+        var tstep = Contour.CurrentTimeStep;
+
+        // 見つかっている出力データ群から表示対象を設定する。
+        OutputFilePath.Value = $"{BasePath}_{GetSuffix(t)}.out";
+
+        // 直前に選択されていたものと同名のヘッダーを持つ
+        // ブロックデータが存在する場合は、これを優先して再選択する。
+        if (block is not null)
+            block = SelectedOutput.Value?.Blocks.FirstOrDefault(b => b.Header == block.Header);
+        if (block is null)
+            block = SelectedOutput.Value?.Blocks.FirstOrDefault();
+
+        SelectedBlock.Value = block;
+        Contour.CurrentTimeStep = tstep;
+    }
+
+    public void OnSelectedBlockChanged(OutputBlockData value)
+    {
+        // コンター表示とグラフ表示を更新する。
+        Contour.SetBlock(SelectedOutput.Value, value);
+        Graph.SetBlock(SelectedOutput.Value, value);
     }
 }

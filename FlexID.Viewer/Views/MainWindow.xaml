@@ -160,7 +160,7 @@
       Grid.Column="2"
       Grid.ColumnSpan="2"
       Style="{StaticResource OutputInfoTextBox}"
-      Text="{Binding Title.Value, Mode=OneWay}" />
+      Text="{Binding SelectedOutput.Value.Title, Mode=OneWay}" />
 
     <Label
       Grid.Row="4"
@@ -187,8 +187,9 @@
       x:Name="NuclidesComboBox"
       Grid.Row="6"
       Grid.Column="2"
-      ItemsSource="{Binding Nuclides}"
-      SelectedItem="{Binding SelectedNuclide.Value}"
+      DisplayMemberPath="Header"
+      ItemsSource="{Binding SelectedOutput.Value.Blocks}"
+      SelectedItem="{Binding SelectedBlock.Value}"
       Style="{StaticResource OutputInfoComboBox}" />
 
     <TabControl
@@ -210,7 +211,7 @@
           CanUserSortColumns="False"
           ColumnHeaderStyle="{StaticResource MyColumnHeader}"
           FontSize="14"
-          ItemsSource="{Binding DataValues, UpdateSourceTrigger=PropertyChanged}"
+          ItemsSource="{Binding Contour.DataValues, UpdateSourceTrigger=PropertyChanged}"
           SelectionUnit="Cell">
           <DataGrid.Columns>
             <DataGridTextColumn
@@ -239,7 +240,7 @@
           CanUserSortColumns="False"
           ColumnHeaderStyle="{StaticResource MyColumnHeader}"
           FontSize="14"
-          ItemsSource="{Binding Regions}">
+          ItemsSource="{Binding Graph.Regions}">
           <DataGrid.Columns>
             <DataGridTemplateColumn
               MinWidth="240"
@@ -301,12 +302,14 @@
               <v:HumanContourLegend
                 Grid.Column="0"
                 Margin="20,48,20,12"
-                HorizontalAlignment="Center" />
+                HorizontalAlignment="Center"
+                DataContext="{Binding Contour}" />
 
               <v:HumanContour
                 Grid.Column="1"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+                DataContext="{Binding Contour}" />
             </Grid>
           </Viewbox>
 
@@ -315,9 +318,9 @@
             Grid.Column="1"
             Margin="0,0,0,60"
             VerticalAlignment="Center"
-            ContourMax="{Binding ContourMax.Value}"
-            ContourMin="{Binding ContourMin.Value}"
-            ContourUnit="{Binding ContourUnit.Value}"
+            ContourMax="{Binding Contour.ContourMax}"
+            ContourMin="{Binding Contour.ContourMin}"
+            ContourUnit="{Binding Contour.ContourUnit}"
             FontSize="14" />
 
           <Grid Grid.Row="1" HorizontalAlignment="Stretch">
@@ -346,10 +349,10 @@
               FontSize="14"
               IsMoveToPointEnabled="True"
               IsSnapToTickEnabled="True"
-              Maximum="{Binding EndTimeStep.Value}"
-              Minimum="{Binding StartTimeStep.Value}"
-              Ticks="{Binding TimeSteps.Value}"
-              Value="{Binding CurrentTimeStep.Value}" />
+              Maximum="{Binding Contour.EndTimeStep}"
+              Minimum="{Binding Contour.StartTimeStep}"
+              Ticks="{Binding Contour.TimeSteps}"
+              Value="{Binding Contour.CurrentTimeStep}" />
 
             <Label
               Grid.Row="1"
@@ -369,7 +372,7 @@
               Height="32"
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
-              Command="{Binding PreviousStepCommand}"
+              Command="{Binding Contour.PreviousStepCommand}"
               ToolTip="Previous step">
               <icons:PackIconMaterial Kind="SkipPrevious" />
             </RepeatButton>
@@ -380,7 +383,7 @@
               Height="32"
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
-              Command="{Binding PlayCommand}"
+              Command="{Binding Contour.PlayCommand}"
               FontSize="12"
               ToolTip="Play/Pause">
               <icons:PackIconMaterial>
@@ -388,10 +391,10 @@
                   <Style TargetType="{x:Type icons:PackIconMaterial}">
                     <Setter Property="Kind" Value="Play" />
                     <Style.Triggers>
-                      <DataTrigger Binding="{Binding IsPlaying.Value}" Value="False">
+                      <DataTrigger Binding="{Binding Contour.IsPlaying}" Value="False">
                         <Setter Property="Kind" Value="Play" />
                       </DataTrigger>
-                      <DataTrigger Binding="{Binding IsPlaying.Value}" Value="True">
+                      <DataTrigger Binding="{Binding Contour.IsPlaying}" Value="True">
                         <Setter Property="Kind" Value="Pause" />
                       </DataTrigger>
                     </Style.Triggers>
@@ -406,7 +409,7 @@
               Height="32"
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
-              Command="{Binding NextStepCommand}"
+              Command="{Binding Contour.NextStepCommand}"
               ToolTip="Next step">
               <icons:PackIconMaterial Kind="SkipNext" />
             </RepeatButton>
@@ -446,19 +449,19 @@
               Margin="0,0,40,0"
               VerticalAlignment="Center"
               Content="Log(_Vertical)"
-              IsChecked="{Binding IsLogAxisY.Value}" />
+              IsChecked="{Binding Graph.IsLogAxisY}" />
             <CheckBox
               Height="18"
               Margin="0,0,40,0"
               VerticalAlignment="Center"
               Content="Log(_Horizontal)"
-              IsChecked="{Binding IsLogAxisX.Value}" />
+              IsChecked="{Binding Graph.IsLogAxisX}" />
           </StackPanel>
 
           <oxy:PlotView
             Grid.Row="1"
             FontSize="14"
-            Model="{Binding PlotModel}" />
+            Model="{Binding Graph.PlotModel}" />
         </Grid>
       </TabItem>
     </TabControl>
