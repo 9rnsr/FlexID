@@ -13,9 +13,6 @@ public class MainWindowViewModel : BindableBase
 {
     private readonly Model model;
 
-    // 入力GUIから受け取るファイルパス
-    public static string OutPath = "";
-
     #region 出力ファイル情報
 
     public ReactivePropertySlim<string> OutputFilePath { get; } = new("");
@@ -187,9 +184,6 @@ public class MainWindowViewModel : BindableBase
         IsLogAxisY = this.model.ToReactivePropertySlimAsSynchronized(m => m.IsLogAxisY);
 
         #endregion
-
-        if (!string.IsNullOrEmpty(OutPath))
-            OutputFilePath.Value = OutPath;
     }
 
     /// <summary>

@@ -1,7 +1,7 @@
+using System.Windows;
 using FlexID.Viewer.ViewModels;
 using FlexID.Viewer.Views;
 using Prism.Ioc;
-using System.Windows;
 
 namespace FlexID.Viewer;
 
@@ -10,6 +10,8 @@ namespace FlexID.Viewer;
 /// </summary>
 public partial class App
 {
+    private string _outPath;
+
     protected override void OnStartup(StartupEventArgs e)
     {
         // Args ==1     入力GUIからの実行
@@ -19,7 +21,7 @@ public partial class App
             var outPath = e.Args[0];
             if (outPath.StartsWith("\"") && outPath.EndsWith("\""))
                 outPath = outPath.Substring(1, outPath.Length - 2);
-            MainWindowViewModel.OutPath = outPath;
+            _outPath = outPath;
         }
 
         base.OnStartup(e);
@@ -27,7 +29,13 @@ public partial class App
 
     protected override Window CreateShell()
     {
-        return Container.Resolve<MainWindow>();
+        var window = Container.Resolve<MainWindow>();
+        if (_outPath is not null)
+        {
+            var vm = (MainWindowViewModel)window.DataContext;
+            vm.OutputFilePath.Value = _outPath;
+        }
+        return window;
     }
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
