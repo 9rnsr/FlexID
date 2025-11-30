@@ -33,7 +33,7 @@ public partial class App
         if (_outPath is not null)
         {
             var vm = (MainWindowViewModel)window.DataContext;
-            vm.OutputFilePath.Value = _outPath;
+            vm.OutputFilePath = _outPath;
         }
         return window;
     }

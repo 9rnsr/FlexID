@@ -1,13 +1,13 @@
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FlexID.Calc;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using Prism.Mvvm;
 
 namespace FlexID.Viewer.ViewModels;
 
-public class GraphViewModel : BindableBase
+public partial class GraphViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
@@ -71,29 +71,23 @@ public class GraphViewModel : BindableBase
         AxisTitleDistance = 10,
     };
 
-    public bool IsLogAxisX
-    {
-        get => isLogAxisX;
-        set
-        {
-            PlotModel.Axes[0] = (value ? (Axis)LogAxisX : LinAxisX);
-            PlotModel.InvalidatePlot(false);
-            SetProperty(ref isLogAxisX, value);
-        }
-    }
-    private bool isLogAxisX = true;
+    [ObservableProperty]
+    public partial bool IsLogAxisX { get; set; } = true;
 
-    public bool IsLogAxisY
+    [ObservableProperty]
+    public partial bool IsLogAxisY { get; set; } = true;
+
+    partial void OnIsLogAxisXChanged(bool value)
     {
-        get => isLogAxisY;
-        set
-        {
-            PlotModel.Axes[1] = (value ? (Axis)LogAxisY : LinAxisY);
-            PlotModel.InvalidatePlot(false);
-            SetProperty(ref isLogAxisY, value);
-        }
+        PlotModel.Axes[0] = value ? LogAxisX : LinAxisX;
+        PlotModel.InvalidatePlot(false);
     }
-    private bool isLogAxisY = true;
+
+    partial void OnIsLogAxisYChanged(bool value)
+    {
+        PlotModel.Axes[1] = value ? LogAxisY : LinAxisY;
+        PlotModel.InvalidatePlot(false);
+    }
 
     public void SetBlock(OutputData output, OutputBlockData block)
     {
@@ -178,7 +172,7 @@ public class GraphViewModel : BindableBase
     }
 }
 
-public class RegionData : BindableBase
+public class RegionData
 {
     public RegionData(ScatterSeries serie, string name)
     {

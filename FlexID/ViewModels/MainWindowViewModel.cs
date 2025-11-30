@@ -1,9 +1,8 @@
-using Prism.Mvvm;
-using Reactive.Bindings;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace FlexID.ViewModels;
 
-public class MainWindowViewModel : BindableBase
+public class MainWindowViewModel
 {
     /// <summary>
     /// コンストラクタ。
@@ -13,7 +12,4 @@ public class MainWindowViewModel : BindableBase
     }
 }
 
-public class CalcState
-{
-    public ReactivePropertySlim<bool> CanExecute { get; } = new(true);
-}
+public class BusyState(bool value) : ValueChangedMessage<bool>(value);

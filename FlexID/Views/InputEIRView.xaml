@@ -41,7 +41,7 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding OutputFilePath.Value}">
+      <TextBox Text="{Binding OutputFilePath}">
         <i:Interaction.Behaviors>
           <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
         </i:Interaction.Behaviors>
@@ -60,7 +60,7 @@
       Grid.Row="1"
       Grid.Column="1"
       ItemsSource="{Binding Nuclides}"
-      SelectedValue="{Binding SelectedNuclide.Value}" />
+      SelectedValue="{Binding SelectedNuclide}" />
 
     <Label
       Grid.Row="2"
@@ -78,12 +78,12 @@
       <RadioButton
         Grid.Column="0"
         Content="Yes"
-        IsChecked="{Binding CalcProgeny.Value}"
-        IsEnabled="{Binding HasProgeny.Value}" />
+        IsChecked="{Binding CalcProgeny}"
+        IsEnabled="{Binding HasProgeny}" />
       <RadioButton
         Grid.Column="1"
         Content="No"
-        IsChecked="{Binding CalcProgeny.Value, Converter={StaticResource Inverted}}" />
+        IsChecked="{Binding CalcProgeny, Converter={StaticResource Inverted}}" />
     </Grid>
 
     <Label
@@ -95,7 +95,7 @@
       Grid.Column="1"
       DisplayMemberPath="Title"
       ItemsSource="{Binding Inputs}"
-      SelectedValue="{Binding SelectedInput.Value}" />
+      SelectedValue="{Binding SelectedInput}" />
 
     <Label
       Grid.Row="4"
@@ -107,7 +107,7 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding CalcTimeMeshFilePath.Value}">
+      <TextBox Text="{Binding CalcTimeMeshFilePath}">
         <i:Interaction.Behaviors>
           <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectCalcTimeMeshFilePathCommand}" />
         </i:Interaction.Behaviors>
@@ -128,7 +128,7 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding OutTimeMeshFilePath.Value}">
+      <TextBox Text="{Binding OutTimeMeshFilePath}">
         <i:Interaction.Behaviors>
           <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutTimeMeshFilePathCommand}" />
         </i:Interaction.Behaviors>
@@ -158,13 +158,13 @@
         Margin="32,4"
         HorizontalContentAlignment="Center"
         d:Text="50"
-        Text="{Binding CommitmentPeriod.Value}" />
+        Text="{Binding CommitmentPeriod}" />
       <ComboBox
         Grid.Column="1"
         Width="120"
         Margin="32,4"
         ItemsSource="{Binding CommitmentPeriodUnits, Mode=OneTime}"
-        SelectedValue="{Binding SelectedCommitmentPeriodUnit.Value}" />
+        SelectedValue="{Binding SelectedCommitmentPeriodUnit}" />
     </Grid>
 
     <Label
@@ -177,7 +177,7 @@
       Width="120"
       HorizontalAlignment="Left"
       ItemsSource="{Binding IntakeAges, Mode=OneTime}"
-      SelectedValue="{Binding SelectedIntakeAge.Value}" />
+      SelectedValue="{Binding SelectedIntakeAge}" />
 
     <Grid Grid.Row="9" Grid.ColumnSpan="2">
       <Button

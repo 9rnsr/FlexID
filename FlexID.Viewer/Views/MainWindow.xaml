@@ -130,7 +130,7 @@
         VerticalAlignment="Center"
         FontSize="14"
         KeyDown="OutputFilePathTextBox_KeyDown"
-        Text="{Binding OutputFilePath.Value, UpdateSourceTrigger=Explicit}">
+        Text="{Binding OutputFilePath, UpdateSourceTrigger=Explicit}">
         <i:Interaction.Behaviors>
           <vb:PathPasteBehavior />
         </i:Interaction.Behaviors>
@@ -160,7 +160,7 @@
       Grid.Column="2"
       Grid.ColumnSpan="2"
       Style="{StaticResource OutputInfoTextBox}"
-      Text="{Binding SelectedOutput.Value.Title, Mode=OneWay}" />
+      Text="{Binding SelectedOutput.Title, Mode=OneWay}" />
 
     <Label
       Grid.Row="4"
@@ -173,7 +173,7 @@
       Grid.Row="4"
       Grid.Column="2"
       ItemsSource="{Binding OutputTypes}"
-      SelectedItem="{Binding SelectedOutputType.Value}"
+      SelectedItem="{Binding SelectedOutputType}"
       Style="{StaticResource OutputInfoComboBox}" />
 
     <Label
@@ -188,8 +188,8 @@
       Grid.Row="6"
       Grid.Column="2"
       DisplayMemberPath="Header"
-      ItemsSource="{Binding SelectedOutput.Value.Blocks}"
-      SelectedItem="{Binding SelectedBlock.Value}"
+      ItemsSource="{Binding SelectedOutput.Blocks}"
+      SelectedItem="{Binding SelectedBlock}"
       Style="{StaticResource OutputInfoComboBox}" />
 
     <TabControl

@@ -1,27 +1,19 @@
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Reactive.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FlexID.Calc;
 using Microsoft.Win32;
-using Prism.Mvvm;
-using Reactive.Bindings;
 
 namespace FlexID.Viewer.ViewModels;
 
-public class MainWindowViewModel : BindableBase
+public partial class MainWindowViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
     public MainWindowViewModel()
     {
-        OutputFilePath.Subscribe(OnOutputFilePathChanged);
-
-        SelectOutputFilePathCommand = new ReactiveCommandSlim<string[]>().WithSubscribe(SelectOutputFilePath);
-
-        SelectedOutputType.Subscribe(OnSelectedOutputTypeChanged);
-
-        SelectedBlock.Subscribe(OnSelectedBlockChanged);
     }
 
     /// <summary>
@@ -37,13 +29,13 @@ public class MainWindowViewModel : BindableBase
     /// <summary>
     /// 出力ファイルのパス文字列。
     /// </summary>
-    public ReactivePropertySlim<string> OutputFilePath { get; } = new("");
+    [ObservableProperty]
+    public partial string OutputFilePath { get; set; } = "";
 
     /// <summary>
     /// 出力ファイルの選択処理。
     /// </summary>
-    public ReactiveCommandSlim<string[]> SelectOutputFilePathCommand { get; }
-
+    [RelayCommand]
     private void SelectOutputFilePath(string[] paths)
     {
         var selected = paths?[0];
@@ -56,13 +48,14 @@ public class MainWindowViewModel : BindableBase
                 selected = dialog.FileName;
         }
         if (selected is string path)
-            OutputFilePath.Value = path;
+            OutputFilePath = path;
     }
 
     /// <summary>
     /// 表示中の出力ファイルのデータ。
     /// </summary>
-    public ReactivePropertySlim<OutputData> SelectedOutput { get; } = new();
+    [ObservableProperty]
+    public partial OutputData SelectedOutput { get; set; }
 
     /// <summary>
     /// 出力ファイルリストのベースとなるパス文字列。
@@ -77,12 +70,14 @@ public class MainWindowViewModel : BindableBase
     /// <summary>
     /// 選択された出力ファイル種別。
     /// </summary>
-    public ReactivePropertySlim<OutputType?> SelectedOutputType { get; } = new();
+    [ObservableProperty]
+    public partial OutputType? SelectedOutputType { get; set; }
 
     /// <summary>
     /// 表示中の核種のデータ。
     /// </summary>
-    public ReactivePropertySlim<OutputBlockData> SelectedBlock { get; } = new();
+    [ObservableProperty]
+    public partial OutputBlockData SelectedBlock { get; set; }
 
     /// <summary>
     /// 出力ファイルの読み込み。
@@ -163,10 +158,10 @@ public class MainWindowViewModel : BindableBase
         OutputType.DoseRate,
     ];
 
-    private void OnOutputFilePathChanged(string value)
+    partial void OnOutputFilePathChanged(string value)
     {
-        SelectedOutput.Value = ReadOutputData(value);
-        if (SelectedOutput.Value is null)
+        SelectedOutput = ReadOutputData(value);
+        if (SelectedOutput is null)
         {
             BasePath = null;
             OutputTypes.Clear();
@@ -183,39 +178,39 @@ public class MainWindowViewModel : BindableBase
         }
         BasePath = newBasePath;
 
-        SelectedOutputType.Value = SelectedOutput.Value.Type;
+        SelectedOutputType = SelectedOutput.Type;
     }
 
-    private void OnSelectedOutputTypeChanged(OutputType? value)
+    partial void OnSelectedOutputTypeChanged(OutputType? value)
     {
-        SelectedBlock.Value = null;
+        SelectedBlock = null;
 
         if (value is not OutputType t)
             return;
         if (!OutputTypes.Contains(t))
             return;
 
-        var block = SelectedBlock.Value;
+        var block = SelectedBlock;
         var tstep = Contour.CurrentTimeStep;
 
         // 見つかっている出力データ群から表示対象を設定する。
-        OutputFilePath.Value = $"{BasePath}_{GetSuffix(t)}.out";
+        OutputFilePath = $"{BasePath}_{GetSuffix(t)}.out";
 
         // 直前に選択されていたものと同名のヘッダーを持つ
         // ブロックデータが存在する場合は、これを優先して再選択する。
         if (block is not null)
-            block = SelectedOutput.Value?.Blocks.FirstOrDefault(b => b.Header == block.Header);
+            block = SelectedOutput?.Blocks.FirstOrDefault(b => b.Header == block.Header);
         if (block is null)
-            block = SelectedOutput.Value?.Blocks.FirstOrDefault();
+            block = SelectedOutput?.Blocks.FirstOrDefault();
 
-        SelectedBlock.Value = block;
+        SelectedBlock = block;
         Contour.CurrentTimeStep = tstep;
     }
 
-    public void OnSelectedBlockChanged(OutputBlockData value)
+    partial void OnSelectedBlockChanged(OutputBlockData value)
     {
         // コンター表示とグラフ表示を更新する。
-        Contour.SetBlock(SelectedOutput.Value, value);
-        Graph.SetBlock(SelectedOutput.Value, value);
+        Contour.SetBlock(SelectedOutput, value);
+        Graph.SetBlock(SelectedOutput, value);
     }
 }

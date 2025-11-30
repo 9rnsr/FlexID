@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Costura.Fody" Version="6.0.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.Memory" Version="4.6.0" />
@@ -12,7 +13,6 @@
     <PackageVersion Include="MahApps.Metro" Version="2.4.10" />
     <PackageVersion Include="MahApps.Metro.IconPacks.Material" Version="5.0.0" />
     <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageVersion Include="ReactiveProperty" Version="9.7.0" />
     <PackageVersion Include="OxyPlot.Wpf" Version="2.1.2" />
     <PackageVersion Include="VirtualizingWrapPanel" Version="2.1.1" />
     <PackageVersion Include="EPPlus" Version="7.3.0" />

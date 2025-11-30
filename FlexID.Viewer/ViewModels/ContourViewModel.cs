@@ -1,13 +1,13 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FlexID.Calc;
-using Prism.Mvvm;
-using Reactive.Bindings;
 
 namespace FlexID.Viewer.ViewModels;
 
-public class ContourViewModel : BindableBase
+public partial class ContourViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
@@ -33,10 +33,6 @@ public class ContourViewModel : BindableBase
 
         OrganValues = unsetOrganValues;
         OrganColors = unsetOrganColors;
-
-        PlayCommand = new ReactiveCommand().WithSubscribe(Play);
-        NextStepCommand = new ReactiveCommand().WithSubscribe(NextStep);
-        PreviousStepCommand = new ReactiveCommand().WithSubscribe(PreviousStep);
     }
 
     /// <summary>
@@ -73,60 +69,36 @@ public class ContourViewModel : BindableBase
     /// <summary>
     /// モデル図に表示するための、統一臓器名とその合算された数値。
     /// </summary>
-    public Dictionary<string, double> OrganValues
-    {
-        get => organValues;
-        set => SetProperty(ref organValues, value);
-    }
-    private Dictionary<string, double> organValues;
+    [ObservableProperty]
+    public partial Dictionary<string, double> OrganValues { get; set; }
 
     /// <summary>
     /// モデル図に表示するための、統一臓器名とその色情報。
     /// </summary>
-    public Dictionary<string, string> OrganColors
-    {
-        get => organColors;
-        set => SetProperty(ref organColors, value);
-    }
-    private Dictionary<string, string> organColors;
+    [ObservableProperty]
+    public partial Dictionary<string, string> OrganColors { get; set; }
 
     /// <summary>
     /// コンターの上限値。
     /// </summary>
-    public double ContourMax
-    {
-        get => contourMax;
-        set
-        {
-            SetProperty(ref contourMax, value);
-            SetColors();
-        }
-    }
-    private double contourMax;
+    [ObservableProperty]
+    public partial double ContourMax { get; set; }
+
+    partial void OnContourMaxChanged(double value) => SetColors();
 
     /// <summary>
     /// コンターの下限値。
     /// </summary>
-    public double ContourMin
-    {
-        get => contourMin;
-        set
-        {
-            SetProperty(ref contourMin, value);
-            SetColors();
-        }
-    }
-    private double contourMin;
+    [ObservableProperty]
+    public partial double ContourMin { get; set; }
+
+    partial void OnContourMinChanged(double value) => SetColors();
 
     /// <summary>
     /// コンターに表示される単位。
     /// </summary>
-    public string ContourUnit
-    {
-        get => contourUnit;
-        set => SetProperty(ref contourUnit, value);
-    }
-    private string contourUnit;
+    [ObservableProperty]
+    public partial string ContourUnit { get; set; }
 
     #endregion
 
@@ -135,17 +107,10 @@ public class ContourViewModel : BindableBase
     /// <summary>
     /// 出力タイムステップ。
     /// </summary>
-    public IReadOnlyList<double> TimeSteps
-    {
-        get => timeSteps;
-        private set
-        {
-            SetProperty(ref timeSteps, value);
-            RaisePropertyChanged(nameof(StartTimeStep));
-            RaisePropertyChanged(nameof(EndTimeStep));
-        }
-    }
-    private IReadOnlyList<double> timeSteps = [];
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StartTimeStep))]
+    [NotifyPropertyChangedFor(nameof(EndTimeStep))]
+    public partial IReadOnlyList<double> TimeSteps { get; private set; } = [];
 
     public double StartTimeStep => TimeSteps.FirstOrDefault();
 
@@ -161,7 +126,7 @@ public class ContourViewModel : BindableBase
     /// </summary>
     public double CurrentTimeStep
     {
-        get => currentTimeStep;
+        get => field;
         set
         {
             if (TimeSteps.Count == 0)
@@ -194,33 +159,25 @@ public class ContourViewModel : BindableBase
                     }
                 }
             }
-            SetProperty(ref currentTimeStep, value);
+            SetProperty(ref field, value);
 
             SetValues();
         }
     }
-    private double currentTimeStep = 0;
 
     /// <summary>
     /// アニメーション再生状態を示す。
     /// </summary>
-    public bool IsPlaying
-    {
-        get => isPlaying;
-        set => SetProperty(ref isPlaying, value);
-    }
-    private bool isPlaying;
+    [ObservableProperty]
+    public partial bool IsPlaying { get; set; }
 
     #endregion
-
-    public ReactiveCommand PlayCommand { get; }
-    public ReactiveCommand NextStepCommand { get; }
-    public ReactiveCommand PreviousStepCommand { get; }
 
     /// <summary>
     /// 再生・停止制御
     /// </summary>
-    public async void Play()
+    [RelayCommand]
+    private async Task Play()
     {
         if (TimeSteps.Count == 0)
             return;
@@ -251,7 +208,8 @@ public class ContourViewModel : BindableBase
     /// <summary>
     /// 次のタイムステップヘ進む
     /// </summary>
-    public void NextStep()
+    [RelayCommand]
+    private void NextStep()
     {
         if (TimeSteps.Count == 0)
             return;
@@ -266,7 +224,8 @@ public class ContourViewModel : BindableBase
     /// <summary>
     /// 1つ前のタイムステップに戻る
     /// </summary>
-    public void PreviousStep()
+    [RelayCommand]
+    private void PreviousStep()
     {
         if (TimeSteps.Count == 0)
             return;

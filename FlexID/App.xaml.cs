@@ -1,5 +1,4 @@
 using System.Windows;
-using FlexID.ViewModels;
 using FlexID.Views;
 using Prism.Ioc;
 
@@ -12,7 +11,6 @@ public partial class App
 {
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterSingleton<CalcState>();
         containerRegistry.RegisterForNavigation<InputOIRView>();
         containerRegistry.RegisterForNavigation<InputEIRView>();
     }
