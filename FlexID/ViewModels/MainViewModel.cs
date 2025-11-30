@@ -2,12 +2,12 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace FlexID.ViewModels;
 
-public class MainWindowViewModel
+public class MainViewModel
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public MainWindowViewModel()
+    public MainViewModel()
     {
     }
 }

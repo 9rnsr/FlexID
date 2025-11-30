@@ -1,4 +1,5 @@
 using System.Windows;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace FlexID;
 
@@ -12,6 +13,8 @@ public partial class MainWindow : Window
         SizeToContent = SizeToContent.Height;
 
         InitializeComponent();
+
+        DataContext = Ioc.Default.GetService<ViewModels.MainViewModel>();
 
         ContentRendered += MainWindow_ContentRendered;
 

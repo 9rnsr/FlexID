@@ -1,7 +1,9 @@
+using System.Collections.ObjectModel;
 using System.Windows;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using FlexID.Viewer.ViewModels;
 using FlexID.Viewer.Views;
-using Prism.Ioc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FlexID.Viewer;
 
@@ -10,35 +12,53 @@ namespace FlexID.Viewer;
 /// </summary>
 public partial class App
 {
-    private string _outPath;
+    public App()
+    {
+        Ioc.Default.ConfigureServices(
+            new ServiceCollection()
+            .AddTransient<MainWindow>()
+            .AddTransient<MainViewModel>()
+            .BuildServiceProvider());
+    }
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        // Args ==1     入力GUIからの実行
-        // Args !=1(0)  exeファイル直接実行
+        base.OnStartup(e);
+
+        var mainWindow = Ioc.Default.GetRequiredService<MainWindow>();
+
+        // Args == 1     入力GUIからの実行
+        // Args != 1(0)  exeファイル直接実行
         if (e.Args.Length == 1)
         {
             var outPath = e.Args[0];
             if (outPath.StartsWith("\"") && outPath.EndsWith("\""))
                 outPath = outPath.Substring(1, outPath.Length - 2);
-            _outPath = outPath;
+
+            var vm = (MainViewModel)mainWindow.DataContext;
+            vm.OutputFilePath = outPath;
         }
 
-        base.OnStartup(e);
+        mainWindow.Show();
     }
+}
 
-    protected override Window CreateShell()
+public static class CollectionExtensions
+{
+    public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
     {
-        var window = Container.Resolve<MainWindow>();
-        if (_outPath is not null)
+        foreach (var item in items)
         {
-            var vm = (MainWindowViewModel)window.DataContext;
-            vm.OutputFilePath = _outPath;
+            collection.Add(item);
         }
-        return window;
     }
 
-    protected override void RegisterTypes(IContainerRegistry containerRegistry)
+    public static void Replace<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
     {
+        collection.Clear();
+        foreach (var item in items)
+        {
+            collection.Add(item);
+        }
     }
 }

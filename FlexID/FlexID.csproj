@@ -16,7 +16,8 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Costura.Fody" PrivateAssets="all" />
-    <PackageReference Include="Prism.DryIoc" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
     <PackageReference Include="VirtualizingWrapPanel" />
   </ItemGroup>
 

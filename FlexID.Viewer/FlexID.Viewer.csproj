@@ -18,8 +18,8 @@
     <PackageReference Include="Costura.Fody" PrivateAssets="all" />
     <PackageReference Include="MahApps.Metro" />
     <PackageReference Include="MahApps.Metro.IconPacks.Material" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="OxyPlot.Wpf" />
-    <PackageReference Include="Prism.DryIoc" />
   </ItemGroup>
 
   <ItemGroup>

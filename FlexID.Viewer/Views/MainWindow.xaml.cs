@@ -1,5 +1,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace FlexID.Viewer.Views;
 
@@ -11,6 +12,8 @@ public partial class MainWindow
     public MainWindow()
     {
         InitializeComponent();
+
+        DataContext = Ioc.Default.GetService<ViewModels.MainViewModel>();
     }
 
     private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)

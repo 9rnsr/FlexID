@@ -5,11 +5,12 @@
   <ItemGroup>
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Costura.Fody" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.Memory" Version="4.6.0" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <PackageVersion Include="Sprache" Version="2.3.1" />
-    <PackageVersion Include="Prism.DryIoc" Version="8.1.97" />
     <PackageVersion Include="MahApps.Metro" Version="2.4.10" />
     <PackageVersion Include="MahApps.Metro.IconPacks.Material" Version="5.0.0" />
     <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />

@@ -7,12 +7,12 @@ using Microsoft.Win32;
 
 namespace FlexID.Viewer.ViewModels;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public MainWindowViewModel()
+    public MainViewModel()
     {
     }
 
@@ -172,8 +172,7 @@ public partial class MainWindowViewModel : ObservableObject
         var newBasePath = GetBasePath(value);
         if (newBasePath is not null && newBasePath != BasePath)
         {
-            OutputTypes.Clear();
-            OutputTypes.AddRange(candidateTypes
+            OutputTypes.Replace(candidateTypes
                 .Where(t => File.Exists($"{newBasePath}_{GetSuffix(t)}.out")));
         }
         BasePath = newBasePath;

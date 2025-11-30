@@ -82,8 +82,7 @@ public partial class InputOIRViewModel : ObservableObject
         var inputs = value is null ? [] : cacheNucInps[value];
 
         // インプットの一覧を更新する。
-        Inputs.Clear();
-        Inputs.AddRange(inputs);
+        Inputs.Replace(inputs);
 
         SelectedInput = inputs.FirstOrDefault();
     }
