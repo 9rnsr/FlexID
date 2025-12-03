@@ -769,23 +769,26 @@ public class InputDataReader_OIR : InputDataReaderBase
                 .Where(s => s.MaleID != 0 || s.FemaleID != 0)
                 .Select(s => s.Name).ToList();
 
-            var inpParams = data.Parameters;
-            var inpIncludes = (inpParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
-            var inpExcludes = (inpParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            // Otherから無機質骨の体積組織(C-bone-VとT-bone-V)への分配について制御する。
+            var paramOtherContainsMineralBone =
+                (nuclide.Parameters.GetValueOrDefault("OtherContainsMineralBone") ??
+                    data.Parameters.GetValueOrDefault("OtherContainsMineralBone") ?? "auto").Trim();
+            bool? otherContainsMineralBone;
+            if (bool.TryParse(paramOtherContainsMineralBone, out var v))
+            {
+                otherContainsMineralBone = v;
+            }
+            else
+            {
+                if (!paramOtherContainsMineralBone.Equals("auto", StringComparison.OrdinalIgnoreCase))
+                    errors.AddError($"unrecognized OtherContainsMineralBone parameter: '{paramOtherContainsMineralBone}'");
+                otherContainsMineralBone = null;
+            }
 
-            var nucParams = nuclide.Parameters;
-            var nucExcludes = (nucParams.GetValueOrDefault("ExcludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
-            var nucIncludes = (nucParams.GetValueOrDefault("IncludeOtherSourceRegions") ?? "").Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var otherCompartments = new List<Organ>();
 
-            // Otherについて、以下の優先度で包含・除外指定された線源領域を追加・削除する：
-            //  優先度低：インプット全体に共通設定として包含指定されたもの
-            //  ↓        インプット全体に共通設定として除外指定されたもの
-            //  ↓        特定の核種に対して包含指定されたもの
-            //  優先度高：特定の核種に対して除外指定されたもの
-            otherSourceRegions.AddRange(inpIncludes.Except(otherSourceRegions).ToArray());
-            otherSourceRegions.RemoveAll(reg => inpExcludes.Contains(reg));
-            otherSourceRegions.AddRange(nucIncludes.Except(otherSourceRegions).ToArray());
-            otherSourceRegions.RemoveAll(reg => nucExcludes.Contains(reg));
+            var anyCTmarrow = false;
+            var anyRYmarrow = false;
 
             foreach (var (lineNum, organ) in organs)
             {
@@ -817,6 +820,14 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     // インプットで明示された線源領域をOtherの内訳から除く。
                     otherSourceRegions.Remove(sourceRegion);
+
+                    if (sourceRegion == "C-marrow" || sourceRegion == "T-marrow")
+                        anyCTmarrow = true;
+                    if (sourceRegion == "R-marrow" || sourceRegion == "Y-marrow")
+                        anyRYmarrow = true;
+
+                    if (sourceRegion == "Other")
+                        otherCompartments.Add(organ);
                 }
                 else
                 {
@@ -834,6 +845,42 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             if (!nuclide.IsProgeny && input is null)
                 errors.AddError(sectionLineNum, "Missing 'inp' compartment.");
+
+            if (otherContainsMineralBone is null)
+            {
+                // 自動判定を行う場合、線源領域Otherを設定した全てのコンパートメントについて
+                // 名称から"ST"＝Soft Tissue, 軟組織であると示されている場合に、骨体積への分配を抑制する。
+                var allSoftTissue = otherCompartments.All(o => o.Name.StartsWith("ST"));
+                if (allSoftTissue)
+                    otherContainsMineralBone = false;
+                else
+                {
+                    otherContainsMineralBone = true;
+
+                    // STと非STが混合している状態について、警告を提供した方がよい…
+                    // if (otherCompartments.Any(o => o.Name.StartsWith("ST")))
+                    //     ;
+                }
+            }
+            if (otherContainsMineralBone == false)
+            {
+                // sregions_2016-08-12.NDXでID=1となっている
+                // 皮質骨体積と梁骨体積をOtherを構成する線源領域から除く。
+                otherSourceRegions.Remove("C-bone-V");
+                otherSourceRegions.Remove("T-bone-V");
+            }
+
+            if (anyCTmarrow)
+            {
+                // C/T-marrowがコンパートメントとして明示されている場合は、
+                // OtherからR/Y-marrowへの分配を行わないようにする。
+                otherSourceRegions.Remove("R-marrow");
+                otherSourceRegions.Remove("Y-marrow");
+
+                // C/T-marrowとR/Y-marrowの組み合わせが両方同時に使用されている場合はエラーとする。
+                if (anyRYmarrow)
+                    errors.AddError(sectionLineNum, "Both of C/T-marrow and R/Y-marrow source region pairs are used.");
+            }
 
             nuclide.OtherSourceRegions = otherSourceRegions.ToArray();
         }

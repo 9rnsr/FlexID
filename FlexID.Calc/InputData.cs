@@ -216,8 +216,7 @@ public class NuclideData
     /// </summary>
     public static readonly string[] ParameterNames =
     [
-        "ExcludeOtherSourceRegions",
-        "IncludeOtherSourceRegions"
+        "OtherContainsMineralBone"
     ];
 
     public override string ToString() => Name;
@@ -278,8 +277,7 @@ public class InputData
     /// </summary>
     public static readonly string[] ParameterNames =
     [
-        "ExcludeOtherSourceRegions",
-        "IncludeOtherSourceRegions",
+        "OtherContainsMineralBone",
         "PrintCompartments",
         "PrintTransfers",
         "PrintScoefficients",
