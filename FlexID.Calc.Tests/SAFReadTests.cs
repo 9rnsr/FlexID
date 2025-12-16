@@ -15,14 +15,20 @@ public class SAFReadTests
     }
 
     [TestMethod]
-    public void TestReadBET()
+    [DataRow("Sr-90")]
+    [DataRow("N-16")]
+    public void TestReadBET(string nuc)
     {
-        var expectFile = TestFiles.Combine("SAFRead", "Sr-90_BetExpected.txt");
-        var expectLines = File.ReadAllLines(expectFile);
+        var expectFile = TestFiles.Combine("SAFRead", $"{nuc}_BetExpected.txt");
+        var expectData = File.ReadLines(expectFile).Select(line =>
+        {
+            var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            return (double.Parse(parts[0]), double.Parse(parts[1]));
+        });
 
-        var actualLines = SAFDataReader.ReadBET("Sr-90");
+        var actualData = SAFDataReader.ReadBET(nuc);
 
-        actualLines.ShouldBe(expectLines);
+        actualData.ShouldBe(expectData);
     }
 
     [TestMethod]

@@ -141,22 +141,34 @@ public class SAFDataReader
     /// </summary>
     /// <param name="nuclideName">取得対象の核種名</param>
     /// <returns>取得したβスペクトルデータ</returns>
-    public static string[] ReadBET(string nuclideName)
+    public static (double Energy, double Yield)[] ReadBET(string nuclideName)
     {
         using var r = new StreamReader(BetFilePath);
 
         string line;
         while ((line = r.ReadLine()) != null)
         {
-            string[] fields = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var fields = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             if (fields[0] != nuclideName)
                 continue;
 
             var dataCount = int.Parse(fields[1]);
-            var data = new string[dataCount];
+            var data = new (double, double)[dataCount];
 
             for (int dataNo = 0; dataNo < dataCount; dataNo++)
-                data[dataNo] = r.ReadLine();
+            {
+                line = r.ReadLine();
+                fields = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
+
+                // Publ.107のBETファイルでは、N-16の最後の2つのビンのデータが空白文字で区切られておらず、
+                // また1列目の桁数が仕様より1文字溢れて8桁になっているため、ここで固定長で切り直す。
+                if (fields.Length == 1)
+                    fields = [line.Substring(0, 8), line.Substring(8)];
+
+                var energy = double.Parse(fields[0]);
+                var yield = double.Parse(fields[1]);
+                data[dataNo] = (energy, yield);
+            }
 
             return data;
         }

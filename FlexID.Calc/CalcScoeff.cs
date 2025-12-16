@@ -145,13 +145,13 @@ public class CalcScoeff
                     double beta = 0;
                     for (int r = 1; r < betdata.Length; r++)
                     {
-                        var betL = betdata[r - 1].Split([" "], StringSplitOptions.RemoveEmptyEntries);
-                        var betH = betdata[r - 0].Split([" "], StringSplitOptions.RemoveEmptyEntries);
+                        // エネルギー幅の下限(MeV)
+                        // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
+                        var (ebinL, nparL) = betdata[r - 1];
 
-                        var ebinL = double.Parse(betL[0]); // エネルギー幅の下限(MeV)
-                        var ebinH = double.Parse(betH[0]); // エネルギー幅の上限(MeV)
-                        var nparL = double.Parse(betL[1]); // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
-                        var nparH = double.Parse(betH[1]); // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
+                        // エネルギー幅の上限(MeV)
+                        // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
+                        var (ebinH, nparH) = betdata[r - 0];
 
                         var yieldL = ebinL * nparL; // 下限側のエネルギー点における放射線の収率(/nt)
                         var yieldH = ebinH * nparH; // 上限側のエネルギー点における放射線の収率(/nt)
