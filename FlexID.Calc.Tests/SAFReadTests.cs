@@ -7,11 +7,15 @@ public class SAFReadTests
     public void TestReadRAD()
     {
         var expectFile = TestFiles.Combine("SAFRead", "Ca-45_RadExpected.txt");
-        var expectLines = File.ReadAllLines(expectFile);
+        var expectData = File.ReadAllLines(expectFile).Select(line =>
+        {
+            var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            return (int.Parse(parts[0]), double.Parse(parts[1]), double.Parse(parts[2]), parts[3]);
+        });
 
-        var actualLines = SAFDataReader.ReadRAD("Ca-45");
+        var actualData = SAFDataReader.ReadRAD("Ca-45");
 
-        actualLines.ShouldBe(expectLines);
+        actualData.ShouldBe(expectData);
     }
 
     [TestMethod]

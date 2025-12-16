@@ -115,15 +115,11 @@ public class CalcScoeff
             foreach (var rad in raddata)
             {
                 // エネルギー毎のSAF算出
-                string[] Rad = rad.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
-                string icode = Rad[0];      // 放射線のタイプ
-                string yield = Rad[1];      // 放射線の収率(/nt)
-                string energy = Rad[2];     // 放射線のエネルギー(MeV)
-                string jcode = Rad[3];      // 放射線のタイプ
-
-                double Yi = double.Parse(yield);
-                double Ei = double.Parse(energy);
+                // 放射線の収率(/nt)
+                // 放射線のエネルギー(MeV)
+                // 放射線のタイプ
+                var (_, Yi, Ei, jcode) = rad;
 
                 if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                 {
