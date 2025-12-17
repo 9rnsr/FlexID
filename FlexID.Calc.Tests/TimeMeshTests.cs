@@ -84,7 +84,7 @@ public class TimeMeshTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(CoverMeshes), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(CoverMeshes))]
     public void TestCover(TimeMesh coarseMesh, TimeMesh fineMesh)
     {
         // 細かいメッシュは粗いメッシュを網羅する。

@@ -6,7 +6,7 @@ public class ParameterTests
     private string ParamDir => TestFiles.Combine("parameter");
 
     [TestMethod]
-    [DynamicData(nameof(ValidCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ValidCases))]
     public void TestValids(string paramFile, Program.CommandLine expect)
     {
         var paramFilePath = Path.Combine(ParamDir, paramFile);
