@@ -115,15 +115,11 @@ public class CalcScoeff
             foreach (var rad in raddata)
             {
                 // エネルギー毎のSAF算出
-                string[] Rad = rad.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
-                string icode = Rad[0];      // 放射線のタイプ
-                string yield = Rad[1];      // 放射線の収率(/nt)
-                string energy = Rad[2];     // 放射線のエネルギー(MeV)
-                string jcode = Rad[3];      // 放射線のタイプ
-
-                double Yi = double.Parse(yield);
-                double Ei = double.Parse(energy);
+                // 放射線の収率(/nt)
+                // 放射線のエネルギー(MeV)
+                // 放射線のタイプ
+                var (_, Yi, Ei, jcode) = rad;
 
                 if (jcode == "X" || jcode == "G" || jcode == "PG" || jcode == "DG" || jcode == "AQ")
                 {
@@ -145,13 +141,13 @@ public class CalcScoeff
                     double beta = 0;
                     for (int r = 1; r < betdata.Length; r++)
                     {
-                        var betL = betdata[r - 1].Split([" "], StringSplitOptions.RemoveEmptyEntries);
-                        var betH = betdata[r - 0].Split([" "], StringSplitOptions.RemoveEmptyEntries);
+                        // エネルギー幅の下限(MeV)
+                        // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
+                        var (ebinL, nparL) = betdata[r - 1];
 
-                        var ebinL = double.Parse(betL[0]); // エネルギー幅の下限(MeV)
-                        var ebinH = double.Parse(betH[0]); // エネルギー幅の上限(MeV)
-                        var nparL = double.Parse(betL[1]); // 下限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
-                        var nparH = double.Parse(betH[1]); // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
+                        // エネルギー幅の上限(MeV)
+                        // 上限側のエネルギー点における、1壊変・1MeVあたりのβ粒子数(/MeV/nt)
+                        var (ebinH, nparH) = betdata[r - 0];
 
                         var yieldL = ebinL * nparL; // 下限側のエネルギー点における放射線の収率(/nt)
                         var yieldH = ebinH * nparH; // 上限側のエネルギー点における放射線の収率(/nt)
