@@ -61,7 +61,7 @@ public class ParameterTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ErrorCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ErrorCases))]
     public void TestErrors(string paramFile, string expect)
     {
         var paramFilePath = Path.Combine(ParamDir, paramFile);
