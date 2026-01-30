@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/SolutionItems/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="FlexID.Calc.Tests/FlexID.Calc.Tests.csproj" />
+  <Project Path="FlexID.Calc/FlexID.Calc.csproj" />
+  <Project Path="FlexID.Viewer/FlexID.Viewer.csproj" />
+  <Project Path="FlexID/FlexID.csproj" />
+  <Project Path="ResultChecker/ResultChecker.csproj" />
+</Solution>
