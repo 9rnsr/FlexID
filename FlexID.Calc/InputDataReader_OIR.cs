@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace FlexID.Calc;
 
 /// <summary>
@@ -107,15 +109,11 @@ public class InputDataReader_OIR : InputDataReaderBase
         {
             var header = GetSectionHeader(line);
 
-            Span<char> buffer = stackalloc char[header.Length];
-            for (int i = 0; i < header.Length; i++)
-                buffer[i] = char.ToLowerInvariant(header[i]);
-
-            if (buffer.SequenceEqual("title".AsSpan()))
+            if (Ascii.EqualsIgnoreCase(header, "title"))
             {
                 line = GetTitle();
             }
-            else if (buffer.SequenceEqual("nuclide".AsSpan()))
+            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
             {
                 line = GetNuclides();
             }
@@ -156,35 +154,31 @@ public class InputDataReader_OIR : InputDataReaderBase
         {
             var header = GetSectionHeader(line);
 
-            Span<char> buffer = stackalloc char[header.Length];
-            for (int i = 0; i < header.Length; i++)
-                buffer[i] = char.ToLowerInvariant(header[i]);
-
-            if (buffer.SequenceEqual("title".AsSpan()))
+            if (Ascii.EqualsIgnoreCase(header, "title"))
             {
                 line = GetTitle();
             }
-            else if (buffer.SequenceEqual("parameter".AsSpan()))
+            else if (Ascii.EqualsIgnoreCase(header, "parameter"))
             {
                 line = GetParameters("");
             }
-            else if (buffer.EndsWith(":parameter".AsSpan()))
+            else if (header.EndsWith(":parameter", StringComparison.OrdinalIgnoreCase))
             {
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetParameters(nuc);
             }
-            else if (buffer.SequenceEqual("nuclide".AsSpan()))
+            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
             {
                 line = GetNuclides();
             }
-            else if (buffer.EndsWith(":compartment".AsSpan()))
+            else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
             {
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetCompartments(nuc);
             }
-            else if (buffer.EndsWith(":transfer".AsSpan()))
+            else if (header.EndsWith(":transfer", StringComparison.OrdinalIgnoreCase))
             {
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
