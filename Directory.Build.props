@@ -1,8 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <LangVersion>13</LangVersion>
+    <LangVersion>preview</LangVersion>
     <ImplicitUsings>true</ImplicitUsings>
 
     <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>

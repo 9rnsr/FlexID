@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using FlexID.Calc;
@@ -201,7 +200,7 @@ internal partial class Program
 
     private static void Usage()
     {
-        var exeName = Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
+        var exeName = Path.GetFileNameWithoutExtension(Environment.ProcessPath);
 
         Console.Error.WriteLine($"usage: {exeName} [options] [<pattern> ...]");
         Console.Error.WriteLine();
