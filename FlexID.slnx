@@ -13,6 +13,7 @@
   </Folder>
   <Project Path="FlexID.Core/FlexID.Core.csproj" />
   <Project Path="FlexID.Core.Tests/FlexID.Core.Tests.csproj" />
+  <Project Path="DataTable/DataTable.csproj" />
   <Project Path="FlexID/FlexID.csproj" />
   <Project Path="FlexUI/FlexUI.csproj">
     <Platform Solution="*|x64" Project="x64" />
