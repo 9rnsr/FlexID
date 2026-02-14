@@ -19,31 +19,6 @@
     <Style TargetType="TextBlock">
       <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
-    <!--
-    <Style TargetType="TabItem">
-      <Setter Property="Padding" Value="8,2" />
-    </Style>
-    <Style TargetType="Button">
-      <Setter Property="Padding" Value="8,3" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-    <Style TargetType="CheckBox">
-      <Setter Property="Margin" Value="32,4" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-    <Style TargetType="RadioButton">
-      <Setter Property="Margin" Value="32,4" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-    <Style TargetType="TextBox">
-      <Setter Property="Padding" Value="3" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-    <Style TargetType="ComboBox">
-      <Setter Property="Padding" Value="6,5,3,3" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-    -->
   </Page.Resources>
 
   <Grid>
@@ -54,7 +29,7 @@
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
 
-      <Grid Grid.Row="0" />
+      <v:InputsPage Grid.Row="0" Targets="{x:Bind ViewModel.Targets}" />
 
       <Grid
         Grid.Row="1"
@@ -173,71 +148,5 @@
         Content="Run" />
     </Grid>
   </Grid>
-
-  <!--
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" SharedSizeGroup="L" />
-      <ColumnDefinition />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition Height="Auto" SharedSizeGroup="R" />
-      <RowDefinition />
-      <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
-
-    <Label
-      Grid.Row="1"
-      Grid.Column="0"
-      Content="Nuclide" />
-    <ComboBox
-      Grid.Row="1"
-      Grid.Column="1"
-      ItemsSource="{Binding Nuclides}"
-      SelectedValue="{Binding SelectedNuclide}" />
-
-    <Label
-      Grid.Row="2"
-      Grid.Column="0"
-      Content="Application of &#xA;Progeny Nuclide" />
-    <Grid
-      Grid.Row="2"
-      Grid.Column="1"
-      HorizontalAlignment="Center"
-      VerticalAlignment="Center">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <RadioButton
-        Grid.Column="0"
-        Content="Yes"
-        IsChecked="{Binding CalcProgeny}"
-        IsEnabled="{Binding HasProgeny}" />
-      <RadioButton
-        Grid.Column="1"
-        Content="No"
-        IsChecked="{Binding CalcProgeny, Converter={StaticResource Inverted}}" />
-    </Grid>
-
-    <Label
-      Grid.Row="3"
-      Grid.Column="0"
-      Content="Input Title &#xA;(Route, Form, etc)" />
-    <ComboBox
-      Grid.Row="3"
-      Grid.Column="1"
-      DisplayMemberPath="Title"
-      ItemsSource="{Binding Inputs}"
-      SelectedValue="{Binding SelectedInput}" />
-  </Grid>
-  -->
 
 </Page>
