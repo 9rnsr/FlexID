@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using FlexID.Services;
 using FlexID.ViewModels;
 using FlexID.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +43,7 @@ public partial class App
             .AddTransient<InputScoeffViewModel>()
             .AddTransient<ViewerWindow>()
             .AddTransient<ViewerViewModel>()
+            .AddSingleton<MessageService>()
             .BuildServiceProvider());
 
         var arguments = Environment.GetCommandLineArgs();

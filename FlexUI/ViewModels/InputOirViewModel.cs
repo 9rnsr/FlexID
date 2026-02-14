@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FlexID.Models;
+using FlexID.Services;
 
 namespace FlexID.ViewModels;
 
@@ -183,9 +184,9 @@ public partial class InputOirViewModel : ViewModelBase
 
             //await RunAndView(SelectedInput.InputTarget);
         }
-        catch (Exception error)
+        catch (Exception ex)
         {
-            //MessageBox.Show(error.Message);
+            MessageService.Error(ex.Message);
         }
         finally
         {

@@ -1,3 +1,4 @@
+using FlexID.Services;
 using FlexID.ViewModels;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
@@ -11,11 +12,13 @@ namespace FlexID.Views;
 
 public sealed partial class MainWindow
 {
-    public MainWindow(MainViewModel vm)
+    public MainWindow(MainViewModel vm, MessageService messageService)
     {
         ViewModel = vm;
 
         InitializeComponent();
+
+        messageService.Register(NavigationView);
 
         // NavigationViewItem.IsSelected を設定する方法は問題があるため、
         // 代替として Activated を契機としてコードビハインドから選択を行う。
