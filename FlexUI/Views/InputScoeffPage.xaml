@@ -165,7 +165,7 @@
           AccessKey="O"
           Text="{x:Bind ViewModel.OutputDirectory, Mode=TwoWay}">
           <i:Interaction.Behaviors>
-            <!--<vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />-->
+            <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />
           </i:Interaction.Behaviors>
         </TextBox>
         <Button
