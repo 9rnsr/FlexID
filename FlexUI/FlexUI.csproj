@@ -58,6 +58,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FlexID.Core\FlexID.Core.csproj" />
+    <ProjectReference Include="..\DataTable\DataTable.csproj" />
   </ItemGroup>
 
   <Target Name="CreatePackageList" BeforeTargets="BeforeBuild">
