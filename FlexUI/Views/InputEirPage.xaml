@@ -16,13 +16,12 @@
   mc:Ignorable="d">
 
   <Page.Resources>
+    <Style TargetType="TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
     <!--
     <Style TargetType="TabItem">
       <Setter Property="Padding" Value="8,2" />
-    </Style>
-    <Style TargetType="Label">
-      <Setter Property="Margin" Value="4" />
-      <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
     <Style TargetType="Button">
       <Setter Property="Padding" Value="8,3" />
@@ -55,6 +54,122 @@
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
 
+      <Grid Grid.Row="0" />
+
+      <Grid
+        Grid.Row="1"
+        RowSpacing="16"
+        ColumnSpacing="8"
+        KeyTipPlacementMode="Left">
+
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="160" />
+          <ColumnDefinition />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+          <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Content" Value="Browse" />
+          </Style>
+        </Grid.Resources>
+
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="0"
+          Text="Commitment Period" />
+        <StackPanel
+          Grid.Row="0"
+          Grid.Column="1"
+          Grid.ColumnSpan="2"
+          Spacing="8"
+          Orientation="Horizontal">
+          <TextBox
+            Width="100"
+            HorizontalContentAlignment="Center"
+            AccessKey="P"
+            Text="{x:Bind ViewModel.CommitmentPeriod, Mode=TwoWay}" />
+          <ComboBox
+            Width="120"
+            VerticalAlignment="Stretch"
+            IsEditable="False"
+            IsTextSearchEnabled="True"
+            ItemsSource="{x:Bind ViewModel.CommitmentPeriodUnits}"
+            SelectedValue="{x:Bind ViewModel.SelectedCommitmentPeriodUnit, Mode=TwoWay}" />
+
+          <Border Width="24" />
+
+          <TextBlock Width="90" Text="Intake Age" />
+          <ComboBox
+            Width="140"
+            HorizontalAlignment="Left"
+            AccessKey="A"
+            ItemsSource="{x:Bind ViewModel.IntakeAges}"
+            SelectedValue="{x:Bind ViewModel.SelectedIntakeAge, Mode=TwoWay}" />
+        </StackPanel>
+
+        <TextBlock
+          Grid.Row="1"
+          Grid.Column="0"
+          Text="Computational Time Mesh" />
+        <TextBox
+          Grid.Row="1"
+          Grid.Column="1"
+          AccessKey="TC"
+          Text="{x:Bind ViewModel.ComputeTimeMeshFilePath, Mode=TwoWay}">
+          <i:Interaction.Behaviors>
+            <!--<vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectComputeTimeMeshFilePathCommand}" />-->
+          </i:Interaction.Behaviors>
+        </TextBox>
+        <Button
+          Grid.Row="1"
+          Grid.Column="2"
+          Command="{x:Bind ViewModel.SelectComputeTimeMeshFilePathCommand}" />
+
+        <TextBlock
+          Grid.Row="2"
+          Grid.Column="0"
+          Text="Output Time Mesh" />
+        <TextBox
+          Grid.Row="2"
+          Grid.Column="1"
+          AccessKey="TO"
+          Text="{x:Bind ViewModel.OutputTimeMeshFilePath, Mode=TwoWay}">
+          <i:Interaction.Behaviors>
+            <!--<vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputTimeMeshFilePathCommand}" />-->
+          </i:Interaction.Behaviors>
+        </TextBox>
+        <Button
+          Grid.Row="2"
+          Grid.Column="2"
+          Command="{x:Bind ViewModel.SelectOutputTimeMeshFilePathCommand}" />
+
+        <TextBlock
+          Grid.Row="3"
+          Grid.Column="0"
+          Text="Output Directory" />
+        <TextBox
+          Grid.Row="3"
+          Grid.Column="1"
+          AccessKey="O"
+          Text="{x:Bind ViewModel.OutputDirectory, Mode=TwoWay}">
+          <i:Interaction.Behaviors>
+            <!--<vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />-->
+          </i:Interaction.Behaviors>
+        </TextBox>
+        <Button
+          Grid.Row="3"
+          Grid.Column="2"
+          Command="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />
+      </Grid>
+
       <Button
         Grid.Row="2"
         Width="128"
@@ -84,27 +199,6 @@
       <RowDefinition />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-
-    <Label
-      Grid.Row="0"
-      Grid.Column="0"
-      Content="Output File Path" />
-    <Grid Grid.Row="0" Grid.Column="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition Width="8" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding OutputFilePath}">
-        <i:Interaction.Behaviors>
-          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
-        </i:Interaction.Behaviors>
-      </TextBox>
-      <Button
-        Grid.Column="2"
-        Command="{Binding SelectOutputFilePathCommand}"
-        Content="Browse" />
-    </Grid>
 
     <Label
       Grid.Row="1"
@@ -150,88 +244,6 @@
       DisplayMemberPath="Title"
       ItemsSource="{Binding Inputs}"
       SelectedValue="{Binding SelectedInput}" />
-
-    <Label
-      Grid.Row="4"
-      Grid.Column="0"
-      Content="Computational &#xA;Time Mesh" />
-    <Grid Grid.Row="4" Grid.Column="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition Width="8" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding ComputeTimeMeshFilePath}">
-        <i:Interaction.Behaviors>
-          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectComputeTimeMeshFilePathCommand}" />
-        </i:Interaction.Behaviors>
-      </TextBox>
-      <Button
-        Grid.Column="2"
-        Command="{Binding SelectComputeTimeMeshFilePathCommand}"
-        Content="Browse" />
-    </Grid>
-
-    <Label
-      Grid.Row="5"
-      Grid.Column="0"
-      Content="Output &#xA;Time Mesh" />
-    <Grid Grid.Row="5" Grid.Column="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition Width="8" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding OutputTimeMeshFilePath}">
-        <i:Interaction.Behaviors>
-          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputTimeMeshFilePathCommand}" />
-        </i:Interaction.Behaviors>
-      </TextBox>
-      <Button
-        Grid.Column="2"
-        Command="{Binding SelectOutputTimeMeshFilePathCommand}"
-        Content="Browse" />
-    </Grid>
-
-    <Label
-      Grid.Row="6"
-      Grid.Column="0"
-      Content="Commitment Period" />
-    <Grid
-      Grid.Row="6"
-      Grid.Column="1"
-      HorizontalAlignment="Center"
-      VerticalAlignment="Center">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <TextBox
-        Grid.Column="0"
-        Width="60"
-        Margin="32,4"
-        HorizontalContentAlignment="Center"
-        d:Text="50"
-        Text="{Binding CommitmentPeriod}" />
-      <ComboBox
-        Grid.Column="1"
-        Width="120"
-        Margin="32,4"
-        ItemsSource="{Binding CommitmentPeriodUnits, Mode=OneTime}"
-        SelectedValue="{Binding SelectedCommitmentPeriodUnit}" />
-    </Grid>
-
-    <Label
-      Grid.Row="7"
-      Grid.Column="0"
-      Content="Intake Age" />
-    <ComboBox
-      Grid.Row="7"
-      Grid.Column="1"
-      Width="120"
-      HorizontalAlignment="Left"
-      ItemsSource="{Binding IntakeAges, Mode=OneTime}"
-      SelectedValue="{Binding SelectedIntakeAge}" />
   </Grid>
   -->
 

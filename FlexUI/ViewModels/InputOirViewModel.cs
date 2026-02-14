@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -7,19 +5,18 @@ using FlexID.Models;
 
 namespace FlexID.ViewModels;
 
-public partial class InputOirViewModel : ObservableObject
+public partial class InputOirViewModel : ViewModelBase
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
     public InputOirViewModel()
     {
-        OutputFilePath = @"out\";
+        CommitmentPeriod = 50;
+        SelectedCommitmentPeriodUnit = CommitmentPeriodUnits[^1];
         ComputeTimeMeshFilePath = @"lib\TimeMesh\time.dat";
         OutputTimeMeshFilePath = @"lib\TimeMesh\out-time-OIR.dat";
-        CommitmentPeriod = "50";
-
-        SelectedCommitmentPeriodUnit = CommitmentPeriodUnits.Last();
+        OutputDirectory = @"out\";
 
         WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
 
@@ -47,6 +44,7 @@ public partial class InputOirViewModel : ObservableObject
 #endif
     }
 
+#if false
     public ObservableCollection<string> Nuclides { get; } = [];
 
     [ObservableProperty]
@@ -83,6 +81,20 @@ public partial class InputOirViewModel : ObservableObject
 
         SelectedInput = inputs.FirstOrDefault();
     }
+#endif
+
+    [ObservableProperty]
+    public partial int CommitmentPeriod { get; set; }
+
+    public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
+    [
+        "days",
+        "months",
+        "years",
+    ];
+
+    [ObservableProperty]
+    public partial string SelectedCommitmentPeriodUnit { get; set; }
 
     [ObservableProperty]
     public partial string ComputeTimeMeshFilePath { get; set; }
@@ -121,23 +133,10 @@ public partial class InputOirViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial string CommitmentPeriod { get; set; }
-
-    public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
-    [
-        "days",
-        "months",
-        "years",
-    ];
-
-    [ObservableProperty]
-    public partial string SelectedCommitmentPeriodUnit { get; set; }
-
-    [ObservableProperty]
-    public partial string OutputFilePath { get; set; }
+    public partial string OutputDirectory { get; set; }
 
     [RelayCommand]
-    private void SelectOutputFilePath(string[] paths)
+    private void SelectOutputDirectory(string[] paths)
     {
         var selected = paths?[0];
         if (selected is null)
@@ -148,7 +147,7 @@ public partial class InputOirViewModel : ObservableObject
             //    selected = dialog.FileName;
         }
         if (selected is not null)
-            OutputFilePath = selected;
+            OutputDirectory = selected;
     }
 
     [ObservableProperty]
@@ -165,24 +164,24 @@ public partial class InputOirViewModel : ObservableObject
             WeakReferenceMessenger.Default.Send(new BusyState(true));
 
             // 各パラメータの入力確認
-            if (OutputFilePath == "")
+            if (OutputDirectory == "")
                 throw new Exception("Please enter the Output File Path.");
-            if (string.IsNullOrWhiteSpace(Path.GetFileName(OutputFilePath)))
-                throw new Exception("Please enter file name in the Output File Path");
-            if (SelectedNuclide is null)
-                throw new Exception("Please select Nuclide.");
-            if (SelectedInput is null)
-                throw new Exception("Please select Route of Intake.");
+            //if (string.IsNullOrWhiteSpace(Path.GetFileName(OutputFilePath)))
+            //    throw new Exception("Please enter file name in the Output File Path");
+            //if (SelectedNuclide is null)
+            //    throw new Exception("Please select Nuclide.");
+            //if (SelectedInput is null)
+            //    throw new Exception("Please select Route of Intake.");
             if (ComputeTimeMeshFilePath == "")
                 throw new Exception("Please enter the Computational Time Mesh file path.");
             if (OutputTimeMeshFilePath == "")
                 throw new Exception("Please enter the Output Time Mesh file path.");
-            if (!int.TryParse(CommitmentPeriod, out _))
-                throw new Exception("Please enter Commitment Period.");
+            if (CommitmentPeriod <= 0)
+                throw new Exception("Please enter the positive Commitment Period.");
             if (SelectedCommitmentPeriodUnit is null)
-                throw new Exception("Please select Commitment Period.");
+                throw new Exception("Please select Commitment Period Unit.");
 
-            await RunAndView(SelectedInput.InputTarget);
+            //await RunAndView(SelectedInput.InputTarget);
         }
         catch (Exception error)
         {
@@ -198,22 +197,20 @@ public partial class InputOirViewModel : ObservableObject
     {
         // FlexID.Calcアセンブリがない場合はこのメソッドに入った直後に例外が発生する。
 
-        var data = new InputDataReader_OIR(target.FilePath, CalcProgeny).Read();
+        var data = new InputDataReader_OIR(target.FilePath, calcProgeny: true).Read();
 
-        var outputPath          /**/= OutputFilePath;
+        var outputDir           /**/= OutputDirectory;
+        var outputFile          /**/= target.Name;
         var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
         var outputTimeMeshPath  /**/= OutputTimeMeshFilePath;
         var commitmentPeriod    /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
 
-        if (!Path.IsPathFullyQualified(outputPath))
-            outputPath = Path.Combine(AppResource.ProcessDir, outputPath);
+        if (!Path.IsPathFullyQualified(outputDir))
+            outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
         if (!Path.IsPathFullyQualified(computeTimeMeshPath))
             computeTimeMeshPath = Path.Combine(AppResource.BaseDir, computeTimeMeshPath);
         if (!Path.IsPathFullyQualified(outputTimeMeshPath))
             outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
-
-        var outputDir = Path.GetDirectoryName(outputPath)!;
-        var outputFile = Path.GetFileName(outputPath);
 
         var main = new MainRoutine_OIR()
         {
@@ -226,8 +223,8 @@ public partial class InputOirViewModel : ObservableObject
 
         await Task.Run(() => main.Main(data));
 
-        // ファイルパスを引数にして出力GUI実行
-        var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
-        p.WaitForExit();
+        // // ファイルパスを引数にして出力GUI実行
+        // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
+        // p.WaitForExit();
     }
 }

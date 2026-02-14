@@ -3,6 +3,8 @@
   x:Class="FlexID.Views.InputScoeffPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+  xmlns:converters="using:CommunityToolkit.WinUI.Converters"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="using:Microsoft.Xaml.Interactivity"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,6 +18,15 @@
   mc:Ignorable="d">
 
   <Page.Resources>
+    <Style BasedOn="{StaticResource DefaultCheckBoxStyle}" TargetType="CheckBox">
+      <Setter Property="Margin" Value="32,4" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style BasedOn="{StaticResource DefaultRadioButtonStyle}" TargetType="RadioButton">
+      <Setter Property="Margin" Value="32,4" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
     <!--
     <Style TargetType="TabItem">
       <Setter Property="Padding" Value="8,2" />
@@ -28,14 +39,6 @@
       <Setter Property="Padding" Value="8,3" />
       <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
-    <Style TargetType="CheckBox">
-      <Setter Property="Margin" Value="32,4" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-    <Style TargetType="RadioButton">
-      <Setter Property="Margin" Value="32,4" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
     <Style TargetType="TextBox">
       <Setter Property="Padding" Value="3" />
       <Setter Property="VerticalAlignment" Value="Center" />
@@ -45,6 +48,8 @@
       <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
     -->
+
+    <converters:BoolNegationConverter x:Key="Inverted" />
   </Page.Resources>
 
   <Grid>
@@ -54,6 +59,120 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
+
+      <Grid Grid.Row="0" />
+
+      <Grid
+        Grid.Row="1"
+        RowSpacing="16"
+        ColumnSpacing="8"
+        KeyTipPlacementMode="Left">
+
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="160" />
+          <ColumnDefinition />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+          <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Content" Value="Browse" />
+          </Style>
+        </Grid.Resources>
+
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="0"
+          Text="Sex" />
+        <controls:UniformGrid
+          Grid.Row="0"
+          Grid.Column="1"
+          HorizontalAlignment="Center"
+          Columns="2">
+          <CheckBox
+            Grid.Column="0"
+            AccessKey="AM"
+            Content="Adult Male"
+            IsChecked="{x:Bind ViewModel.CalcMale, Mode=TwoWay}" />
+          <CheckBox
+            Grid.Column="1"
+            AccessKey="AF"
+            Content="Adult Female"
+            IsChecked="{x:Bind ViewModel.CalcFemale, Mode=TwoWay}" />
+        </controls:UniformGrid>
+
+        <TextBlock
+          Grid.Row="1"
+          Grid.Column="0"
+          Text="SAF Interpolation" />
+        <controls:UniformGrid
+          Grid.Row="1"
+          Grid.Column="1"
+          HorizontalAlignment="Center"
+          Columns="2">
+          <RadioButton
+            Grid.Column="0"
+            AccessKey="P"
+            Content="PCHIP"
+            IsChecked="{x:Bind ViewModel.CalcPchip, Mode=TwoWay}" />
+          <RadioButton
+            Grid.Column="1"
+            AccessKey="L"
+            Content="Linear"
+            IsChecked="{x:Bind ViewModel.CalcPchip, Mode=TwoWay, Converter={StaticResource Inverted}}" />
+        </controls:UniformGrid>
+
+        <TextBlock
+          Grid.Row="2"
+          Grid.Column="0"
+          Text="Output Format" />
+        <Grid
+          Grid.Row="2"
+          Grid.Column="1"
+          HorizontalAlignment="Center">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <RadioButton
+            Grid.Column="0"
+            Margin="16,4"
+            AccessKey="F1"
+            Content="FlexID (*.txt)"
+            IsChecked="{x:Bind ViewModel.IdacDoseCompatible, Mode=TwoWay, Converter={StaticResource Inverted}}" />
+          <RadioButton
+            Grid.Column="1"
+            Margin="16,4"
+            AccessKey="F2"
+            Content="IDAC-Dose 2.1 compatible (*.csv)"
+            IsChecked="{x:Bind ViewModel.IdacDoseCompatible, Mode=TwoWay}" />
+        </Grid>
+
+        <TextBlock
+          Grid.Row="3"
+          Grid.Column="0"
+          Text="Output Directory" />
+        <TextBox
+          Grid.Row="3"
+          Grid.Column="1"
+          AccessKey="O"
+          Text="{x:Bind ViewModel.OutputDirectory, Mode=TwoWay}">
+          <i:Interaction.Behaviors>
+            <!--<vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />-->
+          </i:Interaction.Behaviors>
+        </TextBox>
+        <Button
+          Grid.Row="3"
+          Grid.Column="2"
+          Command="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />
+      </Grid>
 
       <Button
         Grid.Row="2"
@@ -82,89 +201,6 @@
       <RowDefinition Height="12" />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-
-    <Label
-      Grid.Row="0"
-      Grid.Column="0"
-      Content="Output File Path" />
-    <Grid Grid.Row="0" Grid.Column="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition Width="8" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding OutputFilePath}">
-        <i:Interaction.Behaviors>
-          <vb:PathDropBehavior />
-        </i:Interaction.Behaviors>
-      </TextBox>
-      <Button
-        Grid.Column="2"
-        Command="{Binding SelectOutputFilePathCommand}"
-        Content="Browse" />
-    </Grid>
-
-    <Label
-      Grid.Row="1"
-      Grid.Column="0"
-      Content="Sex" />
-    <UniformGrid
-      Grid.Row="1"
-      Grid.Column="1"
-      HorizontalAlignment="Center"
-      Columns="2">
-      <CheckBox
-        Grid.Column="0"
-        Content="Male"
-        IsChecked="{Binding CalcMale}" />
-      <CheckBox
-        Grid.Column="1"
-        Content="Female"
-        IsChecked="{Binding CalcFemale}" />
-    </UniformGrid>
-
-    <Label
-      Grid.Row="2"
-      Grid.Column="0"
-      Content="SAF Interpolation" />
-    <UniformGrid
-      Grid.Row="2"
-      Grid.Column="1"
-      HorizontalAlignment="Center"
-      Columns="2">
-      <RadioButton
-        Grid.Column="0"
-        Content="PCHIP"
-        IsChecked="{Binding CalcPchip}" />
-      <RadioButton
-        Grid.Column="1"
-        Content="Linear"
-        IsChecked="{Binding CalcPchip, Converter={StaticResource Inverted}}" />
-    </UniformGrid>
-
-    <Label
-      Grid.Row="3"
-      Grid.Column="0"
-      Content="Output Format" />
-    <Grid
-      Grid.Row="3"
-      Grid.Column="1"
-      HorizontalAlignment="Center">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <RadioButton
-        Grid.Column="0"
-        Margin="16,4"
-        Content="FlexID (*.txt)"
-        IsChecked="{Binding IdacDoseCompatible, Converter={StaticResource Inverted}}" />
-      <RadioButton
-        Grid.Column="1"
-        Margin="16,4"
-        Content="IDAC-Dose 2.1 compatible (*.csv)"
-        IsChecked="{Binding IdacDoseCompatible}" />
-    </Grid>
 
     <Label
       Grid.Row="4"
