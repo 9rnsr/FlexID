@@ -5,6 +5,7 @@ using FlexID.Services;
 using FlexID.ViewModels;
 using FlexID.Views;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using R3;
@@ -27,6 +28,8 @@ public partial class App
     public Window? Window => _window;
 
     public AppWindow? AppWindow => _window?.AppWindow;
+
+    public DispatcherQueue UIQueue => Window!.DispatcherQueue;
 
     /// <summary>
     /// Invoked when the application is launched.
