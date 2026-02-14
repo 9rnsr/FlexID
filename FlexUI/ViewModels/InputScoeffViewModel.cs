@@ -38,6 +38,9 @@ public partial class InputScoeffViewModel : ViewModelBase
         Task.Run(async () =>
         {
             await Nuclides.AddRangeAsync(SAFDataReader.ReadRadNuclides());
+
+            //Debug.WriteLine("Got Nuclides");
+            WeakReferenceMessenger.Default.Send(new Views.ScoeffState { IsRead = true });
         });
     }
 
