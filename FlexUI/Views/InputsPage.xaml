@@ -175,6 +175,10 @@
           </controls:DataRow>
         </DataTemplate>
       </ListView.ItemTemplate>
+
+      <i:Interaction.Behaviors>
+        <vb:CheckSearchItemsBehavior />
+      </i:Interaction.Behaviors>
     </ListView>
   </Grid>
 
