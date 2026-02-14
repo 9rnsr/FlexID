@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FlexID.Models;
 using FlexID.Services;
+using R3;
 
 namespace FlexID.ViewModels;
 
@@ -13,6 +14,8 @@ public partial class InputEirViewModel : ViewModelBase
     /// </summary>
     public InputEirViewModel()
     {
+        Targets = new(target => new InputTargetViewModel(target));
+
         CommitmentPeriod = 50;
         SelectedCommitmentPeriodUnit = CommitmentPeriodUnits[^1];
         SelectedIntakeAge = IntakeAges[0];
@@ -22,68 +25,15 @@ public partial class InputEirViewModel : ViewModelBase
 
         WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
 
-#if false
-        Task.Run(async () =>
-        {
-            // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
-            await foreach (var input in InputTarget.GetInputsEIR(@"inp\EIR"))
-            {
-                var nuc = input.Nuclide;
-                if (!cacheNucInps.TryGetValue(nuc, out var inputs))
-                {
-                    inputs = [];
-                    cacheNucInps.Add(nuc, inputs);
-                }
-                inputs.Add(new InputTargetViewModel(input));
-            }
+        Targets.ObservePropertyChanged(m => m.IsCheckedAny)
+                  .Subscribe(_ => RunCommand.NotifyCanExecuteChanged())
+                  .AddTo(disposables);
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Nuclides.AddRange(cacheNucInps.Keys.OrderBy(nuc => nuc));
-                SelectedNuclide = Nuclides.FirstOrDefault();
-            });
-        });
-#endif
+        // EIR用のリソースとして配置されたインプットファイルの一覧を取得する。
+        Task.Run(async () => await Targets.AddRangeAsync(InputTarget.GetInputsEIR(@"inp\EIR")));
     }
 
-#if false
-    public ObservableCollection<string> Nuclides { get; } = [];
-
-    [ObservableProperty]
-    public partial string? SelectedNuclide { get; set; }
-
-    private readonly Dictionary<string, List<InputTargetViewModel>> cacheNucInps = [];
-
-    public ObservableCollection<InputTargetViewModel> Inputs { get; } = [];
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(RunCommand))]
-    public partial InputTargetViewModel? SelectedInput { get; set; }
-
-    partial void OnSelectedInputChanged(InputTargetViewModel? value)
-    {
-        // 子孫核種の有無が切り替わった場合に、これを子孫核種の計算有無に反映する。
-        HasProgeny = value?.HasProgeny ?? false;
-        CalcProgeny = HasProgeny;
-    }
-
-    [ObservableProperty]
-    public partial bool HasProgeny { get; private set; }
-
-    [ObservableProperty]
-    public partial bool CalcProgeny { get; set; }
-
-    // 核種に対応する、選択されたインプット群。
-    partial void OnSelectedNuclideChanged(string? value)
-    {
-        var inputs = value is null ? [] : cacheNucInps[value];
-
-        // インプットの一覧を更新する。
-        Inputs.Replace(inputs);
-
-        SelectedInput = inputs.FirstOrDefault();
-    }
-#endif
+    public CheckableItemsView<InputTarget, InputTargetViewModel> Targets { get; }
 
     [ObservableProperty]
     public partial int CommitmentPeriod { get; set; }
@@ -185,7 +135,7 @@ public partial class InputEirViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
     private partial bool IsBusy { get; set; }
 
-    private bool CanRun => !IsBusy /*&& SelectedInput is not null*/;
+    private bool CanRun => !IsBusy && Targets.IsCheckedAny;
 
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async Task Run()
