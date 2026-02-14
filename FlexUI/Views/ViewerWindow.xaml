@@ -294,17 +294,17 @@
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
 
-              <!--<v:HumanContourLegend
+              <v:HumanContourLegend
                 Grid.Column="0"
                 Margin="20,48,20,12"
                 HorizontalAlignment="Center"
-                DataContext="{Binding Contour}" />-->
+                ViewModel="{x:Bind ViewModel.Contour}" />
 
-              <!--<v:HumanContour
+              <v:HumanContour
                 Grid.Column="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                DataContext="{Binding Contour}" />-->
+                ViewModel="{x:Bind ViewModel.Contour}" />
             </Grid>
           </Viewbox>
 
@@ -313,9 +313,9 @@
             Grid.Column="1"
             Margin="0,0,0,60"
             VerticalAlignment="Center"
-            ContourMax="{Binding Contour.ContourMax}"
-            ContourMin="{Binding Contour.ContourMin}"
-            ContourUnit="{Binding Contour.ContourUnit}" />
+            ContourMax="{x:Bind ViewModel.Contour.ContourMax, Mode=TwoWay}"
+            ContourMin="{x:Bind ViewModel.Contour.ContourMin, Mode=TwoWay}"
+            ContourUnit="{x:Bind ViewModel.Contour.ContourUnit, Mode=OneWay}" />
 
           <Grid Grid.Row="1" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
@@ -337,17 +337,12 @@
               Grid.ColumnSpan="5"
               Height="32"
               Margin="70,0"
-              d:Maximum="18250"
-              d:Minimum="0"
-              Maximum="{Binding Contour.EndTimeStep}"
-              Minimum="{Binding Contour.StartTimeStep}"
+              AccessKey="SL"
+              Maximum="{x:Bind ViewModel.Contour.EndTimeStep, Mode=OneWay}"
+              Minimum="{x:Bind ViewModel.Contour.StartTimeStep, Mode=OneWay}"
               ToolTipService.Placement="Bottom"
-              Value="{Binding Contour.CurrentTimeStep}" />
-            <!--
-              IsMoveToPointEnabled="True"
-              IsSnapToTickEnabled="True"
-              Ticks="{Binding Contour.TimeSteps}"
-            -->
+              ValueChanged="TimeStepSlider_ValueChanged"
+              Value="{x:Bind ViewModel.Contour.CurrentTimeStep, Mode=TwoWay}" />
 
             <TextBlock
               Grid.Row="1"
@@ -367,11 +362,12 @@
               Height="32"
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
-              Command="{Binding Contour.PreviousStepCommand}"
+              AccessKey="B"
+              Command="{x:Bind ViewModel.Contour.BackwardStepCommand}"
               Content="&#xF8AC;"
               FontFamily="{StaticResource SymbolThemeFontFamily}"
               FontSize="18"
-              ToolTipService.ToolTip="Previous step" />
+              ToolTipService.ToolTip="Back step" />
             <Button
               Grid.Row="1"
               Grid.Column="2"
@@ -379,26 +375,12 @@
               Height="32"
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
-              Command="{Binding Contour.PlayCommand}"
+              AccessKey="P"
+              Command="{x:Bind GetPlayPauseCommand(ViewModel.Contour.CanPlay), Mode=OneWay}"
+              Content="{x:Bind GetPlayPauseIcon(ViewModel.Contour.CanPlay), Mode=OneWay}"
               FontFamily="{StaticResource SymbolThemeFontFamily}"
               FontSize="18"
-              ToolTipService.ToolTip="Play/Pause">
-              <!--<icons:PackIconMaterial>
-                <icons:PackIconMaterial.Style>
-                  <Style TargetType="{x:Type icons:PackIconMaterial}">
-                    <Setter Property="Kind" Value="Play" />
-                    <Style.Triggers>
-                      <DataTrigger Binding="{Binding Contour.IsPlaying}" Value="False">
-                        <Setter Property="Kind" Value="Play" />
-                      </DataTrigger>
-                      <DataTrigger Binding="{Binding Contour.IsPlaying}" Value="True">
-                        <Setter Property="Kind" Value="Pause" />
-                      </DataTrigger>
-                    </Style.Triggers>
-                  </Style>
-                </icons:PackIconMaterial.Style>
-              </icons:PackIconMaterial>-->
-            </Button>
+              ToolTipService.ToolTip="{x:Bind GetPlayPauseTooltip(ViewModel.Contour.CanPlay), Mode=OneWay}" />
             <RepeatButton
               Grid.Row="1"
               Grid.Column="3"
@@ -406,11 +388,12 @@
               Height="32"
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
-              Command="{Binding Contour.NextStepCommand}"
+              AccessKey="F"
+              Command="{x:Bind ViewModel.Contour.ForwardStepCommand}"
               Content="&#xF8AD;"
               FontFamily="{StaticResource SymbolThemeFontFamily}"
               FontSize="18"
-              ToolTipService.ToolTip="Next step" />
+              ToolTipService.ToolTip="Forward step" />
 
             <StackPanel
               Grid.Row="2"

@@ -1,6 +1,9 @@
+using System.Windows.Input;
 using FlexID.ViewModels;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
 
@@ -74,4 +77,38 @@ public partial class ViewerWindow
         //    binding?.UpdateSource();
         //}
     }
+
+    #region Play/Pause Buttons and TimeStepSlider
+
+    public string GetPlayPauseIcon(bool canPlay) => canPlay ? "\uF5B0" : "\uF8AE";
+
+    public string GetPlayPauseTooltip(bool canPlay) => canPlay ? "Play" : "Pause";
+
+    public ICommand GetPlayPauseCommand(bool canPlay) =>
+        canPlay ? ViewModel.Contour.PlayCommand : ViewModel.Contour.PauseCommand;
+
+    private bool _isInternalTimeStepSliderChange;
+
+    private void TimeStepSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+    {
+        if (_isInternalTimeStepSliderChange)
+            return;
+
+        var slider = (Slider)sender;
+        var timeSteps = ViewModel.Contour.TimeSteps;
+
+        // timeStepsは長さ0の場合もある点に注意。
+        var nearest = timeSteps
+            .OrderBy(p => Math.Abs(p - e.NewValue))
+            .FirstOrDefault();
+
+        if (nearest == e.NewValue)
+            return;
+
+        _isInternalTimeStepSliderChange = true;
+        slider.Value = nearest;
+        _isInternalTimeStepSliderChange = false;
+    }
+
+    #endregion
 }
