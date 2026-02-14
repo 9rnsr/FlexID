@@ -147,7 +147,7 @@
         Text="{x:Bind ViewModel.OutputDirectory, Mode=TwoWay}">
         <i:Interaction.Behaviors>
           <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />
-          <vb:PathPasteBehavior />        
+          <vb:PathPasteBehavior />
         </i:Interaction.Behaviors>
       </TextBox>
       <Button

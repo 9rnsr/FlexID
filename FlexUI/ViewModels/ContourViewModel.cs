@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 
 namespace FlexID.ViewModels;
@@ -51,13 +52,13 @@ public partial class ContourViewModel : ObservableObject
     private readonly Dictionary<string, string> organMap = [];
 
     private readonly Dictionary<string, double> unsetOrganValues = [];
-    private readonly Dictionary<string, string> unsetOrganColors = [];
+    private readonly Dictionary<string, Brush> unsetOrganColors = [];
 
     private readonly Dictionary<string, double> actualOrganValues;
-    private readonly Dictionary<string, string> actualOrganColors;
+    private readonly Dictionary<string, Brush> actualOrganColors;
 
     // モデル図で値が未設定の場合の色情報。
-    private readonly string unsetColorCode = Color.FromArgb(255, 211, 211, 211).ToString();
+    private readonly Brush unsetColorCode = new SolidColorBrush(Color.FromArgb(255, 211, 211, 211));
 
     /// <summary>
     /// 現在の出力タイムステップにおける各コンパートメントの数値。
@@ -74,7 +75,7 @@ public partial class ContourViewModel : ObservableObject
     /// モデル図に表示するための、統一臓器名とその色情報。
     /// </summary>
     [ObservableProperty]
-    public partial Dictionary<string, string> OrganColors { get; set; }
+    public partial Dictionary<string, Brush> OrganColors { get; set; }
 
     /// <summary>
     /// コンターの上限値。
@@ -167,39 +168,52 @@ public partial class ContourViewModel : ObservableObject
     /// アニメーション再生状態を示す。
     /// </summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(PlayCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PauseCommand))]
+    [NotifyPropertyChangedFor(nameof(CanPlay))]
     public partial bool IsPlaying { get; set; }
+
+    public bool CanPlay => !IsPlaying;
 
     #endregion
 
     /// <summary>
-    /// 再生・停止制御
+    /// 再生処理。
     /// </summary>
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanPlay))]
     private async Task Play()
     {
         if (TimeSteps.Count == 0)
             return;
 
-        if (!IsPlaying)
+        IsPlaying = true;
+        var i = CurrentTimeIndex;
+        while (true)
         {
-            // 停止時の処理。
-            IsPlaying = true;
-            for (var i = CurrentTimeIndex + 1; i < TimeSteps.Count; i++)
-            {
-                CurrentTimeIndex = i;
-                CurrentTimeStep = TimeSteps[CurrentTimeIndex];
-                await Task.Delay(200);
+            // スライダーが新しい位置に移動された場合はこれを直前位置とする。
+            if (CurrentTimeIndex != i)
+                i = CurrentTimeIndex;
 
-                if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
-                    break;
-            }
-        }
-        else
-        {
-            // 再生時の処理。
-            IsPlaying = false;
-        }
+            ++i;
+            if (i >= TimeSteps.Count)
+                break;
 
+            CurrentTimeIndex = i;
+            CurrentTimeStep = TimeSteps[CurrentTimeIndex];
+            await Task.Delay(200);
+
+            if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
+                break;
+        }
+        IsPlaying = false;
+    }
+
+    /// <summary>
+    /// 停止処理。
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(IsPlaying))]
+    private void Pause()
+    {
         IsPlaying = false;
     }
 
@@ -207,7 +221,7 @@ public partial class ContourViewModel : ObservableObject
     /// 次のタイムステップヘ進む
     /// </summary>
     [RelayCommand]
-    private void NextStep()
+    private void ForwardStep()
     {
         if (TimeSteps.Count == 0)
             return;
@@ -223,7 +237,7 @@ public partial class ContourViewModel : ObservableObject
     /// 1つ前のタイムステップに戻る
     /// </summary>
     [RelayCommand]
-    private void PreviousStep()
+    private void BackwardStep()
     {
         if (TimeSteps.Count == 0)
             return;
@@ -279,8 +293,8 @@ public partial class ContourViewModel : ObservableObject
         if (SelectedBlock is null)
             return;
 
-        var max = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Max();
-        var min = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Min();
+        var max = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => v != 0 && !double.IsNaN(v)).Max();
+        var min = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => v != 0 && !double.IsNaN(v)).Min();
 
         // 1E**に合わせる
         ContourMax = Math.Pow(10, Math.Ceiling(Math.Log10(max)));
@@ -409,7 +423,7 @@ public partial class ContourViewModel : ObservableObject
                 color = Color.FromArgb(255, 0, 0, 255);
             }
 
-            actualOrganColors[organ] = color.ToString();
+            actualOrganColors[organ] = new SolidColorBrush(color);
         }
 
         OrganColors = actualOrganColors;

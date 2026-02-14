@@ -4,39 +4,37 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  x:Name="Root"
+  xmlns:vc="using:FlexID.Views.Converters"
   mc:Ignorable="d">
 
-  <!--
+  <UserControl.Resources>
+    <vc:ContourMaxMinConverter x:Key="ContourMaxMin" />
+  </UserControl.Resources>
+
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="30" />
-      <RowDefinition Height="250" />
-      <RowDefinition Height="30" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="50" />
-      <ColumnDefinition Width="30" />
-      <ColumnDefinition MinWidth="60" />
+      <ColumnDefinition Width="114" MaxWidth="114" />
     </Grid.ColumnDefinitions>
 
     <TextBox
       Grid.Row="0"
-      Grid.Column="0"
-      Grid.ColumnSpan="2"
-      FontSize="{Binding FontSize, ElementName=Root}"
-      Text="{Binding ContourMax, Mode=TwoWay, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-      TextAlignment="Center" />
-    <Label
-      Grid.Row="0"
-      Grid.Column="2"
-      d:Content="[Bq/Bq]">
-      <TextBlock>
-        <Run Text="[" /><Run Text="{Binding ContourUnit, ElementName=Root, Mode=OneWay}" /><Run Text="]" />
-      </TextBlock>
-    </Label>
+      MaxWidth="114"
+      HorizontalContentAlignment="Center"
+      AccessKey="CU"
+      FontSize="{x:Bind FontSize, Mode=OneWay}"
+      Text="{x:Bind ContourMax, Mode=TwoWay, Converter={StaticResource ContourMaxMin}}" />
 
-    <Rectangle Grid.Row="1" Grid.Column="1">
+    <Rectangle
+      Grid.Row="1"
+      Width="30"
+      Height="250"
+      Margin="0,8">
       <Rectangle.Fill>
         <LinearGradientBrush>
           <GradientStop Offset="0.00" Color="#FF0000" />
@@ -50,20 +48,17 @@
 
     <TextBox
       Grid.Row="2"
-      Grid.Column="0"
-      Grid.ColumnSpan="2"
-      FontSize="{Binding FontSize, ElementName=Root}"
-      Text="{Binding ContourMin, Mode=TwoWay, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
-      TextAlignment="Center" />
-    <Label
-      Grid.Row="2"
-      Grid.Column="2"
+      HorizontalContentAlignment="Center"
+      AccessKey="CL"
+      FontSize="{x:Bind FontSize, Mode=OneWay}"
+      Text="{x:Bind ContourMin, Mode=TwoWay, Converter={StaticResource ContourMaxMin}}" />
+
+    <TextBlock
+      Grid.Row="3"
+      HorizontalAlignment="Center"
       d:Content="[Sv/h]">
-      <TextBlock>
-        <Run Text="[" /><Run Text="{Binding ContourUnit, ElementName=Root, Mode=OneWay}" /><Run Text="]" />
-      </TextBlock>
-    </Label>
+      <Run Text="[" /><Run Text="{x:Bind ContourUnit, Mode=OneWay}" /><Run Text="]" />
+    </TextBlock>
   </Grid>
-  -->
 
 </UserControl>
