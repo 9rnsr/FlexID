@@ -44,8 +44,8 @@
     <PackageReference Include="ObservableCollections.R3" />
     <PackageReference Include="R3" />
     <PackageReference Include="R3Extensions.WinUI3" />
+    <PackageReference Include="ScottPlot.WinUI" />
     <PackageReference Include="WinUIEx" />
-    <!--<PackageReference Include="OxyPlot.Wpf" />-->
   </ItemGroup>
 
   <!-- Publish Properties -->

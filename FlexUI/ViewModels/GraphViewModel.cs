@@ -1,8 +1,9 @@
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-//using OxyPlot;
-//using OxyPlot.Axes;
-//using OxyPlot.Series;
+using ScottPlot;
+using ScottPlot.Plottables;
+using ScottPlot.TickGenerators;
 
 namespace FlexID.ViewModels;
 
@@ -13,8 +14,16 @@ public partial class GraphViewModel : ObservableObject
     /// </summary>
     public GraphViewModel()
     {
-        //PlotModel.Axes.Add(LogAxisX);
-        //PlotModel.Axes.Add(LogAxisY);
+        PlotModel.Legend.IsVisible = false;
+
+        PlotModel.Grid.MajorLineColor = Colors.Black.WithOpacity(.15);
+        PlotModel.Grid.MinorLineColor = Colors.Black.WithOpacity(.05);
+        PlotModel.Grid.MinorLineWidth = 1;
+
+        AxisX.Label.Text = "Days after Intake";
+
+        SetAxisX(IsLogAxisX);
+        SetAxisY(IsLogAxisY);
     }
 
     /// <summary>
@@ -22,53 +31,34 @@ public partial class GraphViewModel : ObservableObject
     /// </summary>
     private OutputBlockData? SelectedBlock { get; set; }
 
-    public ObservableCollection<RegionData> Regions { get; } = [];
+    public ObservableCollection<SerieData> Series { get; } = [];
 
-#if false
-    public PlotModel PlotModel { get; } = new();
+    public Plot PlotModel { get; } = new();
 
-    private LogarithmicAxis LogAxisX { get; } = new LogarithmicAxis()
+    public ICommand? RefreshCommand { get; set; }
+
+    public void Refresh() => RefreshCommand?.Execute(null);
+
+    private IXAxis AxisX => PlotModel.Axes.Bottom;
+
+    private ITickGenerator LinAxisX { get; } = new NumericAutomatic();
+
+    private ITickGenerator LogAxisX { get; } = new NumericAutomatic()
     {
-        Position = AxisPosition.Bottom,
-        MajorGridlineStyle = LineStyle.Automatic,
-        MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-        MinorGridlineStyle = LineStyle.Dot,
-        MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-        TitleFontSize = 14,
-        Title = "Days after Intake"
+        MinorTickGenerator = new LogMinorTickGenerator(),
+        IntegerTicksOnly = true,
+        LabelFormatter = v => $"{Math.Pow(10, v)}"
     };
 
-    private LogarithmicAxis LogAxisY { get; } = new LogarithmicAxis()
-    {
-        Position = AxisPosition.Left,
-        MajorGridlineStyle = LineStyle.Automatic,
-        MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-        MinorGridlineStyle = LineStyle.Dot,
-        MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-        TitleFontSize = 14,
-        AxisTitleDistance = 10,
-    };
+    private IYAxis AxisY => PlotModel.Axes.Left;
 
-    private LinearAxis LinAxisX { get; } = new LinearAxis()
-    {
-        Position = AxisPosition.Bottom,
-        MajorGridlineStyle = LineStyle.Automatic,
-        MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-        MinorGridlineStyle = LineStyle.Dot,
-        MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-        TitleFontSize = 14,
-        Title = "Days after Intake"
-    };
+    private ITickGenerator LinAxisY { get; } = new NumericAutomatic();
 
-    private LinearAxis LinAxisY { get; } = new LinearAxis()
+    private ITickGenerator LogAxisY { get; } = new NumericAutomatic()
     {
-        Position = AxisPosition.Left,
-        MajorGridlineStyle = LineStyle.Automatic,
-        MajorGridlineColor = OxyColor.FromRgb(0, 0, 0),
-        MinorGridlineStyle = LineStyle.Dot,
-        MinorGridlineColor = OxyColor.FromRgb(128, 128, 128),
-        TitleFontSize = 14,
-        AxisTitleDistance = 10,
+        MinorTickGenerator = new LogMinorTickGenerator(),
+        IntegerTicksOnly = true,
+        LabelFormatter = v => $"{Math.Pow(10, v):0e+00}"
     };
 
     [ObservableProperty]
@@ -79,16 +69,33 @@ public partial class GraphViewModel : ObservableObject
 
     partial void OnIsLogAxisXChanged(bool value)
     {
-        PlotModel.Axes[0] = value ? LogAxisX : LinAxisX;
-        PlotModel.InvalidatePlot(false);
+        SetAxisX(value);
+        PlotModel.Axes.AutoScaleX();
+        Refresh();
     }
 
     partial void OnIsLogAxisYChanged(bool value)
     {
-        PlotModel.Axes[1] = value ? LogAxisY : LinAxisY;
-        PlotModel.InvalidatePlot(false);
+        SetAxisY(value);
+        PlotModel.Axes.AutoScaleY();
+        Refresh();
     }
-#endif
+
+    private void SetAxisX(bool isLog)
+    {
+        AxisX.TickGenerator = isLog ? LogAxisX : LinAxisX;
+
+        foreach (var serie in Series)
+            serie.SetAxisX(isLog);
+    }
+
+    private void SetAxisY(bool isLog)
+    {
+        AxisY.TickGenerator = isLog ? LogAxisY : LinAxisY;
+
+        foreach (var serie in Series)
+            serie.SetAxisY(isLog);
+    }
 
     public void SetBlock(OutputData? output, OutputBlockData? block)
     {
@@ -97,12 +104,10 @@ public partial class GraphViewModel : ObservableObject
 
         SelectedBlock = null;
 
-        Regions.Clear();
-#if false
-        PlotModel.Series.Clear();
-        PlotModel.InvalidatePlot(updateData: true);
+        Series.Clear();
+        PlotModel.Clear();
 
-        if (block is null)
+        if (output is null || block is null)
             return;
 
         SelectedBlock = block;
@@ -111,46 +116,30 @@ public partial class GraphViewModel : ObservableObject
         var timeSteps = output.TimeSteps;
         var compartments = SelectedBlock.Compartments;
 
-        void AddSeries(string name, OxyColor? color = null)
+        void AddSeries(string name, Color? color = null)
         {
             var compartment = compartments.FirstOrDefault(c => c.Name == name);
             if (compartment is null)
                 return;
 
-            if (PlotModel.Series.Any(ser => ser.Title == name))
+            if (PlotModel.GetPlottables().OfType<IHasLegendText>().Any(serie => serie.LegendText == name))
                 return;
 
-            var series = new ScatterSeries()
-            {
-                Title = name,
-                IsVisible = color != null,
-                MarkerFill = color ?? OxyColors.Automatic,
-            };
-
-            var values = compartment.Values;
-            for (int j = 0; j < timeSteps.Count; j++)
-            {
-                if (timeSteps[j] == 0)
-                    continue;
-                series.Points.Add(new ScatterPoint(timeSteps[j], values[j]));
-            }
-
-            Regions.Add(new RegionData(series, compartment.Name));
-            PlotModel.Series.Add(series);
+            Series.Add(new SerieData(this, timeSteps, compartment, color));
         }
 
-        AddSeries("WholeBody", OxyColor.FromUInt32(0xFF4466A3));
+        AddSeries("WholeBody", Color.FromARGB(0xFF4466A3));
 
         if (type == OutputType.RetentionActivity ||
             type == OutputType.CumulativeActivity)
         {
-            AddSeries("Urine",            /**/OxyColor.FromUInt32(0xFFF39C35));
-            AddSeries("Faeces",           /**/OxyColor.FromUInt32(0xFFF14C14));
-            AddSeries("AlimentaryTract*", /**/OxyColor.FromUInt32(0xFF4E97A8));
-            AddSeries("Lungs*",           /**/OxyColor.FromUInt32(0xFF2B406B));
-            AddSeries("Skeleton*",        /**/OxyColor.FromUInt32(0xFFB3080E));
-            AddSeries("Liver*",           /**/OxyColor.FromUInt32(0xFFF2C05D));
-            AddSeries("Thyroid*",         /**/OxyColor.FromUInt32(0xFF1D7B63));
+            AddSeries("Urine",            /**/Color.FromARGB(0xFFF39C35));
+            AddSeries("Faeces",           /**/Color.FromARGB(0xFFF14C14));
+            AddSeries("AlimentaryTract*", /**/Color.FromARGB(0xFF4E97A8));
+            AddSeries("Lungs*",           /**/Color.FromARGB(0xFF2B406B));
+            AddSeries("Skeleton*",        /**/Color.FromARGB(0xFFB3080E));
+            AddSeries("Liver*",           /**/Color.FromARGB(0xFFF2C05D));
+            AddSeries("Thyroid*",         /**/Color.FromARGB(0xFF1D7B63));
         }
 
         foreach (var compartment in compartments)
@@ -166,38 +155,66 @@ public partial class GraphViewModel : ObservableObject
         };
         graphLabel += $"[{output.DataValueUnit}]";
 
-        LogAxisY.Title = graphLabel;
-        LinAxisY.Title = graphLabel;
+        AxisY.Label.Text = graphLabel;
 
-        // グラフがFitする範囲などを更新するためにupdateData: trueが必要。
-        PlotModel.InvalidatePlot(updateData: true);
-#endif
+        PlotModel.Axes.AutoScale();
     }
 }
 
-public class RegionData
+public class SerieData
 {
-#if false
-    public RegionData(ScatterSeries serie, string name)
+    public SerieData(GraphViewModel vm, IReadOnlyList<double> timeSteps, OutputCompartmentData compartment, Color? color)
     {
-        this.serie = serie;
-        Name = name;
+        _viewModel = vm;
+
+        var name = compartment.Name;
+        var values = compartment.Values;
+
+        var skipCount = timeSteps[0] == 0 ? 1 : 0;
+        _xsLinear = [.. timeSteps.Skip(skipCount)];
+        _ysLinear = [.. values.Skip(skipCount)];
+
+        _xsLog = [.. _xsLinear.Select(Math.Log10)];
+        _ysLog = [.. _ysLinear.Select(Math.Log10)];
+
+        _xs = vm.IsLogAxisX ? [.. _xsLog] : [.. _xsLinear];
+        _ys = vm.IsLogAxisY ? [.. _ysLog] : [.. _ysLinear];
+
+        var plot = vm.PlotModel;
+        _scatter = plot.Add.Scatter(_xs, _ys);
+        _scatter.LegendText = name;
+        _scatter.IsVisible = color is not null;
+        _scatter.MarkerFillColor = color ?? _scatter.Color;
     }
 
-    private readonly ScatterSeries serie;
+    private readonly GraphViewModel _viewModel;
 
-    public string Name { get; }
+    private readonly double[] _xs, _xsLinear, _xsLog;
+    private readonly double[] _ys, _ysLinear, _ysLog;
+
+    private readonly Scatter _scatter;
+
+    public string Name => _scatter.LegendText;
 
     public bool IsVisible
     {
-        get => serie.IsVisible;
+        get => _scatter.IsVisible;
         set
         {
-            if (serie.IsVisible == value)
+            if (_scatter.IsVisible == value)
                 return;
-            serie.IsVisible = value;
-            serie.PlotModel.InvalidatePlot(true);
+            _scatter.IsVisible = value;
+            _viewModel.Refresh();
         }
     }
-#endif
+
+    public void SetAxisX(bool isLog)
+    {
+        (isLog ? _xsLog : _xsLinear).CopyTo(_xs);
+    }
+
+    public void SetAxisY(bool isLog)
+    {
+        (isLog ? _ysLog : _ysLinear).CopyTo(_ys);
+    }
 }

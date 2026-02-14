@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using FlexID.ViewModels;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
@@ -16,6 +17,9 @@ public partial class ViewerWindow
         ViewModel = vm;
 
         InitializeComponent();
+
+        PlotControl.Reset(ViewModel.Graph.PlotModel);
+        ViewModel.Graph.RefreshCommand = new RelayCommand(PlotControl.Refresh);
     }
 
     public ViewerViewModel ViewModel { get; }
