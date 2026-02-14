@@ -51,12 +51,12 @@ public partial class ViewerViewModel : ObservableObject
     /// 表示中の出力ファイルのデータ。
     /// </summary>
     [ObservableProperty]
-    public partial OutputData SelectedOutput { get; set; }
+    public partial OutputData? SelectedOutput { get; set; }
 
     /// <summary>
     /// 出力ファイルリストのベースとなるパス文字列。
     /// </summary>
-    private string BasePath { get; set; }
+    private string? BasePath { get; set; }
 
     /// <summary>
     /// 検出された出力ファイル種別のリスト。
@@ -73,14 +73,14 @@ public partial class ViewerViewModel : ObservableObject
     /// 表示中の核種のデータ。
     /// </summary>
     [ObservableProperty]
-    public partial OutputBlockData SelectedBlock { get; set; }
+    public partial OutputBlockData? SelectedBlock { get; set; }
 
     /// <summary>
     /// 出力ファイルの読み込み。
     /// </summary>
     /// <param name="path">ファイルのパス文字列。</param>
     /// <returns>ファイルパスが有効でなかったり、読み込みに失敗した場合は <see langword="null"/> を返す。</returns>
-    private static OutputData ReadOutputData(string path)
+    private static OutputData? ReadOutputData(string path)
     {
         if (!string.IsNullOrWhiteSpace(path))
         {
@@ -99,7 +99,7 @@ public partial class ViewerViewModel : ObservableObject
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    private static string GetBasePath(string path)
+    private static string? GetBasePath(string path)
     {
         if (string.IsNullOrEmpty(path))
             return null;
@@ -202,7 +202,7 @@ public partial class ViewerViewModel : ObservableObject
         Contour.CurrentTimeStep = tstep;
     }
 
-    partial void OnSelectedBlockChanged(OutputBlockData value)
+    partial void OnSelectedBlockChanged(OutputBlockData? value)
     {
         // コンター表示とグラフ表示を更新する。
         Contour.SetBlock(SelectedOutput, value);

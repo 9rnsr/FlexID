@@ -51,7 +51,7 @@ public partial class InputEirViewModel : ObservableObject
     public ObservableCollection<string> Nuclides { get; } = [];
 
     [ObservableProperty]
-    public partial string SelectedNuclide { get; set; }
+    public partial string? SelectedNuclide { get; set; }
 
     private readonly Dictionary<string, List<InputTargetViewModel>> cacheNucInps = [];
 
@@ -59,9 +59,9 @@ public partial class InputEirViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
-    public partial InputTargetViewModel SelectedInput { get; set; }
+    public partial InputTargetViewModel? SelectedInput { get; set; }
 
-    partial void OnSelectedInputChanged(InputTargetViewModel value)
+    partial void OnSelectedInputChanged(InputTargetViewModel? value)
     {
         // 子孫核種の有無が切り替わった場合に、これを子孫核種の計算有無に反映する。
         HasProgeny = value?.HasProgeny ?? false;
@@ -75,7 +75,7 @@ public partial class InputEirViewModel : ObservableObject
     public partial bool CalcProgeny { get; set; }
 
     // 核種に対応する、選択されたインプット群。
-    partial void OnSelectedNuclideChanged(string value)
+    partial void OnSelectedNuclideChanged(string? value)
     {
         var inputs = value is null ? [] : cacheNucInps[value];
 
@@ -99,7 +99,8 @@ public partial class InputEirViewModel : ObservableObject
             //if (dialog.ShowDialog() == true)
             //    selected = dialog.FileName;
         }
-        ComputeTimeMeshFilePath = selected;
+        if (selected is not null)
+            ComputeTimeMeshFilePath = selected;
     }
 
     [ObservableProperty]
@@ -116,7 +117,8 @@ public partial class InputEirViewModel : ObservableObject
             //if (dialog.ShowDialog() == true)
             //    selected = dialog.FileName;
         }
-        OutputTimeMeshFilePath = selected;
+        if (selected is not null)
+            OutputTimeMeshFilePath = selected;
     }
 
     [ObservableProperty]
@@ -159,7 +161,8 @@ public partial class InputEirViewModel : ObservableObject
             //if (dialog.ShowDialog() == true)
             //    selected = dialog.FileName;
         }
-        OutputFilePath = selected;
+        if (selected is not null)
+            OutputFilePath = selected;
     }
 
     [ObservableProperty]
@@ -195,7 +198,7 @@ public partial class InputEirViewModel : ObservableObject
             if (SelectedIntakeAge is null)
                 throw new Exception("Please select Exposure Age.");
 
-            await RunAndView();
+            await RunAndView(SelectedInput.InputTarget);
         }
         catch (Exception error)
         {
@@ -207,11 +210,11 @@ public partial class InputEirViewModel : ObservableObject
         }
     }
 
-    private async Task RunAndView()
+    private async Task RunAndView(InputTarget target)
     {
         // FlexID.Calcアセンブリがない場合はこのメソッドに入った直後に例外が発生する。
 
-        var dataList = new InputDataReader_EIR(SelectedInput.InputTarget.FilePath, CalcProgeny).Read();
+        var dataList = new InputDataReader_EIR(target.FilePath, CalcProgeny).Read();
 
         var outputPath          /**/= OutputFilePath;
         var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
@@ -226,7 +229,7 @@ public partial class InputEirViewModel : ObservableObject
         if (!Path.IsPathFullyQualified(outputTimeMeshPath))
             outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
 
-        var outputDir = Path.GetDirectoryName(outputPath);
+        var outputDir = Path.GetDirectoryName(outputPath)!;
         var outputFile = Path.GetFileName(outputPath);
 
         var main = new MainRoutine_EIR()

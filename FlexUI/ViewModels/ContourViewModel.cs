@@ -36,7 +36,7 @@ public partial class ContourViewModel : ObservableObject
     /// <summary>
     /// 表示中のブロックデータ(核種毎の残留放射能や男女別の線量)。
     /// </summary>
-    private OutputBlockData SelectedBlock { get; set; }
+    private OutputBlockData? SelectedBlock { get; set; }
 
     #region コンター表示
 
@@ -96,7 +96,7 @@ public partial class ContourViewModel : ObservableObject
     /// コンターに表示される単位。
     /// </summary>
     [ObservableProperty]
-    public partial string ContourUnit { get; set; }
+    public partial string ContourUnit { get; set; } = string.Empty;
 
     #endregion
 
@@ -238,7 +238,7 @@ public partial class ContourViewModel : ObservableObject
     /// <summary>
     /// 崩壊系列を構成する核種から描画対象を設定する。
     /// </summary>
-    public void SetBlock(OutputData output, OutputBlockData block)
+    public void SetBlock(OutputData? output, OutputBlockData? block)
     {
         if (SelectedBlock == block)
             return;
@@ -257,7 +257,7 @@ public partial class ContourViewModel : ObservableObject
         OrganValues = unsetOrganValues;
         OrganColors = unsetOrganColors;
 
-        if (block is null)
+        if (output is null || block is null)
             return;
 
         SelectedBlock = block;
@@ -276,6 +276,9 @@ public partial class ContourViewModel : ObservableObject
     /// </summary>
     private void SetMinMax()
     {
+        if (SelectedBlock is null)
+            return;
+
         var max = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Max();
         var min = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Min();
 

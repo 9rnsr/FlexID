@@ -11,7 +11,7 @@ static class CLSID
     /// </summary>
     public static readonly Guid ShellLink = new Guid("00021401-0000-0000-C000-000000000046");
 
-    public static readonly Type ShellLinkType = Type.GetTypeFromCLSID(ShellLink);
+    public static readonly Type ShellLinkType = Type.GetTypeFromCLSID(ShellLink)!;
 }
 
 [ComImport]
@@ -67,19 +67,19 @@ public static class ShortcutFile
         if (!Path.GetExtension(path).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
             return path;
 
-        IShellLink shellLink = null;
-        IPersistFile persistFile = null;
+        IShellLink? shellLink = null;
+        IPersistFile? persistFile = null;
         try
         {
             // CoCreateInstance ではなく Activator で RCW を作成
-            shellLink = (IShellLink)Activator.CreateInstance(CLSID.ShellLinkType);
+            shellLink = (IShellLink?)Activator.CreateInstance(CLSID.ShellLinkType);
             persistFile = shellLink as IPersistFile;
 
-            persistFile.Load(path, /*STGM_READ*/0);
+            persistFile!.Load(path, /*STGM_READ*/0);
 
             // リンクの解決を試みる
             var resolveFlags = SLR_NO_UI | (500 << 16) | SLR_NOUPDATE;
-            shellLink.Resolve(/*this.Handle*/IntPtr.Zero, resolveFlags);
+            shellLink!.Resolve(/*this.Handle*/IntPtr.Zero, resolveFlags);
 
             var sb = new StringBuilder(/*MAX_PATH*/260);
 
