@@ -11,8 +11,6 @@ public sealed partial class InputOirPage : Page
         ViewModel = Ioc.Default.GetRequiredService<InputOirViewModel>();
 
         InitializeComponent();
-
-        DataContext = ViewModel;
     }
 
     public InputOirViewModel ViewModel { get; }

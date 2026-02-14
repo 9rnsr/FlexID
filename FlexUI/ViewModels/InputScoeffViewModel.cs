@@ -14,30 +14,38 @@ public partial class NuclideViewModel : ObservableObject
     public partial bool IsChecked { get; set; }
 }
 
-public partial class InputScoeffViewModel : ObservableObject
+public partial class InputScoeffViewModel : ViewModelBase
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
     public InputScoeffViewModel()
     {
-        OutputFilePath = @"out\";
+        OutputDirectory = @"out\";
 
+        WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
+
+#if false
         Task.Run(() =>
         {
             var nuclides = SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideViewModel { Nuclide = nuc });
 
-            //Application.Current.Dispatcher.Invoke(() =>
-            //{
-            //    Nuclides.AddRange(nuclides);
-            //});
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Nuclides.AddRange(nuclides);
+            });
         });
+#endif
     }
 
+    public ObservableCollection<NuclideViewModel> Nuclides { get; } = [];
+
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RunCommand))]
     public partial bool CalcMale { get; set; } = true;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RunCommand))]
     public partial bool CalcFemale { get; set; } = true;
 
     [ObservableProperty]
@@ -46,25 +54,29 @@ public partial class InputScoeffViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IdacDoseCompatible { get; set; } = false;
 
-    public ObservableCollection<NuclideViewModel> Nuclides { get; } = [];
-
     [ObservableProperty]
-    public partial string OutputFilePath { get; set; }
+    public partial string OutputDirectory { get; set; }
 
     [RelayCommand]
-    private void SelectOutputFilePath()
+    private async Task SelectOutputDirectory(string[] paths)
     {
-        //var dialog = new SaveFileDialog();
-        //dialog.InitialDirectory = Environment.CurrentDirectory;
-        //if (dialog.ShowDialog() == true)
-        //    OutputFilePath = dialog.FileName;
+        var selected = paths?[0];
+        if (selected is null)
+        {
+            //var dialog = new SaveFileDialog();
+            //dialog.InitialDirectory = Environment.CurrentDirectory;
+            //if (dialog.ShowDialog() == true)
+            //    selected = dialog.FileName;
+        }
+        if (selected is not null)
+            OutputDirectory = selected;
     }
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
     private partial bool IsBusy { get; set; }
 
-    private bool CanRun => !IsBusy;
+    private bool CanRun => !IsBusy && (CalcMale || CalcFemale);
 
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async Task Run()
@@ -73,12 +85,12 @@ public partial class InputScoeffViewModel : ObservableObject
         {
             WeakReferenceMessenger.Default.Send(new BusyState(true));
 
-            var outPath = OutputFilePath;
+            var outputDir = OutputDirectory;
 
-            if (!Path.IsPathFullyQualified(outPath))
-                outPath = Path.Combine(AppResource.ProcessDir, outPath);
+            if (!Path.IsPathFullyQualified(outputDir))
+                outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
 
-            Directory.CreateDirectory(outPath);
+            Directory.CreateDirectory(outputDir);
 
             var calcAM = CalcMale;
             var calcAF = CalcFemale;
@@ -94,8 +106,8 @@ public partial class InputScoeffViewModel : ObservableObject
             var isIdacDoseCompatible = IdacDoseCompatible;
 
             await Task.WhenAll(
-                calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask,
-                calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask);
+                calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outputDir, isIdacDoseCompatible) : Task.CompletedTask,
+                calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outputDir, isIdacDoseCompatible) : Task.CompletedTask);
 
             //MessageBox.Show("Finish", "S-Coefficient", MessageBoxButton.OK);
         }
@@ -109,7 +121,7 @@ public partial class InputScoeffViewModel : ObservableObject
         }
     }
 
-    private static Task Run(Sex sex, string interpolationMethod, string[] nuclides, string outPath, bool isIdacDoseCompatible)
+    private static Task Run(Sex sex, string interpolationMethod, string[] nuclides, string outputDir, bool isIdacDoseCompatible)
     {
         var safdata = SAFDataReader.ReadSAF(sex);
         if (safdata is null)
@@ -127,12 +139,12 @@ public partial class InputScoeffViewModel : ObservableObject
 
             if (isIdacDoseCompatible)
             {
-                var scoeffFilePath = Path.Combine(outPath, target + ".csv");
+                var scoeffFilePath = Path.Combine(outputDir, target + ".csv");
                 calcS.WriteOutIdacDoseCompatibleResult(scoeffFilePath, sex);
             }
             else
             {
-                var scoeffFilePath = Path.Combine(outPath, target + ".txt");
+                var scoeffFilePath = Path.Combine(outputDir, target + ".txt");
                 calcS.WriteOutTotalResult(scoeffFilePath);
             }
         })));
