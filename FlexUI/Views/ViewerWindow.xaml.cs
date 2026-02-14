@@ -1,5 +1,8 @@
 using FlexID.ViewModels;
+using Microsoft.UI.Input;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
+using Windows.System;
 
 namespace FlexID.Views;
 
@@ -14,28 +17,54 @@ public partial class ViewerWindow
 
     public ViewerViewModel ViewModel { get; }
 
-#if false
-    private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+    private void WindowContent_Loaded(object sender, RoutedEventArgs e)
     {
-        // Ctrl+Tab
-        if (e.Key == Key.Tab && (Keyboard.Modifiers & ModifierKeys.Control) != 0)
+        // タブオーダーに従って初期フォーカスを設定する。
+        var first = FocusManager.FindFirstFocusableElement(Content) as UIElement;
+        first?.Focus(FocusState.Programmatic);
+    }
+
+    private void Page_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        void CycleNavigation(bool reverse)
         {
-            var index = MainTabControl.SelectedIndex;
-            var count = MainTabControl.Items.Count;
+            var count = PivotSegmented.Items.Count;
+            var index = PivotSegmented.SelectedIndex;
+            if (reverse)
+                index = (index + count - 1) % count;
+            else
+                index = (index + 1) % count;
+            PivotSegmented.SelectedIndex = index;
+        }
 
-            var shiftPressed = (Keyboard.Modifiers & ~ModifierKeys.Control) == ModifierKeys.Shift;
-            index += (shiftPressed ? -1 : +1);
-            if (index >= count)
-                index = 0;
-            else if (index < 0)
-                index = count - 1;
+        var ctrlDown = InputKeyboardSource.IsKeyDown(VirtualKey.Control);
+        if (ctrlDown)
+        {
+            // Ctrl + (Shift +) Tab
+            if (e.Key == VirtualKey.Tab)
+            {
+                e.Handled = true;
+                var shiftDown = InputKeyboardSource.IsKeyDown(VirtualKey.Shift);
+                CycleNavigation(reverse: shiftDown);
+                return;
+            }
 
-            MainTabControl.SelectedIndex = index;
-
-            e.Handled = true;
+            // Ctrl + PageDown
+            if (e.Key == VirtualKey.PageDown)
+            {
+                e.Handled = true;
+                CycleNavigation(reverse: false);
+                return;
+            }
+            // Ctrl + PageUp
+            if (e.Key == VirtualKey.PageUp)
+            {
+                e.Handled = true;
+                CycleNavigation(reverse: true);
+                return;
+            }
         }
     }
-#endif
 
     private void OutputFilePathTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {

@@ -3,6 +3,7 @@
   x:Class="FlexID.Views.ViewerWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="using:CommunityToolkit.WinUI.Controls"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="using:Microsoft.Xaml.Interactivity"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,16 +17,13 @@
   MinWidth="1200"
   MinHeight="800"
   mc:Ignorable="d">
-  <!--
-    d:DataContext="{d:DesignInstance Type={x:Type vm:ViewerViewModel}}"
-    PreviewKeyDown="MetroWindow_PreviewKeyDown"
-    WindowStartupLocation="CenterScreen"
-  -->
 
   <Grid
     Margin="20"
     RowSpacing="8"
-    ColumnSpacing="8">
+    ColumnSpacing="8"
+    Loaded="WindowContent_Loaded"
+    PreviewKeyDown="Page_PreviewKeyDown">
 
     <!--<Grid.Resources>
       <Style
@@ -46,6 +44,10 @@
     <!--<i:Interaction.Behaviors>
       <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
     </i:Interaction.Behaviors>-->
+
+    <Grid.Resources>
+      <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
+    </Grid.Resources>
 
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
@@ -102,18 +104,24 @@
       </Style>
     </Grid.Resources>-->
 
-    <TabView
-      x:Name="MainTabControl"
+    <!--  Pivot Selector of Model or Graph  -->
+    <controls:Segmented
+      x:Name="PivotSegmented"
       Grid.RowSpan="2"
       Grid.Column="4"
       HorizontalAlignment="Right"
       VerticalAlignment="Top"
-      SelectedIndex="0">
-      <!--  Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}"  -->
-
-      <TabViewItem Header="Model" />
-      <TabViewItem Header="Graph" />
-    </TabView>
+      SelectedIndex="0"
+      Style="{StaticResource PivotSegmentedStyle}">
+      <controls:SegmentedItem
+        x:Name="ModelSegmentedItem"
+        Content="Model"
+        FontSize="24" />
+      <controls:SegmentedItem
+        x:Name="GraphSegmentedItem"
+        Content="Graph"
+        FontSize="24" />
+    </controls:Segmented>
 
     <!--  Output FilePath  -->
     <Button
@@ -183,16 +191,16 @@
     <!--  Style="{StaticResource OutputInfoComboBox}"  -->
 
     <!--  Data Table of Model or Graph  -->
-    <!--<TabView
+    <controls:SwitchPresenter
       Grid.Row="4"
       Grid.Column="0"
       Grid.ColumnSpan="2"
       Margin="70,16,0,70"
-      SelectedIndex="{x:Bind MainTabControl.SelectedIndex, Mode=OneWay}"
-      Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}">
+      Value="{x:Bind PivotSegmented.SelectedItem, Mode=OneWay}">
 
-      <TabViewItem>
-        <DataGrid
+      <controls:Case Value="{x:Bind ModelSegmentedItem}">
+        <Border BorderBrush="Red" BorderThickness="1" />
+        <!--<DataGrid
           AutoGenerateColumns="False"
           BorderBrush="Black"
           BorderThickness="1"
@@ -214,11 +222,12 @@
               Header="Value"
               IsReadOnly="True" />
           </DataGrid.Columns>
-        </DataGrid>
-      </TabViewItem>
+        </DataGrid>-->
+      </controls:Case>
 
-      <TabViewItem>
-        <DataGrid
+      <controls:Case Value="{x:Bind GraphSegmentedItem}">
+        <Border BorderBrush="Blue" BorderThickness="1" />
+        <!--<DataGrid
           AutoGenerateColumns="False"
           BorderBrush="Black"
           BorderThickness="1"
@@ -255,20 +264,19 @@
               </DataGridTemplateColumn.CellStyle>
             </DataGridTemplateColumn>
           </DataGrid.Columns>
-        </DataGrid>
-      </TabViewItem>
-    </TabView>-->
+        </DataGrid>-->
+      </controls:Case>
+    </controls:SwitchPresenter>
 
     <!--  Main Content of Model or Graph  -->
-    <!--<TabView
+    <controls:SwitchPresenter
       Grid.Row="1"
       Grid.RowSpan="4"
       Grid.Column="2"
       Grid.ColumnSpan="3"
-      SelectedIndex="{x:Bind MainTabControl.SelectedIndex, Mode=OneWay}"
-      Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}">
+      Value="{x:Bind PivotSegmented.SelectedItem, Mode=OneWay}">
 
-      <TabViewItem>
+      <controls:Case Value="{x:Bind ModelSegmentedItem}">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -286,17 +294,17 @@
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
 
-              <v:HumanContourLegend
+              <!--<v:HumanContourLegend
                 Grid.Column="0"
                 Margin="20,48,20,12"
                 HorizontalAlignment="Center"
-                DataContext="{Binding Contour}" />
+                DataContext="{Binding Contour}" />-->
 
-              <v:HumanContour
+              <!--<v:HumanContour
                 Grid.Column="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                DataContext="{Binding Contour}" />
+                DataContext="{Binding Contour}" />-->
             </Grid>
           </Viewbox>
 
@@ -331,13 +339,15 @@
               Margin="70,0"
               d:Maximum="18250"
               d:Minimum="0"
-              ToolTipService.Placement="Bottom"
-              IsMoveToPointEnabled="True"
-              IsSnapToTickEnabled="True"
               Maximum="{Binding Contour.EndTimeStep}"
               Minimum="{Binding Contour.StartTimeStep}"
-              Ticks="{Binding Contour.TimeSteps}"
+              ToolTipService.Placement="Bottom"
               Value="{Binding Contour.CurrentTimeStep}" />
+            <!--
+              IsMoveToPointEnabled="True"
+              IsSnapToTickEnabled="True"
+              Ticks="{Binding Contour.TimeSteps}"
+            -->
 
             <TextBlock
               Grid.Row="1"
@@ -373,7 +383,7 @@
               FontFamily="{StaticResource SymbolThemeFontFamily}"
               FontSize="18"
               ToolTipService.ToolTip="Play/Pause">
-              <icons:PackIconMaterial>
+              <!--<icons:PackIconMaterial>
                 <icons:PackIconMaterial.Style>
                   <Style TargetType="{x:Type icons:PackIconMaterial}">
                     <Setter Property="Kind" Value="Play" />
@@ -387,7 +397,7 @@
                     </Style.Triggers>
                   </Style>
                 </icons:PackIconMaterial.Style>
-              </icons:PackIconMaterial>
+              </icons:PackIconMaterial>-->
             </Button>
             <RepeatButton
               Grid.Row="1"
@@ -419,9 +429,9 @@
             </StackPanel>
           </Grid>
         </Grid>
-      </TabViewItem>
+      </controls:Case>
 
-      <TabViewItem>
+      <controls:Case Value="{x:Bind GraphSegmentedItem}">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -445,12 +455,12 @@
               IsChecked="{Binding Graph.IsLogAxisX}" />
           </StackPanel>
 
-          <oxy:PlotView
+          <!--<oxy:PlotView
             Grid.Row="1"
-            Model="{Binding Graph.PlotModel}" />
+            Model="{Binding Graph.PlotModel}" />-->
         </Grid>
-      </TabViewItem>
-    </TabView>-->
+      </controls:Case>
+    </controls:SwitchPresenter>
   </Grid>
 
 </winex:WindowEx>
