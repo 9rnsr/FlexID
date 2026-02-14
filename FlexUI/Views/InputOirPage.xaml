@@ -47,6 +47,25 @@
     -->
   </Page.Resources>
 
+  <Grid>
+    <Grid Margin="24" RowSpacing="24">
+      <Grid.RowDefinitions>
+        <RowDefinition />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <Button
+        Grid.Row="2"
+        Width="128"
+        Height="40"
+        Margin="0,8,24,0"
+        HorizontalAlignment="Right"
+        Command="{x:Bind ViewModel.RunCommand}"
+        Content="Run" />
+    </Grid>
+  </Grid>
+
   <!--
   <Grid>
     <Grid.ColumnDefinitions>
@@ -206,15 +225,6 @@
       Grid.Row="7"
       Grid.Column="0"
       Content="" />
-
-    <Grid Grid.Row="9" Grid.ColumnSpan="2">
-      <Button
-        Width="120"
-        Height="36"
-        Margin="0,0,32,0"
-        HorizontalAlignment="Right"
-        Command="{Binding RunCommand}"
-        Content="Run" />
     </Grid>
   </Grid>
   -->

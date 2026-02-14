@@ -8,30 +8,39 @@
   xmlns:v="using:FlexID.Views"
   xmlns:vm="using:FlexID.ViewModels"
   xmlns:winex="using:WinUIEx"
-  Title="FlexID"
+  Title="{x:Bind ViewModel.Title}"
   Width="800"
   Height="900"
   mc:Ignorable="d">
-  <!--
-    d:DataContext="{d:DesignInstance vm:MainViewModel}"
-    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-  -->
 
-  <TabView Margin="4" Padding="32,12">
-    <!--  Grid.IsSharedSizeScope="True"  -->
-    <!--  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"  -->
+  <Window.SystemBackdrop>
+    <MicaBackdrop />
+  </Window.SystemBackdrop>
 
-    <TabViewItem Header="OIR">
-      <v:InputOirPage />
-    </TabViewItem>
+  <NavigationView
+    x:Name="NavigationView"
+    IsBackButtonVisible="Collapsed"
+    IsSettingsVisible="False"
+    PaneDisplayMode="Top"
+    PreviewKeyDown="NavigationView_PreviewKeyDown"
+    SelectionChanged="NavigationView_SelectionChanged">
 
-    <TabViewItem Header="EIR">
-      <v:InputEirPage />
-    </TabViewItem>
+    <NavigationView.MenuItems>
+      <NavigationViewItem
+        AccessKey="1"
+        Content="OIR"
+        Tag="{x:Bind InputOirPageType}" />
+      <NavigationViewItem
+        AccessKey="2"
+        Content="EIR"
+        Tag="{x:Bind InputEirPageType}" />
+      <NavigationViewItem
+        AccessKey="3"
+        Content="OIR S-Coeff"
+        Tag="{x:Bind InputScoeffPageType}" />
+    </NavigationView.MenuItems>
 
-    <TabViewItem Header="OIR S-Coeff">
-      <v:InputScoeffPage />
-    </TabViewItem>
-  </TabView>
+    <Frame x:Name="NavigationFrame" Navigated="NavigationFrame_Navigated" />
+  </NavigationView>
 
 </winex:WindowEx>
