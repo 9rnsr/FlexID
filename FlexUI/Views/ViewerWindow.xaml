@@ -24,19 +24,20 @@
     Margin="20"
     RowSpacing="8"
     ColumnSpacing="8"
+    Background="Transparent"
     Loaded="WindowContent_Loaded"
     PreviewKeyDown="Page_PreviewKeyDown">
 
-    <!--<Grid.InputBindings>
-     <KeyBinding
+    <Grid.KeyboardAccelerators>
+      <KeyboardAccelerator
         Key="O"
-        Command="{Binding SelectOutputFilePathCommand}"
-        Modifiers="Ctrl" />
-    </Grid.InputBindings>-->
+        Invoked="OnOpen"
+        Modifiers="Control" />
+    </Grid.KeyboardAccelerators>
 
-    <!--<i:Interaction.Behaviors>
-      <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
-    </i:Interaction.Behaviors>-->
+    <i:Interaction.Behaviors>
+      <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputFilePathCommand}" />
+    </i:Interaction.Behaviors>
 
     <Grid.Resources>
       <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
@@ -57,45 +58,6 @@
       <ColumnDefinition Width="3*" />
       <ColumnDefinition Width="260" />
     </Grid.ColumnDefinitions>
-
-    <!--<Grid.Resources>
-      <Style
-        x:Key="OutputInfoTextBox"
-        BasedOn="{StaticResource MahApps.Styles.TextBox}"
-        TargetType="TextBox">
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="IsReadOnly" Value="True" />
-        <Style.Triggers>
-          <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
-            <Setter Property="IsEnabled" Value="False" />
-          </DataTrigger>
-        </Style.Triggers>
-      </Style>
-
-      <Style
-        x:Key="OutputInfoComboBox"
-        BasedOn="{StaticResource MahApps.Styles.ComboBox}"
-        TargetType="ComboBox">
-        <Setter Property="FontSize" Value="14" />
-        <Style.Triggers>
-          <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="False">
-            <Setter Property="IsEnabled" Value="False" />
-          </DataTrigger>
-          <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="1">
-            <Setter Property="Template">
-              <Setter.Value>
-                <ControlTemplate TargetType="ComboBox">
-                  <TextBox
-                    FontSize="{TemplateBinding FontSize}"
-                    IsReadOnly="True"
-                    Text="{TemplateBinding Text}" />
-                </ControlTemplate>
-              </Setter.Value>
-            </Setter>
-          </DataTrigger>
-        </Style.Triggers>
-      </Style>
-    </Grid.Resources>-->
 
     <!--  Pivot Selector of Model or Graph  -->
     <controls:Segmented
@@ -134,7 +96,7 @@
       KeyDown="OutputFilePathTextBox_KeyDown"
       Text="{Binding OutputFilePath, Mode=TwoWay, UpdateSourceTrigger=Explicit}">
       <i:Interaction.Behaviors>
-        <!--<vb:PathPasteBehavior />-->
+        <vb:PathPasteBehavior />
       </i:Interaction.Behaviors>
     </TextBox>
 
@@ -149,9 +111,9 @@
       Grid.Column="1"
       Grid.ColumnSpan="2"
       AccessKey="L"
+      IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
       IsReadOnly="True"
       Text="{x:Bind ViewModel.SelectedOutput.Title, Mode=OneWay, FallbackValue=''}" />
-    <!--  Style="{StaticResource OutputInfoTextBox}"  -->
 
     <!--  Output Types  -->
     <TextBlock
@@ -163,9 +125,9 @@
       Grid.Column="1"
       HorizontalAlignment="Stretch"
       AccessKey="T"
+      IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
       ItemsSource="{x:Bind ViewModel.OutputTypes, Mode=OneWay}"
       SelectedItem="{x:Bind ViewModel.SelectedOutputType, Mode=TwoWay}" />
-    <!--  Style="{StaticResource OutputInfoComboBox}"  -->
 
     <!--  Output Blocks = Nuclides or Male/Female  -->
     <TextBlock
@@ -179,9 +141,9 @@
       HorizontalAlignment="Stretch"
       AccessKey="N"
       DisplayMemberPath="Header"
+      IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
       ItemsSource="{x:Bind ViewModel.SelectedOutput.Blocks, Mode=OneWay}"
       SelectedItem="{x:Bind ViewModel.SelectedBlock, Mode=TwoWay}" />
-    <!--  Style="{StaticResource OutputInfoComboBox}"  -->
 
     <!--  Data Table of Model or Graph  -->
     <controls:SwitchPresenter
@@ -323,12 +285,14 @@
                 Grid.Column="0"
                 Margin="20,48,20,12"
                 HorizontalAlignment="Center"
+                IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
                 ViewModel="{x:Bind ViewModel.Contour}" />
 
               <v:HumanContour
                 Grid.Column="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
                 ViewModel="{x:Bind ViewModel.Contour}" />
             </Grid>
           </Viewbox>
@@ -340,7 +304,8 @@
             VerticalAlignment="Center"
             ContourMax="{x:Bind ViewModel.Contour.ContourMax, Mode=TwoWay}"
             ContourMin="{x:Bind ViewModel.Contour.ContourMin, Mode=TwoWay}"
-            ContourUnit="{x:Bind ViewModel.Contour.ContourUnit, Mode=OneWay}" />
+            ContourUnit="{x:Bind ViewModel.Contour.ContourUnit, Mode=OneWay}"
+            IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}" />
 
           <Grid Grid.Row="1" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
@@ -363,6 +328,7 @@
               Height="32"
               Margin="70,0"
               AccessKey="SL"
+              IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
               Maximum="{x:Bind ViewModel.Contour.EndTimeStep, Mode=OneWay}"
               Minimum="{x:Bind ViewModel.Contour.StartTimeStep, Mode=OneWay}"
               ToolTipService.Placement="Bottom"
@@ -392,6 +358,7 @@
               Content="&#xF8AC;"
               FontFamily="{StaticResource SymbolThemeFontFamily}"
               FontSize="18"
+              IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
               ToolTipService.ToolTip="Back step" />
             <Button
               Grid.Row="1"
@@ -405,6 +372,7 @@
               Content="{x:Bind GetPlayPauseIcon(ViewModel.Contour.CanPlay), Mode=OneWay}"
               FontFamily="{StaticResource SymbolThemeFontFamily}"
               FontSize="18"
+              IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
               ToolTipService.ToolTip="{x:Bind GetPlayPauseTooltip(ViewModel.Contour.CanPlay), Mode=OneWay}" />
             <RepeatButton
               Grid.Row="1"
@@ -418,6 +386,7 @@
               Content="&#xF8AD;"
               FontFamily="{StaticResource SymbolThemeFontFamily}"
               FontSize="18"
+              IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}"
               ToolTipService.ToolTip="Forward step" />
 
             <StackPanel
@@ -466,7 +435,8 @@
           <ScottPlot:WinUIPlot
             x:Name="PlotControl"
             Grid.Row="1"
-            Background="Transparent" />
+            Background="Transparent"
+            IsEnabled="{x:Bind IsContentEnabled.Value, Mode=OneWay}" />
         </Grid>
       </controls:Case>
     </controls:SwitchPresenter>
