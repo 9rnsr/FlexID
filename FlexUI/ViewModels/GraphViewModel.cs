@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
+//using OxyPlot;
+//using OxyPlot.Axes;
+//using OxyPlot.Series;
 
 namespace FlexID.ViewModels;
 
@@ -13,17 +13,18 @@ public partial class GraphViewModel : ObservableObject
     /// </summary>
     public GraphViewModel()
     {
-        PlotModel.Axes.Add(LogAxisX);
-        PlotModel.Axes.Add(LogAxisY);
+        //PlotModel.Axes.Add(LogAxisX);
+        //PlotModel.Axes.Add(LogAxisY);
     }
 
     /// <summary>
     /// 表示中のブロックデータ(核種毎の残留放射能や男女別の線量)。
     /// </summary>
-    private OutputBlockData SelectedBlock { get; set; }
+    private OutputBlockData? SelectedBlock { get; set; }
 
     public ObservableCollection<RegionData> Regions { get; } = [];
 
+#if false
     public PlotModel PlotModel { get; } = new();
 
     private LogarithmicAxis LogAxisX { get; } = new LogarithmicAxis()
@@ -87,8 +88,9 @@ public partial class GraphViewModel : ObservableObject
         PlotModel.Axes[1] = value ? LogAxisY : LinAxisY;
         PlotModel.InvalidatePlot(false);
     }
+#endif
 
-    public void SetBlock(OutputData output, OutputBlockData block)
+    public void SetBlock(OutputData? output, OutputBlockData? block)
     {
         if (SelectedBlock == block)
             return;
@@ -96,6 +98,7 @@ public partial class GraphViewModel : ObservableObject
         SelectedBlock = null;
 
         Regions.Clear();
+#if false
         PlotModel.Series.Clear();
         PlotModel.InvalidatePlot(updateData: true);
 
@@ -168,11 +171,13 @@ public partial class GraphViewModel : ObservableObject
 
         // グラフがFitする範囲などを更新するためにupdateData: trueが必要。
         PlotModel.InvalidatePlot(updateData: true);
+#endif
     }
 }
 
 public class RegionData
 {
+#if false
     public RegionData(ScatterSeries serie, string name)
     {
         this.serie = serie;
@@ -194,4 +199,5 @@ public class RegionData
             serie.PlotModel.InvalidatePlot(true);
         }
     }
+#endif
 }

@@ -1,7 +1,6 @@
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Threading;
-using Microsoft.Xaml.Behaviors;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.Xaml.Interactivity;
 
 namespace FlexID.Views.Behaviors;
 
@@ -25,17 +24,17 @@ public class NuclideSelectorBehavior : Behavior<ListView>
     protected override void OnAttached()
     {
         var lv = AssociatedObject;
-        lv.SelectionChanged += ListView_SelectionChanged;
-        lv.PreviewKeyDown += ListView_PreviewKeyDown;
-        lv.PreviewTextInput += ListView_PreviewTextInput;
+        //lv.SelectionChanged += ListView_SelectionChanged;
+        //lv.PreviewKeyDown += ListView_PreviewKeyDown;
+        //lv.PreviewTextInput += ListView_PreviewTextInput;
     }
 
     protected override void OnDetaching()
     {
         var lv = AssociatedObject;
-        lv.PreviewKeyDown -= ListView_PreviewKeyDown;
-        lv.PreviewTextInput -= ListView_PreviewTextInput;
-        lv.SelectionChanged -= ListView_SelectionChanged;
+        //lv.PreviewKeyDown -= ListView_PreviewKeyDown;
+        //lv.PreviewTextInput -= ListView_PreviewTextInput;
+        //lv.SelectionChanged -= ListView_SelectionChanged;
     }
 
     private void StartResetTimeout()
@@ -51,6 +50,7 @@ public class NuclideSelectorBehavior : Behavior<ListView>
         //System.Diagnostics.Debug.WriteLine($"--> reset");
     }
 
+#if false
     private void SelectAndFocusItem(int index)
     {
         var lv = AssociatedObject;
@@ -159,4 +159,5 @@ public class NuclideSelectorBehavior : Behavior<ListView>
         }
         avoidResetTimeout = false;
     }
+#endif
 }

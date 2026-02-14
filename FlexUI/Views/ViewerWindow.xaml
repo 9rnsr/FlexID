@@ -1,74 +1,68 @@
-<Controls:MetroWindow
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
   x:Class="FlexID.Views.ViewerWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-  xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+  xmlns:i="using:Microsoft.Xaml.Interactivity"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:oxy="http://oxyplot.org/wpf"
-  xmlns:v="clr-namespace:FlexID.Views"
-  xmlns:vb="clr-namespace:FlexID.Views.Behaviors"
-  xmlns:vm="clr-namespace:FlexID.ViewModels"
+  xmlns:v="using:FlexID.Views"
+  xmlns:vb="using:FlexID.Views.Behaviors"
+  xmlns:vm="using:FlexID.ViewModels"
   Title="FlexID_Viewer"
-  Width="1200"
-  Height="800"
-  MinWidth="1200"
-  MinHeight="800"
-  d:DataContext="{d:DesignInstance Type={x:Type vm:ViewerViewModel}}"
-  PreviewKeyDown="MetroWindow_PreviewKeyDown"
-  TitleCharacterCasing="Normal"
-  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-
-  <Controls:MetroWindow.Resources>
-    <Style
-      x:Key="MyColumnHeader"
-      BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}"
-      TargetType="{x:Type DataGridColumnHeader}">
-      <Setter Property="Controls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
-    </Style>
-  </Controls:MetroWindow.Resources>
-
-  <Controls:MetroWindow.InputBindings>
-    <KeyBinding
-      Key="O"
-      Command="{Binding SelectOutputFilePathCommand}"
-      Modifiers="Ctrl" />
-  </Controls:MetroWindow.InputBindings>
-
-  <i:Interaction.Behaviors>
-    <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
-  </i:Interaction.Behaviors>
+  <!--
+    Width="1200"
+    Height="800"
+    MinWidth="1200"
+    MinHeight="800"
+    d:DataContext="{d:DesignInstance Type={x:Type vm:ViewerViewModel}}"
+    PreviewKeyDown="MetroWindow_PreviewKeyDown"
+    WindowStartupLocation="CenterScreen"
+  -->
 
   <Grid
-    Grid.Row="0"
-    Grid.Column="0"
-    Grid.ColumnSpan="2"
-    Margin="20">
+    Margin="20"
+    RowSpacing="8"
+    ColumnSpacing="8">
+
+    <!--<Grid.Resources>
+      <Style
+        x:Key="MyColumnHeader"
+        BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}"
+        TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="ControlsHelper.ContentCharacterCasing" Value="Normal" />
+      </Style>
+    </Grid.Resources>-->
+
+    <!--<Grid.InputBindings>
+     <KeyBinding
+        Key="O"
+        Command="{Binding SelectOutputFilePathCommand}"
+        Modifiers="Ctrl" />
+    </Grid.InputBindings>-->
+
+    <!--<i:Interaction.Behaviors>
+      <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputFilePathCommand}" />
+    </i:Interaction.Behaviors>-->
 
     <Grid.RowDefinitions>
-      <RowDefinition Height="50" />
-      <RowDefinition Height="8" />
-
+      <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" MinHeight="30" />
-      <RowDefinition Height="Auto" MinHeight="8" />
       <RowDefinition Height="Auto" MinHeight="30" />
-      <RowDefinition Height="Auto" MinHeight="8" />
       <RowDefinition Height="Auto" MinHeight="30" />
 
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="100" />
-      <ColumnDefinition Width="8" />
       <ColumnDefinition Width="Auto" MinWidth="240" />
       <ColumnDefinition Width="2*" />
       <ColumnDefinition Width="3*" />
+      <ColumnDefinition Width="260" />
     </Grid.ColumnDefinitions>
 
-    <Grid.Resources>
+    <!--<Grid.Resources>
       <Style
         x:Key="OutputInfoTextBox"
         BasedOn="{StaticResource MahApps.Styles.TextBox}"
@@ -105,101 +99,98 @@
           </DataTrigger>
         </Style.Triggers>
       </Style>
-    </Grid.Resources>
+    </Grid.Resources>-->
 
+    <TabView
+      x:Name="MainTabControl"
+      Grid.RowSpan="2"
+      Grid.Column="4"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Top"
+      SelectedIndex="0">
+      <!--  Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}"  -->
+
+      <TabViewItem Header="Model" />
+      <TabViewItem Header="Graph" />
+    </TabView>
+
+    <!--  Output FilePath  -->
     <Button
       Grid.Column="0"
+      HorizontalAlignment="Stretch"
       VerticalAlignment="Center"
-      Controls:ControlsHelper.ContentCharacterCasing="Normal"
-      Command="{Binding SelectOutputFilePathCommand}"
-      Content="_Open"
-      FontSize="14"
-      ToolTip="Open Output file (Ctrl+O)" />
-
-    <Grid Grid.Column="2" Grid.ColumnSpan="3">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="260" />
-      </Grid.ColumnDefinitions>
-
-      <TextBox
-        Grid.Column="0"
-        Padding="6"
-        VerticalAlignment="Center"
-        FontSize="14"
-        KeyDown="OutputFilePathTextBox_KeyDown"
-        Text="{Binding OutputFilePath, UpdateSourceTrigger=Explicit}">
-        <i:Interaction.Behaviors>
-          <vb:PathPasteBehavior />
-        </i:Interaction.Behaviors>
-      </TextBox>
-
-      <TabControl
-        x:Name="MainTabControl"
-        Grid.Column="1"
-        HorizontalAlignment="Right"
-        VerticalAlignment="Center"
-        Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}">
-
-        <TabItem Header="Model" />
-        <TabItem Header="Graph" />
-      </TabControl>
-    </Grid>
-
-    <Label
-      Grid.Row="2"
-      Grid.Column="0"
-      Content="_Title"
-      FontSize="14"
-      Target="{Binding ElementName=TitleTextBox}" />
+      AccessKey="O"
+      Command="{x:Bind ViewModel.SelectOutputFilePathCommand}"
+      Content="Open"
+      ToolTipService.ToolTip="Open Output file (Ctrl+O)" />
     <TextBox
-      x:Name="TitleTextBox"
-      Grid.Row="2"
-      Grid.Column="2"
-      Grid.ColumnSpan="2"
-      Style="{StaticResource OutputInfoTextBox}"
-      Text="{Binding SelectedOutput.Title, Mode=OneWay}" />
+      Grid.Column="1"
+      Grid.ColumnSpan="3"
+      Padding="6"
+      VerticalAlignment="Center"
+      DataContext="{x:Bind ViewModel}"
+      KeyDown="OutputFilePathTextBox_KeyDown"
+      Text="{Binding OutputFilePath, Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+      <i:Interaction.Behaviors>
+        <!--<vb:PathPasteBehavior />-->
+      </i:Interaction.Behaviors>
+    </TextBox>
 
-    <Label
-      Grid.Row="4"
-      Grid.Column="0"
-      Content="_Output Type"
-      FontSize="14"
-      Target="{Binding ElementName=OutputTypeComboBox}" />
-    <ComboBox
-      x:Name="OutputTypeComboBox"
-      Grid.Row="4"
-      Grid.Column="2"
-      ItemsSource="{Binding OutputTypes}"
-      SelectedItem="{Binding SelectedOutputType}"
-      Style="{StaticResource OutputInfoComboBox}" />
-
-    <Label
-      Grid.Row="6"
+    <!--  Title  -->
+    <TextBlock
+      Grid.Row="1"
       Grid.Column="0"
       VerticalAlignment="Center"
-      Content="_Nuclides"
-      FontSize="14"
-      Target="{Binding ElementName=NuclidesComboBox}" />
-    <ComboBox
-      x:Name="NuclidesComboBox"
-      Grid.Row="6"
-      Grid.Column="2"
-      DisplayMemberPath="Header"
-      ItemsSource="{Binding SelectedOutput.Blocks}"
-      SelectedItem="{Binding SelectedBlock}"
-      Style="{StaticResource OutputInfoComboBox}" />
+      Text="Title" />
+    <TextBox
+      Grid.Row="1"
+      Grid.Column="1"
+      Grid.ColumnSpan="2"
+      AccessKey="L"
+      IsReadOnly="True"
+      Text="{x:Bind ViewModel.SelectedOutput.Title, Mode=OneWay, FallbackValue=''}" />
+    <!--  Style="{StaticResource OutputInfoTextBox}"  -->
 
-    <TabControl
-      Grid.Row="7"
+    <!--  Output Types  -->
+    <TextBlock
+      Grid.Row="2"
       Grid.Column="0"
-      Grid.ColumnSpan="3"
+      Text="Output Type" />
+    <ComboBox
+      Grid.Row="2"
+      Grid.Column="1"
+      HorizontalAlignment="Stretch"
+      AccessKey="T"
+      ItemsSource="{x:Bind ViewModel.OutputTypes, Mode=OneWay}"
+      SelectedItem="{x:Bind ViewModel.SelectedOutputType, Mode=TwoWay}" />
+    <!--  Style="{StaticResource OutputInfoComboBox}"  -->
+
+    <!--  Output Blocks = Nuclides or Male/Female  -->
+    <TextBlock
+      Grid.Row="3"
+      Grid.Column="0"
+      VerticalAlignment="Center"
+      Text="Nuclides" />
+    <ComboBox
+      Grid.Row="3"
+      Grid.Column="1"
+      HorizontalAlignment="Stretch"
+      AccessKey="N"
+      DisplayMemberPath="Header"
+      ItemsSource="{x:Bind ViewModel.SelectedOutput.Blocks, Mode=OneWay}"
+      SelectedItem="{x:Bind ViewModel.SelectedBlock, Mode=TwoWay}" />
+    <!--  Style="{StaticResource OutputInfoComboBox}"  -->
+
+    <!--  Data Table of Model or Graph  -->
+    <!--<TabView
+      Grid.Row="4"
+      Grid.Column="0"
+      Grid.ColumnSpan="2"
       Margin="70,16,0,70"
-      SelectedIndex="{Binding SelectedIndex, ElementName=MainTabControl}"
+      SelectedIndex="{x:Bind MainTabControl.SelectedIndex, Mode=OneWay}"
       Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}">
 
-      <!--  Model  -->
-      <TabItem>
+      <TabViewItem>
         <DataGrid
           AutoGenerateColumns="False"
           BorderBrush="Black"
@@ -208,7 +199,6 @@
           CanUserResizeColumns="False"
           CanUserSortColumns="False"
           ColumnHeaderStyle="{StaticResource MyColumnHeader}"
-          FontSize="14"
           ItemsSource="{Binding Contour.DataValues, UpdateSourceTrigger=PropertyChanged}"
           SelectionUnit="Cell">
           <DataGrid.Columns>
@@ -224,10 +214,9 @@
               IsReadOnly="True" />
           </DataGrid.Columns>
         </DataGrid>
-      </TabItem>
+      </TabViewItem>
 
-      <!--  Graph  -->
-      <TabItem>
+      <TabViewItem>
         <DataGrid
           AutoGenerateColumns="False"
           BorderBrush="Black"
@@ -237,7 +226,6 @@
           CanUserResizeColumns="False"
           CanUserSortColumns="False"
           ColumnHeaderStyle="{StaticResource MyColumnHeader}"
-          FontSize="14"
           ItemsSource="{Binding Graph.Regions}">
           <DataGrid.Columns>
             <DataGridTemplateColumn
@@ -267,19 +255,19 @@
             </DataGridTemplateColumn>
           </DataGrid.Columns>
         </DataGrid>
-      </TabItem>
-    </TabControl>
+      </TabViewItem>
+    </TabView>-->
 
-    <TabControl
-      Grid.Row="2"
-      Grid.RowSpan="6"
-      Grid.Column="3"
+    <!--  Main Content of Model or Graph  -->
+    <!--<TabView
+      Grid.Row="1"
+      Grid.RowSpan="4"
+      Grid.Column="2"
       Grid.ColumnSpan="3"
-      SelectedIndex="{Binding SelectedIndex, ElementName=MainTabControl}"
+      SelectedIndex="{x:Bind MainTabControl.SelectedIndex, Mode=OneWay}"
       Style="{StaticResource MahApps.Styles.TabControl.AnimatedSingleRow}">
 
-      <!--  Model  -->
-      <TabItem>
+      <TabViewItem>
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -318,8 +306,7 @@
             VerticalAlignment="Center"
             ContourMax="{Binding Contour.ContourMax}"
             ContourMin="{Binding Contour.ContourMin}"
-            ContourUnit="{Binding Contour.ContourUnit}"
-            FontSize="14" />
+            ContourUnit="{Binding Contour.ContourUnit}" />
 
           <Grid Grid.Row="1" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
@@ -343,8 +330,7 @@
               Margin="70,0"
               d:Maximum="18250"
               d:Minimum="0"
-              AutoToolTipPlacement="BottomRight"
-              FontSize="14"
+              ToolTipService.Placement="Bottom"
               IsMoveToPointEnabled="True"
               IsSnapToTickEnabled="True"
               Maximum="{Binding Contour.EndTimeStep}"
@@ -352,16 +338,16 @@
               Ticks="{Binding Contour.TimeSteps}"
               Value="{Binding Contour.CurrentTimeStep}" />
 
-            <Label
+            <TextBlock
               Grid.Row="1"
               Grid.Column="0"
               HorizontalAlignment="Center"
-              Content="{Binding Minimum, ElementName=TimeStepSlider}" />
-            <Label
+              Text="{x:Bind TimeStepSlider.Minimum, Mode=OneWay}" />
+            <TextBlock
               Grid.Row="1"
               Grid.Column="4"
               HorizontalAlignment="Center"
-              Content="{Binding Maximum, ElementName=TimeStepSlider}" />
+              Text="{x:Bind TimeStepSlider.Maximum, Mode=OneWay}" />
 
             <RepeatButton
               Grid.Row="1"
@@ -371,9 +357,10 @@
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
               Command="{Binding Contour.PreviousStepCommand}"
-              ToolTip="Previous step">
-              <icons:PackIconMaterial Kind="SkipPrevious" />
-            </RepeatButton>
+              Content="&#xF8AC;"
+              FontFamily="{StaticResource SymbolThemeFontFamily}"
+              FontSize="18"
+              ToolTipService.ToolTip="Previous step" />
             <Button
               Grid.Row="1"
               Grid.Column="2"
@@ -382,8 +369,9 @@
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
               Command="{Binding Contour.PlayCommand}"
-              FontSize="12"
-              ToolTip="Play/Pause">
+              FontFamily="{StaticResource SymbolThemeFontFamily}"
+              FontSize="18"
+              ToolTipService.ToolTip="Play/Pause">
               <icons:PackIconMaterial>
                 <icons:PackIconMaterial.Style>
                   <Style TargetType="{x:Type icons:PackIconMaterial}">
@@ -408,9 +396,10 @@
               HorizontalAlignment="Center"
               VerticalAlignment="Top"
               Command="{Binding Contour.NextStepCommand}"
-              ToolTip="Next step">
-              <icons:PackIconMaterial Kind="SkipNext" />
-            </RepeatButton>
+              Content="&#xF8AD;"
+              FontFamily="{StaticResource SymbolThemeFontFamily}"
+              FontSize="18"
+              ToolTipService.ToolTip="Next step" />
 
             <StackPanel
               Grid.Row="2"
@@ -420,21 +409,18 @@
                 Height="22"
                 MinWidth="100"
                 HorizontalAlignment="Center"
-                FontSize="14"
-                Text="{Binding Value, ElementName=TimeStepSlider}"
+                Text="{x:Bind TimeStepSlider.Value, Mode=OneWay}"
                 TextAlignment="Center" />
               <TextBlock
                 Height="22"
                 HorizontalAlignment="Center"
-                FontSize="14"
                 Text="[Day]" />
             </StackPanel>
           </Grid>
         </Grid>
-      </TabItem>
+      </TabViewItem>
 
-      <!--  Graph  -->
-      <TabItem>
+      <TabViewItem>
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -446,23 +432,24 @@
               Height="18"
               Margin="0,0,40,0"
               VerticalAlignment="Center"
-              Content="Log(_Vertical)"
+              AccessKey="V"
+              Content="Log(Vertical)"
               IsChecked="{Binding Graph.IsLogAxisY}" />
             <CheckBox
               Height="18"
               Margin="0,0,40,0"
               VerticalAlignment="Center"
-              Content="Log(_Horizontal)"
+              AccessKey="H"
+              Content="Log(Horizontal)"
               IsChecked="{Binding Graph.IsLogAxisX}" />
           </StackPanel>
 
           <oxy:PlotView
             Grid.Row="1"
-            FontSize="14"
             Model="{Binding Graph.PlotModel}" />
         </Grid>
-      </TabItem>
-    </TabControl>
+      </TabViewItem>
+    </TabView>-->
   </Grid>
 
-</Controls:MetroWindow>
+</Window>

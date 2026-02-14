@@ -1,21 +1,18 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FlexID.Models;
-using Microsoft.Win32;
 
 namespace FlexID.ViewModels;
 
-public partial class InputEIRViewModel : ObservableObject
+public partial class InputEirViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public InputEIRViewModel()
+    public InputEirViewModel()
     {
         OutputFilePath = @"out\";
         ComputeTimeMeshFilePath = @"lib\TimeMesh\time.dat";
@@ -25,6 +22,9 @@ public partial class InputEIRViewModel : ObservableObject
         SelectedCommitmentPeriodUnit = CommitmentPeriodUnits.Last();
         SelectedIntakeAge = IntakeAges.First();
 
+        WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
+
+#if false
         Task.Run(async () =>
         {
             // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
@@ -45,8 +45,7 @@ public partial class InputEIRViewModel : ObservableObject
                 SelectedNuclide = Nuclides.FirstOrDefault();
             });
         });
-
-        WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
+#endif
     }
 
     public ObservableCollection<string> Nuclides { get; } = [];
@@ -95,10 +94,10 @@ public partial class InputEIRViewModel : ObservableObject
         var selected = paths?[0];
         if (selected is null)
         {
-            var dialog = new OpenFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory;
-            if (dialog.ShowDialog() == true)
-                selected = dialog.FileName;
+            //var dialog = new OpenFileDialog();
+            //dialog.InitialDirectory = Environment.CurrentDirectory;
+            //if (dialog.ShowDialog() == true)
+            //    selected = dialog.FileName;
         }
         ComputeTimeMeshFilePath = selected;
     }
@@ -112,10 +111,10 @@ public partial class InputEIRViewModel : ObservableObject
         var selected = paths?[0];
         if (selected is null)
         {
-            var dialog = new OpenFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory;
-            if (dialog.ShowDialog() == true)
-                selected = dialog.FileName;
+            //var dialog = new OpenFileDialog();
+            //dialog.InitialDirectory = Environment.CurrentDirectory;
+            //if (dialog.ShowDialog() == true)
+            //    selected = dialog.FileName;
         }
         OutputTimeMeshFilePath = selected;
     }
@@ -155,10 +154,10 @@ public partial class InputEIRViewModel : ObservableObject
         var selected = paths?[0];
         if (selected is null)
         {
-            var dialog = new SaveFileDialog();
-            dialog.InitialDirectory = Environment.CurrentDirectory;
-            if (dialog.ShowDialog() == true)
-                selected = dialog.FileName;
+            //var dialog = new SaveFileDialog();
+            //dialog.InitialDirectory = Environment.CurrentDirectory;
+            //if (dialog.ShowDialog() == true)
+            //    selected = dialog.FileName;
         }
         OutputFilePath = selected;
     }
@@ -200,7 +199,7 @@ public partial class InputEIRViewModel : ObservableObject
         }
         catch (Exception error)
         {
-            MessageBox.Show(error.Message);
+            //MessageBox.Show(error.Message);
         }
         finally
         {

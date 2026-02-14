@@ -1,10 +1,7 @@
-using System.Windows.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 namespace FlexID.Views;
 
-/// <summary>
-/// HumanContourLegend.xaml の相互作用ロジック
-/// </summary>
 public partial class HumanContourLegend : UserControl
 {
     public HumanContourLegend()

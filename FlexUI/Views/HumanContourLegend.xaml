@@ -6,20 +6,16 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="clr-namespace:FlexID.ViewModels"
   d:Background="White"
-  d:DataContext="{d:DesignInstance Type={x:Type vm:ContourViewModel}}"
+  d:DataContext="{d:DesignInstance vm:ContourViewModel}"
   d:DesignHeight="430"
   d:DesignWidth="155"
   mc:Ignorable="d">
 
+  <!--
   <Grid>
-    <UniformGrid
-      Grid.Column="0"
-      Columns="2"
-      Rows="6">
-
+    <UniformGrid Columns="2" Rows="6">
       <UniformGrid.Resources>
         <Style TargetType="TextBlock">
-          <Setter Property="FontSize" Value="14" />
           <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style TargetType="Rectangle">
@@ -34,124 +30,90 @@
 
       <StackPanel>
         <TextBlock x:Name="Genital_text" Text="Genital" />
-        <Rectangle x:Name="Genital" Fill="{Binding OrganColors[Genital]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Genital], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Genital"
+          Fill="{Binding OrganColors[Genital]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Genital], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Rmarrow_text" Text="Red-Marrow" />
-        <Rectangle x:Name="Rmarrow" Fill="{Binding OrganColors[Red-marrow]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Red-marrow], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Rmarrow"
+          Fill="{Binding OrganColors[Red-marrow]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Red-marrow], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Lymph_text" Text="Lymph" />
-        <Rectangle x:Name="Lymph" Fill="{Binding OrganColors[Lymph]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Lymph], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Lymph"
+          Fill="{Binding OrganColors[Lymph]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Lymph], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Bone_text" Text="Bone" />
-        <Rectangle x:Name="Bone" Fill="{Binding OrganColors[Bone]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Bone], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Bone"
+          Fill="{Binding OrganColors[Bone]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Bone], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Skin_text" Text="Skin" />
-        <Rectangle x:Name="Skin" Fill="{Binding OrganColors[Skin]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Skin], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Skin"
+          Fill="{Binding OrganColors[Skin]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Skin], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="EyeLens_text" Text="Eye-lens" />
-        <Rectangle x:Name="EyeLens" Fill="{Binding OrganColors[Eye-lens]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Eye-lens], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="EyeLens"
+          Fill="{Binding OrganColors[Eye-lens]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Eye-lens], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Adipose_text" Text="Adipose" />
-        <Rectangle x:Name="Adipose" Fill="{Binding OrganColors[Adipose]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Adipose], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Adipose"
+          Fill="{Binding OrganColors[Adipose]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Adipose], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Thyroid_text" Text="Thyroid" />
-        <Rectangle x:Name="Thyroid" Fill="{Binding OrganColors[Thyroid]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Thyroid], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Thyroid"
+          Fill="{Binding OrganColors[Thyroid]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Thyroid], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Muscle_text" Text="Muscle" />
-        <Rectangle x:Name="Muscle" Fill="{Binding OrganColors[Muscle]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock Text="{Binding OrganValues[Muscle], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Muscle"
+          Fill="{Binding OrganColors[Muscle]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Muscle], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Breast_text" Text="Breast" />
-        <Rectangle x:Name="Breast" Fill="{Binding OrganColors[Breast]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock FontSize="14" Text="{Binding OrganValues[Breast], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Breast"
+          Fill="{Binding OrganColors[Breast]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Breast], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Other_text" Text="Other" />
-        <Rectangle x:Name="Other" Fill="{Binding OrganColors[Other]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock FontSize="14" Text="{Binding OrganValues[Other], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Other"
+          Fill="{Binding OrganColors[Other]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Other], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
       <StackPanel>
         <TextBlock x:Name="Blood_text" Text="Blood" />
-        <Rectangle x:Name="Blood" Fill="{Binding OrganColors[Blood]}">
-          <ToolTipService.ToolTip>
-            <StackPanel>
-              <TextBlock FontSize="14" Text="{Binding OrganValues[Blood], StringFormat=\{0:0.0000E+00\}}" />
-            </StackPanel>
-          </ToolTipService.ToolTip>
-        </Rectangle>
+        <Rectangle
+          x:Name="Blood"
+          Fill="{Binding OrganColors[Blood]}"
+          ToolTipService.ToolTip="{Binding OrganValues[Blood], StringFormat=\{0:0.0000E+00\}}" />
       </StackPanel>
     </UniformGrid>
   </Grid>
+  -->
+
 </UserControl>

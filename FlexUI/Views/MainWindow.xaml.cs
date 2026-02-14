@@ -1,28 +1,26 @@
-using System.Windows;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using FlexID.ViewModels;
 
 namespace FlexID.Views;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+public sealed partial class MainWindow
 {
-    public MainWindow()
+    public MainWindow(MainViewModel vm)
     {
-        SizeToContent = SizeToContent.Height;
+        ViewModel = vm;
+        //SizeToContent = SizeToContent.Height;
 
         InitializeComponent();
 
-        DataContext = Ioc.Default.GetService<MainViewModel>();
+        //DataContext = ViewModel;
 
-        ContentRendered += MainWindow_ContentRendered;
+        //ContentRendered += MainWindow_ContentRendered;
 
-        void MainWindow_ContentRendered(object sender, System.EventArgs e)
-        {
-            ContentRendered -= MainWindow_ContentRendered;
-            SizeToContent = SizeToContent.Manual;
-        }
+        //void MainWindow_ContentRendered(object sender, System.EventArgs e)
+        //{
+        //    ContentRendered -= MainWindow_ContentRendered;
+        //    SizeToContent = SizeToContent.Manual;
+        //}
     }
+
+    public MainViewModel ViewModel { get; }
 }

@@ -1,8 +1,6 @@
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.Xaml.Behaviors;
+using Microsoft.UI.Xaml;
+using Microsoft.Xaml.Interactivity;
 
 namespace FlexID.Views.Behaviors;
 
@@ -22,15 +20,17 @@ public enum AllowDropPath
 /// <summary>
 /// パス文字列に対するドラッグ&ドロップ挙動を定義する。
 /// </summary>
-public class PathDropBehavior : Behavior<Control>
+public class PathDropBehavior : Behavior<UIElement>
 {
     public static readonly DependencyProperty AllowDropPathProperty =
         DependencyProperty.Register(
-            nameof(AllowDropPath), typeof(AllowDropPath), typeof(PathDropBehavior));
+            nameof(AllowDropPath), typeof(AllowDropPath), typeof(PathDropBehavior),
+            new PropertyMetadata(AllowDropPath.None));
 
     public static readonly DependencyProperty DropCommandProperty =
         DependencyProperty.Register(
-            nameof(DropCommand), typeof(ICommand), typeof(PathDropBehavior));
+            nameof(DropCommand), typeof(ICommand), typeof(PathDropBehavior),
+            new PropertyMetadata(null));
 
     public AllowDropPath AllowDropPath
     {
@@ -48,21 +48,22 @@ public class PathDropBehavior : Behavior<Control>
     {
         var c = AssociatedObject;
         c.AllowDrop = true;
-        c.PreviewDragEnter += OnPreviewDragEnter;
-        c.PreviewDragOver += OnPreviewDragOver;
-        c.PreviewDragLeave += OnPreviewDragLeave;
-        c.Drop += OnDrop;
+        //c.PreviewDragEnter += OnPreviewDragEnter;
+        //c.PreviewDragOver += OnPreviewDragOver;
+        //c.PreviewDragLeave += OnPreviewDragLeave;
+        //c.Drop += OnDrop;
     }
 
     protected override void OnDetaching()
     {
         var c = AssociatedObject;
-        c.PreviewDragEnter -= OnPreviewDragEnter;
-        c.PreviewDragOver -= OnPreviewDragOver;
-        c.PreviewDragLeave -= OnPreviewDragLeave;
-        c.Drop -= OnDrop;
+        //c.PreviewDragEnter -= OnPreviewDragEnter;
+        //c.PreviewDragOver -= OnPreviewDragOver;
+        //c.PreviewDragLeave -= OnPreviewDragLeave;
+        //c.Drop -= OnDrop;
     }
 
+#if false
     private void OnPreviewDragEnter(object sender, DragEventArgs e) => CheckDragEventArgs(e);
 
     private void OnPreviewDragOver(object sender, DragEventArgs e) => CheckDragEventArgs(e);
@@ -195,4 +196,5 @@ public class PathDropBehavior : Behavior<Control>
         }
         return null;
     }
+#endif
 }

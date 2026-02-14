@@ -1,7 +1,5 @@
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Microsoft.Xaml.Behaviors;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.Xaml.Interactivity;
 
 namespace FlexID.Views.Behaviors;
 
@@ -13,17 +11,18 @@ public class PathPasteBehavior : Behavior<TextBox>
     protected override void OnAttached()
     {
         var tb = AssociatedObject;
-        CommandManager.AddPreviewCanExecuteHandler(tb, TextBox_PreviewCanExecute);
-        CommandManager.AddPreviewExecutedHandler(tb, TextBox_PreviewExecuted);
+        //CommandManager.AddPreviewCanExecuteHandler(tb, TextBox_PreviewCanExecute);
+        //CommandManager.AddPreviewExecutedHandler(tb, TextBox_PreviewExecuted);
     }
 
     protected override void OnDetaching()
     {
         var tb = AssociatedObject;
-        CommandManager.RemovePreviewCanExecuteHandler(tb, TextBox_PreviewCanExecute);
-        CommandManager.RemovePreviewExecutedHandler(tb, TextBox_PreviewExecuted);
+        //CommandManager.RemovePreviewCanExecuteHandler(tb, TextBox_PreviewCanExecute);
+        //CommandManager.RemovePreviewExecutedHandler(tb, TextBox_PreviewExecuted);
     }
 
+#if false
     private void TextBox_PreviewCanExecute(object sender, CanExecuteRoutedEventArgs e)
     {
         if (e.Command == ApplicationCommands.Paste)
@@ -64,4 +63,5 @@ public class PathPasteBehavior : Behavior<TextBox>
             tb.CaretIndex = prevSelectionStart + path.Length;
         }
     }
+#endif
 }

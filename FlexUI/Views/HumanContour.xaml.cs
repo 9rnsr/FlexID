@@ -1,10 +1,7 @@
-using System.Windows.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 namespace FlexID.Views;
 
-/// <summary>
-/// HumanContour.xaml の相互作用ロジック
-/// </summary>
 public partial class HumanContour : UserControl
 {
     public HumanContour()

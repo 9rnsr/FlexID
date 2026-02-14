@@ -5,9 +5,9 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   x:Name="Root"
-  d:FontSize="14"
   mc:Ignorable="d">
 
+  <!--
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="30" />
@@ -25,7 +25,7 @@
       Grid.Column="0"
       Grid.ColumnSpan="2"
       FontSize="{Binding FontSize, ElementName=Root}"
-      Text="{Binding ContourMax, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+      Text="{Binding ContourMax, Mode=TwoWay, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
       TextAlignment="Center" />
     <Label
       Grid.Row="0"
@@ -53,7 +53,7 @@
       Grid.Column="0"
       Grid.ColumnSpan="2"
       FontSize="{Binding FontSize, ElementName=Root}"
-      Text="{Binding ContourMin, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
+      Text="{Binding ContourMin, Mode=TwoWay, ElementName=Root, Delay=500, StringFormat=0.00E+00, UpdateSourceTrigger=PropertyChanged}"
       TextAlignment="Center" />
     <Label
       Grid.Row="2"
@@ -64,5 +64,6 @@
       </TextBlock>
     </Label>
   </Grid>
+  -->
 
 </UserControl>

@@ -1,4 +1,8 @@
 <Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitattributes" />
@@ -10,5 +14,8 @@
   <Project Path="FlexID.Core/FlexID.Core.csproj" />
   <Project Path="FlexID.Core.Tests/FlexID.Core.Tests.csproj" />
   <Project Path="FlexID/FlexID.csproj" />
-  <Project Path="FlexUI/FlexUI.csproj" />
+  <Project Path="FlexUI/FlexUI.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
 </Solution>

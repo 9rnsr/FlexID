@@ -1,8 +1,7 @@
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Windows.UI;
 
 namespace FlexID.ViewModels;
 
@@ -58,7 +57,7 @@ public partial class ContourViewModel : ObservableObject
     private readonly Dictionary<string, string> actualOrganColors;
 
     // モデル図で値が未設定の場合の色情報。
-    private readonly string unsetColorCode = Color.FromRgb(211, 211, 211).ToString();
+    private readonly string unsetColorCode = Color.FromArgb(255, 211, 211, 211).ToString();
 
     /// <summary>
     /// 現在の出力タイムステップにおける各コンパートメントの数値。
@@ -368,7 +367,7 @@ public partial class ContourViewModel : ObservableObject
 
             if (frac > 1) // コンターの上限を超える
             {
-                color = Color.FromRgb(255, 0, 0);
+                color = Color.FromArgb(255, 255, 0, 0);
             }
             else if (frac > 0.75) // Red～Orangeの間
             {
@@ -376,7 +375,7 @@ public partial class ContourViewModel : ObservableObject
                 //R = (byte)(255 + (0 * frac));
                 G = (byte)(165 - (165 * frac));
                 //B = (byte)(0 + (0 * frac));
-                color = Color.FromRgb(255, G, 0);
+                color = Color.FromArgb(255, 255, G, 0);
             }
             else if (frac > 0.5) // Orange～Yellowの間
             {
@@ -384,7 +383,7 @@ public partial class ContourViewModel : ObservableObject
                 //R = (byte)(255 + (0 * frac));
                 G = (byte)(255 - (90 * frac));
                 //B = (byte)(0 + (0 * frac));
-                color = Color.FromRgb(255, G, 0);
+                color = Color.FromArgb(255, 255, G, 0);
             }
             else if (frac > 0.25) // Yellow～Limeの間
             {
@@ -392,7 +391,7 @@ public partial class ContourViewModel : ObservableObject
                 R = (byte)(0 + (255 * frac));
                 //G = (byte)(255 + (0 * frac));
                 //B = (byte)(0 + (0 * frac));
-                color = Color.FromRgb(R, 255, 0);
+                color = Color.FromArgb(255, R, 255, 0);
             }
             else if (frac > 0) // Lime～Blueの間
             {
@@ -400,11 +399,11 @@ public partial class ContourViewModel : ObservableObject
                 //R = (byte)(0 + (0 * frac));
                 G = (byte)(0 + (255 * frac));
                 B = (byte)(255 - (255 * frac));
-                color = Color.FromRgb(0, G, B);
+                color = Color.FromArgb(255, 0, G, B);
             }
             else  // コンターの下限を下回る
             {
-                color = Color.FromRgb(0, 0, 255);
+                color = Color.FromArgb(255, 0, 0, 255);
             }
 
             actualOrganColors[organ] = color.ToString();

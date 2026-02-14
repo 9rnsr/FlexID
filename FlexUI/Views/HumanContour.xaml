@@ -6,9 +6,10 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="clr-namespace:FlexID.ViewModels"
   d:Background="White"
-  d:DataContext="{d:DesignInstance Type={x:Type vm:ContourViewModel}}"
+  d:DataContext="{d:DesignInstance vm:ContourViewModel}"
   mc:Ignorable="d">
 
+  <!--
   <UserControl.Resources>
     <Style TargetType="Path">
       <Setter Property="Stretch" Value="Fill" />
@@ -66,8 +67,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Brain" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Brain], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Brain" />
+            <TextBlock Text="{Binding OrganValues[Brain], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -82,8 +83,8 @@
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="ET1" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[ET1], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="ET1" />
+            <TextBlock Text="{Binding OrganValues[ET1], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -98,8 +99,8 @@
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="ET2" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[ET2], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="ET2" />
+            <TextBlock Text="{Binding OrganValues[ET2], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -114,7 +115,7 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Trachea" />
+            <TextBlock Text="Trachea" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -127,8 +128,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Oesophagus" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Oesophagus], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Oesophagus" />
+            <TextBlock Text="{Binding OrganValues[Oesophagus], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -143,8 +144,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Lung" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Lung], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Lung" />
+            <TextBlock Text="{Binding OrganValues[Lung], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -177,8 +178,8 @@
         </Path.RenderTransform>
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Lung" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Lung], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Lung" />
+            <TextBlock Text="{Binding OrganValues[Lung], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -210,8 +211,8 @@
         </Ellipse.RenderTransform>
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Heart" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Heart], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Heart" />
+            <TextBlock Text="{Binding OrganValues[Heart], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Ellipse>
@@ -226,8 +227,8 @@
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Pancreas" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Pancreas], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Pancreas" />
+            <TextBlock Text="{Binding OrganValues[Pancreas], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -242,8 +243,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Stomach" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Stomach], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Stomach" />
+            <TextBlock Text="{Binding OrganValues[Stomach], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -258,8 +259,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Spleen" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Spleen], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Spleen" />
+            <TextBlock Text="{Binding OrganValues[Spleen], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -274,7 +275,7 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Duodenum" />
+            <TextBlock Text="Duodenum" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -289,8 +290,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Right Colon" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[RC], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Right Colon" />
+            <TextBlock Text="{Binding OrganValues[RC], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -303,8 +304,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Left Colon" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[LC], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Left Colon" />
+            <TextBlock Text="{Binding OrganValues[LC], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -317,8 +318,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Rectosigmoid Colon" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[RS], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Rectosigmoid Colon" />
+            <TextBlock Text="{Binding OrganValues[RS], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -333,8 +334,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Liver" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Liver], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Liver" />
+            <TextBlock Text="{Binding OrganValues[Liver], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -349,8 +350,8 @@
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Gall Bladder" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[GB], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Gall Bladder" />
+            <TextBlock Text="{Binding OrganValues[GB], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -365,8 +366,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Kidneys" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Kidneys" />
+            <TextBlock Text="{Binding OrganValues[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -381,8 +382,8 @@
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Ureter" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Ureters], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Ureter" />
+            <TextBlock Text="{Binding OrganValues[Ureters], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -397,8 +398,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Kidneys" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Kidneys" />
+            <TextBlock Text="{Binding OrganValues[Kidneys], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -413,8 +414,8 @@
         StrokeThickness="3">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Ureter" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[Ureters], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Ureter" />
+            <TextBlock Text="{Binding OrganValues[Ureters], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -429,8 +430,8 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Small Intestine" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[SI], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Small Intestine" />
+            <TextBlock Text="{Binding OrganValues[SI], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
@@ -445,11 +446,13 @@
         StrokeThickness="5">
         <ToolTipService.ToolTip>
           <StackPanel>
-            <TextBlock FontSize="14" Text="Urine Bladder" />
-            <TextBlock FontSize="14" Text="{Binding OrganValues[UB], StringFormat=\{0:0.0000E+00\}}" />
+            <TextBlock Text="Urine Bladder" />
+            <TextBlock Text="{Binding OrganValues[UB], StringFormat=\{0:0.0000E+00\}}" />
           </StackPanel>
         </ToolTipService.ToolTip>
       </Path>
     </Canvas>
   </Grid>
+  -->
+
 </UserControl>

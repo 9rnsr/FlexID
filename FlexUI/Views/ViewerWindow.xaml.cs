@@ -1,21 +1,20 @@
-using System.Windows.Controls;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.DependencyInjection;
+using FlexID.ViewModels;
+using Microsoft.UI.Xaml.Input;
 
 namespace FlexID.Views;
 
-/// <summary>
-/// Interaction logic for ViewerWindow.xaml
-/// </summary>
 public partial class ViewerWindow
 {
-    public ViewerWindow()
+    public ViewerWindow(ViewerViewModel vm)
     {
-        InitializeComponent();
+        ViewModel = vm;
 
-        DataContext = Ioc.Default.GetService<ViewModels.ViewerViewModel>();
+        InitializeComponent();
     }
 
+    public ViewerViewModel ViewModel { get; }
+
+#if false
     private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         // Ctrl+Tab
@@ -36,13 +35,14 @@ public partial class ViewerWindow
             e.Handled = true;
         }
     }
+#endif
 
-    private void OutputFilePathTextBox_KeyDown(object sender, KeyEventArgs e)
+    private void OutputFilePathTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
-        if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None)
-        {
-            var binding = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
-            binding?.UpdateSource();
-        }
+        //if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None)
+        //{
+        //    var binding = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
+        //    binding?.UpdateSource();
+        //}
     }
 }

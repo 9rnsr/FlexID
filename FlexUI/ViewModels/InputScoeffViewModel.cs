@@ -1,10 +1,7 @@
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Win32;
 
 namespace FlexID.ViewModels;
 
@@ -17,12 +14,12 @@ public partial class NuclideViewModel : ObservableObject
     public partial bool IsChecked { get; set; }
 }
 
-public partial class ScoeffCalcViewModel : ObservableObject
+public partial class InputScoeffViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public ScoeffCalcViewModel()
+    public InputScoeffViewModel()
     {
         OutputFilePath = @"out\";
 
@@ -30,10 +27,10 @@ public partial class ScoeffCalcViewModel : ObservableObject
         {
             var nuclides = SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideViewModel { Nuclide = nuc });
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Nuclides.AddRange(nuclides);
-            });
+            //Application.Current.Dispatcher.Invoke(() =>
+            //{
+            //    Nuclides.AddRange(nuclides);
+            //});
         });
     }
 
@@ -57,10 +54,10 @@ public partial class ScoeffCalcViewModel : ObservableObject
     [RelayCommand]
     private void SelectOutputFilePath()
     {
-        var dialog = new SaveFileDialog();
-        dialog.InitialDirectory = Environment.CurrentDirectory;
-        if (dialog.ShowDialog() == true)
-            OutputFilePath = dialog.FileName;
+        //var dialog = new SaveFileDialog();
+        //dialog.InitialDirectory = Environment.CurrentDirectory;
+        //if (dialog.ShowDialog() == true)
+        //    OutputFilePath = dialog.FileName;
     }
 
     [ObservableProperty]
@@ -100,11 +97,11 @@ public partial class ScoeffCalcViewModel : ObservableObject
                 calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask,
                 calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outPath, isIdacDoseCompatible) : Task.CompletedTask);
 
-            MessageBox.Show("Finish", "S-Coefficient", MessageBoxButton.OK);
+            //MessageBox.Show("Finish", "S-Coefficient", MessageBoxButton.OK);
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {

@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
-using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 
 namespace FlexID.ViewModels;
 
@@ -40,11 +38,10 @@ public partial class ViewerViewModel : ObservableObject
         var selected = paths?[0];
         if (selected is null)
         {
-            var dialog = new OpenFileDialog();
-            dialog.ShowDialog();
-
-            if (dialog.FileName != "")
-                selected = dialog.FileName;
+            //var dialog = new OpenFileDialog();
+            //dialog.ShowDialog();
+            //if (dialog.FileName != "")
+            //    selected = dialog.FileName;
         }
         if (selected is string path)
             OutputFilePath = path;

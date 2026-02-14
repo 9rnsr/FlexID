@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
+    <!--<Nullable>enable</Nullable>-->
     <ImplicitUsings>true</ImplicitUsings>
 
     <RootNamespace>FlexID</RootNamespace>
