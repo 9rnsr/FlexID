@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Window
+<winex:WindowEx
   x:Class="FlexID.Views.ViewerWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,13 +9,14 @@
   xmlns:v="using:FlexID.Views"
   xmlns:vb="using:FlexID.Views.Behaviors"
   xmlns:vm="using:FlexID.ViewModels"
+  xmlns:winex="using:WinUIEx"
   Title="FlexID_Viewer"
+  Width="1200"
+  Height="800"
+  MinWidth="1200"
+  MinHeight="800"
   mc:Ignorable="d">
   <!--
-    Width="1200"
-    Height="800"
-    MinWidth="1200"
-    MinHeight="800"
     d:DataContext="{d:DesignInstance Type={x:Type vm:ViewerViewModel}}"
     PreviewKeyDown="MetroWindow_PreviewKeyDown"
     WindowStartupLocation="CenterScreen"
@@ -452,4 +453,4 @@
     </TabView>-->
   </Grid>
 
-</Window>
+</winex:WindowEx>

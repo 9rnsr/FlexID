@@ -18,6 +18,7 @@
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Sprache" Version="2.3.1" />
     <PackageVersion Include="System.CommandLine" Version="2.0.3" />
+    <PackageVersion Include="WinUIEx" Version="2.9.0" />
     <!--<PackageVersion Include="OxyPlot.Wpf" Version="2.2.0" />-->
     <!--<PackageVersion Include="VirtualizingWrapPanel" Version="2.3.2" />-->
   </ItemGroup>

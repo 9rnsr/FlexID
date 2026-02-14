@@ -42,6 +42,7 @@
     <PackageReference Include="ObservableCollections.R3" />
     <PackageReference Include="R3" />
     <PackageReference Include="R3Extensions.WinUI3" />
+    <PackageReference Include="WinUIEx" />
     <!--<PackageReference Include="OxyPlot.Wpf" />-->
     <!--<PackageReference Include="VirtualizingWrapPanel" />-->
   </ItemGroup>
