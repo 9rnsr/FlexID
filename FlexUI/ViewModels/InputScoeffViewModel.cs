@@ -64,10 +64,16 @@ public partial class InputScoeffViewModel : ViewModelBase
         var selected = paths?[0];
         if (selected is null)
         {
-            //var dialog = new SaveFileDialog();
-            //dialog.InitialDirectory = Environment.CurrentDirectory;
-            //if (dialog.ShowDialog() == true)
-            //    selected = dialog.FileName;
+            var appId = App.Current.AppWindow!.Id;
+            var picker = new Microsoft.Windows.Storage.Pickers.FolderPicker(appId)
+            {
+                SuggestedStartLocation = Microsoft.Windows.Storage.Pickers.PickerLocationId.Unspecified,
+                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+            };
+
+            var result = await picker.PickSingleFolderAsync();
+
+            selected = result?.Path;
         }
         if (selected is not null)
             OutputDirectory = selected;

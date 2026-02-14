@@ -33,15 +33,20 @@ public partial class ViewerViewModel : ObservableObject
     /// 出力ファイルの選択処理。
     /// </summary>
     [RelayCommand]
-    private void SelectOutputFilePath(string[] paths)
+    private async Task SelectOutputFilePath(string[] paths)
     {
         var selected = paths?[0];
         if (selected is null)
         {
-            //var dialog = new OpenFileDialog();
-            //dialog.ShowDialog();
-            //if (dialog.FileName != "")
-            //    selected = dialog.FileName;
+            var appId = App.Current.AppWindow!.Id;
+            var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
+            {
+                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+            };
+
+            var result = await picker.PickSingleFileAsync();
+
+            selected = result?.Path;
         }
         if (selected is string path)
             OutputFilePath = path;
