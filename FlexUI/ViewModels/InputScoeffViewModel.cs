@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FlexID.Services;
 
 namespace FlexID.ViewModels;
 
@@ -109,11 +110,13 @@ public partial class InputScoeffViewModel : ViewModelBase
                 calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outputDir, isIdacDoseCompatible) : Task.CompletedTask,
                 calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outputDir, isIdacDoseCompatible) : Task.CompletedTask);
 
-            //MessageBox.Show("Finish", "S-Coefficient", MessageBoxButton.OK);
+            var message = "All tasks completed successfully.";
+            MessageService.Confirm("Caculation Finished", message);
         }
         catch (Exception ex)
         {
-            //MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            var message = "Unexpected error has occurred during processing: " + ex.Message;
+            MessageService.Error("Calculation Stopped", message);
         }
         finally
         {

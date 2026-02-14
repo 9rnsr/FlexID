@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FlexID.Models;
+using FlexID.Services;
 
 namespace FlexID.ViewModels;
 
@@ -182,10 +183,14 @@ public partial class InputOirViewModel : ViewModelBase
                 throw new Exception("Please select Commitment Period Unit.");
 
             //await RunAndView(SelectedInput.InputTarget);
+
+            var message = "All tasks completed successfully.";
+            MessageService.Confirm("Caculation Finished", message);
         }
-        catch (Exception error)
+        catch (Exception ex)
         {
-            //MessageBox.Show(error.Message);
+            var message = "Unexpected error has occurred during processing: " + ex.Message;
+            MessageService.Error("Calculation Stopped", message);
         }
         finally
         {
