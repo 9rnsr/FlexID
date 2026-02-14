@@ -1,18 +1,20 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FlexID.Models;
 using FlexID.Services;
+using R3;
 
 namespace FlexID.ViewModels;
 
-public partial class NuclideViewModel : ObservableObject
+public partial class NuclideViewModel(string nuc) : ObservableObject, ICheckableItem
 {
     [ObservableProperty]
-    public partial string Nuclide { get; set; }
-
-    [ObservableProperty]
     public partial bool IsChecked { get; set; }
+
+    public string Nuclide { get; } = nuc;
+
+    string ICheckableItem.ItemText => Nuclide;
 }
 
 public partial class InputScoeffViewModel : ViewModelBase
@@ -22,24 +24,24 @@ public partial class InputScoeffViewModel : ViewModelBase
     /// </summary>
     public InputScoeffViewModel()
     {
+        Nuclides = new(nuc => new NuclideViewModel(nuc));
+
         OutputDirectory = @"out\";
 
         WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
 
-#if false
-        Task.Run(() =>
-        {
-            var nuclides = SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideViewModel { Nuclide = nuc });
+        Nuclides.ObservePropertyChanged(m => m.IsCheckedAny)
+                   .Subscribe(_ => RunCommand.NotifyCanExecuteChanged())
+                   .AddTo(disposables);
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Nuclides.AddRange(nuclides);
-            });
+        // 放射線データに定義されている核種の一覧を取得する。
+        Task.Run(async () =>
+        {
+            await Nuclides.AddRangeAsync(SAFDataReader.ReadRadNuclides());
         });
-#endif
     }
 
-    public ObservableCollection<NuclideViewModel> Nuclides { get; } = [];
+    public CheckableItemsView<string, NuclideViewModel> Nuclides { get; }
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
@@ -83,7 +85,7 @@ public partial class InputScoeffViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
     private partial bool IsBusy { get; set; }
 
-    private bool CanRun => !IsBusy && (CalcMale || CalcFemale);
+    private bool CanRun => !IsBusy && Nuclides.IsCheckedAny && (CalcMale || CalcFemale);
 
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async Task Run()
@@ -104,7 +106,7 @@ public partial class InputScoeffViewModel : ViewModelBase
             if (!calcAM && !calcAF)
                 throw new Exception("Select target male and/or female.");
 
-            var nuclides = Nuclides.Where(ni => ni.IsChecked).Select(ni => ni.Nuclide).ToArray();
+            var nuclides = Nuclides.FilteredItems.Where(ni => ni.IsChecked).Select(ni => ni.Nuclide).ToArray();
             if (!nuclides.Any())
                 throw new Exception("No nuclides selected.");
 
