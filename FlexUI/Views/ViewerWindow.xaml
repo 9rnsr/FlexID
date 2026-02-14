@@ -3,6 +3,7 @@
   x:Class="FlexID.Views.ViewerWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:ScottPlot="using:ScottPlot.WinUI"
   xmlns:controls="using:CommunityToolkit.WinUI.Controls"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="using:Microsoft.Xaml.Interactivity"
@@ -428,19 +429,20 @@
               VerticalAlignment="Center"
               AccessKey="V"
               Content="Log(Vertical)"
-              IsChecked="{Binding Graph.IsLogAxisY}" />
+              IsChecked="{x:Bind ViewModel.Graph.IsLogAxisY, Mode=TwoWay}" />
             <CheckBox
               Height="18"
               Margin="0,0,40,0"
               VerticalAlignment="Center"
               AccessKey="H"
               Content="Log(Horizontal)"
-              IsChecked="{Binding Graph.IsLogAxisX}" />
+              IsChecked="{x:Bind ViewModel.Graph.IsLogAxisX, Mode=TwoWay}" />
           </StackPanel>
 
-          <!--<oxy:PlotView
+          <ScottPlot:WinUIPlot
+            x:Name="PlotControl"
             Grid.Row="1"
-            Model="{Binding Graph.PlotModel}" />-->
+            Background="Transparent" />
         </Grid>
       </controls:Case>
     </controls:SwitchPresenter>

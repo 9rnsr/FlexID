@@ -212,5 +212,7 @@ public partial class ViewerViewModel : ObservableObject
         // コンター表示とグラフ表示を更新する。
         Contour.SetBlock(SelectedOutput, value);
         Graph.SetBlock(SelectedOutput, value);
+
+        Graph.Refresh();
     }
 }
