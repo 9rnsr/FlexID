@@ -115,15 +115,20 @@ public partial class InputEirViewModel : ViewModelBase
     public partial string ComputeTimeMeshFilePath { get; set; }
 
     [RelayCommand]
-    private void SelectComputeTimeMeshFilePath(string[] paths)
+    private async Task SelectComputeTimeMeshFilePath(string[] paths)
     {
         var selected = paths?[0];
         if (selected is null)
         {
-            //var dialog = new OpenFileDialog();
-            //dialog.InitialDirectory = Environment.CurrentDirectory;
-            //if (dialog.ShowDialog() == true)
-            //    selected = dialog.FileName;
+            var appId = App.Current.AppWindow!.Id;
+            var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
+            {
+                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+            };
+
+            var result = await picker.PickSingleFileAsync();
+
+            selected = result?.Path;
         }
         if (selected is not null)
             ComputeTimeMeshFilePath = selected;
@@ -133,15 +138,20 @@ public partial class InputEirViewModel : ViewModelBase
     public partial string OutputTimeMeshFilePath { get; set; }
 
     [RelayCommand]
-    private void SelectOutputTimeMeshFilePath(string[] paths)
+    private async Task SelectOutputTimeMeshFilePath(string[] paths)
     {
         var selected = paths?[0];
         if (selected is null)
         {
-            //var dialog = new OpenFileDialog();
-            //dialog.InitialDirectory = Environment.CurrentDirectory;
-            //if (dialog.ShowDialog() == true)
-            //    selected = dialog.FileName;
+            var appId = App.Current.AppWindow!.Id;
+            var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
+            {
+                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+            };
+
+            var result = await picker.PickSingleFileAsync();
+
+            selected = result?.Path;
         }
         if (selected is not null)
             OutputTimeMeshFilePath = selected;
@@ -151,15 +161,21 @@ public partial class InputEirViewModel : ViewModelBase
     public partial string OutputDirectory { get; set; }
 
     [RelayCommand]
-    private void SelectOutputDirectory(string[] paths)
+    private async Task SelectOutputDirectory(string[] paths)
     {
         var selected = paths?[0];
         if (selected is null)
         {
-            //var dialog = new SaveFileDialog();
-            //dialog.InitialDirectory = Environment.CurrentDirectory;
-            //if (dialog.ShowDialog() == true)
-            //    selected = dialog.FileName;
+            var appId = App.Current.AppWindow!.Id;
+            var picker = new Microsoft.Windows.Storage.Pickers.FolderPicker(appId)
+            {
+                SuggestedStartLocation = Microsoft.Windows.Storage.Pickers.PickerLocationId.Unspecified,
+                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+            };
+
+            var result = await picker.PickSingleFolderAsync();
+
+            selected = result?.Path;
         }
         if (selected is not null)
             OutputDirectory = selected;
