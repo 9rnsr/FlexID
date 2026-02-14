@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Xaml.Interactivity;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace FlexID.Views.Behaviors;
 
@@ -11,57 +12,33 @@ public class PathPasteBehavior : Behavior<TextBox>
     protected override void OnAttached()
     {
         var tb = AssociatedObject;
-        //CommandManager.AddPreviewCanExecuteHandler(tb, TextBox_PreviewCanExecute);
-        //CommandManager.AddPreviewExecutedHandler(tb, TextBox_PreviewExecuted);
+        tb.Paste += TextBox_Paste;
     }
 
     protected override void OnDetaching()
     {
         var tb = AssociatedObject;
-        //CommandManager.RemovePreviewCanExecuteHandler(tb, TextBox_PreviewCanExecute);
-        //CommandManager.RemovePreviewExecutedHandler(tb, TextBox_PreviewExecuted);
+        tb.Paste -= TextBox_Paste;
     }
 
-#if false
-    private void TextBox_PreviewCanExecute(object sender, CanExecuteRoutedEventArgs e)
+    private async void TextBox_Paste(object sender, TextControlPasteEventArgs args)
     {
-        if (e.Command == ApplicationCommands.Paste)
-        {
-            var dataObj = Clipboard.GetDataObject();
-            var paths = (string[])dataObj.GetData(DataFormats.FileDrop);
-            if (paths is null)
-                return;
+        var view = Clipboard.GetContent();
+        if (!view.Contains(StandardDataFormats.StorageItems))
+            return;
 
-            var tb = (TextBox)sender;
-            if (!tb.AcceptsReturn && paths.Length != 1)
-                return;
+        var items = await view.GetStorageItemsAsync();
 
-            e.CanExecute = true;
-            e.Handled = true;
-        }
+        var tb = (TextBox)sender;
+        if (!tb.AcceptsReturn && items.Count != 1)
+            return;
+
+        args.Handled = true;
+
+        var paths = items.Select(item => ShortcutFile.Resolve(item.Path)).ToArray();
+        var path = string.Join("\n", paths);    // 複数ファイルは改行で区切る。
+
+        // SelectedText経由で選択範囲を置き換えることで、Undoも効く。
+        tb.SelectedText = path;
     }
-
-    private void TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (e.Command == ApplicationCommands.Paste)
-        {
-            var dataObj = Clipboard.GetDataObject();
-            var paths = (string[])dataObj.GetData(DataFormats.FileDrop);
-            if (paths is null || paths.Length != 1)
-                return;
-
-            paths = paths.Select(ShortcutFile.Resolve).ToArray();
-
-            var tb = (TextBox)sender;
-            var path = string.Join("\n", paths);    // 複数ファイルは改行で区切る。
-
-            var prevSelectionStart = tb.IsSelectionActive ? tb.SelectionStart : tb.CaretIndex;
-
-            // SelectedText経由で選択範囲を置き換えることで、Undoも効く。
-            tb.SelectedText = path;
-
-            tb.CaretIndex = prevSelectionStart + path.Length;
-        }
-    }
-#endif
 }

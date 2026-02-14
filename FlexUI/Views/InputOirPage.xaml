@@ -116,6 +116,7 @@
           Text="{x:Bind ViewModel.ComputeTimeMeshFilePath, Mode=TwoWay}">
           <i:Interaction.Behaviors>
             <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectComputeTimeMeshFilePathCommand}" />
+            <vb:PathPasteBehavior />
           </i:Interaction.Behaviors>
         </TextBox>
         <Button
@@ -134,6 +135,7 @@
           Text="{x:Bind ViewModel.OutputTimeMeshFilePath, Mode=TwoWay}">
           <i:Interaction.Behaviors>
             <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputTimeMeshFilePathCommand}" />
+            <vb:PathPasteBehavior />
           </i:Interaction.Behaviors>
         </TextBox>
         <Button
@@ -152,6 +154,7 @@
           Text="{x:Bind ViewModel.OutputDirectory, Mode=TwoWay}">
           <i:Interaction.Behaviors>
             <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputDirectoryCommand}" />
+            <vb:PathPasteBehavior />
           </i:Interaction.Behaviors>
         </TextBox>
         <Button
