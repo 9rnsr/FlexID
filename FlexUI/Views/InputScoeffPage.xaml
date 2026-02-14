@@ -79,6 +79,10 @@
               </StackPanel>
             </DataTemplate>
           </GridView.ItemTemplate>
+
+          <i:Interaction.Behaviors>
+            <vb:CheckSearchItemsBehavior />
+          </i:Interaction.Behaviors>
         </GridView>
       </Grid>
     </Grid>
