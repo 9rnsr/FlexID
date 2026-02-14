@@ -155,7 +155,7 @@ public partial class InputOirViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
     private partial bool IsBusy { get; set; }
 
-    private bool CanRun => !IsBusy && SelectedInput is not null;
+    private bool CanRun => !IsBusy /*&& SelectedInput is not null*/;
 
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async Task Run()

@@ -1,8 +1,9 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace FlexID.ViewModels;
 
-public class MainViewModel
+public partial class MainViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
@@ -10,6 +11,9 @@ public class MainViewModel
     public MainViewModel()
     {
     }
+
+    [ObservableProperty]
+    public partial string Title { get; set; } = "FlexID";
 }
 
 public class BusyState(bool value) : ValueChangedMessage<bool>(value);
