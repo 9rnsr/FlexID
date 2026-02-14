@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using R3;
 using Windows.System;
 
 namespace FlexID.Views;
@@ -18,11 +19,18 @@ public partial class ViewerWindow
 
         InitializeComponent();
 
+        IsContentEnabled = ViewModel
+            .ObservePropertyChanged(vm => vm.SelectedOutput)
+            .Select(o => o is not null)
+            .ToReadOnlyBindableReactiveProperty();
+
         PlotControl.Reset(ViewModel.Graph.PlotModel);
         ViewModel.Graph.RefreshCommand = new RelayCommand(PlotControl.Refresh);
     }
 
     public ViewerViewModel ViewModel { get; }
+
+    public IReadOnlyBindableReactiveProperty<bool> IsContentEnabled { get; }
 
     private void WindowContent_Loaded(object sender, RoutedEventArgs e)
     {
@@ -73,13 +81,22 @@ public partial class ViewerWindow
         }
     }
 
+    private void OnOpen(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        // KeyboardAcceleratorはHandledを設定してイベントを消費しないと適切に動作しないため
+        // InvokeCommandActionなどが使えない…
+        args.Handled = true;
+
+        ViewModel.SelectOutputFilePathCommand.Execute(null);
+    }
+
     private void OutputFilePathTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
-        //if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None)
-        //{
-        //    var binding = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
-        //    binding?.UpdateSource();
-        //}
+        if (e.Key == VirtualKey.Enter /*&& Keyboard.Modifiers == ModifierKeys.None*/)
+        {
+            var binding = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
+            binding?.UpdateSource();
+        }
     }
 
     #region Play/Pause Buttons and TimeStepSlider
