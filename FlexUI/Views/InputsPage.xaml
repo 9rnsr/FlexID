@@ -72,17 +72,36 @@
               IsAccessKeyScope="True"
               KeyTipPlacementMode="Left"
               XYFocusKeyboardNavigation="Enabled">
-              <CheckBox AccessKey="J" Content="Injection" />
-              <CheckBox AccessKey="G" Content="Ingestion" />
-              <CheckBox AccessKey="H" Content="Inhalation" />
+              <CheckBox
+                AccessKey="J"
+                Content="Injection"
+                IsChecked="{x:Bind SearchFilter.TargetIsInjecion, Mode=TwoWay}" />
+              <CheckBox
+                AccessKey="G"
+                Content="Ingestion"
+                IsChecked="{x:Bind SearchFilter.TargetIsIngestion, Mode=TwoWay}" />
+              <CheckBox
+                AccessKey="H"
+                Content="Inhalation"
+                IsChecked="{x:Bind SearchFilter.TargetIsInhalation, Mode=TwoWay}" />
+
               <StackPanel
                 Margin="12,0,0,0"
                 Spacing="16"
                 KeyTipPlacementMode="Bottom"
                 Orientation="Horizontal">
-                <CheckBox AccessKey="F" Content="F" />
-                <CheckBox AccessKey="M" Content="M" />
-                <CheckBox AccessKey="S" Content="S" />
+                <CheckBox
+                  AccessKey="F"
+                  Content="F"
+                  IsChecked="{x:Bind SearchFilter.TargetIsTypeF, Mode=TwoWay}" />
+                <CheckBox
+                  AccessKey="M"
+                  Content="M"
+                  IsChecked="{x:Bind SearchFilter.TargetIsTypeM, Mode=TwoWay}" />
+                <CheckBox
+                  AccessKey="S"
+                  Content="S"
+                  IsChecked="{x:Bind SearchFilter.TargetIsTypeS, Mode=TwoWay}" />
                 <StackPanel.Resources>
                   <Style BasedOn="{StaticResource DefaultCheckBoxStyle}" TargetType="CheckBox">
                     <Setter Property="MinWidth" Value="0" />
@@ -99,7 +118,7 @@
         Grid.Column="2"
         AccessKey="F"
         PlaceholderText="Search Filter"
-        Text="{x:Bind Targets.SearchFilter.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+        Text="{x:Bind SearchFilter.TargetTitlePattern, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
     </Grid>
 
     <ListView

@@ -10,6 +10,8 @@ public sealed partial class InputsPage : Page
     public InputsPage()
     {
         InitializeComponent();
+
+        SearchFilter.Updated += (_, _) => Targets?.AttachFilter(SearchFilter);
     }
 
     public static readonly DependencyProperty TargetsProperty =
@@ -23,6 +25,8 @@ public sealed partial class InputsPage : Page
         set => SetValue(TargetsProperty, value);
     }
 
+    public SearchFilterViewModel SearchFilter { get; } = new();
+
     public ElementsViewModel ElementsTable { get; } = new();
 
     private void ElementsFlyout_Closed(object sender, object e)
@@ -30,6 +34,7 @@ public sealed partial class InputsPage : Page
         var elements = ElementsTable.CheckedElements
             .Select(elementVM => elementVM.Element);
 
-        // Update search filter...
+        SearchFilter.TargetElements.Clear();
+        SearchFilter.TargetElements.AddRange(elements);
     }
 }

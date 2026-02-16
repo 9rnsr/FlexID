@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ObservableCollections;
 using R3;
@@ -34,23 +33,6 @@ public partial class CheckableItemsView<T, TView> : ObservableObject, IDisposabl
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .AddTo(disposables);
 
-        SearchFilter
-        .Debounce(TimeSpan.FromMilliseconds(300))
-        .ObserveOnCurrentSynchronizationContext()
-        .Subscribe(pattern =>
-        {
-            Regex? regex = null;
-            try
-            {
-                regex = new Regex(pattern);
-            }
-            catch { }
-            if (regex is null)
-                View.ResetFilter();
-            else
-                View.AttachFilter(new RegexSearchFilter(regex));
-        }).AddTo(disposables);
-
         View.ViewChanged += OnViewChanged;
 
         _countChecked = 0;
@@ -68,21 +50,12 @@ public partial class CheckableItemsView<T, TView> : ObservableObject, IDisposabl
 
     public NotifyCollectionChangedSynchronizedViewList<TView> FilteredItems { get; }
 
-    public BindableReactiveProperty<string> SearchFilter { get; } = new("");
-
-    private class RegexSearchFilter : ISynchronizedViewFilter<T, TView>
+    public void AttachFilter(ISynchronizedViewFilter<T, TView>? filter)
     {
-        readonly Regex regex;
-
-        public RegexSearchFilter(Regex regex)
-        {
-            this.regex = regex;
-        }
-
-        public bool IsMatch(T item, TView view)
-        {
-            return regex.IsMatch(view.ItemText);
-        }
+        if (filter is null)
+            View.ResetFilter();
+        else
+            View.AttachFilter(filter);
     }
 
     private int _countChecked;
