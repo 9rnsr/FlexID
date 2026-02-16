@@ -441,4 +441,9 @@ public class CalcData
     public string OrganName { get; set; }
 
     public double Value { get; set; }
+
+    public string FormatValue(double value)
+    {
+        return $"{value:0.000000E+00}";
+    }
 }
