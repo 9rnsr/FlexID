@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FlexID.Models;
 using ScottPlot;
 using ScottPlot.Plottables;
 using ScottPlot.TickGenerators;
@@ -161,7 +162,7 @@ public partial class GraphViewModel : ObservableObject
     }
 }
 
-public class SerieData
+public class SerieData : ViewModelBase, ICheckableItem
 {
     public SerieData(GraphViewModel vm, IReadOnlyList<double> timeSteps, OutputCompartmentData compartment, Color? color)
     {
@@ -194,9 +195,7 @@ public class SerieData
 
     private readonly Scatter _scatter;
 
-    public string Name => _scatter.LegendText;
-
-    public bool IsVisible
+    public bool IsChecked
     {
         get => _scatter.IsVisible;
         set
@@ -205,8 +204,13 @@ public class SerieData
                 return;
             _scatter.IsVisible = value;
             _viewModel.Refresh();
+            OnPropertyChanged();
         }
     }
+
+    public string Name => _scatter.LegendText;
+
+    public string ItemText => Name;
 
     public void SetAxisX(bool isLog)
     {
