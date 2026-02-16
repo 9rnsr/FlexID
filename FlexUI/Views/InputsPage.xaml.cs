@@ -23,8 +23,13 @@ public sealed partial class InputsPage : Page
         set => SetValue(TargetsProperty, value);
     }
 
+    public ElementsViewModel ElementsTable { get; } = new();
+
     private void ElementsFlyout_Closed(object sender, object e)
     {
-        // TODO
+        var elements = ElementsTable.CheckedElements
+            .Select(elementVM => elementVM.Element);
+
+        // Update search filter...
     }
 }

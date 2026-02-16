@@ -47,14 +47,14 @@
             ShouldConstrainToRootBounds="False">
             <Flyout.FlyoutPresenterStyle>
               <Style BasedOn="{StaticResource DefaultFlyoutPresenterStyle}" TargetType="FlyoutPresenter">
-                <Setter Property="MaxWidth" Value="1000" />
-                <Setter Property="MaxHeight" Value="600" />
+                <Setter Property="MaxWidth" Value="860" />
+                <Setter Property="MaxHeight" Value="510" />
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
                 <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
               </Style>
             </Flyout.FlyoutPresenterStyle>
             <Grid IsAccessKeyScope="True" XYFocusKeyboardNavigation="Enabled">
-              <!--    -->
+              <v:ElementsPage ViewModel="{x:Bind ElementsTable}" />
             </Grid>
           </Flyout>
         </DropDownButton.Flyout>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+  x:Class="FlexID.Views.ElementsPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:v="using:FlexID.Views"
+  xmlns:vm="using:FlexID.ViewModels"
+  mc:Ignorable="d">
+
+  <controls:UniformGrid
+    RowSpacing="1"
+    ColumnSpacing="1"
+    Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
+    Columns="19"
+    Rows="11">
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="8" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <controls:UniformGrid.Resources>
+      <Style TargetType="TextBlock">
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+      </Style>
+      <Style TargetType="ContentControl">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="ContentControl">
+              <ToggleButton
+                Padding="0"
+                IsChecked="{x:Bind ((vm:ElementViewModel)DataContext).IsChecked, Mode=TwoWay}"
+                TabIndex="{x:Bind ((vm:ElementViewModel)DataContext).Number}">
+                <Border Width="40" Padding="2">
+                  <Grid>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto" />
+                      <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                      Grid.Row="0"
+                      HorizontalAlignment="Center"
+                      Text="{x:Bind ((vm:ElementViewModel)DataContext).Number}" />
+                    <TextBlock
+                      Grid.Row="1"
+                      HorizontalAlignment="Center"
+                      FontSize="16"
+                      Text="{x:Bind ((vm:ElementViewModel)DataContext).Element}" />
+                  </Grid>
+                </Border>
+              </ToggleButton>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </controls:UniformGrid.Resources>
+
+    <Border Grid.Row="0" Grid.Column="0" />
+    <Border
+      Grid.Row="1"
+      Grid.Column="2"
+      Grid.ColumnSpan="16" />
+    <Border
+      Grid.Row="2"
+      Grid.RowSpan="2"
+      Grid.Column="3"
+      Grid.ColumnSpan="10">
+      <Button
+        Padding="12,8"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Top"
+        Command="{x:Bind ViewModel.ClearAllCommand}"
+        Content="Clear All"
+        TabIndex="0" />
+    </Border>
+    <Border
+      Grid.Row="9"
+      Grid.RowSpan="2"
+      Grid.Column="0" />
+
+    <TextBlock Text="1" />
+    <TextBlock Text="2" />
+    <TextBlock Text="3" />
+    <TextBlock Text="4" />
+    <TextBlock Text="5" />
+    <TextBlock Text="6" />
+    <TextBlock Text="7" />
+    <TextBlock Text="8" />
+    <TextBlock Text="9" />
+    <TextBlock Text="10" />
+    <TextBlock Text="11" />
+    <TextBlock Text="12" />
+    <TextBlock Text="13" />
+    <TextBlock Text="14" />
+    <TextBlock Text="15" />
+    <TextBlock Text="16" />
+    <TextBlock Text="17" />
+    <TextBlock Text="18" />
+
+    <TextBlock Text="1" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(1), Mode=OneWay}" TabIndex="1" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(2), Mode=OneWay}" TabIndex="2" />
+
+    <TextBlock Text="2" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(3), Mode=OneWay}" TabIndex="3" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(4), Mode=OneWay}" TabIndex="4" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(5), Mode=OneWay}" TabIndex="5" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(6), Mode=OneWay}" TabIndex="6" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(7), Mode=OneWay}" TabIndex="7" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(8), Mode=OneWay}" TabIndex="8" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(9), Mode=OneWay}" TabIndex="9" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(10), Mode=OneWay}" TabIndex="10" />
+
+    <TextBlock Text="3" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(11), Mode=OneWay}" TabIndex="11" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(12), Mode=OneWay}" TabIndex="12" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(13), Mode=OneWay}" TabIndex="13" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(14), Mode=OneWay}" TabIndex="14" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(15), Mode=OneWay}" TabIndex="15" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(16), Mode=OneWay}" TabIndex="16" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(17), Mode=OneWay}" TabIndex="17" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(18), Mode=OneWay}" TabIndex="18" />
+
+    <TextBlock Text="4" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(19), Mode=OneWay}" TabIndex="19" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(20), Mode=OneWay}" TabIndex="20" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(21), Mode=OneWay}" TabIndex="21" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(22), Mode=OneWay}" TabIndex="22" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(23), Mode=OneWay}" TabIndex="23" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(24), Mode=OneWay}" TabIndex="24" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(25), Mode=OneWay}" TabIndex="25" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(26), Mode=OneWay}" TabIndex="26" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(27), Mode=OneWay}" TabIndex="27" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(28), Mode=OneWay}" TabIndex="28" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(29), Mode=OneWay}" TabIndex="29" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(30), Mode=OneWay}" TabIndex="30" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(31), Mode=OneWay}" TabIndex="31" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(32), Mode=OneWay}" TabIndex="32" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(33), Mode=OneWay}" TabIndex="33" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(34), Mode=OneWay}" TabIndex="34" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(35), Mode=OneWay}" TabIndex="35" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(36), Mode=OneWay}" TabIndex="36" />
+
+    <TextBlock Text="5" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(37), Mode=OneWay}" TabIndex="37" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(38), Mode=OneWay}" TabIndex="38" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(39), Mode=OneWay}" TabIndex="39" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(40), Mode=OneWay}" TabIndex="40" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(41), Mode=OneWay}" TabIndex="41" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(42), Mode=OneWay}" TabIndex="42" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(43), Mode=OneWay}" TabIndex="43" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(44), Mode=OneWay}" TabIndex="44" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(45), Mode=OneWay}" TabIndex="45" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(46), Mode=OneWay}" TabIndex="46" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(47), Mode=OneWay}" TabIndex="47" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(48), Mode=OneWay}" TabIndex="48" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(49), Mode=OneWay}" TabIndex="49" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(50), Mode=OneWay}" TabIndex="50" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(51), Mode=OneWay}" TabIndex="51" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(52), Mode=OneWay}" TabIndex="52" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(53), Mode=OneWay}" TabIndex="53" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(54), Mode=OneWay}" TabIndex="54" />
+
+    <TextBlock Text="6" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(55), Mode=OneWay}" TabIndex="55" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(56), Mode=OneWay}" TabIndex="56" />
+    <Border
+      Grid.Row="6"
+      Grid.Column="3"
+      BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}"
+      BorderThickness="1"
+      CornerRadius="4" />
+    <Path
+      Grid.Row="6"
+      Grid.RowSpan="4"
+      Grid.Column="3"
+      Margin="26,20,0,20"
+      Data="M0,0 L0,1 L1,1"
+      Stretch="Fill"
+      Stroke="Black"
+      StrokeThickness="1" />
+
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(72), Mode=OneWay}" TabIndex="72" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(73), Mode=OneWay}" TabIndex="73" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(74), Mode=OneWay}" TabIndex="74" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(75), Mode=OneWay}" TabIndex="75" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(76), Mode=OneWay}" TabIndex="76" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(77), Mode=OneWay}" TabIndex="77" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(78), Mode=OneWay}" TabIndex="78" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(79), Mode=OneWay}" TabIndex="79" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(80), Mode=OneWay}" TabIndex="80" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(81), Mode=OneWay}" TabIndex="81" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(82), Mode=OneWay}" TabIndex="82" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(83), Mode=OneWay}" TabIndex="83" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(84), Mode=OneWay}" TabIndex="84" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(85), Mode=OneWay}" TabIndex="85" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(86), Mode=OneWay}" TabIndex="86" />
+
+    <TextBlock Text="7" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(87), Mode=OneWay}" TabIndex="87" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(88), Mode=OneWay}" TabIndex="88" />
+    <Border
+      Grid.Row="7"
+      Grid.Column="3"
+      BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}"
+      BorderThickness="1"
+      CornerRadius="4" />
+    <Path
+      Grid.Row="7"
+      Grid.RowSpan="4"
+      Grid.Column="3"
+      Margin="14,20,0,20"
+      Data="M0,0 L0,1 L1,1"
+      Stretch="Fill"
+      Stroke="Black"
+      StrokeThickness="1" />
+    <Border Grid.ColumnSpan="15" />
+
+    <Border Grid.ColumnSpan="19" />
+
+    <TextBlock
+      Grid.ColumnSpan="2"
+      Text="Lanthanide&#xD;Series"
+      TextAlignment="Center" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(57), Mode=OneWay}" TabIndex="57" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(58), Mode=OneWay}" TabIndex="58" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(59), Mode=OneWay}" TabIndex="59" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(60), Mode=OneWay}" TabIndex="60" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(61), Mode=OneWay}" TabIndex="61" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(62), Mode=OneWay}" TabIndex="62" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(63), Mode=OneWay}" TabIndex="63" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(64), Mode=OneWay}" TabIndex="64" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(65), Mode=OneWay}" TabIndex="65" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(66), Mode=OneWay}" TabIndex="66" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(67), Mode=OneWay}" TabIndex="67" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(68), Mode=OneWay}" TabIndex="68" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(69), Mode=OneWay}" TabIndex="69" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(70), Mode=OneWay}" TabIndex="70" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(71), Mode=OneWay}" TabIndex="71" />
+
+    <TextBlock
+      Grid.ColumnSpan="2"
+      Text="Actinide&#xD;Series"
+      TextAlignment="Center" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(89), Mode=OneWay}" TabIndex="89" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(90), Mode=OneWay}" TabIndex="90" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(91), Mode=OneWay}" TabIndex="91" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(92), Mode=OneWay}" TabIndex="92" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(93), Mode=OneWay}" TabIndex="93" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(94), Mode=OneWay}" TabIndex="94" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(95), Mode=OneWay}" TabIndex="95" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(96), Mode=OneWay}" TabIndex="96" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(97), Mode=OneWay}" TabIndex="97" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(98), Mode=OneWay}" TabIndex="98" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(99), Mode=OneWay}" TabIndex="99" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(100), Mode=OneWay}" TabIndex="100" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(101), Mode=OneWay}" TabIndex="101" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(102), Mode=OneWay}" TabIndex="102" />
+    <ContentControl DataContext="{x:Bind ViewModel.GetElement(103), Mode=OneWay}" TabIndex="103" />
+  </controls:UniformGrid>
+
+</Page>
