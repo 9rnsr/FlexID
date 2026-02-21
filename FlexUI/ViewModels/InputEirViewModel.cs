@@ -247,12 +247,6 @@ public partial class InputEirViewModel : ViewModelBase
             // 各パラメータの入力確認
             if (OutputDirectory == "")
                 throw new Exception("Please enter the Output File Path.");
-            //if (string.IsNullOrWhiteSpace(Path.GetFileName(OutputFilePath)))
-            //    throw new Exception("Please enter file name in the Output File Path");
-            //if (SelectedNuclide is null)
-            //    throw new Exception("Please select Nuclide.");
-            //if (SelectedInput is null)
-            //    throw new Exception("Please select Route of Intake.");
             if (ComputeTimeMeshFilePath == "")
                 throw new Exception("Please enter the Computational Time Mesh file path.");
             if (OutputTimeMeshFilePath == "")
@@ -264,7 +258,17 @@ public partial class InputEirViewModel : ViewModelBase
             if (SelectedIntakeAge is null)
                 throw new Exception("Please select Exposure Age.");
 
-            //await RunAndView(SelectedInput.InputTarget);
+            var targets = Targets.FilteredItems
+                .Where(targetVM => targetVM.IsChecked)
+                .Select(targetVM => targetVM.InputTarget).ToArray();
+
+            var cts = new CancellationTokenSource();
+
+            var runner = new ParallelRunner<InputTarget>(targets);
+
+            await runner.StartAsync(RunSingle(), cts.Token);
+
+            MessageService.Confirm("Caculation finished.");
         }
         catch (Exception ex)
         {
@@ -276,14 +280,9 @@ public partial class InputEirViewModel : ViewModelBase
         }
     }
 
-    private async Task RunAndView(InputTarget target)
+    private Action<InputTarget, CancellationToken> RunSingle()
     {
-        // FlexID.Calcアセンブリがない場合はこのメソッドに入った直後に例外が発生する。
-
-        var dataList = new InputDataReader_EIR(target.FilePath, calcProgeny: true).Read();
-
         var outputDir           /**/= OutputDirectory;
-        var outputFile          /**/= target.Name;
         var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
         var outputTimeMeshPath  /**/= OutputTimeMeshFilePath;
         var commitmentPeriod    /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
@@ -296,20 +295,25 @@ public partial class InputEirViewModel : ViewModelBase
         if (!Path.IsPathFullyQualified(outputTimeMeshPath))
             outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
 
-        var main = new MainRoutine_EIR()
+        return (target, cancellationToken) =>
         {
-            OutputDirectory     /**/= outputDir,
-            OutputFileName      /**/= outputFile,
-            ComputeTimeMeshPath /**/= computeTimeMeshPath,
-            OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= commitmentPeriod,
-            ExposureAge         /**/= intakeAge,
+            var dataList = new InputDataReader_EIR(target.FilePath, calcProgeny: true).Read();
+
+            var main = new MainRoutine_EIR()
+            {
+                OutputDirectory     /**/= outputDir,
+                OutputFileName      /**/= target.Name,
+                ComputeTimeMeshPath /**/= computeTimeMeshPath,
+                OutputTimeMeshPath  /**/= outputTimeMeshPath,
+                CommitmentPeriod    /**/= commitmentPeriod,
+                ExposureAge         /**/= intakeAge,
+            };
+
+            main.Main(dataList);
+
+            // // ファイルパスを引数にして出力GUI実行
+            // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
+            // p.WaitForExit();
         };
-
-        await Task.Run(() => main.Main(dataList));
-
-        // // ファイルパスを引数にして出力GUI実行
-        // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
-        // p.WaitForExit();
     }
 }

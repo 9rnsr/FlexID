@@ -121,7 +121,7 @@ public partial class InputScoeffViewModel : ViewModelBase
                 calcAM ? Run(Sex.Male, interpolationMethod, nuclides, outputDir, isIdacDoseCompatible) : Task.CompletedTask,
                 calcAF ? Run(Sex.Female, interpolationMethod, nuclides, outputDir, isIdacDoseCompatible) : Task.CompletedTask);
 
-            MessageService.Confirm("Finished S-Coefficient caculation");
+            MessageService.Confirm("Caculation finished.");
         }
         catch (Exception ex)
         {
