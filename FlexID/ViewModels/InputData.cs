@@ -73,14 +73,15 @@ public class InputData
     /// <summary>
     /// 指定フォルダ内にある、ある核種のOIRのインプット群を列挙する。
     /// </summary>
-    /// <param name="baseDir">基準フォルダ。</param>
+    /// <param name="dirPath">基準フォルダ。</param>
     /// <returns>取得したインプット群の情報。</returns>
-    public static IEnumerable<InputData> GetInputsOIR(string baseDir)
+    public static IEnumerable<InputData> GetInputsOIR(string dirPath)
     {
         IEnumerable<string> inputFiles;
         try
         {
-            inputFiles = Directory.EnumerateFiles(baseDir, "*.inp", SearchOption.AllDirectories);
+            dirPath = Path.Combine(AppResource.BaseDir, dirPath);
+            inputFiles = Directory.EnumerateFiles(dirPath, "*.inp", SearchOption.AllDirectories);
         }
         catch (Exception e) when (e is IOException || e is SystemException)
         {
@@ -117,14 +118,15 @@ public class InputData
     /// <summary>
     /// 指定フォルダ内にある、ある核種のEIRのインプット群を列挙する。
     /// </summary>
-    /// <param name="baseDir">基準フォルダ。</param>
+    /// <param name="dirPath">基準フォルダ。</param>
     /// <returns>取得したインプット群の情報。</returns>
-    public static IEnumerable<InputData> GetInputsEIR(string baseDir)
+    public static IEnumerable<InputData> GetInputsEIR(string dirPath)
     {
         IEnumerable<string> inputFiles;
         try
         {
-            inputFiles = Directory.EnumerateFiles(baseDir, "*.inp", SearchOption.AllDirectories);
+            dirPath = Path.Combine(AppResource.BaseDir, dirPath);
+            inputFiles = Directory.EnumerateFiles(dirPath, "*.inp", SearchOption.AllDirectories);
         }
         catch (Exception e) when (e is IOException || e is SystemException)
         {

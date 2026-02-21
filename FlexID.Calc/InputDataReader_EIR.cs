@@ -91,7 +91,7 @@ public class InputDataReader_EIR : InputDataReaderBase
             if (!isProgeny)
             {
                 // 組織加重係数データを読み込む。
-                var (ts, ws) = ReadTissueWeights(Path.Combine("lib", "EIR", "wT.txt"));
+                var (ts, ws) = ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\EIR\wT.txt"));
                 data.TargetRegions = ts;
                 data.TargetWeights = ws;
 
@@ -283,7 +283,7 @@ public class InputDataReader_EIR : InputDataReaderBase
         var nuc = nuclide.Name;
         var file = $"{nuc}.txt";
 
-        using var reader = new StreamReader(Path.Combine("lib", "EIR", "SEE", file));
+        using var reader = new StreamReader(Path.Combine(AppResource.BaseDir, @"lib\EIR\SEE", file));
 
         while (reader.ReadLine() != age)
         { }

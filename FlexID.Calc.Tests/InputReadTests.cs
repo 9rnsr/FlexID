@@ -16,7 +16,7 @@ public class InputReadTests
 
     public static IEnumerable<object[]> GetTargets()
     {
-        var inputDir = @"inp\OIR";
+        var inputDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
         return Directory.EnumerateFiles(inputDir, "*.inp", SearchOption.AllDirectories)
             .Select(path => new object[] { path });
     }
@@ -26,7 +26,7 @@ public class InputReadTests
     public void Test_EIR(string target)
     {
         var nuclide = target.Split('_')[0];
-        var inputPath = Path.Combine("inp", "EIR", nuclide, target + ".inp");
+        var inputPath = Path.Combine(AppResource.BaseDir, @"inp\EIR", nuclide, target + ".inp");
 
         var data = new InputDataReader_EIR(inputPath).Read();
         data.ShouldNotBeNull();

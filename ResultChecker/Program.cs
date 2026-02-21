@@ -10,7 +10,7 @@ internal partial class Program
     static async Task<int> Main(string[] args)
     {
         // 処理結果の出力ディレクトリ。
-        var outputDir = "out";
+        var outputDir = Path.Combine(AppResource.ProcessDir, "out");
 
         // 処理結果の出力ファイル名。
         var outputFileName = "summary.xlsx";
@@ -508,7 +508,7 @@ internal partial class Program
         var filePath = target.ResultDosePath;
 
         // 組織加重係数データを読み込む。
-        var (ts, ws) = InputDataReaderBase.ReadTissueWeights(Path.Combine("lib", "OIR", "wT.txt"));
+        var (ts, ws) = InputDataReaderBase.ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
 
         using var reader = new OutputDataReader(filePath);
 

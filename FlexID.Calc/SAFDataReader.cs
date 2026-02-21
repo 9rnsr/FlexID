@@ -92,7 +92,7 @@ public class SAFDataReader
     /// <returns></returns>
     public static IEnumerable<string> ReadRadNuclides()
     {
-        using var r = new StreamReader(RadFilePath);
+        using var r = new StreamReader(Path.Combine(AppResource.BaseDir, RadFilePath));
 
         string line;
         while ((line = r.ReadLine()) != null)
@@ -113,7 +113,7 @@ public class SAFDataReader
     /// <returns>取得した放射線データ</returns>
     public static (int ICode, double Yield, double Energy, string JCode)[] ReadRAD(string nuclideName)
     {
-        using var r = new StreamReader(RadFilePath);
+        using var r = new StreamReader(Path.Combine(AppResource.BaseDir, RadFilePath));
 
         string line;
         while ((line = r.ReadLine()) != null)
@@ -153,7 +153,7 @@ public class SAFDataReader
     /// <returns>取得したβスペクトルデータ</returns>
     public static (double Energy, double Yield)[] ReadBET(string nuclideName)
     {
-        using var r = new StreamReader(BetFilePath);
+        using var r = new StreamReader(Path.Combine(AppResource.BaseDir, BetFilePath));
 
         string line;
         while ((line = r.ReadLine()) != null)
@@ -190,7 +190,7 @@ public class SAFDataReader
 
     private static string GetSingleFile(string pattern)
     {
-        var libDir = Path.Combine(Environment.CurrentDirectory, "lib");
+        var libDir = Path.Combine(AppResource.BaseDir, "lib");
 
         var files = Directory.GetFiles(libDir, pattern);
         return files.Length == 1 ? files[0] : null;

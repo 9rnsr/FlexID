@@ -18,8 +18,4 @@
     <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="$(SolutionDir)resources/expect/**/*.dat" LinkBase="expect" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
 </Project>

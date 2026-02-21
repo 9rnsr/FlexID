@@ -73,10 +73,10 @@ public class TimeMeshTests
     [TestMethod]
     [DataRow("$(TestFiles)/TimeMesh/calc-time.dat")]
     [DataRow("$(TestFiles)/TimeMesh/out-time.dat")]
-    [DataRow("lib/TimeMesh/time.dat")]
-    [DataRow("lib/TimeMesh/out-time.dat")]
-    [DataRow("lib/TimeMesh/out-per-h.dat")]
-    [DataRow("lib/TimeMesh/out-time-OIR.dat")]
+    [DataRow("$(ResourceFiles)/lib/TimeMesh/time.dat")]
+    [DataRow("$(ResourceFiles)/lib/TimeMesh/out-time.dat")]
+    [DataRow("$(ResourceFiles)/lib/TimeMesh/out-per-h.dat")]
+    [DataRow("$(ResourceFiles)/lib/TimeMesh/out-time-OIR.dat")]
     public void ReadTimeMeshFile(string filePath)
     {
         filePath = TestFiles.ReplaceVar(filePath);
@@ -141,8 +141,8 @@ public class TimeMeshTests
 
         yield return new object[]
         {
-            new TimeMesh("lib/TimeMesh/out-time-OIR.dat"),
-            new TimeMesh("lib/TimeMesh/time.dat"),
+            new TimeMesh(Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\out-time-OIR.dat")),
+            new TimeMesh(Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat")),
         };
     }
 

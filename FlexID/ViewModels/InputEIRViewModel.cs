@@ -28,7 +28,7 @@ public partial class InputEIRViewModel : ObservableObject
         Task.Run(() =>
         {
             // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
-            var inputDirPath = Path.Combine(AppContext.BaseDirectory, "inp", "EIR");
+            var inputDirPath = Path.Combine(AppResource.BaseDir, @"inp\EIR");
 
             foreach (var input in InputData.GetInputsEIR(inputDirPath))
             {
@@ -214,10 +214,21 @@ public partial class InputEIRViewModel : ObservableObject
 
         var dataList = new InputDataReader_EIR(SelectedInput.FilePath, CalcProgeny).Read();
 
+        var outputPath       /**/= OutputFilePath;
+        var calcTimeMeshPath /**/= CalcTimeMeshFilePath;
+        var outTimeMeshPath  /**/= OutTimeMeshFilePath;
+
+        if (!Path.IsPathFullyQualified(outputPath))
+            outputPath = Path.Combine(AppResource.ProcessDir, outputPath);
+        if (!Path.IsPathFullyQualified(calcTimeMeshPath))
+            calcTimeMeshPath = Path.Combine(AppResource.BaseDir, calcTimeMeshPath);
+        if (!Path.IsPathFullyQualified(outTimeMeshPath))
+            outTimeMeshPath = Path.Combine(AppResource.BaseDir, outTimeMeshPath);
+
         var main = new MainRoutine_EIR();
-        main.OutputPath       /**/= OutputFilePath;
-        main.CalcTimeMeshPath /**/= CalcTimeMeshFilePath;
-        main.OutTimeMeshPath  /**/= OutTimeMeshFilePath;
+        main.OutputPath       /**/= outputPath;
+        main.CalcTimeMeshPath /**/= calcTimeMeshPath;
+        main.OutTimeMeshPath  /**/= outTimeMeshPath;
         main.CommitmentPeriod /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
         main.ExposureAge      /**/= SelectedIntakeAge;
 

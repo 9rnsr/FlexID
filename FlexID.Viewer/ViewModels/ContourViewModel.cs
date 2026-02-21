@@ -14,7 +14,7 @@ public partial class ContourViewModel : ObservableObject
     /// </summary>
     public ContourViewModel()
     {
-        var listFilePath = Path.Combine(AppContext.BaseDirectory, "lib", "FixList.txt");
+        var listFilePath = Path.Combine(AppResource.BaseDir, @"lib\FixList.txt");
         foreach (var line in File.ReadLines(listFilePath))
         {
             var parts = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);

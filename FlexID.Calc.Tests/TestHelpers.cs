@@ -19,8 +19,10 @@ class TestFiles
         return Path.Combine(testFilesDir, Path.Combine(paths));
     }
 
-    public static string ReplaceVar(string str, string pattern = "$(TestFiles)")
+    public static string ReplaceVar(string str)
     {
-        return str.Replace(pattern, testFilesDir);
+        str = str.Replace("$(TestFiles)", testFilesDir);
+        str = str.Replace("$(ResourceFiles)", AppResource.BaseDir);
+        return str;
     }
 }

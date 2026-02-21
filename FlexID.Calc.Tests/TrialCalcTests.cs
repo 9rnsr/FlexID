@@ -20,7 +20,7 @@ public class TrialCalcTests
     {
         var target = Path.GetFileNameWithoutExtension(path);
         var nuclide = target.Split('_')[0];
-        var inputPath = Path.Combine("inp", "OIR", path + ".inp");
+        var inputPath = Path.Combine(AppResource.BaseDir, @"inp\OIR", path + ".inp");
 
         var expectDir = Path.Combine(TestDir, "Expect_OIR", nuclide);
         var resultDir = Path.Combine(TestDir, "Result_OIR~", nuclide);
@@ -28,7 +28,7 @@ public class TrialCalcTests
 
         var outputPath = Path.Combine(resultDir, target);
 
-        var cTimeMeshFile = @"lib\TimeMesh\time.dat";
+        var cTimeMeshFile = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
         var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
 
         var commitmentPeriod = "50years";
@@ -66,7 +66,7 @@ public class TrialCalcTests
     public void Test_EIR(string target, string exposureAge)
     {
         var nuclide = target.Split('_')[0];
-        var inputPath = Path.Combine("inp", "EIR", nuclide, target + ".inp");
+        var inputPath = Path.Combine(AppResource.BaseDir, @"inp\EIR", nuclide, target + ".inp");
 
         var expectDir = Path.Combine(TestDir, "Expect_EIR", nuclide, exposureAge.Replace(' ', '_'));
         var resultDir = Path.Combine(TestDir, "Result_EIR~", nuclide, exposureAge.Replace(' ', '_'));
@@ -74,7 +74,7 @@ public class TrialCalcTests
 
         var outputPath = Path.Combine(resultDir, target);
 
-        var cTimeMeshFile = @"lib\TimeMesh\time.dat";
+        var cTimeMeshFile = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
         var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
 
         var commitmentPeriod =

@@ -78,6 +78,10 @@ public partial class ScoeffCalcViewModel : ObservableObject
             WeakReferenceMessenger.Default.Send(new BusyState(true));
 
             var outPath = OutputFilePath;
+
+            if (!Path.IsPathFullyQualified(outPath))
+                outPath = Path.Combine(AppResource.ProcessDir, outPath);
+
             Directory.CreateDirectory(outPath);
 
             var calcAM = CalcMale;
