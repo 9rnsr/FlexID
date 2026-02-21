@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Expect/**/*.dat" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)resources/expect/**/*.dat" LinkBase="expect" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
