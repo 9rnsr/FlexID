@@ -81,7 +81,7 @@ public class IndexDataReader
 
     public static IEnumerable<IndexData> ReadNDX()
     {
-        using var r = new StreamReader(IndexFilePath);
+        using var r = new StreamReader(Path.Combine(AppResource.BaseDir, IndexFilePath));
 
         string line;
         line = r.ReadLine();

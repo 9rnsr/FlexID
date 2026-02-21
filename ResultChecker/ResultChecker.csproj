@@ -18,8 +18,4 @@
     <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Expect/**/*.dat" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
 </Project>

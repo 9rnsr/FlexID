@@ -27,7 +27,7 @@ public partial class InputOIRViewModel : ObservableObject
         Task.Run(() =>
         {
             // OIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
-            var inputDirPath = Path.Combine(AppContext.BaseDirectory, "inp", "OIR");
+            var inputDirPath = Path.Combine(AppResource.BaseDir, @"inp\OIR");
 
             foreach (var input in InputData.GetInputsOIR(inputDirPath))
             {
@@ -198,10 +198,21 @@ public partial class InputOIRViewModel : ObservableObject
 
         var data = new InputDataReader_OIR(SelectedInput.FilePath, CalcProgeny).Read();
 
+        var outputPath       /**/= OutputFilePath;
+        var calcTimeMeshPath /**/= CalcTimeMeshFilePath;
+        var outTimeMeshPath  /**/= OutTimeMeshFilePath;
+
+        if (!Path.IsPathFullyQualified(outputPath))
+            outputPath = Path.Combine(AppResource.ProcessDir, outputPath);
+        if (!Path.IsPathFullyQualified(calcTimeMeshPath))
+            calcTimeMeshPath = Path.Combine(AppResource.BaseDir, calcTimeMeshPath);
+        if (!Path.IsPathFullyQualified(outTimeMeshPath))
+            outTimeMeshPath = Path.Combine(AppResource.BaseDir, outTimeMeshPath);
+
         var main = new MainRoutine_OIR();
-        main.OutputPath       /**/= OutputFilePath;
-        main.CalcTimeMeshPath /**/= CalcTimeMeshFilePath;
-        main.OutTimeMeshPath  /**/= OutTimeMeshFilePath;
+        main.OutputPath       /**/= outputPath;
+        main.CalcTimeMeshPath /**/= calcTimeMeshPath;
+        main.OutTimeMeshPath  /**/= outTimeMeshPath;
         main.CommitmentPeriod /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
 
         await Task.Run(() => main.Main(data));

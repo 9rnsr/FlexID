@@ -1,3 +1,5 @@
+using FlexID.Calc;
+
 namespace ResultChecker;
 
 internal partial class Program
@@ -10,8 +12,8 @@ internal partial class Program
     /// <returns></returns>
     static IEnumerable<Target> GetTargets(string outputDir, bool runCalc)
     {
-        const string inputDir = @"inp\OIR";
-        const string expectDir = @"Expect";
+        var inputDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
+        var expectDir = Path.Combine(AppResource.BaseDir, @"expect");
 
         try
         {
