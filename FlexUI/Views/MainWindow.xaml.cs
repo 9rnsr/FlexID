@@ -79,9 +79,17 @@ public sealed partial class MainWindow
     {
         //Debug.WriteLine($"NavigationView_SelectionChanged, {args.SelectedItemContainer.Content}");
 
-        // 選択項目が変化した場合に、対応するPageへのナビゲーションを行う。
-        // NavigationViewItem.Tag に typeof(対応するPage) が設定されていることを前提としている。
-        var pageType = (Type)args.SelectedItemContainer.Tag;
+        Type pageType;
+        if (args.IsSettingsSelected)
+        {
+            pageType = typeof(AboutPage);
+        }
+        else
+        {
+            // 選択項目が変化した場合に、対応するPageへのナビゲーションを行う。
+            // NavigationViewItem.Tag に typeof(対応するPage) が設定されていることを前提としている。
+            pageType = (Type)args.SelectedItemContainer.Tag;
+        }
 
         NavigationFrame.NavigateToType(pageType, null, new()
         {
