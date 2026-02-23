@@ -20,7 +20,7 @@
   <NavigationView
     x:Name="NavigationView"
     IsBackButtonVisible="Collapsed"
-    IsSettingsVisible="False"
+    IsSettingsVisible="True"
     PaneDisplayMode="Top"
     PreviewKeyDown="NavigationView_PreviewKeyDown"
     SelectionChanged="NavigationView_SelectionChanged">

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+  x:Class="FlexID.Views.AboutPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="using:Microsoft.Xaml.Interactivity"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:v="using:FlexID.Views"
+  xmlns:vb="using:FlexID.Views.Behaviors"
+  xmlns:vm="using:FlexID.ViewModels"
+  NavigationCacheMode="Required"
+  mc:Ignorable="d">
+
+  <Page.Resources>
+    <Style TargetType="TextBlock">
+      <Setter Property="FontSize" Value="18" />
+      <Setter Property="FontFamily" Value="Seoge UI" />
+    </Style>
+  </Page.Resources>
+
+  <Grid Margin="24" RowSpacing="24">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+
+    <TextBlock
+      Grid.Row="0"
+      IsTabStop="True"
+      IsTextSelectionEnabled="True">
+      <Span xml:space="preserve"><Underline
+          FontSize="32"
+          FontStyle="Italic"
+          FontWeight="Bold">FlexID WG-Edition</Underline> <Run Text="{x:Bind PointerSize}" /> Ver. <Run Text="{x:Bind VersionNumber}" /></Span>
+      <LineBreak /><Span xml:space="preserve">(Git-hash: <Run Text="{x:Bind GitCommitId}" />)</Span>
+      <LineBreak />
+      <LineBreak /><Span xml:space="preserve">    Contributed by:</Span>
+      <LineBreak /><Span xml:space="preserve">      <Hyperlink NavigateUri="{x:Bind AESJ_Url}" ToolTipService.ToolTip="{x:Bind AESJ_Url}">Atomic Egency Society of Japan</Hyperlink></Span>
+      <LineBreak /><Span xml:space="preserve">      <Hyperlink NavigateUri="{x:Bind AESJ_RST_Url}" ToolTipService.ToolTip="{x:Bind AESJ_RST_Url}">Radiation Science and Technology subcommittee</Hyperlink> members</Span>
+      <LineBreak />
+      <LineBreak /><Span xml:space="preserve">    Maintainer: HARA Kenji (<Hyperlink NavigateUri="{x:Bind MaintainerUrl}" ToolTipService.ToolTip="{x:Bind MaintainerUrl}">@9rnsr</Hyperlink>)</Span>
+      <LineBreak /><Span xml:space="preserve">    Copyright © 2024-2026 by HARA Kenji, MHI NS Engineering Co., Ltd.</Span>
+      <LineBreak />
+      <LineBreak /><Span xml:space="preserve">    Project URL:&#x9;<Hyperlink NavigateUri="{x:Bind ProjectUrl}" ToolTipService.ToolTip="{x:Bind ProjectUrl}"><Run Text="{x:Bind ProjectUrl}" /></Hyperlink></Span>
+      <LineBreak /><Span xml:space="preserve">    Source URL:&#x9;<Hyperlink NavigateUri="{x:Bind SourceUrl}" ToolTipService.ToolTip="{x:Bind SourceUrl}"><Run Text="{x:Bind SourceUrl}" /></Hyperlink></Span>
+      <LineBreak /><Span xml:space="preserve">    forked from:&#x9;<Hyperlink NavigateUri="{x:Bind OriginalRepositoryUrl}" ToolTipService.ToolTip="{x:Bind OriginalRepositoryUrl}"><Run Text="{x:Bind OriginalRepositoryUrl}" /></Hyperlink></Span>
+    </TextBlock>
+
+    <Border
+      Grid.Row="1"
+      BorderBrush="Black"
+      BorderThickness="1" />
+
+    <Grid Grid.Row="2" RowSpacing="8">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+
+      <TextBlock
+        FontSize="22"
+        FontWeight="Bold"
+        Text="Third-Party Notices:" />
+
+      <ListView Grid.Row="1">
+        <!--  -->
+      </ListView>
+    </Grid>
+  </Grid>
+
+</Page>
