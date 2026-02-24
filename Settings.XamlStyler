@@ -1,4 +1,7 @@
 {
+    "IndentSize": 2,
+    "IndentWithTabs": false,
+
     "AttributesTolerance": 2,
     "KeepFirstAttributeOnSameLine": false,
     "MaxAttributeCharactersPerLine": 0,
@@ -17,7 +20,7 @@
         "x:Key, Key, x:Name, Name, x:Uid, Uid, Title",
         "Grid.Row, Grid.RowSpan, Grid.Column, Grid.ColumnSpan, Canvas.Left, Canvas.Top, Canvas.Right, Canvas.Bottom",
         "Width, Height, MinWidth, MinHeight, MaxWidth, MaxHeight",
-        "Margin, Padding, HorizontalAlignment, VerticalAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
+        "Margin, Padding, Spacing, RowSpacing, ColumnSpacing, HorizontalAlignment, VerticalAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
         "*:*, *",
         "PageSource, PageIndex, Offset, Color, TargetName, Property, Value, StartPoint, EndPoint",
         "mc:Ignorable, d:IsDataSource, d:LayoutOverrides, d:IsStaticText",
