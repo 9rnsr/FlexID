@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 
-namespace FlexID.Viewer.Views.Behaviors;
+namespace FlexID.Views.Behaviors;
 
 public enum AllowDropPath
 {

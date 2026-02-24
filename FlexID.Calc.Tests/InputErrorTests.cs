@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace FlexID.Calc.Tests;
+namespace FlexID;
 
 using static InputErrorTestHelpers;
 

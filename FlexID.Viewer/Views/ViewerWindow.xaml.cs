@@ -2,7 +2,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace FlexID.Viewer.Views;
+namespace FlexID.Views;
 
 /// <summary>
 /// Interaction logic for ViewerWindow.xaml

@@ -1,4 +1,4 @@
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// 性別を表現する列挙型

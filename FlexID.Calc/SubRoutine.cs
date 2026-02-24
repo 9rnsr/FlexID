@@ -1,4 +1,4 @@
-namespace FlexID.Calc;
+namespace FlexID;
 
 static class SubRoutine
 {

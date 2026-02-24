@@ -1,4 +1,4 @@
-namespace FlexID.Calc.Models;
+namespace FlexID.Models;
 
 /// <summary>
 /// 計算対象となるインプットの情報を保持する。

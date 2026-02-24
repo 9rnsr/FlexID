@@ -4,6 +4,8 @@
     <LangVersion>preview</LangVersion>
     <ImplicitUsings>true</ImplicitUsings>
 
+    <RootNamespace>FlexID</RootNamespace>
+
     <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
 
     <OutputPath>$(SolutionDir)out\$(Configuration)_bin\</OutputPath>

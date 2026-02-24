@@ -1,6 +1,6 @@
 #define DEBUG_ParallelRunningCount
 
-namespace ResultChecker;
+namespace FlexID;
 
 class ProgressPresenter
 {

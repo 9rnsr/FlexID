@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// 放射性核種の職業上の摂取(OIR: Occupational Intakes of Radionuclides)における

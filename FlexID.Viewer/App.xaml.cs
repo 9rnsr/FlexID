@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.DependencyInjection;
-using FlexID.Viewer.ViewModels;
-using FlexID.Viewer.Views;
+using FlexID.ViewModels;
+using FlexID.Views;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FlexID.Viewer;
+namespace FlexID;
 
 /// <summary>
 /// Interaction logic for App.xaml

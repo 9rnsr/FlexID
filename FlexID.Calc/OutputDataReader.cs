@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// アウトプットファイル種別。

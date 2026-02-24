@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 public readonly struct TimeMeshBoundary
 {

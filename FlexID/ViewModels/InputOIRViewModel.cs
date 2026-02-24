@@ -5,8 +5,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using FlexID.Calc;
-using FlexID.Calc.Models;
+using FlexID.Models;
 using Microsoft.Win32;
 
 namespace FlexID.ViewModels;

@@ -1,6 +1,6 @@
 using Sprache;
 
-namespace FlexID.Calc.Tests;
+namespace FlexID;
 
 /// <summary>
 /// テストのため式構造を文字列化する。

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// インプットで設定されてる壊変経路の集合から、

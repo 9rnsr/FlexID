@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace FlexID.Viewer.Views;
+namespace FlexID.Views;
 
 /// <summary>
 /// HumanContour.xaml の相互作用ロジック

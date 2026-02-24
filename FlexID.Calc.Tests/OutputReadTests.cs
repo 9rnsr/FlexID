@@ -1,4 +1,4 @@
-namespace FlexID.Calc.Tests;
+namespace FlexID;
 
 [TestClass]
 public class OutputReadTests
