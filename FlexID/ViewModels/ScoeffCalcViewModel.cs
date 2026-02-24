@@ -9,7 +9,7 @@ using Microsoft.Win32;
 
 namespace FlexID.ViewModels;
 
-public partial class NuclideItem : ObservableObject
+public partial class NuclideViewModel : ObservableObject
 {
     [ObservableProperty]
     public partial string Nuclide { get; set; }
@@ -29,7 +29,7 @@ public partial class ScoeffCalcViewModel : ObservableObject
 
         Task.Run(() =>
         {
-            var nuclides = SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideItem { Nuclide = nuc });
+            var nuclides = SAFDataReader.ReadRadNuclides().Select(nuc => new NuclideViewModel { Nuclide = nuc });
 
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -50,7 +50,7 @@ public partial class ScoeffCalcViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IdacDoseCompatible { get; set; } = false;
 
-    public ObservableCollection<NuclideItem> Nuclides { get; } = [];
+    public ObservableCollection<NuclideViewModel> Nuclides { get; } = [];
 
     [ObservableProperty]
     public partial string OutputFilePath { get; set; }

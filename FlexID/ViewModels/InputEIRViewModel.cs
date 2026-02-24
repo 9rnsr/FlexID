@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FlexID.Calc;
+using FlexID.Calc.Models;
 using Microsoft.Win32;
 
 namespace FlexID.ViewModels;
@@ -25,12 +26,10 @@ public partial class InputEIRViewModel : ObservableObject
         SelectedCommitmentPeriodUnit = CommitmentPeriodUnits.Last();
         SelectedIntakeAge = IntakeAges.First();
 
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             // EIR用のインプットフォルダ配下に置かれたインプットファイルと、それらの核種の一覧を取得する。
-            var inputDirPath = Path.Combine(AppResource.BaseDir, @"inp\EIR");
-
-            foreach (var input in InputData.GetInputsEIR(inputDirPath))
+            await foreach (var input in InputTarget.GetInputsEIR(@"inp\EIR"))
             {
                 var nuc = input.Nuclide;
                 if (!cacheNucInps.TryGetValue(nuc, out var inputs))
@@ -38,7 +37,7 @@ public partial class InputEIRViewModel : ObservableObject
                     inputs = [];
                     cacheNucInps.Add(nuc, inputs);
                 }
-                inputs.Add(input);
+                inputs.Add(new InputTargetViewModel(input));
             }
 
             Application.Current.Dispatcher.Invoke(() =>
@@ -56,15 +55,15 @@ public partial class InputEIRViewModel : ObservableObject
     [ObservableProperty]
     public partial string SelectedNuclide { get; set; }
 
-    private readonly Dictionary<string, List<InputData>> cacheNucInps = [];
+    private readonly Dictionary<string, List<InputTargetViewModel>> cacheNucInps = [];
 
-    public ObservableCollection<InputData> Inputs { get; } = [];
+    public ObservableCollection<InputTargetViewModel> Inputs { get; } = [];
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
-    public partial InputData SelectedInput { get; set; }
+    public partial InputTargetViewModel SelectedInput { get; set; }
 
-    partial void OnSelectedInputChanged(InputData value)
+    partial void OnSelectedInputChanged(InputTargetViewModel value)
     {
         // 子孫核種の有無が切り替わった場合に、これを子孫核種の計算有無に反映する。
         HasProgeny = value?.HasProgeny ?? false;
@@ -212,7 +211,7 @@ public partial class InputEIRViewModel : ObservableObject
     {
         // FlexID.Calcアセンブリがない場合はこのメソッドに入った直後に例外が発生する。
 
-        var dataList = new InputDataReader_EIR(SelectedInput.FilePath, CalcProgeny).Read();
+        var dataList = new InputDataReader_EIR(SelectedInput.InputTarget.FilePath, CalcProgeny).Read();
 
         var outputPath       /**/= OutputFilePath;
         var calcTimeMeshPath /**/= CalcTimeMeshFilePath;

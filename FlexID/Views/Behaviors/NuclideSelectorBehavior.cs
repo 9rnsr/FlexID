@@ -78,8 +78,8 @@ public class NuclideSelectorBehavior : Behavior<ListView>
                 return;
 
             // 現在フォーカスがある項目のチェック状態を基準にする。
-            var currentChecked = ((ViewModels.NuclideItem)value).IsChecked;
-            foreach (ViewModels.NuclideItem nucItem in lv.SelectedItems)
+            var currentChecked = ((ViewModels.NuclideViewModel)value).IsChecked;
+            foreach (ViewModels.NuclideViewModel nucItem in lv.SelectedItems)
             {
                 nucItem.IsChecked = !currentChecked;
             }
@@ -133,7 +133,7 @@ public class NuclideSelectorBehavior : Behavior<ListView>
                 // 現在の選択項目から検索を開始する。
                 var index = (current + i) % count;
 
-                var item = (ViewModels.NuclideItem)lv.Items[index];
+                var item = (ViewModels.NuclideViewModel)lv.Items[index];
                 if (!item.Nuclide.StartsWith(searchPattern, StringComparison.OrdinalIgnoreCase))
                     continue;
 

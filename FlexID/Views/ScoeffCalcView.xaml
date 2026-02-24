@@ -135,7 +135,7 @@
       </ListView.ItemsPanel>
 
       <ListView.ItemTemplate>
-        <DataTemplate DataType="{x:Type vm:NuclideItem}">
+        <DataTemplate DataType="{x:Type vm:NuclideViewModel}">
           <StackPanel Width="100" Orientation="Horizontal">
             <CheckBox
               Margin="0"
