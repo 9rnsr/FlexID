@@ -1,5 +1,5 @@
-﻿<Controls:MetroWindow
-  x:Class="FlexID.Viewer.Views.MainWindow"
+<Controls:MetroWindow
+  x:Class="FlexID.Viewer.Views.ViewerWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
@@ -16,7 +16,7 @@
   Height="800"
   MinWidth="1200"
   MinHeight="800"
-  d:DataContext="{d:DesignInstance Type={x:Type vm:MainViewModel}}"
+  d:DataContext="{d:DesignInstance Type={x:Type vm:ViewerViewModel}}"
   PreviewKeyDown="MetroWindow_PreviewKeyDown"
   TitleCharacterCasing="Normal"
   WindowStartupLocation="CenterScreen"

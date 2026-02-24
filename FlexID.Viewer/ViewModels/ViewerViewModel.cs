@@ -7,12 +7,12 @@ using Microsoft.Win32;
 
 namespace FlexID.Viewer.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class ViewerViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public MainViewModel()
+    public ViewerViewModel()
     {
     }
 

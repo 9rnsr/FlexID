@@ -5,15 +5,15 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 namespace FlexID.Viewer.Views;
 
 /// <summary>
-/// Interaction logic for MainWindow.xaml
+/// Interaction logic for ViewerWindow.xaml
 /// </summary>
-public partial class MainWindow
+public partial class ViewerWindow
 {
-    public MainWindow()
+    public ViewerWindow()
     {
         InitializeComponent();
 
-        DataContext = Ioc.Default.GetService<ViewModels.MainViewModel>();
+        DataContext = Ioc.Default.GetService<ViewModels.ViewerViewModel>();
     }
 
     private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)
