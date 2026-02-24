@@ -22,5 +22,5 @@ public class InputTargetViewModel
     /// <summary>
     /// 子孫核種の計算モデルを持っている場合は<c>true</c>。
     /// </summary>
-    public bool HasProgeny => InputTarget.Progenies.Count > 1;
+    public bool HasProgeny => InputTarget.Progenies.Count != 0;
 }
