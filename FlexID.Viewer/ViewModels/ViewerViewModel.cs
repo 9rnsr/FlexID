@@ -2,17 +2,16 @@ using System.Collections.ObjectModel;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FlexID.Calc;
 using Microsoft.Win32;
 
-namespace FlexID.Viewer.ViewModels;
+namespace FlexID.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class ViewerViewModel : ObservableObject
 {
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public MainViewModel()
+    public ViewerViewModel()
     {
     }
 

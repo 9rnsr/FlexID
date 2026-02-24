@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// インデックスデータを表現する。

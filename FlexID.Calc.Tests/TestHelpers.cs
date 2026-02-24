@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace FlexID.Calc.Tests;
+namespace FlexID;
 
 class TestFiles
 {

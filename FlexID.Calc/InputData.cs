@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// 流入経路を表現する

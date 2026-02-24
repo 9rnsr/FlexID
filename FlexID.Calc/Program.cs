@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 [assembly: InternalsVisibleTo("FlexID.Calc.Tests")]
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 public class Program
 {

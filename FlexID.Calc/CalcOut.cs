@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 class CalcOut : IDisposable
 {

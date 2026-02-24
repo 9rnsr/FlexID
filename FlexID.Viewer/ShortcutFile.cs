@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 
-namespace FlexID.Viewer;
+namespace FlexID;
 
 static class CLSID
 {

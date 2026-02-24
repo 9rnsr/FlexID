@@ -1,4 +1,4 @@
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// 公衆の構成員による放射性核種の摂取(EIR:  Environmental Intakes of Radionuclides)における

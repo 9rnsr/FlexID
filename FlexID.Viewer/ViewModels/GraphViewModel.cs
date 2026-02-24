@@ -1,11 +1,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FlexID.Calc;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 
-namespace FlexID.Viewer.ViewModels;
+namespace FlexID.ViewModels;
 
 public partial class GraphViewModel : ObservableObject
 {

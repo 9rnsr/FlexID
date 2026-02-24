@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// OIR用インプットファイルの読み取り処理。

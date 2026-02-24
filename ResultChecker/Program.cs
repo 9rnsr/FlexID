@@ -1,9 +1,8 @@
 using System.Collections.Concurrent;
 using System.Text;
 using System.Text.RegularExpressions;
-using FlexID.Calc;
 
-namespace ResultChecker;
+namespace FlexID;
 
 internal partial class Program
 {

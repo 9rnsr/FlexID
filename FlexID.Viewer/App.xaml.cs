@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.DependencyInjection;
-using FlexID.Viewer.ViewModels;
-using FlexID.Viewer.Views;
+using FlexID.ViewModels;
+using FlexID.Views;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FlexID.Viewer;
+namespace FlexID;
 
 /// <summary>
 /// Interaction logic for App.xaml
@@ -16,8 +16,8 @@ public partial class App
     {
         Ioc.Default.ConfigureServices(
             new ServiceCollection()
-            .AddTransient<MainWindow>()
-            .AddTransient<MainViewModel>()
+            .AddTransient<ViewerWindow>()
+            .AddTransient<ViewerViewModel>()
             .BuildServiceProvider());
     }
 
@@ -25,7 +25,7 @@ public partial class App
     {
         base.OnStartup(e);
 
-        var mainWindow = Ioc.Default.GetRequiredService<MainWindow>();
+        var viewerWindow = Ioc.Default.GetRequiredService<ViewerWindow>();
 
         // Args == 1     入力GUIからの実行
         // Args != 1(0)  exeファイル直接実行
@@ -35,11 +35,11 @@ public partial class App
             if (outPath.StartsWith("\"") && outPath.EndsWith("\""))
                 outPath = outPath.Substring(1, outPath.Length - 2);
 
-            var vm = (MainViewModel)mainWindow.DataContext;
+            var vm = (ViewerViewModel)viewerWindow.DataContext;
             vm.OutputFilePath = outPath;
         }
 
-        mainWindow.Show();
+        viewerWindow.Show();
     }
 }
 

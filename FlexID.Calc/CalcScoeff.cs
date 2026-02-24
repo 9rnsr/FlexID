@@ -1,6 +1,6 @@
 using MathNet.Numerics.Interpolation;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 public class CalcScoeff
 {

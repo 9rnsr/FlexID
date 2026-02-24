@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 
-namespace FlexID.Viewer.Views.Behaviors;
+namespace FlexID.Views.Behaviors;
 
 /// <summary>
 /// パス文字列に対する貼り付け挙動を定義する。

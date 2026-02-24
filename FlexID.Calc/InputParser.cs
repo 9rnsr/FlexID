@@ -2,7 +2,7 @@ using System.Globalization;
 using Sprache;
 using static Sprache.Parse;
 
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// インプットにおける文法とその解析処理を提供する。

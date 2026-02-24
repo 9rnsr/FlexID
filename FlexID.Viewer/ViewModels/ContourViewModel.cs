@@ -3,9 +3,8 @@ using System.IO;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FlexID.Calc;
 
-namespace FlexID.Viewer.ViewModels;
+namespace FlexID.ViewModels;
 
 public partial class ContourViewModel : ObservableObject
 {

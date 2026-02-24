@@ -1,4 +1,4 @@
-namespace FlexID.Calc;
+namespace FlexID;
 
 /// <summary>
 /// EIR用インプットファイルの読み取り処理。

@@ -5,7 +5,7 @@ using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 
-namespace ResultChecker;
+namespace FlexID;
 
 internal partial class Program
 {

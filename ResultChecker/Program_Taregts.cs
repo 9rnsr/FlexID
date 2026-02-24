@@ -1,6 +1,4 @@
-using FlexID.Calc;
-
-namespace ResultChecker;
+namespace FlexID;
 
 internal partial class Program
 {
