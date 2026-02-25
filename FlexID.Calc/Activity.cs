@@ -1,7 +1,5 @@
 namespace FlexID;
 
-#nullable disable
-
 /// <summary>
 /// あるコンパートメントにおける、計算時間メッシュ内の放射能を保持する。
 /// </summary>
@@ -30,35 +28,77 @@ public struct OrganActivity
 
 public class Activity
 {
+    private OrganActivity[] _iterPre;
+    private OrganActivity[] _iterNow;
+    private OrganActivity[] _calcPre;
+    private OrganActivity[] _calcNow;
+
     /// <summary>
     /// 前回の収束計算回における、コンパートメント毎の放射能。
     /// </summary>
-    public OrganActivity[] IterPre;
+    public OrganActivity[] IterPre => _iterPre;
 
     /// <summary>
     /// 今回の収束計算回における、コンパートメント毎の放射能。
     /// </summary>
-    public OrganActivity[] IterNow;
+    public OrganActivity[] IterNow => _iterNow;
 
     /// <summary>
     /// 前回の計算時間メッシュにおける、コンパートメント毎の放射能。
     /// </summary>
-    public OrganActivity[] CalcPre;
+    public OrganActivity[] CalcPre => _calcPre;
 
     /// <summary>
     /// 今回の計算時間メッシュにおける、コンパートメント毎の放射能。
     /// </summary>
-    public OrganActivity[] CalcNow;
+    public OrganActivity[] CalcNow => _calcNow;
 
     /// <summary>
     /// 今回の出力時間メッシュにおける、コンパートメント毎の放射能。
     /// </summary>
-    public OrganActivity[] OutNow;
+    public OrganActivity[] OutNow { get; }
 
     /// <summary>
     /// 摂取時からの、コンパートメント毎の積算放射能[Bq]。
     /// </summary>
-    public double[] OutTotalFromIntake;
+    public double[] OutTotalFromIntake { get; }
+
+    /// <summary>
+    /// inputから各臓器に初期値を振り分ける。
+    /// </summary>
+    /// <param name="data"></param>
+    public Activity(InputData data)
+    {
+        _calcPre = new OrganActivity[data.Organs.Count];
+        _calcNow = new OrganActivity[data.Organs.Count];
+
+        _iterPre = new OrganActivity[data.Organs.Count];
+        _iterNow = new OrganActivity[data.Organs.Count];
+
+        OutNow = new OrganActivity[data.Organs.Count];
+        OutTotalFromIntake = new double[data.Organs.Count];
+
+        // 全ての組織における計算結果をゼロクリアする。
+        foreach (var organ in data.Organs)
+        {
+            CalcPre[organ.Index].ini = 0;
+            CalcPre[organ.Index].ave = 0;
+            CalcPre[organ.Index].end = 0;
+            CalcPre[organ.Index].total = 0;
+
+            CalcNow[organ.Index].ini = 0;
+            CalcNow[organ.Index].ave = 0;
+            CalcNow[organ.Index].end = 0;
+            CalcNow[organ.Index].total = 0;
+
+            OutNow[organ.Index].ini = 0;
+            OutNow[organ.Index].ave = 0;
+            OutNow[organ.Index].end = 0;
+            OutNow[organ.Index].total = 0;
+
+            OutTotalFromIntake[organ.Index] = 0;
+        }
+    }
 
     /// <summary>
     /// 次の計算時間メッシュのための準備を行う。
@@ -68,7 +108,7 @@ public class Activity
     {
         // 最新の計算結果を格納したCalcNowを、
         // 前回計算時間メッシュの結果であるCalcPreへ移動する。
-        Swap(ref CalcNow, ref CalcPre);
+        Swap(ref _calcNow, ref _calcPre);
 
         // 収束計算における各コンパートメントの初期値としてゼロを設定する。
         foreach (var o in data.Organs)
@@ -111,7 +151,7 @@ public class Activity
 
         // IterNowに格納された今回収束計算の結果を、前回収束計算の結果として
         // IterPreが指すよう移動する。
-        Swap(ref IterNow, ref IterPre);
+        Swap(ref _iterNow, ref _iterPre);
 
         return next;
     }
@@ -123,7 +163,7 @@ public class Activity
     {
         // 最後の収束計算回の結果(IterNowからIterPreへ移動済み)を
         // CalcNowに移動する。
-        Swap(ref IterPre, ref CalcNow);
+        Swap(ref _iterPre, ref _calcNow);
     }
 
     /// <summary>

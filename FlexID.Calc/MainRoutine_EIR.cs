@@ -33,8 +33,6 @@ public class MainRoutine_EIR
     /// </summary>
     public string ExposureAge { get; set; }
 
-    private Activity Act { get; } = new Activity();
-
     private CalcOut CalcOut { get; set; }
 
     // EIR計算時の切替年齢
@@ -219,11 +217,13 @@ public class MainRoutine_EIR
         var resultNow = new double[31]; // 今回の出力時間メッシュにおける組織毎の計算結果。
         var resultPre = new double[31]; // 前回の出力時間メッシュにおける組織毎の計算結果。
 
+        var act = new Activity(dataLo);
+
         // inputの初期値を各コンパートメントに振り分ける。
-        SubRoutine.Init(Act, dataLo);
+        SubRoutine.Init(act, dataLo);
 
         // 初期配分された放射能をファイルに出力する。
-        CalcOut.ActivityOut(0.0, Act, 0);
+        CalcOut.ActivityOut(0.0, act, 0);
 
         // 出力時間メッシュを進める。
         outTimes.MoveNext();
@@ -287,7 +287,7 @@ public class MainRoutine_EIR
             int daysLo = dataLo.StartAge;
             int daysHi = dataHi.StartAge;
 
-            Act.NextCalc(dataLo);
+            act.NextCalc(dataLo);
 
             #region 1つの計算時間メッシュ内で収束計算を繰り返す
             for (calcIter = 1; calcIter <= iterMax; calcIter++)
@@ -302,24 +302,24 @@ public class MainRoutine_EIR
                     // 臓器機能ごとに異なる処理をする
                     if (func == OrganFunc.inp) // 入力
                     {
-                        SubRoutine.Input(organLo, Act);
+                        SubRoutine.Input(organLo, act);
                     }
                     else if (func == OrganFunc.acc) // 蓄積
                     {
-                        SubRoutine.Accumulation_EIR(organLo, organHi, Act, calcDeltaDay, ageDay, daysLo, daysHi);
+                        SubRoutine.Accumulation_EIR(organLo, organHi, act, calcDeltaDay, ageDay, daysLo, daysHi);
                     }
                     else if (func == OrganFunc.mix) // 混合
                     {
-                        SubRoutine.Mix(organLo, Act);
+                        SubRoutine.Mix(organLo, act);
                     }
                     else if (func == OrganFunc.exc) // 排泄
                     {
-                        SubRoutine.Excretion(organLo, Act, calcDeltaDay);
+                        SubRoutine.Excretion(organLo, act, calcDeltaDay);
                     }
                 }
 
                 // 前回との差が収束するまで計算を繰り返す
-                if (Act.NextIter(dataLo, convergence))
+                if (act.NextIter(dataLo, convergence))
                     continue;
 
                 // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
@@ -331,7 +331,7 @@ public class MainRoutine_EIR
             }
             #endregion
 
-            Act.FinishIter();
+            act.FinishIter();
 
             if (calcNowT <= outBefore24hourT)
             {
@@ -342,20 +342,20 @@ public class MainRoutine_EIR
 
                     // OIR互換排泄コンパートメントについて、
                     // 残留放射能をカウントすべき24時間より以前の結果を捨てる。
-                    Act.CalcNow[organ.Index].end = 0;
+                    act.CalcNow[organ.Index].end = 0;
                 }
             }
 
             // 時間メッシュ毎の放射能を足していく
             foreach (var organ in dataLo.Organs)
             {
-                var calcNowTotal = Act.CalcNow[organ.Index].total;
+                var calcNowTotal = act.CalcNow[organ.Index].total;
 
                 // 今回の出力時間メッシュにおける積算放射能。
-                Act.OutNow[organ.Index].total += calcNowTotal;
+                act.OutNow[organ.Index].total += calcNowTotal;
 
                 // 摂取時からの積算放射能。
-                Act.OutTotalFromIntake[organ.Index] += calcNowTotal;
+                act.OutTotalFromIntake[organ.Index] += calcNowTotal;
             }
 
             // S係数の補間計算を実施する。
@@ -368,7 +368,7 @@ public class MainRoutine_EIR
                     continue;
 
                 // コンパートメントの残留放射能がゼロの場合は何もしない。
-                var activity = Act.CalcNow[organ.Index].ave * calcDeltaT;
+                var activity = act.CalcNow[organ.Index].ave * calcDeltaT;
                 if (activity == 0)
                     continue;
 
@@ -420,13 +420,13 @@ public class MainRoutine_EIR
                 // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                 foreach (var organ in dataLo.Organs)
                 {
-                    Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
+                    act.OutNow[organ.Index].ave = act.OutNow[organ.Index].total / outDeltaDay;
 
-                    Act.OutNow[organ.Index].end = Act.CalcNow[organ.Index].end;
+                    act.OutNow[organ.Index].end = act.CalcNow[organ.Index].end;
                 }
 
                 // 放射能をファイルに出力する。
-                CalcOut.ActivityOut(outNowDay, Act, outIter, maskExcreta);
+                CalcOut.ActivityOut(outNowDay, act, outIter, maskExcreta);
 
                 // 線量をファイルに出力する。
                 CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre, Sex.Male);
@@ -450,12 +450,12 @@ public class MainRoutine_EIR
                             continue;
 
                         // OIR互換排泄コンパートメントについて、残留放射能をゼロクリアする。
-                        Act.CalcNow[organ.Index].end = 0;
+                        act.CalcNow[organ.Index].end = 0;
                     }
                 }
                 outBefore24hourT = outNowT - Delta24hourT;
 
-                Act.NextOut(dataLo);
+                act.NextOut(dataLo);
 
                 wholeBodyPre = wholeBodyNow;
                 Array.Copy(resultNow, resultPre, resultNow.Length);
