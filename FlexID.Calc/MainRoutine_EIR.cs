@@ -1,7 +1,5 @@
 namespace FlexID;
 
-#nullable disable
-
 /// <summary>
 /// 公衆の構成員による放射性核種の摂取(EIR:  Environmental Intakes of Radionuclides)における
 /// 残留放射能および預託線量の計算。
@@ -11,32 +9,32 @@ public class MainRoutine_EIR
     /// <summary>
     /// 出力ディレクトリ。
     /// </summary>
-    public string OutputDirectory { get; set; }
+    public required string OutputDirectory { get; init; }
 
     /// <summary>
     /// 出力ファイル名。
     /// </summary>
-    public string OutputFileName { get; set; }
+    public required string OutputFileName { get; init; }
 
     /// <summary>
     /// 計算時間メッシュファイルパス。
     /// </summary>
-    public string CalcTimeMeshPath { get; set; }
+    public required string CalcTimeMeshPath { get; init; }
 
     /// <summary>
     /// 出力メッシュファイルパス。
     /// </summary>
-    public string OutTimeMeshPath { get; set; }
+    public required string OutTimeMeshPath { get; init; }
 
     /// <summary>
     /// 預託期間。
     /// </summary>
-    public string CommitmentPeriod { get; set; }
+    public required string CommitmentPeriod { get; init; }
 
     /// <summary>
     /// 被ばく時の年齢。
     /// </summary>
-    public string ExposureAge { get; set; }
+    public required string ExposureAge { get; init; }
 
     // EIR計算時の切替年齢
     public const int Age3month = 100;       // 100日と考える
@@ -103,9 +101,9 @@ public class MainRoutine_EIR
             ExposureAge == /**/"Adult" ? ageAdultT :
             throw Program.Error("Please select the age at the time of exposure.");
 
-        InputData dataLoInterp = null;  // 年齢区間の切り替わり検出用。
-        double[][] sourcesSee = null;
-        double[][] organsSee = null;
+        InputData? dataLoInterp = null;  // 年齢区間の切り替わり検出用。
+        double[][]? sourcesSee = null;
+        double[][]? organsSee = null;
 
         // S係数の補間のための領域を確保する。
         void InterpolationAlloc()
@@ -186,7 +184,7 @@ public class MainRoutine_EIR
                         var sourceRegion = nuclide.SourceRegions[indexS];
 
                         // 各標的領域への補間されたS係数値を書き込むための配列を取得する。
-                        var see = sourcesSee[offsetS + indexS];
+                        var see = sourcesSee![offsetS + indexS];
 
                         var seeLo = tableLo[sourceRegion];
                         var seeHi = tableHi[sourceRegion];
@@ -389,7 +387,7 @@ public class MainRoutine_EIR
                     var targetWeight = targetWeights[indexT];
 
                     // S係数(補間あり)。
-                    var scoeff = organsSee[organ.Index][indexT];
+                    var scoeff = organsSee![organ.Index][indexT];
 
                     // 等価線量 = 放射能 * S係数
                     var equivalentDose = activity * scoeff;

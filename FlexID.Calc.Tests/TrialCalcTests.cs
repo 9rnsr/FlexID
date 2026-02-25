@@ -33,12 +33,14 @@ public class TrialCalcTests
 
         var data = new InputDataReader_OIR(inputPath).Read();
 
-        var main = new MainRoutine_OIR();
-        main.OutputDirectory  /**/= resultDir;
-        main.OutputFileName   /**/= target;
-        main.CalcTimeMeshPath /**/= cTimeMeshFile;
-        main.OutTimeMeshPath  /**/= oTimeMeshFile;
-        main.CommitmentPeriod /**/= commitmentPeriod;
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= target,
+            CalcTimeMeshPath /**/= cTimeMeshFile,
+            OutTimeMeshPath  /**/= oTimeMeshFile,
+            CommitmentPeriod /**/= commitmentPeriod,
+        };
 
         main.Main(data);
 
@@ -85,13 +87,15 @@ public class TrialCalcTests
 
         var dataList = new InputDataReader_EIR(inputPath).Read();
 
-        var main = new MainRoutine_EIR();
-        main.OutputDirectory  /**/= resultDir;
-        main.OutputFileName   /**/= target;
-        main.CalcTimeMeshPath /**/= cTimeMeshFile;
-        main.OutTimeMeshPath  /**/= oTimeMeshFile;
-        main.CommitmentPeriod /**/= commitmentPeriod;
-        main.ExposureAge      /**/= exposureAge;
+        var main = new MainRoutine_EIR()
+        {
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= target,
+            CalcTimeMeshPath /**/= cTimeMeshFile,
+            OutTimeMeshPath  /**/= oTimeMeshFile,
+            CommitmentPeriod /**/= commitmentPeriod,
+            ExposureAge      /**/= exposureAge,
+        };
 
         main.Main(dataList);
 

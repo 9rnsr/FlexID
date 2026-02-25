@@ -2,8 +2,6 @@ using System.Text;
 
 namespace FlexID;
 
-#nullable disable
-
 /// <summary>
 /// 放射性核種の職業上の摂取(OIR: Occupational Intakes of Radionuclides)における
 /// 残留放射能および預託線量の計算。
@@ -13,27 +11,27 @@ public class MainRoutine_OIR
     /// <summary>
     /// 出力ディレクトリ。
     /// </summary>
-    public string OutputDirectory { get; set; }
+    public required string OutputDirectory { get; init; }
 
     /// <summary>
     /// 出力ファイル名。
     /// </summary>
-    public string OutputFileName { get; set; }
+    public required string OutputFileName { get; init; }
 
     /// <summary>
     /// 計算時間メッシュファイルパス。
     /// </summary>
-    public string CalcTimeMeshPath { get; set; }
+    public required string CalcTimeMeshPath { get; init; }
 
     /// <summary>
     /// 出力メッシュファイルパス。
     /// </summary>
-    public string OutTimeMeshPath { get; set; }
+    public required string OutTimeMeshPath { get; init; }
 
     /// <summary>
     /// 預託期間。
     /// </summary>
-    public string CommitmentPeriod { get; set; }
+    public required string CommitmentPeriod { get; init; }
 
     public void Main(InputData data)
     {
@@ -170,7 +168,7 @@ public class MainRoutine_OIR
         var spacing = new char[Math.Max(nuclideLength, nameLength)];
         spacing.AsSpan().Fill(' ');
 
-        NuclideData prevNuclide = null;
+        NuclideData? prevNuclide = null;
         foreach (var nuclide in data.Nuclides)
         {
             var organs = data.Organs.Where(o => o.Nuclide == nuclide);
@@ -215,13 +213,13 @@ public class MainRoutine_OIR
         writer.WriteLine();
         writer.WriteLine("Transfers:");
 
-        var transfers = new List<(int nuclideIndex, string from, string to, string coeff)>();
+        var transfers = new List<(int nuclideIndex, string from, string to, string? coeff)>();
         var fromLength = 0;
         var toLength = 0;
         var coeffAlignment = 0;
         foreach (var nuclide in data.Nuclides)
         {
-            void Add(Organ organFrom, Organ organTo, string coeff)
+            void Add(Organ organFrom, Organ organTo, string? coeff)
             {
                 var from = $"{organFrom.Nuclide.Name}/{organFrom.Name}";
                 var to = $"{organTo.Nuclide.Name}/{organTo.Name}";

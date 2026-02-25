@@ -201,6 +201,7 @@ public partial class InputOIRViewModel : ObservableObject
         var outputPath       /**/= OutputFilePath;
         var calcTimeMeshPath /**/= CalcTimeMeshFilePath;
         var outTimeMeshPath  /**/= OutTimeMeshFilePath;
+        var commitmentPeriod /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
 
         if (!Path.IsPathFullyQualified(outputPath))
             outputPath = Path.Combine(AppResource.ProcessDir, outputPath);
@@ -212,12 +213,14 @@ public partial class InputOIRViewModel : ObservableObject
         var outputDir = Path.GetDirectoryName(outputPath);
         var outputFile = Path.GetFileName(outputPath);
 
-        var main = new MainRoutine_OIR();
-        main.OutputDirectory  /**/= outputDir;
-        main.OutputFileName   /**/= outputFile;
-        main.CalcTimeMeshPath /**/= calcTimeMeshPath;
-        main.OutTimeMeshPath  /**/= outTimeMeshPath;
-        main.CommitmentPeriod /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory  /**/= outputDir,
+            OutputFileName   /**/= outputFile,
+            CalcTimeMeshPath /**/= calcTimeMeshPath,
+            OutTimeMeshPath  /**/= outTimeMeshPath,
+            CommitmentPeriod /**/= commitmentPeriod,
+        };
 
         await Task.Run(() => main.Main(data));
 

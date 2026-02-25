@@ -297,12 +297,14 @@ internal partial class Program
         data.OutputRetention = true;
         data.OutputCumulative = false;
 
-        var main = new MainRoutine_OIR();
-        main.OutputDirectory  /**/= outputDir;
-        main.OutputFileName   /**/= target.Name;
-        main.CalcTimeMeshPath /**/= cTimeMeshFile;
-        main.OutTimeMeshPath  /**/= oTimeMeshFile;
-        main.CommitmentPeriod /**/= commitmentPeriod;
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory  /**/= outputDir,
+            OutputFileName   /**/= target.Name,
+            CalcTimeMeshPath /**/= cTimeMeshFile,
+            OutTimeMeshPath  /**/= oTimeMeshFile,
+            CommitmentPeriod /**/= commitmentPeriod,
+        };
 
         main.Main(data);
     }
