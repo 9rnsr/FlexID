@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.Xaml.Interactivity;
+using Windows.Foundation;
 using Windows.System;
 
 namespace FlexID.Views.Behaviors;
@@ -21,6 +22,8 @@ public partial class CheckSearchItemsBehavior : Behavior<ListViewBase>
         _resetNuclideInputTimer.Interval = new TimeSpan(0, 0, 1);
         _resetNuclideInputTimer.Tick += (o, e) => StopResetTimeout();
     }
+
+    public event TypedEventHandler<object, RoutedEventArgs>? DeleteItems;
 
     // 文字入力でマッチする核種名に選択項目を移動する機能。
     private readonly DispatcherTimer _resetNuclideInputTimer;
@@ -181,6 +184,31 @@ public partial class CheckSearchItemsBehavior : Behavior<ListViewBase>
             {
                 itemVM.IsChecked = !currentChecked;
             }
+
+            e.Handled = true;
+            return;
+        }
+        if (e.Key == VirtualKey.Delete)
+        {
+            var deleteItems = DeleteItems;
+            if (deleteItems is null)
+                return;
+
+            // 選択項目の削除を実施する。
+            var lv = AssociatedObject ?? (ListViewBase)sender;
+
+            var selectedItems = lv.SelectedItems;
+            if (selectedItems.Count == 0)
+                return;
+
+            // キーボードフォーカスがSelectorItem配下にある場合のみを処理する。
+            var focused =
+                (FocusManager.GetFocusedElement(lv.XamlRoot) as DependencyObject)
+                ?.FindAscendantOrSelf<FrameworkElement>(e => e is SelectorItem || ReferenceEquals(e, lv));
+            if (focused is not SelectorItem)
+                return;
+
+            deleteItems?.Invoke(this, new RoutedEventArgs());
 
             e.Handled = true;
             return;
