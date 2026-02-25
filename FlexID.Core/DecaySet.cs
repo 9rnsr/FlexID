@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace FlexID;
 
-#nullable disable
+//#nullable disable
 
 /// <summary>
 /// インプットで設定されてる壊変経路の集合から、
@@ -153,11 +153,10 @@ internal class DecaySet
     /// <param name="coeff"></param>
     /// <remarks>organFrom + organTo + coeffの組み合わせは高々1回だけ与えられることを前提としている。</remarks>
     /// <returns></returns>
-    public Organ AddDecayPath(int lineNum, Organ organFrom, Organ organTo, decimal? coeff)
+    public Organ? AddDecayPath(int lineNum, Organ organFrom, Organ organTo, decimal? coeff)
     {
         var nuclideFrom = organFrom.Nuclide;
         var nuclideTo = organTo.Nuclide;
-        var hasCoeff = coeff is not null;
 
         // 分岐比が不明な壊変経路は定義できない。
         if (!GetProgenies(nuclideFrom).Contains(nuclideTo))
@@ -172,7 +171,7 @@ internal class DecaySet
         {
             targetChain = chainsFrom[0];
         }
-        else if (!hasCoeff &&
+        else if (coeff is null &&
             JointChains.TryGetValue(organTo, out chainsFrom) && chainsFrom.Count == 1 &&
             GetAncestors(nuclideTo).All(ancestor => chainsFrom[0][ancestor].Organ is null))
         {
@@ -202,7 +201,7 @@ internal class DecaySet
         {
             var decayTo = targetChain[nuclideTo];
             bool consistentPath;
-            if (hasCoeff)
+            if (coeff is not null)
             {
                 organDecay = decayTo.Organ;
 
@@ -286,12 +285,12 @@ internal class DecaySet
             {
                 // 今回と前回の矛盾する2つの設定経路について、
                 // nuclideFrom位置からnuclideTo位置までを表示する。
-                var (prevTo, prevCoeff) = AfterDecayPath.GetValueOrDefault(decayTo.Organ, (decayTo.Organ, null));
+                var (prevTo, prevCoeff) = AfterDecayPath.GetValueOrDefault(decayTo.Organ!, (decayTo.Organ!, null));
                 var prev = $"'{prevTo.ToString()}'";
                 if (prevCoeff is decimal v) prev += $" (with coeff. {v})";
 
                 var here = $"'{organTo.ToString()}'";
-                if (hasCoeff) here += $" (with coeff. {coeff.Value})";
+                if (coeff is not null) here += $" (with coeff. {coeff.Value})";
 
                 Errors.AddError(lineNum, "Decay paths conflict each other:");
                 Errors.AddError($"    the previous: '{organFrom}' --> {prev} at Line {decayTo.LineNum}");
@@ -383,7 +382,7 @@ internal class DecaySet
                 }
 
                 // progeny位置を共有する崩壊系列にchainsInflowを追加する。
-                var chainsProgeny = JointChains[decayTo.Organ];
+                var chainsProgeny = JointChains[decayTo.Organ!];
                 foreach (var chain in chainsInflow)
                 {
                     if (!chainsProgeny.Contains(chain))
@@ -398,7 +397,7 @@ internal class DecaySet
         // chainsToの全ての崩壊系列は、nuclideTo位置でorganDecayコンパートメントを共有している。
         Debug.Assert(chainsTo.All(chain => chain[nuclideTo].Organ == organDecay));
 
-        return hasCoeff ? organDecay : null;
+        return coeff is not null ? organDecay : null;
     }
 
     /// <summary>

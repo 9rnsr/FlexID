@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace FlexID;
 
-#nullable disable
+//#nullable disable
 
 /// <summary>
 /// インデックスデータを表現する。
@@ -12,45 +12,45 @@ public class IndexData
     /// <summary>
     /// 親核種。
     /// </summary>
-    public string Nuclide { get; set; }
+    public required string Nuclide { get; init; }
 
     /// <summary>
     /// 半減期(単位付き)。
     /// </summary>
-    public string HalfLife { get; set; }
+    public required string HalfLife { get; init; }
 
     /// <summary>
     /// 半減期[day]。
     /// </summary>
-    public decimal HalfLifeDay { get; set; }
+    public decimal HalfLifeDay { get; init; }
 
     /// <summary>
     /// 崩壊定数λ[/day]。(＝ ln(2) / 半減期[day])
     /// </summary>
     public double Lambda => Math.Log(2) / (double)HalfLifeDay;
 
-    public string DecayModes { get; set; }
+    public required string DecayModes { get; init; }
 
-    public int LocationRAD { get; set; }
-    public int LocationBET { get; set; }
-    public int LocationACK { get; set; }
-    public int LocationNSF { get; set; }
+    public int LocationRAD { get; init; }
+    public int LocationBET { get; init; }
+    public int LocationACK { get; init; }
+    public int LocationNSF { get; init; }
 
-    public IndexDaughterData[] Daughters { get; set; }
+    public required IndexDaughterData[] Daughters { get; init; }
 
-    public decimal EnergyAlpha { get; internal set; }
-    public decimal EnergyElectron { get; internal set; }
-    public decimal EnergyPhoton { get; internal set; }
+    public decimal EnergyAlpha { get; init; }
+    public decimal EnergyElectron { get; init; }
+    public decimal EnergyPhoton { get; init; }
 
-    public int Number1 { get; internal set; }
-    public int Number2 { get; internal set; }
-    public int Number3 { get; internal set; }
-    public int Number4 { get; internal set; }
-    public int Number5 { get; internal set; }
+    public int Number1 { get; init; }
+    public int Number2 { get; init; }
+    public int Number3 { get; init; }
+    public int Number4 { get; init; }
+    public int Number5 { get; init; }
 
-    public decimal AMU { get; internal set; }
-    public decimal AirKerma { get; internal set; }
-    public decimal PointSourceAirKerma { get; internal set; }
+    public decimal AMU { get; init; }
+    public decimal AirKerma { get; init; }
+    public decimal PointSourceAirKerma { get; init; }
 }
 
 /// <summary>
@@ -85,7 +85,7 @@ public class IndexDataReader
     {
         using var r = new StreamReader(Path.Combine(AppResource.BaseDir, IndexFilePath));
 
-        string line;
+        string? line;
         line = r.ReadLine();
         //var first = int.Parse(line.Substring(0, 4));
         //var last = int.Parse(line.Substring(4, 8));
