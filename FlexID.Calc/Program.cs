@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace FlexID;
 
+#nullable disable
+
 public class Program
 {
     public class CommandLine
@@ -59,7 +61,6 @@ public class Program
         if (args.Length == 0)
             return usage();
 
-        var main = new MainRoutine_OIR();
         try
         {
             // パラメータファイルが2つ以上の時エラー
@@ -71,10 +72,17 @@ public class Program
 
             var data = new InputDataReader_OIR(param.Input).Read();
 
-            main.OutputPath       /**/= param.Output;
-            main.CalcTimeMeshPath /**/= param.CalcTimeMesh;
-            main.OutTimeMeshPath  /**/= param.OutTimeMesh;
-            main.CommitmentPeriod /**/= param.CommitmentPeriod;
+            var outputDir = Path.GetDirectoryName(param.Output);
+            var outputFile = Path.GetFileName(param.Output);
+
+            var main = new MainRoutine_OIR()
+            {
+                OutputDirectory  /**/= outputDir,
+                OutputFileName   /**/= outputFile,
+                CalcTimeMeshPath /**/= param.CalcTimeMesh,
+                OutTimeMeshPath  /**/= param.OutTimeMesh,
+                CommitmentPeriod /**/= param.CommitmentPeriod,
+            };
 
             main.Main(data);
 

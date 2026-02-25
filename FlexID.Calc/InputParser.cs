@@ -24,8 +24,8 @@ public class InputParser<T>
 
     public InputParser(Visitor<T> visitor)
     {
-        Parser<string> OrEmpty<X>(Parser<X> parser) =>
-            parser.Optional().Select(x => x.IsDefined ? x.Get().ToString() : "");
+        static Parser<string> OrEmpty<X>(Parser<X> parser) =>
+            parser.Optional().Select(x => x.IsDefined ? x.Get()!.ToString()! : "");
 
         Identifier =
             from first in Letter

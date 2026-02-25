@@ -283,8 +283,6 @@ internal partial class Program
     {
         var nuclide = target.Nuclide;
 
-        var outputPath = Path.Combine(outputDir, target.Name);
-
         // 計算時間メッシュはFlexID.Calcに付属のものを使用する。
         var cTimeMeshFile = @"lib\TimeMesh\time.dat";
 
@@ -299,11 +297,14 @@ internal partial class Program
         data.OutputRetention = true;
         data.OutputCumulative = false;
 
-        var main = new MainRoutine_OIR();
-        main.OutputPath       /**/= outputPath;
-        main.CalcTimeMeshPath /**/= cTimeMeshFile;
-        main.OutTimeMeshPath  /**/= oTimeMeshFile;
-        main.CommitmentPeriod /**/= commitmentPeriod;
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory  /**/= outputDir,
+            OutputFileName   /**/= target.Name,
+            CalcTimeMeshPath /**/= cTimeMeshFile,
+            OutTimeMeshPath  /**/= oTimeMeshFile,
+            CommitmentPeriod /**/= commitmentPeriod,
+        };
 
         main.Main(data);
     }

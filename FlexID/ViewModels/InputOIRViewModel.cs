@@ -165,6 +165,8 @@ public partial class InputOIRViewModel : ObservableObject
             // 各パラメータの入力確認
             if (OutputFilePath == "")
                 throw new Exception("Please enter the Output File Path.");
+            if (string.IsNullOrWhiteSpace(Path.GetFileName(OutputFilePath)))
+                throw Program.Error("Please enter file name in the Output File Path");
             if (SelectedNuclide is null)
                 throw new Exception("Please select Nuclide.");
             if (SelectedInput is null)
@@ -199,6 +201,7 @@ public partial class InputOIRViewModel : ObservableObject
         var outputPath       /**/= OutputFilePath;
         var calcTimeMeshPath /**/= CalcTimeMeshFilePath;
         var outTimeMeshPath  /**/= OutTimeMeshFilePath;
+        var commitmentPeriod /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
 
         if (!Path.IsPathFullyQualified(outputPath))
             outputPath = Path.Combine(AppResource.ProcessDir, outputPath);
@@ -207,16 +210,22 @@ public partial class InputOIRViewModel : ObservableObject
         if (!Path.IsPathFullyQualified(outTimeMeshPath))
             outTimeMeshPath = Path.Combine(AppResource.BaseDir, outTimeMeshPath);
 
-        var main = new MainRoutine_OIR();
-        main.OutputPath       /**/= outputPath;
-        main.CalcTimeMeshPath /**/= calcTimeMeshPath;
-        main.OutTimeMeshPath  /**/= outTimeMeshPath;
-        main.CommitmentPeriod /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
+        var outputDir = Path.GetDirectoryName(outputPath);
+        var outputFile = Path.GetFileName(outputPath);
+
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory  /**/= outputDir,
+            OutputFileName   /**/= outputFile,
+            CalcTimeMeshPath /**/= calcTimeMeshPath,
+            OutTimeMeshPath  /**/= outTimeMeshPath,
+            CommitmentPeriod /**/= commitmentPeriod,
+        };
 
         await Task.Run(() => main.Main(data));
 
         // ファイルパスを引数にして出力GUI実行
-        var p = Process.Start("FlexID.Viewer.exe", main.OutputPath + "_Retention.out");
+        var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
         p.WaitForExit();
     }
 }

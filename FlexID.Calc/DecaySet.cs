@@ -2,6 +2,8 @@ using System.Diagnostics;
 
 namespace FlexID;
 
+#nullable disable
+
 /// <summary>
 /// インプットで設定されてる壊変経路の集合から、
 /// 暗黙に構成される崩壊系列の集合を計算する。またこれらの中で

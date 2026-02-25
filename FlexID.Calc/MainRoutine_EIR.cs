@@ -7,33 +7,34 @@ namespace FlexID;
 public class MainRoutine_EIR
 {
     /// <summary>
-    /// 出力ファイルパス。
+    /// 出力ディレクトリ。
     /// </summary>
-    public string OutputPath { get; set; }
+    public required string OutputDirectory { get; init; }
+
+    /// <summary>
+    /// 出力ファイル名。
+    /// </summary>
+    public required string OutputFileName { get; init; }
 
     /// <summary>
     /// 計算時間メッシュファイルパス。
     /// </summary>
-    public string CalcTimeMeshPath { get; set; }
+    public required string CalcTimeMeshPath { get; init; }
 
     /// <summary>
     /// 出力メッシュファイルパス。
     /// </summary>
-    public string OutTimeMeshPath { get; set; }
+    public required string OutTimeMeshPath { get; init; }
 
     /// <summary>
     /// 預託期間。
     /// </summary>
-    public string CommitmentPeriod { get; set; }
+    public required string CommitmentPeriod { get; init; }
 
     /// <summary>
     /// 被ばく時の年齢。
     /// </summary>
-    public string ExposureAge { get; set; }
-
-    private Activity Act { get; } = new Activity();
-
-    private CalcOut CalcOut { get; set; }
+    public required string ExposureAge { get; init; }
 
     // EIR計算時の切替年齢
     public const int Age3month = 100;       // 100日と考える
@@ -45,24 +46,31 @@ public class MainRoutine_EIR
 
     public void Main(List<InputData> dataList)
     {
+        if (string.IsNullOrWhiteSpace(OutputDirectory))
+            throw Program.Error("Output directory is not specified");
+        if (string.IsNullOrWhiteSpace(OutputFileName))
+            throw Program.Error("Output file name is not specified");
+
         var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
         var outTimeMesh = new TimeMesh(OutTimeMeshPath);
         if (!calcTimeMesh.Cover(outTimeMesh))
             throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-        using (CalcOut = new CalcOut(dataList[0], OutputPath))
+        Directory.CreateDirectory(OutputDirectory);
+
+        using (var calcOut = new CalcOut(dataList[0], OutputDirectory, OutputFileName))
         {
             // コンパートメントの名称をヘッダ―として出力。
-            CalcOut.ActivityHeader();
+            calcOut.ActivityHeader();
 
             // 標的領域の名称をヘッダーとして出力。
-            CalcOut.CommitmentHeader();
+            calcOut.CommitmentHeader();
 
-            MainCalc(calcTimeMesh, outTimeMesh, dataList);
+            MainCalc(calcOut, calcTimeMesh, outTimeMesh, dataList);
         }
     }
 
-    private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, List<InputData> dataList)
+    private void MainCalc(CalcOut calcOut, TimeMesh calcTimeMesh, TimeMesh outTimeMesh, List<InputData> dataList)
     {
         InputData dataLo;
         InputData dataHi;
@@ -93,9 +101,9 @@ public class MainRoutine_EIR
             ExposureAge == /**/"Adult" ? ageAdultT :
             throw Program.Error("Please select the age at the time of exposure.");
 
-        InputData dataLoInterp = null;  // 年齢区間の切り替わり検出用。
-        double[][] sourcesSee = null;
-        double[][] organsSee = null;
+        InputData? dataLoInterp = null;  // 年齢区間の切り替わり検出用。
+        double[][]? sourcesSee = null;
+        double[][]? organsSee = null;
 
         // S係数の補間のための領域を確保する。
         void InterpolationAlloc()
@@ -176,7 +184,7 @@ public class MainRoutine_EIR
                         var sourceRegion = nuclide.SourceRegions[indexS];
 
                         // 各標的領域への補間されたS係数値を書き込むための配列を取得する。
-                        var see = sourcesSee[offsetS + indexS];
+                        var see = sourcesSee![offsetS + indexS];
 
                         var seeLo = tableLo[sourceRegion];
                         var seeHi = tableHi[sourceRegion];
@@ -217,11 +225,13 @@ public class MainRoutine_EIR
         var resultNow = new double[31]; // 今回の出力時間メッシュにおける組織毎の計算結果。
         var resultPre = new double[31]; // 前回の出力時間メッシュにおける組織毎の計算結果。
 
+        var act = new Activity(dataLo);
+
         // inputの初期値を各コンパートメントに振り分ける。
-        SubRoutine.Init(Act, dataLo);
+        SubRoutine.Init(act, dataLo);
 
         // 初期配分された放射能をファイルに出力する。
-        CalcOut.ActivityOut(0.0, Act, 0);
+        calcOut.ActivityOut(0.0, act, 0);
 
         // 出力時間メッシュを進める。
         outTimes.MoveNext();
@@ -285,7 +295,7 @@ public class MainRoutine_EIR
             int daysLo = dataLo.StartAge;
             int daysHi = dataHi.StartAge;
 
-            Act.NextCalc(dataLo);
+            act.NextCalc(dataLo);
 
             #region 1つの計算時間メッシュ内で収束計算を繰り返す
             for (calcIter = 1; calcIter <= iterMax; calcIter++)
@@ -300,24 +310,24 @@ public class MainRoutine_EIR
                     // 臓器機能ごとに異なる処理をする
                     if (func == OrganFunc.inp) // 入力
                     {
-                        SubRoutine.Input(organLo, Act);
+                        SubRoutine.Input(organLo, act);
                     }
                     else if (func == OrganFunc.acc) // 蓄積
                     {
-                        SubRoutine.Accumulation_EIR(organLo, organHi, Act, calcDeltaDay, ageDay, daysLo, daysHi);
+                        SubRoutine.Accumulation_EIR(organLo, organHi, act, calcDeltaDay, ageDay, daysLo, daysHi);
                     }
                     else if (func == OrganFunc.mix) // 混合
                     {
-                        SubRoutine.Mix(organLo, Act);
+                        SubRoutine.Mix(organLo, act);
                     }
                     else if (func == OrganFunc.exc) // 排泄
                     {
-                        SubRoutine.Excretion(organLo, Act, calcDeltaDay);
+                        SubRoutine.Excretion(organLo, act, calcDeltaDay);
                     }
                 }
 
                 // 前回との差が収束するまで計算を繰り返す
-                if (Act.NextIter(dataLo, convergence))
+                if (act.NextIter(dataLo, convergence))
                     continue;
 
                 // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
@@ -329,7 +339,7 @@ public class MainRoutine_EIR
             }
             #endregion
 
-            Act.FinishIter();
+            act.FinishIter();
 
             if (calcNowT <= outBefore24hourT)
             {
@@ -340,20 +350,20 @@ public class MainRoutine_EIR
 
                     // OIR互換排泄コンパートメントについて、
                     // 残留放射能をカウントすべき24時間より以前の結果を捨てる。
-                    Act.CalcNow[organ.Index].end = 0;
+                    act.CalcNow[organ.Index].end = 0;
                 }
             }
 
             // 時間メッシュ毎の放射能を足していく
             foreach (var organ in dataLo.Organs)
             {
-                var calcNowTotal = Act.CalcNow[organ.Index].total;
+                var calcNowTotal = act.CalcNow[organ.Index].total;
 
                 // 今回の出力時間メッシュにおける積算放射能。
-                Act.OutNow[organ.Index].total += calcNowTotal;
+                act.OutNow[organ.Index].total += calcNowTotal;
 
                 // 摂取時からの積算放射能。
-                Act.OutTotalFromIntake[organ.Index] += calcNowTotal;
+                act.OutTotalFromIntake[organ.Index] += calcNowTotal;
             }
 
             // S係数の補間計算を実施する。
@@ -366,7 +376,7 @@ public class MainRoutine_EIR
                     continue;
 
                 // コンパートメントの残留放射能がゼロの場合は何もしない。
-                var activity = Act.CalcNow[organ.Index].ave * calcDeltaT;
+                var activity = act.CalcNow[organ.Index].ave * calcDeltaT;
                 if (activity == 0)
                     continue;
 
@@ -377,7 +387,7 @@ public class MainRoutine_EIR
                     var targetWeight = targetWeights[indexT];
 
                     // S係数(補間あり)。
-                    var scoeff = organsSee[organ.Index][indexT];
+                    var scoeff = organsSee![organ.Index][indexT];
 
                     // 等価線量 = 放射能 * S係数
                     var equivalentDose = activity * scoeff;
@@ -418,16 +428,16 @@ public class MainRoutine_EIR
                 // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
                 foreach (var organ in dataLo.Organs)
                 {
-                    Act.OutNow[organ.Index].ave = Act.OutNow[organ.Index].total / outDeltaDay;
+                    act.OutNow[organ.Index].ave = act.OutNow[organ.Index].total / outDeltaDay;
 
-                    Act.OutNow[organ.Index].end = Act.CalcNow[organ.Index].end;
+                    act.OutNow[organ.Index].end = act.CalcNow[organ.Index].end;
                 }
 
                 // 放射能をファイルに出力する。
-                CalcOut.ActivityOut(outNowDay, Act, outIter, maskExcreta);
+                calcOut.ActivityOut(outNowDay, act, outIter, maskExcreta);
 
                 // 線量をファイルに出力する。
-                CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre, Sex.Male);
+                calcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre, Sex.Male);
 
                 // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                 if (!outTimes.MoveNext())
@@ -448,12 +458,12 @@ public class MainRoutine_EIR
                             continue;
 
                         // OIR互換排泄コンパートメントについて、残留放射能をゼロクリアする。
-                        Act.CalcNow[organ.Index].end = 0;
+                        act.CalcNow[organ.Index].end = 0;
                     }
                 }
                 outBefore24hourT = outNowT - Delta24hourT;
 
-                Act.NextOut(dataLo);
+                act.NextOut(dataLo);
 
                 wholeBodyPre = wholeBodyNow;
                 Array.Copy(resultNow, resultPre, resultNow.Length);
@@ -461,6 +471,6 @@ public class MainRoutine_EIR
         }
 
         // 計算完了の出力を行う。
-        CalcOut.FinishOut();
+        calcOut.FinishOut();
     }
 }

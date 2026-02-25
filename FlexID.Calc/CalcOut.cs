@@ -45,20 +45,18 @@ class CalcOut : IDisposable
     /// コンストラクタ。
     /// </summary>
     /// <param name="data"></param>
-    /// <param name="outputPath"></param>
-    public CalcOut(InputData data, string outputPath)
+    /// <param name="outputDir"></param>
+    /// <param name="outputName"></param>
+    public CalcOut(InputData data, string outputDir, string outputName)
     {
         this.data = data;
 
         IsMaleOnly = data.StartAge != 0;
 
-        var outputDir = Path.GetDirectoryName(outputPath);
-        Directory.CreateDirectory(outputDir);
-
-        DosePath = outputPath + "_Dose.out";
-        DoseRatePath = outputPath + "_DoseRate.out";
-        RetentionPath = outputPath + "_Retention.out";
-        CumulativePath = outputPath + "_Cumulative.out";
+        DosePath = Path.Combine(outputDir, outputName + "_Dose.out");
+        DoseRatePath = Path.Combine(outputDir, outputName + "_DoseRate.out");
+        RetentionPath = Path.Combine(outputDir, outputName + "_Retention.out");
+        CumulativePath = Path.Combine(outputDir, outputName + "_Cumulative.out");
 
         // 預託線量の出力ファイルを用意する。
         wDoseM = data.OutputDose ? CreateWriter(DosePath) : NullWriter;
@@ -70,7 +68,7 @@ class CalcOut : IDisposable
         wsRete = (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count)).ToArray();
         wsCumu = (data.OutputCumulative ? CreateWriters(CumulativePath) : NullWriters(data.Nuclides.Count)).ToArray();
 
-        TextWriter CreateWriter(string path, string suffix = null)
+        TextWriter CreateWriter(string path, string? suffix = null)
         {
             if (suffix != null)
             {

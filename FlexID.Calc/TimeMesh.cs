@@ -115,7 +115,7 @@ public class TimeMesh
 
         using (var reader = new StreamReader(file))
         {
-            string ReadLine()
+            string? ReadLine()
             {
                 while (true)
                 {

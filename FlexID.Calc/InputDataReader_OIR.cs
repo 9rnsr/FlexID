@@ -22,13 +22,13 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private readonly InputEvaluator evaluator;
 
-    private string inputTitle;
+    private string? inputTitle;
 
-    private Dictionary<string, string> inputParameters;
+    private Dictionary<string, string>? inputParameters;
 
     private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
 
-    private List<NuclideData> nuclides;
+    private List<NuclideData>? nuclides;
 
     private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
 
@@ -87,7 +87,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         return ln.AsSpan(1, ln.Length - 2).Trim();
     }
 
-    private string SkipUntilNextSection()
+    private string? SkipUntilNextSection()
     {
         while (true)
         {
@@ -129,13 +129,18 @@ public class InputDataReader_OIR : InputDataReaderBase
                 break;
         }
 
+        if (inputTitle is null)
+            errors.AddError(LineNum, "Missing [title] section.");
+        if (nuclides is null)
+            errors.AddError(LineNum, "Missing [nuclide] section.");
+
         // インプットの構文に従って読み取りができていることを確定する。
         // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
         errors.RaiseIfAny();
 
         var data = new InputData();
-        data.Title = inputTitle;
-        data.Nuclides.AddRange(nuclides);
+        data.Title = inputTitle!;
+        data.Nuclides.AddRange(nuclides!);
 
         return data;
     }
@@ -264,7 +269,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// タイトルの定義セクションを読み込む。
     /// </summary>
     /// <returns>セクションの次行。</returns>
-    private string GetTitle()
+    private string? GetTitle()
     {
         if (inputTitle != null)
         {
@@ -298,7 +303,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// </summary>
     /// <param name="nuc"></param>
     /// <returns>セクションの次行。</returns>
-    private string GetParameters(string nuc)
+    private string? GetParameters(string nuc)
     {
         Dictionary<string, string> parameters;
         string[] parameterNames;
@@ -359,7 +364,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// 核種の定義セクションを読み込む。
     /// </summary>
     /// <returns>セクションの次行。</returns>
-    private string GetNuclides()
+    private string? GetNuclides()
     {
         if (nuclides != null)
         {
@@ -375,7 +380,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
         var autoMode = default(bool?);
 
-        Dictionary<string, IndexData> indexTable = null;
+        Dictionary<string, IndexData>? indexTable = null;
         var branchTable = new Dictionary<NuclideData, (string Daughter, decimal Fraction)[]>();
         var nuclideLines = new Dictionary<NuclideData, int>();
 
@@ -523,7 +528,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             var lineNum = nuclideLines[nuclide];
             var branches = entry.Value;
 
-            NuclideData GetNuclide(string nuc)
+            NuclideData? GetNuclide(string nuc)
                 => nuclides.FirstOrDefault(n => n.Name == nuc);
 
             if (autoMode == true)
@@ -599,7 +604,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// </summary>
     /// <param name="nuc"></param>
     /// <returns>セクションの次行。</returns>
-    private string GetCompartments(string nuc)
+    private string? GetCompartments(string nuc)
     {
         if (nuclideOrgans.TryGetValue(nuc, out var organs))
         {
@@ -677,7 +682,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="nuc"></param>
     /// <returns>セクションの次行。</returns>
     /// <param name="line"></param>
-    private string GetTransfers(string nuc)
+    private string? GetTransfers(string nuc)
     {
         if (nuclideTransfers.TryGetValue(nuc, out var transfers))
         {
@@ -739,9 +744,9 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="data"></param>
     private void DefineCompartments(InputData data)
     {
-        Organ input = null;
+        Organ? input = null;
 
-        foreach (var nuclide in nuclides)
+        foreach (var nuclide in nuclides!)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
@@ -891,7 +896,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         var decaySet = new DecaySet(data.Nuclides, errors);
 
-        foreach (var nuclide in nuclides)
+        foreach (var nuclide in nuclides!)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
@@ -968,8 +973,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
 
                 // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
-                var funcFrom = organFrom.Func;
-                var funcTo = organTo.Func;
+                var funcFrom = organFrom!.Func;
+                var funcTo = organTo!.Func;
                 var isDecayPath = nuclideFrom != nuclideTo;
                 var hasCoeff = coeff != null;
 

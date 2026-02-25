@@ -2,6 +2,8 @@ using System.Globalization;
 
 namespace FlexID;
 
+#nullable disable
+
 /// <summary>
 /// インデックスデータを表現する。
 /// </summary>

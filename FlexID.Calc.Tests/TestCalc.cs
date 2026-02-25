@@ -128,11 +128,14 @@ public class TestCalc
         data.OutputRetention = outActRete;
         data.OutputCumulative = outActCumu;
 
-        var main = new MainRoutine_OIR();
-        main.OutputPath       /**/= Path.Combine(resultDir, targetName);
-        main.CalcTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat");
-        main.OutTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat");
-        main.CommitmentPeriod /**/= @"5days";
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= targetName,
+            CalcTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat"),
+            OutTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat"),
+            CommitmentPeriod /**/= @"5days",
+        };
 
         // 計算を実行する。
         main.Main(data);
