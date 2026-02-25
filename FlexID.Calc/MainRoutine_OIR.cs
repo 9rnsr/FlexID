@@ -11,9 +11,14 @@ namespace FlexID;
 public class MainRoutine_OIR
 {
     /// <summary>
-    /// 出力ファイルパス。
+    /// 出力ディレクトリ。
     /// </summary>
-    public string OutputPath { get; set; }
+    public string OutputDirectory { get; set; }
+
+    /// <summary>
+    /// 出力ファイル名。
+    /// </summary>
+    public string OutputFileName { get; set; }
 
     /// <summary>
     /// 計算時間メッシュファイルパス。
@@ -32,13 +37,20 @@ public class MainRoutine_OIR
 
     public void Main(InputData data)
     {
+        if (string.IsNullOrWhiteSpace(OutputDirectory))
+            throw Program.Error("Output directory is not specified");
+        if (string.IsNullOrWhiteSpace(OutputFileName))
+            throw Program.Error("Output file name is not specified");
+
         var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
         var outTimeMesh = new TimeMesh(OutTimeMeshPath);
         if (!calcTimeMesh.Cover(outTimeMesh))
             throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
+        Directory.CreateDirectory(OutputDirectory);
+
         // ログファイルを出力する。
-        var logPath = OutputPath + ".log";
+        var logPath = Path.Combine(OutputDirectory, OutputFileName) + ".log";
         using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
         using (var writer = new StreamWriter(stream, Encoding.UTF8))
         {
@@ -50,7 +62,7 @@ public class MainRoutine_OIR
             WriteOutScoefficients(data, writer);
         }
 
-        using (var calcOut = new CalcOut(data, OutputPath))
+        using (var calcOut = new CalcOut(data, OutputDirectory, OutputFileName))
         {
             // OIRでは、集合コンパートメントを処理するための準備を行う。
             calcOut.PrepareCompositeCompartments();

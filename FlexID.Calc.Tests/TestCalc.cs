@@ -129,7 +129,8 @@ public class TestCalc
         data.OutputCumulative = outActCumu;
 
         var main = new MainRoutine_OIR();
-        main.OutputPath       /**/= Path.Combine(resultDir, targetName);
+        main.OutputDirectory  /**/= resultDir;
+        main.OutputFileName   /**/= targetName;
         main.CalcTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat");
         main.OutTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat");
         main.CommitmentPeriod /**/= @"5days";

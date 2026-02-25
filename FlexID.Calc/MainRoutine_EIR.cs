@@ -9,9 +9,14 @@ namespace FlexID;
 public class MainRoutine_EIR
 {
     /// <summary>
-    /// 出力ファイルパス。
+    /// 出力ディレクトリ。
     /// </summary>
-    public string OutputPath { get; set; }
+    public string OutputDirectory { get; set; }
+
+    /// <summary>
+    /// 出力ファイル名。
+    /// </summary>
+    public string OutputFileName { get; set; }
 
     /// <summary>
     /// 計算時間メッシュファイルパス。
@@ -43,12 +48,19 @@ public class MainRoutine_EIR
 
     public void Main(List<InputData> dataList)
     {
+        if (string.IsNullOrWhiteSpace(OutputDirectory))
+            throw Program.Error("Output directory is not specified");
+        if (string.IsNullOrWhiteSpace(OutputFileName))
+            throw Program.Error("Output file name is not specified");
+
         var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
         var outTimeMesh = new TimeMesh(OutTimeMeshPath);
         if (!calcTimeMesh.Cover(outTimeMesh))
             throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-        using (var calcOut = new CalcOut(dataList[0], OutputPath))
+        Directory.CreateDirectory(OutputDirectory);
+
+        using (var calcOut = new CalcOut(dataList[0], OutputDirectory, OutputFileName))
         {
             // コンパートメントの名称をヘッダ―として出力。
             calcOut.ActivityHeader();

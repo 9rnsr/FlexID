@@ -73,7 +73,11 @@ public class Program
 
             var data = new InputDataReader_OIR(param.Input).Read();
 
-            main.OutputPath       /**/= param.Output;
+            var outputDir = Path.GetDirectoryName(param.Output);
+            var outputFile = Path.GetFileName(param.Output);
+
+            main.OutputDirectory  /**/= outputDir;
+            main.OutputFileName   /**/= outputFile;
             main.CalcTimeMeshPath /**/= param.CalcTimeMesh;
             main.OutTimeMeshPath  /**/= param.OutTimeMesh;
             main.CommitmentPeriod /**/= param.CommitmentPeriod;
