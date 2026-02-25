@@ -14,7 +14,8 @@ public partial class InputEirViewModel : ViewModelBase
     /// </summary>
     public InputEirViewModel()
     {
-        Targets = new(target => new InputTargetViewModel(target));
+        BuiltinTargets = new(target => new InputTargetViewModel(target));
+        ExternalTargets = new(target => new InputTargetViewModel(target));
 
         CommitmentPeriod = 50;
         SelectedCommitmentPeriodUnit = CommitmentPeriodUnits[^1];
@@ -25,15 +26,88 @@ public partial class InputEirViewModel : ViewModelBase
 
         WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
 
-        Targets.ObservePropertyChanged(m => m.IsCheckedAny)
-                  .Subscribe(_ => RunCommand.NotifyCanExecuteChanged())
-                  .AddTo(disposables);
+        this.ObservePropertyChanged(vm => vm.Targets)
+            .Select(targets => targets.ObservePropertyChanged(m => m.IsCheckedAny)).Switch()
+            .Subscribe(_ => RunCommand.NotifyCanExecuteChanged())
+            .AddTo(disposables);
 
         // EIR用のリソースとして配置されたインプットファイルの一覧を取得する。
-        Task.Run(async () => await Targets.AddRangeAsync(InputTarget.GetInputsEIR(@"inp\EIR")));
+        Task.Run(async () => await BuiltinTargets.AddRangeAsync(InputTarget.GetInputsEIR(@"inp\EIR")));
     }
 
-    public CheckableItemsView<InputTarget, InputTargetViewModel> Targets { get; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Targets))]
+    [NotifyCanExecuteChangedFor(nameof(RunCommand))]
+    public partial bool IsBuiltin { get; set; } = true;
+
+    public CheckableItemsView<InputTarget, InputTargetViewModel> Targets =>
+        IsBuiltin ? BuiltinTargets : ExternalTargets;
+
+    public CheckableItemsView<InputTarget, InputTargetViewModel> BuiltinTargets { get; }
+
+    public CheckableItemsView<InputTarget, InputTargetViewModel> ExternalTargets { get; }
+
+    [RelayCommand]
+    private async Task AddInputFiles(string[] paths)
+    {
+        var selected = paths;
+        if (selected is null)
+        {
+            var appId = App.Current.AppWindow!.Id;
+            var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
+            {
+                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+            };
+
+            var results = await picker.PickMultipleFilesAsync();
+
+            selected = results?.Select(item => item.Path).ToArray();
+        }
+        if (selected is not null)
+        {
+            IsBuiltin = false;
+
+            foreach (var inputFile in selected)
+            {
+                if (ExternalTargets.FilteredItems.Any(
+                    targetVM => Path.GetFullPath(targetVM.InputTarget.FilePath)
+                             == Path.GetFullPath(inputFile)))
+                {
+                    continue;
+                }
+
+                var data = await Task.Run(() =>
+                {
+                    try
+                    {
+                        var reader = new InputDataReader_EIR(inputFile);
+                        return reader.Read().FirstOrDefault();
+                    }
+                    catch
+                    {
+                        // 読み込みに失敗した。
+                        return null;
+                    }
+                });
+                if (data is null)
+                    continue;
+
+                var parentNuclide = data.Nuclides.FirstOrDefault();
+                if (parentNuclide is null)
+                    continue;
+
+                ExternalTargets.Add(new InputTarget(inputFile, data), initialCheck: true);
+            }
+        }
+    }
+
+    [RelayCommand]
+    private async Task RemoveInputFiles(IReadOnlyList<object> inputVMs)
+    {
+        var items = inputVMs.OfType<InputTargetViewModel>()
+            .Select(inputVM => inputVM.InputTarget);
+        ExternalTargets.RemoveRange(items);
+    }
 
     [ObservableProperty]
     public partial int CommitmentPeriod { get; set; }

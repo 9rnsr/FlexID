@@ -28,7 +28,16 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <v:InputsPage Grid.Row="0" Targets="{x:Bind ViewModel.Targets}" />
+    <v:InputsPage
+      Grid.Row="0"
+      AddCommand="{x:Bind ViewModel.AddInputFilesCommand}"
+      IsBuiltin="{x:Bind ViewModel.IsBuiltin, Mode=TwoWay}"
+      RemoveCommand="{x:Bind ViewModel.RemoveInputFilesCommand}"
+      Targets="{x:Bind ViewModel.Targets, Mode=OneWay}">
+      <i:Interaction.Behaviors>
+        <vb:PathDropBehavior AllowDropPath="MultiAny" DropCommand="{x:Bind ViewModel.AddInputFilesCommand}" />
+      </i:Interaction.Behaviors>
+    </v:InputsPage>
 
     <Grid
       Grid.Row="1"
