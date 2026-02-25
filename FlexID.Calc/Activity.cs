@@ -1,5 +1,7 @@
 namespace FlexID;
 
+#nullable disable
+
 /// <summary>
 /// あるコンパートメントにおける、計算時間メッシュ内の放射能を保持する。
 /// </summary>

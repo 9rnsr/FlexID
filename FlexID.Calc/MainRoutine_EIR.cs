@@ -1,5 +1,7 @@
 namespace FlexID;
 
+#nullable disable
+
 /// <summary>
 /// 公衆の構成員による放射性核種の摂取(EIR:  Environmental Intakes of Radionuclides)における
 /// 残留放射能および預託線量の計算。

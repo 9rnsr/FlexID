@@ -491,7 +491,7 @@ public class CalcScoeff
     {
         var regions = sourceRegions.ToArray();
 
-        (string, string, int) Get(string nameIdacDose, string nameOIR = null)
+        (string, string, int) Get(string nameIdacDose, string? nameOIR = null)
         {
             nameIdacDose = $"\"{nameIdacDose}\"";
             if (nameOIR is null)
@@ -589,7 +589,7 @@ public class CalcScoeff
     {
         var regions = targetRegions.ToArray();
 
-        (string, string, int) Get(string nameIdacDose, string nameOIR = null)
+        (string, string, int) Get(string nameIdacDose, string? nameOIR = null)
         {
             nameIdacDose = $"\"{nameIdacDose}\"";
             if (nameOIR is null)

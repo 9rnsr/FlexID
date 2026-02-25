@@ -52,7 +52,7 @@ class CalcOut : IDisposable
 
         IsMaleOnly = data.StartAge != 0;
 
-        var outputDir = Path.GetDirectoryName(outputPath);
+        var outputDir = Path.GetDirectoryName(outputPath)!;
         Directory.CreateDirectory(outputDir);
 
         DosePath = outputPath + "_Dose.out";
@@ -70,7 +70,7 @@ class CalcOut : IDisposable
         wsRete = (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count)).ToArray();
         wsCumu = (data.OutputCumulative ? CreateWriters(CumulativePath) : NullWriters(data.Nuclides.Count)).ToArray();
 
-        TextWriter CreateWriter(string path, string suffix = null)
+        TextWriter CreateWriter(string path, string? suffix = null)
         {
             if (suffix != null)
             {

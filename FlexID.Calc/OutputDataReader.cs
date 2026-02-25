@@ -114,7 +114,7 @@ public class OutputDataReader : IDisposable
         string valuesUnit;
         var timeSteps = new List<double>();
 
-        string line;
+        string? line;
         string[] values;
 
         void ReadEmptyLine()
@@ -125,7 +125,7 @@ public class OutputDataReader : IDisposable
         }
 
         line = reader.ReadLine();
-        if (!line.StartsWith("FlexID output: "))
+        if (line?.StartsWith("FlexID output: ") != true)
             throw new InvalidDataException("unrecognized file format");
 
         line = line.Substring("FlexID output: ".Length);
@@ -136,19 +136,18 @@ public class OutputDataReader : IDisposable
             line == "DoseRate" ? (OutputType.DoseRate, "Sv/h") :
             throw new InvalidDataException("unrecognized file format");
 
-        title = reader.ReadLine();
-        if (title is null)
-            throw new InvalidCastException("unrecognized file format");
+        title = reader.ReadLine()
+            ?? throw new InvalidCastException("unrecognized file format");
 
         ReadEmptyLine();
 
         line = reader.ReadLine();
-        if (line is null || !line.StartsWith("Radionuclide: "))
+        if (line?.StartsWith("Radionuclide: ") != true)
             throw new InvalidCastException("unrecognized file format");
         var nuclides = line.Substring("Radionuclide: ".Length).Split([", "], StringSplitOptions.None);
 
         line = reader.ReadLine();
-        if (line is null || !line.StartsWith("Units: "))
+        if (line?.StartsWith("Units: ") != true)
             throw new InvalidCastException("unrecognized file format");
         var units = line.Substring("Units: ".Length).Split([", "], StringSplitOptions.None);
 
@@ -164,7 +163,7 @@ public class OutputDataReader : IDisposable
         ReadEmptyLine();
 
         var separators = new[] { ' ' };
-        string[] ReadValues(string ln)
+        string[] ReadValues(string? ln)
         {
             if (ln is null)
                 throw new InvalidDataException("unrecognized file format");

@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace FlexID;
 
+#nullable disable
+
 public class Program
 {
     public class CommandLine

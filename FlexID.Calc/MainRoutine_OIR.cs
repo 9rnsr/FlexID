@@ -2,6 +2,8 @@ using System.Text;
 
 namespace FlexID;
 
+#nullable disable
+
 /// <summary>
 /// 放射性核種の職業上の摂取(OIR: Occupational Intakes of Radionuclides)における
 /// 残留放射能および預託線量の計算。

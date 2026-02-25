@@ -1,5 +1,7 @@
 namespace FlexID;
 
+#nullable disable
+
 /// <summary>
 /// 性別を表現する列挙型
 /// </summary>

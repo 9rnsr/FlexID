@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 
 namespace FlexID;
 
+#nullable disable
+
 /// <summary>
 /// 流入経路を表現する
 /// </summary>
