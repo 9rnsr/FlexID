@@ -329,7 +329,14 @@ public class InputDataReader_EIR : InputDataReaderBase
         if (data.SourceRegions is [])
         {
             // 線源領域の名称を設定する。
-            data.SourceRegions = sources.Select(s => new SourceRegionData { Name = s }).ToArray();
+            data.SourceRegions = sources.Select(s => new SourceRegionData
+            {
+                Name = s,
+                MaleMass   /**/= double.NaN,
+                MaleID     /**/= -1,
+                FemaleMass /**/= double.NaN,
+                FemaleID   /**/= -1
+            }).ToArray();
         }
         else if (!data.SourceRegions.Select(sr => sr.Name).SequenceEqual(sources))
         {
