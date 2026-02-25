@@ -30,8 +30,6 @@ public class MainRoutine_OIR
     /// </summary>
     public string CommitmentPeriod { get; set; }
 
-    private CalcOut CalcOut { get; set; }
-
     public void Main(InputData data)
     {
         var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
@@ -52,18 +50,18 @@ public class MainRoutine_OIR
             WriteOutScoefficients(data, writer);
         }
 
-        using (CalcOut = new CalcOut(data, OutputPath))
+        using (var calcOut = new CalcOut(data, OutputPath))
         {
             // OIRでは、集合コンパートメントを処理するための準備を行う。
-            CalcOut.PrepareCompositeCompartments();
+            calcOut.PrepareCompositeCompartments();
 
             // コンパートメントの名称をヘッダ―として出力。
-            CalcOut.ActivityHeader();
+            calcOut.ActivityHeader();
 
             // 標的領域の名称をヘッダーとして出力。
-            CalcOut.CommitmentHeader();
+            calcOut.CommitmentHeader();
 
-            MainCalc(calcTimeMesh, outTimeMesh, data);
+            MainCalc(calcOut, calcTimeMesh, outTimeMesh, data);
         }
     }
 
@@ -337,7 +335,7 @@ public class MainRoutine_OIR
         writer.Flush();
     }
 
-    private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, InputData data)
+    private void MainCalc(CalcOut calcOut, TimeMesh calcTimeMesh, TimeMesh outTimeMesh, InputData data)
     {
         const double convergence = 1E-10; // 収束値
         const int iterMax = 1500;  // iterationの最大回数
@@ -373,7 +371,7 @@ public class MainRoutine_OIR
         SubRoutine.Init(act, data);
 
         // 初期配分された放射能をファイルに出力する。
-        CalcOut.ActivityOut(0.0, act, 0);
+        calcOut.ActivityOut(0.0, act, 0);
 
         // 出力時間メッシュを進める。
         outTimes.MoveNext();
@@ -541,11 +539,11 @@ public class MainRoutine_OIR
                 }
 
                 // 放射能をファイルに出力する。
-                CalcOut.ActivityOut(outNowDay, act, outIter, maskExcreta);
+                calcOut.ActivityOut(outNowDay, act, outIter, maskExcreta);
 
                 // 線量をファイルに出力する。
-                CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowM, resultPreM, Sex.Male);
-                CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowF, resultPreF, Sex.Female);
+                calcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowM, resultPreM, Sex.Male);
+                calcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowF, resultPreF, Sex.Female);
 
                 // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                 if (!outTimes.MoveNext())
@@ -580,6 +578,6 @@ public class MainRoutine_OIR
         }
 
         // 計算完了の出力を行う。
-        CalcOut.FinishOut();
+        calcOut.FinishOut();
     }
 }

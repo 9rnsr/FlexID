@@ -33,8 +33,6 @@ public class MainRoutine_EIR
     /// </summary>
     public string ExposureAge { get; set; }
 
-    private CalcOut CalcOut { get; set; }
-
     // EIR計算時の切替年齢
     public const int Age3month = 100;       // 100日と考える
     public const int Age1year = 1 * 365;
@@ -50,19 +48,19 @@ public class MainRoutine_EIR
         if (!calcTimeMesh.Cover(outTimeMesh))
             throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
 
-        using (CalcOut = new CalcOut(dataList[0], OutputPath))
+        using (var calcOut = new CalcOut(dataList[0], OutputPath))
         {
             // コンパートメントの名称をヘッダ―として出力。
-            CalcOut.ActivityHeader();
+            calcOut.ActivityHeader();
 
             // 標的領域の名称をヘッダーとして出力。
-            CalcOut.CommitmentHeader();
+            calcOut.CommitmentHeader();
 
-            MainCalc(calcTimeMesh, outTimeMesh, dataList);
+            MainCalc(calcOut, calcTimeMesh, outTimeMesh, dataList);
         }
     }
 
-    private void MainCalc(TimeMesh calcTimeMesh, TimeMesh outTimeMesh, List<InputData> dataList)
+    private void MainCalc(CalcOut calcOut, TimeMesh calcTimeMesh, TimeMesh outTimeMesh, List<InputData> dataList)
     {
         InputData dataLo;
         InputData dataHi;
@@ -223,7 +221,7 @@ public class MainRoutine_EIR
         SubRoutine.Init(act, dataLo);
 
         // 初期配分された放射能をファイルに出力する。
-        CalcOut.ActivityOut(0.0, act, 0);
+        calcOut.ActivityOut(0.0, act, 0);
 
         // 出力時間メッシュを進める。
         outTimes.MoveNext();
@@ -426,10 +424,10 @@ public class MainRoutine_EIR
                 }
 
                 // 放射能をファイルに出力する。
-                CalcOut.ActivityOut(outNowDay, act, outIter, maskExcreta);
+                calcOut.ActivityOut(outNowDay, act, outIter, maskExcreta);
 
                 // 線量をファイルに出力する。
-                CalcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre, Sex.Male);
+                calcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNow, resultPre, Sex.Male);
 
                 // これ以上出力時間メッシュが存在しないならば、計算を終了する。
                 if (!outTimes.MoveNext())
@@ -463,6 +461,6 @@ public class MainRoutine_EIR
         }
 
         // 計算完了の出力を行う。
-        CalcOut.FinishOut();
+        calcOut.FinishOut();
     }
 }
