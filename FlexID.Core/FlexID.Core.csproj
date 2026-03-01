@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EPPlus" />
     <PackageReference Include="MathNet.Numerics" />
     <PackageReference Include="Sprache" />
   </ItemGroup>

@@ -1,7 +1,19 @@
 namespace System.Collections.Generic
 {
-    internal static class Extensions
+    public static class Extensions
     {
+        public static int IndexOf<T>(this IEnumerable<T> sources, Func<T, bool> predicate)
+        {
+            int index = 0;
+            foreach (var value in sources)
+            {
+                if (predicate(value))
+                    return index;
+                index++;
+            }
+            return -1;
+        }
+
         public static int IndexOf<T>(this IReadOnlyList<T> list, T element)
         {
             if (list is null)

@@ -7,25 +7,28 @@ using OfficeOpenXml.Style;
 
 namespace FlexID;
 
-internal partial class Program
+public class ReportGenerator
 {
-    static void WriteSummaryExcel(string filePath, Result[] sortedResults)
+    static ReportGenerator()
     {
         // 非商用ライセンスを設定
         ExcelPackage.License.SetNonCommercialPersonal("FlexID");
+    }
 
+    public static void WriteSummary(string filePath, ReportResult[] results)
+    {
         using var package = new ExcelPackage();
 
         // 預託実効線量と預託等価線量のシートを作成。
         var sheetEequivDose = package.Workbook.Worksheets.Add("Dose");
-        WriteDoseSheet(sheetEequivDose, sortedResults);
+        WriteDoseSheet(sheetEequivDose, results);
 
         // (預託実効線量と)残留放射能の要約シートを作成。
         var sheetSummary = package.Workbook.Worksheets.Add("Retention");
-        WriteRetentionSheet(sheetSummary, sortedResults);
+        WriteRetentionSheet(sheetSummary, results);
 
         // 対象毎の残留放射能の確認シートを作成。
-        foreach (var res in sortedResults)
+        foreach (var res in results)
         {
             if (res.HasErrors)
                 continue;
@@ -58,7 +61,7 @@ internal partial class Program
     /// </summary>
     /// <param name="sheet"></param>
     /// <param name="results"></param>
-    static void WriteDoseSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
+    private static void WriteDoseSheet(ExcelWorksheet sheet, IEnumerable<ReportResult> results)
     {
         sheet.Cells[1, 1].Value = "Dose";
 
@@ -242,7 +245,7 @@ internal partial class Program
     /// </summary>
     /// <param name="sheet"></param>
     /// <param name="results"></param>
-    static void WriteRetentionSheet(ExcelWorksheet sheet, IEnumerable<Result> results)
+    private static void WriteRetentionSheet(ExcelWorksheet sheet, IEnumerable<ReportResult> results)
     {
         sheet.Cells[1, 1].Value = "Retention";
 
@@ -372,7 +375,7 @@ internal partial class Program
     /// </summary>
     /// <param name="sheet"></param>
     /// <param name="result"></param>
-    static void WriteResultSheet(ExcelWorksheet sheet, Result result)
+    private static void WriteResultSheet(ExcelWorksheet sheet, ReportResult result)
     {
         var target = result.Target;
 
@@ -624,7 +627,7 @@ internal partial class Program
         sheet.View.FreezePanes(rowT, colD + 1);
     }
 
-    static ExcelScatterChart SetActivityChartStyle(ExcelScatterChart chart, int row, int col, int nrow, int ncol)
+    private static ExcelScatterChart SetActivityChartStyle(ExcelScatterChart chart, int row, int col, int nrow, int ncol)
     {
         row--;
         col--;
@@ -677,7 +680,7 @@ internal partial class Program
         return chart;
     }
 
-    static void SetExpectSerieStyle(ExcelScatterChartSerie serie, string name)
+    private static void SetExpectSerieStyle(ExcelScatterChartSerie serie, string name)
     {
         serie.Header = name + " (OIR)";
 
@@ -686,7 +689,7 @@ internal partial class Program
         serie.Marker.Fill.Color = Color.Indigo;
     }
 
-    static void SetActualSerieStyle(ExcelScatterChartSerie serie, string name)
+    private static void SetActualSerieStyle(ExcelScatterChartSerie serie, string name)
     {
         serie.Header = name + " (FlexID)";
 

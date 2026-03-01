@@ -1,5 +1,6 @@
 namespace FlexID;
 
+#if false
 internal partial class Program
 {
     /// <summary>
@@ -8,7 +9,7 @@ internal partial class Program
     /// <param name="outputDir"></param>
     /// <param name="runCalc"></param>
     /// <returns></returns>
-    static IEnumerable<Target> GetTargets(string outputDir, bool runCalc)
+    static IEnumerable<ReportTarget> GetTargets(string outputDir, bool runCalc)
     {
         var inputDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
         var expectDir = Path.Combine(AppResource.BaseDir, @"expect");
@@ -33,7 +34,7 @@ internal partial class Program
                 var resultDosePath = Path.Combine(outputDir, $"{name}_Dose.out");
                 var resultRetentionPath = Path.Combine(outputDir, $"{name}_Retention.out");
 
-                return new Target
+                return new ReportTarget
                 {
                     Name = name,
                     TargetPath = targetPath,
@@ -51,3 +52,4 @@ internal partial class Program
         }
     }
 }
+#endif
