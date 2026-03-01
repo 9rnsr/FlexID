@@ -8,9 +8,9 @@ class ProgressPresenter
     {
         public string Name { get; }
 
-        public string Status { get; private set; }
+        public string Status { get; private set; } = "";
 
-        public string Message { get; private set; }
+        public string? Message { get; private set; }
 
         public bool IsFinished { get; private set; }
 
@@ -19,7 +19,7 @@ class ProgressPresenter
             Name = name;
         }
 
-        public void SetStatus(string status, string message)
+        public void SetStatus(string status, string? message)
         {
             Status = status;
             Message = message;
@@ -115,7 +115,7 @@ class ProgressPresenter
     /// <param name="name">項目名。</param>
     /// <param name="status">最終状態。</param>
     /// <param name="message">付加的なメッセージ。</param>
-    public void Stop(string name, string status, string message = null)
+    public void Stop(string name, string status, string? message = null)
     {
         locker.EnterReadLock();
         try
