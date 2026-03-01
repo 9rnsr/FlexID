@@ -21,22 +21,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
+    <ProjectReference Include="..\FlexID.Core\FlexID.Core.csproj" />
   </ItemGroup>
 
-  <Target Name="CreateTestFilesDir" AfterTargets="PostBuildEvent">
-    <!--  For old junction 'TestFiles' directory.  -->
-    <RemoveDir Directories="$(TargetDir)TestFiles" />
-
-    <Delete Files="$(TargetDir)TestFiles" />
-    <Exec Command="echo $(ProjectDir)TestFiles&gt; $(TargetDir)TestFiles" />
+  <Target Name="CreateTestFiles" BeforeTargets="BeforeBuild">
+    <WriteLinesToFile File="$(IntermediateOutputPath)TestFiles" Lines="$(ProjectDir)TestFiles" Overwrite="true" />
+    <ItemGroup>
+      <None Visible="false" Include="$(IntermediateOutputPath)TestFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
+    </ItemGroup>
   </Target>
-
-  <Target Name="RemoveTestFilesDir" AfterTargets="AfterClean">
-    <!--  For old junction 'TestFiles' directory.  -->
-    <RemoveDir Directories="$(TargetDir)TestFiles" />
-
-    <Delete Files="$(TargetDir)TestFiles" />
+  <Target Name="RemoveTestFiles" BeforeTargets="Clean">
+    <Delete Files="$(IntermediateOutputPath)TestFiles" />
   </Target>
 
 </Project>

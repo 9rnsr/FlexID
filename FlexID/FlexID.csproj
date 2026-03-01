@@ -3,11 +3,14 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
-    <PublishSingleFile>true</PublishSingleFile>
 
     <UseWPF>true</UseWPF>
     <ApplicationManifest>App.manifest</ApplicationManifest>
-    <DisableFody Condition="'$(Configuration)' == 'Debug'">true</DisableFody>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PublishDir)' != ''">
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
+    <ProjectReference Include="..\FlexID.Core\FlexID.Core.csproj" />
   </ItemGroup>
 
 </Project>

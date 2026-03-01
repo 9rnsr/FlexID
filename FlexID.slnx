@@ -7,8 +7,8 @@
     <File Path="Directory.Packages.props" />
     <File Path="Settings.XamlStyler" />
   </Folder>
-  <Project Path="FlexID.Calc.Tests/FlexID.Calc.Tests.csproj" />
-  <Project Path="FlexID.Calc/FlexID.Calc.csproj" />
+  <Project Path="FlexID.Core/FlexID.Core.csproj" />
+  <Project Path="FlexID.Core.Tests/FlexID.Core.Tests.csproj" />
   <Project Path="FlexID.Viewer/FlexID.Viewer.csproj" />
   <Project Path="FlexID/FlexID.csproj" />
   <Project Path="ResultChecker/ResultChecker.csproj" />

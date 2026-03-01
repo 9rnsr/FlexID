@@ -1,5 +1,6 @@
 namespace FlexID;
 
+#if false
 [TestClass]
 public class ParameterTests
 {
@@ -134,3 +135,4 @@ public class ParameterTests
         };
     }
 }
+#endif

@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Copyright>Copyright © 2018</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" />
+    <PackageReference Include="Sprache" />
+  </ItemGroup>
+
+  <Target Name="CreateResourceFiles" BeforeTargets="BeforeBuild">
+    <WriteLinesToFile File="$(IntermediateOutputPath)ResourceFiles" Lines="$(SolutionDir)resources" Overwrite="true" />
+    <ItemGroup>
+      <None Visible="false" Include="$(IntermediateOutputPath)ResourceFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+  </Target>
+  <Target Name="RemoveResourceFiles" BeforeTargets="Clean">
+    <Delete Files="$(IntermediateOutputPath)ResourceFiles" />
+  </Target>
+
+  <ItemGroup>
+    <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.BET"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.RAD"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.NDX"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/rcp-a?_*_????-??-??.SAF" LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/sregions_????-??-??.NDX" LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/torgans_????-??-??.NDX"  LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
+
+    <None Visible="false" Include="$(SolutionDir)resources/inp/OIR/**/*.inp"   LinkBase="inp/OIR"      CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/OIR/wT.txt"     LinkBase="lib/OIR"      CopyToPublishDirectory="PreserveNewest" />
+
+    <None Visible="false" Include="$(SolutionDir)resources/inp/EIR/**/*.inp"   LinkBase="inp/EIR"      CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/EIR/wT.txt"     LinkBase="lib/EIR"      CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/lib/EIR/SEE/*.txt"  LinkBase="lib/EIR/SEE"  CopyToPublishDirectory="PreserveNewest" />
+
+    <None Visible="false" Include="$(SolutionDir)resources/lib/TimeMesh/*.dat" LinkBase="lib/TimeMesh" CopyToPublishDirectory="PreserveNewest" />
+
+    <None Visible="false" Include="$(SolutionDir)resources/lib/FixList.txt"    LinkBase="lib"          CopyToPublishDirectory="PreserveNewest" />
+
+    <None Visible="false" Include="$(SolutionDir)resources/expect/**/*.dat"    LinkBase="expect"       CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

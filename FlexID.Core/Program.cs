@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-[assembly: InternalsVisibleTo("FlexID.Calc.Tests")]
+[assembly: InternalsVisibleTo("FlexID.Core.Tests")]
 
 namespace FlexID;
 
@@ -9,6 +9,7 @@ namespace FlexID;
 
 public class Program
 {
+#if false
     public class CommandLine
     {
         public string Output;
@@ -163,6 +164,7 @@ public class Program
         Console.WriteLine("CommitmentPeriod=Arbitrary commitment period (integer) + 'days'or'months'or'years'.");
         return 0;
     }
+#endif
 
     public static Exception Error(string msg)
     {
