@@ -15,6 +15,20 @@ public class ReportGenerator
         ExcelPackage.License.SetNonCommercialPersonal("FlexID");
     }
 
+    public static void WriteReport(string filePath, ReportData report)
+    {
+        if (report.Errors.Any())
+            return;
+
+        using var package = new ExcelPackage();
+
+        // 対象の残留放射能の確認シートを作成。
+        var sheetRes = package.Workbook.Worksheets.Add(report.OutputName);
+        WriteResultSheet(sheetRes, report);
+
+        package.SaveAs(filePath);
+    }
+
     public static void WriteSummary(string filePath, ReportData[] reports)
     {
         using var package = new ExcelPackage();
@@ -26,16 +40,6 @@ public class ReportGenerator
         // (預託実効線量と)残留放射能の要約シートを作成。
         var sheetSummary = package.Workbook.Worksheets.Add("Retention");
         WriteRetentionSummary(sheetSummary, reports);
-
-        // 対象毎の残留放射能の確認シートを作成。
-        foreach (var report in reports)
-        {
-            if (report.HasErrors)
-                continue;
-
-            var sheetRes = package.Workbook.Worksheets.Add(report.OutputName);
-            WriteResultSheet(sheetRes, report);
-        }
 
         package.SaveAs(filePath);
     }
