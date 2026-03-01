@@ -166,7 +166,7 @@ public partial class InputOIRViewModel : ObservableObject
             if (OutputFilePath == "")
                 throw new Exception("Please enter the Output File Path.");
             if (string.IsNullOrWhiteSpace(Path.GetFileName(OutputFilePath)))
-                throw Program.Error("Please enter file name in the Output File Path");
+                throw new Exception("Please enter file name in the Output File Path");
             if (SelectedNuclide is null)
                 throw new Exception("Please select Nuclide.");
             if (SelectedInput is null)
