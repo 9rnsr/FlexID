@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <EnableMSTestRunner>true</EnableMSTestRunner>
+
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" />
+    <PackageReference Include="Shouldly" />
+
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <Using Include="Shouldly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlexID.Core\FlexID.Core.csproj" />
+  </ItemGroup>
+
+  <Target Name="CreateTestFiles" BeforeTargets="BeforeBuild">
+    <WriteLinesToFile File="$(IntermediateOutputPath)TestFiles" Lines="$(ProjectDir)TestFiles" Overwrite="true" />
+    <ItemGroup>
+      <None Visible="false" Include="$(IntermediateOutputPath)TestFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+  </Target>
+  <Target Name="RemoveTestFiles" BeforeTargets="Clean">
+    <Delete Files="$(IntermediateOutputPath)TestFiles" />
+  </Target>
+
+</Project>

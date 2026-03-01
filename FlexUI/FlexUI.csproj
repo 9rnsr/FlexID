@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PublishDir)' != ''">
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Copyright>Copyright © 2017</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="OxyPlot.Wpf" />
+    <PackageReference Include="VirtualizingWrapPanel" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlexID.Core\FlexID.Core.csproj" />
+  </ItemGroup>
+
+</Project>

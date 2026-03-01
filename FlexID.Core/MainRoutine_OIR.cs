@@ -1,0 +1,593 @@
+using System.Text;
+
+namespace FlexID;
+
+/// <summary>
+/// 放射性核種の職業上の摂取(OIR: Occupational Intakes of Radionuclides)における
+/// 残留放射能および預託線量の計算。
+/// </summary>
+public class MainRoutine_OIR
+{
+    /// <summary>
+    /// 出力ディレクトリ。
+    /// </summary>
+    public required string OutputDirectory { get; init; }
+
+    /// <summary>
+    /// 出力ファイル名。
+    /// </summary>
+    public required string OutputFileName { get; init; }
+
+    /// <summary>
+    /// 計算時間メッシュファイルパス。
+    /// </summary>
+    public required string ComputeTimeMeshPath { get; init; }
+
+    /// <summary>
+    /// 出力時間メッシュファイルパス。
+    /// </summary>
+    public required string OutputTimeMeshPath { get; init; }
+
+    /// <summary>
+    /// 預託期間。
+    /// </summary>
+    public required string CommitmentPeriod { get; init; }
+
+    public void Main(InputData data)
+    {
+        if (string.IsNullOrWhiteSpace(OutputDirectory))
+            throw Program.Error("Output directory is not specified");
+        if (string.IsNullOrWhiteSpace(OutputFileName))
+            throw Program.Error("Output file name is not specified");
+
+        var computeTimeMesh = new TimeMesh(ComputeTimeMeshPath);
+        var outputTimeMesh = new TimeMesh(OutputTimeMeshPath);
+        if (!computeTimeMesh.Cover(outputTimeMesh))
+            throw Program.Error("Computational time mesh does not cover all boundaries of output time mesh.");
+
+        Directory.CreateDirectory(OutputDirectory);
+
+        // ログファイルを出力する。
+        var logPath = Path.Combine(OutputDirectory, OutputFileName) + ".log";
+        using (var stream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        using (var writer = new StreamWriter(stream, Encoding.UTF8))
+        {
+            WriteOutNuclides(data, writer);
+            WriteOutCompartments(data, writer);
+            WriteOutTransfers(data, writer);
+
+            InputDataReader_OIR.SetSCoefficients(data);
+            WriteOutScoefficients(data, writer);
+        }
+
+        using (var calcOut = new CalcOut(data, OutputDirectory, OutputFileName))
+        {
+            // OIRでは、集合コンパートメントを処理するための準備を行う。
+            calcOut.PrepareCompositeCompartments();
+
+            // コンパートメントの名称をヘッダ―として出力。
+            calcOut.ActivityHeader();
+
+            // 標的領域の名称をヘッダーとして出力。
+            calcOut.CommitmentHeader();
+
+            MainCalc(calcOut, computeTimeMesh, outputTimeMesh, data);
+        }
+    }
+
+    private static void WriteOutNuclides(InputData data, StreamWriter writer)
+    {
+        var formatted = data.Nuclides
+            .Select(n => (Nuclide: n.Name, Lambda: n.Lambda.ToString("E"), HalfLife: n.HalfLife ?? "",
+                          Branches: n.Branches.Select(d => $"{d.Daughter.Name}/{d.Fraction}").ToArray())).ToArray();
+
+        const string HeaderN = "Nuclide";
+        const string HeaderL = "Lambda";
+        const string HeaderH = "HalfLife";
+
+        var widthN = formatted.Select(n => n.Nuclide.Length).Max();
+        var widthL = formatted.Select(n => n.Lambda.Length).Max();
+        var widthHL = formatted.Select(n => n.HalfLife.Length).Max();
+        var widthBr = formatted.SelectMany(n => n.Branches).Append("").Max(r => r.Length);
+
+        widthN = Math.Max(widthN, HeaderN.Length);
+        widthL = Math.Max(widthL, HeaderL.Length);
+        if (widthHL > 0)
+            widthHL = Math.Max(widthHL, HeaderH.Length);
+        var branchColumn = widthBr != 0;
+
+        writer.WriteLine();
+
+        int remainPadding = 0;
+        void WriteStr(string value, int width = 0)
+        {
+            while (remainPadding-- != 0)
+                writer.Write(' ');
+
+            if (width > 0) // PadLeft
+                for (int w = width - value.Length; w != 0; w--) writer.Write(' ');
+
+            writer.Write(value);
+
+            if (width < 0) // PadRight
+                remainPadding = -width - value.Length;
+            else
+                remainPadding = 0;
+        }
+        void WriteLine()
+        {
+            writer.WriteLine();
+            remainPadding = 0;
+        }
+
+        WriteStr(HeaderN, -widthN);
+        WriteStr("  ");
+        WriteStr(HeaderL, -widthL);
+        if (widthHL != 0) { WriteStr("  "); WriteStr(HeaderH, widthHL); }
+        if (widthBr != 0) { WriteStr("  Branches"); }
+        WriteLine();
+
+        foreach (var nuclide in formatted)
+        {
+            WriteStr(nuclide.Nuclide, -widthN);
+            WriteStr("  ");
+            WriteStr(nuclide.Lambda, +widthL);
+
+            if (widthHL != 0)
+            {
+                WriteStr("  ");
+                WriteStr(nuclide.HalfLife, widthHL);
+            }
+            if (nuclide.Branches.Any())
+            {
+                WriteStr(" ");
+                foreach (var branch in nuclide.Branches)
+                {
+                    WriteStr(" ");
+                    WriteStr(branch, -widthBr);
+                }
+            }
+
+            WriteLine();
+        }
+
+        writer.Flush();
+    }
+
+    internal static void WriteOutCompartments(InputData data, TextWriter writer)
+    {
+        if (!data.PrintCompartments)
+            return;
+
+        writer.WriteLine();
+        writer.WriteLine("Compartments:");
+
+        var nuclideLength = data.Nuclides.Max(o => o.Name.Length);
+        var nameLength = data.Organs.Max(o => o.Name.Length);
+
+        var spacing = new char[Math.Max(nuclideLength, nameLength)];
+        spacing.AsSpan().Fill(' ');
+
+        NuclideData? prevNuclide = null;
+        foreach (var nuclide in data.Nuclides)
+        {
+            var organs = data.Organs.Where(o => o.Nuclide == nuclide);
+
+            if (prevNuclide != null)
+                writer.WriteLine();
+            prevNuclide = nuclide;
+
+            foreach (var organ in organs)
+            {
+                writer.Write("  ");
+                writer.Write(organ.Func.ToString());
+                if (organ.IsZeroInflow)
+                    writer.Write(" Z ");
+                else
+                    writer.Write("   ");
+
+                writer.Write(nuclide.Name);
+                writer.Write(spacing, 0, nuclideLength - nuclide.Name.Length);
+                writer.Write('/');
+                writer.Write(organ.Name);
+
+                if (organ.SourceRegion is not null)
+                {
+                    writer.Write(spacing, 0, nameLength - organ.Name.Length);
+                    writer.Write("   ");
+                    writer.Write(organ.SourceRegion);
+                }
+
+                writer.WriteLine();
+            }
+        }
+
+        writer.Flush();
+    }
+
+    internal static void WriteOutTransfers(InputData data, TextWriter writer)
+    {
+        if (!data.PrintTransfers)
+            return;
+
+        writer.WriteLine();
+        writer.WriteLine("Transfers:");
+
+        var transfers = new List<(int nuclideIndex, string from, string to, string? coeff)>();
+        var fromLength = 0;
+        var toLength = 0;
+        var coeffAlignment = 0;
+        foreach (var nuclide in data.Nuclides)
+        {
+            void Add(Organ organFrom, Organ organTo, string? coeff)
+            {
+                var from = $"{organFrom.Nuclide.Name}/{organFrom.Name}";
+                var to = $"{organTo.Nuclide.Name}/{organTo.Name}";
+
+                transfers.Add((nuclide.Index, from, to, coeff));
+
+                fromLength = Math.Max(fromLength, from.Length + 2);
+                toLength = Math.Max(toLength, to.Length + 2);
+                if (coeff != null)
+                    coeffAlignment = Math.Max(coeffAlignment, to.Length + 2 + coeff.IndexOf('='));
+            }
+
+            var organs = data.Organs.Where(o => o.Nuclide == nuclide);
+            foreach (var organTo in organs)
+            {
+                foreach (var inflow in organTo.Inflows.Where(i => i.Organ.Nuclide != organTo.Nuclide))
+                {
+                    var organFrom = inflow.Organ;
+                    Add(organFrom, organTo, null);
+                }
+            }
+            foreach (var organTo in organs)
+            {
+                foreach (var inflow in organTo.Inflows.Where(i => i.Organ.Nuclide == organTo.Nuclide))
+                {
+                    var organFrom = inflow.Organ;
+
+                    var bioDecay = organFrom.BioDecay;
+                    var rate = organFrom.IsInstantOutflow ? $"{inflow.Rate:P}" : $"{inflow.Rate:G}";
+                    var coeff = $"{bioDecay * inflow.Rate:G} = {bioDecay:G} * {rate}";
+
+                    Add(organFrom, organTo, coeff);
+                }
+            }
+        }
+
+        var spacing = new char[Math.Max(fromLength, Math.Max(toLength, coeffAlignment))];
+        spacing.AsSpan().Fill(' ');
+
+        var prevNuclideIndex = -1;
+        foreach (var (nuclideIndex, from, to, coeff) in transfers)
+        {
+            if (nuclideIndex != prevNuclideIndex)
+            {
+                if (prevNuclideIndex != -1)
+                    writer.WriteLine();
+                prevNuclideIndex = nuclideIndex;
+            }
+
+            writer.Write("  ");
+            writer.Write(from);
+            writer.Write(spacing, 0, fromLength - from.Length);
+
+            writer.Write("-> ");
+            writer.Write(to);
+
+            if (coeff is null)
+            {
+                writer.Write(spacing, 0, toLength - to.Length);
+                writer.WriteLine("---");
+            }
+            else
+            {
+                var coeffLeftLength = coeff.IndexOf('=');
+                var spacingLength = coeffAlignment - (to.Length + coeffLeftLength);
+                writer.Write(spacing, 0, spacingLength);
+                writer.WriteLine(coeff);
+            }
+        }
+
+        writer.Flush();
+    }
+
+    private static void WriteOutScoefficients(InputData data, TextWriter writer)
+    {
+        var printScoeff = data.PrintScoefficients;
+
+        var sourceRegions = data.SourceRegions.Select(s => s.Name).ToArray();
+        var otherSourceRegion = "Other";
+
+        foreach (var nuclide in data.Nuclides)
+        {
+            var indexN = data.Nuclides.IndexOf(nuclide);
+            var scoeffTableM = data.SCoeffTablesM[indexN];
+            var scoeffTableF = data.SCoeffTablesF[indexN];
+
+            writer.WriteLine();
+            writer.WriteLine($"Nuclide: {nuclide.Name}");
+
+            if (printScoeff)
+            {
+                writer.WriteLine();
+                writer.WriteLine($"S-Coefficients (Adult Male):");
+                foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableM, sourceRegions, data.TargetRegions))
+                    writer.WriteLine(line);
+
+                writer.WriteLine();
+                writer.WriteLine($"S-Coefficients (Adult Female):");
+                foreach (var line in CalcScoeff.GenerateScoeffFileContent(scoeffTableF, sourceRegions, data.TargetRegions))
+                    writer.WriteLine(line);
+            }
+
+            writer.WriteLine();
+            writer.WriteLine($"Source regions those are part of '{otherSourceRegion}':");
+            writer.WriteLine(string.Join(",", nuclide.OtherSourceRegions));
+            writer.WriteLine();
+            writer.WriteLine($"S-Coefficient values from '{otherSourceRegion}' to each target regions:");
+            writer.WriteLine($"{"  T/S",-10} {otherSourceRegion + "(Male)",-14} {otherSourceRegion + "(Female)",-14}");
+
+            var scoeffOtherM = scoeffTableM[otherSourceRegion];
+            var scoeffOtherF = scoeffTableF[otherSourceRegion];
+
+            foreach (var targetRegion in data.TargetRegions)
+            {
+                var indexT = Array.IndexOf(data.TargetRegions, targetRegion);
+                var scoeffM = scoeffOtherM[indexT];
+                var scoeffF = scoeffOtherF[indexT];
+
+                writer.WriteLine($"{targetRegion,-10} {scoeffM:0.00000000E+00} {scoeffF:0.00000000E+00}");
+            }
+        }
+
+        writer.Flush();
+    }
+
+    private void MainCalc(CalcOut calcOut, TimeMesh computeTimeMesh, TimeMesh outputTimeMesh, InputData data)
+    {
+        const double convergence = 1E-10; // 収束値
+        const int iterMax = 1500;  // iterationの最大回数
+
+        // 預託期間[sec]を取得。
+        var commitmentPeriod = TimeMesh.CommitmentPeriodToSeconds(CommitmentPeriod);
+
+        // 標的領域の組織加重係数を取得。
+        var targetWeights = data.TargetWeights;
+
+        // 計算時間メッシュを準備する。
+        var calcTimes = computeTimeMesh.Start();
+        long calcPreT;
+        long calcNowT = calcTimes.Current;
+        int calcIter;   // 計算時間メッシュ毎の収束計算回数
+
+        // 出力時間メッシュを準備する。
+        var outTimes = outputTimeMesh.Start();
+        long outPreT;
+        long outNowT = outTimes.Current;
+        int outIter;    // 出力時間メッシュ毎の収束計算回数
+
+        var wholeBodyNow = 0.0; // 今回の出力時間メッシュにおける全身の積算線量。
+        var wholeBodyPre = 0.0; // 前回の出力時間メッシュにおける全身の積算線量。
+        var resultNowM = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+        var resultNowF = new double[43]; // 今回の出力時間メッシュにおける組織毎の計算結果。
+        var resultPreM = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
+        var resultPreF = new double[43]; // 前回の出力時間メッシュにおける組織毎の計算結果。
+
+        var act = new Activity(data);
+
+        // inputの初期値を各コンパートメントに振り分ける。
+        SubRoutine.Init(act, data);
+
+        // 初期配分された放射能をファイルに出力する。
+        calcOut.ActivityOut(0.0, act, 0);
+
+        // 出力時間メッシュを進める。
+        outTimes.MoveNext();
+        outPreT = outNowT;
+        outNowT = outTimes.Current;
+        outIter = 0;
+
+        const long Delta24hourT = 24 * 60 * 60;
+        long outLastExcretaT = outPreT; // excコンパートメントで最後に数値を出力した時間メッシュ
+        long outBefore24hourT = outNowT - Delta24hourT;
+
+        // 計算時間メッシュを進める。
+        while (calcTimes.MoveNext())
+        {
+            calcPreT = calcNowT;
+            calcNowT = calcTimes.Current;
+
+            // 預託期間を超える計算は行わない
+            if (commitmentPeriod < calcNowT)
+                break;
+
+            var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
+
+            // ΔT[sec]
+            var calcDeltaT = calcNowT - calcPreT;
+            var calcDeltaDay = TimeMesh.SecondsToDays(calcDeltaT);
+
+            act.NextCalc(data);
+
+            #region 1つの計算時間メッシュ内で収束計算を繰り返す
+            for (calcIter = 1; calcIter <= iterMax; calcIter++)
+            {
+                foreach (var organ in data.Organs)
+                {
+                    // 流入がないコンパートメントの計算をスキップする。
+                    if (organ.IsZeroInflow)
+                        continue;
+
+                    var func = organ.Func; // 臓器機能
+
+                    // 臓器機能ごとに異なる処理をする
+                    if (func == OrganFunc.inp) // 入力
+                    {
+                        SubRoutine.Input(organ, act);
+                    }
+                    else if (func == OrganFunc.acc) // 蓄積
+                    {
+                        SubRoutine.Accumulation_OIR(organ, act, calcDeltaDay);
+                    }
+                    else if (func == OrganFunc.mix) // 混合
+                    {
+                        SubRoutine.Mix(organ, act);
+                    }
+                    else if (func == OrganFunc.exc) // 排泄
+                    {
+                        SubRoutine.Excretion(organ, act, calcDeltaDay);
+                    }
+                }
+
+                // 前回との差が収束するまで計算を繰り返す
+                if (act.NextIter(data, convergence))
+                    continue;
+
+                // 出力時間メッシュと終端が一致する計算時間メッシュにおける反復回数を保存する。
+                outIter = calcIter;
+
+                // // 出力時間メッシュ内での総反復回数を保存する。
+                // outIter += calcIter;
+                break;
+            }
+            #endregion
+
+            act.FinishIter();
+
+            if (calcNowT <= outBefore24hourT)
+            {
+                foreach (var organ in data.Organs)
+                {
+                    if (!organ.IsExcretaCompatibleWithOIR)
+                        continue;
+
+                    // OIR互換排泄コンパートメントについて、
+                    // 残留放射能をカウントすべき24時間より以前の結果を捨てる。
+                    act.CalcNow[organ.Index].end = 0;
+                }
+            }
+
+            // 時間メッシュ毎の放射能を足していく
+            foreach (var organ in data.Organs)
+            {
+                var calcNowTotal = act.CalcNow[organ.Index].total;
+
+                // 今回の出力時間メッシュにおける積算放射能。
+                act.OutNow[organ.Index].total += calcNowTotal;
+
+                // 摂取時からの積算放射能。
+                act.OutTotalFromIntake[organ.Index] += calcNowTotal;
+            }
+
+            foreach (var organ in data.Organs)
+            {
+                // コンパートメントが線源領域に対応しない場合は何もしない。
+                if (organ.SourceRegion is null)
+                    continue;
+
+                // コンパートメントの残留放射能がゼロの場合は何もしない。
+                var activity = act.CalcNow[organ.Index].ave * calcDeltaT;
+                if (activity == 0)
+                    continue;
+
+                // コンパートメントから各標的領域への預託線量を計算する。
+                for (int indexT = 0; indexT < 43; indexT++)
+                {
+                    // 標的領域の部分的な重量。
+                    var targetWeight = targetWeights[indexT];
+
+                    // S係数(男女別)。
+                    var scoeffM = organ.S_CoefficientsM[indexT];
+                    var scoeffF = organ.S_CoefficientsF[indexT];
+
+                    // 等価線量 = 放射能 * S係数(男女別)
+                    var equivalentDoseM = activity * scoeffM;
+                    var equivalentDoseF = activity * scoeffF;
+
+                    // 実効線量 = 等価線量(男女平均) * wT
+                    var effectiveDose = (equivalentDoseM + equivalentDoseF) / 2 * targetWeight;
+
+                    resultNowM[indexT] += equivalentDoseM;
+                    resultNowF[indexT] += equivalentDoseF;
+                    wholeBodyNow += effectiveDose;
+                }
+            }
+
+            if (calcNowT == outNowT)
+            {
+                var outDeltaT = outNowT - outPreT;
+
+                var outNowDay = TimeMesh.SecondsToDays(outNowT);
+                var outPreDay = TimeMesh.SecondsToDays(outPreT);
+                var outDeltaDay = TimeMesh.SecondsToDays(outDeltaT);
+
+                if (outDeltaT < Delta24hourT)
+                {
+                    // 24時間より小さい幅を持つ出力時間メッシュは、それらを合わせた時間幅が
+                    // 前回の'exc'コンパートメントに対する数値出力から24-hour経過した時間と一致することをここで確認する。
+                    // - 'exc'の残留放射能の出力に寄与しない出力時間メッシュがないことを保証する。
+                    // - これを許した場合、excの積算放射能を構成する複数の出力時間メッシュのうち、24-hourを超える古い側の
+                    //   メッシュの寄与を後から減算しなければならず、この面倒な処理を避けるという理由もある。
+                    // - 本来は計算開始前にTimeMesh入力検証で確認すべきだが、現在はOIRの'exc'に特有の処理であるためここで確認している。
+                    if ((outNowT - outLastExcretaT) > Delta24hourT)
+                        throw new Exception("sum of out time meshes those are smaller than 24-hour delta should match to 24-hour, "
+                                          + "for the 'exc' compartment output compatibility with OIR.");
+                }
+
+                // OIR互換排泄コンパートメントについて、前回の数値出力からの
+                // 経過時間が24時間に満たない場合は、数値出力を抑制する。
+                var maskExcreta = outNowT < outLastExcretaT + Delta24hourT;
+
+                // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
+                foreach (var organ in data.Organs)
+                {
+                    act.OutNow[organ.Index].ave = act.OutNow[organ.Index].total / outDeltaDay;
+
+                    act.OutNow[organ.Index].end = act.CalcNow[organ.Index].end;
+                }
+
+                // 放射能をファイルに出力する。
+                calcOut.ActivityOut(outNowDay, act, outIter, maskExcreta);
+
+                // 線量をファイルに出力する。
+                calcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowM, resultPreM, Sex.Male);
+                calcOut.CommitmentOut(outNowDay, outPreDay, wholeBodyNow, wholeBodyPre, resultNowF, resultPreF, Sex.Female);
+
+                // これ以上出力時間メッシュが存在しないならば、計算を終了する。
+                if (!outTimes.MoveNext())
+                    break;
+
+                // 出力時間メッシュを進める。
+                outPreT = outNowT;
+                outNowT = outTimes.Current;
+                outIter = 0;
+
+                if (!maskExcreta)
+                {
+                    outLastExcretaT = outPreT;
+
+                    foreach (var organ in data.Organs)
+                    {
+                        if (!organ.IsExcretaCompatibleWithOIR)
+                            continue;
+
+                        // OIR互換排泄コンパートメントについて、残留放射能をゼロクリアする。
+                        act.CalcNow[organ.Index].end = 0;
+                    }
+                }
+                outBefore24hourT = outNowT - Delta24hourT;
+
+                act.NextOut(data);
+
+                wholeBodyPre = wholeBodyNow;
+                Array.Copy(resultNowM, resultPreM, resultNowM.Length);
+                Array.Copy(resultNowF, resultPreF, resultNowF.Length);
+            }
+        }
+
+        // 計算完了の出力を行う。
+        calcOut.FinishOut();
+    }
+}

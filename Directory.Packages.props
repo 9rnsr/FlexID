@@ -8,6 +8,7 @@
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Sprache" Version="2.3.1" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.3" />
     <PackageVersion Include="MahApps.Metro" Version="2.4.11" />
     <PackageVersion Include="MahApps.Metro.IconPacks.Material" Version="6.2.1" />
     <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />

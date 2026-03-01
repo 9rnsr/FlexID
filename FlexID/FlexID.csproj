@@ -1,28 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <PublishSingleFile>true</PublishSingleFile>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <UseWPF>true</UseWPF>
-    <ApplicationManifest>App.manifest</ApplicationManifest>
-    <DisableFody Condition="'$(Configuration)' == 'Debug'">true</DisableFody>
+  <PropertyGroup Condition="'$(PublishDir)' != ''">
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Copyright>Copyright © 2017</Copyright>
+    <Copyright>Copyright © 2024</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
-    <PackageReference Include="VirtualizingWrapPanel" />
+    <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlexID.Calc\FlexID.Calc.csproj" />
+    <ProjectReference Include="..\FlexID.Core\FlexID.Core.csproj" />
   </ItemGroup>
 
 </Project>
