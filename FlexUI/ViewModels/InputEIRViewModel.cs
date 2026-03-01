@@ -18,8 +18,8 @@ public partial class InputEIRViewModel : ObservableObject
     public InputEIRViewModel()
     {
         OutputFilePath = @"out\";
-        CalcTimeMeshFilePath = @"lib\TimeMesh\time.dat";
-        OutTimeMeshFilePath = @"lib\TimeMesh\out-time.dat";
+        ComputeTimeMeshFilePath = @"lib\TimeMesh\time.dat";
+        OutputTimeMeshFilePath = @"lib\TimeMesh\out-time.dat";
         CommitmentPeriod = "50";
 
         SelectedCommitmentPeriodUnit = CommitmentPeriodUnits.Last();
@@ -87,10 +87,10 @@ public partial class InputEIRViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial string CalcTimeMeshFilePath { get; set; }
+    public partial string ComputeTimeMeshFilePath { get; set; }
 
     [RelayCommand]
-    private void SelectCalcTimeMeshFilePath(string[] paths)
+    private void SelectComputeTimeMeshFilePath(string[] paths)
     {
         var selected = paths?[0];
         if (selected is null)
@@ -100,14 +100,14 @@ public partial class InputEIRViewModel : ObservableObject
             if (dialog.ShowDialog() == true)
                 selected = dialog.FileName;
         }
-        CalcTimeMeshFilePath = selected;
+        ComputeTimeMeshFilePath = selected;
     }
 
     [ObservableProperty]
-    public partial string OutTimeMeshFilePath { get; set; }
+    public partial string OutputTimeMeshFilePath { get; set; }
 
     [RelayCommand]
-    private void SelectOutTimeMeshFilePath(string[] paths)
+    private void SelectOutputTimeMeshFilePath(string[] paths)
     {
         var selected = paths?[0];
         if (selected is null)
@@ -117,7 +117,7 @@ public partial class InputEIRViewModel : ObservableObject
             if (dialog.ShowDialog() == true)
                 selected = dialog.FileName;
         }
-        OutTimeMeshFilePath = selected;
+        OutputTimeMeshFilePath = selected;
     }
 
     [ObservableProperty]
@@ -185,9 +185,9 @@ public partial class InputEIRViewModel : ObservableObject
                 throw new Exception("Please select Nuclide.");
             if (SelectedInput is null)
                 throw new Exception("Please select Route of Intake.");
-            if (CalcTimeMeshFilePath == "")
-                throw new Exception("Please enter the Calculation Time Mesh file path.");
-            if (OutTimeMeshFilePath == "")
+            if (ComputeTimeMeshFilePath == "")
+                throw new Exception("Please enter the Computational Time Mesh file path.");
+            if (OutputTimeMeshFilePath == "")
                 throw new Exception("Please enter the Output Time Mesh file path.");
             if (!int.TryParse(CommitmentPeriod, out _))
                 throw new Exception("Please enter Commitment Period.");
@@ -214,30 +214,30 @@ public partial class InputEIRViewModel : ObservableObject
 
         var dataList = new InputDataReader_EIR(SelectedInput.InputTarget.FilePath, CalcProgeny).Read();
 
-        var outputPath       /**/= OutputFilePath;
-        var calcTimeMeshPath /**/= CalcTimeMeshFilePath;
-        var outTimeMeshPath  /**/= OutTimeMeshFilePath;
-        var commitmentPeriod /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
-        var intakeAge        /**/= SelectedIntakeAge;
+        var outputPath          /**/= OutputFilePath;
+        var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
+        var outputTimeMeshPath  /**/= OutputTimeMeshFilePath;
+        var commitmentPeriod    /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
+        var intakeAge           /**/= SelectedIntakeAge;
 
         if (!Path.IsPathFullyQualified(outputPath))
             outputPath = Path.Combine(AppResource.ProcessDir, outputPath);
-        if (!Path.IsPathFullyQualified(calcTimeMeshPath))
-            calcTimeMeshPath = Path.Combine(AppResource.BaseDir, calcTimeMeshPath);
-        if (!Path.IsPathFullyQualified(outTimeMeshPath))
-            outTimeMeshPath = Path.Combine(AppResource.BaseDir, outTimeMeshPath);
+        if (!Path.IsPathFullyQualified(computeTimeMeshPath))
+            computeTimeMeshPath = Path.Combine(AppResource.BaseDir, computeTimeMeshPath);
+        if (!Path.IsPathFullyQualified(outputTimeMeshPath))
+            outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
 
         var outputDir = Path.GetDirectoryName(outputPath);
         var outputFile = Path.GetFileName(outputPath);
 
         var main = new MainRoutine_EIR()
         {
-            OutputDirectory  /**/= outputDir,
-            OutputFileName   /**/= outputFile,
-            CalcTimeMeshPath /**/= calcTimeMeshPath,
-            OutTimeMeshPath  /**/= outTimeMeshPath,
-            CommitmentPeriod /**/= commitmentPeriod,
-            ExposureAge      /**/= intakeAge,
+            OutputDirectory     /**/= outputDir,
+            OutputFileName      /**/= outputFile,
+            ComputeTimeMeshPath /**/= computeTimeMeshPath,
+            OutputTimeMeshPath  /**/= outputTimeMeshPath,
+            CommitmentPeriod    /**/= commitmentPeriod,
+            ExposureAge         /**/= intakeAge,
         };
 
         await Task.Run(() => main.Main(dataList));

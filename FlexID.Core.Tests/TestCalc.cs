@@ -130,11 +130,11 @@ public class TestCalc
 
         var main = new MainRoutine_OIR()
         {
-            OutputDirectory  /**/= resultDir,
-            OutputFileName   /**/= targetName,
-            CalcTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat"),
-            OutTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat"),
-            CommitmentPeriod /**/= @"5days",
+            OutputDirectory     /**/= resultDir,
+            OutputFileName      /**/= targetName,
+            ComputeTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat"),
+            OutputTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat"),
+            CommitmentPeriod    /**/= @"5days",
         };
 
         // 計算を実行する。

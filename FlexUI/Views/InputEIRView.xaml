@@ -128,21 +128,21 @@
     <Label
       Grid.Row="4"
       Grid.Column="0"
-      Content="Calculation &#xA;Time Mesh" />
+      Content="Computational &#xA;Time Mesh" />
     <Grid Grid.Row="4" Grid.Column="1">
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding CalcTimeMeshFilePath}">
+      <TextBox Text="{Binding ComputeTimeMeshFilePath}">
         <i:Interaction.Behaviors>
-          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectCalcTimeMeshFilePathCommand}" />
+          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectComputeTimeMeshFilePathCommand}" />
         </i:Interaction.Behaviors>
       </TextBox>
       <Button
         Grid.Column="2"
-        Command="{Binding SelectCalcTimeMeshFilePathCommand}"
+        Command="{Binding SelectComputeTimeMeshFilePathCommand}"
         Content="Browse" />
     </Grid>
 
@@ -156,14 +156,14 @@
         <ColumnDefinition Width="8" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox Text="{Binding OutTimeMeshFilePath}">
+      <TextBox Text="{Binding OutputTimeMeshFilePath}">
         <i:Interaction.Behaviors>
-          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutTimeMeshFilePathCommand}" />
+          <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{Binding SelectOutputTimeMeshFilePathCommand}" />
         </i:Interaction.Behaviors>
       </TextBox>
       <Button
         Grid.Column="2"
-        Command="{Binding SelectOutTimeMeshFilePathCommand}"
+        Command="{Binding SelectOutputTimeMeshFilePathCommand}"
         Content="Browse" />
     </Grid>
 

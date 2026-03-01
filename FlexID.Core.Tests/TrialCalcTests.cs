@@ -26,8 +26,8 @@ public class TrialCalcTests
         var resultDir = Path.Combine(TestDir, "Result_OIR~", nuclide);
         Directory.CreateDirectory(resultDir);
 
-        var cTimeMeshFile = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
-        var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
+        var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
+        var outputTimeMeshPath = Path.Combine(TestDir, "out-time.dat");
 
         var commitmentPeriod = "50years";
 
@@ -35,11 +35,11 @@ public class TrialCalcTests
 
         var main = new MainRoutine_OIR()
         {
-            OutputDirectory  /**/= resultDir,
-            OutputFileName   /**/= target,
-            CalcTimeMeshPath /**/= cTimeMeshFile,
-            OutTimeMeshPath  /**/= oTimeMeshFile,
-            CommitmentPeriod /**/= commitmentPeriod,
+            OutputDirectory     /**/= resultDir,
+            OutputFileName      /**/= target,
+            ComputeTimeMeshPath /**/= computeTimeMeshPath,
+            OutputTimeMeshPath  /**/= outputTimeMeshPath,
+            CommitmentPeriod    /**/= commitmentPeriod,
         };
 
         main.Main(data);
@@ -89,12 +89,12 @@ public class TrialCalcTests
 
         var main = new MainRoutine_EIR()
         {
-            OutputDirectory  /**/= resultDir,
-            OutputFileName   /**/= target,
-            CalcTimeMeshPath /**/= cTimeMeshFile,
-            OutTimeMeshPath  /**/= oTimeMeshFile,
-            CommitmentPeriod /**/= commitmentPeriod,
-            ExposureAge      /**/= exposureAge,
+            OutputDirectory     /**/= resultDir,
+            OutputFileName      /**/= target,
+            ComputeTimeMeshPath /**/= cTimeMeshFile,
+            OutputTimeMeshPath  /**/= oTimeMeshFile,
+            CommitmentPeriod    /**/= commitmentPeriod,
+            ExposureAge         /**/= exposureAge,
         };
 
         main.Main(dataList);

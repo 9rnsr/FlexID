@@ -21,12 +21,12 @@ public class MainRoutine_OIR
     /// <summary>
     /// 計算時間メッシュファイルパス。
     /// </summary>
-    public required string CalcTimeMeshPath { get; init; }
+    public required string ComputeTimeMeshPath { get; init; }
 
     /// <summary>
-    /// 出力メッシュファイルパス。
+    /// 出力時間メッシュファイルパス。
     /// </summary>
-    public required string OutTimeMeshPath { get; init; }
+    public required string OutputTimeMeshPath { get; init; }
 
     /// <summary>
     /// 預託期間。
@@ -40,10 +40,10 @@ public class MainRoutine_OIR
         if (string.IsNullOrWhiteSpace(OutputFileName))
             throw Program.Error("Output file name is not specified");
 
-        var calcTimeMesh = new TimeMesh(CalcTimeMeshPath);
-        var outTimeMesh = new TimeMesh(OutTimeMeshPath);
-        if (!calcTimeMesh.Cover(outTimeMesh))
-            throw Program.Error("Calculation time mesh does not cover all boundaries of output time mesh.");
+        var computeTimeMesh = new TimeMesh(ComputeTimeMeshPath);
+        var outputTimeMesh = new TimeMesh(OutputTimeMeshPath);
+        if (!computeTimeMesh.Cover(outputTimeMesh))
+            throw Program.Error("Computational time mesh does not cover all boundaries of output time mesh.");
 
         Directory.CreateDirectory(OutputDirectory);
 
@@ -71,7 +71,7 @@ public class MainRoutine_OIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(calcOut, calcTimeMesh, outTimeMesh, data);
+            MainCalc(calcOut, computeTimeMesh, outputTimeMesh, data);
         }
     }
 
@@ -345,7 +345,7 @@ public class MainRoutine_OIR
         writer.Flush();
     }
 
-    private void MainCalc(CalcOut calcOut, TimeMesh calcTimeMesh, TimeMesh outTimeMesh, InputData data)
+    private void MainCalc(CalcOut calcOut, TimeMesh computeTimeMesh, TimeMesh outputTimeMesh, InputData data)
     {
         const double convergence = 1E-10; // 収束値
         const int iterMax = 1500;  // iterationの最大回数
@@ -357,13 +357,13 @@ public class MainRoutine_OIR
         var targetWeights = data.TargetWeights;
 
         // 計算時間メッシュを準備する。
-        var calcTimes = calcTimeMesh.Start();
+        var calcTimes = computeTimeMesh.Start();
         long calcPreT;
         long calcNowT = calcTimes.Current;
         int calcIter;   // 計算時間メッシュ毎の収束計算回数
 
         // 出力時間メッシュを準備する。
-        var outTimes = outTimeMesh.Start();
+        var outTimes = outputTimeMesh.Start();
         long outPreT;
         long outNowT = outTimes.Current;
         int outIter;    // 出力時間メッシュ毎の収束計算回数
@@ -445,10 +445,10 @@ public class MainRoutine_OIR
                 if (act.NextIter(data, convergence))
                     continue;
 
-                // 出力メッシュと終端が一致する計算メッシュにおける反復回数を保存する。
+                // 出力時間メッシュと終端が一致する計算時間メッシュにおける反復回数を保存する。
                 outIter = calcIter;
 
-                // // 出力メッシュ内での総反復回数を保存する。
+                // // 出力時間メッシュ内での総反復回数を保存する。
                 // outIter += calcIter;
                 break;
             }
