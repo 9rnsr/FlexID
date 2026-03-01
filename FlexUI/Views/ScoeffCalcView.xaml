@@ -151,6 +151,7 @@
       Grid.Column="1"
       MinHeight="64"
       ItemsSource="{Binding Nuclides}"
+      ScrollViewer.CanContentScroll="True"
       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
       SelectionMode="Extended">
 

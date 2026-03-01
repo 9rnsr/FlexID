@@ -8,16 +8,16 @@ $BuildOpts = @(
 )
 
 # クリーンアップ
-dotnet clean FlexUI\FlexUI.csproj               @BuildOpts
-dotnet clean ResultChecker\ResultChecker.csproj @BuildOpts
+dotnet clean FlexID\FlexID.csproj @BuildOpts
+dotnet clean FlexUI\FlexUI.csproj @BuildOpts
 
 $PublishOpts = @(
   "--output", "$PublishDir"
 )
 
 # 発行
-dotnet publish FlexUI\FlexUI.csproj               @BuildOpts @PublishOpts
-dotnet publish ResultChecker\ResultChecker.csproj @BuildOpts @PublishOpts
+dotnet publish FlexID\FlexID.csproj @BuildOpts @PublishOpts
+dotnet publish FlexUI\FlexUI.csproj @BuildOpts @PublishOpts
 
 # アーカイブ
 Compress-Archive -Path $PublishDir/* -DestinationPath $OutputDir/FlexID.zip -Force

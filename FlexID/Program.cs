@@ -8,6 +8,9 @@ internal partial class Program
 {
     static async Task<int> Main(string[] args)
     {
+        if (args.Length == 0)
+            return Usage();
+
         // 処理結果の出力ディレクトリ。
         var outputDir = Path.Combine(AppResource.ProcessDir, "out");
 
@@ -197,7 +200,7 @@ internal partial class Program
         return 0;
     }
 
-    private static void Usage()
+    private static int Usage()
     {
         var exeName = Path.GetFileNameWithoutExtension(Environment.ProcessPath);
 
@@ -214,6 +217,7 @@ internal partial class Program
         Console.Error.WriteLine("<pattern>");
         Console.Error.WriteLine("    target input name pattern as regular expression.");
         Console.Error.WriteLine();
+        return 0;
     }
 
     /// <summary>
