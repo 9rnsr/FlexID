@@ -15,26 +15,26 @@ public class ReportGenerator
         ExcelPackage.License.SetNonCommercialPersonal("FlexID");
     }
 
-    public static void WriteSummary(string filePath, ReportResult[] results)
+    public static void WriteSummary(string filePath, ReportData[] reports)
     {
         using var package = new ExcelPackage();
 
         // 預託実効線量と預託等価線量のシートを作成。
         var sheetEequivDose = package.Workbook.Worksheets.Add("Dose");
-        WriteDoseSheet(sheetEequivDose, results);
+        WriteDoseSummary(sheetEequivDose, reports);
 
         // (預託実効線量と)残留放射能の要約シートを作成。
         var sheetSummary = package.Workbook.Worksheets.Add("Retention");
-        WriteRetentionSheet(sheetSummary, results);
+        WriteRetentionSummary(sheetSummary, reports);
 
         // 対象毎の残留放射能の確認シートを作成。
-        foreach (var res in results)
+        foreach (var report in reports)
         {
-            if (res.HasErrors)
+            if (report.HasErrors)
                 continue;
 
-            var sheetRes = package.Workbook.Worksheets.Add(res.Target.Name);
-            WriteResultSheet(sheetRes, res);
+            var sheetRes = package.Workbook.Worksheets.Add(report.OutputName);
+            WriteResultSheet(sheetRes, report);
         }
 
         package.SaveAs(filePath);
@@ -60,16 +60,16 @@ public class ReportGenerator
     /// 預託実効線量と預託等価線量の比較結果シートを書き出す。
     /// </summary>
     /// <param name="sheet"></param>
-    /// <param name="results"></param>
-    private static void WriteDoseSheet(ExcelWorksheet sheet, IEnumerable<ReportResult> results)
+    /// <param name="reports"></param>
+    private static void WriteDoseSummary(ExcelWorksheet sheet, IEnumerable<ReportData> reports)
     {
         sheet.Cells[1, 1].Value = "Dose";
 
         const int rowH = 3;
         const int rowV = rowH + 2;
-        const int colT = 1;
-        const int colD = 2;
-        const int colE = 7;
+        const int colT = 1; // Target
+        const int colD = 2; // effective Dose
+        const int colE = 7; // Equivalent dose
 
         sheet.OutLineSummaryBelow = false;
         sheet.OutLineSummaryRight = false;
@@ -125,39 +125,42 @@ public class ReportGenerator
         }
 
         var r = rowV;
-        foreach (var res in results)
+        foreach (var report in reports)
         {
             ExcelRange cells;
 
             // Target
             {
                 cells = sheet.Cells[r, colT];
-                cells.Value = res.Target.Name;
+                cells.Value = report.OutputName;
                 cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             }
 
             // Effective Dose
             {
-                if (res.HasErrors)
+                if (report.HasErrors)
                 {
                     cells = sheet.Cells[r, colD + 0, r, colD + 2];
                     cells.Value = "-";
                 }
                 else
                 {
-                    var cellEffDoseE = sheet.Cells[r, colD + 0];
-                    var cellEffDoseA = sheet.Cells[r, colD + 1];
-                    var cellEffDoseR = sheet.Cells[r, colD + 2];
+                    var expectDose = report.ExpectDose!;
+                    var outputDose = report.OutputDose!;
 
-                    cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
-                    cellEffDoseA.Value = res.ActualDose.EffectiveDose;
-                    cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
+                    var cellEffDoseE = sheet.Cells[r, colD + 0];
+                    var cellEffDoseO = sheet.Cells[r, colD + 1];
+                    var cellEffDoseD = sheet.Cells[r, colD + 2];
+
+                    cellEffDoseE.Value = expectDose.EffectiveDose;
+                    cellEffDoseO.Value = outputDose.EffectiveDose;
+                    cellEffDoseD.Formula = $"{cellEffDoseO.Address}/{cellEffDoseE.Address}";
                     cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
-                    cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
-                    cellEffDoseR.Style.Numberformat.Format = "??0.0%";
+                    cellEffDoseO.Style.Numberformat.Format = "0.0E+00";
+                    cellEffDoseD.Style.Numberformat.Format = "??0.0%";
 
                     // 預託実効線量のFlexID/OIR比にカラースケールを設定。
-                    SetPercentColorScale(cellEffDoseR);
+                    SetPercentColorScale(cellEffDoseD);
                 }
 
                 sheet.Cells[r + 0, colD + 0, r + 5, colD + 0].Merge = true;
@@ -178,36 +181,39 @@ public class ReportGenerator
                 sheet.Cells[r + 4, colE - 1].Value = "FlexID Male";
                 sheet.Cells[r + 5, colE - 1].Value = "FlexID Female";
 
-                if (res.HasErrors)
+                if (report.HasErrors)
                 {
                     cells = sheet.Cells[r + 0, colE, r + 5, colE + targetRegions.Length - 1];
                     cells.Value = "-";
                 }
                 else
                 {
-                    int targetRegionCount = res.ExpectDose.EquivalentDosesMale.Length;
+                    var expectDose = report.ExpectDose!;
+                    var outputDose = report.OutputDose!;
+
+                    int targetRegionCount = expectDose.EquivalentDosesMale.Length;
                     for (int i = 0; i < targetRegionCount; i++)
                     {
-                        var cellEquivDoseRM = sheet.Cells[r + 0, colE + i];
-                        var cellEquivDoseRF = sheet.Cells[r + 1, colE + i];
-                        var cellEquivDoseEM = sheet.Cells[r + 2, colE + i];
-                        var cellEquivDoseEF = sheet.Cells[r + 3, colE + i];
-                        var cellEquivDoseAM = sheet.Cells[r + 4, colE + i];
-                        var cellEquivDoseAF = sheet.Cells[r + 5, colE + i];
+                        var cellEquivDoseDM = sheet.Cells[r + 0, colE + i]; // Diff Male
+                        var cellEquivDoseDF = sheet.Cells[r + 1, colE + i]; // Diff Female
+                        var cellEquivDoseEM = sheet.Cells[r + 2, colE + i]; // Expect Male
+                        var cellEquivDoseEF = sheet.Cells[r + 3, colE + i]; // Expect Female
+                        var cellEquivDoseOM = sheet.Cells[r + 4, colE + i]; // Output Male
+                        var cellEquivDoseOF = sheet.Cells[r + 5, colE + i]; // Output Female
 
-                        cellEquivDoseRM.Formula = $"IFERROR({cellEquivDoseAM.Address}/{cellEquivDoseEM.Address},\"-\")";
-                        cellEquivDoseRF.Formula = $"IFERROR({cellEquivDoseAF.Address}/{cellEquivDoseEF.Address},\"-\")";
-                        cellEquivDoseEM.Value = res.ExpectDose.EquivalentDosesMale[i];
-                        cellEquivDoseEF.Value = res.ExpectDose.EquivalentDosesFemale[i];
-                        cellEquivDoseAM.Value = res.ActualDose.EquivalentDosesMale[i];
-                        cellEquivDoseAF.Value = res.ActualDose.EquivalentDosesFemale[i];
+                        cellEquivDoseDM.Formula = $"IFERROR({cellEquivDoseOM.Address}/{cellEquivDoseEM.Address},\"-\")";
+                        cellEquivDoseDF.Formula = $"IFERROR({cellEquivDoseOF.Address}/{cellEquivDoseEF.Address},\"-\")";
+                        cellEquivDoseEM.Value = expectDose.EquivalentDosesMale[i];
+                        cellEquivDoseEF.Value = expectDose.EquivalentDosesFemale[i];
+                        cellEquivDoseOM.Value = outputDose.EquivalentDosesMale[i];
+                        cellEquivDoseOF.Value = outputDose.EquivalentDosesFemale[i];
 
-                        cellEquivDoseRM.Style.Numberformat.Format = "??0.0%";
-                        cellEquivDoseRF.Style.Numberformat.Format = "??0.0%";
+                        cellEquivDoseDM.Style.Numberformat.Format = "??0.0%";
+                        cellEquivDoseDF.Style.Numberformat.Format = "??0.0%";
                         cellEquivDoseEM.Style.Numberformat.Format = "0.0E+00";
                         cellEquivDoseEF.Style.Numberformat.Format = "0.0E+00";
-                        cellEquivDoseAM.Style.Numberformat.Format = "0.0E+00";
-                        cellEquivDoseAF.Style.Numberformat.Format = "0.0E+00";
+                        cellEquivDoseOM.Style.Numberformat.Format = "0.0E+00";
+                        cellEquivDoseOF.Style.Numberformat.Format = "0.0E+00";
                     }
 
                     // 預託等価線量のFlexID/OIR比にカラースケールを設定。
@@ -229,7 +235,7 @@ public class ReportGenerator
         sheet.Column(6).AutoFit();
 
         r = rowV;
-        foreach (var res in results)
+        foreach (var report in reports)
         {
             // Target
             sheet.Cells[r, colT, r + 5, colT].Merge = true;
@@ -244,16 +250,16 @@ public class ReportGenerator
     /// 預託実効線量の比較結果と、残留放射能の要約比較を含んだシートを書き出す。
     /// </summary>
     /// <param name="sheet"></param>
-    /// <param name="results"></param>
-    private static void WriteRetentionSheet(ExcelWorksheet sheet, IEnumerable<ReportResult> results)
+    /// <param name="reports"></param>
+    private static void WriteRetentionSummary(ExcelWorksheet sheet, IEnumerable<ReportData> reports)
     {
         sheet.Cells[1, 1].Value = "Retention";
 
         const int rowH = 3;
         const int rowV = rowH + 2;
-        const int colT = 1;
-        const int colD = 2;
-        const int colA = 6;
+        const int colT = 1; // Target
+        const int colD = 2; // Dose
+        const int colA = 6; // Activity
 
         // Target
         {
@@ -301,12 +307,12 @@ public class ReportGenerator
         WriteActivityHeader(colA + 14, "Thyroid");
 
         var r = rowV;
-        foreach (var res in results)
+        foreach (var report in reports)
         {
             // Target
-            sheet.Cells[r, 1].Value = res.Target.Name;
+            sheet.Cells[r, 1].Value = report.OutputName;
 
-            if (res.HasErrors)
+            if (report.HasErrors)
             {
                 sheet.Cells[r, 2, r, 4].Value = "-";
                 sheet.Cells[r, 6, r, 11].Value = "-";
@@ -314,17 +320,20 @@ public class ReportGenerator
                 continue;
             }
 
+            var expectDose = report.ExpectDose!;
+            var outputDose = report.OutputDose!;
+
             // Effective Dose
             {
-                var cellEffDoseE = sheet.Cells[r, colD + 0];
-                var cellEffDoseA = sheet.Cells[r, colD + 1];
-                var cellEffDoseR = sheet.Cells[r, colD + 2];
-                cellEffDoseE.Value = res.ExpectDose.EffectiveDose;
-                cellEffDoseA.Value = res.ActualDose.EffectiveDose;
-                cellEffDoseR.Formula = $"{cellEffDoseA.Address}/{cellEffDoseE.Address}";
+                var cellEffDoseE = sheet.Cells[r, colD + 0]; // Expec
+                var cellEffDoseO = sheet.Cells[r, colD + 1]; // Output
+                var cellEffDoseD = sheet.Cells[r, colD + 2]; // Diff
+                cellEffDoseE.Value = expectDose.EffectiveDose;
+                cellEffDoseO.Value = outputDose.EffectiveDose;
+                cellEffDoseD.Formula = $"{cellEffDoseO.Address}/{cellEffDoseE.Address}";
                 cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
-                cellEffDoseA.Style.Numberformat.Format = "0.0E+00";
-                cellEffDoseR.Style.Numberformat.Format = "??0.0%";
+                cellEffDoseO.Style.Numberformat.Format = "0.0E+00";
+                cellEffDoseD.Style.Numberformat.Format = "??0.0%";
             }
 
             // Activity
@@ -340,14 +349,14 @@ public class ReportGenerator
                 cell1.Style.Numberformat.Format = "??0.0%";
                 cell2.Style.Numberformat.Format = "??0.0%";
             }
-            WriteActivityValue(colA + 0, res.FractionsWholeBody);
-            WriteActivityValue(colA + 2, res.FractionsUrine);
-            WriteActivityValue(colA + 4, res.FractionsFaeces);
-            WriteActivityValue(colA + 6, res.FractionsAtract);
-            WriteActivityValue(colA + 8, res.FractionsLungs);
-            WriteActivityValue(colA + 10, res.FractionsSkeleton);
-            WriteActivityValue(colA + 12, res.FractionsLiver);
-            WriteActivityValue(colA + 14, res.FractionsThyroid);
+            WriteActivityValue(colA + 0, report.FractionsWholeBody);
+            WriteActivityValue(colA + 2, report.FractionsUrine);
+            WriteActivityValue(colA + 4, report.FractionsFaeces);
+            WriteActivityValue(colA + 6, report.FractionsAtract);
+            WriteActivityValue(colA + 8, report.FractionsLungs);
+            WriteActivityValue(colA + 10, report.FractionsSkeleton);
+            WriteActivityValue(colA + 12, report.FractionsLiver);
+            WriteActivityValue(colA + 14, report.FractionsThyroid);
 
             r++;
         }
@@ -374,37 +383,35 @@ public class ReportGenerator
     /// 計算対象の、残留放射能の比較結果シートを書き出す。
     /// </summary>
     /// <param name="sheet"></param>
-    /// <param name="result"></param>
-    private static void WriteResultSheet(ExcelWorksheet sheet, ReportResult result)
+    /// <param name="report"></param>
+    private static void WriteResultSheet(ExcelWorksheet sheet, ReportData report)
     {
-        var target = result.Target;
+        var expectActs = report.ExpectActs!;
+        var outputActs = report.OutputActs!;
 
-        var expectActs = result.ExpectActs;
-        var actualActs = result.ActualActs;
-
-        sheet.Cells[1, 1].Value = target.Name;
+        sheet.Cells[1, 1].Value = report.OutputName;
 
         const int rowH = 4;
         const int rowT = rowH + 1;
-        const int colE = 24;
-        const int colA = 34;
-        const int colD = 14;
+        const int colE = 24; // Expect
+        const int colO = 34; // Output
+        const int colD = 14; // Diff
         const int colC = 1;
 
         sheet.Cells[rowH - 1, colE + 0].Value = "OIR";
-        sheet.Cells[rowH - 1, colA + 0].Value = "FlexID";
+        sheet.Cells[rowH - 1, colO + 0].Value = "FlexID";
         sheet.Cells[rowH - 1, colD + 0].Value = "Diff";
 
-        string GetCompartmentNuclide(string nuclide) =>
-            nuclide is null ? "-" : nuclide == target.Nuclide ? "" : $"({nuclide})";
-        sheet.Cells[rowH - 1, colD + 1].Value = GetCompartmentNuclide(target.NuclideWholeBody);
-        sheet.Cells[rowH - 1, colD + 2].Value = GetCompartmentNuclide(target.NuclideUrine);
-        sheet.Cells[rowH - 1, colD + 3].Value = GetCompartmentNuclide(target.NuclideFaeces);
-        sheet.Cells[rowH - 1, colD + 4].Value = GetCompartmentNuclide(target.NuclideAtract);
-        sheet.Cells[rowH - 1, colD + 5].Value = GetCompartmentNuclide(target.NuclideLungs);
-        sheet.Cells[rowH - 1, colD + 6].Value = GetCompartmentNuclide(target.NuclideSkeleton);
-        sheet.Cells[rowH - 1, colD + 7].Value = GetCompartmentNuclide(target.NuclideLiver);
-        sheet.Cells[rowH - 1, colD + 8].Value = GetCompartmentNuclide(target.NuclideThyroid);
+        string GetCompartmentNuclide(string? nuclide) =>
+            nuclide is null ? "-" : nuclide == report.OutputNuclide ? "" : $"({nuclide})";
+        sheet.Cells[rowH - 1, colD + 1].Value = GetCompartmentNuclide(report.NuclideWholeBody);
+        sheet.Cells[rowH - 1, colD + 2].Value = GetCompartmentNuclide(report.NuclideUrine);
+        sheet.Cells[rowH - 1, colD + 3].Value = GetCompartmentNuclide(report.NuclideFaeces);
+        sheet.Cells[rowH - 1, colD + 4].Value = GetCompartmentNuclide(report.NuclideAtract);
+        sheet.Cells[rowH - 1, colD + 5].Value = GetCompartmentNuclide(report.NuclideLungs);
+        sheet.Cells[rowH - 1, colD + 6].Value = GetCompartmentNuclide(report.NuclideSkeleton);
+        sheet.Cells[rowH - 1, colD + 7].Value = GetCompartmentNuclide(report.NuclideLiver);
+        sheet.Cells[rowH - 1, colD + 8].Value = GetCompartmentNuclide(report.NuclideThyroid);
         sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.ShrinkToFit = true;
         sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
@@ -421,18 +428,18 @@ public class ReportGenerator
         sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
         sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-        sheet.Cells[rowH, colA + 0].Value = "Time, days";
-        sheet.Cells[rowH, colA + 1].Value = "Whole Body";
-        sheet.Cells[rowH, colA + 2].Value = "Urine\n(24-hour)";
-        sheet.Cells[rowH, colA + 3].Value = "Faeces\n(24-hour)";
-        sheet.Cells[rowH, colA + 4].Value = "Alimentary Tract";
-        sheet.Cells[rowH, colA + 5].Value = "Lungs";
-        sheet.Cells[rowH, colA + 6].Value = "Skeleton";
-        sheet.Cells[rowH, colA + 7].Value = "Liver";
-        sheet.Cells[rowH, colA + 8].Value = "Thyroid";
-        sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.WrapText = true;
-        sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-        sheet.Cells[rowH, colA + 0, rowH, colA + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        sheet.Cells[rowH, colO + 0].Value = "Time, days";
+        sheet.Cells[rowH, colO + 1].Value = "Whole Body";
+        sheet.Cells[rowH, colO + 2].Value = "Urine\n(24-hour)";
+        sheet.Cells[rowH, colO + 3].Value = "Faeces\n(24-hour)";
+        sheet.Cells[rowH, colO + 4].Value = "Alimentary Tract";
+        sheet.Cells[rowH, colO + 5].Value = "Lungs";
+        sheet.Cells[rowH, colO + 6].Value = "Skeleton";
+        sheet.Cells[rowH, colO + 7].Value = "Liver";
+        sheet.Cells[rowH, colO + 8].Value = "Thyroid";
+        sheet.Cells[rowH, colO + 0, rowH, colO + 8].Style.WrapText = true;
+        sheet.Cells[rowH, colO + 0, rowH, colO + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+        sheet.Cells[rowH, colO + 0, rowH, colO + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
         sheet.Cells[rowH, colD + 0].Value = "Time, days";
         sheet.Cells[rowH, colD + 1].Value = "Whole Body";
@@ -453,81 +460,47 @@ public class ReportGenerator
         //sheet.Cells[rowH, colD, rowH, colD + 3].AutoFitColumns(0);
 
         var nrow = 0;
-        foreach (var (actualAct, expectAct) in actualActs.Zip(expectActs, (a, e) => (a, e)))
+        foreach (var (outputAct, expectAct) in outputActs.Zip(expectActs))
         {
             var r = rowT + nrow;
 
-            var cellTimeE      /**/= sheet.Cells[r, colE + 0];
-            var cellWholeBodyE /**/= sheet.Cells[r, colE + 1];
-            var cellUrineE     /**/= sheet.Cells[r, colE + 2];
-            var cellFaecesE    /**/= sheet.Cells[r, colE + 3];
-            var cellAtractE    /**/= sheet.Cells[r, colE + 4];
-            var cellLungsE     /**/= sheet.Cells[r, colE + 5];
-            var cellSkeletonE  /**/= sheet.Cells[r, colE + 6];
-            var cellLiverE     /**/= sheet.Cells[r, colE + 7];
-            var cellThyroidE   /**/= sheet.Cells[r, colE + 8];
-            cellTimeE      /**/.Value = expectAct.EndTime;
-            cellWholeBodyE /**/.Value = expectAct.WholeBody/**/?? (object)"-";
-            cellUrineE     /**/.Value = expectAct.Urine    /**/?? (object)"-";
-            cellFaecesE    /**/.Value = expectAct.Faeces   /**/?? (object)"-";
-            cellAtractE    /**/.Value = expectAct.Atract   /**/?? (object)"-";
-            cellLungsE     /**/.Value = expectAct.Lungs    /**/?? (object)"-";
-            cellSkeletonE  /**/.Value = expectAct.Skeleton /**/?? (object)"-";
-            cellLiverE     /**/.Value = expectAct.Liver    /**/?? (object)"-";
-            cellThyroidE   /**/.Value = expectAct.Thyroid  /**/?? (object)"-";
+            void SetValues(int col, in ReportData.Retention act)
+            {
+                sheet.Cells[r, col + 0].Value = act.EndTime;
+                sheet.Cells[r, col + 1].Value = act.WholeBody/**/?? (object)"-";
+                sheet.Cells[r, col + 2].Value = act.Urine    /**/?? (object)"-";
+                sheet.Cells[r, col + 3].Value = act.Faeces   /**/?? (object)"-";
+                sheet.Cells[r, col + 4].Value = act.Atract   /**/?? (object)"-";
+                sheet.Cells[r, col + 5].Value = act.Lungs    /**/?? (object)"-";
+                sheet.Cells[r, col + 6].Value = act.Skeleton /**/?? (object)"-";
+                sheet.Cells[r, col + 7].Value = act.Liver    /**/?? (object)"-";
+                sheet.Cells[r, col + 8].Value = act.Thyroid  /**/?? (object)"-";
+            }
+            SetValues(colE, expectActs[nrow]);
+            SetValues(colO, outputActs[nrow]);
 
-            var cellTimeA      /**/= sheet.Cells[r, colA + 0];
-            var cellWholeBodyA /**/= sheet.Cells[r, colA + 1];
-            var cellUrineA     /**/= sheet.Cells[r, colA + 2];
-            var cellFaecesA    /**/= sheet.Cells[r, colA + 3];
-            var cellAtractA    /**/= sheet.Cells[r, colA + 4];
-            var cellLungsA     /**/= sheet.Cells[r, colA + 5];
-            var cellSkeletonA  /**/= sheet.Cells[r, colA + 6];
-            var cellLiverA     /**/= sheet.Cells[r, colA + 7];
-            var cellThyroidA   /**/= sheet.Cells[r, colA + 8];
-            cellTimeA      /**/.Value = actualAct.EndTime;
-            cellWholeBodyA /**/.Value = actualAct.WholeBody/**/?? (object)"-";
-            cellUrineA     /**/.Value = actualAct.Urine    /**/?? (object)"-";
-            cellFaecesA    /**/.Value = actualAct.Faeces   /**/?? (object)"-";
-            cellAtractA    /**/.Value = actualAct.Atract   /**/?? (object)"-";
-            cellLungsA     /**/.Value = actualAct.Lungs    /**/?? (object)"-";
-            cellSkeletonA  /**/.Value = actualAct.Skeleton /**/?? (object)"-";
-            cellLiverA     /**/.Value = actualAct.Liver    /**/?? (object)"-";
-            cellThyroidA   /**/.Value = actualAct.Thyroid  /**/?? (object)"-";
-
-            var cellTimeR      /**/= sheet.Cells[r, colD + 0];
-            var cellWholeBodyR /**/= sheet.Cells[r, colD + 1];
-            var cellUrineR     /**/= sheet.Cells[r, colD + 2];
-            var cellFaecesR    /**/= sheet.Cells[r, colD + 3];
-            var cellAtractR    /**/= sheet.Cells[r, colD + 4];
-            var cellLungsR     /**/= sheet.Cells[r, colD + 5];
-            var cellSkeletonR  /**/= sheet.Cells[r, colD + 6];
-            var cellLiverR     /**/= sheet.Cells[r, colD + 7];
-            var cellThyroidR   /**/= sheet.Cells[r, colD + 8];
-            cellTimeR      /**/.Value = expectAct.EndTime;
-            cellWholeBodyR/**/.Formula = $"IFERROR({cellWholeBodyA/**/.Address}/{cellWholeBodyE/**/.Address},\"-\")";
-            cellUrineR    /**/.Formula = $"IFERROR({cellUrineA    /**/.Address}/{cellUrineE    /**/.Address},\"-\")";
-            cellFaecesR   /**/.Formula = $"IFERROR({cellFaecesA   /**/.Address}/{cellFaecesE   /**/.Address},\"-\")";
-            cellAtractR   /**/.Formula = $"IFERROR({cellAtractA   /**/.Address}/{cellAtractE   /**/.Address},\"-\")";
-            cellLungsR    /**/.Formula = $"IFERROR({cellLungsA    /**/.Address}/{cellLungsE    /**/.Address},\"-\")";
-            cellSkeletonR /**/.Formula = $"IFERROR({cellSkeletonA /**/.Address}/{cellSkeletonE /**/.Address},\"-\")";
-            cellLiverR    /**/.Formula = $"IFERROR({cellLiverA    /**/.Address}/{cellLiverE    /**/.Address},\"-\")";
-            cellThyroidR  /**/.Formula = $"IFERROR({cellThyroidA  /**/.Address}/{cellThyroidE  /**/.Address},\"-\")";
-
-            nrow++;
+            sheet.Cells[r, colD + 0].Value = outputActs[nrow].EndTime;
+            sheet.Cells[r, colD + 1].Formula = $"IFERROR({sheet.Cells[r, colO + 1].Address}/{sheet.Cells[r, colE + 1].Address},\"-\")";
+            sheet.Cells[r, colD + 2].Formula = $"IFERROR({sheet.Cells[r, colO + 2].Address}/{sheet.Cells[r, colE + 2].Address},\"-\")";
+            sheet.Cells[r, colD + 3].Formula = $"IFERROR({sheet.Cells[r, colO + 3].Address}/{sheet.Cells[r, colE + 3].Address},\"-\")";
+            sheet.Cells[r, colD + 4].Formula = $"IFERROR({sheet.Cells[r, colO + 4].Address}/{sheet.Cells[r, colE + 4].Address},\"-\")";
+            sheet.Cells[r, colD + 5].Formula = $"IFERROR({sheet.Cells[r, colO + 5].Address}/{sheet.Cells[r, colE + 5].Address},\"-\")";
+            sheet.Cells[r, colD + 6].Formula = $"IFERROR({sheet.Cells[r, colO + 6].Address}/{sheet.Cells[r, colE + 6].Address},\"-\")";
+            sheet.Cells[r, colD + 7].Formula = $"IFERROR({sheet.Cells[r, colO + 7].Address}/{sheet.Cells[r, colE + 7].Address},\"-\")";
+            sheet.Cells[r, colD + 8].Formula = $"IFERROR({sheet.Cells[r, colO + 8].Address}/{sheet.Cells[r, colE + 8].Address},\"-\")";
         }
 
-        var sr = rowT;
-        var er = rowT + nrow - 1;
+        var rowS = rowT;            // row start
+        var rowE = rowT + nrow - 1; // row end
 
-        var cellsE = sheet.Cells[sr, colE + 1, er, colE + 8];
-        var cellsA = sheet.Cells[sr, colA + 1, er, colA + 8];
-        var cellsD = sheet.Cells[sr, colD + 1, er, colD + 8];
+        var cellsE = sheet.Cells[rowS, colE + 1, rowE, colE + 8];
+        var cellsO = sheet.Cells[rowS, colO + 1, rowE, colO + 8];
+        var cellsD = sheet.Cells[rowS, colD + 1, rowE, colD + 8];
         cellsE.Style.Numberformat.Format = "0.0E+00";
-        cellsA.Style.Numberformat.Format = "0.0E+00";
+        cellsO.Style.Numberformat.Format = "0.0E+00";
         cellsD.Style.Numberformat.Format = "??0.0%";
         cellsE.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-        cellsA.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        cellsO.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         cellsD.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
         // 時間メッシュ毎の残留放射能のFlexID/OIR比にカラースケールを設定。
@@ -536,26 +509,6 @@ public class ReportGenerator
         //sheet.Cells[rowT, colE, er, colE + 3].AutoFitColumns(0);
         //sheet.Cells[rowT, colA, er, colA + 3].AutoFitColumns(0);
         //sheet.Cells[rowT, colD, er, colD + 3].AutoFitColumns(0);
-
-        var timesE     /**/= sheet.Cells[sr, colE + 0, er, colE + 0];
-        var wholeBodyE /**/= sheet.Cells[sr, colE + 1, er, colE + 1];
-        var urineE     /**/= sheet.Cells[sr, colE + 2, er, colE + 2];
-        var faecesE    /**/= sheet.Cells[sr, colE + 3, er, colE + 3];
-        var atractE    /**/= sheet.Cells[sr, colE + 4, er, colE + 4];
-        var lungsE     /**/= sheet.Cells[sr, colE + 5, er, colE + 5];
-        var skeletonE  /**/= sheet.Cells[sr, colE + 6, er, colE + 6];
-        var liverE     /**/= sheet.Cells[sr, colE + 7, er, colE + 7];
-        var thyroidE   /**/= sheet.Cells[sr, colE + 8, er, colE + 8];
-
-        var timesA     /**/= sheet.Cells[sr, colA + 0, er, colA + 0];
-        var wholeBodyA /**/= sheet.Cells[sr, colA + 1, er, colA + 1];
-        var urineA     /**/= sheet.Cells[sr, colA + 2, er, colA + 2];
-        var faecesA    /**/= sheet.Cells[sr, colA + 3, er, colA + 3];
-        var aractA     /**/= sheet.Cells[sr, colA + 4, er, colA + 4];
-        var lungsA     /**/= sheet.Cells[sr, colA + 5, er, colA + 5];
-        var skeletonA  /**/= sheet.Cells[sr, colA + 6, er, colA + 6];
-        var liverA     /**/= sheet.Cells[sr, colA + 7, er, colA + 7];
-        var thyroidA   /**/= sheet.Cells[sr, colA + 8, er, colA + 8];
 
         var chartWholeBody /**/= sheet.Drawings.AddScatterChart("ChartWholeBody", /**/eScatterChartType.XYScatter);
         var chartUrine     /**/= sheet.Drawings.AddScatterChart("ChartUrine",     /**/eScatterChartType.XYScatter);
@@ -573,7 +526,6 @@ public class ReportGenerator
         chartSkeleton /**/.Title.Text = "Skeleton";
         chartLiver    /**/.Title.Text = "Liver";
         chartThyroid  /**/.Title.Text = "Thyroid";
-
         SetActivityChartStyle(chartWholeBody, /**/rowT/*                     */, colC, 22, 12);
         SetActivityChartStyle(chartUrine,     /**/chartWholeBody/**/.To.Row + 2, colC, 22, 12);
         SetActivityChartStyle(chartFaeces,    /**/chartUrine    /**/.To.Row + 2, colC, 22, 12);
@@ -583,45 +535,36 @@ public class ReportGenerator
         SetActivityChartStyle(chartLiver,     /**/chartSkeleton /**/.To.Row + 2, colC, 22, 12);
         SetActivityChartStyle(chartThyroid,   /**/chartLiver    /**/.To.Row + 2, colC, 22, 12);
 
-        var serieWholeBodyE = chartWholeBody.Series.Add(wholeBodyE, timesE);
-        var serieWholeBodyA = chartWholeBody.Series.Add(wholeBodyA, timesA);
-        SetExpectSerieStyle(serieWholeBodyE, "Whole Body");
-        SetActualSerieStyle(serieWholeBodyA, "Whole Body");
-
-        var serieUrineE = chartUrine.Series.Add(urineE, timesE);
-        var serieUrineA = chartUrine.Series.Add(urineA, timesA);
-        SetExpectSerieStyle(serieUrineE, "Urine");
-        SetActualSerieStyle(serieUrineA, "Urine");
-
-        var serieFaecesE = chartFaeces.Series.Add(faecesE, timesE);
-        var serieFaecesA = chartFaeces.Series.Add(faecesA, timesA);
-        SetExpectSerieStyle(serieFaecesE, "Faeces");
-        SetActualSerieStyle(serieFaecesA, "Faeces");
-
-        var serieAtractE = chartAtract.Series.Add(atractE, timesE);
-        var serieAtractA = chartAtract.Series.Add(aractA, timesA);
-        SetExpectSerieStyle(serieAtractE, "Aimentary Tract");
-        SetActualSerieStyle(serieAtractA, "Aimentary Tract");
-
-        var serieLungsE = chartLungs.Series.Add(lungsE, timesE);
-        var serieLungsA = chartLungs.Series.Add(lungsA, timesA);
-        SetExpectSerieStyle(serieLungsE, "Lungs");
-        SetActualSerieStyle(serieLungsA, "Lungs");
-
-        var serieSkeletonE = chartSkeleton.Series.Add(skeletonE, timesE);
-        var serieSkeletonA = chartSkeleton.Series.Add(skeletonA, timesA);
-        SetExpectSerieStyle(serieSkeletonE, "Skeleton");
-        SetActualSerieStyle(serieSkeletonA, "Skeleton");
-
-        var serieLiverE = chartLiver.Series.Add(liverE, timesE);
-        var serieLiverA = chartLiver.Series.Add(liverA, timesA);
-        SetExpectSerieStyle(serieLiverE, "Liver");
-        SetActualSerieStyle(serieLiverA, "Liver");
-
-        var serieThyroidE = chartThyroid.Series.Add(thyroidE, timesE);
-        var serieThyroidA = chartThyroid.Series.Add(thyroidA, timesA);
-        SetExpectSerieStyle(serieThyroidE, "Thyroid");
-        SetActualSerieStyle(serieThyroidA, "Thyroid");
+        void AddSeries(int col, Action<ExcelScatterChartSerie, string> setSerieStyle)
+        {
+            var times     /**/= sheet.Cells[rowS, col + 0, rowE, col + 0];
+            var wholeBody /**/= sheet.Cells[rowS, col + 1, rowE, col + 1];
+            var urine     /**/= sheet.Cells[rowS, col + 2, rowE, col + 2];
+            var faeces    /**/= sheet.Cells[rowS, col + 3, rowE, col + 3];
+            var atract    /**/= sheet.Cells[rowS, col + 4, rowE, col + 4];
+            var lungs     /**/= sheet.Cells[rowS, col + 5, rowE, col + 5];
+            var skeleton  /**/= sheet.Cells[rowS, col + 6, rowE, col + 6];
+            var liver     /**/= sheet.Cells[rowS, col + 7, rowE, col + 7];
+            var thyroid   /**/= sheet.Cells[rowS, col + 8, rowE, col + 8];
+            var serieWholeBody /**/= chartWholeBody/**/.Series.Add(wholeBody, /**/times);
+            var serieUrine     /**/= chartUrine    /**/.Series.Add(urine,     /**/times);
+            var serieFaeces    /**/= chartFaeces   /**/.Series.Add(faeces,    /**/times);
+            var serieAtract    /**/= chartAtract   /**/.Series.Add(atract,    /**/times);
+            var serieLungs     /**/= chartLungs    /**/.Series.Add(lungs,     /**/times);
+            var serieSkeleton  /**/= chartSkeleton /**/.Series.Add(skeleton,  /**/times);
+            var serieLiver     /**/= chartLiver    /**/.Series.Add(liver,     /**/times);
+            var serieThyroid   /**/= chartThyroid  /**/.Series.Add(thyroid,   /**/times);
+            setSerieStyle(serieWholeBody, /**/"Whole Body");
+            setSerieStyle(serieUrine,     /**/"Urine");
+            setSerieStyle(serieFaeces,    /**/"Faeces");
+            setSerieStyle(serieAtract,    /**/"Aimentary Tract");
+            setSerieStyle(serieLungs,     /**/"Lungs");
+            setSerieStyle(serieSkeleton,  /**/"Skeleton");
+            setSerieStyle(serieLiver,     /**/"Liver");
+            setSerieStyle(serieThyroid,   /**/"Thyroid");
+        }
+        AddSeries(colE, SetExpectSerieStyle);
+        AddSeries(colO, SetOutputSerieStyle);
 
         // ウインドウ枠の固定を設定。
         sheet.View.FreezePanes(rowT, colD + 1);
@@ -689,7 +632,7 @@ public class ReportGenerator
         serie.Marker.Fill.Color = Color.Indigo;
     }
 
-    private static void SetActualSerieStyle(ExcelScatterChartSerie serie, string name)
+    private static void SetOutputSerieStyle(ExcelScatterChartSerie serie, string name)
     {
         serie.Header = name + " (FlexID)";
 
