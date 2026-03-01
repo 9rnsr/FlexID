@@ -9,7 +9,6 @@
   </Folder>
   <Project Path="FlexID.Core/FlexID.Core.csproj" />
   <Project Path="FlexID.Core.Tests/FlexID.Core.Tests.csproj" />
-  <Project Path="FlexID.Viewer/FlexID.Viewer.csproj" />
-  <Project Path="FlexID/FlexID.csproj" />
+  <Project Path="FlexUI/FlexUI.csproj" />
   <Project Path="ResultChecker/ResultChecker.csproj" />
 </Solution>

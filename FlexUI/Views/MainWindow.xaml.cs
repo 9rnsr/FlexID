@@ -1,7 +1,8 @@
 using System.Windows;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using FlexID.ViewModels;
 
-namespace FlexID;
+namespace FlexID.Views;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -14,7 +15,7 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        DataContext = Ioc.Default.GetService<ViewModels.MainViewModel>();
+        DataContext = Ioc.Default.GetService<MainViewModel>();
 
         ContentRendered += MainWindow_ContentRendered;
 

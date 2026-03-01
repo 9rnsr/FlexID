@@ -24,6 +24,8 @@ public partial class App
             .AddTransient<InputEIRViewModel>()
             .AddTransient<ScoeffCalcView>()
             .AddTransient<ScoeffCalcViewModel>()
+            .AddTransient<ViewerWindow>()
+            .AddTransient<ViewerViewModel>()
             .BuildServiceProvider());
     }
 
@@ -31,9 +33,27 @@ public partial class App
     {
         base.OnStartup(e);
 
-        var mainWindow = Ioc.Default.GetRequiredService<MainWindow>();
+        // Args == 1     入力GUIからの実行
+        // Args != 1(0)  exeファイル直接実行
+        if (e.Args.Length == 1)
+        {
+            var viewerWindow = Ioc.Default.GetRequiredService<ViewerWindow>();
 
-        mainWindow.Show();
+            var outPath = e.Args[0];
+            if (outPath.StartsWith("\"") && outPath.EndsWith("\""))
+                outPath = outPath.Substring(1, outPath.Length - 2);
+
+            var vm = (ViewerViewModel)viewerWindow.DataContext;
+            vm.OutputFilePath = outPath;
+
+            viewerWindow.Show();
+        }
+        else
+        {
+            var mainWindow = Ioc.Default.GetRequiredService<MainWindow>();
+
+            mainWindow.Show();
+        }
     }
 }
 

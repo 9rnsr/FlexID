@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace FlexID.VIews.Converters;
+namespace FlexID.Views.Converters;
 
 public class InvertedBooleanConverter : IValueConverter
 {
