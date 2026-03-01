@@ -390,47 +390,22 @@ public class ReportGenerator
     /// <param name="report"></param>
     private static void WriteResultSheet(ExcelWorksheet sheet, ReportData report)
     {
-        var expectActs = report.ExpectActs!;
+        var comp = report.ExpectActs is not null;
         var outputActs = report.OutputActs!;
+        var expectActs = report.ExpectActs ?? [];
 
         sheet.Cells[1, 1].Value = report.OutputName;
 
         const int rowH = 4;
         const int rowT = rowH + 1;
-        const int colE = 24; // Expect
-        const int colO = 34; // Output
-        const int colD = 14; // Diff
+        int colO = comp ? 34 : 14; // Output
+        int colE = comp ? 24 : -1; // Expect
+        int colD = comp ? 14 : -1; // Diff
         const int colC = 1;
 
-        sheet.Cells[rowH - 1, colE + 0].Value = "OIR";
-        sheet.Cells[rowH - 1, colO + 0].Value = "FlexID";
-        sheet.Cells[rowH - 1, colD + 0].Value = "Diff";
-
-        string GetCompartmentNuclide(string? nuclide) =>
-            nuclide is null ? "-" : nuclide == report.OutputNuclide ? "" : $"({nuclide})";
-        sheet.Cells[rowH - 1, colD + 1].Value = GetCompartmentNuclide(report.NuclideWholeBody);
-        sheet.Cells[rowH - 1, colD + 2].Value = GetCompartmentNuclide(report.NuclideUrine);
-        sheet.Cells[rowH - 1, colD + 3].Value = GetCompartmentNuclide(report.NuclideFaeces);
-        sheet.Cells[rowH - 1, colD + 4].Value = GetCompartmentNuclide(report.NuclideAtract);
-        sheet.Cells[rowH - 1, colD + 5].Value = GetCompartmentNuclide(report.NuclideLungs);
-        sheet.Cells[rowH - 1, colD + 6].Value = GetCompartmentNuclide(report.NuclideSkeleton);
-        sheet.Cells[rowH - 1, colD + 7].Value = GetCompartmentNuclide(report.NuclideLiver);
-        sheet.Cells[rowH - 1, colD + 8].Value = GetCompartmentNuclide(report.NuclideThyroid);
-        sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.ShrinkToFit = true;
-        sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
-        sheet.Cells[rowH, colE + 0].Value = "Time, days";
-        sheet.Cells[rowH, colE + 1].Value = "Whole Body";
-        sheet.Cells[rowH, colE + 2].Value = "Urine\n(24-hour sample)";
-        sheet.Cells[rowH, colE + 3].Value = "Faeces\n(24-hour sample)";
-        sheet.Cells[rowH, colE + 4].Value = "Alimentary Tract";
-        sheet.Cells[rowH, colE + 5].Value = "Lungs";
-        sheet.Cells[rowH, colE + 6].Value = "Skeleton";
-        sheet.Cells[rowH, colE + 7].Value = "Liver";
-        sheet.Cells[rowH, colE + 8].Value = "Thyroid";
-        sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.WrapText = true;
-        sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-        sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        if (true) sheet.Cells[rowH - 1, colO + 0].Value = "FlexID";
+        if (comp) sheet.Cells[rowH - 1, colE + 0].Value = "OIR";
+        if (comp) sheet.Cells[rowH - 1, colD + 0].Value = "Diff";
 
         sheet.Cells[rowH, colO + 0].Value = "Time, days";
         sheet.Cells[rowH, colO + 1].Value = "Whole Body";
@@ -445,18 +420,47 @@ public class ReportGenerator
         sheet.Cells[rowH, colO + 0, rowH, colO + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
         sheet.Cells[rowH, colO + 0, rowH, colO + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-        sheet.Cells[rowH, colD + 0].Value = "Time, days";
-        sheet.Cells[rowH, colD + 1].Value = "Whole Body";
-        sheet.Cells[rowH, colD + 2].Value = "Urine";
-        sheet.Cells[rowH, colD + 3].Value = "Faeces";
-        sheet.Cells[rowH, colD + 4].Value = "Alimentary Tract";
-        sheet.Cells[rowH, colD + 5].Value = "Lungs";
-        sheet.Cells[rowH, colD + 6].Value = "Skeleton";
-        sheet.Cells[rowH, colD + 7].Value = "Liver";
-        sheet.Cells[rowH, colD + 8].Value = "Thyroid";
-        sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.WrapText = true;
-        sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-        sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        if (comp)
+        {
+            sheet.Cells[rowH, colE + 0].Value = "Time, days";
+            sheet.Cells[rowH, colE + 1].Value = "Whole Body";
+            sheet.Cells[rowH, colE + 2].Value = "Urine\n(24-hour sample)";
+            sheet.Cells[rowH, colE + 3].Value = "Faeces\n(24-hour sample)";
+            sheet.Cells[rowH, colE + 4].Value = "Alimentary Tract";
+            sheet.Cells[rowH, colE + 5].Value = "Lungs";
+            sheet.Cells[rowH, colE + 6].Value = "Skeleton";
+            sheet.Cells[rowH, colE + 7].Value = "Liver";
+            sheet.Cells[rowH, colE + 8].Value = "Thyroid";
+            sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.WrapText = true;
+            sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colE + 0, rowH, colE + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            sheet.Cells[rowH, colD + 0].Value = "Time, days";
+            sheet.Cells[rowH, colD + 1].Value = "Whole Body";
+            sheet.Cells[rowH, colD + 2].Value = "Urine";
+            sheet.Cells[rowH, colD + 3].Value = "Faeces";
+            sheet.Cells[rowH, colD + 4].Value = "Alimentary Tract";
+            sheet.Cells[rowH, colD + 5].Value = "Lungs";
+            sheet.Cells[rowH, colD + 6].Value = "Skeleton";
+            sheet.Cells[rowH, colD + 7].Value = "Liver";
+            sheet.Cells[rowH, colD + 8].Value = "Thyroid";
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.WrapText = true;
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[rowH, colD + 0, rowH, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            string GetCompartmentNuclide(string? nuclide) =>
+                nuclide is null ? "-" : nuclide == report.OutputNuclide ? "" : $"({nuclide})";
+            sheet.Cells[rowH - 1, colD + 1].Value = GetCompartmentNuclide(report.NuclideWholeBody);
+            sheet.Cells[rowH - 1, colD + 2].Value = GetCompartmentNuclide(report.NuclideUrine);
+            sheet.Cells[rowH - 1, colD + 3].Value = GetCompartmentNuclide(report.NuclideFaeces);
+            sheet.Cells[rowH - 1, colD + 4].Value = GetCompartmentNuclide(report.NuclideAtract);
+            sheet.Cells[rowH - 1, colD + 5].Value = GetCompartmentNuclide(report.NuclideLungs);
+            sheet.Cells[rowH - 1, colD + 6].Value = GetCompartmentNuclide(report.NuclideSkeleton);
+            sheet.Cells[rowH - 1, colD + 7].Value = GetCompartmentNuclide(report.NuclideLiver);
+            sheet.Cells[rowH - 1, colD + 8].Value = GetCompartmentNuclide(report.NuclideThyroid);
+            sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.ShrinkToFit = true;
+            sheet.Cells[rowH - 1, colD + 1, rowH - 1, colD + 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        }
 
         sheet.Row(rowH).Height *= 3;
         //sheet.Cells[rowH, colE, rowH, colE + 3].AutoFitColumns(0);
@@ -464,8 +468,13 @@ public class ReportGenerator
         //sheet.Cells[rowH, colD, rowH, colD + 3].AutoFitColumns(0);
 
         var nrow = 0;
-        foreach (var (outputAct, expectAct) in outputActs.Zip(expectActs))
+        for (; ; nrow++)
         {
+            var inrangeO = nrow < outputActs.Count;
+            var inrangeE = nrow < expectActs.Count;
+            if (!inrangeO && !inrangeE)
+                break;
+
             var r = rowT + nrow;
 
             void SetValues(int col, in ReportData.Retention act)
@@ -480,35 +489,43 @@ public class ReportGenerator
                 sheet.Cells[r, col + 7].Value = act.Liver    /**/?? (object)"-";
                 sheet.Cells[r, col + 8].Value = act.Thyroid  /**/?? (object)"-";
             }
-            SetValues(colE, expectActs[nrow]);
-            SetValues(colO, outputActs[nrow]);
+            if (true && inrangeO) SetValues(colO, outputActs[nrow]);
+            if (comp && inrangeE) SetValues(colE, expectActs[nrow]);
 
-            sheet.Cells[r, colD + 0].Value = outputActs[nrow].EndTime;
-            sheet.Cells[r, colD + 1].Formula = $"IFERROR({sheet.Cells[r, colO + 1].Address}/{sheet.Cells[r, colE + 1].Address},\"-\")";
-            sheet.Cells[r, colD + 2].Formula = $"IFERROR({sheet.Cells[r, colO + 2].Address}/{sheet.Cells[r, colE + 2].Address},\"-\")";
-            sheet.Cells[r, colD + 3].Formula = $"IFERROR({sheet.Cells[r, colO + 3].Address}/{sheet.Cells[r, colE + 3].Address},\"-\")";
-            sheet.Cells[r, colD + 4].Formula = $"IFERROR({sheet.Cells[r, colO + 4].Address}/{sheet.Cells[r, colE + 4].Address},\"-\")";
-            sheet.Cells[r, colD + 5].Formula = $"IFERROR({sheet.Cells[r, colO + 5].Address}/{sheet.Cells[r, colE + 5].Address},\"-\")";
-            sheet.Cells[r, colD + 6].Formula = $"IFERROR({sheet.Cells[r, colO + 6].Address}/{sheet.Cells[r, colE + 6].Address},\"-\")";
-            sheet.Cells[r, colD + 7].Formula = $"IFERROR({sheet.Cells[r, colO + 7].Address}/{sheet.Cells[r, colE + 7].Address},\"-\")";
-            sheet.Cells[r, colD + 8].Formula = $"IFERROR({sheet.Cells[r, colO + 8].Address}/{sheet.Cells[r, colE + 8].Address},\"-\")";
+            if (inrangeO && inrangeE)
+            {
+                sheet.Cells[r, colD + 0].Value = outputActs[nrow].EndTime;
+                sheet.Cells[r, colD + 1].Formula = $"IFERROR({sheet.Cells[r, colO + 1].Address}/{sheet.Cells[r, colE + 1].Address},\"-\")";
+                sheet.Cells[r, colD + 2].Formula = $"IFERROR({sheet.Cells[r, colO + 2].Address}/{sheet.Cells[r, colE + 2].Address},\"-\")";
+                sheet.Cells[r, colD + 3].Formula = $"IFERROR({sheet.Cells[r, colO + 3].Address}/{sheet.Cells[r, colE + 3].Address},\"-\")";
+                sheet.Cells[r, colD + 4].Formula = $"IFERROR({sheet.Cells[r, colO + 4].Address}/{sheet.Cells[r, colE + 4].Address},\"-\")";
+                sheet.Cells[r, colD + 5].Formula = $"IFERROR({sheet.Cells[r, colO + 5].Address}/{sheet.Cells[r, colE + 5].Address},\"-\")";
+                sheet.Cells[r, colD + 6].Formula = $"IFERROR({sheet.Cells[r, colO + 6].Address}/{sheet.Cells[r, colE + 6].Address},\"-\")";
+                sheet.Cells[r, colD + 7].Formula = $"IFERROR({sheet.Cells[r, colO + 7].Address}/{sheet.Cells[r, colE + 7].Address},\"-\")";
+                sheet.Cells[r, colD + 8].Formula = $"IFERROR({sheet.Cells[r, colO + 8].Address}/{sheet.Cells[r, colE + 8].Address},\"-\")";
+            }
         }
 
         var rowS = rowT;            // row start
         var rowE = rowT + nrow - 1; // row end
 
-        var cellsE = sheet.Cells[rowS, colE + 1, rowE, colE + 8];
         var cellsO = sheet.Cells[rowS, colO + 1, rowE, colO + 8];
-        var cellsD = sheet.Cells[rowS, colD + 1, rowE, colD + 8];
-        cellsE.Style.Numberformat.Format = "0.0E+00";
         cellsO.Style.Numberformat.Format = "0.0E+00";
-        cellsD.Style.Numberformat.Format = "??0.0%";
-        cellsE.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         cellsO.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-        cellsD.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-        // 時間メッシュ毎の残留放射能のFlexID/OIR比にカラースケールを設定。
-        SetPercentColorScale(cellsD);
+        if (comp)
+        {
+            var cellsE = sheet.Cells[rowS, colE + 1, rowE, colE + 8];
+            cellsE.Style.Numberformat.Format = "0.0E+00";
+            cellsE.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            var cellsD = sheet.Cells[rowS, colD + 1, rowE, colD + 8];
+            cellsD.Style.Numberformat.Format = "??0.0%";
+            cellsD.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            // 時間メッシュ毎の残留放射能のFlexID/OIR比にカラースケールを設定。
+            SetPercentColorScale(cellsD);
+        }
 
         //sheet.Cells[rowT, colE, er, colE + 3].AutoFitColumns(0);
         //sheet.Cells[rowT, colA, er, colA + 3].AutoFitColumns(0);
@@ -567,11 +584,12 @@ public class ReportGenerator
             setSerieStyle(serieLiver,     /**/"Liver");
             setSerieStyle(serieThyroid,   /**/"Thyroid");
         }
-        AddSeries(colE, SetExpectSerieStyle);
-        AddSeries(colO, SetOutputSerieStyle);
+        // 従来同等のグラフ描画のため、期待値の系列を先に追加する。
+        if (comp) AddSeries(colE, SetExpectSerieStyle);
+        if (true) AddSeries(colO, SetOutputSerieStyle);
 
         // ウインドウ枠の固定を設定。
-        sheet.View.FreezePanes(rowT, colD + 1);
+        sheet.View.FreezePanes(rowT, (comp ? colD : colO) + 1);
     }
 
     private static ExcelScatterChart SetActivityChartStyle(ExcelScatterChart chart, int row, int col, int nrow, int ncol)
