@@ -6,7 +6,7 @@
 
     <RootNamespace>FlexID</RootNamespace>
 
-    <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
     <OutputPath>$(SolutionDir)out\$(Configuration)_bin\</OutputPath>
     <BaseIntermediateOutputPath>$(SolutionDir)out\$(Configuration)_obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
