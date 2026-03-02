@@ -93,19 +93,22 @@ public partial class CheckableItemsView<T, TView> : ObservableObject, IDisposabl
         App.Current?.UIQueue?.TryEnqueue(() =>
         {
             Items.Add(item);
-            var view = View.Filtered.Concat(View.Unfiltered)
-                           .Where(pair => EqualityComparer<T>.Default.Equals(pair.Value, item))
-                           .Select(pair => pair.View)
-                           .FirstOrDefault();
-            view?.IsChecked = initialCheck;
+            if (initialCheck)
+            {
+                var view = View.Filtered.Concat(View.Unfiltered)
+                               .Where(pair => EqualityComparer<T>.Default.Equals(pair.Value, item))
+                               .Select(pair => pair.View)
+                               .FirstOrDefault();
+                view?.IsChecked = initialCheck;
+            }
         });
     }
 
-    public async Task AddRangeAsync(IAsyncEnumerable<T> items)
+    public async Task AddRangeAsync(IAsyncEnumerable<T> items, bool initialCheck = false)
     {
         await foreach (var item in items)
         {
-            Add(item);
+            Add(item, initialCheck);
         }
     }
 

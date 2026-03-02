@@ -31,7 +31,7 @@ public partial class InputOirViewModel : ViewModelBase
             .AddTo(disposables);
 
         // OIR用のリソースとして配置されたインプットファイルの一覧を取得する。
-        Task.Run(async () => await BuiltinTargets.AddRangeAsync(InputTarget.GetInputsOIR(@"inp\OIR")));
+        Task.Run(async () => await LoadBuiltinInputs());
     }
 
     [ObservableProperty]
@@ -45,6 +45,55 @@ public partial class InputOirViewModel : ViewModelBase
     public CheckableItemsView<InputTarget, InputTargetViewModel> BuiltinTargets { get; }
 
     public CheckableItemsView<InputTarget, InputTargetViewModel> ExternalTargets { get; }
+
+    private static async IAsyncEnumerable<InputTarget> GetTargets(IEnumerable<string> inputs)
+    {
+        foreach (var inputFile in inputs)
+        {
+            var data = await Task.Run(() =>
+            {
+                try
+                {
+                    var reader = new InputDataReader_OIR(inputFile);
+                    return reader.ReadRough();
+                }
+                catch
+                {
+                    // 読み込みに失敗した。
+                    return null;
+                }
+            });
+            if (data is null)
+                continue;
+
+            var parentNuclide = data.Nuclides.FirstOrDefault();
+            if (parentNuclide is null)
+                continue;
+
+            yield return new InputTarget(inputFile, data);
+        }
+    }
+
+    /// <summary>
+    /// 組み込みのインプット群を列挙する。
+    /// </summary>
+    public async Task LoadBuiltinInputs()
+    {
+        IEnumerable<string> inputFiles;
+        try
+        {
+            var inputDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
+            inputFiles = Directory.EnumerateFiles(inputDir, "*.inp", SearchOption.AllDirectories);
+        }
+        catch (Exception e) when (e is IOException || e is SystemException)
+        {
+            // inputDirが存在しない場合など。
+            return;
+        }
+
+        var inputs = GetTargets(inputFiles);
+        await BuiltinTargets.AddRangeAsync(inputs);
+    }
 
     [RelayCommand]
     private async Task AddInputFiles(string[] paths)
@@ -66,37 +115,14 @@ public partial class InputOirViewModel : ViewModelBase
         {
             IsBuiltin = false;
 
-            foreach (var inputFile in selected)
+            var inputs = GetTargets(selected.Where(inputFile =>
             {
-                if (ExternalTargets.FilteredItems.Any(
-                    targetVM => Path.GetFullPath(targetVM.InputTarget.FilePath)
-                             == Path.GetFullPath(inputFile)))
-                {
-                    continue;
-                }
+                inputFile = Path.GetFullPath(inputFile);
+                return ExternalTargets.FilteredItems
+                    .All(targetVM => Path.GetFullPath(targetVM.InputTarget.FilePath) != inputFile);
+            }));
 
-                var data = await Task.Run(() =>
-                {
-                    try
-                    {
-                        var reader = new InputDataReader_OIR(inputFile);
-                        return reader.ReadRough();
-                    }
-                    catch
-                    {
-                        // 読み込みに失敗した。
-                        return null;
-                    }
-                });
-                if (data is null)
-                    continue;
-
-                var parentNuclide = data.Nuclides.FirstOrDefault();
-                if (parentNuclide is null)
-                    continue;
-
-                ExternalTargets.Add(new InputTarget(inputFile, data), initialCheck: true);
-            }
+            await ExternalTargets.AddRangeAsync(inputs, initialCheck: true);
         }
     }
 
