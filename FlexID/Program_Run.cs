@@ -11,7 +11,7 @@ internal class Program_Run
     /// </summary>
     public static Command Command { get; }
 
-    static readonly Option<FileInfo[]> InputFileOption = new("--input", "-i")
+    static readonly Option<string[]> InputFileOption = new("--input", "-i")
     {
         HelpName = "path",
         Description = "The input file for the calculation",
@@ -62,7 +62,6 @@ internal class Program_Run
 
     static Program_Run()
     {
-        InputFileOption.AcceptExistingOnly();
         OutputDirectoryOption.AcceptLegalFilePathsOnly();
         OutputFileOption.AcceptLegalFilePathsOnly();
         ComputeTimeMeshFileOption.AcceptExistingOnly();
@@ -113,7 +112,7 @@ internal class Program_Run
 
     private static async Task<int> Execute(ParseResult parseResult)
     {
-        var inputs = parseResult.GetValue(InputFileOption) ?? [];
+        var inputs = GetInputs(parseResult.GetValue(InputFileOption));
         var patterns = parseResult.GetValue(InputPatternOption) ?? [];
 
         var outputDir = Path.GetFullPath(parseResult.GetValue(OutputDirectoryOption) ?? Environment.CurrentDirectory);
@@ -199,5 +198,25 @@ internal class Program_Run
         Console.WriteLine();
 
         return errors ? 1 : 0;
+    }
+
+    /// <summary>
+    /// -iで指定された入力ファイルを列挙する。
+    /// </summary>
+    /// <param name="inputFiles"></param>
+    /// <returns></returns>
+    private static FileInfo[] GetInputs(string[]? inputFiles)
+    {
+        // ワイルドカードを含む場合は、カレントディレクトリを基準にしてこれを展開する。
+        static IEnumerable<string> ExpandWildCards(string path) =>
+            path.Contains('*') || path.Contains('?')
+                ? Directory.EnumerateFiles(Environment.CurrentDirectory, path, SearchOption.TopDirectoryOnly)
+                : [Path.GetFullPath(path)];
+
+        return (inputFiles ?? [])
+                .SelectMany(ExpandWildCards)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Where(File.Exists).Select(path => new FileInfo(path))
+                .ToArray();
     }
 }
