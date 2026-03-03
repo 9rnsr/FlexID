@@ -1,7 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Text.RegularExpressions;
-using FlexID.Models;
 
 namespace FlexID;
 
@@ -156,70 +155,48 @@ internal class Program_Run
             outputs = inputs.Select(input => Path.GetFileNameWithoutExtension(input.Name));
         outputs = outputs.Select(output => Path.Combine(outputDir, output));
 
+        var targets = inputs.Zip(outputs).ToArray();
+
         var cts = new CancellationTokenSource();
 
-        // UIとそのほかのプロセスのために1コアだけ残して他を使用する。
-        var parallelCount = Math.Max(1, Environment.ProcessorCount - 1);
-        var semaphore = new SemaphoreSlim(parallelCount);
-        var presenter = new ProgressPresenter(inputs.Length, cts.Token);
-
         var errors = false;
-
-        await Task.WhenAll(inputs.Zip(outputs).Select((pair, i) =>
+        var runner = new ParallelRunner<(FileInfo Input, string Output)>(targets);
+        var presenter = new ProgressPresenter(inputs.Length, cts.Token);
+        runner.StartItem += target => presenter.Start(target.Input.Name);
+        runner.SuccessItem += target => presenter.Stop(target.Input.Name, $"\x1B[36mOK\x1B[0m");
+        runner.FailureItem += (target, exception) =>
         {
-            // 同時に起動・実行されるタスク数を制限する。
-            semaphore.Wait();
+            errors = true;
+            presenter.Stop(target.Input.Name, $"\x1B[31mNG\x1B[0m", exception.Message);
+        };
 
-            var (input, output) = pair;
+        await runner.StartAsync((target, cancellationToken) =>
+        {
+            var outDir = Path.GetDirectoryName(target.Output)!;
+            var outName = Path.GetFileNameWithoutExtension(target.Output);
 
-            return Task.Run(() => RunSingle(input, output))
-                       .ContinueWith(_ => semaphore.Release());
-        }));
+            var reader = new InputDataReader_OIR(target.Input.FullName);
+            var data = reader.Read();
+            data.OutputDose = outputDose;
+            data.OutputDoseRate = outputDoseRate;
+            data.OutputRetention = outputRetention;
+            data.OutputCumulative = outputCumulative;
+
+            var main = new MainRoutine_OIR()
+            {
+                OutputDirectory     /**/= outDir,
+                OutputFileName      /**/= outName,
+                ComputeTimeMeshPath /**/= computeTimeMeshPath.FullName,
+                OutputTimeMeshPath  /**/= outputTimeMeshPath.FullName,
+                CommitmentPeriod    /**/= commitmentPeriod,
+            };
+
+            main.Main(data);
+
+        }, cts.Token);
 
         await presenter.WaitForExit();
         Console.WriteLine();
-
-        void RunSingle(FileInfo input, string output)
-        {
-            var outDir = Path.GetDirectoryName(output)!;
-            var outName = Path.GetFileNameWithoutExtension(output);
-
-            try
-            {
-                presenter.Start(input.Name);
-
-                var reader = new InputDataReader_OIR(input.FullName);
-                var data = reader.Read();
-                data.OutputDose = outputDose;
-                data.OutputDoseRate = outputDoseRate;
-                data.OutputRetention = outputRetention;
-                data.OutputCumulative = outputCumulative;
-
-                var target = new InputTarget(input.FullName, data);
-
-                var main = new MainRoutine_OIR()
-                {
-                    OutputDirectory     /**/= outDir,
-                    OutputFileName      /**/= outName,
-                    ComputeTimeMeshPath /**/= computeTimeMeshPath.FullName,
-                    OutputTimeMeshPath  /**/= outputTimeMeshPath.FullName,
-                    CommitmentPeriod    /**/= commitmentPeriod,
-                };
-
-                main.Main(data);
-
-                presenter.Stop(input.Name, $"\x1B[36mOK\x1B[0m");
-            }
-            catch (Exception exception)
-            {
-                // 何らかのエラーが発生した場合。
-                errors = true;
-                presenter.Stop(input.Name, $"\x1B[31mNG\x1B[0m", exception.Message);
-            }
-
-            // 1ケースの計算が終了するごとにGCを呼ばないと、並列計算数がだんだん減ってしまう。
-            GC.Collect();
-        }
 
         return errors ? 1 : 0;
     }

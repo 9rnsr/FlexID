@@ -116,49 +116,32 @@ internal partial class Program_Gen
             compares = [.. compareNames.Select(name => (Name: name, Path: expects[name]))];
         }
 
+        var reports = outputs.Select((output, i) => new ReportData(outputDir, output, compares?[i])).ToArray();
+
         var cts = new CancellationTokenSource();
 
-        // UIとそのほかのプロセスのために1コアだけ残して他を使用する。
-        var parallelCount = Math.Max(1, Environment.ProcessorCount - 1);
-        var semaphore = new SemaphoreSlim(parallelCount);
-        var presenter = new ProgressPresenter(outputs.Length, cts.Token);
-
-        var reports = outputs.Select((output, i) => new ReportData(outputDir, output, compares?[i]));
         var errors = false;
-
-        await Task.WhenAll(reports.Select(report =>
+        var runner = new ParallelRunner<ReportData>(reports);
+        var presenter = new ProgressPresenter(outputs.Length, cts.Token);
+        runner.StartItem += report => presenter.Start(report.OutputName);
+        runner.SuccessItem += report => presenter.Stop(report.OutputName, $"\x1B[36mOK\x1B[0m");
+        runner.FailureItem += (report, exception) =>
         {
-            // 同時に起動・実行されるタスク数を制限する。
-            semaphore.Wait();
+            errors = true;
+            presenter.Stop(report.OutputName, $"\x1B[31mNG\x1B[0m", exception.Message);
+        };
 
-            return Task.Run(() => GenSingle(report))
-                       .ContinueWith(_ => semaphore.Release());
-        }));
+        await runner.StartAsync((report, cancellationToken) =>
+        {
+            report.LoadResult();
+            if (report.HasErrors)
+                throw new Exception(string.Join("\n", report.Errors));
+
+            ReportGenerator.WriteReport(report.ReportPath, report);
+        }, cts.Token);
 
         await presenter.WaitForExit();
         Console.WriteLine();
-
-        void GenSingle(ReportData report)
-        {
-            try
-            {
-                presenter.Start(report.OutputName);
-
-                report.LoadResult();
-                if (report.HasErrors)
-                    throw new Exception(string.Join("\n", report.Errors));
-
-                ReportGenerator.WriteReport(report.ReportPath, report);
-
-                presenter.Stop(report.OutputName, $"\x1B[36mOK\x1B[0m");
-            }
-            catch (Exception exception)
-            {
-                // 何らかのエラーが発生した場合。
-                errors = true;
-                presenter.Stop(report.OutputName, $"\x1B[31mNG\x1B[0m", exception.Message);
-            }
-        }
 
         if (!errors && compareNames is not null)
         {
