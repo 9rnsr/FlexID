@@ -160,7 +160,7 @@ internal partial class Program_Gen
             }
         }
 
-        if (!errors)
+        if (!errors && compareNames is not null)
         {
             var summaryFile = parseResult.GetValue(SummaryFileOption) ?? DefaultSummaryFileName;
             summaryFile = Path.Combine((outputDir ?? currentDir).FullName, summaryFile);
