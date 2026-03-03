@@ -17,7 +17,7 @@ internal partial class Program_Gen
         Description = "The directory that contains all output files",
     };
 
-    static readonly Option<FileInfo[]> OutputFileOption = new("--output", "-o")
+    static readonly Option<string[]> OutputFileOption = new("--output", "-o")
     {
         HelpName = "path",
         Description = "The output files to be processed (one of the set of *.out files, or *.log file)",
@@ -50,7 +50,6 @@ internal partial class Program_Gen
     static Program_Gen()
     {
         OutputDirectoryOption.AcceptExistingOnly();
-        OutputFileOption.AcceptExistingOnly();
 
         Command = new("gen", "Generate additional files from the outputs")
         {
@@ -97,7 +96,7 @@ internal partial class Program_Gen
     {
         var currentDir = new FileInfo(Environment.CurrentDirectory);
         var outputDir = parseResult.GetValue(OutputDirectoryOption);
-        var outputs = GetOutputs(parseResult.GetValue(OutputFileOption), outputDir ?? currentDir).ToArray();
+        var outputs = GetOutputs(parseResult.GetValue(OutputFileOption), outputDir ?? currentDir);
 
         var compareNames =
                 parseResult.GetValue(CompareNameOption) is [_, ..] names ? names :
@@ -174,20 +173,32 @@ internal partial class Program_Gen
     /// <param name="outputFiles"></param>
     /// <param name="outputDir"></param>
     /// <returns></returns>
-    private static IEnumerable<string> GetOutputs(FileInfo[]? outputFiles, FileInfo outputDir)
+    private static string[] GetOutputs(string[]? outputFiles, FileInfo outputDir)
     {
-        var outputs = outputFiles?.Length > 0 ? outputFiles.Select(file => file.FullName) :
-                  Directory.EnumerateFiles(outputDir.FullName, "*.log");
-        foreach (var path in outputs)
-        {
-            var parent = Path.GetDirectoryName(path)!;
-            var filename = Path.GetFileName(path);
+        // ワイルドカードを含む場合は、カレントディレクトリを基準にしてこれを展開する。
+        static IEnumerable<string> ExpandWildCards(string path) =>
+            path.Contains('*') || path.Contains('?')
+                ? Directory.EnumerateFiles(Environment.CurrentDirectory, path, SearchOption.TopDirectoryOnly)
+                : [Path.GetFullPath(path)];
 
-            var suffix = suffixes.FirstOrDefault(suffix => filename.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
-            if (suffix is not null)
-                yield return Path.Combine(parent, filename[..^suffix.Length]);
-            else
-                continue;
+        IEnumerable<string> EnumerateCandidates()
+        {
+            var outputs = outputFiles?.Length > 0 ?
+                    outputFiles.SelectMany(ExpandWildCards) :
+                    Directory.EnumerateFiles(outputDir.FullName, "*.log");
+            foreach (var path in outputs.Where(File.Exists))
+            {
+                var parent = Path.GetDirectoryName(path)!;
+                var filename = Path.GetFileName(path);
+
+                var suffix = suffixes.FirstOrDefault(suffix => filename.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
+                if (suffix is not null)
+                    yield return Path.Combine(parent, filename[..^suffix.Length]);
+                else
+                    continue;
+            }
         }
+
+        return EnumerateCandidates().Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
     }
 }
