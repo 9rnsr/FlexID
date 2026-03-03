@@ -116,16 +116,15 @@ internal partial class Program_Gen
             compares = [.. compareNames.Select(name => (Name: name, Path: expects[name]))];
         }
 
+        var cts = new CancellationTokenSource();
+
         // UIとそのほかのプロセスのために1コアだけ残して他を使用する。
         var parallelCount = Math.Max(1, Environment.ProcessorCount - 1);
         var semaphore = new SemaphoreSlim(parallelCount);
-        var presenter = new ProgressPresenter(outputs.Length);
+        var presenter = new ProgressPresenter(outputs.Length, cts.Token);
 
         var reports = outputs.Select((output, i) => new ReportData(outputDir, output, compares?[i]));
         var errors = false;
-
-        // 同期処理で出力の取得と進捗表示を実施する。
-        presenter.Update();
 
         await Task.WhenAll(reports.Select(report =>
         {
@@ -136,7 +135,8 @@ internal partial class Program_Gen
                        .ContinueWith(_ => semaphore.Release());
         }));
 
-        presenter.Update();
+        await presenter.WaitForExit();
+        Console.WriteLine();
 
         void GenSingle(ReportData report)
         {
@@ -167,16 +167,12 @@ internal partial class Program_Gen
 
             var sortedReports = reports.OrderBy(r => r.OutputName).ToArray();
 
-            Console.Write($"\nGenerate {summaryFile} ...");
+            Console.Write($"Generate {summaryFile} ...");
             ReportGenerator.WriteSummary(summaryFile, sortedReports);
             Console.WriteLine($"done");
+        }
 
-            return 0;
-        }
-        else
-        {
-            return 1;
-        }
+        return errors ? 1 : 0;
     }
 
     static readonly string[] suffixes =

@@ -156,15 +156,14 @@ internal class Program_Run
             outputs = inputs.Select(input => Path.GetFileNameWithoutExtension(input.Name));
         outputs = outputs.Select(output => Path.Combine(outputDir, output));
 
+        var cts = new CancellationTokenSource();
+
         // UIとそのほかのプロセスのために1コアだけ残して他を使用する。
         var parallelCount = Math.Max(1, Environment.ProcessorCount - 1);
         var semaphore = new SemaphoreSlim(parallelCount);
-        var presenter = new ProgressPresenter(inputs.Length);
+        var presenter = new ProgressPresenter(inputs.Length, cts.Token);
 
         var errors = false;
-
-        // 同期処理で出力の取得と進捗表示を実施する。
-        presenter.Update();
 
         await Task.WhenAll(inputs.Zip(outputs).Select((pair, i) =>
         {
@@ -177,7 +176,8 @@ internal class Program_Run
                        .ContinueWith(_ => semaphore.Release());
         }));
 
-        presenter.Update();
+        await presenter.WaitForExit();
+        Console.WriteLine();
 
         void RunSingle(FileInfo input, string output)
         {
@@ -219,8 +219,6 @@ internal class Program_Run
 
             // 1ケースの計算が終了するごとにGCを呼ばないと、並列計算数がだんだん減ってしまう。
             GC.Collect();
-
-            presenter.Update();
         }
 
         return errors ? 1 : 0;
