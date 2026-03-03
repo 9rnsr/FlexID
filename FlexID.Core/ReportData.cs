@@ -20,7 +20,7 @@ public class ReportData
         {
             ExpectName = name;
             ExpectNuclide = name.Split('_')[0];
-            ExpectDosePath = Path.Combine(Path.GetDirectoryName(ExpectRetentionPath)!, ExpectNuclide + ".dat");
+            ExpectDosePath = Path.Combine(Path.GetDirectoryName(path)!, ExpectNuclide + ".dat");
             ExpectRetentionPath = path;
         }
 
