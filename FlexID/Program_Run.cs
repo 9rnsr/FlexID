@@ -1,7 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Text.RegularExpressions;
-using FlexID.Models;
 
 namespace FlexID;
 
@@ -12,7 +11,7 @@ internal class Program_Run
     /// </summary>
     public static Command Command { get; }
 
-    static readonly Option<FileInfo[]> InputFileOption = new("--input", "-i")
+    static readonly Option<string[]> InputFileOption = new("--input", "-i")
     {
         HelpName = "path",
         Description = "The input file for the calculation",
@@ -63,7 +62,6 @@ internal class Program_Run
 
     static Program_Run()
     {
-        InputFileOption.AcceptExistingOnly();
         OutputDirectoryOption.AcceptLegalFilePathsOnly();
         OutputFileOption.AcceptLegalFilePathsOnly();
         ComputeTimeMeshFileOption.AcceptExistingOnly();
@@ -114,7 +112,7 @@ internal class Program_Run
 
     private static async Task<int> Execute(ParseResult parseResult)
     {
-        var inputs = parseResult.GetValue(InputFileOption) ?? [];
+        var inputs = GetInputs(parseResult.GetValue(InputFileOption));
         var patterns = parseResult.GetValue(InputPatternOption) ?? [];
 
         var outputDir = Path.GetFullPath(parseResult.GetValue(OutputDirectoryOption) ?? Environment.CurrentDirectory);
@@ -156,73 +154,69 @@ internal class Program_Run
             outputs = inputs.Select(input => Path.GetFileNameWithoutExtension(input.Name));
         outputs = outputs.Select(output => Path.Combine(outputDir, output));
 
-        // UIとそのほかのプロセスのために1コアだけ残して他を使用する。
-        var parallelCount = Math.Max(1, Environment.ProcessorCount - 1);
-        var semaphore = new SemaphoreSlim(parallelCount);
-        var presenter = new ProgressPresenter(inputs.Length);
+        var targets = inputs.Zip(outputs).ToArray();
+
+        var cts = new CancellationTokenSource();
 
         var errors = false;
-
-        // 同期処理で出力の取得と進捗表示を実施する。
-        presenter.Update();
-
-        await Task.WhenAll(inputs.Zip(outputs).Select((pair, i) =>
+        var runner = new ParallelRunner<(FileInfo Input, string Output)>(targets);
+        var presenter = new ProgressPresenter(inputs.Length, cts.Token);
+        runner.StartItem += target => presenter.Start(target.Input.Name);
+        runner.SuccessItem += target => presenter.Stop(target.Input.Name, $"\x1B[36mOK\x1B[0m");
+        runner.FailureItem += (target, exception) =>
         {
-            // 同時に起動・実行されるタスク数を制限する。
-            semaphore.Wait();
+            errors = true;
+            presenter.Stop(target.Input.Name, $"\x1B[31mNG\x1B[0m", exception.Message);
+        };
 
-            var (input, output) = pair;
-
-            return Task.Run(() => RunSingle(input, output))
-                       .ContinueWith(_ => semaphore.Release());
-        }));
-
-        presenter.Update();
-
-        void RunSingle(FileInfo input, string output)
+        await runner.StartAsync((target, cancellationToken) =>
         {
-            var outDir = Path.GetDirectoryName(output)!;
-            var outName = Path.GetFileNameWithoutExtension(output);
+            var outDir = Path.GetDirectoryName(target.Output)!;
+            var outName = Path.GetFileNameWithoutExtension(target.Output);
 
-            try
+            var reader = new InputDataReader_OIR(target.Input.FullName);
+            var data = reader.Read();
+            data.OutputDose = outputDose;
+            data.OutputDoseRate = outputDoseRate;
+            data.OutputRetention = outputRetention;
+            data.OutputCumulative = outputCumulative;
+
+            var main = new MainRoutine_OIR()
             {
-                presenter.Start(input.Name);
+                OutputDirectory     /**/= outDir,
+                OutputFileName      /**/= outName,
+                ComputeTimeMeshPath /**/= computeTimeMeshPath.FullName,
+                OutputTimeMeshPath  /**/= outputTimeMeshPath.FullName,
+                CommitmentPeriod    /**/= commitmentPeriod,
+            };
 
-                var reader = new InputDataReader_OIR(input.FullName);
-                var data = reader.Read();
-                data.OutputDose = outputDose;
-                data.OutputDoseRate = outputDoseRate;
-                data.OutputRetention = outputRetention;
-                data.OutputCumulative = outputCumulative;
+            main.Main(data);
 
-                var target = new InputTarget(input.FullName, data);
+        }, cts.Token);
 
-                var main = new MainRoutine_OIR()
-                {
-                    OutputDirectory     /**/= outDir,
-                    OutputFileName      /**/= outName,
-                    ComputeTimeMeshPath /**/= computeTimeMeshPath.FullName,
-                    OutputTimeMeshPath  /**/= outputTimeMeshPath.FullName,
-                    CommitmentPeriod    /**/= commitmentPeriod,
-                };
-
-                main.Main(data);
-
-                presenter.Stop(input.Name, $"\x1B[36mOK\x1B[0m");
-            }
-            catch (Exception exception)
-            {
-                // 何らかのエラーが発生した場合。
-                errors = true;
-                presenter.Stop(input.Name, $"\x1B[31mNG\x1B[0m", exception.Message);
-            }
-
-            // 1ケースの計算が終了するごとにGCを呼ばないと、並列計算数がだんだん減ってしまう。
-            GC.Collect();
-
-            presenter.Update();
-        }
+        await presenter.WaitForExit();
+        Console.WriteLine();
 
         return errors ? 1 : 0;
+    }
+
+    /// <summary>
+    /// -iで指定された入力ファイルを列挙する。
+    /// </summary>
+    /// <param name="inputFiles"></param>
+    /// <returns></returns>
+    private static FileInfo[] GetInputs(string[]? inputFiles)
+    {
+        // ワイルドカードを含む場合は、カレントディレクトリを基準にしてこれを展開する。
+        static IEnumerable<string> ExpandWildCards(string path) =>
+            path.Contains('*') || path.Contains('?')
+                ? Directory.EnumerateFiles(Environment.CurrentDirectory, path, SearchOption.TopDirectoryOnly)
+                : [Path.GetFullPath(path)];
+
+        return (inputFiles ?? [])
+                .SelectMany(ExpandWildCards)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Where(File.Exists).Select(path => new FileInfo(path))
+                .ToArray();
     }
 }

@@ -28,9 +28,10 @@ class ProgressPresenter
     }
 
     private readonly Task task;
-    private readonly CancellationTokenSource cancellationTokenSource = new();
+    private readonly CancellationTokenSource cts = new();
 
     private readonly List<ItemData> items = [];
+    private readonly List<ItemData> newItems = [];
     private readonly ReaderWriterLockSlim locker = new();
 
     private string windmill = "/";
@@ -47,27 +48,28 @@ class ProgressPresenter
     /// コンストラクタ。
     /// </summary>
     /// <param name="totalCount">項目の総数。</param>
-    public ProgressPresenter(int totalCount)
+    /// <param name="cancellationToken"></param>
+    public ProgressPresenter(int totalCount, CancellationToken cancellationToken)
     {
         this.totalCount = totalCount;
         this.finishCount = 0;
 
-        var cancellationToken = cancellationTokenSource.Token;
+        var ctsLinked = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken);
 
         // 一定間隔ごとに画面を更新するためのタスク。
-        task = new Task(async () =>
+        task = Task.Run(async () =>
         {
             // カーソルを非表示にする。
             Console.Write("\x1B[?25l");
 
             DumpOut();
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (!ctsLinked.IsCancellationRequested)
             {
                 Update();
                 try
                 {
-                    await Task.Delay(wait, cancellationToken);
+                    await Task.Delay(wait, ctsLinked.Token);
                 }
                 catch (TaskCanceledException)
                 {
@@ -82,9 +84,7 @@ class ProgressPresenter
             // カーソルを再表示する。
             Console.Write("\x1B[?25h");
 
-        }, TaskCreationOptions.LongRunning);
-
-        task.Start();
+        }, cancellationToken);
     }
 
     /// <summary>
@@ -97,8 +97,7 @@ class ProgressPresenter
         try
         {
             var item = new ItemData(name);
-            items.Add(item);
-            PrintOut(item, overwriteLine: true);
+            newItems.Add(item);
 #if DEBUG_ParallelRunningCount
             //System.Diagnostics.Debug.WriteLine($"START {name} : ThreadID = {Thread.CurrentThread.ManagedThreadId}");
 #endif
@@ -117,14 +116,13 @@ class ProgressPresenter
     /// <param name="message">付加的なメッセージ。</param>
     public void Stop(string name, string status, string? message = null)
     {
-        locker.EnterReadLock();
+        locker.EnterWriteLock();
         try
         {
-            var i = items.IndexOf(item => item.Name == name);
-            if (i == -1)
+            var target = items.Concat(newItems).FirstOrDefault(item => item.Name == name);
+            if (target is null)
                 return;
 
-            var target = items[i];
             target.SetStatus(status, message);
 #if DEBUG_ParallelRunningCount
             System.Diagnostics.Debug.WriteLine($"END   {name} : ThreadID = {Thread.CurrentThread.ManagedThreadId}");
@@ -132,14 +130,14 @@ class ProgressPresenter
         }
         finally
         {
-            locker.ExitReadLock();
+            locker.ExitWriteLock();
         }
     }
 
     /// <summary>
     /// 画面の更新処理。
     /// </summary>
-    public void Update()
+    private void Update()
     {
         switch (windmill)
         {
@@ -152,13 +150,22 @@ class ProgressPresenter
         locker.EnterWriteLock();
         try
         {
-            if (items.Count == 0)
+            //System.Diagnostics.Debug.WriteLine($"# items.Count = {items.Count}, newItems.Count = {newItems.Count}");
+            if (items.Count == 0 && newItems.Count == 0)
                 return;
 
             // カーソルをitems.Count行上の先頭に移動。
-            Console.Write($"\x1B[{items.Count}F");
+            if (items.Count != 0)
+                Console.Write($"\x1B[{items.Count}F");
 
-            var overwriteLine = false;
+            // 行全体を更新するかどうか。新しく追加された、あるいは終了状態に移行した項目が
+            // ある場合は、当該項目以降の全ての行を書き換える必要があるためtrueになる。
+            var overwriteLine = newItems.Count != 0;
+
+            // 新しく追加され、まだ未表示の項目をitemsに追加する。
+            items.AddRange(newItems);
+            newItems.Clear();
+
             // 終了した項目を出力。
             foreach (var item in items.Where(item => item.IsFinished))
             {
@@ -239,9 +246,13 @@ class ProgressPresenter
 #endif
     }
 
+    /// <summary>
+    /// 表示更新処理の終了を待機する
+    /// </summary>
+    /// <returns></returns>
     public async Task WaitForExit()
     {
-        cancellationTokenSource.Cancel();
+        cts.Cancel();
 
         await task;
     }

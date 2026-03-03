@@ -26,12 +26,13 @@
 
   <Target Name="CreateTestFiles" BeforeTargets="BeforeBuild">
     <WriteLinesToFile File="$(IntermediateOutputPath)TestFiles" Lines="$(ProjectDir)TestFiles" Overwrite="true" />
-    <ItemGroup>
-      <None Visible="false" Include="$(IntermediateOutputPath)TestFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
-    </ItemGroup>
   </Target>
   <Target Name="RemoveTestFiles" BeforeTargets="Clean">
     <Delete Files="$(IntermediateOutputPath)TestFiles" />
   </Target>
+
+  <ItemGroup>
+    <None Visible="false" Include="$(IntermediateOutputPath)TestFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
+  </ItemGroup>
 
 </Project>

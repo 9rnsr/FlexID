@@ -17,7 +17,7 @@ internal partial class Program_Gen
         Description = "The directory that contains all output files",
     };
 
-    static readonly Option<FileInfo[]> OutputFileOption = new("--output", "-o")
+    static readonly Option<string[]> OutputFileOption = new("--output", "-o")
     {
         HelpName = "path",
         Description = "The output files to be processed (one of the set of *.out files, or *.log file)",
@@ -50,7 +50,6 @@ internal partial class Program_Gen
     static Program_Gen()
     {
         OutputDirectoryOption.AcceptExistingOnly();
-        OutputFileOption.AcceptExistingOnly();
 
         Command = new("gen", "Generate additional files from the outputs")
         {
@@ -97,7 +96,7 @@ internal partial class Program_Gen
     {
         var currentDir = new FileInfo(Environment.CurrentDirectory);
         var outputDir = parseResult.GetValue(OutputDirectoryOption);
-        var outputs = GetOutputs(parseResult.GetValue(OutputFileOption), outputDir ?? currentDir).ToArray();
+        var outputs = GetOutputs(parseResult.GetValue(OutputFileOption), outputDir ?? currentDir);
 
         var compareNames =
                 parseResult.GetValue(CompareNameOption) is [_, ..] names ? names :
@@ -116,67 +115,46 @@ internal partial class Program_Gen
             compares = [.. compareNames.Select(name => (Name: name, Path: expects[name]))];
         }
 
-        // UIとそのほかのプロセスのために1コアだけ残して他を使用する。
-        var parallelCount = Math.Max(1, Environment.ProcessorCount - 1);
-        var semaphore = new SemaphoreSlim(parallelCount);
-        var presenter = new ProgressPresenter(outputs.Length);
+        var reports = outputs.Select((output, i) => new ReportData(outputDir, output, compares?[i])).ToArray();
 
-        var reports = outputs.Select((output, i) => new ReportData(outputDir, output, compares?[i]));
+        var cts = new CancellationTokenSource();
+
         var errors = false;
-
-        // 同期処理で出力の取得と進捗表示を実施する。
-        presenter.Update();
-
-        await Task.WhenAll(reports.Select(report =>
+        var runner = new ParallelRunner<ReportData>(reports);
+        var presenter = new ProgressPresenter(outputs.Length, cts.Token);
+        runner.StartItem += report => presenter.Start(report.OutputName);
+        runner.SuccessItem += report => presenter.Stop(report.OutputName, $"\x1B[36mOK\x1B[0m");
+        runner.FailureItem += (report, exception) =>
         {
-            // 同時に起動・実行されるタスク数を制限する。
-            semaphore.Wait();
+            errors = true;
+            presenter.Stop(report.OutputName, $"\x1B[31mNG\x1B[0m", exception.Message);
+        };
 
-            return Task.Run(() => GenSingle(report))
-                       .ContinueWith(_ => semaphore.Release());
-        }));
-
-        presenter.Update();
-
-        void GenSingle(ReportData report)
+        await runner.StartAsync((report, cancellationToken) =>
         {
-            try
-            {
-                presenter.Start(report.OutputName);
+            report.LoadResult();
+            if (report.HasErrors)
+                throw new Exception(string.Join("\n", report.Errors));
 
-                report.LoadResult();
-                if (report.HasErrors)
-                    throw new Exception(string.Join("\n", report.Errors));
+            ReportGenerator.WriteReport(report.ReportPath, report);
+        }, cts.Token);
 
-                ReportGenerator.WriteReport(report.ReportPath, report);
+        await presenter.WaitForExit();
+        Console.WriteLine();
 
-                presenter.Stop(report.OutputName, $"\x1B[36mOK\x1B[0m");
-            }
-            catch (Exception exception)
-            {
-                // 何らかのエラーが発生した場合。
-                errors = true;
-                presenter.Stop(report.OutputName, $"\x1B[31mNG\x1B[0m", exception.Message);
-            }
-        }
-
-        if (!errors)
+        if (!errors && compareNames is not null)
         {
             var summaryFile = parseResult.GetValue(SummaryFileOption) ?? DefaultSummaryFileName;
             summaryFile = Path.Combine((outputDir ?? currentDir).FullName, summaryFile);
 
             var sortedReports = reports.OrderBy(r => r.OutputName).ToArray();
 
-            Console.Write($"\nGenerate {summaryFile} ...");
+            Console.Write($"Generate {summaryFile} ...");
             ReportGenerator.WriteSummary(summaryFile, sortedReports);
             Console.WriteLine($"done");
+        }
 
-            return 0;
-        }
-        else
-        {
-            return 1;
-        }
+        return errors ? 1 : 0;
     }
 
     static readonly string[] suffixes =
@@ -195,20 +173,32 @@ internal partial class Program_Gen
     /// <param name="outputFiles"></param>
     /// <param name="outputDir"></param>
     /// <returns></returns>
-    private static IEnumerable<string> GetOutputs(FileInfo[]? outputFiles, FileInfo outputDir)
+    private static string[] GetOutputs(string[]? outputFiles, FileInfo outputDir)
     {
-        var outputs = outputFiles?.Length > 0 ? outputFiles.Select(file => file.FullName) :
-                  Directory.EnumerateFiles(outputDir.FullName, "*.log");
-        foreach (var path in outputs)
-        {
-            var parent = Path.GetDirectoryName(path)!;
-            var filename = Path.GetFileName(path);
+        // ワイルドカードを含む場合は、カレントディレクトリを基準にしてこれを展開する。
+        static IEnumerable<string> ExpandWildCards(string path) =>
+            path.Contains('*') || path.Contains('?')
+                ? Directory.EnumerateFiles(Environment.CurrentDirectory, path, SearchOption.TopDirectoryOnly)
+                : [Path.GetFullPath(path)];
 
-            var suffix = suffixes.FirstOrDefault(suffix => filename.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
-            if (suffix is not null)
-                yield return Path.Combine(parent, filename[..^suffix.Length]);
-            else
-                continue;
+        IEnumerable<string> EnumerateCandidates()
+        {
+            var outputs = outputFiles?.Length > 0 ?
+                    outputFiles.SelectMany(ExpandWildCards) :
+                    Directory.EnumerateFiles(outputDir.FullName, "*.log");
+            foreach (var path in outputs.Where(File.Exists))
+            {
+                var parent = Path.GetDirectoryName(path)!;
+                var filename = Path.GetFileName(path);
+
+                var suffix = suffixes.FirstOrDefault(suffix => filename.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
+                if (suffix is not null)
+                    yield return Path.Combine(parent, filename[..^suffix.Length]);
+                else
+                    continue;
+            }
         }
+
+        return EnumerateCandidates().Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
     }
 }

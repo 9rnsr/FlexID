@@ -18,15 +18,14 @@
 
   <Target Name="CreateResourceFiles" BeforeTargets="BeforeBuild">
     <WriteLinesToFile File="$(IntermediateOutputPath)ResourceFiles" Lines="$(SolutionDir)resources" Overwrite="true" />
-    <ItemGroup>
-      <None Visible="false" Include="$(IntermediateOutputPath)ResourceFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
-    </ItemGroup>
   </Target>
   <Target Name="RemoveResourceFiles" BeforeTargets="Clean">
     <Delete Files="$(IntermediateOutputPath)ResourceFiles" />
   </Target>
 
   <ItemGroup>
+    <None Visible="false" Include="$(IntermediateOutputPath)ResourceFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
+
     <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.BET"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
     <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.RAD"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
     <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.NDX"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
