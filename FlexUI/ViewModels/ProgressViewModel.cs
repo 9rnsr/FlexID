@@ -23,7 +23,33 @@ public partial class ProgressTargetViewModel : ViewModelBase
     public string Nuclide => InputTarget.Nuclide;
 
     [ObservableProperty]
-    public partial bool InProgress { get; set; }
+    [NotifyPropertyChangedFor(nameof(IsBlocked))]
+    [NotifyPropertyChangedFor(nameof(IsSuccess))]
+    [NotifyPropertyChangedFor(nameof(IsFailure))]
+    [NotifyPropertyChangedFor(nameof(IsFailureDetails))]
+    public partial bool IsRunning { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsBlocked))]
+    [NotifyPropertyChangedFor(nameof(IsSuccess))]
+    [NotifyPropertyChangedFor(nameof(IsFailure))]
+    [NotifyPropertyChangedFor(nameof(IsFailureDetails))]
+    public partial string? ErrorText { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsFailureDetails))]
+    public partial bool IsSelected { get; set; }
+
+    public bool IsBlocked => !IsRunning && ErrorText is null;
+
+    public bool IsSuccess => !IsRunning && ErrorText?.Length == 0;
+
+    public bool IsFailure => !IsRunning && ErrorText?.Length > 0;
+
+    public bool IsFailureDetails => IsFailure && IsSelected;
+
+    public Microsoft.UI.Xaml.Visibility BoolToVisibility(bool v) =>
+        v ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
 }
 
 public partial class ProgressViewModel : ObservableObject
@@ -78,20 +104,30 @@ public partial class ProgressViewModel : ObservableObject
     private void OnStartItem(InputTarget target)
     {
         var targetVM = mapVM[target];
-        App.Current.UIQueue.TryEnqueue(() => targetVM.InProgress = true);
+        App.Current.UIQueue.TryEnqueue(() =>
+        {
+            targetVM.IsRunning = true;
+        });
     }
 
     private void OnSuccessItem(InputTarget target)
     {
         var targetVM = mapVM[target];
-        App.Current.UIQueue.TryEnqueue(() => targetVM.InProgress = false);
+        App.Current.UIQueue.TryEnqueue(() =>
+        {
+            targetVM.IsRunning = false;
+            targetVM.ErrorText = "";
+        });
     }
 
     private void OnFailureItem(InputTarget target, Exception exception)
     {
-        //errors.Add(target,exception);
         var targetVM = mapVM[target];
-        App.Current.UIQueue.TryEnqueue(() => targetVM.InProgress = false);
+        App.Current.UIQueue.TryEnqueue(() =>
+        {
+            targetVM.IsRunning = false;
+            targetVM.ErrorText = exception.Message;
+        });
     }
 
     [RelayCommand]

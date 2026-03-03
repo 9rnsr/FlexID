@@ -9,7 +9,7 @@
   xmlns:vm="using:FlexID.ViewModels"
   xmlns:winex="using:WinUIEx"
   Title="{x:Bind ViewModel.Title}"
-  Width="800"
+  Width="500"
   Height="500"
   mc:Ignorable="d">
 
@@ -22,19 +22,44 @@
       <RowDefinition />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <ListView ItemsSource="{x:Bind ViewModel.Targets}" SelectionMode="Extended">
+    <ListView
+      ItemsSource="{x:Bind ViewModel.Targets}"
+      SelectionChanged="ListView_SelectionChanged"
+      SelectionMode="Extended">
       <ListView.ItemTemplate>
         <DataTemplate x:DataType="vm:ProgressTargetViewModel">
-          <Grid>
+          <Grid Padding="0,6" ColumnSpacing="8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="2*" />
-              <ColumnDefinition Width="1*" MaxWidth="200" />
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{x:Bind Title}" />
-            <ProgressBar
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Column="0" Visibility="{x:Bind BoolToVisibility(IsBlocked), Mode=OneWay}">
+              <FontIcon Foreground="LightGray" Glyph="&#xF2D9;" />
+            </Grid>
+            <Grid Grid.Column="0" Visibility="{x:Bind BoolToVisibility(IsRunning), Mode=OneWay}">
+              <ProgressRing Width="20" Height="20" />
+            </Grid>
+            <Grid Grid.Column="0" Visibility="{x:Bind BoolToVisibility(IsSuccess), Mode=OneWay}">
+              <FontIcon Foreground="Green" Glyph="&#xF136;" />
+              <FontIcon Foreground="LightGreen" Glyph="&#xF137;" />
+              <FontIcon Foreground="Black" Glyph="&#xF13E;" />
+            </Grid>
+            <Grid Grid.Column="0" Visibility="{x:Bind BoolToVisibility(IsFailure), Mode=OneWay}">
+              <FontIcon Foreground="DarkRed" Glyph="&#xF136;" />
+              <FontIcon Foreground="Red" Glyph="&#xF137;" />
+              <FontIcon Foreground="White" Glyph="&#xF13D;" />
+            </Grid>
+            <TextBlock Grid.Column="1" Text="{x:Bind Title}" />
+            <TextBlock
+              Grid.Row="1"
               Grid.Column="1"
-              VerticalAlignment="Stretch"
-              IsIndeterminate="{x:Bind InProgress, Mode=OneWay}" />
+              Margin="0,4"
+              Text="{x:Bind ErrorText, Mode=OneWay}"
+              Visibility="{x:Bind BoolToVisibility(IsFailureDetails), Mode=OneWay}" />
           </Grid>
         </DataTemplate>
       </ListView.ItemTemplate>
@@ -42,6 +67,9 @@
 
     <Button
       Grid.Row="1"
+      Width="120"
+      Height="40"
+      Margin="0,0,24,0"
       HorizontalAlignment="Right"
       Command="{x:Bind ViewModel.AbortOrCloseCommand}"
       Content="{x:Bind GetButtonText(ViewModel.InProgress), Mode=OneWay}" />

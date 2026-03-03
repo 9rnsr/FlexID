@@ -39,4 +39,13 @@ public sealed partial class ProgressWindow
     private static partial IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
     const int GWLP_HWNDPARENT = -8;
+
+    private void ListView_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
+    {
+        foreach (var targetVM in e.AddedItems.OfType<ProgressTargetViewModel>())
+            targetVM.IsSelected = true;
+
+        foreach (var targetVM in e.RemovedItems.OfType<ProgressTargetViewModel>())
+            targetVM.IsSelected = false;
+    }
 }
