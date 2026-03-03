@@ -12,7 +12,7 @@ public partial class InputOirViewModel : ViewModelBase
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public InputOirViewModel()
+    public InputOirViewModel(ProgressViewModel progressVM)
     {
         BuiltinTargets = new(target => new InputTargetViewModel(target));
         ExternalTargets = new(target => new InputTargetViewModel(target));
@@ -22,6 +22,8 @@ public partial class InputOirViewModel : ViewModelBase
         ComputeTimeMeshFilePath = @"lib\TimeMesh\time.dat";
         OutputTimeMeshFilePath = @"lib\TimeMesh\out-time-OIR.dat";
         OutputDirectory = @"out\";
+
+        ProgressViewModel = progressVM;
 
         WeakReferenceMessenger.Default.Register<BusyState>(this, (r, m) => IsBusy = m.Value);
 
@@ -217,6 +219,8 @@ public partial class InputOirViewModel : ViewModelBase
             OutputDirectory = selected;
     }
 
+    private ProgressViewModel ProgressViewModel { get; }
+
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
     private partial bool IsBusy { get; set; }
@@ -246,11 +250,11 @@ public partial class InputOirViewModel : ViewModelBase
                 .Where(targetVM => targetVM.IsChecked)
                 .Select(targetVM => targetVM.InputTarget).ToArray();
 
-            var cts = new CancellationTokenSource();
-
             var runner = new ParallelRunner<InputTarget>(targets);
 
-            await runner.StartAsync(RunSingle(), cts.Token);
+            var cancellationToken = ProgressViewModel.Connect(runner);
+
+            await runner.StartAsync(RunSingle(), cancellationToken);
 
             MessageService.Confirm("Caculation finished.");
         }

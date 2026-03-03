@@ -9,6 +9,7 @@
 
     <UseWinUI>true</UseWinUI>
     <WindowsPackageType>None</WindowsPackageType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <Nullable>enable</Nullable>
     <ApplicationManifest>App.manifest</ApplicationManifest>
