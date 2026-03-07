@@ -65,8 +65,59 @@
         FontWeight="Bold"
         Text="Third-Party Notices:" />
 
-      <ListView Grid.Row="1">
-        <!--  -->
+      <ListView Grid.Row="1" ItemsSource="{x:Bind PackageList}">
+        <ListView.ItemTemplate>
+          <DataTemplate x:DataType="v:PackageInfo">
+            <Grid Margin="4" RowSpacing="4">
+              <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+              </Grid.RowDefinitions>
+
+              <TextBlock Grid.Row="0" xml:space="preserve"><Run Text="{x:Bind PackageId}" /> [<Run Text="{x:Bind PackageVersion}" />]</TextBlock>
+
+              <Grid
+                Grid.Row="1"
+                Margin="24,0"
+                ColumnSpacing="16">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0">Copyright:</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0">Authors:</TextBlock>
+                <TextBlock
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  Text="{x:Bind Copyright}" />
+                <TextBlock
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Text="{x:Bind Authors}" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0">Project website:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1">
+                  <Hyperlink NavigateUri="{x:Bind PackageProjectUrl}" ToolTipService.ToolTip="{x:Bind PackageProjectUrl}">
+                    <Run Text="{x:Bind PackageProjectUrl}" />
+                  </Hyperlink>
+                </TextBlock>
+
+                <TextBlock Grid.Row="3" Grid.Column="0">License:</TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="1">
+                  <Hyperlink NavigateUri="{x:Bind LicenseUrl}" ToolTipService.ToolTip="{x:Bind LicenseUrl}">
+                    <Run Text="{x:Bind License}" />
+                  </Hyperlink>
+                </TextBlock>
+              </Grid>
+            </Grid>
+          </DataTemplate>
+        </ListView.ItemTemplate>
       </ListView>
     </Grid>
   </Grid>
