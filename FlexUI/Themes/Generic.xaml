@@ -1,0 +1,45 @@
+<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:v="using:FlexID.Views">
+
+  <Style BasedOn="{StaticResource DefaultContentOverlayStyle}" TargetType="v:ContentOverlay" />
+
+  <Style x:Key="DefaultContentOverlayStyle" TargetType="v:ContentOverlay">
+    <Setter Property="BackgroundOverlayBrush" Value="#55000000" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="v:ContentOverlay">
+          <Grid>
+            <Grid x:Name="PART_Content">
+              <ContentPresenter
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Content="{TemplateBinding Content}" />
+            </Grid>
+
+            <Grid x:Name="PART_Overlay" Visibility="Collapsed">
+              <Image Name="PART_ContentImage" />
+
+              <Grid Background="{TemplateBinding BackgroundOverlayBrush}" />
+
+              <Border
+                Margin="{TemplateBinding OverlayMargin}"
+                HorizontalAlignment="{TemplateBinding HorizontalOverlayAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalOverlayAlignment}"
+                Background="White"
+                CornerRadius="8">
+
+                <ContentPresenter Content="{TemplateBinding OverlayContent}" />
+              </Border>
+            </Grid>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+</ResourceDictionary>
