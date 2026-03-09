@@ -219,9 +219,11 @@ public partial class InputOirViewModel : ViewModelBase
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
-    private partial bool IsBusy { get; set; }
+    public partial bool IsBusy { get; private set; }
 
     private bool CanRun => !IsBusy && Targets.IsCheckedAny;
+
+    public ProgressViewModel ProgressViewModel { get; } = new();
 
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async Task Run(CancellationToken cancellationToken)
@@ -248,9 +250,13 @@ public partial class InputOirViewModel : ViewModelBase
 
             var runner = new ParallelRunner<InputTarget>(targets);
 
+            ProgressViewModel.Connect(runner);
+
             await runner.StartAsync(RunSingle(), cancellationToken);
 
-            var message = "All tasks completed successfully.";
+            var failedCount = ProgressViewModel.Targets.Count(targetVM => targetVM.IsFailure);
+            var message = failedCount == 0 ? "All tasks completed successfully."
+                : $"{failedCount} / {ProgressViewModel.Targets.Count} tasks encounted errors during processing.";
             MessageService.Confirm("Caculation Finished", message);
         }
         catch (Exception ex)
@@ -297,5 +303,14 @@ public partial class InputOirViewModel : ViewModelBase
             // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
             // p.WaitForExit();
         };
+    }
+
+    [RelayCommand]
+    private void AbortOrCloseProgress()
+    {
+        if (IsBusy)
+            RunCommand.Cancel();
+        else
+            ProgressViewModel.Disconnect();
     }
 }

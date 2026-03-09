@@ -11,7 +11,15 @@ public sealed partial class InputEirPage : Page
         ViewModel = Ioc.Default.GetRequiredService<InputEirViewModel>();
 
         InitializeComponent();
+
+        var progressVM = ViewModel.ProgressViewModel;
+        progressVM.ShowAction = () => ProgressOverlay.IsOverlay = true;
+        progressVM.CloseAction = () => ProgressOverlay.IsOverlay = false;
     }
 
     public InputEirViewModel ViewModel { get; }
+
+    public string AbortCloseButtonText(bool isBusy) => isBusy ? "Abort" : "Close";
+
+    public bool CanCloseProgress(bool isBusy) => !isBusy;
 }

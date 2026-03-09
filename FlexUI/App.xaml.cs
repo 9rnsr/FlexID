@@ -44,6 +44,8 @@ public partial class App
             .AddTransient<InputOirViewModel>()
             .AddTransient<InputEirViewModel>()
             .AddTransient<InputScoeffViewModel>()
+            .AddTransient<ProgressPage>()
+            .AddTransient<ProgressViewModel>()
             .AddTransient<ViewerWindow>()
             .AddTransient<ViewerViewModel>()
             .AddSingleton<MessageService>()

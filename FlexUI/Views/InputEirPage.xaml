@@ -21,7 +21,7 @@
     </Style>
   </Page.Resources>
 
-  <Grid>
+  <v:ContentOverlay x:Name="ProgressOverlay" OverlayMargin="80,20">
     <Grid Margin="24" RowSpacing="24">
       <Grid.RowDefinitions>
         <RowDefinition />
@@ -166,6 +166,30 @@
         Command="{x:Bind ViewModel.RunCommand}"
         Content="Run" />
     </Grid>
-  </Grid>
+
+    <v:ContentOverlay.OverlayContent>
+      <Grid Margin="16" RowSpacing="8">
+        <Grid.RowDefinitions>
+          <RowDefinition />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <v:ProgressPage Grid.Row="0" ViewModel="{x:Bind ViewModel.ProgressViewModel}" />
+
+        <Button
+          Grid.Row="1"
+          Width="120"
+          Height="40"
+          Margin="0,0,24,0"
+          HorizontalAlignment="Right"
+          Command="{x:Bind ViewModel.AbortOrCloseProgressCommand, Mode=OneWay}"
+          Content="{x:Bind AbortCloseButtonText(ViewModel.IsBusy), Mode=OneWay}">
+          <Button.KeyboardAccelerators>
+            <KeyboardAccelerator Key="Escape" IsEnabled="{x:Bind CanCloseProgress(ViewModel.IsBusy), Mode=OneWay}" />
+          </Button.KeyboardAccelerators>
+        </Button>
+      </Grid>
+    </v:ContentOverlay.OverlayContent>
+  </v:ContentOverlay>
 
 </Page>
