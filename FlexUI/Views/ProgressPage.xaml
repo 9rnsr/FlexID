@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+  x:Class="FlexID.Views.ProgressPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:v="using:FlexID.Views"
+  xmlns:vm="using:FlexID.ViewModels"
+  mc:Ignorable="d">
+
+  <ListView
+    x:Name="LV"
+    ItemsSource="{x:Bind ViewModel.Targets, Mode=OneWay}"
+    SelectionChanged="ListView_SelectionChanged"
+    SelectionMode="Extended">
+
+    <ListView.ItemTemplate>
+      <DataTemplate x:DataType="vm:ProgressTargetViewModel">
+        <Grid Padding="0,6" ColumnSpacing="8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+
+          <Grid Visibility="{x:Bind BoolToVisibility(IsBlocked), Mode=OneWay}">
+            <FontIcon Foreground="LightGray" Glyph="&#xF2D9;" />
+          </Grid>
+          <Grid Visibility="{x:Bind BoolToVisibility(IsRunning), Mode=OneWay}">
+            <ProgressRing Width="20" Height="20" />
+          </Grid>
+          <Grid Visibility="{x:Bind BoolToVisibility(IsSuccess), Mode=OneWay}">
+            <FontIcon Foreground="ForestGreen" Glyph="&#xF136;" />
+            <FontIcon Foreground="#FF77BB00" Glyph="&#xF137;" />
+            <FontIcon Foreground="White" Glyph="&#xF13E;" />
+          </Grid>
+          <Grid Visibility="{x:Bind BoolToVisibility(IsFailure), Mode=OneWay}">
+            <FontIcon Foreground="DarkRed" Glyph="&#xF136;" />
+            <FontIcon Foreground="Red" Glyph="&#xF137;" />
+            <FontIcon Foreground="White" Glyph="&#xF13D;" />
+          </Grid>
+
+          <TextBlock Grid.Column="1" Text="{x:Bind Title}" />
+          <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,4"
+            Text="{x:Bind ErrorText, Mode=OneWay}"
+            TextWrapping="Wrap"
+            Visibility="{x:Bind BoolToVisibility(IsFailure), Mode=OneWay}" />
+        </Grid>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+
+</Page>

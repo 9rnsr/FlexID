@@ -1,59 +1,76 @@
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using FlexID.Services;
 using FlexID.ViewModels;
 using FlexID.Views;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
+using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
+using R3;
 
 namespace FlexID;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
 public partial class App
 {
     public App()
+    {
+        InitializeComponent();
+
+        WinUI3ProviderInitializer.SetDefaultObservableSystem(ex => Trace.WriteLine(ex.ToString()));
+    }
+
+    public new static App Current => (App)Application.Current;
+
+    private Window? _window;
+
+    public Window? Window => _window;
+
+    public AppWindow? AppWindow => _window?.AppWindow;
+
+    public DispatcherQueue UIQueue => Window!.DispatcherQueue;
+
+    /// <summary>
+    /// Invoked when the application is launched.
+    /// </summary>
+    /// <param name="args">Details about the launch request and process.</param>
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         Ioc.Default.ConfigureServices(
             new ServiceCollection()
             .AddTransient<MainWindow>()
             .AddTransient<MainViewModel>()
-            .AddTransient<InputOIRView>()
-            .AddTransient<InputOIRViewModel>()
-            .AddTransient<InputEIRView>()
-            .AddTransient<InputEIRViewModel>()
-            .AddTransient<ScoeffCalcView>()
-            .AddTransient<ScoeffCalcViewModel>()
+            .AddTransient<InputOirViewModel>()
+            .AddTransient<InputEirViewModel>()
+            .AddTransient<InputScoeffViewModel>()
+            .AddTransient<ProgressPage>()
+            .AddTransient<ProgressViewModel>()
             .AddTransient<ViewerWindow>()
             .AddTransient<ViewerViewModel>()
+            .AddSingleton<MessageService>()
             .BuildServiceProvider());
-    }
 
-    protected override void OnStartup(StartupEventArgs e)
-    {
-        base.OnStartup(e);
+        var arguments = Environment.GetCommandLineArgs();
 
-        // Args == 1     入力GUIからの実行
-        // Args != 1(0)  exeファイル直接実行
-        if (e.Args.Length == 1)
+        if (arguments.Length == 2)
         {
+            var outPath = arguments[1];
+            if (outPath.Length >= 2 && outPath.StartsWith("\"") && outPath.EndsWith("\""))
+                outPath = outPath[1..^1];
+
             var viewerWindow = Ioc.Default.GetRequiredService<ViewerWindow>();
-
-            var outPath = e.Args[0];
-            if (outPath.StartsWith("\"") && outPath.EndsWith("\""))
-                outPath = outPath.Substring(1, outPath.Length - 2);
-
-            var vm = (ViewerViewModel)viewerWindow.DataContext;
+            var vm = viewerWindow.ViewModel;
             vm.OutputFilePath = outPath;
 
-            viewerWindow.Show();
+            _window = viewerWindow;
         }
         else
         {
             var mainWindow = Ioc.Default.GetRequiredService<MainWindow>();
-
-            mainWindow.Show();
+            _window = mainWindow;
         }
+        _window.Activate();
     }
 }
 

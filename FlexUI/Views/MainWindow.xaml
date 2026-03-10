@@ -1,36 +1,46 @@
-<Window
+<?xml version="1.0" encoding="utf-8" ?>
+<winex:WindowEx
   x:Class="FlexID.Views.MainWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:v="clr-namespace:FlexID.Views"
-  xmlns:vm="clr-namespace:FlexID.ViewModels"
-  Title="FlexID"
-  Width="600"
-  d:DataContext="{d:DesignInstance vm:MainViewModel}"
-  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-  FontSize="14"
+  xmlns:v="using:FlexID.Views"
+  xmlns:vm="using:FlexID.ViewModels"
+  xmlns:winex="using:WinUIEx"
+  Title="{x:Bind ViewModel.Title}"
+  Width="800"
+  Height="900"
   mc:Ignorable="d">
 
-  <TabControl
-    Margin="4"
-    Padding="32,12"
-    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-    Grid.IsSharedSizeScope="True">
+  <Window.SystemBackdrop>
+    <MicaBackdrop />
+  </Window.SystemBackdrop>
 
-    <TabItem Header="OIR">
-      <v:InputOIRView />
-    </TabItem>
+  <NavigationView
+    x:Name="NavigationView"
+    IsBackButtonVisible="Collapsed"
+    IsSettingsVisible="True"
+    PaneDisplayMode="Top"
+    PreviewKeyDown="NavigationView_PreviewKeyDown"
+    SelectionChanged="NavigationView_SelectionChanged">
 
-    <TabItem Header="EIR">
-      <v:InputEIRView />
-    </TabItem>
+    <NavigationView.MenuItems>
+      <NavigationViewItem
+        AccessKey="1"
+        Content="OIR"
+        Tag="{x:Bind InputOirPageType}" />
+      <NavigationViewItem
+        AccessKey="2"
+        Content="EIR"
+        Tag="{x:Bind InputEirPageType}" />
+      <NavigationViewItem
+        AccessKey="3"
+        Content="OIR S-Coeff"
+        Tag="{x:Bind InputScoeffPageType}" />
+    </NavigationView.MenuItems>
 
-    <TabItem Header="OIR S-Coeff">
-      <v:ScoeffCalcView />
-    </TabItem>
+    <Frame x:Name="NavigationFrame" Navigated="NavigationFrame_Navigated" />
+  </NavigationView>
 
-  </TabControl>
-
-</Window>
+</winex:WindowEx>

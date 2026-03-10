@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Media;
+using Windows.UI;
 
 namespace FlexID.ViewModels;
 
@@ -37,7 +37,7 @@ public partial class ContourViewModel : ObservableObject
     /// <summary>
     /// 表示中のブロックデータ(核種毎の残留放射能や男女別の線量)。
     /// </summary>
-    private OutputBlockData SelectedBlock { get; set; }
+    private OutputBlockData? SelectedBlock { get; set; }
 
     #region コンター表示
 
@@ -52,13 +52,13 @@ public partial class ContourViewModel : ObservableObject
     private readonly Dictionary<string, string> organMap = [];
 
     private readonly Dictionary<string, double> unsetOrganValues = [];
-    private readonly Dictionary<string, string> unsetOrganColors = [];
+    private readonly Dictionary<string, Brush> unsetOrganColors = [];
 
     private readonly Dictionary<string, double> actualOrganValues;
-    private readonly Dictionary<string, string> actualOrganColors;
+    private readonly Dictionary<string, Brush> actualOrganColors;
 
     // モデル図で値が未設定の場合の色情報。
-    private readonly string unsetColorCode = Color.FromRgb(211, 211, 211).ToString();
+    private readonly Brush unsetColorCode = new SolidColorBrush(Color.FromArgb(255, 211, 211, 211));
 
     /// <summary>
     /// 現在の出力タイムステップにおける各コンパートメントの数値。
@@ -75,7 +75,7 @@ public partial class ContourViewModel : ObservableObject
     /// モデル図に表示するための、統一臓器名とその色情報。
     /// </summary>
     [ObservableProperty]
-    public partial Dictionary<string, string> OrganColors { get; set; }
+    public partial Dictionary<string, Brush> OrganColors { get; set; }
 
     /// <summary>
     /// コンターの上限値。
@@ -97,7 +97,7 @@ public partial class ContourViewModel : ObservableObject
     /// コンターに表示される単位。
     /// </summary>
     [ObservableProperty]
-    public partial string ContourUnit { get; set; }
+    public partial string ContourUnit { get; set; } = string.Empty;
 
     #endregion
 
@@ -168,39 +168,52 @@ public partial class ContourViewModel : ObservableObject
     /// アニメーション再生状態を示す。
     /// </summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(PlayCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PauseCommand))]
+    [NotifyPropertyChangedFor(nameof(CanPlay))]
     public partial bool IsPlaying { get; set; }
+
+    public bool CanPlay => !IsPlaying;
 
     #endregion
 
     /// <summary>
-    /// 再生・停止制御
+    /// 再生処理。
     /// </summary>
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanPlay))]
     private async Task Play()
     {
         if (TimeSteps.Count == 0)
             return;
 
-        if (!IsPlaying)
+        IsPlaying = true;
+        var i = CurrentTimeIndex;
+        while (true)
         {
-            // 停止時の処理。
-            IsPlaying = true;
-            for (var i = CurrentTimeIndex + 1; i < TimeSteps.Count; i++)
-            {
-                CurrentTimeIndex = i;
-                CurrentTimeStep = TimeSteps[CurrentTimeIndex];
-                await Task.Delay(200);
+            // スライダーが新しい位置に移動された場合はこれを直前位置とする。
+            if (CurrentTimeIndex != i)
+                i = CurrentTimeIndex;
 
-                if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
-                    break;
-            }
-        }
-        else
-        {
-            // 再生時の処理。
-            IsPlaying = false;
-        }
+            ++i;
+            if (i >= TimeSteps.Count)
+                break;
 
+            CurrentTimeIndex = i;
+            CurrentTimeStep = TimeSteps[CurrentTimeIndex];
+            await Task.Delay(200);
+
+            if (!IsPlaying) // 再生中にボタンが押されると再生処理を終了する
+                break;
+        }
+        IsPlaying = false;
+    }
+
+    /// <summary>
+    /// 停止処理。
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(IsPlaying))]
+    private void Pause()
+    {
         IsPlaying = false;
     }
 
@@ -208,7 +221,7 @@ public partial class ContourViewModel : ObservableObject
     /// 次のタイムステップヘ進む
     /// </summary>
     [RelayCommand]
-    private void NextStep()
+    private void ForwardStep()
     {
         if (TimeSteps.Count == 0)
             return;
@@ -224,7 +237,7 @@ public partial class ContourViewModel : ObservableObject
     /// 1つ前のタイムステップに戻る
     /// </summary>
     [RelayCommand]
-    private void PreviousStep()
+    private void BackwardStep()
     {
         if (TimeSteps.Count == 0)
             return;
@@ -239,7 +252,7 @@ public partial class ContourViewModel : ObservableObject
     /// <summary>
     /// 崩壊系列を構成する核種から描画対象を設定する。
     /// </summary>
-    public void SetBlock(OutputData output, OutputBlockData block)
+    public void SetBlock(OutputData? output, OutputBlockData? block)
     {
         if (SelectedBlock == block)
             return;
@@ -258,7 +271,7 @@ public partial class ContourViewModel : ObservableObject
         OrganValues = unsetOrganValues;
         OrganColors = unsetOrganColors;
 
-        if (block is null)
+        if (output is null || block is null)
             return;
 
         SelectedBlock = block;
@@ -277,8 +290,11 @@ public partial class ContourViewModel : ObservableObject
     /// </summary>
     private void SetMinMax()
     {
-        var max = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Max();
-        var min = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => !double.IsNaN(v)).Min();
+        if (SelectedBlock is null)
+            return;
+
+        var max = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => v != 0 && !double.IsNaN(v)).Max();
+        var min = SelectedBlock.Compartments.SelectMany(c => c.Values).Where(v => v != 0 && !double.IsNaN(v)).Min();
 
         // 1E**に合わせる
         ContourMax = Math.Pow(10, Math.Ceiling(Math.Log10(max)));
@@ -368,7 +384,7 @@ public partial class ContourViewModel : ObservableObject
 
             if (frac > 1) // コンターの上限を超える
             {
-                color = Color.FromRgb(255, 0, 0);
+                color = Color.FromArgb(255, 255, 0, 0);
             }
             else if (frac > 0.75) // Red～Orangeの間
             {
@@ -376,7 +392,7 @@ public partial class ContourViewModel : ObservableObject
                 //R = (byte)(255 + (0 * frac));
                 G = (byte)(165 - (165 * frac));
                 //B = (byte)(0 + (0 * frac));
-                color = Color.FromRgb(255, G, 0);
+                color = Color.FromArgb(255, 255, G, 0);
             }
             else if (frac > 0.5) // Orange～Yellowの間
             {
@@ -384,7 +400,7 @@ public partial class ContourViewModel : ObservableObject
                 //R = (byte)(255 + (0 * frac));
                 G = (byte)(255 - (90 * frac));
                 //B = (byte)(0 + (0 * frac));
-                color = Color.FromRgb(255, G, 0);
+                color = Color.FromArgb(255, 255, G, 0);
             }
             else if (frac > 0.25) // Yellow～Limeの間
             {
@@ -392,7 +408,7 @@ public partial class ContourViewModel : ObservableObject
                 R = (byte)(0 + (255 * frac));
                 //G = (byte)(255 + (0 * frac));
                 //B = (byte)(0 + (0 * frac));
-                color = Color.FromRgb(R, 255, 0);
+                color = Color.FromArgb(255, R, 255, 0);
             }
             else if (frac > 0) // Lime～Blueの間
             {
@@ -400,14 +416,14 @@ public partial class ContourViewModel : ObservableObject
                 //R = (byte)(0 + (0 * frac));
                 G = (byte)(0 + (255 * frac));
                 B = (byte)(255 - (255 * frac));
-                color = Color.FromRgb(0, G, B);
+                color = Color.FromArgb(255, 0, G, B);
             }
             else  // コンターの下限を下回る
             {
-                color = Color.FromRgb(0, 0, 255);
+                color = Color.FromArgb(255, 0, 0, 255);
             }
 
-            actualOrganColors[organ] = color.ToString();
+            actualOrganColors[organ] = new SolidColorBrush(color);
         }
 
         OrganColors = actualOrganColors;
@@ -425,4 +441,9 @@ public class CalcData
     public string OrganName { get; set; }
 
     public double Value { get; set; }
+
+    public string FormatValue(double value)
+    {
+        return $"{value:0.000000E+00}";
+    }
 }

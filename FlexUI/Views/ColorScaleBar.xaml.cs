@@ -1,11 +1,8 @@
-using System.Windows;
-using System.Windows.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace FlexID.Views;
 
-/// <summary>
-/// Interaction logic for ColorScaleBar
-/// </summary>
 public partial class ColorScaleBar : UserControl
 {
     public ColorScaleBar()
@@ -14,16 +11,19 @@ public partial class ColorScaleBar : UserControl
     }
 
     public static readonly DependencyProperty ContourMaxProperty =
-        DependencyProperty.Register(nameof(ContourMax), typeof(double), typeof(ColorScaleBar),
-            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        DependencyProperty.Register(
+            nameof(ContourMax), typeof(double), typeof(ColorScaleBar),
+            new PropertyMetadata(0.0));
 
     public static readonly DependencyProperty ContourMinProperty =
-        DependencyProperty.Register(nameof(ContourMin), typeof(double), typeof(ColorScaleBar),
-            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        DependencyProperty.Register(
+            nameof(ContourMin), typeof(double), typeof(ColorScaleBar),
+            new PropertyMetadata(0.0));
 
     public static readonly DependencyProperty ContourUnitProperty =
-        DependencyProperty.Register(nameof(ContourUnit), typeof(string), typeof(ColorScaleBar),
-            new FrameworkPropertyMetadata(""));
+        DependencyProperty.Register(
+            nameof(ContourUnit), typeof(string), typeof(ColorScaleBar),
+            new PropertyMetadata(""));
 
     public double ContourMax
     {

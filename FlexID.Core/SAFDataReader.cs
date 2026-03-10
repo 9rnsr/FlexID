@@ -92,19 +92,19 @@ public class SAFDataReader
     /// 放射線データに定義されている核種を列挙する。
     /// </summary>
     /// <returns></returns>
-    public static IEnumerable<string> ReadRadNuclides()
+    public static async IAsyncEnumerable<string> ReadRadNuclides()
     {
         using var r = new StreamReader(Path.Combine(AppResource.BaseDir, RadFilePath));
 
         string line;
-        while ((line = r.ReadLine()) != null)
+        while ((line = await r.ReadLineAsync()) != null)
         {
             string[] fields = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
             yield return fields[0];
 
             var dataCount = int.Parse(fields[2]);
             for (int dataNo = 0; dataNo < dataCount; dataNo++)
-                r.ReadLine();
+                await r.ReadLineAsync();
         }
     }
 

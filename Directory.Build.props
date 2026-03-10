@@ -2,14 +2,17 @@
 
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
+    <!--<Nullable>enable</Nullable>-->
     <ImplicitUsings>true</ImplicitUsings>
 
     <RootNamespace>FlexID</RootNamespace>
 
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
-    <OutputPath>$(SolutionDir)out\$(Configuration)_bin\</OutputPath>
-    <BaseIntermediateOutputPath>$(SolutionDir)out\$(Configuration)_obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <SolutionDir>$(MSBuildThisFileDirectory)</SolutionDir>
+
+    <BaseOutputPath>$(SolutionDir)out\bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)out\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
