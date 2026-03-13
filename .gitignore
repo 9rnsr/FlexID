@@ -366,3 +366,5 @@ FodyWeavers.xsd
 ~*
 *~
 *.lnk
+
+*/Properties/launchSettings.json

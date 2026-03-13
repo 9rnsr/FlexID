@@ -7,12 +7,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Copyright>Copyright © 2018</Copyright>
+    <Copyright>Copyright © 2017</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" />
     <PackageReference Include="MathNet.Numerics" />
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
     <PackageReference Include="Sprache" />
   </ItemGroup>
 

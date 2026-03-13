@@ -12,10 +12,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Copyright>Copyright © 2024</Copyright>
+    <Copyright>Copyright © 2017</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 

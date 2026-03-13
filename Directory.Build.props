@@ -13,6 +13,8 @@
 
     <BaseOutputPath>$(SolutionDir)out\bin\</BaseOutputPath>
     <BaseIntermediateOutputPath>$(SolutionDir)out\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+
+    <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -22,5 +24,11 @@
     <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RepoRoot>
     <PathMap>$(RepoRoot)=.</PathMap>
   </PropertyGroup>
+
+  <Target Name="OverrideInformationalVersionForPublicRelease" AfterTargets="GetBuildVersion">
+    <PropertyGroup Condition="'$(PublicRelease)' == 'true'">
+      <AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
+    </PropertyGroup>
+  </Target>
 
 </Project>
