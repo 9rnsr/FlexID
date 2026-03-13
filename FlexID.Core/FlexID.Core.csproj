@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="EPPlus" />
     <PackageReference Include="MathNet.Numerics" />
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
     <PackageReference Include="Sprache" />
   </ItemGroup>
 

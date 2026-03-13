@@ -12,9 +12,9 @@ public sealed partial class AboutPage : Page
 
         var ver = typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion!;
 
-        GitCommitId = ver.Split('+')[1];
+        GitCommitId = ThisAssembly.GitCommitId;
         PointerSize = Environment.Is64BitProcess ? "64-bit" : "32-bit";
-        VersionNumber = ver.Split('+')[0];
+        VersionNumber = ThisAssembly.AssemblyInformationalVersion;
 
         PackageList = LoadPackageList();
     }

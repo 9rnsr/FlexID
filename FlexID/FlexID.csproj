@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 
