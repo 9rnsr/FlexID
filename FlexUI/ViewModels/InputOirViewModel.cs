@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -244,15 +245,83 @@ public partial class InputOirViewModel : ViewModelBase
             if (SelectedCommitmentPeriodUnit is null)
                 throw new Exception("Please select Commitment Period Unit.");
 
+            var outputDir           /**/= OutputDirectory;
+            var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
+            var outputTimeMeshPath  /**/= OutputTimeMeshFilePath;
+            var commitmentPeriod    /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
+
+            if (!Path.IsPathFullyQualified(outputDir))
+                outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
+            if (!Path.IsPathFullyQualified(computeTimeMeshPath))
+                computeTimeMeshPath = Path.Combine(AppResource.BaseDir, computeTimeMeshPath);
+            if (!Path.IsPathFullyQualified(outputTimeMeshPath))
+                outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
+
             var targets = Targets.FilteredItems
                 .Where(targetVM => targetVM.IsChecked)
                 .Select(targetVM => targetVM.InputTarget).ToArray();
+
+            var outputs = targets.Select(target => Path.Combine(outputDir, target.Name));
+
+            var expectDir = Path.Combine(AppResource.BaseDir, @"expect");
+            var expects = Directory.EnumerateFiles(expectDir, "*.dat", SearchOption.AllDirectories)
+                .Select(path => KeyValuePair.Create(Path.GetFileNameWithoutExtension(path), path))
+                .Where(expect => expect.Key.Contains('_'))  // Leave the expect retention files only (e.g. 'H-3_Injection.dat').
+                .ToDictionary();
+
+            var reports = new ConcurrentDictionary<InputTarget, ReportData>();
 
             var runner = new ParallelRunner<InputTarget>(targets);
 
             ProgressViewModel.Connect(runner);
 
-            await runner.StartAsync(RunSingle(), cancellationToken);
+            await runner.StartAsync((target, cancellationToken) =>
+            {
+                var data = new InputDataReader_OIR(target.FilePath, calcProgeny: true).Read();
+
+                var main = new MainRoutine_OIR()
+                {
+                    OutputDirectory     /**/= outputDir,
+                    OutputFileName      /**/= target.Name,
+                    ComputeTimeMeshPath /**/= computeTimeMeshPath,
+                    OutputTimeMeshPath  /**/= outputTimeMeshPath,
+                    CommitmentPeriod    /**/= commitmentPeriod,
+                };
+
+                main.Main(data);
+
+                // // ファイルパスを引数にして出力GUI実行
+                // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
+                // p.WaitForExit();
+
+                var output = Path.Combine(outputDir, target.Name);
+
+                (string Name, string Path)? compare = null;
+                if (IsCompareWithOir && expects.TryGetValue(target.Name, out var expectPath))
+                    compare = (Name: target.Name, Path: expectPath);
+
+                var report = new ReportData(new FileInfo(outputDir), output, compare);
+
+                report.LoadResult();
+                if (report.HasErrors)
+                    throw new Exception(string.Join("\n", report.Errors));
+
+                ReportGenerator.WriteReport(report.ReportPath, report);
+
+                reports.TryAdd(target, report);
+            }, cancellationToken);
+
+            //if (!errors)
+            {
+                var summaryFile = "summary.xlsx";
+                summaryFile = Path.Combine(outputDir, summaryFile);
+
+                var sortedReports = targets
+                    .Select(target => reports.TryGetValue(target, out var report) ? report : null)
+                    .OfType<ReportData>().ToArray();
+
+                ReportGenerator.WriteSummary(summaryFile, sortedReports);
+            }
 
             var failedCount = ProgressViewModel.Targets.Count(targetVM => targetVM.IsFailure);
             var message = failedCount == 0 ? "All tasks completed successfully."
@@ -268,41 +337,6 @@ public partial class InputOirViewModel : ViewModelBase
         {
             WeakReferenceMessenger.Default.Send(new BusyState(false));
         }
-    }
-
-    private Action<InputTarget, CancellationToken> RunSingle()
-    {
-        var outputDir           /**/= OutputDirectory;
-        var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
-        var outputTimeMeshPath  /**/= OutputTimeMeshFilePath;
-        var commitmentPeriod    /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
-
-        if (!Path.IsPathFullyQualified(outputDir))
-            outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
-        if (!Path.IsPathFullyQualified(computeTimeMeshPath))
-            computeTimeMeshPath = Path.Combine(AppResource.BaseDir, computeTimeMeshPath);
-        if (!Path.IsPathFullyQualified(outputTimeMeshPath))
-            outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
-
-        return (target, cancellationToken) =>
-        {
-            var data = new InputDataReader_OIR(target.FilePath, calcProgeny: true).Read();
-
-            var main = new MainRoutine_OIR()
-            {
-                OutputDirectory     /**/= outputDir,
-                OutputFileName      /**/= target.Name,
-                ComputeTimeMeshPath /**/= computeTimeMeshPath,
-                OutputTimeMeshPath  /**/= outputTimeMeshPath,
-                CommitmentPeriod    /**/= commitmentPeriod,
-            };
-
-            main.Main(data);
-
-            // // ファイルパスを引数にして出力GUI実行
-            // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
-            // p.WaitForExit();
-        };
     }
 
     [RelayCommand]
