@@ -33,6 +33,14 @@ public class ReportGenerator
     {
         using var package = new ExcelPackage();
 
+        var hyperlinkStyle = package.Workbook.Styles.CreateNamedStyle("HyperLink");
+        hyperlinkStyle.Style.Font.UnderLine = true;
+        hyperlinkStyle.BuildInId = 8; // the id for the build in hyper link style.
+
+        var followedHyperlinkStyle = package.Workbook.Styles.CreateNamedStyle("FollowedHyperLink");
+        followedHyperlinkStyle.Style.Font.UnderLine = true;
+        followedHyperlinkStyle.BuildInId = 9; // the id for the build in followed hyper link style.
+
         // 預託実効線量と預託等価線量のシートを作成。
         var sheetEequivDose = package.Workbook.Worksheets.Add("Dose");
         WriteDoseSummary(sheetEequivDose, reports);
@@ -172,6 +180,8 @@ public class ReportGenerator
             {
                 cells = sheet.Cells[r, colT];
                 cells.Value = report.OutputName;
+                cells.Hyperlink = new Uri(report.OutputName + ".xlsx", UriKind.Relative);
+                cells.StyleName = "HyperLink";
                 cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                 cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -404,6 +414,8 @@ public class ReportGenerator
 
             // Target
             sheet.Cells[r, 1].Value = report.OutputName;
+            sheet.Cells[r, 1].Hyperlink = new Uri(report.OutputName + ".xlsx", UriKind.Relative);
+            sheet.Cells[r, 1].StyleName = "HyperLink";
 
             // Effective Dose
             if (hasExpect)
