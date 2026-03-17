@@ -149,6 +149,9 @@ public partial class InputOirViewModel : ViewModelBase
     public partial string SelectedCommitmentPeriodUnit { get; set; }
 
     [ObservableProperty]
+    public partial bool IsCompareWithOir { get; set; } = true;
+
+    [ObservableProperty]
     public partial string ComputeTimeMeshFilePath { get; set; }
 
     [RelayCommand]
