@@ -142,7 +142,7 @@ internal partial class Program_Gen
         await presenter.WaitForExit();
         Console.WriteLine();
 
-        if (!errors && compareNames is not null)
+        if (!errors)
         {
             var summaryFile = parseResult.GetValue(SummaryFileOption) ?? DefaultSummaryFileName;
             summaryFile = Path.Combine((outputDir ?? currentDir).FullName, summaryFile);
