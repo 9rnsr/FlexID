@@ -18,6 +18,7 @@ public class ReportData
 
         if (compare is var (name, path))
         {
+            HasExpect = true;
             ExpectName = name;
             ExpectNuclide = name.Split('_')[0];
             ExpectDosePath = Path.Combine(Path.GetDirectoryName(path)!, ExpectNuclide + ".dat");
@@ -32,6 +33,7 @@ public class ReportData
     public string OutputDosePath { get; }
     public string OutputRetentionPath { get; }
 
+    public bool HasExpect { get; }
     public string? ExpectName { get; }
     public string? ExpectNuclide { get; }
     public string? ExpectDosePath { get; }
@@ -64,6 +66,15 @@ public class ReportData
 
     public IReadOnlyList<Retention>? OutputActs;
     public IReadOnlyList<Retention>? ExpectActs;
+
+    public (double Min, double Max) OutputMinMaxWholeBody /**/= (double.PositiveInfinity, double.NegativeInfinity);
+    public (double Min, double Max) OutputMinMaxUrine     /**/= (double.PositiveInfinity, double.NegativeInfinity);
+    public (double Min, double Max) OutputMinMaxFaeces    /**/= (double.PositiveInfinity, double.NegativeInfinity);
+    public (double Min, double Max) OutputMinMaxAtract    /**/= (double.PositiveInfinity, double.NegativeInfinity);
+    public (double Min, double Max) OutputMinMaxLungs     /**/= (double.PositiveInfinity, double.NegativeInfinity);
+    public (double Min, double Max) OutputMinMaxSkeleton  /**/= (double.PositiveInfinity, double.NegativeInfinity);
+    public (double Min, double Max) OutputMinMaxLiver     /**/= (double.PositiveInfinity, double.NegativeInfinity);
+    public (double Min, double Max) OutputMinMaxThyroid   /**/= (double.PositiveInfinity, double.NegativeInfinity);
 
     // fractions of OutputActs / ExpectActs
     public (double Min, double Max) FractionsWholeBody /**/= (double.PositiveInfinity, double.NegativeInfinity);
@@ -168,6 +179,30 @@ public class ReportData
             }
         }
 
+        if (OutputActs is not null)
+        {
+            static void UpdateMinMax(ref (double Min, double Max) minmax, double? output)
+            {
+                if (output is double outputVal)
+                {
+                    minmax.Min = Math.Min(minmax.Min, outputVal);
+                    minmax.Max = Math.Max(minmax.Max, outputVal);
+                }
+            }
+
+            foreach (var outputAct in OutputActs)
+            {
+                UpdateMinMax(ref OutputMinMaxWholeBody, /**/outputAct.WholeBody);
+                UpdateMinMax(ref OutputMinMaxUrine,     /**/outputAct.Urine);
+                UpdateMinMax(ref OutputMinMaxFaeces,    /**/outputAct.Faeces);
+                UpdateMinMax(ref OutputMinMaxAtract,    /**/outputAct.Atract);
+                UpdateMinMax(ref OutputMinMaxLungs,     /**/outputAct.Lungs);
+                UpdateMinMax(ref OutputMinMaxSkeleton,  /**/outputAct.Skeleton);
+                UpdateMinMax(ref OutputMinMaxLiver,     /**/outputAct.Liver);
+                UpdateMinMax(ref OutputMinMaxThyroid,   /**/outputAct.Thyroid);
+            }
+        }
+
         // 50年の預託期間における、各出力時間メッシュにおける数値の比較。
         // 要約として、期待値に対する下振れ率と上振れ率の最大値を算出する。
         if (OutputActs is not null && ExpectActs is not null)
@@ -177,7 +212,8 @@ public class ReportData
                 if (output is double outputVal && expect is double expectVal)
                 {
                     var frac = outputVal / expectVal;
-                    fractions = (Math.Min(fractions.Min, frac), Math.Max(fractions.Max, frac));
+                    fractions.Min = Math.Min(fractions.Min, frac);
+                    fractions.Max = Math.Max(fractions.Max, frac);
                 }
             }
 

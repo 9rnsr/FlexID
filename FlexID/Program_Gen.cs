@@ -103,7 +103,7 @@ internal partial class Program_Gen
                 parseResult.GetValue(CompareAllOption) ? [.. outputs.Select(output => Path.GetFileNameWithoutExtension(output))] :
                 null;
 
-        (string Name, string Path)[]? compares = null;
+        (string Name, string Path)?[]? compares = null;
         if (compareNames is not null)
         {
             var expectDir = Path.Combine(AppResource.BaseDir, @"expect");
@@ -112,7 +112,13 @@ internal partial class Program_Gen
                 .Where(expect => expect.Key.Contains('_'))  // Leave the expect retention files only (e.g. 'H-3_Injection.dat').
                 .ToDictionary();
 
-            compares = [.. compareNames.Select(name => (Name: name, Path: expects[name]))];
+            compares = [.. compareNames.Select(name =>
+            {
+                (string Name, string Path)? compare = null;
+                if (expects.TryGetValue(name, out var expectPath))
+                    compare = (Name: name, Path: expectPath);
+                return compare;
+            })];
         }
 
         var reports = outputs.Select((output, i) => new ReportData(outputDir, output, compares?[i])).ToArray();
@@ -142,7 +148,7 @@ internal partial class Program_Gen
         await presenter.WaitForExit();
         Console.WriteLine();
 
-        if (!errors && compareNames is not null)
+        if (!errors)
         {
             var summaryFile = parseResult.GetValue(SummaryFileOption) ?? DefaultSummaryFileName;
             summaryFile = Path.Combine((outputDir ?? currentDir).FullName, summaryFile);

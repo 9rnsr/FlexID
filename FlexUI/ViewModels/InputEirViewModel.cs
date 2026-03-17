@@ -260,6 +260,19 @@ public partial class InputEirViewModel : ViewModelBase
             if (SelectedIntakeAge is null)
                 throw new Exception("Please select Exposure Age.");
 
+            var outputDir           /**/= OutputDirectory;
+            var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
+            var outputTimeMeshPath  /**/= OutputTimeMeshFilePath;
+            var commitmentPeriod    /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
+            var intakeAge           /**/= SelectedIntakeAge;
+
+            if (!Path.IsPathFullyQualified(outputDir))
+                outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
+            if (!Path.IsPathFullyQualified(computeTimeMeshPath))
+                computeTimeMeshPath = Path.Combine(AppResource.BaseDir, computeTimeMeshPath);
+            if (!Path.IsPathFullyQualified(outputTimeMeshPath))
+                outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
+
             var targets = Targets.FilteredItems
                 .Where(targetVM => targetVM.IsChecked)
                 .Select(targetVM => targetVM.InputTarget).ToArray();
@@ -268,7 +281,27 @@ public partial class InputEirViewModel : ViewModelBase
 
             ProgressViewModel.Connect(runner);
 
-            await runner.StartAsync(RunSingle(), cancellationToken);
+            await runner.StartAsync((target, cancellationToken) =>
+            {
+                var dataList = new InputDataReader_EIR(target.FilePath, calcProgeny: true).Read();
+
+                var main = new MainRoutine_EIR()
+                {
+                    OutputDirectory     /**/= outputDir,
+                    OutputFileName      /**/= target.Name,
+                    ComputeTimeMeshPath /**/= computeTimeMeshPath,
+                    OutputTimeMeshPath  /**/= outputTimeMeshPath,
+                    CommitmentPeriod    /**/= commitmentPeriod,
+                    ExposureAge         /**/= intakeAge,
+                };
+
+                main.Main(dataList);
+
+                // // ファイルパスを引数にして出力GUI実行
+                // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
+                // p.WaitForExit();
+
+            }, cancellationToken);
 
             var failedCount = ProgressViewModel.Targets.Count(targetVM => targetVM.IsFailure);
             var message = failedCount == 0 ? "All tasks completed successfully."
@@ -284,43 +317,6 @@ public partial class InputEirViewModel : ViewModelBase
         {
             WeakReferenceMessenger.Default.Send(new BusyState(false));
         }
-    }
-
-    private Action<InputTarget, CancellationToken> RunSingle()
-    {
-        var outputDir           /**/= OutputDirectory;
-        var computeTimeMeshPath /**/= ComputeTimeMeshFilePath;
-        var outputTimeMeshPath  /**/= OutputTimeMeshFilePath;
-        var commitmentPeriod    /**/= CommitmentPeriod + SelectedCommitmentPeriodUnit;
-        var intakeAge           /**/= SelectedIntakeAge;
-
-        if (!Path.IsPathFullyQualified(outputDir))
-            outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
-        if (!Path.IsPathFullyQualified(computeTimeMeshPath))
-            computeTimeMeshPath = Path.Combine(AppResource.BaseDir, computeTimeMeshPath);
-        if (!Path.IsPathFullyQualified(outputTimeMeshPath))
-            outputTimeMeshPath = Path.Combine(AppResource.BaseDir, outputTimeMeshPath);
-
-        return (target, cancellationToken) =>
-        {
-            var dataList = new InputDataReader_EIR(target.FilePath, calcProgeny: true).Read();
-
-            var main = new MainRoutine_EIR()
-            {
-                OutputDirectory     /**/= outputDir,
-                OutputFileName      /**/= target.Name,
-                ComputeTimeMeshPath /**/= computeTimeMeshPath,
-                OutputTimeMeshPath  /**/= outputTimeMeshPath,
-                CommitmentPeriod    /**/= commitmentPeriod,
-                ExposureAge         /**/= intakeAge,
-            };
-
-            main.Main(dataList);
-
-            // // ファイルパスを引数にして出力GUI実行
-            // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
-            // p.WaitForExit();
-        };
     }
 
     [RelayCommand]

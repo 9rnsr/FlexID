@@ -87,6 +87,13 @@
             IsTextSearchEnabled="True"
             ItemsSource="{x:Bind ViewModel.CommitmentPeriodUnits}"
             SelectedValue="{x:Bind ViewModel.SelectedCommitmentPeriodUnit, Mode=TwoWay}" />
+
+          <Border Width="24" />
+
+          <CheckBox
+            AccessKey="C"
+            Content="Compare with OIR data"
+            IsChecked="{x:Bind ViewModel.IsCompareWithOir, Mode=TwoWay}" />
         </StackPanel>
 
         <TextBlock
