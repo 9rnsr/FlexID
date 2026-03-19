@@ -223,27 +223,21 @@
                 </Style>
               </Border.Resources>
               <controls:DataTable MinHeight="32" ColumnSpacing="8">
-                <controls:DataColumn DesiredWidth="Auto">
-                  <!--<CheckBox
-                    MinWidth="0"
-                    Margin="16,0,0,0"
-                    Padding="0"
-                    IsChecked="{x:Bind ViewModel.Graph.IsCheckedAll, Mode=TwoWay}" />-->
+                <controls:DataColumn DesiredWidth="1*">
+                  <TextBlock Margin="44,0,0,0" Text="Organ" />
                 </controls:DataColumn>
-                <controls:DataColumn Content="Organ" DesiredWidth="1*" />
               </controls:DataTable>
             </Border>
           </ListView.Header>
 
           <ListView.ItemTemplate>
             <DataTemplate x:DataType="vm:SerieData">
-              <controls:DataRow Margin="-16,0,-16,0" HorizontalAlignment="Left">
+              <controls:DataRow>
                 <CheckBox
-                  MinWidth="0"
-                  Margin="16,0,0,0"
+                  HorizontalAlignment="Stretch"
+                  Content="{x:Bind Name}"
                   IsChecked="{x:Bind IsChecked, Mode=TwoWay}"
                   IsTabStop="False" />
-                <TextBlock VerticalAlignment="Center" Text="{x:Bind Name}" />
               </controls:DataRow>
             </DataTemplate>
           </ListView.ItemTemplate>
