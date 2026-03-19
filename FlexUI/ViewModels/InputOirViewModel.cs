@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -235,6 +236,7 @@ public partial class InputOirViewModel : ViewModelBase
         try
         {
             WeakReferenceMessenger.Default.Send(new BusyState(true));
+            CanOpenSummary = false;
 
             // 各パラメータの入力確認
             if (OutputDirectory == "")
@@ -321,6 +323,8 @@ public partial class InputOirViewModel : ViewModelBase
                     .OfType<ReportData>().ToArray();
 
                 ReportGenerator.WriteSummary(summaryFile, sortedReports);
+
+                CanOpenSummary = true;
             }
 
             var failedCount = targets.Count(target => target.IsFailure);
@@ -346,5 +350,20 @@ public partial class InputOirViewModel : ViewModelBase
             RunCommand.Cancel();
         else
             ProgressViewModel.Disconnect();
+    }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenSummaryCommand))]
+    public partial bool CanOpenSummary { get; set; }
+
+    [RelayCommand(CanExecute = nameof(CanOpenSummary))]
+    private void OpenSummary()
+    {
+        var outputDir = OutputDirectory;
+        if (!Path.IsPathFullyQualified(outputDir))
+            outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
+        var summaryFile = Path.Combine(outputDir, "summary.xlsx");
+        if (File.Exists(summaryFile))
+            Process.Start(new ProcessStartInfo(summaryFile) { UseShellExecute = true });
     }
 }

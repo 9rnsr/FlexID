@@ -185,6 +185,14 @@
             <KeyboardAccelerator Key="Escape" IsEnabled="{x:Bind CanCloseProgress(ViewModel.IsBusy), Mode=OneWay}" />
           </Button.KeyboardAccelerators>
         </Button>
+
+        <Button
+          Grid.Row="1"
+          Height="40"
+          HorizontalAlignment="Left"
+          Command="{x:Bind ViewModel.OpenSummaryCommand}"
+          Content="Open Report Summary"
+          Visibility="{x:Bind VisibilityOpenSummary(ViewModel.IsBusy), Mode=OneWay}" />
       </Grid>
     </v:ContentOverlay.OverlayContent>
   </v:ContentOverlay>
