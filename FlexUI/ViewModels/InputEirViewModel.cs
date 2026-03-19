@@ -297,9 +297,8 @@ public partial class InputEirViewModel : ViewModelBase
 
                 main.Main(dataList);
 
-                // // ファイルパスを引数にして出力GUI実行
-                // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
-                // p.WaitForExit();
+                var output = Path.Combine(outputDir, target.Name);
+                target.OutputFilePath = output + "_Retention.out";
 
             }, cancellationToken);
 
