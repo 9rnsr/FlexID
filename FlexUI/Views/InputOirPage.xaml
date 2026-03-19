@@ -161,7 +161,11 @@
         Margin="0,0,24,0"
         HorizontalAlignment="Right"
         Command="{x:Bind ViewModel.RunCommand}"
-        Content="Run" />
+        Content="Run">
+        <Button.KeyboardAccelerators>
+          <KeyboardAccelerator Key="F5" />
+        </Button.KeyboardAccelerators>
+      </Button>
     </Grid>
 
     <v:ContentOverlay.OverlayContent>
