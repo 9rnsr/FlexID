@@ -27,7 +27,7 @@
             <RowDefinition Height="Auto" />
           </Grid.RowDefinitions>
 
-          <Grid Visibility="{x:Bind BoolToVisibility(IsBlocked), Mode=OneWay}">
+          <Grid Visibility="{x:Bind BoolToVisibility(IsSuspend), Mode=OneWay}">
             <FontIcon Foreground="LightGray" Glyph="&#xF2D9;" />
           </Grid>
           <Grid Visibility="{x:Bind BoolToVisibility(IsRunning), Mode=OneWay}">

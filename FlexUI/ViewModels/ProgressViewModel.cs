@@ -20,13 +20,13 @@ public partial class ProgressTargetViewModel : ViewModelBase
     public string Nuclide => InputTarget.Nuclide;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsBlocked))]
+    [NotifyPropertyChangedFor(nameof(IsSuspend))]
     [NotifyPropertyChangedFor(nameof(IsSuccess))]
     [NotifyPropertyChangedFor(nameof(IsFailure))]
     public partial bool IsRunning { get; set; }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsBlocked))]
+    [NotifyPropertyChangedFor(nameof(IsSuspend))]
     [NotifyPropertyChangedFor(nameof(IsSuccess))]
     [NotifyPropertyChangedFor(nameof(IsFailure))]
     public partial string? ErrorText { get; set; }
@@ -34,7 +34,7 @@ public partial class ProgressTargetViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
 
-    public bool IsBlocked => !IsRunning && ErrorText is null;
+    public bool IsSuspend => !IsRunning && ErrorText is null;
 
     public bool IsSuccess => !IsRunning && ErrorText?.Length == 0;
 
