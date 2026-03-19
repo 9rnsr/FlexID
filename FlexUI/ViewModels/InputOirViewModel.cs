@@ -262,7 +262,7 @@ public partial class InputOirViewModel : ViewModelBase
 
             var targets = Targets.FilteredItems
                 .Where(targetVM => targetVM.IsChecked)
-                .Select(targetVM => targetVM.InputTarget).ToArray();
+                .Select(targetVM => new ProgressTargetViewModel(targetVM.InputTarget)).ToArray();
 
             var outputs = targets.Select(target => Path.Combine(outputDir, target.Name));
 
@@ -272,15 +272,15 @@ public partial class InputOirViewModel : ViewModelBase
                 .Where(expect => expect.Key.Contains('_'))  // Leave the expect retention files only (e.g. 'H-3_Injection.dat').
                 .ToDictionary();
 
-            var reports = new ConcurrentDictionary<InputTarget, ReportData>();
+            var reports = new ConcurrentDictionary<ProgressTargetViewModel, ReportData>();
 
-            var runner = new ParallelRunner<InputTarget>(targets);
+            var runner = new ParallelRunner<ProgressTargetViewModel>(targets);
 
             ProgressViewModel.Connect(runner);
 
             await runner.StartAsync((target, cancellationToken) =>
             {
-                var data = new InputDataReader_OIR(target.FilePath, calcProgeny: true).Read();
+                var data = new InputDataReader_OIR(target.InputFilePath, calcProgeny: true).Read();
 
                 var main = new MainRoutine_OIR()
                 {
@@ -326,7 +326,7 @@ public partial class InputOirViewModel : ViewModelBase
                 ReportGenerator.WriteSummary(summaryFile, sortedReports);
             }
 
-            var failedCount = ProgressViewModel.Targets.Count(targetVM => targetVM.IsFailure);
+            var failedCount = targets.Count(target => target.IsFailure);
             var message = failedCount == 0 ? "All tasks completed successfully."
                 : $"{failedCount} / {ProgressViewModel.Targets.Count} tasks encounted errors during processing.";
             MessageService.Confirm("Caculation Finished", message);

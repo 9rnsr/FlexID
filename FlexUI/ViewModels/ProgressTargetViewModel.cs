@@ -13,9 +13,13 @@ public partial class ProgressTargetViewModel : ViewModelBase
 
     public InputTarget InputTarget { get; }
 
+    public string Name => InputTarget.Name;
+
     public string Title => InputTarget.Title;
 
     public string Nuclide => InputTarget.Nuclide;
+
+    public string InputFilePath => InputTarget.FilePath;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSuspend))]

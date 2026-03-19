@@ -275,15 +275,15 @@ public partial class InputEirViewModel : ViewModelBase
 
             var targets = Targets.FilteredItems
                 .Where(targetVM => targetVM.IsChecked)
-                .Select(targetVM => targetVM.InputTarget).ToArray();
+                .Select(targetVM => new ProgressTargetViewModel(targetVM.InputTarget)).ToArray();
 
-            var runner = new ParallelRunner<InputTarget>(targets);
+            var runner = new ParallelRunner<ProgressTargetViewModel>(targets);
 
             ProgressViewModel.Connect(runner);
 
             await runner.StartAsync((target, cancellationToken) =>
             {
-                var dataList = new InputDataReader_EIR(target.FilePath, calcProgeny: true).Read();
+                var dataList = new InputDataReader_EIR(target.InputFilePath, calcProgeny: true).Read();
 
                 var main = new MainRoutine_EIR()
                 {
@@ -303,7 +303,7 @@ public partial class InputEirViewModel : ViewModelBase
 
             }, cancellationToken);
 
-            var failedCount = ProgressViewModel.Targets.Count(targetVM => targetVM.IsFailure);
+            var failedCount = targets.Count(target => target.IsFailure);
             var message = failedCount == 0 ? "All tasks completed successfully."
                 : $"{failedCount} / {ProgressViewModel.Targets.Count} tasks encounted errors during processing.";
             MessageService.Confirm("Caculation Finished", message);
