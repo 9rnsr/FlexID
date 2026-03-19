@@ -4,6 +4,7 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="using:Microsoft.Xaml.Interactivity"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:v="using:FlexID.Views"
   xmlns:vm="using:FlexID.ViewModels"
@@ -17,7 +18,16 @@
 
     <ListView.ItemTemplate>
       <DataTemplate x:DataType="vm:ProgressTargetViewModel">
-        <Grid Padding="0,6" ColumnSpacing="8">
+        <Grid
+          Padding="0,6"
+          ColumnSpacing="8"
+          Background="Transparent">
+          <i:Interaction.Behaviors>
+            <i:EventTriggerBehavior EventName="DoubleTapped">
+              <i:InvokeCommandAction Command="{x:Bind OpenViewerCommand}" />
+            </i:EventTriggerBehavior>
+          </i:Interaction.Behaviors>
+
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
@@ -27,7 +37,7 @@
             <RowDefinition Height="Auto" />
           </Grid.RowDefinitions>
 
-          <Grid Visibility="{x:Bind BoolToVisibility(IsBlocked), Mode=OneWay}">
+          <Grid Visibility="{x:Bind BoolToVisibility(IsSuspend), Mode=OneWay}">
             <FontIcon Foreground="LightGray" Glyph="&#xF2D9;" />
           </Grid>
           <Grid Visibility="{x:Bind BoolToVisibility(IsRunning), Mode=OneWay}">

@@ -185,7 +185,8 @@ public class SerieData : ViewModelBase, ICheckableItem
         _scatter = plot.Add.Scatter(_xs, _ys);
         _scatter.LegendText = name;
         _scatter.IsVisible = color is not null;
-        _scatter.MarkerFillColor = color ?? _scatter.Color;
+        _scatter.LineColor = color ?? _scatter.Color;
+        _scatter.MarkerColor = color ?? _scatter.Color;
     }
 
     private readonly GraphViewModel _viewModel;

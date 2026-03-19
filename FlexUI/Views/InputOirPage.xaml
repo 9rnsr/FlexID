@@ -161,7 +161,11 @@
         Margin="0,0,24,0"
         HorizontalAlignment="Right"
         Command="{x:Bind ViewModel.RunCommand}"
-        Content="Run" />
+        Content="Run">
+        <Button.KeyboardAccelerators>
+          <KeyboardAccelerator Key="F5" />
+        </Button.KeyboardAccelerators>
+      </Button>
     </Grid>
 
     <v:ContentOverlay.OverlayContent>
@@ -179,12 +183,20 @@
           Height="40"
           Margin="0,0,24,0"
           HorizontalAlignment="Right"
-          Command="{x:Bind ViewModel.AbortOrCloseProgressCommand, Mode=OneWay}"
+          Command="{x:Bind ViewModel.ProgressAbortOrCloseCommand}"
           Content="{x:Bind AbortCloseButtonText(ViewModel.IsBusy), Mode=OneWay}">
           <Button.KeyboardAccelerators>
             <KeyboardAccelerator Key="Escape" IsEnabled="{x:Bind CanCloseProgress(ViewModel.IsBusy), Mode=OneWay}" />
           </Button.KeyboardAccelerators>
         </Button>
+
+        <Button
+          Grid.Row="1"
+          Height="40"
+          HorizontalAlignment="Left"
+          Command="{x:Bind ViewModel.OpenSummaryCommand}"
+          Content="Open Report Summary"
+          Visibility="{x:Bind VisibilityOpenSummary(ViewModel.IsBusy), Mode=OneWay}" />
       </Grid>
     </v:ContentOverlay.OverlayContent>
   </v:ContentOverlay>

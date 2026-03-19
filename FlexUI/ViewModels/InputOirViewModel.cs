@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -235,6 +236,7 @@ public partial class InputOirViewModel : ViewModelBase
         try
         {
             WeakReferenceMessenger.Default.Send(new BusyState(true));
+            CanOpenSummary = false;
 
             // 各パラメータの入力確認
             if (OutputDirectory == "")
@@ -262,7 +264,7 @@ public partial class InputOirViewModel : ViewModelBase
 
             var targets = Targets.FilteredItems
                 .Where(targetVM => targetVM.IsChecked)
-                .Select(targetVM => targetVM.InputTarget).ToArray();
+                .Select(targetVM => new ProgressTargetViewModel(targetVM.InputTarget)).ToArray();
 
             var outputs = targets.Select(target => Path.Combine(outputDir, target.Name));
 
@@ -272,15 +274,15 @@ public partial class InputOirViewModel : ViewModelBase
                 .Where(expect => expect.Key.Contains('_'))  // Leave the expect retention files only (e.g. 'H-3_Injection.dat').
                 .ToDictionary();
 
-            var reports = new ConcurrentDictionary<InputTarget, ReportData>();
+            var reports = new ConcurrentDictionary<ProgressTargetViewModel, ReportData>();
 
-            var runner = new ParallelRunner<InputTarget>(targets);
+            var runner = new ParallelRunner<ProgressTargetViewModel>(targets);
 
             ProgressViewModel.Connect(runner);
 
             await runner.StartAsync((target, cancellationToken) =>
             {
-                var data = new InputDataReader_OIR(target.FilePath, calcProgeny: true).Read();
+                var data = new InputDataReader_OIR(target.InputFilePath, calcProgeny: true).Read();
 
                 var main = new MainRoutine_OIR()
                 {
@@ -293,11 +295,8 @@ public partial class InputOirViewModel : ViewModelBase
 
                 main.Main(data);
 
-                // // ファイルパスを引数にして出力GUI実行
-                // var p = Process.Start("FlexID.Viewer.exe", outputPath + "_Retention.out");
-                // p.WaitForExit();
-
                 var output = Path.Combine(outputDir, target.Name);
+                target.OutputFilePath = output + "_Retention.out";
 
                 (string Name, string Path)? compare = null;
                 if (IsCompareWithOir && expects.TryGetValue(target.Name, out var expectPath))
@@ -324,9 +323,11 @@ public partial class InputOirViewModel : ViewModelBase
                     .OfType<ReportData>().ToArray();
 
                 ReportGenerator.WriteSummary(summaryFile, sortedReports);
+
+                CanOpenSummary = true;
             }
 
-            var failedCount = ProgressViewModel.Targets.Count(targetVM => targetVM.IsFailure);
+            var failedCount = targets.Count(target => target.IsFailure);
             var message = failedCount == 0 ? "All tasks completed successfully."
                 : $"{failedCount} / {ProgressViewModel.Targets.Count} tasks encounted errors during processing.";
             MessageService.Confirm("Caculation Finished", message);
@@ -343,11 +344,26 @@ public partial class InputOirViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void AbortOrCloseProgress()
+    private void ProgressAbortOrClose()
     {
         if (IsBusy)
             RunCommand.Cancel();
         else
             ProgressViewModel.Disconnect();
+    }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenSummaryCommand))]
+    public partial bool CanOpenSummary { get; set; }
+
+    [RelayCommand(CanExecute = nameof(CanOpenSummary))]
+    private void OpenSummary()
+    {
+        var outputDir = OutputDirectory;
+        if (!Path.IsPathFullyQualified(outputDir))
+            outputDir = Path.Combine(AppResource.ProcessDir, outputDir);
+        var summaryFile = Path.Combine(outputDir, "summary.xlsx");
+        if (File.Exists(summaryFile))
+            Process.Start(new ProcessStartInfo(summaryFile) { UseShellExecute = true });
     }
 }
