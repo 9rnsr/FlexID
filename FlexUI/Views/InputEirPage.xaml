@@ -182,7 +182,7 @@
           Height="40"
           Margin="0,0,24,0"
           HorizontalAlignment="Right"
-          Command="{x:Bind ViewModel.AbortOrCloseProgressCommand, Mode=OneWay}"
+          Command="{x:Bind ViewModel.ProgressAbortOrCloseCommand}"
           Content="{x:Bind AbortCloseButtonText(ViewModel.IsBusy), Mode=OneWay}">
           <Button.KeyboardAccelerators>
             <KeyboardAccelerator Key="Escape" IsEnabled="{x:Bind CanCloseProgress(ViewModel.IsBusy), Mode=OneWay}" />

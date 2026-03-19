@@ -320,7 +320,7 @@ public partial class InputEirViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void AbortOrCloseProgress()
+    private void ProgressAbortOrClose()
     {
         if (IsBusy)
             RunCommand.Cancel();

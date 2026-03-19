@@ -343,7 +343,7 @@ public partial class InputOirViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void AbortOrCloseProgress()
+    private void ProgressAbortOrClose()
     {
         if (IsBusy)
             RunCommand.Cancel();
