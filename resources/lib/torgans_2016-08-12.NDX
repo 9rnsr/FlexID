@@ -1,0 +1,54 @@
+Targets               2016-08-12
+             ---- Mass(kg) ----|
+  43           Male     Female |
+--------------------------------
+O-mucosa     3.583E-02 2.245E-02
+Oesophagus   9.500E-05 8.800E-05
+St-stem      6.160E-04 6.160E-04
+SI-stem      3.711E-03 3.446E-03
+RC-stem      1.346E-03 1.188E-03
+LC-stem      1.256E-03 1.157E-03
+RS-stem      7.590E-04 6.990E-04
+ET1-bas      2.000E-05 1.700E-05
+ET2-bas      4.500E-04 3.900E-04
+LN-ET        1.595E-02 1.270E-02
+Bronch-bas   4.300E-04 3.900E-04
+Bronch-sec   8.600E-04 7.800E-04
+Bchiol-sec   1.900E-03 1.900E-03
+AI           1.100E+00 9.040E-01
+LN-Th        1.595E-02 1.270E-02
+R-marrow     1.394E+00 1.064E+00
+Endost-BS    5.800E-01 4.327E-01
+Brain        1.517E+00 1.349E+00
+Eye-lens     4.000E-04 4.000E-04
+P-gland      6.280E-04 6.180E-04
+Tongue       7.642E-02 6.185E-02
+Tonsils      3.141E-03 3.092E-03
+S-glands     8.898E-02 7.215E-02
+Thyroid      2.336E-02 1.946E-02
+Breast       2.617E-02 5.154E-01
+Thymus       2.617E-02 2.062E-02
+Ht-wall      3.860E-01 2.910E-01
+Adrenals     1.736E-02 1.546E-02
+Liver        2.360E+00 1.810E+00
+Pancreas     1.736E-01 1.446E-01
+Kidneys      4.220E-01 3.570E-01
+Spleen       2.284E-01 1.874E-01
+GB-wall      1.047E-02 8.246E-03
+Ureters      1.675E-02 1.546E-02
+UB-wall      5.112E-02 4.082E-02
+Ovaries      0.000E+00 1.264E-02
+Testes       3.724E-02 0.000E+00
+Prostate     1.780E-02 0.000E+00
+Uterus       0.000E+00 8.246E-02
+LN-Sys       1.577E-01 1.255E-01
+Skin         3.468E+00 2.423E+00
+Adipose      1.751E+01 2.176E+01
+Muscle       2.978E+01 1.793E+01
+--------------------------------
+Target tissues in SAF files for|
+RCP-AM & RCP-AF.               |
+Do not change the order of the |
+targets; this file is used to  |
+derive the record location in  |
+the SAF files.                 |
