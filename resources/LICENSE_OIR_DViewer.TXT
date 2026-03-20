@@ -1,16 +1,16 @@
-Electronic Annex / OIR Data Viewer Ver. 4.01.04.19 
-Copyright © ICRP, 2017-2019 All Rights Reserved. 
+Electronic Annex / OIR Data Viewer Ver. 5.27.9.21 
+Copyright © ICRP, 2017-2022 All Rights Reserved. 
 
 Permission is hereby granted to any person legally obtained a copy of ICRP Publication 134, 
-ICRP Publication 137 or ICRP Publication 141, accompanying of the electronic annex /
-OIR Data Viewer software, and the associated documentation to use, these materials 
-without a signed licensing agreement provided that the file LICENSE_OIR_DViewer.TXT 
-containing the above copyright notice, this paragraph and the following four paragraphs 
-appears in all copies, modifications, and distributions. 
+ICRP Publication 137, ICRP Publication 141 or ICRP Publication 151, accompanying of the 
+electronic annex / OIR Data Viewer software, and the associated documentation to use 
+these materials without a signed licensing agreement provided that the file 
+LICENSE_OIR_DViewer.TXT containing the above copyright notice, this paragraph and the 
+following four paragraphs appears in all copies, modifications, and distributions. 
 
-No part of ICRP Publication 134, ICRP Publication 137, and ICRP Publication 141 
-may be reproduced, stored in a retrieval system or transmitted in any form or 
-by any means electronic, electrostatic, magnetic tape, mechanical photocopying, 
+No part of ICRP Publication 134, ICRP Publication 137, ICRP Publication 141, 
+and ICRP Publication 151 may be reproduced, stored in a retrieval system or transmitted 
+in any form or by any means electronic, electrostatic, magnetic tape, mechanical photocopying, 
 recording or otherwise or republished in any form, without permission in writing 
 from the copyright owner. In order to obtain permission, or for other general 
 inquiries regarding the Annals of the ICRP, please contact ICRP, 
