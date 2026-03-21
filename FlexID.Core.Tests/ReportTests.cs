@@ -30,8 +30,10 @@ public class ReportTests
         var report = reports[0];
         ReportGenerator.WriteReport(Path.Combine(resultDir, report.OutputName + "_compare.xlsx"), report);
 
+        var sortedReports = reports.OrderBy(r => r.SortKey).ToArray();
+
         var summaryFile = Path.Combine(resultDir, "summary_compare.xlsx");
-        ReportGenerator.WriteSummary(summaryFile, reports);
+        ReportGenerator.WriteSummary(summaryFile, sortedReports);
     }
 
     [TestMethod]
@@ -54,7 +56,9 @@ public class ReportTests
         var report = reports[0];
         ReportGenerator.WriteReport(Path.Combine(resultDir, report.OutputName + "_output.xlsx"), report);
 
+        var sortedReports = reports.OrderBy(r => r.SortKey).ToArray();
+
         var summaryFile = Path.Combine(resultDir, "summary_output.xlsx");
-        ReportGenerator.WriteSummary(summaryFile, reports);
+        ReportGenerator.WriteSummary(summaryFile, sortedReports);
     }
 }
