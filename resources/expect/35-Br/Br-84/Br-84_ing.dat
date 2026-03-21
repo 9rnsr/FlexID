@@ -1,0 +1,14 @@
+Radionuclide	Br-84
+Route of Intake	Ingestion
+Material	All forms, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*
+0.041667	2.7E-1	1.2E-1
+0.083333	7.3E-2	1.6E-2
+0.125	2.0E-2	2.1E-3
+0.25	3.9E-4	1.4E-5
+0.375	7.6E-6	2.4E-7
+0.5	1.5E-7	4.6E-9
+0.625	2.9E-9	-

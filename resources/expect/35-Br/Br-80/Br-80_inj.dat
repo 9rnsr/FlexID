@@ -1,0 +1,12 @@
+Radionuclide	Br-80
+Route of Intake	Injection
+Material	Injection, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*
+0.041667	9.5E-2	2.0E-3
+0.083333	9.0E-3	1.9E-4
+0.125	8.6E-4	1.8E-5
+0.25	7.3E-7	1.6E-8
+0.375	6.3E-10	-

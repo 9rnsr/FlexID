@@ -1,0 +1,13 @@
+Radionuclide	Se-83
+Route of Intake	Ingestion
+Material	All other forms, fA=0.8
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	1.5E-1	1.2E-1	2.2E-3	3.5E-3
+0.083333	2.4E-2	1.3E-2	7.2E-4	1.2E-3
+0.125	3.7E-3	1.5E-3	1.4E-4	2.7E-4
+0.25	1.3E-5	3.6E-6	5.3E-7	1.3E-6
+0.375	4.8E-8	1.2E-8	1.9E-9	5.0E-9
+0.5	1.7E-10	-	-	-

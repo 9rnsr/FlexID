@@ -1,0 +1,11 @@
+Radionuclide	As-69
+Route of Intake	Ingestion
+Material	Water soluble compounds, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	6.4E-2	3.1E-2	2.2E-3	2.9E-3
+0.083333	4.0E-3	9.6E-4	1.9E-4	2.4E-4
+0.125	2.5E-4	3.3E-5	1.4E-5	1.7E-5
+0.25	6.1E-8	3.5E-9	3.9E-9	4.6E-9

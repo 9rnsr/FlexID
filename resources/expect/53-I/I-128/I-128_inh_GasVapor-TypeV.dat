@@ -1,0 +1,13 @@
+Radionuclide	I-128
+Route of Intake	Inhalation
+Material	Gas or vapour Type V, Methyl iodide, ethyl iodide 
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Thyroid*	Liver*
+0.041667	1.3E-1	1.5E-2	7.0E-3	5.7E-3
+0.083333	2.3E-2	3.2E-3	2.1E-3	8.5E-4
+0.125	4.1E-3	6.0E-4	5.3E-4	1.4E-4
+0.25	2.3E-5	3.0E-6	5.6E-6	6.4E-7
+0.375	1.3E-7	1.5E-8	4.7E-8	3.0E-9
+0.5	7.4E-10	-	3.6E-10	-

@@ -1,0 +1,12 @@
+Radionuclide	Pt-184
+Route of Intake	Ingestion
+Material	Metal, oxide, hydroxide, fA=1E-3
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	9.0E-2	9.0E-2	4.2E-7	8.8E-7
+0.083333	8.2E-3	8.2E-3	1.1E-7	2.5E-7
+0.125	7.4E-4	7.4E-4	1.6E-8	3.8E-8
+0.25	5.4E-7	5.4E-7	-	-
+0.375	4.0E-10	4.0E-10	-	-

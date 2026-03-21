@@ -1,0 +1,13 @@
+Radionuclide	Pa-235
+Route of Intake	Inhalation
+Material	Aerosols Water soluble forms, including chloride, citrate, fluoride, nitrate and sulphate, fA=5E-5
+AMTD/AMAD, µm	5
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.5E-1	5.0E-2	1.3E-2	3.2E-4	2.9E-4
+0.083333	2.7E-2	1.0E-2	2.2E-3	8.7E-5	5.4E-5
+0.125	4.8E-3	2.0E-3	3.9E-4	2.1E-5	9.9E-6
+0.25	2.9E-5	1.5E-5	2.3E-6	2.1E-7	5.8E-8
+0.375	1.7E-7	1.0E-7	1.4E-8	1.7E-9	3.4E-10
+0.5	1.0E-9	6.7E-10	-	-	-

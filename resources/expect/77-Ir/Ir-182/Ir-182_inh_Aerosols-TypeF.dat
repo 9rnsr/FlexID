@@ -1,0 +1,11 @@
+Radionuclide	Ir-182
+Route of Intake	Inhalation
+Material	Aerosols Type F, Iridium chloride, fA=1E-2
+AMTD/AMAD, µm	5
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	5.1E-2	1.4E-2	1.7E-3	7.4E-4	1.1E-3
+0.083333	3.1E-3	9.6E-4	4.4E-5	5.5E-5	8.2E-5
+0.125	1.9E-4	6.5E-5	1.8E-6	3.7E-6	5.5E-6
+0.25	4.4E-8	1.9E-8	3.5E-10	1.0E-9	1.5E-9

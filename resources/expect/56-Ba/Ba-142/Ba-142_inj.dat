@@ -1,0 +1,10 @@
+Radionuclide	Ba-142
+Route of Intake	Injection
+Material	Injection, fA=0.2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*
+0.041667	2.0E-2	6.0E-3	5.0E-3
+0.083333	3.8E-4	1.3E-4	1.1E-4
+0.125	7.5E-6	2.7E-6	2.2E-6

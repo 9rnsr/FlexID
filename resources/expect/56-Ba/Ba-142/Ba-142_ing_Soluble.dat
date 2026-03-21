@@ -1,0 +1,10 @@
+Radionuclide	Ba-142
+Route of Intake	Ingestion
+Material	Soluble forms, fA=0.2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*
+0.041667	2.0E-2	2.0E-2	6.3E-5
+0.083333	3.8E-4	3.7E-4	4.3E-6
+0.125	7.7E-6	7.3E-6	1.6E-7

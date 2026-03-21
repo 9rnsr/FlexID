@@ -1,0 +1,13 @@
+Radionuclide	I-128
+Route of Intake	Inhalation
+Material	Gas or vapour Type F, Elemental iodine and unspecified forms , fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Liver*
+0.041667	1.9E-1	4.2E-2	5.4E-3	7.1E-3	7.5E-3
+0.083333	3.4E-2	6.3E-3	7.3E-4	2.5E-3	1.2E-3
+0.125	6.1E-3	1.0E-3	1.2E-4	6.6E-4	2.1E-4
+0.25	3.4E-5	4.8E-6	5.7E-7	7.5E-6	9.8E-7
+0.375	1.9E-7	2.3E-8	2.7E-9	6.5E-8	4.6E-9
+0.5	1.1E-9	1.1E-10	-	5.0E-10	-
