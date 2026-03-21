@@ -52,7 +52,7 @@ public class ReportGenerator
         package.SaveAs(filePath);
     }
 
-    private static void SetPercentColorScale(ExcelRange cells)
+    private static void SetPercentColorScale(ExcelRangeBase cells)
     {
         var sheet = cells.Worksheet;
         var condition = sheet.ConditionalFormatting.AddThreeColorScale(cells);
@@ -79,64 +79,55 @@ public class ReportGenerator
 
         var hasExpect = reports.Any(report => report.HasExpect);
         const int rowH = 3;
-        const int rowV = rowH + 2;
+        const int rowV = rowH + 1;
         const int colT = 1; // Target
         const int colD = 2; // Effective Dose
-        int colE = hasExpect ? 7 : 5; // Equivalent dose
+        int colE = hasExpect ? 8 : 6; // Equivalent dose
         var rowOfs = hasExpect ? 6 : 2;
-        ExcelRange cells;
+        ExcelRangeBase cells;
 
         sheet.OutLineSummaryBelow = false;
         sheet.OutLineSummaryRight = false;
 
         // Target (header)
         {
-            sheet.Cells[rowH + 0, colT].Value = "Target";
-            sheet.Cells[rowH + 0, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[rowH + 0, colT, rowH + 1, colT].Merge = true;
+            cells = sheet.Cells[rowH, colT];
+            cells.Value = "Target";
 
-            cells = sheet.Cells[rowH + 1, colT, rowH + 1, colT];
+            cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             cells.Style.Border.Bottom.Color.SetColor(Color.Black);
+            cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Right.Color.SetColor(Color.Black);
         }
 
         // Effective Dose (header)
         if (hasExpect)
         {
-            var (r0, r1) = (rowH + 0, rowH + 1);
-            var (c0, c1, c2) = (colD + 0, colD + 1, colD + 2);
-            sheet.Cells[r0, c0].Value = "Whole Body Effective Dose";
-            sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[r0, c0, r0, c2].Merge = true;
+            cells = sheet.Cells[rowH, colD];
+            cells.Offset(-1, 0).Value = "Effective Dose";
 
-            sheet.Cells[r1, c0].Value = "OIR";
-            sheet.Cells[r1, c1].Value = "FlexID";
-            sheet.Cells[r1, c2].Value = "Diff";
+            cells.Offset(0, 0).Value = "Diff";
+            cells.Offset(0, 1).Value = "OIR";
+            cells.Offset(0, 2).Value = "FlexID";
 
-            cells = sheet.Cells[r1, c0, r1, c2];
+            cells = cells.Offset(0, 0, 1, 3);
             cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            cells.Style.WrapText = true;
-
-            cells = sheet.Cells[r1, c0, r1, c2];
             cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             cells.Style.Border.Bottom.Color.SetColor(Color.Black);
         }
         else
         {
-            var (r0, r1) = (rowH + 0, rowH + 1);
-            var c0 = colD;
-            sheet.Cells[r0, c0].Value = "Whole Body\nEffective Dose";
-            sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[r0, c0].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[r0, c0].Style.WrapText = true;
-            sheet.Cells[r0, c0, r1, c0].Merge = true;
+            cells = sheet.Cells[rowH, colD];
+            cells.Offset(-1, 0).Value = "Effective Dose";
 
-            cells = sheet.Cells[r1, c0, r1, c0];
+            cells.Offset(0, 0).Value = "FlexID";
+
+            cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             cells.Style.Border.Bottom.Color.SetColor(Color.Black);
-
-            sheet.Column(colD).Width *= 2;
         }
 
         var targetRegions = new[]
@@ -151,22 +142,27 @@ public class ReportGenerator
 
         // Equivalent Dose (header)
         {
-            int targetRegionCount = targetRegions.Length;
-            for (int i = 0; i < targetRegionCount; i++)
-            {
-                var targetRegion = targetRegions[i];
+            cells = sheet.Cells[rowH, colE];
+            cells.Offset(-1, 0).Value = "Equivalent Dose";
 
-                var (r0, r1) = (rowH + 0, rowH + 1);
-                var c = colE + i;
-                var cell = sheet.Cells[r0, c];
-                cell.Value = targetRegion;
-                sheet.Cells[r0, c, r1, c].Merge = true;
-                sheet.Cells[r0, c, r1, c].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                sheet.Cells[r0, c, r1, c].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                sheet.Cells[r0, c, r1, c].Style.WrapText = true;
+            foreach (var targetRegion in targetRegions)
+            {
+                cells.Value = targetRegion;
+                cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                cells.Style.WrapText = true;
+
+                cells = cells.Offset(0, 1);
             }
 
-            cells = sheet.Cells[rowH + 1, colE - 1, rowH + 1, colE + targetRegions.Length - 1];
+            cells = sheet.Cells[rowH, colE - 2].Offset(0, 0, 1, 2);
+            cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Bottom.Color.SetColor(Color.Black);
+            cells = sheet.Cells[rowH, colE - 1].Offset(0, 0, 1, 1);
+            cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Right.Color.SetColor(Color.Black);
+
+            cells = sheet.Cells[rowH, colE].Offset(0, 0, 1, targetRegions.Length);
             cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             cells.Style.Border.Bottom.Color.SetColor(Color.Black);
         }
@@ -191,17 +187,17 @@ public class ReportGenerator
             // Effective Dose
             if (hasExpect)
             {
-                var cellEffDoseE = sheet.Cells[r, colD + 0];
-                var cellEffDoseO = sheet.Cells[r, colD + 1];
-                var cellEffDoseD = sheet.Cells[r, colD + 2];
+                var cellEffDoseD = sheet.Cells[r, colD + 0];
+                var cellEffDoseE = sheet.Cells[r, colD + 1];
+                var cellEffDoseO = sheet.Cells[r, colD + 2];
 
+                cellEffDoseD.Formula = $"IFERROR({cellEffDoseO.Address}/{cellEffDoseE.Address},\"-\")";
                 cellEffDoseE.Value = err ? "-" : report.ExpectDose?.EffectiveDose ?? (object)"-";
                 cellEffDoseO.Value = err ? "-" : report.OutputDose!.EffectiveDose;
-                cellEffDoseD.Formula = $"IFERROR({cellEffDoseO.Address}/{cellEffDoseE.Address},\"-\")";
 
+                cellEffDoseD.Style.Numberformat.Format = "??0.0%";
                 cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                 cellEffDoseO.Style.Numberformat.Format = "0.0E+00";
-                cellEffDoseD.Style.Numberformat.Format = "??0.0%";
 
                 // 預託実効線量のFlexID/OIR比にカラースケールを設定。
                 SetPercentColorScale(cellEffDoseD);
@@ -239,12 +235,18 @@ public class ReportGenerator
             // Equivalent Dose
             if (hasExpect)
             {
-                sheet.Cells[r + 0, colE - 1].Value = "Diff Male";
-                sheet.Cells[r + 1, colE - 1].Value = "Diff Female";
-                sheet.Cells[r + 2, colE - 1].Value = "OIR Male";
-                sheet.Cells[r + 3, colE - 1].Value = "OIR Female";
-                sheet.Cells[r + 4, colE - 1].Value = "FlexID Male";
-                sheet.Cells[r + 5, colE - 1].Value = "FlexID Female";
+                cells = sheet.Cells[r, colE - 2];
+                cells.Offset(0, 0).Value = "Diff";
+                cells.Offset(2, 0).Value = "OIR";
+                cells.Offset(4, 0).Value = "FlexID";
+                cells.Offset(0, 1).Value = cells.Offset(2, 1).Value = cells.Offset(4, 1).Value = "Male";
+                cells.Offset(1, 1).Value = cells.Offset(3, 1).Value = cells.Offset(5, 1).Value = "Female";
+                cells.Offset(0, 0, 2, 1).Merge = true;
+                cells.Offset(2, 0, 2, 1).Merge = true;
+                cells.Offset(4, 0, 2, 1).Merge = true;
+                cells = cells.Offset(0, 0, 6, 2);
+                cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                 for (int i = 0; i < targetRegions.Length; i++)
                 {
@@ -271,13 +273,13 @@ public class ReportGenerator
                 }
 
                 // 預託等価線量のFlexID/OIR比にカラースケールを設定。
-                var cellsEquivDose = sheet.Cells[r, colE, r + 1, colE + targetRegions.Length - 1];
+                var cellsEquivDose = sheet.Cells[r, colE].Offset(0, 0, 2, targetRegions.Length);
                 SetPercentColorScale(cellsEquivDose);
 
-                cells = sheet.Cells[r + 0, colE - 1, r + 5, colE + targetRegions.Length - 1];
+                cells = sheet.Cells[r, colE].Offset(0, 0, rowOfs, targetRegions.Length);
                 cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                cells = sheet.Cells[r + 0, colE - 1, r + 0, colE + targetRegions.Length - 1];
+                cells = sheet.Cells[r, colE - 2, r, colE + targetRegions.Length - 1];
                 cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                 cells.Style.Border.Top.Color.SetColor(Color.Black);
 
@@ -286,8 +288,14 @@ public class ReportGenerator
             }
             else
             {
-                sheet.Cells[r + 0, colE - 1].Value = "FlexID Male";
-                sheet.Cells[r + 1, colE - 1].Value = "FlexID Female";
+                cells = sheet.Cells[r, colE - 2];
+                cells.Offset(0, 0).Value = "FlexID";
+                cells.Offset(0, 1).Value = "Male";
+                cells.Offset(1, 1).Value = "Female";
+                cells.Offset(0, 0, 2, 1).Merge = true;
+                cells = cells.Offset(0, 0, 2, 2);
+                cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                 for (int i = 0; i < targetRegions.Length; i++)
                 {
@@ -301,10 +309,10 @@ public class ReportGenerator
                     cellEquivDoseOF.Style.Numberformat.Format = "0.0E+00";
                 }
 
-                cells = sheet.Cells[r + 0, colE - 1, r + 1, colE + targetRegions.Length - 1];
+                cells = sheet.Cells[r, colE].Offset(0, 0, rowOfs, targetRegions.Length);
                 cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                cells = sheet.Cells[r + 0, colE - 1, r + 0, colE + targetRegions.Length - 1];
+                cells = sheet.Cells[r, colE - 2, r, colE + targetRegions.Length - 1];
                 cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                 cells.Style.Border.Top.Color.SetColor(Color.Black);
             }
@@ -312,8 +320,15 @@ public class ReportGenerator
             r += rowOfs;
         }
 
-        sheet.Column(1).AutoFit();
-        sheet.Column(colE - 1).AutoFit();
+        sheet.Column(colT).AutoFit();
+
+        cells = sheet.Cells[rowV, colT, r - 1, colT];
+        cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+        cells.Style.Border.Right.Color.SetColor(Color.Black);
+
+        cells = sheet.Cells[rowV, colE - 1, r - 1, colE - 1];
+        cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+        cells.Style.Border.Right.Color.SetColor(Color.Black);
 
         r = rowV;
         foreach (var report in reports)
@@ -339,49 +354,56 @@ public class ReportGenerator
         sheet.Cells[1, 1].Value = "Retention";
 
         var hasExpect = reports.Any(report => report.HasExpect);
-        const int rowH = 3;
+        const int rowH = 2;
         const int rowV = rowH + 2;
         const int colT = 1; // Target
         const int colD = 2; // Effective Dose
         int colA = hasExpect ? 6 : 4; // Retention Activity
-        ExcelRange cells;
+        ExcelRangeBase cells;
 
         // Target (header)
         {
-            sheet.Cells[rowH + 0, colT].Value = "Target";
-            sheet.Cells[rowH + 0, colT].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[rowH + 0, colT, rowH + 1, colT].Merge = true;
+            cells = sheet.Cells[rowH + 0, colT];
+            cells.Value = "Target";
+
+            cells = cells.Offset(0, 0, 2, 1);
+            cells.Merge = true;
+            cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Bottom.Color.SetColor(Color.Black);
+            cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Right.Color.SetColor(Color.Black);
         }
 
         // Effective Dose (header)
         if (hasExpect)
         {
-            var (r0, r1) = (rowH + 0, rowH + 1);
-            var (c0, c1, c2) = (colD + 0, colD + 1, colD + 2);
-            sheet.Cells[r0, c0].Value = "Whole Body Effective Dose";
-            sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[r0, c0, r0, c2].Merge = true;
+            cells = sheet.Cells[rowH, colD];
+            cells.Value = "Effective Dose";
 
-            sheet.Cells[r1, c0].Value = "OIR";
-            sheet.Cells[r1, c1].Value = "FlexID";
-            sheet.Cells[r1, c2].Value = "Diff";
+            cells = cells.Offset(1, 0);
+            cells.Offset(0, 0).Value = "Diff";
+            cells.Offset(0, 1).Value = "OIR";
+            cells.Offset(0, 2).Value = "FlexID";
 
-            cells = sheet.Cells[r1, c0, r1, c2];
+            cells = cells.Offset(0, 0, 1, 3);
             cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            cells.Style.WrapText = true;
+            cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Bottom.Color.SetColor(Color.Black);
         }
         else
         {
-            var (r0, r1) = (rowH + 0, rowH + 1);
-            var c0 = colD;
-            sheet.Cells[r0, c0].Value = "Whole Body\nEffective Dose";
-            sheet.Cells[r0, c0].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[r0, c0].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[r0, c0].Style.WrapText = true;
-            sheet.Cells[r0, c0, r1, c0].Merge = true;
+            cells = sheet.Cells[rowH, colD];
+            cells.Value = "Effective Dose";
 
-            sheet.Column(colD).Width *= 2;
+            cells = cells.Offset(1, 0);
+            cells.Value = "FlexID";
+
+            cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Bottom.Color.SetColor(Color.Black);
         }
 
         // Retention Activity (header)
@@ -394,9 +416,12 @@ public class ReportGenerator
             sheet.Cells[r0, c0, r0, c1].Merge = true;
             sheet.Cells[r1, c0].Value = hasExpect ? "Diff (min)" : "min";
             sheet.Cells[r1, c1].Value = hasExpect ? "Diff (max)" : "max";
-            sheet.Cells[r1, c0, r1, c1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[r1, c0, r1, c1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[r1, c0, r1, c1].Style.WrapText = true;
+
+            cells = sheet.Cells[r1, c0, r1, c1];
+            cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            cells.Style.Border.Bottom.Color.SetColor(Color.Black);
         }
         WriteActivityHeader(colA + 0, "Whole Body");
         WriteActivityHeader(colA + 2, "Urine");
@@ -420,15 +445,15 @@ public class ReportGenerator
             // Effective Dose
             if (hasExpect)
             {
-                var cellEffDoseE = sheet.Cells[r, colD + 0]; // Expec
-                var cellEffDoseO = sheet.Cells[r, colD + 1]; // Output
-                var cellEffDoseD = sheet.Cells[r, colD + 2]; // Diff
+                var cellEffDoseD = sheet.Cells[r, colD + 0]; // Diff
+                var cellEffDoseE = sheet.Cells[r, colD + 1]; // Expect
+                var cellEffDoseO = sheet.Cells[r, colD + 2]; // Output
+                cellEffDoseD.Formula = $"IFERROR({cellEffDoseO.Address}/{cellEffDoseE.Address},\"-\")";
                 cellEffDoseE.Value = err ? "-" : report.ExpectDose?.EffectiveDose ?? (object)"-";
                 cellEffDoseO.Value = err ? "-" : report.OutputDose!.EffectiveDose;
-                cellEffDoseD.Formula = $"IFERROR({cellEffDoseO.Address}/{cellEffDoseE.Address},\"-\")";
+                cellEffDoseD.Style.Numberformat.Format = "??0.0%";
                 cellEffDoseE.Style.Numberformat.Format = "0.0E+00";
                 cellEffDoseO.Style.Numberformat.Format = "0.0E+00";
-                cellEffDoseD.Style.Numberformat.Format = "??0.0%";
             }
             else
             {
@@ -462,13 +487,19 @@ public class ReportGenerator
             r++;
         }
 
+        sheet.Column(colT).AutoFit();
+
+        cells = sheet.Cells[rowV, colT, r - 1, colT];
+        cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+        cells.Style.Border.Right.Color.SetColor(Color.Black);
+
         if (hasExpect)
         {
             sheet.Cells[rowV, colD, r - 1, colD + 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             sheet.Cells[rowV, colA, r - 1, colA + 15].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
             // 預託実効線量のFlexID/OIR比にカラースケールを設定。
-            var cellsDose = sheet.Cells[rowV, colD + 2, r - 1, colD + 2];
+            var cellsDose = sheet.Cells[rowV, colD, r - 1, colD];
             SetPercentColorScale(cellsDose);
 
             // 残留放射能のFlexID/OIR比にカラースケールを設定。
@@ -480,9 +511,6 @@ public class ReportGenerator
             sheet.Cells[rowV, colD, r - 1, colD].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             sheet.Cells[rowV, colA, r - 1, colA + 15].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         }
-
-        sheet.Column(1).AutoFit();
-        //sheet.Cells.AutoFitColumns(0);  // Autofit columns for all cells
 
         // ウインドウ枠の固定を設定。
         sheet.View.FreezePanes(rowV, colD);
