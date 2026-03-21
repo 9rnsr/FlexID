@@ -153,7 +153,7 @@ internal partial class Program_Gen
             var summaryFile = parseResult.GetValue(SummaryFileOption) ?? DefaultSummaryFileName;
             summaryFile = Path.Combine((outputDir ?? currentDir).FullName, summaryFile);
 
-            var sortedReports = reports.OrderBy(r => r.OutputName).ToArray();
+            var sortedReports = reports.OrderBy(r => r.SortKey).ToArray();
 
             Console.Write($"Generate {summaryFile} ...");
             ReportGenerator.WriteSummary(summaryFile, sortedReports);

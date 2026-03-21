@@ -396,7 +396,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             // 核種の定義行を読み込む。
             var values = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
-            if (autoMode == true || autoMode == default && values.All(patternNuclide.IsMatch))
+            if (autoMode == true || autoMode == default && values.All(ElementTable.PatternNuclide.IsMatch))
             {
                 // インデックスファイルから娘核種と分岐比の情報を自動取得する。
                 autoMode = true;
@@ -406,7 +406,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                 foreach (var nuc in values)
                 {
-                    if (!patternNuclide.IsMatch(nuc))
+                    if (!ElementTable.PatternNuclide.IsMatch(nuc))
                     {
                         errors.AddError(LineNum, $"'{nuc}' is not nuclide name.");
                         continue;

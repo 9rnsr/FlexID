@@ -41,6 +41,17 @@ public class ReportData
 
     public string ReportPath { get; }
 
+    public (int AtomicNumber, int MassNumber, string MetaStable) SortKey
+    {
+        get
+        {
+            if (ElementTable.TryParseNuclide(OutputNuclide, out var elem, out var massNum, out var meta))
+                return (ElementTable.ElementToAtomicNumber(elem), massNum, meta);
+            else
+                return default;
+        }
+    }
+
     /// <summary>
     /// レポート出力処理中に発生したエラーを保持する。
     /// </summary>
