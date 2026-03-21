@@ -52,6 +52,11 @@ public class ReportGenerator
         package.SaveAs(filePath);
     }
 
+    private static string SetPercentFormula(ExcelRangeBase cellO, ExcelRangeBase cellE)
+    {
+        return $"IFERROR(VALUE(TEXT({cellO.Address},\"0.0E+00\"))/{cellE.Address},\"-\")";
+    }
+
     private static void SetPercentColorScale(ExcelRangeBase cells)
     {
         var sheet = cells.Worksheet;
@@ -261,7 +266,7 @@ public class ReportGenerator
                 var cellEffDoseD = sheet.Cells[r, colD + 0]; // Diff
                 var cellEffDoseE = sheet.Cells[r, colD + 1]; // Expect
                 var cellEffDoseO = sheet.Cells[r, colD + 2]; // Output
-                cellEffDoseD.Formula = $"IFERROR({cellEffDoseO.Address}/{cellEffDoseE.Address},\"-\")";
+                cellEffDoseD.Formula = SetPercentFormula(cellEffDoseO, cellEffDoseE);
                 cellEffDoseE.Value = err ? "-" : report.ExpectDose?.EffectiveDose ?? (object)"-";
                 cellEffDoseO.Value = err ? "-" : report.OutputDose!.EffectiveDose;
                 cellEffDoseD.Style.Numberformat.Format = "??0.0%";
@@ -462,14 +467,14 @@ public class ReportGenerator
             if (inrangeO && inrangeE)
             {
                 sheet.Cells[r, colD + 0].Value = outputActs[nrow].EndTime;
-                sheet.Cells[r, colD + 1].Formula = $"IFERROR({sheet.Cells[r, colO + 1].Address}/{sheet.Cells[r, colE + 1].Address},\"-\")";
-                sheet.Cells[r, colD + 2].Formula = $"IFERROR({sheet.Cells[r, colO + 2].Address}/{sheet.Cells[r, colE + 2].Address},\"-\")";
-                sheet.Cells[r, colD + 3].Formula = $"IFERROR({sheet.Cells[r, colO + 3].Address}/{sheet.Cells[r, colE + 3].Address},\"-\")";
-                sheet.Cells[r, colD + 4].Formula = $"IFERROR({sheet.Cells[r, colO + 4].Address}/{sheet.Cells[r, colE + 4].Address},\"-\")";
-                sheet.Cells[r, colD + 5].Formula = $"IFERROR({sheet.Cells[r, colO + 5].Address}/{sheet.Cells[r, colE + 5].Address},\"-\")";
-                sheet.Cells[r, colD + 6].Formula = $"IFERROR({sheet.Cells[r, colO + 6].Address}/{sheet.Cells[r, colE + 6].Address},\"-\")";
-                sheet.Cells[r, colD + 7].Formula = $"IFERROR({sheet.Cells[r, colO + 7].Address}/{sheet.Cells[r, colE + 7].Address},\"-\")";
-                sheet.Cells[r, colD + 8].Formula = $"IFERROR({sheet.Cells[r, colO + 8].Address}/{sheet.Cells[r, colE + 8].Address},\"-\")";
+                sheet.Cells[r, colD + 1].Formula = SetPercentFormula(sheet.Cells[r, colO + 1], sheet.Cells[r, colE + 1]);
+                sheet.Cells[r, colD + 2].Formula = SetPercentFormula(sheet.Cells[r, colO + 2], sheet.Cells[r, colE + 2]);
+                sheet.Cells[r, colD + 3].Formula = SetPercentFormula(sheet.Cells[r, colO + 3], sheet.Cells[r, colE + 3]);
+                sheet.Cells[r, colD + 4].Formula = SetPercentFormula(sheet.Cells[r, colO + 4], sheet.Cells[r, colE + 4]);
+                sheet.Cells[r, colD + 5].Formula = SetPercentFormula(sheet.Cells[r, colO + 5], sheet.Cells[r, colE + 5]);
+                sheet.Cells[r, colD + 6].Formula = SetPercentFormula(sheet.Cells[r, colO + 6], sheet.Cells[r, colE + 6]);
+                sheet.Cells[r, colD + 7].Formula = SetPercentFormula(sheet.Cells[r, colO + 7], sheet.Cells[r, colE + 7]);
+                sheet.Cells[r, colD + 8].Formula = SetPercentFormula(sheet.Cells[r, colO + 8], sheet.Cells[r, colE + 8]);
             }
         }
 
@@ -599,7 +604,7 @@ public class ReportGenerator
             var cellEffDoseE = cellValue.Offset(0, 1);
             var cellEffDoseO = cellValue.Offset(0, 2);
 
-            cellEffDoseD.Formula = $"IFERROR({cellEffDoseO.Address}/{cellEffDoseE.Address},\"-\")";
+            cellEffDoseD.Formula = SetPercentFormula(cellEffDoseO, cellEffDoseE);
             cellEffDoseE.Value = err ? "-" : report.ExpectDose?.EffectiveDose ?? (object)"-";
             cellEffDoseO.Value = err ? "-" : report.OutputDose!.EffectiveDose;
 
@@ -715,8 +720,8 @@ public class ReportGenerator
                 var cellEquivDoseOM = cellValue.Offset(4, i); // Output Male
                 var cellEquivDoseOF = cellValue.Offset(5, i); // Output Female
 
-                cellEquivDoseDM.Formula = $"IFERROR({cellEquivDoseOM.Address}/{cellEquivDoseEM.Address},\"-\")";
-                cellEquivDoseDF.Formula = $"IFERROR({cellEquivDoseOF.Address}/{cellEquivDoseEF.Address},\"-\")";
+                cellEquivDoseDM.Formula = SetPercentFormula(cellEquivDoseOM, cellEquivDoseEM);
+                cellEquivDoseDF.Formula = SetPercentFormula(cellEquivDoseOF, cellEquivDoseEF);
                 cellEquivDoseEM.Value = err ? "-" : report.ExpectDose?.EquivalentDosesMale[i] ?? (object)"-";
                 cellEquivDoseEF.Value = err ? "-" : report.ExpectDose?.EquivalentDosesFemale[i] ?? (object)"-";
                 cellEquivDoseOM.Value = err ? "-" : report.OutputDose!.EquivalentDosesMale[i];
