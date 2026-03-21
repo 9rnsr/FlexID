@@ -1,0 +1,11 @@
+Radionuclide	Fr-222
+Route of Intake	Injection
+Material	Injection, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*
+0.041667	5.2E-2	1.4E-3
+0.083333	2.8E-3	7.6E-5
+0.125	1.5E-4	4.1E-6
+0.25	2.2E-8	6.2E-10

@@ -1,0 +1,12 @@
+Radionuclide	Hg-190
+Route of Intake	Ingestion
+Material	All forms, fA=0.1
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	1.2E-1	1.2E-1	5.4E-5	1.4E-4
+0.083333	1.6E-2	1.5E-2	1.5E-5	5.7E-5
+0.125	2.0E-3	1.9E-3	2.5E-6	1.3E-5
+0.25	3.8E-6	3.6E-6	5.0E-9	5.4E-8
+0.375	7.3E-9	6.8E-9	-	1.3E-10

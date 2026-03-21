@@ -1,0 +1,10 @@
+Radionuclide	Ba-142
+Route of Intake	Ingestion
+Material	Insoluble forms: sulphate, titanate, fA=1E-4
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*
+0.041667	2.0E-2	2.0E-2	2.6E-8
+0.083333	3.8E-4	3.8E-4	1.8E-9
+0.125	7.7E-6	7.7E-6	-

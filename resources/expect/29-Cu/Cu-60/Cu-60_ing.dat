@@ -1,0 +1,13 @@
+Radionuclide	Cu-60
+Route of Intake	Ingestion
+Material	All forms, fA=0.5
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Liver*
+0.041667	1.7E-1	1.6E-1	4.1E-3
+0.083333	3.0E-2	2.5E-2	2.8E-3
+0.125	5.2E-3	3.8E-3	9.3E-4
+0.25	2.7E-5	1.6E-5	8.9E-6
+0.375	1.4E-7	7.4E-8	4.8E-8
+0.5	7.0E-10	3.7E-10	2.3E-10

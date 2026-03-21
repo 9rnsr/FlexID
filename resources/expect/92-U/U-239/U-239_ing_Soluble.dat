@@ -1,0 +1,13 @@
+Radionuclide	U-239
+Route of Intake	Ingestion
+Material	Soluble forms, fA=2E-2
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Skeleton*	Liver*
+0.041667	1.7E-1	1.7E-1	2.2E-5	1.7E-5
+0.083333	2.9E-2	2.8E-2	1.2E-5	6.2E-6
+0.125	4.9E-3	4.9E-3	3.7E-6	1.4E-6
+0.25	2.4E-5	2.4E-5	3.9E-8	7.9E-9
+0.375	1.1E-7	1.1E-7	2.6E-10	-
+0.5	5.5E-10	5.4E-10	-	-

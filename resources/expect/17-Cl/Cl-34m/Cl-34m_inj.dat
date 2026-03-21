@@ -1,0 +1,14 @@
+Radionuclide	Cl-34m
+Route of Intake	Injection
+Material	Injection, fA=0.99
+AMTD/AMAD, µm	-
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*
+0.041667	2.7E-1	5.8E-3
+0.083333	7.4E-2	1.6E-3
+0.125	2.0E-2	4.3E-4
+0.25	4.1E-4	8.7E-6
+0.375	8.2E-6	1.7E-7
+0.5	1.6E-7	3.5E-9
+0.625	3.3E-9	-
