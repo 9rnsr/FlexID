@@ -33,6 +33,11 @@ public class MainRoutine_OIR
     /// </summary>
     public required string CommitmentPeriod { get; init; }
 
+    /// <summary>
+    /// 計算処理の進捗率を0～100で報告する。
+    /// </summary>
+    public IProgress<double>? ProgressIndicator { get; init; }
+
     public void Main(InputData data)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
@@ -383,6 +388,9 @@ public class MainRoutine_OIR
         // 初期配分された放射能をファイルに出力する。
         calcOut.ActivityOut(0.0, act, 0);
 
+        var progressValue = 0.0;
+        ProgressIndicator?.Report(progressValue);
+
         // 出力時間メッシュを進める。
         outTimes.MoveNext();
         outPreT = outNowT;
@@ -402,6 +410,13 @@ public class MainRoutine_OIR
             // 預託期間を超える計算は行わない
             if (commitmentPeriod < calcNowT)
                 break;
+
+            var newProgressValue = (int)((double)calcNowT / commitmentPeriod * 100);
+            if (newProgressValue != progressValue)
+            {
+                progressValue = newProgressValue;
+                ProgressIndicator?.Report(progressValue);
+            }
 
             var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
 
@@ -589,5 +604,8 @@ public class MainRoutine_OIR
 
         // 計算完了の出力を行う。
         calcOut.FinishOut();
+
+        progressValue = 100;
+        ProgressIndicator?.Report(progressValue);
     }
 }

@@ -291,6 +291,7 @@ public partial class InputOirViewModel : ViewModelBase
                     ComputeTimeMeshPath /**/= computeTimeMeshPath,
                     OutputTimeMeshPath  /**/= outputTimeMeshPath,
                     CommitmentPeriod    /**/= commitmentPeriod,
+                    ProgressIndicator   /**/= target.ProgressIndicator,
                 };
 
                 main.Main(data);

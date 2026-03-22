@@ -293,6 +293,7 @@ public partial class InputEirViewModel : ViewModelBase
                     OutputTimeMeshPath  /**/= outputTimeMeshPath,
                     CommitmentPeriod    /**/= commitmentPeriod,
                     ExposureAge         /**/= intakeAge,
+                    ProgressIndicator   /**/= target.ProgressIndicator,
                 };
 
                 main.Main(dataList);

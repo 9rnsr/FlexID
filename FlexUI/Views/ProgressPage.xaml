@@ -55,6 +55,11 @@
           </Grid>
 
           <TextBlock Grid.Column="1" Text="{x:Bind Title}" />
+          <ProgressBar
+            Grid.Column="1"
+            VerticalAlignment="Bottom"
+            Visibility="{x:Bind BoolToVisibility(IsRunning), Mode=OneWay}"
+            Value="{x:Bind ProgressValue, Mode=OneWay}" />
           <TextBlock
             Grid.Row="1"
             Grid.Column="1"
