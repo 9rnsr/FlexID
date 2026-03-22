@@ -96,9 +96,9 @@ public partial class SearchFilterViewModel : ViewModelBase, ISynchronizedViewFil
         if (TargetIsInjecion   /**/) intakeForms[i++] = "Injection";
         if (TargetIsIngestion  /**/) intakeForms[i++] = "Ingestion";
         if (TargetIsInhalation /**/) intakeForms[i++] = "Inhalation";
-        if (TargetIsTypeF      /**/) intakeForms[i++] = "Type-F";
-        if (TargetIsTypeM      /**/) intakeForms[i++] = "Type-M";
-        if (TargetIsTypeS      /**/) intakeForms[i++] = "Type-S";
+        if (TargetIsTypeF      /**/) intakeForms[i++] = "Type[- ]?F";
+        if (TargetIsTypeM      /**/) intakeForms[i++] = "Type[- ]?M";
+        if (TargetIsTypeS      /**/) intakeForms[i++] = "Type[- ]?S";
         if (i != 0)
         {
             _intakeFormsPattern = new Regex($@"\b({string.Join("|", intakeForms.AsSpan()[0..i])})\b");
