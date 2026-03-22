@@ -42,7 +42,7 @@ public class TrialCalcTests
             CommitmentPeriod    /**/= commitmentPeriod,
         };
 
-        main.Main(data);
+        main.Main(data, default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));
@@ -97,7 +97,7 @@ public class TrialCalcTests
             ExposureAge         /**/= exposureAge,
         };
 
-        main.Main(dataList);
+        main.Main(dataList, default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));

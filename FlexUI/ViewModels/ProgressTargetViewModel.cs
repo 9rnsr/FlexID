@@ -12,6 +12,7 @@ public partial class ProgressTargetViewModel : ViewModelBase
     public ProgressTargetViewModel(InputTarget target)
     {
         InputTarget = target;
+        ProgressIndicator = new Progress<double>(value => ProgressValue = value);
     }
 
     public InputTarget InputTarget { get; }
@@ -25,6 +26,11 @@ public partial class ProgressTargetViewModel : ViewModelBase
     public string InputFilePath => InputTarget.FilePath;
 
     public string OutputFilePath { get; set; } = "";
+
+    public Progress<double> ProgressIndicator { get; }
+
+    [ObservableProperty]
+    public partial double ProgressValue { get; private set; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSuspend))]

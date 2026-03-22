@@ -291,9 +291,10 @@ public partial class InputOirViewModel : ViewModelBase
                     ComputeTimeMeshPath /**/= computeTimeMeshPath,
                     OutputTimeMeshPath  /**/= outputTimeMeshPath,
                     CommitmentPeriod    /**/= commitmentPeriod,
+                    ProgressIndicator   /**/= target.ProgressIndicator,
                 };
 
-                main.Main(data);
+                main.Main(data, cancellationToken);
 
                 var output = Path.Combine(outputDir, target.Name);
                 target.OutputFilePath = output + "_Retention.out";

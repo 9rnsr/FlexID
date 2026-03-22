@@ -44,7 +44,12 @@ public class MainRoutine_EIR
     public const int Age15year = 15 * 365;
     public const int AgeAdult = 25 * 365;   // TODO: 現在はSrしか計算しないため25歳で決め打ち
 
-    public void Main(List<InputData> dataList)
+    /// <summary>
+    /// 計算処理の進捗率を0～100で報告する。
+    /// </summary>
+    public IProgress<double>? ProgressIndicator { get; init; }
+
+    public void Main(List<InputData> dataList, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
             throw Program.Error("Output directory is not specified");
@@ -66,11 +71,11 @@ public class MainRoutine_EIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(calcOut, computeTimeMesh, outputTimeMesh, dataList);
+            MainCalc(dataList, computeTimeMesh, outputTimeMesh, calcOut, cancellationToken);
         }
     }
 
-    private void MainCalc(CalcOut calcOut, TimeMesh computeTimeMesh, TimeMesh outputimeMesh, List<InputData> dataList)
+    private void MainCalc(List<InputData> dataList, TimeMesh computeTimeMesh, TimeMesh outputimeMesh, CalcOut calcOut, CancellationToken cancellationToken)
     {
         InputData dataLo;
         InputData dataHi;
@@ -233,6 +238,9 @@ public class MainRoutine_EIR
         // 初期配分された放射能をファイルに出力する。
         calcOut.ActivityOut(0.0, act, 0);
 
+        var progressValue = 0.0;
+        ProgressIndicator?.Report(progressValue);
+
         // 出力時間メッシュを進める。
         outTimes.MoveNext();
         outPreT = outNowT;
@@ -246,12 +254,21 @@ public class MainRoutine_EIR
         // 計算時間メッシュを進める。
         while (calcTimes.MoveNext())
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             calcPreT = calcNowT;
             calcNowT = calcTimes.Current;
 
             // 預託期間を超える計算は行わない
             if (commitmentPeriod < calcNowT)
                 break;
+
+            var newProgressValue = (int)((double)calcNowT / commitmentPeriod * 100);
+            if (newProgressValue != progressValue)
+            {
+                progressValue = newProgressValue;
+                ProgressIndicator?.Report(progressValue);
+            }
 
             var calcNowDay = TimeMesh.SecondsToDays(calcNowT);
 
@@ -472,5 +489,8 @@ public class MainRoutine_EIR
 
         // 計算完了の出力を行う。
         calcOut.FinishOut();
+
+        progressValue = 100;
+        ProgressIndicator?.Report(progressValue);
     }
 }
