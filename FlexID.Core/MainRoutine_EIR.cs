@@ -49,7 +49,7 @@ public class MainRoutine_EIR
     /// </summary>
     public IProgress<double>? ProgressIndicator { get; init; }
 
-    public void Main(List<InputData> dataList)
+    public void Main(List<InputData> dataList, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
             throw Program.Error("Output directory is not specified");
@@ -71,11 +71,11 @@ public class MainRoutine_EIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(calcOut, computeTimeMesh, outputTimeMesh, dataList);
+            MainCalc(dataList, computeTimeMesh, outputTimeMesh, calcOut, cancellationToken);
         }
     }
 
-    private void MainCalc(CalcOut calcOut, TimeMesh computeTimeMesh, TimeMesh outputimeMesh, List<InputData> dataList)
+    private void MainCalc(List<InputData> dataList, TimeMesh computeTimeMesh, TimeMesh outputimeMesh, CalcOut calcOut, CancellationToken cancellationToken)
     {
         InputData dataLo;
         InputData dataHi;
@@ -254,6 +254,8 @@ public class MainRoutine_EIR
         // 計算時間メッシュを進める。
         while (calcTimes.MoveNext())
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             calcPreT = calcNowT;
             calcNowT = calcTimes.Current;
 

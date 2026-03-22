@@ -38,7 +38,7 @@ public class MainRoutine_OIR
     /// </summary>
     public IProgress<double>? ProgressIndicator { get; init; }
 
-    public void Main(InputData data)
+    public void Main(InputData data, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
             throw Program.Error("Output directory is not specified");
@@ -76,7 +76,7 @@ public class MainRoutine_OIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(calcOut, computeTimeMesh, outputTimeMesh, data);
+            MainCalc(data, computeTimeMesh, outputTimeMesh, calcOut, cancellationToken);
         }
     }
 
@@ -350,7 +350,7 @@ public class MainRoutine_OIR
         writer.Flush();
     }
 
-    private void MainCalc(CalcOut calcOut, TimeMesh computeTimeMesh, TimeMesh outputTimeMesh, InputData data)
+    private void MainCalc(InputData data, TimeMesh computeTimeMesh, TimeMesh outputTimeMesh, CalcOut calcOut, CancellationToken cancellationToken)
     {
         const double convergence = 1E-10; // 収束値
         const int iterMax = 1500;  // iterationの最大回数
@@ -404,6 +404,8 @@ public class MainRoutine_OIR
         // 計算時間メッシュを進める。
         while (calcTimes.MoveNext())
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             calcPreT = calcNowT;
             calcNowT = calcTimes.Current;
 

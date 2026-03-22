@@ -138,7 +138,7 @@ public class TestCalc
         };
 
         // 計算を実行する。
-        main.Main(data);
+        main.Main(data, default);
 
         // アウトプットファイルの出力有無と、出力されている場合はその内容確認を行う。
         CheckOutputFile(targetName + "_Dose.out", outDose);

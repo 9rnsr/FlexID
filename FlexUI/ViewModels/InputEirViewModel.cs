@@ -296,7 +296,7 @@ public partial class InputEirViewModel : ViewModelBase
                     ProgressIndicator   /**/= target.ProgressIndicator,
                 };
 
-                main.Main(dataList);
+                main.Main(dataList, cancellationToken);
 
                 var output = Path.Combine(outputDir, target.Name);
                 target.OutputFilePath = output + "_Retention.out";
