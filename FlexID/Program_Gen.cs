@@ -125,6 +125,12 @@ internal partial class Program_Gen
 
         var cts = new CancellationTokenSource();
 
+        Console.CancelKeyPress += (sender, eargs) =>
+        {
+            eargs.Cancel = true;
+            cts.Cancel();
+        };
+
         var errors = false;
         var runner = new ParallelRunner<ReportData>(reports);
         var presenter = new ProgressPresenter(outputs.Length, cts.Token);

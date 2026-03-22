@@ -158,6 +158,12 @@ internal class Program_Run
 
         var cts = new CancellationTokenSource();
 
+        Console.CancelKeyPress += (sender, eargs) =>
+        {
+            eargs.Cancel = true;
+            cts.Cancel();
+        };
+
         var errors = false;
         var runner = new ParallelRunner<(FileInfo Input, string Output)>(targets);
         var presenter = new ProgressPresenter(inputs.Length, cts.Token);
@@ -190,7 +196,7 @@ internal class Program_Run
                 CommitmentPeriod    /**/= commitmentPeriod,
             };
 
-            main.Main(data, default);
+            main.Main(data, cancellationToken);
 
         }, cts.Token);
 
