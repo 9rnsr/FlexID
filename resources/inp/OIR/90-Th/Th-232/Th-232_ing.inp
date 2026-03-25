@@ -1513,19 +1513,19 @@ Th-232 Ingestion
 #   Plasmaからの元々の流出量の総和は
 #      1.75 + 0.7 + 4.86 + 3.89 + 22.16 + 0.7 + 0.14 + 4.9 + 2.45 + 0.0245 + 28 + 0.42 = 69.9945
 #   Plasmaから追加コンパートメントへの流出量＝ST0,1,2への流出量から差し引くべき量は
-#      69.9945 * (0.6% + 0.2% + 0.03% + 0.05% + 0.02%) = 0.6299505
+#      69.9945 * (0.6% + 0.2% + 0.03% + 0.005% + 0.002%) = 0.585854
 #   PlasmaからST0,1,2への流出量の減少率は
-#      (22.16 + 0.7 + 0.14 - 0.6299505) / (22.16 + 0.7 + 0.14) ≒ 0.972611
-#   ※ 1 - 0.972611 ≒ 約2.74%減少 ⇔「約2.5%減少」
+#      (22.16 + 0.7 + 0.14 - 0.585854) / (22.16 + 0.7 + 0.14) ≒ 0.974528
+#   ※ 1 - 0.974528 ≒ 約2.54%減少 ⇔「約2.5%減少」
 
  #Plasma                  RedMarrow         $(69.9945 * 0.6%)       # fix(2)
   Plasma                  Skin              $(69.9945 * 0.2%)
   Plasma                  Spleen            $(69.9945 * 0.03%)
-  Plasma                  Testes            $(69.9945 * 0.05%)
-  Plasma                  Ovaries           $(69.9945 * 0.02%)
-  Plasma                  ST0               $(22.16 * 0.972611)
- #Plasma                  ST1               $( 0.7  * 0.972611)     # fix(2)
-  Plasma                  ST2               $( 0.14 * 0.972611)
+  Plasma                  Testes            $(69.9945 * 0.005%)
+  Plasma                  Ovaries           $(69.9945 * 0.002%)
+  Plasma                  ST0               $(22.16 * 0.974528)
+ #Plasma                  ST1               $( 0.7  * 0.974528)     # fix(2)
+  Plasma                  ST2               $( 0.14 * 0.974528)
  #RedMarrow               Plasma                    0.0019          # fix(2)
   Skin                    Plasma                    0.0019
   Spleen                  Plasma                    0.0019
@@ -1545,7 +1545,7 @@ Th-232 Ingestion
 
   Plasma                  T-marrow          $(69.9945 * 0.6%)                           # RedMarrowをT-marrowに置換
   Plasma                  C-marrow          $(69.9945 * 0.6% / 3)                       # Plasma→T-marrowの移行速度の1/3
-  Plasma                  ST1               $( 0.7  * 0.972611 - 69.9945 * 0.6% / 3)    # Plasma→C-marrowの速度を差し引く
+  Plasma                  ST1               $( 0.7  * 0.974528 - 69.9945 * 0.6% / 3)    # Plasma→C-marrowの速度を差し引く
   T-marrow                Plasma                    0.0019                              # RedMarrowをT-marrowに置換
   C-marrow                Plasma                    0.0019                              # T-marrow→Plasmaの移行速度と同じ
 
