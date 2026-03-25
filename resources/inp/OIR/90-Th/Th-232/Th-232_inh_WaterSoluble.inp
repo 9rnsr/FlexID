@@ -3130,19 +3130,23 @@ Th-232 Inhalation, WaterSoluble
   Ra-228/Skin             Bi-212/Skin               ---
   Ra-228/Spleen           Bi-212/Spleen             ---
 
-  Th-232/ST0              Bi-212/Plasma          1000       # Th-228/ST0を経由する
-  Th-232/ST1              Bi-212/Plasma          1000       # Th-228/ST1を経由する
-  Th-232/ST2              Bi-212/Plasma          1000       # Th-228/ST2を経由する
-  Ra-228/ST0              Bi-212/Plasma          1000       # Ra-224/ST0を経由する
-  Ra-228/ST1              Bi-212/Plasma          1000       # Ra-224/ST1を経由する
-  Ra-228/ST2              Bi-212/Plasma          1000       # Ra-224/ST2を経由する
-  Ac-228/ST0              Bi-212/Plasma          1000
-  Ac-228/ST1              Bi-212/Plasma          1000
-  Ac-228/ST2              Bi-212/Plasma          1000
-  Po-216/Other            Bi-212/Plasma          1000
-  Pb-212/ST0              Bi-212/Plasma          1000
-  Pb-212/ST1              Bi-212/Plasma          1000
-  Pb-212/ST2              Bi-212/Plasma          1000
+# Publ.137 Para.482には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
+# ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
+# を採用する。
+
+  Th-232/ST0              Bi-212/Plasma            66.54    # Th-228/ST0を経由する
+  Th-232/ST1              Bi-212/Plasma            66.54    # Th-228/ST1を経由する
+  Th-232/ST2              Bi-212/Plasma            66.54    # Th-228/ST2を経由する
+  Ra-228/ST0              Bi-212/Plasma            66.54    # Ra-224/ST0を経由する
+  Ra-228/ST1              Bi-212/Plasma            66.54    # Ra-224/ST1を経由する
+  Ra-228/ST2              Bi-212/Plasma            66.54    # Ra-224/ST2を経由する
+  Ac-228/ST0              Bi-212/Plasma            66.54
+  Ac-228/ST1              Bi-212/Plasma            66.54
+  Ac-228/ST2              Bi-212/Plasma            66.54
+  Po-216/Other            Bi-212/Plasma            66.54
+  Pb-212/ST0              Bi-212/Plasma            66.54
+  Pb-212/ST1              Bi-212/Plasma            66.54
+  Pb-212/ST2              Bi-212/Plasma            66.54
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのポロニウムは、ラジウム子孫元素としてのモデルを用いる
