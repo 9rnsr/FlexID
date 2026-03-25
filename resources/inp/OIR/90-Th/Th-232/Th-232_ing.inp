@@ -1064,12 +1064,12 @@ Th-232 Ingestion
 # > またはクリプトンは、1000 d⁻¹の割合で体外に排出されます（呼気）。これは半減期1分に相当します。
 
   Th-232/Blood            Rn-220/Blood              ---
-  Th-232/C-bone-S         Rn-220/Blood              0.36
-  Th-232/T-bone-S         Rn-220/Blood              0.36
-  Ra-228/Exch-C-bone-V    Rn-220/Blood              0.36
-  Ra-228/Exch-T-bone-V    Rn-220/Blood              0.36
   Th-232/C-bone-V         Rn-220/Blood              0.36    # Ra-228/Noch-C-bone-Vを経由する
   Th-232/T-bone-V         Rn-220/Blood              0.36    # Ra-228/Noch-T-bone-Vを経由する
+  Ra-228/Exch-C-bone-V    Rn-220/Blood              1.5
+  Ra-228/Exch-T-bone-V    Rn-220/Blood              1.5
+  Th-232/C-bone-S         Rn-220/Blood            100
+  Th-232/T-bone-S         Rn-220/Blood            100
   Th-232/C-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
   Th-232/T-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
   Th-232/Liver1           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
