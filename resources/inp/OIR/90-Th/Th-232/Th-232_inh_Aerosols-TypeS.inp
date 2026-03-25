@@ -3862,7 +3862,7 @@ Th-232 Inhalation, Aerosols Type S
   Th-232/C-marrow         Tl-208/C-marrow           ---
   Th-232/T-marrow         Tl-208/T-marrow           ---
   Th-232/Liver1           Tl-208/Liver              ---
-  Th-232/Kidneys1         Tl-208/Kidneys            ---
+  Th-232/Kidneys2         Tl-208/Kidneys            ---
   Th-232/Testes           Tl-208/Testes             ---
   Th-232/Ovaries          Tl-208/Ovaries            ---
   Ra-228/Skin             Tl-208/Skin               ---
@@ -3872,7 +3872,7 @@ Th-232 Inhalation, Aerosols Type S
   Th-232/ST1              Tl-208/Plasma             2.5     # Th-228/ST1を経由する
   Th-232/ST2              Tl-208/Plasma             2.5     # Th-228/ST2を経由する
   Th-232/Liver2           Tl-208/Plasma             2.5
-  Th-232/Kidneys2         Tl-208/Plasma             2.5
+  Th-232/Kidneys1         Tl-208/Plasma             2.5
   Ra-228/ST0              Tl-208/Plasma             2.5     # Ra-224/ST0を経由する
   Ra-228/ST1              Tl-208/Plasma             2.5     # Ra-224/ST1を経由する
   Ra-228/ST2              Tl-208/Plasma             2.5     # Ra-224/ST2を経由する
