@@ -568,10 +568,22 @@ Th-228 Inhalation, WaterSoluble
 
 #   ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラドンは、ラジウム子孫元素としてのモデルを用いる。
 # →ICRP Publ.137 p.331 Para.711 / ラジウム子孫元素としてのラドン
+# なお、子孫核種としてのラドンの挙動については、ICRP Publ.141 p.235 Para.563にも
+# 同等の記載が存在するため、ここではPubl.137 Para.711 と併せて引用する。
+
+# ICRP Publ.137 p.331 Para.711 / ラジウム子孫元素としてのラドン
 # > (711) A generic model structure is applied in the OIR series to radon, xenon, and
 # > krypton produced in systemic compartments by decay of a parent radionuclide. ...
 # > (711) OIRシリーズでは、親放射性核種の崩壊によって全身コンパートメントで生成されるラドン、
-# > キセノン、およびクリプトンに、一般的なモデル構造が適用されている。
+# > キセノン、およびクリプトンに、一般的なモデル構造が適用されている。 ...
+
+# ICRP Publ.141 p.235 Para.563 / 子孫核種としてのラドンの取り扱い
+# > (563) The model applied here to radon as an actinide progeny is a generic model
+# > applied in the OIR series to radon produced by radioactive decay in a systemic
+# > compartment. ...
+# > (563) ここでアクチニド娘核種としてのラドンに適用したモデルは、OIRシリーズにおいて
+# > 全身コンパートメント内で放射性崩壊によって生成されたラドンに適用された一般的な
+# > モデルである。 ...
 
 [Rn-220:compartment]
 #-----+---------------------| S-Coefficient
@@ -746,9 +758,7 @@ Th-228 Inhalation, WaterSoluble
   Th-228/Urine            Rn-220/Urine              ---
 
 # ICRP Publ.137 p.331 Para.711 / ラジウム子孫元素としてのラドン
-# > (711) A generic model structure is applied in the OIR series to radon, xenon, and
-# > krypton produced in systemic compartments by decay of a parent radionuclide.
-# > These gases are assigned the model for transfer of radon from bone to blood introduced
+# > (711) ... These gases are assigned the model for transfer of radon from bone to blood introduced
 # > in Publication 67 (ICRP, 1993), but are assigned element-specific rates of
 # > transfer from soft tissues to blood. Specifically, radon, xenon, or krypton produced
 # > in non-exchangeable bone volume, exchangeable bone volume, or bone surfaces
@@ -768,13 +778,27 @@ Th-228 Inhalation, WaterSoluble
 # > 生成された、または全身コンパートメントで生成された後に血液中に入るラドン、キセノン、
 # > またはクリプトンは、1000 d⁻¹の割合で体外に排出されます（呼気）。これは半減期1分に相当します。
 
+# ICRP Publ.141 p.235 Para.563 / 子孫核種としてのラドンの取り扱い
+# > (563) ... Radon produced in a compartment identified as non-exchangeable
+# > bone volume, exchangeable bone volume, or bone surface transfers to blood at the
+# > rate 0.36, 1.5, or 100 d⁻¹, respectively; radon produced in a compartment identified
+# > simply as ‘bone volume’ transfers to blood at 0.36 d⁻¹; radon produced in a soft
+# > tissue compartment transfers to blood at 33.3 d⁻¹; and radon produced in blood or
+# > entering blood is removed from the body (exhaled) at 1000 d⁻¹.
+# > (563) ... 非交換性骨量、交換性骨量、または骨表面として識別されるコンパートメントで
+# > 生成されたラドンは、それぞれ0.36、1.5、または100 d⁻¹の速度で血液に移行します。
+# > 単に「骨量」として識別されるコンパートメントで生成されたラドンは、0.36 d⁻¹で
+# > 血液に移行します。軟組織コンパートメントで生成されたラドンは、33.3 d⁻¹で血液に
+# > 移行します。血液中で生成された、または血液に入ったラドンは、1000 d⁻¹で体から（呼気として）
+# > 除去されます。
+
   Th-228/Blood            Rn-220/Blood              ---
-  Th-228/C-bone-S         Rn-220/Blood              0.36
-  Th-228/T-bone-S         Rn-220/Blood              0.36
-  Ra-224/Exch-C-bone-V    Rn-220/Blood              0.36
-  Ra-224/Exch-T-bone-V    Rn-220/Blood              0.36
   Th-228/C-bone-V         Rn-220/Blood              0.36    # Ra-224/Noch-C-bone-Vを経由する
   Th-228/T-bone-V         Rn-220/Blood              0.36    # Ra-224/Noch-T-bone-Vを経由する
+  Ra-224/Exch-C-bone-V    Rn-220/Blood              1.5
+  Ra-224/Exch-T-bone-V    Rn-220/Blood              1.5
+  Th-228/C-bone-S         Rn-220/Blood            100
+  Th-228/T-bone-S         Rn-220/Blood            100
   Th-228/C-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
   Th-228/T-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
   Th-228/Liver1           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
@@ -786,12 +810,12 @@ Th-228 Inhalation, WaterSoluble
   Ra-224/Skin             Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
   Ra-224/Spleen           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
 
-  Th-228/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-228/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Th-228/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Th-228/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Ra-224/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Ra-224/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Ra-224/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
 
   Blood                   Exhaled                1000       # ≒半減期1分
 
@@ -1456,19 +1480,19 @@ Th-228 Inhalation, WaterSoluble
 #   Plasmaからの元々の流出量の総和は
 #      1.75 + 0.7 + 4.86 + 3.89 + 22.16 + 0.7 + 0.14 + 4.9 + 2.45 + 0.0245 + 28 + 0.42 = 69.9945
 #   Plasmaから追加コンパートメントへの流出量＝ST0,1,2への流出量から差し引くべき量は
-#      69.9945 * (0.6% + 0.2% + 0.03% + 0.05% + 0.02%) = 0.6299505
+#      69.9945 * (0.6% + 0.2% + 0.03% + 0.005% + 0.002%) = 0.585854
 #   PlasmaからST0,1,2への流出量の減少率は
-#      (22.16 + 0.7 + 0.14 - 0.6299505) / (22.16 + 0.7 + 0.14) ≒ 0.972611
-#   ※ 1 - 0.972611 ≒ 約2.74%減少 ⇔「約2.5%減少」
+#      (22.16 + 0.7 + 0.14 - 0.585854) / (22.16 + 0.7 + 0.14) ≒ 0.974528
+#   ※ 1 - 0.974528 ≒ 約2.54%減少 ⇔「約2.5%減少」
 
  #Plasma                  RedMarrow         $(69.9945 * 0.6%)       # fix(2)
   Plasma                  Skin              $(69.9945 * 0.2%)
   Plasma                  Spleen            $(69.9945 * 0.03%)
-  Plasma                  Testes            $(69.9945 * 0.05%)
-  Plasma                  Ovaries           $(69.9945 * 0.02%)
-  Plasma                  ST0               $(22.16 * 0.972611)
- #Plasma                  ST1               $( 0.7  * 0.972611)     # fix(2)
-  Plasma                  ST2               $( 0.14 * 0.972611)
+  Plasma                  Testes            $(69.9945 * 0.005%)
+  Plasma                  Ovaries           $(69.9945 * 0.002%)
+  Plasma                  ST0               $(22.16 * 0.974528)
+ #Plasma                  ST1               $( 0.7  * 0.974528)     # fix(2)
+  Plasma                  ST2               $( 0.14 * 0.974528)
  #RedMarrow               Plasma                    0.0019          # fix(2)
   Skin                    Plasma                    0.0019
   Spleen                  Plasma                    0.0019
@@ -1488,7 +1512,7 @@ Th-228 Inhalation, WaterSoluble
 
   Plasma                  T-marrow          $(69.9945 * 0.6%)                           # RedMarrowをT-marrowに置換
   Plasma                  C-marrow          $(69.9945 * 0.6% / 3)                       # Plasma→T-marrowの移行速度の1/3
-  Plasma                  ST1               $( 0.7  * 0.972611 - 69.9945 * 0.6% / 3)    # Plasma→C-marrowの速度を差し引く
+  Plasma                  ST1               $( 0.7  * 0.974528 - 69.9945 * 0.6% / 3)    # Plasma→C-marrowの速度を差し引く
   T-marrow                Plasma                    0.0019                              # RedMarrowをT-marrowに置換
   C-marrow                Plasma                    0.0019                              # T-marrow→Plasmaの移行速度と同じ
 
@@ -1953,16 +1977,20 @@ Th-228 Inhalation, WaterSoluble
   Ra-224/Skin             Bi-212/Skin               ---
   Ra-224/Spleen           Bi-212/Spleen             ---
 
-  Th-228/ST0              Bi-212/Plasma          1000
-  Th-228/ST1              Bi-212/Plasma          1000
-  Th-228/ST2              Bi-212/Plasma          1000
-  Ra-224/ST0              Bi-212/Plasma          1000
-  Ra-224/ST1              Bi-212/Plasma          1000
-  Ra-224/ST2              Bi-212/Plasma          1000
-  Po-216/Other            Bi-212/Plasma          1000
-  Pb-212/ST0              Bi-212/Plasma          1000
-  Pb-212/ST1              Bi-212/Plasma          1000
-  Pb-212/ST2              Bi-212/Plasma          1000
+# Publ.137 Para.482には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
+# ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
+# を採用する。
+
+  Th-228/ST0              Bi-212/Plasma            66.54
+  Th-228/ST1              Bi-212/Plasma            66.54
+  Th-228/ST2              Bi-212/Plasma            66.54
+  Ra-224/ST0              Bi-212/Plasma            66.54
+  Ra-224/ST1              Bi-212/Plasma            66.54
+  Ra-224/ST2              Bi-212/Plasma            66.54
+  Po-216/Other            Bi-212/Plasma            66.54
+  Pb-212/ST0              Bi-212/Plasma            66.54
+  Pb-212/ST1              Bi-212/Plasma            66.54
+  Pb-212/ST2              Bi-212/Plasma            66.54
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのポロニウムは、ラジウム子孫元素としてのモデルを用いる
@@ -2632,18 +2660,18 @@ Th-228 Inhalation, WaterSoluble
   Th-228/LNTH-B           Tl-208/LNTH-B             ---
   Th-228/Environment      Tl-208/Environment        ---
 
-  Pb-212/Oralcavity       Tl-208/Oralcavity         ---
-  Pb-212/Oesophagus-f     Tl-208/Oesophagus-f       ---
-  Pb-212/Oesophagus-s     Tl-208/Oesophagus-s       ---
-  Pb-212/St-con           Tl-208/St-con             ---
-  Pb-212/SI-con           Tl-208/SI-con             ---
-  Pb-212/SI-conRe         Tl-208/SI-conRe           ---
-  Pb-212/RC-con           Tl-208/RC-con             ---
-  Pb-212/LC-con           Tl-208/LC-con             ---
-  Pb-212/RS-con           Tl-208/RS-con             ---
-  Pb-212/Faeces           Tl-208/Faeces             ---
-  Pb-212/UB-con           Tl-208/UB-con             ---
-  Pb-212/Urine            Tl-208/Urine              ---
+  Th-228/Oralcavity       Tl-208/Oralcavity         ---
+  Th-228/Oesophagus-f     Tl-208/Oesophagus-f       ---
+  Th-228/Oesophagus-s     Tl-208/Oesophagus-s       ---
+  Th-228/St-con           Tl-208/St-con             ---
+  Th-228/SI-con           Tl-208/SI-con             ---
+  Th-228/SI-conRe         Tl-208/SI-conRe           ---
+  Th-228/RC-con           Tl-208/RC-con             ---
+  Th-228/LC-con           Tl-208/LC-con             ---
+  Th-228/RS-con           Tl-208/RS-con             ---
+  Th-228/Faeces           Tl-208/Faeces             ---
+  Th-228/UB-con           Tl-208/UB-con             ---
+  Th-228/Urine            Tl-208/Urine              ---
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > (481) ... Thallium produced by radioactive
@@ -2672,7 +2700,7 @@ Th-228 Inhalation, WaterSoluble
   Th-228/C-marrow         Tl-208/C-marrow           ---
   Th-228/T-marrow         Tl-208/T-marrow           ---
   Th-228/Liver1           Tl-208/Liver              ---
-  Th-228/Kidneys1         Tl-208/Kidneys            ---
+  Th-228/Kidneys2         Tl-208/Kidneys            ---
   Th-228/Testes           Tl-208/Testes             ---
   Th-228/Ovaries          Tl-208/Ovaries            ---
   Ra-224/Skin             Tl-208/Skin               ---
@@ -2682,7 +2710,7 @@ Th-228 Inhalation, WaterSoluble
   Th-228/ST1              Tl-208/Plasma             2.5
   Th-228/ST2              Tl-208/Plasma             2.5
   Th-228/Liver2           Tl-208/Plasma             2.5
-  Th-228/Kidneys2         Tl-208/Plasma             2.5
+  Th-228/Kidneys1         Tl-208/Plasma             2.5
   Ra-224/ST0              Tl-208/Plasma             2.5
   Ra-224/ST1              Tl-208/Plasma             2.5
   Ra-224/ST2              Tl-208/Plasma             2.5
