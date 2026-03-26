@@ -3822,18 +3822,18 @@ Th-232 Inhalation, WaterSoluble
   Th-232/LNTH-B           Tl-208/LNTH-B             ---
   Th-232/Environment      Tl-208/Environment        ---
 
-  Pb-212/Oralcavity       Tl-208/Oralcavity         ---
-  Pb-212/Oesophagus-f     Tl-208/Oesophagus-f       ---
-  Pb-212/Oesophagus-s     Tl-208/Oesophagus-s       ---
-  Pb-212/St-con           Tl-208/St-con             ---
-  Pb-212/SI-con           Tl-208/SI-con             ---
-  Pb-212/SI-conRe         Tl-208/SI-conRe           ---
-  Pb-212/RC-con           Tl-208/RC-con             ---
-  Pb-212/LC-con           Tl-208/LC-con             ---
-  Pb-212/RS-con           Tl-208/RS-con             ---
-  Pb-212/Faeces           Tl-208/Faeces             ---
-  Pb-212/UB-con           Tl-208/UB-con             ---
-  Pb-212/Urine            Tl-208/Urine              ---
+  Th-232/Oralcavity       Tl-208/Oralcavity         ---
+  Th-232/Oesophagus-f     Tl-208/Oesophagus-f       ---
+  Th-232/Oesophagus-s     Tl-208/Oesophagus-s       ---
+  Th-232/St-con           Tl-208/St-con             ---
+  Th-232/SI-con           Tl-208/SI-con             ---
+  Th-232/SI-conRe         Tl-208/SI-conRe           ---
+  Th-232/RC-con           Tl-208/RC-con             ---
+  Th-232/LC-con           Tl-208/LC-con             ---
+  Th-232/RS-con           Tl-208/RS-con             ---
+  Th-232/Faeces           Tl-208/Faeces             ---
+  Th-232/UB-con           Tl-208/UB-con             ---
+  Th-232/Urine            Tl-208/Urine              ---
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > (481) ... Thallium produced by radioactive
