@@ -40,6 +40,9 @@ public partial class SearchFilterViewModel : ViewModelBase, ISynchronizedViewFil
     public ObservableList<string> TargetElements { get; } = [];
 
     [ObservableProperty]
+    public partial bool IsTargetElementsFiltered { get; private set; }
+
+    [ObservableProperty]
     public partial bool TargetIsInjecion { get; set; }
 
     [ObservableProperty]
@@ -58,6 +61,9 @@ public partial class SearchFilterViewModel : ViewModelBase, ISynchronizedViewFil
     public partial bool TargetIsTypeS { get; set; }
 
     [ObservableProperty]
+    public partial bool IsTargetIntakesFiltered { get; private set; }
+
+    [ObservableProperty]
     public partial string TargetTitlePattern { get; set; } = "";
 
     public event TypedEventHandler<SearchFilterViewModel, EventArgs>? Updated;
@@ -71,10 +77,12 @@ public partial class SearchFilterViewModel : ViewModelBase, ISynchronizedViewFil
             case NotifyCollectionChangedAction.Remove:
             case NotifyCollectionChangedAction.Replace:
                 _elementsPattern = new Regex($@"\b({string.Join("|", TargetElements)})\b");
+                IsTargetElementsFiltered = true;
                 break;
 
             case NotifyCollectionChangedAction.Reset:
                 _elementsPattern = null;
+                IsTargetElementsFiltered = false;
                 break;
         }
 
@@ -100,13 +108,11 @@ public partial class SearchFilterViewModel : ViewModelBase, ISynchronizedViewFil
         if (TargetIsTypeM      /**/) intakeForms[i++] = "Type[- ]?M";
         if (TargetIsTypeS      /**/) intakeForms[i++] = "Type[- ]?S";
         if (i != 0)
-        {
             _intakeFormsPattern = new Regex($@"\b({string.Join("|", intakeForms.AsSpan()[0..i])})\b");
-        }
         else
-        {
             _intakeFormsPattern = null;
-        }
+
+        IsTargetIntakesFiltered = _intakeFormsPattern is not null;
 
         Updated?.Invoke(this, EventArgs.Empty);
     }

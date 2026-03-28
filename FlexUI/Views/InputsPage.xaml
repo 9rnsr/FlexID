@@ -56,6 +56,12 @@
             VerticalAlignment="Stretch"
             AccessKey="E"
             Content="Elements ...">
+            <i:Interaction.Behaviors>
+              <vb:AccentDropDownButtonBehavior
+                AccentStyle="{StaticResource AccentDropDownButtonStyle}"
+                IsAccent="{x:Bind SearchFilter.IsTargetElementsFiltered, Mode=OneWay}"
+                NormalStyle="{x:Null}" />
+            </i:Interaction.Behaviors>
             <DropDownButton.Flyout>
               <Flyout
                 Closed="ElementsFlyout_Closed"
@@ -82,6 +88,12 @@
             VerticalAlignment="Stretch"
             AccessKey="I"
             Content="Intake Route">
+            <i:Interaction.Behaviors>
+              <vb:AccentDropDownButtonBehavior
+                AccentStyle="{StaticResource AccentDropDownButtonStyle}"
+                IsAccent="{x:Bind SearchFilter.IsTargetIntakesFiltered, Mode=OneWay}"
+                NormalStyle="{x:Null}" />
+            </i:Interaction.Behaviors>
             <DropDownButton.Flyout>
               <Flyout Placement="BottomEdgeAlignedLeft" ShouldConstrainToRootBounds="False">
                 <StackPanel

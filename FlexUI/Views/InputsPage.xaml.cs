@@ -44,10 +44,13 @@ public sealed partial class InputsPage : Page
     private void ElementsFlyout_Closed(object sender, object e)
     {
         var elements = ElementsTable.CheckedElements
-            .Select(elementVM => elementVM.Element);
+            .Select(elementVM => elementVM.Element).ToArray();
 
-        SearchFilter.TargetElements.Clear();
-        SearchFilter.TargetElements.AddRange(elements);
+        if (!SearchFilter.TargetElements.SequenceEqual(elements))
+        {
+            SearchFilter.TargetElements.Clear();
+            SearchFilter.TargetElements.AddRange(elements);
+        }
     }
 
     public static readonly DependencyProperty AddCommandProperty =
