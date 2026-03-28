@@ -11,7 +11,9 @@
 
         <!--  Other merged dictionaries here  -->
         <ResourceDictionary Source="ms-appx:///DataTable/Themes/Generic.xaml" />
+        <ResourceDictionary Source="/Themes/Generic.xaml" />
       </ResourceDictionary.MergedDictionaries>
+
       <!--  Other app resources here  -->
     </ResourceDictionary>
   </Application.Resources>
