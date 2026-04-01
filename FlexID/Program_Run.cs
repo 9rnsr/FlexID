@@ -146,8 +146,8 @@ internal class Program_Run
                 throw new Exception("Failed to enumerate built-in inputs");
             }
 
-            outputDoseRate = false;
-            outputCumulative = false;
+            //outputDoseRate = false;
+            //outputCumulative = false;
         }
 
         if (outputs.Count() == 0)
