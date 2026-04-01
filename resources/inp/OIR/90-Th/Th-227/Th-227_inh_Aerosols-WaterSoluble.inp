@@ -1,12 +1,12 @@
 [title]
-Th-228 Inhalation, WaterSoluble
+Th-227 Inhalation, Aerosols WaterSoluble
 
 [nuclide]
-  Th-228  Ra-224  Rn-220
-  Po-216  Pb-212  Bi-212  Po-212  Tl-208
+  Th-227  Ra-223  Rn-219
+  Po-215  Pb-211  Bi-211  Po-211  Tl-207
 
 
-[Th-228:compartment]
+[Th-227:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -76,7 +76,7 @@ Th-228 Inhalation, WaterSoluble
   acc   ST1                   Other
   acc   ST2                   Other
 
-[Th-228:transfer]
+[Th-227:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
@@ -251,7 +251,7 @@ Th-228 Inhalation, WaterSoluble
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラジウムは、ラジウム子孫元素としてのモデルを用いる
 # → ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
 
-[Ra-224:compartment]
+[Ra-223:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -326,7 +326,7 @@ Th-228 Inhalation, WaterSoluble
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
-[Ra-224:transfer]
+[Ra-223:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
@@ -487,52 +487,52 @@ Th-228 Inhalation, WaterSoluble
   Skin                    Blood                     0.02
 
 # from parent to progeny
-  Th-228/ET1-F            Ra-224/ET1-F              ---
-  Th-228/ET2-F            Ra-224/ET2-F              ---
-  Th-228/ETseq-F          Ra-224/ETseq-F            ---
-  Th-228/LNET-F           Ra-224/LNET-F             ---
-  Th-228/BB-F             Ra-224/BB-F               ---
-  Th-228/BBseq-F          Ra-224/BBseq-F            ---
-  Th-228/bb-F             Ra-224/bb-F               ---
-  Th-228/bbseq-F          Ra-224/bbseq-F            ---
-  Th-228/ALV-F            Ra-224/ALV-F              ---
-  Th-228/INT-F            Ra-224/INT-F              ---
-  Th-228/LNTH-F           Ra-224/LNTH-F             ---
-  Th-228/ET1-S            Ra-224/ET1-S              ---
-  Th-228/ET2-S            Ra-224/ET2-S              ---
-  Th-228/ETseq-S          Ra-224/ETseq-S            ---
-  Th-228/LNET-S           Ra-224/LNET-S             ---
-  Th-228/BB-S             Ra-224/BB-S               ---
-  Th-228/BBseq-S          Ra-224/BBseq-S            ---
-  Th-228/bb-S             Ra-224/bb-S               ---
-  Th-228/bbseq-S          Ra-224/bbseq-S            ---
-  Th-228/ALV-S            Ra-224/ALV-S              ---
-  Th-228/INT-S            Ra-224/INT-S              ---
-  Th-228/LNTH-S           Ra-224/LNTH-S             ---
-  Th-228/ET2-B            Ra-224/ET2-B              ---
-  Th-228/ETseq-B          Ra-224/ETseq-B            ---
-  Th-228/LNET-B           Ra-224/LNET-B             ---
-  Th-228/BB-B             Ra-224/BB-B               ---
-  Th-228/BBseq-B          Ra-224/BBseq-B            ---
-  Th-228/bb-B             Ra-224/bb-B               ---
-  Th-228/bbseq-B          Ra-224/bbseq-B            ---
-  Th-228/ALV-B            Ra-224/ALV-B              ---
-  Th-228/INT-B            Ra-224/INT-B              ---
-  Th-228/LNTH-B           Ra-224/LNTH-B             ---
-  Th-228/Environment      Ra-224/Environment        ---
+  Th-227/ET1-F            Ra-223/ET1-F              ---
+  Th-227/ET2-F            Ra-223/ET2-F              ---
+  Th-227/ETseq-F          Ra-223/ETseq-F            ---
+  Th-227/LNET-F           Ra-223/LNET-F             ---
+  Th-227/BB-F             Ra-223/BB-F               ---
+  Th-227/BBseq-F          Ra-223/BBseq-F            ---
+  Th-227/bb-F             Ra-223/bb-F               ---
+  Th-227/bbseq-F          Ra-223/bbseq-F            ---
+  Th-227/ALV-F            Ra-223/ALV-F              ---
+  Th-227/INT-F            Ra-223/INT-F              ---
+  Th-227/LNTH-F           Ra-223/LNTH-F             ---
+  Th-227/ET1-S            Ra-223/ET1-S              ---
+  Th-227/ET2-S            Ra-223/ET2-S              ---
+  Th-227/ETseq-S          Ra-223/ETseq-S            ---
+  Th-227/LNET-S           Ra-223/LNET-S             ---
+  Th-227/BB-S             Ra-223/BB-S               ---
+  Th-227/BBseq-S          Ra-223/BBseq-S            ---
+  Th-227/bb-S             Ra-223/bb-S               ---
+  Th-227/bbseq-S          Ra-223/bbseq-S            ---
+  Th-227/ALV-S            Ra-223/ALV-S              ---
+  Th-227/INT-S            Ra-223/INT-S              ---
+  Th-227/LNTH-S           Ra-223/LNTH-S             ---
+  Th-227/ET2-B            Ra-223/ET2-B              ---
+  Th-227/ETseq-B          Ra-223/ETseq-B            ---
+  Th-227/LNET-B           Ra-223/LNET-B             ---
+  Th-227/BB-B             Ra-223/BB-B               ---
+  Th-227/BBseq-B          Ra-223/BBseq-B            ---
+  Th-227/bb-B             Ra-223/bb-B               ---
+  Th-227/bbseq-B          Ra-223/bbseq-B            ---
+  Th-227/ALV-B            Ra-223/ALV-B              ---
+  Th-227/INT-B            Ra-223/INT-B              ---
+  Th-227/LNTH-B           Ra-223/LNTH-B             ---
+  Th-227/Environment      Ra-223/Environment        ---
 
-  Th-228/Oralcavity       Ra-224/Oralcavity         ---
-  Th-228/Oesophagus-f     Ra-224/Oesophagus-f       ---
-  Th-228/Oesophagus-s     Ra-224/Oesophagus-s       ---
-  Th-228/St-con           Ra-224/St-con             ---
-  Th-228/SI-con           Ra-224/SI-con             ---
-  Th-228/SI-conRe         Ra-224/SI-conRe           ---
-  Th-228/RC-con           Ra-224/RC-con             ---
-  Th-228/LC-con           Ra-224/LC-con             ---
-  Th-228/RS-con           Ra-224/RS-con             ---
-  Th-228/Faeces           Ra-224/Faeces             ---
-  Th-228/UB-con           Ra-224/UB-con             ---
-  Th-228/Urine            Ra-224/Urine              ---
+  Th-227/Oralcavity       Ra-223/Oralcavity         ---
+  Th-227/Oesophagus-f     Ra-223/Oesophagus-f       ---
+  Th-227/Oesophagus-s     Ra-223/Oesophagus-s       ---
+  Th-227/St-con           Ra-223/St-con             ---
+  Th-227/SI-con           Ra-223/SI-con             ---
+  Th-227/SI-conRe         Ra-223/SI-conRe           ---
+  Th-227/RC-con           Ra-223/RC-con             ---
+  Th-227/LC-con           Ra-223/LC-con             ---
+  Th-227/RS-con           Ra-223/RS-con             ---
+  Th-227/Faeces           Ra-223/Faeces             ---
+  Th-227/UB-con           Ra-223/UB-con             ---
+  Th-227/Urine            Ra-223/Urine              ---
 
 # ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
 # > (716) ... Radium produced in a blood compartment of
@@ -547,23 +547,23 @@ Th-228 Inhalation, WaterSoluble
 # > 軟部組織コンパートメントで生成された場合は6.98 d⁻¹である。6.98 d⁻¹という値は、
 # > ラジウムの特性モデルにおける他の軟部組織コンパートメントからの除去速度の最大値である。
 
-  Th-228/Blood            Ra-224/Blood              ---
-  Th-228/C-bone-S         Ra-224/C-bone-S           ---
-  Th-228/T-bone-S         Ra-224/T-bone-S           ---
-  Th-228/C-bone-V         Ra-224/Noch-C-bone-V      ---     # Publ.137 Para.812
-  Th-228/T-bone-V         Ra-224/Noch-T-bone-V      ---     # Publ.137 Para.812
-  Th-228/C-marrow         Ra-224/C-marrow           ---
-  Th-228/T-marrow         Ra-224/T-marrow           ---
-  Th-228/Liver1           Ra-224/Liver1             ---
-  Th-228/Liver2           Ra-224/Liver2             ---
-  Th-228/Kidneys1         Ra-224/Kidneys1           ---
-  Th-228/Kidneys2         Ra-224/Kidneys2           ---
-  Th-228/Testes           Ra-224/Testes             ---
-  Th-228/Ovaries          Ra-224/Ovaries            ---
+  Th-227/Blood            Ra-223/Blood              ---
+  Th-227/C-bone-S         Ra-223/C-bone-S           ---
+  Th-227/T-bone-S         Ra-223/T-bone-S           ---
+  Th-227/C-bone-V         Ra-223/Noch-C-bone-V      ---     # Publ.137 Para.812
+  Th-227/T-bone-V         Ra-223/Noch-T-bone-V      ---     # Publ.137 Para.812
+  Th-227/C-marrow         Ra-223/C-marrow           ---
+  Th-227/T-marrow         Ra-223/T-marrow           ---
+  Th-227/Liver1           Ra-223/Liver1             ---
+  Th-227/Liver2           Ra-223/Liver2             ---
+  Th-227/Kidneys1         Ra-223/Kidneys1           ---
+  Th-227/Kidneys2         Ra-223/Kidneys2           ---
+  Th-227/Testes           Ra-223/Testes             ---
+  Th-227/Ovaries          Ra-223/Ovaries            ---
 
-  Th-228/ST0              Ra-224/Blood              6.98
-  Th-228/ST1              Ra-224/Blood              6.98
-  Th-228/ST2              Ra-224/Blood              6.98
+  Th-227/ST0              Ra-223/Blood              6.98
+  Th-227/ST1              Ra-223/Blood              6.98
+  Th-227/ST2              Ra-223/Blood              6.98
 
 
 #   ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラドンは、ラジウム子孫元素としてのモデルを用いる。
@@ -585,7 +585,7 @@ Th-228 Inhalation, WaterSoluble
 # > 全身コンパートメント内で放射性崩壊によって生成されたラドンに適用された一般的な
 # > モデルである。 ...
 
-[Rn-220:compartment]
+[Rn-219:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -639,7 +639,7 @@ Th-228 Inhalation, WaterSoluble
   acc   Blood                 Blood
   exc   Exhaled               ---
 
-[Rn-220:transfer]
+[Rn-219:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
@@ -710,52 +710,52 @@ Th-228 Inhalation, WaterSoluble
   UB-con                  Exhaled                  12
 
 # from parent to progeny
-  Th-228/ET1-F            Rn-220/ET1-F              ---
-  Th-228/ET2-F            Rn-220/ET2-F              ---
-  Th-228/ETseq-F          Rn-220/ETseq-F            ---
-  Th-228/LNET-F           Rn-220/LNET-F             ---
-  Th-228/BB-F             Rn-220/BB-F               ---
-  Th-228/BBseq-F          Rn-220/BBseq-F            ---
-  Th-228/bb-F             Rn-220/bb-F               ---
-  Th-228/bbseq-F          Rn-220/bbseq-F            ---
-  Th-228/ALV-F            Rn-220/ALV-F              ---
-  Th-228/INT-F            Rn-220/INT-F              ---
-  Th-228/LNTH-F           Rn-220/LNTH-F             ---
-  Th-228/ET1-S            Rn-220/ET1-S              ---
-  Th-228/ET2-S            Rn-220/ET2-S              ---
-  Th-228/ETseq-S          Rn-220/ETseq-S            ---
-  Th-228/LNET-S           Rn-220/LNET-S             ---
-  Th-228/BB-S             Rn-220/BB-S               ---
-  Th-228/BBseq-S          Rn-220/BBseq-S            ---
-  Th-228/bb-S             Rn-220/bb-S               ---
-  Th-228/bbseq-S          Rn-220/bbseq-S            ---
-  Th-228/ALV-S            Rn-220/ALV-S              ---
-  Th-228/INT-S            Rn-220/INT-S              ---
-  Th-228/LNTH-S           Rn-220/LNTH-S             ---
-  Th-228/ET2-B            Rn-220/ET2-B              ---
-  Th-228/ETseq-B          Rn-220/ETseq-B            ---
-  Th-228/LNET-B           Rn-220/LNET-B             ---
-  Th-228/BB-B             Rn-220/BB-B               ---
-  Th-228/BBseq-B          Rn-220/BBseq-B            ---
-  Th-228/bb-B             Rn-220/bb-B               ---
-  Th-228/bbseq-B          Rn-220/bbseq-B            ---
-  Th-228/ALV-B            Rn-220/ALV-B              ---
-  Th-228/INT-B            Rn-220/INT-B              ---
-  Th-228/LNTH-B           Rn-220/LNTH-B             ---
-  Th-228/Environment      Rn-220/Environment        ---
+  Th-227/ET1-F            Rn-219/ET1-F              ---
+  Th-227/ET2-F            Rn-219/ET2-F              ---
+  Th-227/ETseq-F          Rn-219/ETseq-F            ---
+  Th-227/LNET-F           Rn-219/LNET-F             ---
+  Th-227/BB-F             Rn-219/BB-F               ---
+  Th-227/BBseq-F          Rn-219/BBseq-F            ---
+  Th-227/bb-F             Rn-219/bb-F               ---
+  Th-227/bbseq-F          Rn-219/bbseq-F            ---
+  Th-227/ALV-F            Rn-219/ALV-F              ---
+  Th-227/INT-F            Rn-219/INT-F              ---
+  Th-227/LNTH-F           Rn-219/LNTH-F             ---
+  Th-227/ET1-S            Rn-219/ET1-S              ---
+  Th-227/ET2-S            Rn-219/ET2-S              ---
+  Th-227/ETseq-S          Rn-219/ETseq-S            ---
+  Th-227/LNET-S           Rn-219/LNET-S             ---
+  Th-227/BB-S             Rn-219/BB-S               ---
+  Th-227/BBseq-S          Rn-219/BBseq-S            ---
+  Th-227/bb-S             Rn-219/bb-S               ---
+  Th-227/bbseq-S          Rn-219/bbseq-S            ---
+  Th-227/ALV-S            Rn-219/ALV-S              ---
+  Th-227/INT-S            Rn-219/INT-S              ---
+  Th-227/LNTH-S           Rn-219/LNTH-S             ---
+  Th-227/ET2-B            Rn-219/ET2-B              ---
+  Th-227/ETseq-B          Rn-219/ETseq-B            ---
+  Th-227/LNET-B           Rn-219/LNET-B             ---
+  Th-227/BB-B             Rn-219/BB-B               ---
+  Th-227/BBseq-B          Rn-219/BBseq-B            ---
+  Th-227/bb-B             Rn-219/bb-B               ---
+  Th-227/bbseq-B          Rn-219/bbseq-B            ---
+  Th-227/ALV-B            Rn-219/ALV-B              ---
+  Th-227/INT-B            Rn-219/INT-B              ---
+  Th-227/LNTH-B           Rn-219/LNTH-B             ---
+  Th-227/Environment      Rn-219/Environment        ---
 
-  Th-228/Oralcavity       Rn-220/Oralcavity         ---
-  Th-228/Oesophagus-f     Rn-220/Oesophagus-f       ---
-  Th-228/Oesophagus-s     Rn-220/Oesophagus-s       ---
-  Th-228/St-con           Rn-220/St-con             ---
-  Th-228/SI-con           Rn-220/SI-con             ---
-  Th-228/SI-conRe         Rn-220/SI-conRe           ---
-  Th-228/RC-con           Rn-220/RC-con             ---
-  Th-228/LC-con           Rn-220/LC-con             ---
-  Th-228/RS-con           Rn-220/RS-con             ---
-  Th-228/Faeces           Rn-220/Faeces             ---
-  Th-228/UB-con           Rn-220/UB-con             ---
-  Th-228/Urine            Rn-220/Urine              ---
+  Th-227/Oralcavity       Rn-219/Oralcavity         ---
+  Th-227/Oesophagus-f     Rn-219/Oesophagus-f       ---
+  Th-227/Oesophagus-s     Rn-219/Oesophagus-s       ---
+  Th-227/St-con           Rn-219/St-con             ---
+  Th-227/SI-con           Rn-219/SI-con             ---
+  Th-227/SI-conRe         Rn-219/SI-conRe           ---
+  Th-227/RC-con           Rn-219/RC-con             ---
+  Th-227/LC-con           Rn-219/LC-con             ---
+  Th-227/RS-con           Rn-219/RS-con             ---
+  Th-227/Faeces           Rn-219/Faeces             ---
+  Th-227/UB-con           Rn-219/UB-con             ---
+  Th-227/Urine            Rn-219/Urine              ---
 
 # ICRP Publ.137 p.331 Para.711 / ラジウム子孫元素としてのラドン
 # > (711) ... These gases are assigned the model for transfer of radon from bone to blood introduced
@@ -792,30 +792,30 @@ Th-228 Inhalation, WaterSoluble
 # > 移行します。血液中で生成された、または血液に入ったラドンは、1000 d⁻¹で体から（呼気として）
 # > 除去されます。
 
-  Th-228/Blood            Rn-220/Blood              ---
-  Th-228/C-bone-V         Rn-220/Blood              0.36    # Ra-224/Noch-C-bone-Vを経由する
-  Th-228/T-bone-V         Rn-220/Blood              0.36    # Ra-224/Noch-T-bone-Vを経由する
-  Ra-224/Exch-C-bone-V    Rn-220/Blood              1.5
-  Ra-224/Exch-T-bone-V    Rn-220/Blood              1.5
-  Th-228/C-bone-S         Rn-220/Blood            100
-  Th-228/T-bone-S         Rn-220/Blood            100
-  Th-228/C-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/T-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Liver1           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Liver2           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Kidneys1         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Kidneys2         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Testes           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Ovaries          Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Skin             Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Spleen           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/Blood            Rn-219/Blood              ---
+  Th-227/C-bone-V         Rn-219/Blood              0.36    # Ra-223/Noch-C-bone-Vを経由する
+  Th-227/T-bone-V         Rn-219/Blood              0.36    # Ra-223/Noch-T-bone-Vを経由する
+  Ra-223/Exch-C-bone-V    Rn-219/Blood              1.5
+  Ra-223/Exch-T-bone-V    Rn-219/Blood              1.5
+  Th-227/C-bone-S         Rn-219/Blood            100
+  Th-227/T-bone-S         Rn-219/Blood            100
+  Th-227/C-marrow         Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/T-marrow         Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/Liver1           Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/Liver2           Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/Kidneys1         Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/Kidneys2         Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/Testes           Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Th-227/Ovaries          Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Ra-223/Skin             Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  Ra-223/Spleen           Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分
 
-  Th-228/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Th-228/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Th-228/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Ra-224/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Ra-224/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Ra-224/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Th-227/ST0              Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Th-227/ST1              Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Th-227/ST2              Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Ra-223/ST0              Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Ra-223/ST1              Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  Ra-223/ST2              Rn-219/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
 
   Blood                   Exhaled                1000       # ≒半減期1分
 
@@ -854,7 +854,7 @@ Th-228 Inhalation, WaterSoluble
 # > 適用されている全身モデル(第11節)と同一である。ただし、子孫核種モデルでは、呼吸器系と
 # > 消化器系から血液に入るポロニウムを区別しない点が異なる。 ...
 
-[Po-216:compartment]
+[Po-215:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -939,7 +939,7 @@ Th-228 Inhalation, WaterSoluble
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Po-216:transfer]
+[Po-215:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
@@ -1110,52 +1110,52 @@ Th-228 Inhalation, WaterSoluble
   C-marrow                Plasma1                   0.099       # T-marrow→Plasma1の移行速度と同じ
 
 # from parent to progeny
-  Th-228/ET1-F            Po-216/ET1-F              ---
-  Th-228/ET2-F            Po-216/ET2-F              ---
-  Th-228/ETseq-F          Po-216/ETseq-F            ---
-  Th-228/LNET-F           Po-216/LNET-F             ---
-  Th-228/BB-F             Po-216/BB-F               ---
-  Th-228/BBseq-F          Po-216/BBseq-F            ---
-  Th-228/bb-F             Po-216/bb-F               ---
-  Th-228/bbseq-F          Po-216/bbseq-F            ---
-  Th-228/ALV-F            Po-216/ALV-F              ---
-  Th-228/INT-F            Po-216/INT-F              ---
-  Th-228/LNTH-F           Po-216/LNTH-F             ---
-  Th-228/ET1-S            Po-216/ET1-S              ---
-  Th-228/ET2-S            Po-216/ET2-S              ---
-  Th-228/ETseq-S          Po-216/ETseq-S            ---
-  Th-228/LNET-S           Po-216/LNET-S             ---
-  Th-228/BB-S             Po-216/BB-S               ---
-  Th-228/BBseq-S          Po-216/BBseq-S            ---
-  Th-228/bb-S             Po-216/bb-S               ---
-  Th-228/bbseq-S          Po-216/bbseq-S            ---
-  Th-228/ALV-S            Po-216/ALV-S              ---
-  Th-228/INT-S            Po-216/INT-S              ---
-  Th-228/LNTH-S           Po-216/LNTH-S             ---
-  Th-228/ET2-B            Po-216/ET2-B              ---
-  Th-228/ETseq-B          Po-216/ETseq-B            ---
-  Th-228/LNET-B           Po-216/LNET-B             ---
-  Th-228/BB-B             Po-216/BB-B               ---
-  Th-228/BBseq-B          Po-216/BBseq-B            ---
-  Th-228/bb-B             Po-216/bb-B               ---
-  Th-228/bbseq-B          Po-216/bbseq-B            ---
-  Th-228/ALV-B            Po-216/ALV-B              ---
-  Th-228/INT-B            Po-216/INT-B              ---
-  Th-228/LNTH-B           Po-216/LNTH-B             ---
-  Th-228/Environment      Po-216/Environment        ---
+  Th-227/ET1-F            Po-215/ET1-F              ---
+  Th-227/ET2-F            Po-215/ET2-F              ---
+  Th-227/ETseq-F          Po-215/ETseq-F            ---
+  Th-227/LNET-F           Po-215/LNET-F             ---
+  Th-227/BB-F             Po-215/BB-F               ---
+  Th-227/BBseq-F          Po-215/BBseq-F            ---
+  Th-227/bb-F             Po-215/bb-F               ---
+  Th-227/bbseq-F          Po-215/bbseq-F            ---
+  Th-227/ALV-F            Po-215/ALV-F              ---
+  Th-227/INT-F            Po-215/INT-F              ---
+  Th-227/LNTH-F           Po-215/LNTH-F             ---
+  Th-227/ET1-S            Po-215/ET1-S              ---
+  Th-227/ET2-S            Po-215/ET2-S              ---
+  Th-227/ETseq-S          Po-215/ETseq-S            ---
+  Th-227/LNET-S           Po-215/LNET-S             ---
+  Th-227/BB-S             Po-215/BB-S               ---
+  Th-227/BBseq-S          Po-215/BBseq-S            ---
+  Th-227/bb-S             Po-215/bb-S               ---
+  Th-227/bbseq-S          Po-215/bbseq-S            ---
+  Th-227/ALV-S            Po-215/ALV-S              ---
+  Th-227/INT-S            Po-215/INT-S              ---
+  Th-227/LNTH-S           Po-215/LNTH-S             ---
+  Th-227/ET2-B            Po-215/ET2-B              ---
+  Th-227/ETseq-B          Po-215/ETseq-B            ---
+  Th-227/LNET-B           Po-215/LNET-B             ---
+  Th-227/BB-B             Po-215/BB-B               ---
+  Th-227/BBseq-B          Po-215/BBseq-B            ---
+  Th-227/bb-B             Po-215/bb-B               ---
+  Th-227/bbseq-B          Po-215/bbseq-B            ---
+  Th-227/ALV-B            Po-215/ALV-B              ---
+  Th-227/INT-B            Po-215/INT-B              ---
+  Th-227/LNTH-B           Po-215/LNTH-B             ---
+  Th-227/Environment      Po-215/Environment        ---
 
-  Th-228/Oralcavity       Po-216/Oralcavity         ---
-  Th-228/Oesophagus-f     Po-216/Oesophagus-f       ---
-  Th-228/Oesophagus-s     Po-216/Oesophagus-s       ---
-  Th-228/St-con           Po-216/St-con             ---
-  Th-228/SI-con           Po-216/SI-con             ---
-  Th-228/SI-conRe         Po-216/SI-conRe           ---
-  Th-228/RC-con           Po-216/RC-con             ---
-  Th-228/LC-con           Po-216/LC-con             ---
-  Th-228/RS-con           Po-216/RS-con             ---
-  Th-228/Faeces           Po-216/Faeces             ---
-  Th-228/UB-con           Po-216/UB-con             ---
-  Th-228/Urine            Po-216/Urine              ---
+  Th-227/Oralcavity       Po-215/Oralcavity         ---
+  Th-227/Oesophagus-f     Po-215/Oesophagus-f       ---
+  Th-227/Oesophagus-s     Po-215/Oesophagus-s       ---
+  Th-227/St-con           Po-215/St-con             ---
+  Th-227/SI-con           Po-215/SI-con             ---
+  Th-227/SI-conRe         Po-215/SI-conRe           ---
+  Th-227/RC-con           Po-215/RC-con             ---
+  Th-227/LC-con           Po-215/LC-con             ---
+  Th-227/RS-con           Po-215/RS-con             ---
+  Th-227/Faeces           Po-215/Faeces             ---
+  Th-227/UB-con           Po-215/UB-con             ---
+  Th-227/Urine            Po-215/Urine              ---
 
 # ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
 # > (484) ... Polonium produced in a blood compartment
@@ -1173,30 +1173,30 @@ Th-228 Inhalation, WaterSoluble
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
 # > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
 
-  Th-228/Blood            Po-216/Plasma2         1000
-  Th-228/C-bone-S         Po-216/C-bone-S           ---
-  Th-228/T-bone-S         Po-216/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Po-216/Plasma2        $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Po-216/Plasma2        $(0.18 / 365.25)
-  Ra-224/Noch-C-bone-V    Po-216/Plasma2        $(0.03 / 365.25)
-  Ra-224/Noch-T-bone-V    Po-216/Plasma2        $(0.18 / 365.25)
-  Th-228/C-marrow         Po-216/C-marrow           ---
-  Th-228/T-marrow         Po-216/T-marrow           ---
-  Th-228/Liver1           Po-216/Liver1             ---
-  Th-228/Liver2           Po-216/Liver2             ---
-  Th-228/Kidneys1         Po-216/Kidneys1           ---
-  Th-228/Kidneys2         Po-216/Kidneys2           ---
-  Th-228/Testes           Po-216/Testes             ---
-  Th-228/Ovaries          Po-216/Ovaries            ---
-  Ra-224/Skin             Po-216/Skin               ---
-  Ra-224/Spleen           Po-216/Spleen             ---
+  Th-227/Blood            Po-215/Plasma2         1000
+  Th-227/C-bone-S         Po-215/C-bone-S           ---
+  Th-227/T-bone-S         Po-215/T-bone-S           ---
+  Ra-223/Exch-C-bone-V    Po-215/Plasma2        $(0.03 / 365.25)
+  Ra-223/Exch-T-bone-V    Po-215/Plasma2        $(0.18 / 365.25)
+  Ra-223/Noch-C-bone-V    Po-215/Plasma2        $(0.03 / 365.25)
+  Ra-223/Noch-T-bone-V    Po-215/Plasma2        $(0.18 / 365.25)
+  Th-227/C-marrow         Po-215/C-marrow           ---
+  Th-227/T-marrow         Po-215/T-marrow           ---
+  Th-227/Liver1           Po-215/Liver1             ---
+  Th-227/Liver2           Po-215/Liver2             ---
+  Th-227/Kidneys1         Po-215/Kidneys1           ---
+  Th-227/Kidneys2         Po-215/Kidneys2           ---
+  Th-227/Testes           Po-215/Testes             ---
+  Th-227/Ovaries          Po-215/Ovaries            ---
+  Ra-223/Skin             Po-215/Skin               ---
+  Ra-223/Spleen           Po-215/Spleen             ---
 
-  Th-228/ST0              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST1              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST2              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST0              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST1              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST2              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
+  Th-227/ST0              Po-215/Plasma2        $(0.693 / 7)    # 半減期7日
+  Th-227/ST1              Po-215/Plasma2        $(0.693 / 7)    # 半減期7日
+  Th-227/ST2              Po-215/Plasma2        $(0.693 / 7)    # 半減期7日
+  Ra-223/ST0              Po-215/Plasma2        $(0.693 / 7)    # 半減期7日
+  Ra-223/ST1              Po-215/Plasma2        $(0.693 / 7)    # 半減期7日
+  Ra-223/ST2              Po-215/Plasma2        $(0.693 / 7)    # 半減期7日
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としての鉛は、ラジウム子孫元素としてのモデルを用いる
@@ -1207,7 +1207,7 @@ Th-228 Inhalation, WaterSoluble
 # > (482) 鉛の子孫核種としての鉛の全身モデルは、上述の(訳注：親核種としての)
 # > 鉛の特性モデルの拡張である。 ...
 
-[Pb-212:compartment]
+[Pb-211:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -1304,7 +1304,7 @@ Th-228 Inhalation, WaterSoluble
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Pb-212:transfer]
+[Pb-211:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
@@ -1517,52 +1517,52 @@ Th-228 Inhalation, WaterSoluble
   C-marrow                Plasma                    0.0019                              # T-marrow→Plasmaの移行速度と同じ
 
 # from parent to progeny
-  Th-228/ET1-F            Pb-212/ET1-F              ---
-  Th-228/ET2-F            Pb-212/ET2-F              ---
-  Th-228/ETseq-F          Pb-212/ETseq-F            ---
-  Th-228/LNET-F           Pb-212/LNET-F             ---
-  Th-228/BB-F             Pb-212/BB-F               ---
-  Th-228/BBseq-F          Pb-212/BBseq-F            ---
-  Th-228/bb-F             Pb-212/bb-F               ---
-  Th-228/bbseq-F          Pb-212/bbseq-F            ---
-  Th-228/ALV-F            Pb-212/ALV-F              ---
-  Th-228/INT-F            Pb-212/INT-F              ---
-  Th-228/LNTH-F           Pb-212/LNTH-F             ---
-  Th-228/ET1-S            Pb-212/ET1-S              ---
-  Th-228/ET2-S            Pb-212/ET2-S              ---
-  Th-228/ETseq-S          Pb-212/ETseq-S            ---
-  Th-228/LNET-S           Pb-212/LNET-S             ---
-  Th-228/BB-S             Pb-212/BB-S               ---
-  Th-228/BBseq-S          Pb-212/BBseq-S            ---
-  Th-228/bb-S             Pb-212/bb-S               ---
-  Th-228/bbseq-S          Pb-212/bbseq-S            ---
-  Th-228/ALV-S            Pb-212/ALV-S              ---
-  Th-228/INT-S            Pb-212/INT-S              ---
-  Th-228/LNTH-S           Pb-212/LNTH-S             ---
-  Th-228/ET2-B            Pb-212/ET2-B              ---
-  Th-228/ETseq-B          Pb-212/ETseq-B            ---
-  Th-228/LNET-B           Pb-212/LNET-B             ---
-  Th-228/BB-B             Pb-212/BB-B               ---
-  Th-228/BBseq-B          Pb-212/BBseq-B            ---
-  Th-228/bb-B             Pb-212/bb-B               ---
-  Th-228/bbseq-B          Pb-212/bbseq-B            ---
-  Th-228/ALV-B            Pb-212/ALV-B              ---
-  Th-228/INT-B            Pb-212/INT-B              ---
-  Th-228/LNTH-B           Pb-212/LNTH-B             ---
-  Th-228/Environment      Pb-212/Environment        ---
+  Th-227/ET1-F            Pb-211/ET1-F              ---
+  Th-227/ET2-F            Pb-211/ET2-F              ---
+  Th-227/ETseq-F          Pb-211/ETseq-F            ---
+  Th-227/LNET-F           Pb-211/LNET-F             ---
+  Th-227/BB-F             Pb-211/BB-F               ---
+  Th-227/BBseq-F          Pb-211/BBseq-F            ---
+  Th-227/bb-F             Pb-211/bb-F               ---
+  Th-227/bbseq-F          Pb-211/bbseq-F            ---
+  Th-227/ALV-F            Pb-211/ALV-F              ---
+  Th-227/INT-F            Pb-211/INT-F              ---
+  Th-227/LNTH-F           Pb-211/LNTH-F             ---
+  Th-227/ET1-S            Pb-211/ET1-S              ---
+  Th-227/ET2-S            Pb-211/ET2-S              ---
+  Th-227/ETseq-S          Pb-211/ETseq-S            ---
+  Th-227/LNET-S           Pb-211/LNET-S             ---
+  Th-227/BB-S             Pb-211/BB-S               ---
+  Th-227/BBseq-S          Pb-211/BBseq-S            ---
+  Th-227/bb-S             Pb-211/bb-S               ---
+  Th-227/bbseq-S          Pb-211/bbseq-S            ---
+  Th-227/ALV-S            Pb-211/ALV-S              ---
+  Th-227/INT-S            Pb-211/INT-S              ---
+  Th-227/LNTH-S           Pb-211/LNTH-S             ---
+  Th-227/ET2-B            Pb-211/ET2-B              ---
+  Th-227/ETseq-B          Pb-211/ETseq-B            ---
+  Th-227/LNET-B           Pb-211/LNET-B             ---
+  Th-227/BB-B             Pb-211/BB-B               ---
+  Th-227/BBseq-B          Pb-211/BBseq-B            ---
+  Th-227/bb-B             Pb-211/bb-B               ---
+  Th-227/bbseq-B          Pb-211/bbseq-B            ---
+  Th-227/ALV-B            Pb-211/ALV-B              ---
+  Th-227/INT-B            Pb-211/INT-B              ---
+  Th-227/LNTH-B           Pb-211/LNTH-B             ---
+  Th-227/Environment      Pb-211/Environment        ---
 
-  Th-228/Oralcavity       Pb-212/Oralcavity         ---
-  Th-228/Oesophagus-f     Pb-212/Oesophagus-f       ---
-  Th-228/Oesophagus-s     Pb-212/Oesophagus-s       ---
-  Th-228/St-con           Pb-212/St-con             ---
-  Th-228/SI-con           Pb-212/SI-con             ---
-  Th-228/SI-conRe         Pb-212/SI-conRe           ---
-  Th-228/RC-con           Pb-212/RC-con             ---
-  Th-228/LC-con           Pb-212/LC-con             ---
-  Th-228/RS-con           Pb-212/RS-con             ---
-  Th-228/Faeces           Pb-212/Faeces             ---
-  Th-228/UB-con           Pb-212/UB-con             ---
-  Th-228/Urine            Pb-212/Urine              ---
+  Th-227/Oralcavity       Pb-211/Oralcavity         ---
+  Th-227/Oesophagus-f     Pb-211/Oesophagus-f       ---
+  Th-227/Oesophagus-s     Pb-211/Oesophagus-s       ---
+  Th-227/St-con           Pb-211/St-con             ---
+  Th-227/SI-con           Pb-211/SI-con             ---
+  Th-227/SI-conRe         Pb-211/SI-conRe           ---
+  Th-227/RC-con           Pb-211/RC-con             ---
+  Th-227/LC-con           Pb-211/LC-con             ---
+  Th-227/RS-con           Pb-211/RS-con             ---
+  Th-227/Faeces           Pb-211/Faeces             ---
+  Th-227/UB-con           Pb-211/UB-con             ---
+  Th-227/Urine            Pb-211/Urine              ---
 
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
 # > (482) ... Lead produced in a soft tissue compartment of a
@@ -1577,35 +1577,35 @@ Th-228 Inhalation, WaterSoluble
 # > 生成された鉛が鉛モデルの血液コンパートメントと識別できない場合、血漿への移行速度は
 # > 1000 d⁻¹と割り当てられる。
 
-  Th-228/Blood            Pb-212/Plasma          1000
-  Po-216/Plasma1          Pb-212/Plasma             ---
-  Po-216/Plasma2          Pb-212/Plasma             ---
-  Po-216/Plasma3          Pb-212/Plasma             ---
-  Po-216/RBC              Pb-212/RBC                ---
-  Th-228/C-bone-S         Pb-212/C-bone-S           ---
-  Th-228/T-bone-S         Pb-212/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Pb-212/Exch-C-bone-V      ---
-  Ra-224/Exch-T-bone-V    Pb-212/Exch-T-bone-V      ---
-  Ra-224/Noch-C-bone-V    Pb-212/Noch-C-bone-V      ---
-  Ra-224/Noch-T-bone-V    Pb-212/Noch-T-bone-V      ---
-  Th-228/C-marrow         Pb-212/C-marrow           ---
-  Th-228/T-marrow         Pb-212/T-marrow           ---
-  Th-228/Liver1           Pb-212/Liver1             ---
-  Th-228/Liver2           Pb-212/Liver2             ---
-  Th-228/Kidneys1         Pb-212/Kidneys1           ---
-  Th-228/Kidneys2         Pb-212/Kidneys2           ---
-  Th-228/Testes           Pb-212/Testes             ---
-  Th-228/Ovaries          Pb-212/Ovaries            ---
-  Ra-224/Skin             Pb-212/Skin               ---
-  Ra-224/Spleen           Pb-212/Spleen             ---
+  Th-227/Blood            Pb-211/Plasma          1000
+  Po-215/Plasma1          Pb-211/Plasma             ---
+  Po-215/Plasma2          Pb-211/Plasma             ---
+  Po-215/Plasma3          Pb-211/Plasma             ---
+  Po-215/RBC              Pb-211/RBC                ---
+  Th-227/C-bone-S         Pb-211/C-bone-S           ---
+  Th-227/T-bone-S         Pb-211/T-bone-S           ---
+  Ra-223/Exch-C-bone-V    Pb-211/Exch-C-bone-V      ---
+  Ra-223/Exch-T-bone-V    Pb-211/Exch-T-bone-V      ---
+  Ra-223/Noch-C-bone-V    Pb-211/Noch-C-bone-V      ---
+  Ra-223/Noch-T-bone-V    Pb-211/Noch-T-bone-V      ---
+  Th-227/C-marrow         Pb-211/C-marrow           ---
+  Th-227/T-marrow         Pb-211/T-marrow           ---
+  Th-227/Liver1           Pb-211/Liver1             ---
+  Th-227/Liver2           Pb-211/Liver2             ---
+  Th-227/Kidneys1         Pb-211/Kidneys1           ---
+  Th-227/Kidneys2         Pb-211/Kidneys2           ---
+  Th-227/Testes           Pb-211/Testes             ---
+  Th-227/Ovaries          Pb-211/Ovaries            ---
+  Ra-223/Skin             Pb-211/Skin               ---
+  Ra-223/Spleen           Pb-211/Spleen             ---
 
-  Th-228/ST0              Pb-212/Plasma             7.39
-  Th-228/ST1              Pb-212/Plasma             7.39
-  Th-228/ST2              Pb-212/Plasma             7.39
-  Ra-224/ST0              Pb-212/Plasma             7.39
-  Ra-224/ST1              Pb-212/Plasma             7.39
-  Ra-224/ST2              Pb-212/Plasma             7.39
-  Po-216/Other            Pb-212/Plasma             7.39
+  Th-227/ST0              Pb-211/Plasma             7.39
+  Th-227/ST1              Pb-211/Plasma             7.39
+  Th-227/ST2              Pb-211/Plasma             7.39
+  Ra-223/ST0              Pb-211/Plasma             7.39
+  Ra-223/ST1              Pb-211/Plasma             7.39
+  Ra-223/ST2              Pb-211/Plasma             7.39
+  Po-215/Other            Pb-211/Plasma             7.39
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのビスマスは、ラジウム子孫元素としてのモデルを用いる
@@ -1616,7 +1616,7 @@ Th-228 Inhalation, WaterSoluble
 # > (483) 鉛の子孫元素としてのビスマスの全身モデルは、本論文で適用されているビスマスの特性モデルに
 # > 基づいています。...
 
-[Bi-212:compartment]
+[Bi-211:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -1711,7 +1711,7 @@ Th-228 Inhalation, WaterSoluble
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Bi-212:transfer]
+[Bi-211:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
@@ -1901,52 +1901,52 @@ Th-228 Inhalation, WaterSoluble
   C-marrow                Plasma                    0.0347      # T-marrow→Plasmaの移行速度と同じ
 
 # from parent to progeny
-  Th-228/ET1-F            Bi-212/ET1-F              ---
-  Th-228/ET2-F            Bi-212/ET2-F              ---
-  Th-228/ETseq-F          Bi-212/ETseq-F            ---
-  Th-228/LNET-F           Bi-212/LNET-F             ---
-  Th-228/BB-F             Bi-212/BB-F               ---
-  Th-228/BBseq-F          Bi-212/BBseq-F            ---
-  Th-228/bb-F             Bi-212/bb-F               ---
-  Th-228/bbseq-F          Bi-212/bbseq-F            ---
-  Th-228/ALV-F            Bi-212/ALV-F              ---
-  Th-228/INT-F            Bi-212/INT-F              ---
-  Th-228/LNTH-F           Bi-212/LNTH-F             ---
-  Th-228/ET1-S            Bi-212/ET1-S              ---
-  Th-228/ET2-S            Bi-212/ET2-S              ---
-  Th-228/ETseq-S          Bi-212/ETseq-S            ---
-  Th-228/LNET-S           Bi-212/LNET-S             ---
-  Th-228/BB-S             Bi-212/BB-S               ---
-  Th-228/BBseq-S          Bi-212/BBseq-S            ---
-  Th-228/bb-S             Bi-212/bb-S               ---
-  Th-228/bbseq-S          Bi-212/bbseq-S            ---
-  Th-228/ALV-S            Bi-212/ALV-S              ---
-  Th-228/INT-S            Bi-212/INT-S              ---
-  Th-228/LNTH-S           Bi-212/LNTH-S             ---
-  Th-228/ET2-B            Bi-212/ET2-B              ---
-  Th-228/ETseq-B          Bi-212/ETseq-B            ---
-  Th-228/LNET-B           Bi-212/LNET-B             ---
-  Th-228/BB-B             Bi-212/BB-B               ---
-  Th-228/BBseq-B          Bi-212/BBseq-B            ---
-  Th-228/bb-B             Bi-212/bb-B               ---
-  Th-228/bbseq-B          Bi-212/bbseq-B            ---
-  Th-228/ALV-B            Bi-212/ALV-B              ---
-  Th-228/INT-B            Bi-212/INT-B              ---
-  Th-228/LNTH-B           Bi-212/LNTH-B             ---
-  Th-228/Environment      Bi-212/Environment        ---
+  Th-227/ET1-F            Bi-211/ET1-F              ---
+  Th-227/ET2-F            Bi-211/ET2-F              ---
+  Th-227/ETseq-F          Bi-211/ETseq-F            ---
+  Th-227/LNET-F           Bi-211/LNET-F             ---
+  Th-227/BB-F             Bi-211/BB-F               ---
+  Th-227/BBseq-F          Bi-211/BBseq-F            ---
+  Th-227/bb-F             Bi-211/bb-F               ---
+  Th-227/bbseq-F          Bi-211/bbseq-F            ---
+  Th-227/ALV-F            Bi-211/ALV-F              ---
+  Th-227/INT-F            Bi-211/INT-F              ---
+  Th-227/LNTH-F           Bi-211/LNTH-F             ---
+  Th-227/ET1-S            Bi-211/ET1-S              ---
+  Th-227/ET2-S            Bi-211/ET2-S              ---
+  Th-227/ETseq-S          Bi-211/ETseq-S            ---
+  Th-227/LNET-S           Bi-211/LNET-S             ---
+  Th-227/BB-S             Bi-211/BB-S               ---
+  Th-227/BBseq-S          Bi-211/BBseq-S            ---
+  Th-227/bb-S             Bi-211/bb-S               ---
+  Th-227/bbseq-S          Bi-211/bbseq-S            ---
+  Th-227/ALV-S            Bi-211/ALV-S              ---
+  Th-227/INT-S            Bi-211/INT-S              ---
+  Th-227/LNTH-S           Bi-211/LNTH-S             ---
+  Th-227/ET2-B            Bi-211/ET2-B              ---
+  Th-227/ETseq-B          Bi-211/ETseq-B            ---
+  Th-227/LNET-B           Bi-211/LNET-B             ---
+  Th-227/BB-B             Bi-211/BB-B               ---
+  Th-227/BBseq-B          Bi-211/BBseq-B            ---
+  Th-227/bb-B             Bi-211/bb-B               ---
+  Th-227/bbseq-B          Bi-211/bbseq-B            ---
+  Th-227/ALV-B            Bi-211/ALV-B              ---
+  Th-227/INT-B            Bi-211/INT-B              ---
+  Th-227/LNTH-B           Bi-211/LNTH-B             ---
+  Th-227/Environment      Bi-211/Environment        ---
 
-  Th-228/Oralcavity       Bi-212/Oralcavity         ---
-  Th-228/Oesophagus-f     Bi-212/Oesophagus-f       ---
-  Th-228/Oesophagus-s     Bi-212/Oesophagus-s       ---
-  Th-228/St-con           Bi-212/St-con             ---
-  Th-228/SI-con           Bi-212/SI-con             ---
-  Th-228/SI-conRe         Bi-212/SI-conRe           ---
-  Th-228/RC-con           Bi-212/RC-con             ---
-  Th-228/LC-con           Bi-212/LC-con             ---
-  Th-228/RS-con           Bi-212/RS-con             ---
-  Th-228/Faeces           Bi-212/Faeces             ---
-  Th-228/UB-con           Bi-212/UB-con             ---
-  Th-228/Urine            Bi-212/Urine              ---
+  Th-227/Oralcavity       Bi-211/Oralcavity         ---
+  Th-227/Oesophagus-f     Bi-211/Oesophagus-f       ---
+  Th-227/Oesophagus-s     Bi-211/Oesophagus-s       ---
+  Th-227/St-con           Bi-211/St-con             ---
+  Th-227/SI-con           Bi-211/SI-con             ---
+  Th-227/SI-conRe         Bi-211/SI-conRe           ---
+  Th-227/RC-con           Bi-211/RC-con             ---
+  Th-227/LC-con           Bi-211/LC-con             ---
+  Th-227/RS-con           Bi-211/RS-con             ---
+  Th-227/Faeces           Bi-211/Faeces             ---
+  Th-227/UB-con           Bi-211/UB-con             ---
+  Th-227/Urine            Bi-211/Urine              ---
 
 # ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
 # > (483) ... Bismuth produced in a trabecular or cortical bone
@@ -1957,40 +1957,40 @@ Th-228 Inhalation, WaterSoluble
 # > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
-  Th-228/Blood            Bi-212/Plasma          1000
-  Pb-212/Plasma           Bi-212/Plasma             ---
-  Pb-212/RBC              Bi-212/RBC                ---
-  Th-228/C-bone-S         Bi-212/C-bone-S           ---
-  Th-228/T-bone-S         Bi-212/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Bi-212/Plasma         $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Bi-212/Plasma         $(0.18 / 365.25)
-  Ra-224/Noch-C-bone-V    Bi-212/Plasma         $(0.03 / 365.25)
-  Ra-224/Noch-T-bone-V    Bi-212/Plasma         $(0.18 / 365.25)
-  Th-228/C-marrow         Bi-212/C-marrow           ---
-  Th-228/T-marrow         Bi-212/T-marrow           ---
-  Th-228/Liver1           Bi-212/Liver1             ---
-  Th-228/Liver2           Bi-212/Liver2             ---
-  Th-228/Kidneys1         Bi-212/Kidneys1           ---
-  Th-228/Kidneys2         Bi-212/Kidneys2           ---
-  Th-228/Testes           Bi-212/Testes             ---
-  Th-228/Ovaries          Bi-212/Ovaries            ---
-  Ra-224/Skin             Bi-212/Skin               ---
-  Ra-224/Spleen           Bi-212/Spleen             ---
+  Th-227/Blood            Bi-211/Plasma          1000
+  Pb-211/Plasma           Bi-211/Plasma             ---
+  Pb-211/RBC              Bi-211/RBC                ---
+  Th-227/C-bone-S         Bi-211/C-bone-S           ---
+  Th-227/T-bone-S         Bi-211/T-bone-S           ---
+  Ra-223/Exch-C-bone-V    Bi-211/Plasma         $(0.03 / 365.25)
+  Ra-223/Exch-T-bone-V    Bi-211/Plasma         $(0.18 / 365.25)
+  Ra-223/Noch-C-bone-V    Bi-211/Plasma         $(0.03 / 365.25)
+  Ra-223/Noch-T-bone-V    Bi-211/Plasma         $(0.18 / 365.25)
+  Th-227/C-marrow         Bi-211/C-marrow           ---
+  Th-227/T-marrow         Bi-211/T-marrow           ---
+  Th-227/Liver1           Bi-211/Liver1             ---
+  Th-227/Liver2           Bi-211/Liver2             ---
+  Th-227/Kidneys1         Bi-211/Kidneys1           ---
+  Th-227/Kidneys2         Bi-211/Kidneys2           ---
+  Th-227/Testes           Bi-211/Testes             ---
+  Th-227/Ovaries          Bi-211/Ovaries            ---
+  Ra-223/Skin             Bi-211/Skin               ---
+  Ra-223/Spleen           Bi-211/Spleen             ---
 
 # Publ.137 Para.482には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
 # ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
 # を採用する。
 
-  Th-228/ST0              Bi-212/Plasma            66.54
-  Th-228/ST1              Bi-212/Plasma            66.54
-  Th-228/ST2              Bi-212/Plasma            66.54
-  Ra-224/ST0              Bi-212/Plasma            66.54
-  Ra-224/ST1              Bi-212/Plasma            66.54
-  Ra-224/ST2              Bi-212/Plasma            66.54
-  Po-216/Other            Bi-212/Plasma            66.54
-  Pb-212/ST0              Bi-212/Plasma            66.54
-  Pb-212/ST1              Bi-212/Plasma            66.54
-  Pb-212/ST2              Bi-212/Plasma            66.54
+  Th-227/ST0              Bi-211/Plasma            66.54
+  Th-227/ST1              Bi-211/Plasma            66.54
+  Th-227/ST2              Bi-211/Plasma            66.54
+  Ra-223/ST0              Bi-211/Plasma            66.54
+  Ra-223/ST1              Bi-211/Plasma            66.54
+  Ra-223/ST2              Bi-211/Plasma            66.54
+  Po-215/Other            Bi-211/Plasma            66.54
+  Pb-211/ST0              Bi-211/Plasma            66.54
+  Pb-211/ST1              Bi-211/Plasma            66.54
+  Pb-211/ST2              Bi-211/Plasma            66.54
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのポロニウムは、ラジウム子孫元素としてのモデルを用いる
@@ -2004,7 +2004,7 @@ Th-228 Inhalation, WaterSoluble
 # > 適用されている全身モデル(第11節)と同一である。ただし、子孫核種モデルでは、呼吸器系と
 # > 消化器系から血液に入るポロニウムを区別しない点が異なる。 ...
 
-[Po-212:compartment]
+[Po-211:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -2089,7 +2089,7 @@ Th-228 Inhalation, WaterSoluble
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Po-212:transfer]
+[Po-211:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
@@ -2260,52 +2260,52 @@ Th-228 Inhalation, WaterSoluble
   C-marrow                Plasma1                   0.099       # T-marrow→Plasma1の移行速度と同じ
 
 # from parent to progeny
-  Th-228/ET1-F            Po-212/ET1-F              ---
-  Th-228/ET2-F            Po-212/ET2-F              ---
-  Th-228/ETseq-F          Po-212/ETseq-F            ---
-  Th-228/LNET-F           Po-212/LNET-F             ---
-  Th-228/BB-F             Po-212/BB-F               ---
-  Th-228/BBseq-F          Po-212/BBseq-F            ---
-  Th-228/bb-F             Po-212/bb-F               ---
-  Th-228/bbseq-F          Po-212/bbseq-F            ---
-  Th-228/ALV-F            Po-212/ALV-F              ---
-  Th-228/INT-F            Po-212/INT-F              ---
-  Th-228/LNTH-F           Po-212/LNTH-F             ---
-  Th-228/ET1-S            Po-212/ET1-S              ---
-  Th-228/ET2-S            Po-212/ET2-S              ---
-  Th-228/ETseq-S          Po-212/ETseq-S            ---
-  Th-228/LNET-S           Po-212/LNET-S             ---
-  Th-228/BB-S             Po-212/BB-S               ---
-  Th-228/BBseq-S          Po-212/BBseq-S            ---
-  Th-228/bb-S             Po-212/bb-S               ---
-  Th-228/bbseq-S          Po-212/bbseq-S            ---
-  Th-228/ALV-S            Po-212/ALV-S              ---
-  Th-228/INT-S            Po-212/INT-S              ---
-  Th-228/LNTH-S           Po-212/LNTH-S             ---
-  Th-228/ET2-B            Po-212/ET2-B              ---
-  Th-228/ETseq-B          Po-212/ETseq-B            ---
-  Th-228/LNET-B           Po-212/LNET-B             ---
-  Th-228/BB-B             Po-212/BB-B               ---
-  Th-228/BBseq-B          Po-212/BBseq-B            ---
-  Th-228/bb-B             Po-212/bb-B               ---
-  Th-228/bbseq-B          Po-212/bbseq-B            ---
-  Th-228/ALV-B            Po-212/ALV-B              ---
-  Th-228/INT-B            Po-212/INT-B              ---
-  Th-228/LNTH-B           Po-212/LNTH-B             ---
-  Th-228/Environment      Po-212/Environment        ---
+  Th-227/ET1-F            Po-211/ET1-F              ---
+  Th-227/ET2-F            Po-211/ET2-F              ---
+  Th-227/ETseq-F          Po-211/ETseq-F            ---
+  Th-227/LNET-F           Po-211/LNET-F             ---
+  Th-227/BB-F             Po-211/BB-F               ---
+  Th-227/BBseq-F          Po-211/BBseq-F            ---
+  Th-227/bb-F             Po-211/bb-F               ---
+  Th-227/bbseq-F          Po-211/bbseq-F            ---
+  Th-227/ALV-F            Po-211/ALV-F              ---
+  Th-227/INT-F            Po-211/INT-F              ---
+  Th-227/LNTH-F           Po-211/LNTH-F             ---
+  Th-227/ET1-S            Po-211/ET1-S              ---
+  Th-227/ET2-S            Po-211/ET2-S              ---
+  Th-227/ETseq-S          Po-211/ETseq-S            ---
+  Th-227/LNET-S           Po-211/LNET-S             ---
+  Th-227/BB-S             Po-211/BB-S               ---
+  Th-227/BBseq-S          Po-211/BBseq-S            ---
+  Th-227/bb-S             Po-211/bb-S               ---
+  Th-227/bbseq-S          Po-211/bbseq-S            ---
+  Th-227/ALV-S            Po-211/ALV-S              ---
+  Th-227/INT-S            Po-211/INT-S              ---
+  Th-227/LNTH-S           Po-211/LNTH-S             ---
+  Th-227/ET2-B            Po-211/ET2-B              ---
+  Th-227/ETseq-B          Po-211/ETseq-B            ---
+  Th-227/LNET-B           Po-211/LNET-B             ---
+  Th-227/BB-B             Po-211/BB-B               ---
+  Th-227/BBseq-B          Po-211/BBseq-B            ---
+  Th-227/bb-B             Po-211/bb-B               ---
+  Th-227/bbseq-B          Po-211/bbseq-B            ---
+  Th-227/ALV-B            Po-211/ALV-B              ---
+  Th-227/INT-B            Po-211/INT-B              ---
+  Th-227/LNTH-B           Po-211/LNTH-B             ---
+  Th-227/Environment      Po-211/Environment        ---
 
-  Th-228/Oralcavity       Po-212/Oralcavity         ---
-  Th-228/Oesophagus-f     Po-212/Oesophagus-f       ---
-  Th-228/Oesophagus-s     Po-212/Oesophagus-s       ---
-  Th-228/St-con           Po-212/St-con             ---
-  Th-228/SI-con           Po-212/SI-con             ---
-  Th-228/SI-conRe         Po-212/SI-conRe           ---
-  Th-228/RC-con           Po-212/RC-con             ---
-  Th-228/LC-con           Po-212/LC-con             ---
-  Th-228/RS-con           Po-212/RS-con             ---
-  Th-228/Faeces           Po-212/Faeces             ---
-  Th-228/UB-con           Po-212/UB-con             ---
-  Th-228/Urine            Po-212/Urine              ---
+  Th-227/Oralcavity       Po-211/Oralcavity         ---
+  Th-227/Oesophagus-f     Po-211/Oesophagus-f       ---
+  Th-227/Oesophagus-s     Po-211/Oesophagus-s       ---
+  Th-227/St-con           Po-211/St-con             ---
+  Th-227/SI-con           Po-211/SI-con             ---
+  Th-227/SI-conRe         Po-211/SI-conRe           ---
+  Th-227/RC-con           Po-211/RC-con             ---
+  Th-227/LC-con           Po-211/LC-con             ---
+  Th-227/RS-con           Po-211/RS-con             ---
+  Th-227/Faeces           Po-211/Faeces             ---
+  Th-227/UB-con           Po-211/UB-con             ---
+  Th-227/Urine            Po-211/Urine              ---
 
 # ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
 # > (484) ... Polonium produced in a blood compartment
@@ -2323,39 +2323,39 @@ Th-228 Inhalation, WaterSoluble
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
 # > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
 
-  Th-228/Blood            Po-212/Plasma2         1000
-  Pb-212/Plasma           Po-212/Plasma2         1000               # Bi-212/Plasmaを経由する
-  Po-216/RBC              Po-212/RBC                ---
-  Th-228/C-bone-S         Po-212/C-bone-S           ---
-  Th-228/T-bone-S         Po-212/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Po-212/Plasma2        $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Po-212/Plasma2        $(0.18 / 365.25)
-  Th-228/C-bone-V         Po-212/Plasma2        $(0.03 / 365.25)    # Ra-224/Noch-C-bone-Vを経由する
-  Th-228/T-bone-V         Po-212/Plasma2        $(0.18 / 365.25)    # Ra-224/Noch-T-bone-Vを経由する
-  Th-228/C-marrow         Po-212/C-marrow           ---
-  Th-228/T-marrow         Po-212/T-marrow           ---
-  Th-228/Liver1           Po-212/Liver1             ---
-  Th-228/Liver2           Po-212/Liver2             ---
-  Th-228/Kidneys1         Po-212/Kidneys1           ---
-  Th-228/Kidneys2         Po-212/Kidneys2           ---
-  Th-228/Testes           Po-212/Testes             ---
-  Th-228/Ovaries          Po-212/Ovaries            ---
-  Ra-224/Skin             Po-212/Skin               ---
-  Ra-224/Spleen           Po-212/Spleen             ---
+  Th-227/Blood            Po-211/Plasma2         1000
+  Pb-211/Plasma           Po-211/Plasma2         1000               # Bi-211/Plasmaを経由する
+  Po-215/RBC              Po-211/RBC                ---
+  Th-227/C-bone-S         Po-211/C-bone-S           ---
+  Th-227/T-bone-S         Po-211/T-bone-S           ---
+  Ra-223/Exch-C-bone-V    Po-211/Plasma2        $(0.03 / 365.25)
+  Ra-223/Exch-T-bone-V    Po-211/Plasma2        $(0.18 / 365.25)
+  Th-227/C-bone-V         Po-211/Plasma2        $(0.03 / 365.25)    # Ra-223/Noch-C-bone-Vを経由する
+  Th-227/T-bone-V         Po-211/Plasma2        $(0.18 / 365.25)    # Ra-223/Noch-T-bone-Vを経由する
+  Th-227/C-marrow         Po-211/C-marrow           ---
+  Th-227/T-marrow         Po-211/T-marrow           ---
+  Th-227/Liver1           Po-211/Liver1             ---
+  Th-227/Liver2           Po-211/Liver2             ---
+  Th-227/Kidneys1         Po-211/Kidneys1           ---
+  Th-227/Kidneys2         Po-211/Kidneys2           ---
+  Th-227/Testes           Po-211/Testes             ---
+  Th-227/Ovaries          Po-211/Ovaries            ---
+  Ra-223/Skin             Po-211/Skin               ---
+  Ra-223/Spleen           Po-211/Spleen             ---
 
-  Th-228/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Po-216/Other            Po-212/Other              ---
-  Pb-212/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Pb-212/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Pb-212/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Bi-212/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Bi-212/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Bi-212/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
+  Th-227/ST0              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Th-227/ST1              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Th-227/ST2              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Ra-223/ST0              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Ra-223/ST1              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Ra-223/ST2              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Po-215/Other            Po-211/Other              ---
+  Pb-211/ST0              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Pb-211/ST1              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Pb-211/ST2              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-211/ST0              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-211/ST1              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
+  Bi-211/ST2              Po-211/Plasma2        $(0.693 / 7)    # 半減期7日
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのタリウムは、ラジウム子孫元素としてのモデルを用いる
@@ -2365,7 +2365,7 @@ Th-228 Inhalation, WaterSoluble
 # > intake of lead. ...
 # > (481) 鉛摂取後に体内で生成されるタリウムには、以下の全身モデルが適用されます。 ...
 
-[Tl-208:compartment]
+[Tl-207:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -2447,7 +2447,7 @@ Th-228 Inhalation, WaterSoluble
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Tl-208:transfer]
+[Tl-207:transfer]
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
@@ -2626,52 +2626,52 @@ Th-228 Inhalation, WaterSoluble
   C-marrow                Plasma                    2.5             # T-marrow→Plasmaの移行速度と同じ
 
 # from parent to progeny
-  Th-228/ET1-F            Tl-208/ET1-F              ---
-  Th-228/ET2-F            Tl-208/ET2-F              ---
-  Th-228/ETseq-F          Tl-208/ETseq-F            ---
-  Th-228/LNET-F           Tl-208/LNET-F             ---
-  Th-228/BB-F             Tl-208/BB-F               ---
-  Th-228/BBseq-F          Tl-208/BBseq-F            ---
-  Th-228/bb-F             Tl-208/bb-F               ---
-  Th-228/bbseq-F          Tl-208/bbseq-F            ---
-  Th-228/ALV-F            Tl-208/ALV-F              ---
-  Th-228/INT-F            Tl-208/INT-F              ---
-  Th-228/LNTH-F           Tl-208/LNTH-F             ---
-  Th-228/ET1-S            Tl-208/ET1-S              ---
-  Th-228/ET2-S            Tl-208/ET2-S              ---
-  Th-228/ETseq-S          Tl-208/ETseq-S            ---
-  Th-228/LNET-S           Tl-208/LNET-S             ---
-  Th-228/BB-S             Tl-208/BB-S               ---
-  Th-228/BBseq-S          Tl-208/BBseq-S            ---
-  Th-228/bb-S             Tl-208/bb-S               ---
-  Th-228/bbseq-S          Tl-208/bbseq-S            ---
-  Th-228/ALV-S            Tl-208/ALV-S              ---
-  Th-228/INT-S            Tl-208/INT-S              ---
-  Th-228/LNTH-S           Tl-208/LNTH-S             ---
-  Th-228/ET2-B            Tl-208/ET2-B              ---
-  Th-228/ETseq-B          Tl-208/ETseq-B            ---
-  Th-228/LNET-B           Tl-208/LNET-B             ---
-  Th-228/BB-B             Tl-208/BB-B               ---
-  Th-228/BBseq-B          Tl-208/BBseq-B            ---
-  Th-228/bb-B             Tl-208/bb-B               ---
-  Th-228/bbseq-B          Tl-208/bbseq-B            ---
-  Th-228/ALV-B            Tl-208/ALV-B              ---
-  Th-228/INT-B            Tl-208/INT-B              ---
-  Th-228/LNTH-B           Tl-208/LNTH-B             ---
-  Th-228/Environment      Tl-208/Environment        ---
+  Th-227/ET1-F            Tl-207/ET1-F              ---
+  Th-227/ET2-F            Tl-207/ET2-F              ---
+  Th-227/ETseq-F          Tl-207/ETseq-F            ---
+  Th-227/LNET-F           Tl-207/LNET-F             ---
+  Th-227/BB-F             Tl-207/BB-F               ---
+  Th-227/BBseq-F          Tl-207/BBseq-F            ---
+  Th-227/bb-F             Tl-207/bb-F               ---
+  Th-227/bbseq-F          Tl-207/bbseq-F            ---
+  Th-227/ALV-F            Tl-207/ALV-F              ---
+  Th-227/INT-F            Tl-207/INT-F              ---
+  Th-227/LNTH-F           Tl-207/LNTH-F             ---
+  Th-227/ET1-S            Tl-207/ET1-S              ---
+  Th-227/ET2-S            Tl-207/ET2-S              ---
+  Th-227/ETseq-S          Tl-207/ETseq-S            ---
+  Th-227/LNET-S           Tl-207/LNET-S             ---
+  Th-227/BB-S             Tl-207/BB-S               ---
+  Th-227/BBseq-S          Tl-207/BBseq-S            ---
+  Th-227/bb-S             Tl-207/bb-S               ---
+  Th-227/bbseq-S          Tl-207/bbseq-S            ---
+  Th-227/ALV-S            Tl-207/ALV-S              ---
+  Th-227/INT-S            Tl-207/INT-S              ---
+  Th-227/LNTH-S           Tl-207/LNTH-S             ---
+  Th-227/ET2-B            Tl-207/ET2-B              ---
+  Th-227/ETseq-B          Tl-207/ETseq-B            ---
+  Th-227/LNET-B           Tl-207/LNET-B             ---
+  Th-227/BB-B             Tl-207/BB-B               ---
+  Th-227/BBseq-B          Tl-207/BBseq-B            ---
+  Th-227/bb-B             Tl-207/bb-B               ---
+  Th-227/bbseq-B          Tl-207/bbseq-B            ---
+  Th-227/ALV-B            Tl-207/ALV-B              ---
+  Th-227/INT-B            Tl-207/INT-B              ---
+  Th-227/LNTH-B           Tl-207/LNTH-B             ---
+  Th-227/Environment      Tl-207/Environment        ---
 
-  Th-228/Oralcavity       Tl-208/Oralcavity         ---
-  Th-228/Oesophagus-f     Tl-208/Oesophagus-f       ---
-  Th-228/Oesophagus-s     Tl-208/Oesophagus-s       ---
-  Th-228/St-con           Tl-208/St-con             ---
-  Th-228/SI-con           Tl-208/SI-con             ---
-  Th-228/SI-conRe         Tl-208/SI-conRe           ---
-  Th-228/RC-con           Tl-208/RC-con             ---
-  Th-228/LC-con           Tl-208/LC-con             ---
-  Th-228/RS-con           Tl-208/RS-con             ---
-  Th-228/Faeces           Tl-208/Faeces             ---
-  Th-228/UB-con           Tl-208/UB-con             ---
-  Th-228/Urine            Tl-208/Urine              ---
+  Th-227/Oralcavity       Tl-207/Oralcavity         ---
+  Th-227/Oesophagus-f     Tl-207/Oesophagus-f       ---
+  Th-227/Oesophagus-s     Tl-207/Oesophagus-s       ---
+  Th-227/St-con           Tl-207/St-con             ---
+  Th-227/SI-con           Tl-207/SI-con             ---
+  Th-227/SI-conRe         Tl-207/SI-conRe           ---
+  Th-227/RC-con           Tl-207/RC-con             ---
+  Th-227/LC-con           Tl-207/LC-con             ---
+  Th-227/RS-con           Tl-207/RS-con             ---
+  Th-227/Faeces           Tl-207/Faeces             ---
+  Th-227/UB-con           Tl-207/UB-con             ---
+  Th-227/Urine            Tl-207/Urine              ---
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > (481) ... Thallium produced by radioactive
@@ -2688,36 +2688,36 @@ Th-228 Inhalation, WaterSoluble
 # > 血漿に移行すると仮定されます。皮質骨または海綿骨の容積コンパートメントで生成されたタリウムは、
 # > その骨の種類の基準代謝速度で血漿に移行すると仮定されます。
 
-  Th-228/Blood            Tl-208/Plasma          1000
-  Pb-212/Plasma           Tl-208/Plasma             ---
-  Po-216/RBC              Tl-208/RBC                ---
-  Th-228/C-bone-S         Tl-208/C-bone-S           ---
-  Th-228/T-bone-S         Tl-208/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Tl-208/Plasma         $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Tl-208/Plasma         $(0.18 / 365.25)
-  Th-228/C-bone-V         Tl-208/Plasma         $(0.03 / 365.25)    # Ra-224/Noch-C-bone-Vを経由する
-  Th-228/T-bone-V         Tl-208/Plasma         $(0.18 / 365.25)    # Ra-224/Noch-T-bone-Vを経由する
-  Th-228/C-marrow         Tl-208/C-marrow           ---
-  Th-228/T-marrow         Tl-208/T-marrow           ---
-  Th-228/Liver1           Tl-208/Liver              ---
-  Th-228/Kidneys2         Tl-208/Kidneys            ---
-  Th-228/Testes           Tl-208/Testes             ---
-  Th-228/Ovaries          Tl-208/Ovaries            ---
-  Ra-224/Skin             Tl-208/Skin               ---
-  Ra-224/Spleen           Tl-208/Spleen             ---
+  Th-227/Blood            Tl-207/Plasma          1000
+  Pb-211/Plasma           Tl-207/Plasma             ---
+  Po-215/RBC              Tl-207/RBC                ---
+  Th-227/C-bone-S         Tl-207/C-bone-S           ---
+  Th-227/T-bone-S         Tl-207/T-bone-S           ---
+  Ra-223/Exch-C-bone-V    Tl-207/Plasma         $(0.03 / 365.25)
+  Ra-223/Exch-T-bone-V    Tl-207/Plasma         $(0.18 / 365.25)
+  Th-227/C-bone-V         Tl-207/Plasma         $(0.03 / 365.25)    # Ra-223/Noch-C-bone-Vを経由する
+  Th-227/T-bone-V         Tl-207/Plasma         $(0.18 / 365.25)    # Ra-223/Noch-T-bone-Vを経由する
+  Th-227/C-marrow         Tl-207/C-marrow           ---
+  Th-227/T-marrow         Tl-207/T-marrow           ---
+  Th-227/Liver1           Tl-207/Liver              ---
+  Th-227/Kidneys2         Tl-207/Kidneys            ---
+  Th-227/Testes           Tl-207/Testes             ---
+  Th-227/Ovaries          Tl-207/Ovaries            ---
+  Ra-223/Skin             Tl-207/Skin               ---
+  Ra-223/Spleen           Tl-207/Spleen             ---
 
-  Th-228/ST0              Tl-208/Plasma             2.5
-  Th-228/ST1              Tl-208/Plasma             2.5
-  Th-228/ST2              Tl-208/Plasma             2.5
-  Th-228/Liver2           Tl-208/Plasma             2.5
-  Th-228/Kidneys1         Tl-208/Plasma             2.5
-  Ra-224/ST0              Tl-208/Plasma             2.5
-  Ra-224/ST1              Tl-208/Plasma             2.5
-  Ra-224/ST2              Tl-208/Plasma             2.5
-  Po-216/Other            Tl-208/Plasma             2.5
-  Pb-212/ST0              Tl-208/Plasma             2.5
-  Pb-212/ST1              Tl-208/Plasma             2.5
-  Pb-212/ST2              Tl-208/Plasma             2.5
-  Bi-212/ST0              Tl-208/Plasma             2.5
-  Bi-212/ST1              Tl-208/Plasma             2.5
-  Bi-212/ST2              Tl-208/Plasma             2.5
+  Th-227/ST0              Tl-207/Plasma             2.5
+  Th-227/ST1              Tl-207/Plasma             2.5
+  Th-227/ST2              Tl-207/Plasma             2.5
+  Th-227/Liver2           Tl-207/Plasma             2.5
+  Th-227/Kidneys1         Tl-207/Plasma             2.5
+  Ra-223/ST0              Tl-207/Plasma             2.5
+  Ra-223/ST1              Tl-207/Plasma             2.5
+  Ra-223/ST2              Tl-207/Plasma             2.5
+  Po-215/Other            Tl-207/Plasma             2.5
+  Pb-211/ST0              Tl-207/Plasma             2.5
+  Pb-211/ST1              Tl-207/Plasma             2.5
+  Pb-211/ST2              Tl-207/Plasma             2.5
+  Bi-211/ST0              Tl-207/Plasma             2.5
+  Bi-211/ST1              Tl-207/Plasma             2.5
+  Bi-211/ST2              Tl-207/Plasma             2.5
