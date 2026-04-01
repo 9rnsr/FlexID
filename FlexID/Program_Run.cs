@@ -42,7 +42,7 @@ internal class Program_Run
         Arity = ArgumentArity.OneOrMore,
     };
 
-    static readonly Option<FileInfo> ComputeTimeMeshFileOption = new("--compute-mesh", "-mo")
+    static readonly Option<FileInfo> ComputeTimeMeshFileOption = new("--compute-mesh", "-mc")
     {
         HelpName = "path",
         Description = "The computational time mesh file",
