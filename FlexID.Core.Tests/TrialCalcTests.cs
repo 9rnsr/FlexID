@@ -6,16 +6,16 @@ public class TrialCalcTests
     private string TestDir => TestFiles.Combine("TrialCalc");
 
     [TestMethod]
-    [DataRow("56-Ba/Ba-133/Ba-133_ing-Insoluble")]
-    [DataRow("56-Ba/Ba-133/Ba-133_ing-Soluble")]
-    [DataRow("56-Ba/Ba-133/Ba-133_inh-TypeF")]
-    [DataRow("56-Ba/Ba-133/Ba-133_inh-TypeM")]
-    [DataRow("56-Ba/Ba-133/Ba-133_inh-TypeS")]
-    [DataRow("38-Sr/Sr-90/Sr-90_ing-Other")]
-    [DataRow("38-Sr/Sr-90/Sr-90_ing-Titanate")]
-    [DataRow("38-Sr/Sr-90/Sr-90_inh-TypeF")]
-    [DataRow("38-Sr/Sr-90/Sr-90_inh-TypeM")]
-    [DataRow("38-Sr/Sr-90/Sr-90_inh-TypeS")]
+    [DataRow("56-Ba/Ba-133/Ba-133_ing_Insoluble")]
+    [DataRow("56-Ba/Ba-133/Ba-133_ing_Soluble")]
+    [DataRow("56-Ba/Ba-133/Ba-133_inh_Aerosols-TypeF")]
+    [DataRow("56-Ba/Ba-133/Ba-133_inh_Aerosols-TypeM")]
+    [DataRow("56-Ba/Ba-133/Ba-133_inh_Aerosols-TypeS")]
+    [DataRow("38-Sr/Sr-90/Sr-90_ing_Other")]
+    [DataRow("38-Sr/Sr-90/Sr-90_ing_Titanate")]
+    [DataRow("38-Sr/Sr-90/Sr-90_inh_Aerosols-TypeF")]
+    [DataRow("38-Sr/Sr-90/Sr-90_inh_Aerosols-TypeM")]
+    [DataRow("38-Sr/Sr-90/Sr-90_inh_Aerosols-TypeS")]
     public void Test_OIR(string path)
     {
         var target = Path.GetFileNameWithoutExtension(path);
