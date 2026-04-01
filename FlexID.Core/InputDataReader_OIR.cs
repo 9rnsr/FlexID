@@ -394,7 +394,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 break;
 
             // 核種の定義行を読み込む。
-            var values = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split(StringSplitOptions.RemoveEmptyEntries);
 
             if (autoMode == true || autoMode == default && values.All(ElementTable.PatternNuclide.IsMatch))
             {
@@ -628,7 +628,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (CheckSectionHeader(line))
                 break;
 
-            var values = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split(StringSplitOptions.RemoveEmptyEntries);
 
             if (values.Length != 3)
             {
@@ -706,7 +706,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (CheckSectionHeader(line))
                 break;
 
-            var values = line.Split([" "], 3, StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split(3, StringSplitOptions.RemoveEmptyEntries);
 
             if (values.Length != 3)
             {

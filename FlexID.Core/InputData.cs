@@ -428,7 +428,7 @@ public abstract class InputDataReaderBase : IDisposable
         var fileLines = File.ReadLines(fileName);
         foreach (var line in fileLines.Skip(1))  // 1行目は読み飛ばす
         {
-            var values = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var values = line.Split(StringSplitOptions.RemoveEmptyEntries);
             var target = values[0];
             var weight = double.Parse(values[1]);
 

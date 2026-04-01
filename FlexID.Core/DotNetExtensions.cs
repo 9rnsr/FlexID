@@ -1,3 +1,18 @@
+namespace System
+{
+    public static class Extensions
+    {
+        public static string[] Split(this string value, StringSplitOptions options)
+        {
+            return value.Split(Array.Empty<char>(), options);
+        }
+
+        public static string[] Split(this string value, int count, StringSplitOptions options)
+        {
+            return value.Split(Array.Empty<char>(), count, options);
+        }
+    }
+}
 namespace System.Collections.Generic
 {
     public static class Extensions

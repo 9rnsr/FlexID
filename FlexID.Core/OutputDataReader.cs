@@ -162,12 +162,11 @@ public class OutputDataReader : IDisposable
 
         ReadEmptyLine();
 
-        var separators = new[] { ' ' };
         string[] ReadValues(string? ln)
         {
             if (ln is null)
                 throw new InvalidDataException("unrecognized file format");
-            return ln.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            return ln.Split(StringSplitOptions.RemoveEmptyEntries);
         }
 
         var outputHeaders = type == OutputType.Dose || type == OutputType.DoseRate

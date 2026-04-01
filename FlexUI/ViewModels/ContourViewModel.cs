@@ -16,7 +16,7 @@ public partial class ContourViewModel : ObservableObject
         var listFilePath = Path.Combine(AppResource.BaseDir, @"lib\FixList.txt");
         foreach (var line in File.ReadLines(listFilePath))
         {
-            var parts = line.Split([" "], StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(StringSplitOptions.RemoveEmptyEntries);
             var organ = parts[0];
 
             organs.Add(organ);

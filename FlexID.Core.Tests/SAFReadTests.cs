@@ -9,7 +9,7 @@ public class SAFReadTests
         var expectFile = TestFiles.Combine("SAFRead", "Ca-45_RadExpected.txt");
         var expectData = File.ReadAllLines(expectFile).Select(line =>
         {
-            var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(StringSplitOptions.RemoveEmptyEntries);
             return (int.Parse(parts[0]), double.Parse(parts[1]), double.Parse(parts[2]), parts[3]);
         });
 
@@ -26,7 +26,7 @@ public class SAFReadTests
         var expectFile = TestFiles.Combine("SAFRead", $"{nuc}_BetExpected.txt");
         var expectData = File.ReadLines(expectFile).Select(line =>
         {
-            var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(StringSplitOptions.RemoveEmptyEntries);
             return (double.Parse(parts[0]), double.Parse(parts[1]));
         });
 
