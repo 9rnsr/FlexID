@@ -44,6 +44,9 @@ public class TrialCalcTests
 
         main.Main(data, default);
 
+        File.ReadAllLines(Path.Combine(resultDir, target + ".log")).ShouldBe(
+        File.ReadAllLines(Path.Combine(expectDir, target + ".log")));
+
         File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));
 
