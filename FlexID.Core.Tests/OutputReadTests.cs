@@ -12,14 +12,14 @@ public class OutputReadTests
     ];
 
     [TestMethod]
-    [DataRow("Ba-133_ing-Insoluble")]
-    [DataRow("Sr-90_ing-Other", "Y-90")]
+    [DataRow("Ba-133_ing_Insoluble")]
+    [DataRow("Sr-90_ing_Other", "Y-90")]
     public void Test(string target, params string[] progeny)
     {
         var nuclide = target.Split('_')[0];
 
-        var TestDir = TestFiles.Combine("TrialCalc");
-        var expectDir = Path.Combine(TestDir, "Expect_OIR");
+        var testDir = TestFiles.Combine("TrialCalc");
+        var expectDir = Path.Combine(testDir, "Expect_OIR");
 
         foreach (var (type, suffix) in types)
         {
@@ -28,8 +28,8 @@ public class OutputReadTests
 
             data.Blocks.Select(n => n.Header)
                 .ShouldBe(type == OutputType.Dose || type == OutputType.DoseRate
-                    ? new[] { nuclide + " (Male)", nuclide + " (Female)", }
-                    : new[] { nuclide }.Concat(progeny));
+                    ? [nuclide + " (Male)", nuclide + " (Female)",]
+                    : [nuclide, .. progeny]);
         }
     }
 }
