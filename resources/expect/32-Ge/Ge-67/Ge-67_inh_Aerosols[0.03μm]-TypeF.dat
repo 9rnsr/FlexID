@@ -1,0 +1,12 @@
+Radionuclide	Ge-67
+Route of Intake	Inhalation
+Material	Aerosols Type F, fA=0.99
+AMTD/AMAD, µm	0.03
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	6.7E-2	4.1E-3	2.1E-2	2.6E-3	3.8E-3
+0.083333	6.8E-3	3.7E-4	9.8E-4	3.1E-4	4.7E-4
+0.125	6.6E-4	3.0E-5	5.5E-5	3.0E-5	4.7E-5
+0.25	5.4E-7	1.7E-8	1.9E-8	2.8E-8	4.6E-8
+0.375	4.6E-10	-	-	-	-

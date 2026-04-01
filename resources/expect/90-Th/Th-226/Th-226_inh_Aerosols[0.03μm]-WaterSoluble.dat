@@ -1,0 +1,14 @@
+Radionuclide	Th-226
+Route of Intake	Inhalation
+Material	Aerosols Water soluble forms, including thorium chloride, citrate, nitrate and sulphate; thorium fluoride, fA=5E-5
+AMTD/AMAD, µm	0.03
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.6E-1	9.8E-3	1.2E-1	1.2E-3	1.2E-3
+0.083333	4.0E-2	3.0E-3	3.1E-2	4.8E-4	3.1E-4
+0.125	1.0E-2	8.5E-4	7.9E-3	1.6E-4	7.6E-5
+0.25	1.7E-4	1.7E-5	1.3E-4	4.2E-6	1.1E-6
+0.375	2.9E-6	3.3E-7	2.2E-6	8.8E-8	1.6E-8
+0.5	4.9E-8	6.0E-9	3.7E-8	1.7E-9	2.5E-10
+0.625	8.2E-10	1.1E-10	6.2E-10	-	-

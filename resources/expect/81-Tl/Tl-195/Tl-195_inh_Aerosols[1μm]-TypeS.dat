@@ -1,0 +1,21 @@
+Radionuclide	Tl-195
+Route of Intake	Inhalation
+Material	Aerosols Type S, fA=1E-2
+AMTD/AMAD, µm	1
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Faeces (24-hour sample)	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.8E-1	-	7.9E-2	7.2E-2	2.1E-5	8.7E-6
+0.083333	1.5E-1	-	4.9E-2	3.9E-2	2.6E-5	1.0E-5
+0.125	8.3E-2	-	2.9E-2	2.1E-2	2.4E-5	8.8E-6
+0.25	1.3E-2	-	5.8E-3	3.4E-3	8.0E-6	2.9E-6
+0.375	2.2E-3	-	1.1E-3	5.6E-4	1.8E-6	6.4E-7
+0.5	3.6E-4	-	1.9E-4	9.3E-5	3.6E-7	1.3E-7
+0.625	5.8E-5	-	3.3E-5	1.5E-5	6.6E-8	2.3E-8
+0.75	9.3E-6	-	5.6E-6	2.6E-6	1.2E-8	4.1E-9
+0.875	1.5E-6	-	9.2E-7	4.2E-7	2.1E-9	7.2E-10
+1	2.4E-7	2.6E-8	1.5E-7	7.1E-8	3.5E-10	1.2E-10
+1.125	3.8E-8	-	2.4E-8	1.2E-8	-	-
+1.25	6.1E-9	-	3.8E-9	1.9E-9	-	-
+1.375	9.6E-10	-	5.9E-10	3.2E-10	-	-
+1.5	1.5E-10	-	-	-	-	-

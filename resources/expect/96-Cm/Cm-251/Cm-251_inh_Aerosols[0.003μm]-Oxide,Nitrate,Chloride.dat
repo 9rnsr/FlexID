@@ -1,0 +1,12 @@
+Radionuclide	Cm-251
+Route of Intake	Inhalation
+Material	Aerosols Curium oxide, nitrate and chloride, fA=2.5E-4
+AMTD/AMAD, µm	0.003
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	8.0E-2	1.7E-2	3.7E-2	4.9E-5	7.8E-5
+0.083333	6.5E-3	1.7E-3	2.9E-3	9.1E-6	1.5E-5
+0.125	5.5E-4	1.6E-4	2.3E-4	1.2E-6	2.0E-6
+0.25	3.2E-7	1.2E-7	1.3E-7	1.5E-9	2.5E-9
+0.375	1.9E-10	-	-	-	-

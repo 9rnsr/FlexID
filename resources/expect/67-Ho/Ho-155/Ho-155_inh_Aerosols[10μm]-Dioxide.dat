@@ -1,0 +1,17 @@
+Radionuclide	Ho-155
+Route of Intake	Inhalation
+Material	Aerosols Dioxide, fA=5E-7
+AMTD/AMAD, µm	10
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	3.2E-1	1.2E-1	1.6E-2	8.7E-7	2.2E-7
+0.083333	1.3E-1	5.5E-2	6.2E-3	6.6E-7	1.1E-7
+0.125	5.5E-2	2.5E-2	2.5E-3	3.8E-7	5.2E-8
+0.25	4.0E-3	2.2E-3	1.7E-4	4.8E-8	5.5E-9
+0.375	2.9E-4	1.8E-4	1.2E-5	4.9E-9	5.2E-10
+0.5	2.1E-5	1.5E-5	9.0E-7	4.6E-10	-
+0.625	1.5E-6	1.1E-6	6.7E-8	-	-
+0.75	1.1E-7	8.4E-8	4.9E-9	-	-
+0.875	7.6E-9	6.2E-9	3.6E-10	-	-
+1	5.3E-10	4.5E-10	-	-	-

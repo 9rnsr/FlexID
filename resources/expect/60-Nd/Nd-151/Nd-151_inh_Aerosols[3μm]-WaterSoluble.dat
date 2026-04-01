@@ -1,0 +1,11 @@
+Radionuclide	Nd-151
+Route of Intake	Inhalation
+Material	Aerosols Water soluble forms, including chloride and citrate, fA=2.5E-4
+AMTD/AMAD, µm	3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.8E-2	9.1E-3	3.6E-3	1.9E-5	2.5E-5
+0.083333	9.4E-4	3.5E-4	1.2E-4	1.3E-6	1.7E-6
+0.125	3.3E-5	1.4E-5	4.0E-6	6.8E-8	8.8E-8
+0.25	1.4E-9	7.2E-10	1.6E-10	-	-

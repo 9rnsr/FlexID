@@ -1,0 +1,12 @@
+Radionuclide	Se-81
+Route of Intake	Inhalation
+Material	Aerosols Type F, Selenium dioxide, selenious acid, elemental selenium, all unspecified forms, fA=0.8
+AMTD/AMAD, µm	20
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	6.9E-2	1.8E-2	1.4E-3	6.6E-4	1.1E-3
+0.083333	7.1E-3	1.5E-3	1.6E-4	1.1E-4	1.9E-4
+0.125	7.4E-4	1.3E-4	1.7E-5	1.4E-5	2.7E-5
+0.25	8.1E-7	1.3E-7	1.5E-8	1.9E-8	4.5E-8
+0.375	9.0E-10	1.5E-10	-	-	-

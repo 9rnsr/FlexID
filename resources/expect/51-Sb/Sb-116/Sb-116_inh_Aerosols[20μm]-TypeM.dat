@@ -1,0 +1,11 @@
+Radionuclide	Sb-116
+Route of Intake	Inhalation
+Material	Aerosols Type M, Trioxide, all unspecified forms, fA=1E-2
+AMTD/AMAD, µm	20
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	4.8E-2	1.8E-2	9.9E-4	3.8E-7	6.5E-6	7.1E-6
+0.083333	3.3E-3	1.4E-3	6.1E-5	4.1E-8	6.3E-7	6.7E-7
+0.125	2.4E-4	1.1E-4	4.0E-6	4.0E-9	5.9E-8	6.2E-8
+0.25	8.6E-8	4.8E-8	1.3E-9	-	-	-

@@ -1,0 +1,11 @@
+Radionuclide	Te-114
+Route of Intake	Inhalation
+Material	Aerosols Type M, Elemental tellurium, cadmium telluride, all unspecified forms, fA=6E-2
+AMTD/AMAD, µm	0.03
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	4.0E-2	2.4E-3	3.3E-2	5.6E-7	5.8E-5	8.3E-5
+0.083333	2.5E-3	1.9E-4	2.1E-3	7.4E-8	6.9E-6	1.0E-5
+0.125	1.7E-4	1.4E-5	1.3E-4	7.5E-9	6.4E-7	9.3E-7
+0.25	4.5E-8	4.6E-9	3.4E-8	-	2.9E-10	4.3E-10

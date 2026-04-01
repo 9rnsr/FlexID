@@ -1,0 +1,15 @@
+Radionuclide	W-179
+Route of Intake	Inhalation
+Material	Aerosols Type S, fA=5E-3
+AMTD/AMAD, µm	0.03
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.0E-1	1.2E-2	1.7E-1	1.4E-5	1.7E-5
+0.083333	6.5E-2	4.6E-3	5.5E-2	8.3E-6	8.7E-6
+0.125	2.1E-2	1.7E-3	1.8E-2	3.8E-6	3.6E-6
+0.25	7.2E-4	7.3E-5	6.0E-4	2.3E-7	1.7E-7
+0.375	2.5E-5	2.9E-6	2.1E-5	1.0E-8	6.9E-9
+0.5	8.5E-7	1.1E-7	7.1E-7	4.0E-10	2.6E-10
+0.625	2.9E-8	3.9E-9	2.4E-8	-	-
+0.75	1.0E-9	1.4E-10	8.3E-10	-	-

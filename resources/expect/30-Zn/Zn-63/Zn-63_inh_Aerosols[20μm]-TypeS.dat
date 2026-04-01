@@ -1,0 +1,15 @@
+Radionuclide	Zn-63
+Route of Intake	Inhalation
+Material	Aerosols Type S, Corrosion products, fA=5E-3
+AMTD/AMAD, µm	20
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.2E-1	8.4E-2	4.7E-3	8.6E-7	1.8E-5
+0.083333	7.4E-2	3.1E-2	1.4E-3	5.4E-7	1.4E-5
+0.125	2.5E-2	1.2E-2	4.5E-4	2.6E-7	8.2E-6
+0.25	9.4E-4	5.4E-4	1.5E-5	1.8E-8	7.1E-7
+0.375	3.6E-5	2.3E-5	5.7E-7	9.6E-10	4.1E-8
+0.5	1.4E-6	9.7E-7	2.2E-8	-	2.0E-9
+0.625	5.1E-8	3.9E-8	8.4E-10	-	-
+0.75	1.9E-9	1.5E-9	-	-	-

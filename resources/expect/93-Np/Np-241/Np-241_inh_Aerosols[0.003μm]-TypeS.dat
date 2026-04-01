@@ -1,0 +1,11 @@
+Radionuclide	Np-241
+Route of Intake	Inhalation
+Material	Aerosols Type S, Neptunium dioxide, fA=5E-6
+AMTD/AMAD, µm	0.003
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	4.8E-2	1.0E-2	2.2E-2	2.5E-6	2.9E-6
+0.083333	2.3E-3	6.0E-4	1.0E-3	2.6E-7	2.5E-7
+0.125	1.2E-4	3.4E-5	5.1E-5	2.0E-8	1.7E-8
+0.25	1.5E-8	5.4E-9	6.1E-9	-	-

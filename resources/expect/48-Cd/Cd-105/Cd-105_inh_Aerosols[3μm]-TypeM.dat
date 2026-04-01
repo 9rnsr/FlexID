@@ -1,0 +1,18 @@
+Radionuclide	Cd-105
+Route of Intake	Inhalation
+Material	Aerosols Type M, Oxide, chloride, sulphide, carbonate, telluride, all unspecified forms, fA=1E-2
+AMTD/AMAD, µm	3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Faeces (24-hour sample)	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	3.6E-1	-	1.2E-1	4.8E-2	1.1E-5	8.1E-4
+0.083333	1.7E-1	-	6.4E-2	2.1E-2	7.0E-6	6.3E-4
+0.125	7.9E-2	-	3.3E-2	9.5E-3	4.0E-6	4.1E-4
+0.25	8.1E-3	-	4.1E-3	9.2E-4	6.1E-7	7.1E-5
+0.375	8.3E-4	-	4.8E-4	9.2E-5	7.8E-8	9.6E-6
+0.5	8.6E-5	-	5.5E-5	9.4E-6	9.3E-9	1.2E-6
+0.625	8.8E-6	-	6.0E-6	9.8E-7	1.1E-9	1.4E-7
+0.75	9.0E-7	-	6.4E-7	1.0E-7	1.2E-10	1.5E-8
+0.875	9.1E-8	-	6.7E-8	1.1E-8	-	1.7E-9
+1	9.2E-9	1.2E-9	6.8E-9	1.1E-9	-	1.9E-10
+1.125	9.2E-10	-	6.9E-10	1.2E-10	-	-

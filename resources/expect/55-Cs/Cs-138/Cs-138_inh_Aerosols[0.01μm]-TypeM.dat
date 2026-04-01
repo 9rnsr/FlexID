@@ -1,0 +1,15 @@
+Radionuclide	Cs-138
+Route of Intake	Inhalation
+Material	Aerosols Type M, Irradiated fuel fragments, all unspecified forms, fA=0.2
+AMTD/AMAD, µm	0.01
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.5E-1	2.3E-2	1.9E-1	2.3E-4	5.0E-4
+0.083333	7.2E-2	8.0E-3	5.3E-2	1.4E-4	3.1E-4
+0.125	2.1E-2	2.6E-3	1.5E-2	6.1E-5	1.4E-4
+0.25	4.9E-4	7.4E-5	3.4E-4	3.0E-6	6.5E-6
+0.375	1.2E-5	1.9E-6	7.7E-6	1.0E-7	2.1E-7
+0.5	2.8E-7	4.8E-8	1.8E-7	3.1E-9	5.7E-9
+0.625	6.5E-9	1.2E-9	4.2E-9	-	1.4E-10
+0.75	1.5E-10	-	-	-	-

@@ -1,0 +1,11 @@
+Radionuclide	U-242
+Route of Intake	Inhalation
+Material	Aerosols Intermediate Type F/M: Uranyl nitrate, uranium peroxide hydrate, ammonium diuranate, uranium trioxide, fA=1.6E-2
+AMTD/AMAD, µm	0.3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.5E-2	3.6E-3	1.5E-2	4.8E-5	3.2E-5
+0.083333	2.0E-3	3.4E-4	1.2E-3	8.5E-6	3.6E-6
+0.125	1.7E-4	3.2E-5	9.8E-5	1.1E-6	3.6E-7
+0.25	9.9E-8	2.3E-8	5.2E-8	1.4E-9	2.9E-10

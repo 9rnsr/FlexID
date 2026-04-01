@@ -1,0 +1,12 @@
+Radionuclide	Ag-115
+Route of Intake	Inhalation
+Material	Aerosols Type F, Silver nitrate, fA=5E-2
+AMTD/AMAD, µm	20
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	8.2E-2	3.0E-2	1.7E-3	2.3E-5	1.8E-4
+0.083333	1.0E-2	4.2E-3	1.8E-4	4.7E-6	4.3E-5
+0.125	1.3E-3	5.7E-4	2.0E-5	8.4E-7	8.1E-6
+0.25	2.4E-6	1.3E-6	3.1E-8	3.0E-9	3.2E-8
+0.375	4.5E-9	2.8E-9	-	-	-

@@ -1,0 +1,11 @@
+Radionuclide	Pb-195m
+Route of Intake	Inhalation
+Material	Aerosols Type F, Lead dichloride, dibromide, difluoride, hydroxide, nitrate, oxide, all unspecified forms, fA=0.2
+AMTD/AMAD, µm	0.3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.9E-2	1.7E-3	6.1E-3	9.9E-4	7.7E-4
+0.083333	1.1E-3	1.1E-4	3.4E-4	7.4E-5	5.5E-5
+0.125	7.0E-5	7.3E-6	2.1E-5	5.2E-6	3.9E-6
+0.25	1.7E-8	2.0E-9	4.3E-9	1.6E-9	1.2E-9

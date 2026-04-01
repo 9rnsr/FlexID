@@ -1,0 +1,10 @@
+Radionuclide	Co-60m
+Route of Intake	Inhalation
+Material	Aerosols Type F, Cobalt nitrate, chloride, fA=0.1
+AMTD/AMAD, µm	0.1
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	6.2E-3	4.9E-4	4.8E-3	1.3E-5	6.6E-5
+0.083333	1.1E-4	1.1E-5	8.3E-5	4.8E-7	2.5E-6
+0.125	2.1E-6	2.2E-7	1.5E-6	1.3E-8	7.0E-8

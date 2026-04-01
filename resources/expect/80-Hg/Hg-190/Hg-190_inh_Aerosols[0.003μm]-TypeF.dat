@@ -1,0 +1,12 @@
+Radionuclide	Hg-190
+Route of Intake	Inhalation
+Material	Aerosols Type F, fA=0.1
+AMTD/AMAD, µm	0.003
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.2E-1	2.2E-2	2.7E-2	1.6E-3	5.3E-3
+0.083333	1.4E-2	3.1E-3	2.2E-3	1.6E-4	1.0E-3
+0.125	1.8E-3	4.2E-4	2.1E-4	1.5E-5	1.5E-4
+0.25	3.4E-6	9.2E-7	2.9E-7	2.0E-8	3.4E-7
+0.375	6.5E-9	2.0E-9	4.5E-10	-	7.1E-10

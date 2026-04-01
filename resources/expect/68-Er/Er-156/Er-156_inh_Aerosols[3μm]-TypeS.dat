@@ -1,0 +1,12 @@
+Radionuclide	Er-156
+Route of Intake	Inhalation
+Material	Aerosols Type S, Irradiated fuel fragments, fA=5E-6
+AMTD/AMAD, µm	3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	9.2E-2	3.0E-2	1.2E-2	1.8E-6	5.2E-7
+0.083333	1.1E-2	4.0E-3	1.4E-3	4.5E-7	8.0E-8
+0.125	1.2E-3	5.2E-4	1.6E-4	7.9E-8	1.2E-8
+0.25	2.0E-6	1.0E-6	2.5E-7	2.5E-10	-
+0.375	3.3E-9	1.9E-9	4.2E-10	-	-

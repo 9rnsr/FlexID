@@ -1,0 +1,15 @@
+Radionuclide	Zn-63
+Route of Intake	Inhalation
+Material	Aerosols Type M, Nitrate, phosphate, all unspecified compounds, fA=0.1
+AMTD/AMAD, µm	10
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.6E-1	9.3E-2	1.3E-2	2.4E-5	4.8E-4
+0.083333	8.6E-2	3.5E-2	3.9E-3	1.4E-5	3.8E-4
+0.125	2.9E-2	1.3E-2	1.2E-3	6.7E-6	2.2E-4
+0.25	1.1E-3	5.7E-4	4.3E-5	4.5E-7	1.8E-5
+0.375	4.1E-5	2.4E-5	1.6E-6	2.4E-8	1.0E-6
+0.5	1.6E-6	1.0E-6	5.9E-8	1.2E-9	5.1E-8
+0.625	5.9E-8	4.1E-8	2.3E-9	-	2.3E-9
+0.75	2.2E-9	1.6E-9	-	-	1.0E-10

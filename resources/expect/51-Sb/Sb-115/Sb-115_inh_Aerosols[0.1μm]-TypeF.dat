@@ -1,0 +1,14 @@
+Radionuclide	Sb-115
+Route of Intake	Inhalation
+Material	Aerosols Type F, Chloride, tartrate, fA=5E-2
+AMTD/AMAD, µm	0.1
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	8.9E-2	6.8E-3	2.2E-2	1.4E-4	2.5E-3	2.8E-3
+0.083333	2.3E-2	2.0E-3	1.9E-3	5.6E-5	8.2E-4	8.5E-4
+0.125	6.3E-3	5.8E-4	1.9E-4	1.7E-5	2.4E-4	2.4E-4
+0.25	1.2E-4	1.4E-5	1.4E-6	4.0E-7	5.5E-6	5.3E-6
+0.375	2.5E-6	3.1E-7	2.8E-8	9.0E-9	1.2E-7	1.1E-7
+0.5	5.0E-8	6.6E-9	5.6E-10	2.0E-10	2.6E-9	2.4E-9
+0.625	1.0E-9	1.4E-10	-	-	-	-

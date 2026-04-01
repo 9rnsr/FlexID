@@ -1,0 +1,14 @@
+Radionuclide	At-206
+Route of Intake	Inhalation
+Material	Aerosols Type M, fA=0.2
+AMTD/AMAD, µm	0.3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Liver*
+0.041667	7.6E-2	1.1E-2	4.6E-2	8.0E-6	9.8E-5
+0.083333	1.9E-2	3.1E-3	1.2E-2	6.0E-6	4.9E-5
+0.125	4.9E-3	8.7E-4	2.9E-3	3.0E-6	1.8E-5
+0.25	8.2E-5	1.7E-5	4.7E-5	1.6E-7	5.1E-7
+0.375	1.4E-6	3.1E-7	7.6E-7	4.9E-9	1.1E-8
+0.5	2.3E-8	5.6E-9	1.3E-8	1.3E-10	1.9E-10
+0.625	3.8E-10	-	2.1E-10	-	-

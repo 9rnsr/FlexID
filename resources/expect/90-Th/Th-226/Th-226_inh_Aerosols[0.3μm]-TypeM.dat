@@ -1,0 +1,14 @@
+Radionuclide	Th-226
+Route of Intake	Inhalation
+Material	Aerosols Type M, Thorium hydroxide, fA=1E-4
+AMTD/AMAD, µm	0.3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	7.6E-2	1.1E-2	4.6E-2	1.1E-4	1.1E-4
+0.083333	1.9E-2	3.2E-3	1.1E-2	6.6E-5	5.2E-5
+0.125	4.9E-3	9.2E-4	2.9E-3	2.8E-5	1.8E-5
+0.25	8.2E-5	1.9E-5	4.6E-5	1.1E-6	4.5E-7
+0.375	1.4E-6	3.6E-7	7.5E-7	3.1E-8	8.8E-9
+0.5	2.3E-8	6.4E-9	1.2E-8	7.1E-10	1.5E-10
+0.625	3.8E-10	1.1E-10	2.0E-10	-	-

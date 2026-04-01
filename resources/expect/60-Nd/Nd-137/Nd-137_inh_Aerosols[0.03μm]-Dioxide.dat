@@ -1,0 +1,15 @@
+Radionuclide	Nd-137
+Route of Intake	Inhalation
+Material	Aerosols Dioxide, fA=5E-7
+AMTD/AMAD, µm	0.03
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.1E-1	1.2E-2	1.8E-1	2.1E-6	2.8E-6
+0.083333	7.0E-2	5.0E-3	6.0E-2	1.8E-6	2.3E-6
+0.125	2.4E-2	1.9E-3	2.0E-2	9.8E-7	1.3E-6
+0.25	9.3E-4	9.5E-5	7.8E-4	8.3E-8	1.1E-7
+0.375	3.6E-5	4.2E-6	3.0E-5	4.9E-9	6.4E-9
+0.5	1.4E-6	1.8E-7	1.2E-6	2.6E-10	3.3E-10
+0.625	5.5E-8	7.4E-9	4.6E-8	-	-
+0.75	2.1E-9	3.0E-10	1.8E-9	-	-

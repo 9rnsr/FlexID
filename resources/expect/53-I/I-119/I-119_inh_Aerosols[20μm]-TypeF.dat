@@ -1,0 +1,12 @@
+Radionuclide	I-119
+Route of Intake	Inhalation
+Material	Aerosols Type F, Sodium iodide, caesium chloride vector, silver iodide, all unspecified forms, fA=0.99
+AMTD/AMAD, µm	20
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Liver*
+0.041667	7.5E-2	9.6E-3	6.7E-4	9.6E-4	1.1E-3
+0.083333	8.1E-3	8.4E-4	7.5E-5	2.2E-4	1.3E-4
+0.125	8.9E-4	8.6E-5	8.5E-6	3.7E-5	1.4E-5
+0.25	1.2E-6	1.1E-7	1.1E-8	1.1E-7	1.9E-8
+0.375	1.5E-9	1.3E-10	-	2.2E-10	-

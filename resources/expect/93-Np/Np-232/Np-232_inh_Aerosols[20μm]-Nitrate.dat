@@ -1,0 +1,11 @@
+Radionuclide	Np-232
+Route of Intake	Inhalation
+Material	Aerosols Neptunium nitrate, fA=3.5E-4
+AMTD/AMAD, µm	20
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	3.9E-2	1.3E-2	7.5E-4	2.6E-4	2.8E-4
+0.083333	2.2E-3	8.0E-4	3.5E-5	2.1E-5	1.8E-5
+0.125	1.3E-4	5.2E-5	1.9E-6	1.6E-6	1.1E-6
+0.25	2.6E-8	1.3E-8	3.4E-10	5.0E-10	2.5E-10

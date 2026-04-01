@@ -1,0 +1,11 @@
+Radionuclide	Ba-124
+Route of Intake	Inhalation
+Material	Aerosols Type M, Barium sulphate, all unspecified forms, fA=4E-2
+AMTD/AMAD, µm	0.001
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*
+0.041667	2.3E-2	7.4E-3	3.5E-3	3.0E-5
+0.083333	4.9E-4	1.9E-4	6.6E-5	1.4E-6
+0.125	1.1E-5	4.9E-6	1.4E-6	4.9E-8
+0.25	1.3E-10	-	-	-

@@ -1,0 +1,11 @@
+Radionuclide	U-242
+Route of Intake	Inhalation
+Material	Aerosols Type F, Uranium hexafluoride, uranyl tributyl-phosphate, fA=2E-2
+AMTD/AMAD, µm	0.3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.5E-2	3.5E-3	1.1E-2	5.1E-4	3.2E-4
+0.083333	2.0E-3	3.3E-4	5.8E-4	7.7E-5	2.9E-5
+0.125	1.6E-4	3.0E-5	3.3E-5	8.8E-6	2.3E-6
+0.25	7.8E-8	2.1E-8	5.9E-9	7.7E-9	1.2E-9

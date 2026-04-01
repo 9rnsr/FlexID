@@ -1,0 +1,15 @@
+Radionuclide	Np-233
+Route of Intake	Inhalation
+Material	Aerosols Type M, Neptunium citrate, oxalate, fA=1E-4
+AMTD/AMAD, µm	0.3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	9.4E-2	1.4E-2	5.7E-2	1.2E-4	1.4E-4
+0.083333	2.9E-2	5.0E-3	1.8E-2	8.3E-5	8.2E-5
+0.125	9.3E-3	1.7E-3	5.4E-3	4.2E-5	3.6E-5
+0.25	2.9E-4	6.7E-5	1.6E-4	3.0E-6	1.8E-6
+0.375	9.1E-6	2.4E-6	5.0E-6	1.5E-7	7.2E-8
+0.5	2.9E-7	8.1E-8	1.6E-7	6.2E-9	2.5E-9
+0.625	9.0E-9	2.7E-9	4.8E-9	2.4E-10	-
+0.75	2.8E-10	-	1.5E-10	-	-

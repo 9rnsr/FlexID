@@ -1,0 +1,12 @@
+Radionuclide	Eu-159
+Route of Intake	Inhalation
+Material	Aerosols Type M, Nitrate, oxide, fA=1E-4
+AMTD/AMAD, µm	0.001
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	9.9E-2	3.3E-2	1.5E-2	3.2E-5	2.8E-5
+0.083333	9.6E-3	3.8E-3	1.3E-3	6.5E-6	5.1E-6
+0.125	9.6E-4	4.2E-4	1.2E-4	9.5E-7	7.2E-7
+0.25	9.5E-7	5.2E-7	1.0E-7	1.7E-9	1.2E-9
+0.375	9.4E-10	5.8E-10	-	-	-

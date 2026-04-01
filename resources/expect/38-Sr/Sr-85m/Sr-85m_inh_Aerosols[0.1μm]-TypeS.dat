@@ -1,0 +1,20 @@
+Radionuclide	Sr-85m
+Route of Intake	Inhalation
+Material	Aerosols Type S, FAP, PSL, fA=2.5E-3
+AMTD/AMAD, µm	0.1
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Urine (24-hour sample)	Faeces (24-hour sample)	Alimentary Tract*	Lungs*	Skeleton*
+0.041667	1.8E-1	-	-	1.4E-2	1.4E-1	2.0E-5
+0.083333	9.4E-2	-	-	8.9E-3	7.5E-2	2.6E-5
+0.125	5.1E-2	-	-	5.4E-3	4.0E-2	2.3E-5
+0.25	8.0E-3	-	-	1.1E-3	6.3E-3	7.8E-6
+0.375	1.3E-3	-	-	1.9E-4	9.9E-4	1.8E-6
+0.5	2.0E-4	-	-	3.2E-5	1.6E-4	3.4E-7
+0.625	3.1E-5	-	-	5.3E-6	2.4E-5	6.2E-8
+0.75	4.9E-6	-	-	8.6E-7	3.8E-6	1.1E-8
+0.875	7.6E-7	-	-	1.4E-7	6.0E-7	1.7E-9
+1	1.2E-7	1.7E-10	3.4E-9	2.1E-8	9.5E-8	2.8E-10
+1.125	1.9E-8	-	-	3.2E-9	1.5E-8	-
+1.25	2.9E-9	-	-	4.7E-10	2.3E-9	-
+1.375	4.5E-10	-	-	-	3.1E-10	-

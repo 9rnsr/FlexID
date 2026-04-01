@@ -1,0 +1,13 @@
+Radionuclide	Sr-81
+Route of Intake	Inhalation
+Material	Aerosols Type M, Fuel fragments, all unspecified forms, fA=5E-2
+AMTD/AMAD, µm	0.001
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*
+0.041667	1.5E-1	5.0E-2	2.4E-2	1.2E-4
+0.083333	2.3E-2	8.8E-3	3.1E-3	4.4E-5
+0.125	3.5E-3	1.5E-3	4.3E-4	1.1E-5
+0.25	1.3E-5	6.7E-6	1.3E-6	9.3E-8
+0.375	4.6E-8	2.7E-8	4.4E-9	5.0E-10
+0.5	1.7E-10	-	-	-

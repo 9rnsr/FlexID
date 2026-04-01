@@ -1,0 +1,13 @@
+Radionuclide	U-235m
+Route of Intake	Inhalation
+Material	Aerosols Uranium aluminide, fA=2E-3
+AMTD/AMAD, µm	0.01
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.8E-1	1.6E-2	1.4E-1	1.7E-7	1.4E-7
+0.083333	3.5E-2	3.8E-3	2.7E-2	1.3E-7	7.1E-8
+0.125	7.2E-3	8.7E-4	5.5E-3	5.3E-8	2.2E-8
+0.25	5.9E-5	8.9E-6	4.5E-5	1.2E-9	2.9E-10
+0.375	4.8E-7	8.3E-8	3.6E-7	-	-
+0.5	3.9E-9	7.4E-10	3.0E-9	-	-

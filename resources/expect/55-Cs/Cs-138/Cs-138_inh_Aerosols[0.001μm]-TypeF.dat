@@ -1,0 +1,15 @@
+Radionuclide	Cs-138
+Route of Intake	Inhalation
+Material	Aerosols Type F, Caesium chloride, nitrate, sulphate, fA=0.99
+AMTD/AMAD, µm	0.001
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.8E-1	5.1E-2	4.3E-3	5.3E-3	1.2E-2
+0.083333	7.9E-2	1.2E-2	1.2E-3	2.0E-3	4.6E-3
+0.125	2.3E-2	3.2E-3	4.0E-4	6.9E-4	1.6E-3
+0.25	5.2E-4	5.9E-5	1.2E-5	2.2E-5	4.6E-5
+0.375	1.2E-5	1.2E-6	3.1E-7	6.4E-7	1.2E-6
+0.5	2.8E-7	2.4E-8	7.9E-9	1.7E-8	2.9E-8
+0.625	6.6E-9	5.2E-10	1.9E-10	4.5E-10	6.8E-10
+0.75	1.6E-10	-	-	-	-

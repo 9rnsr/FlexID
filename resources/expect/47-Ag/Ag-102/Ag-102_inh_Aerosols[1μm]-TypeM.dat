@@ -1,0 +1,11 @@
+Radionuclide	Ag-102
+Route of Intake	Inhalation
+Material	Aerosols Type M, Silver iodide, all unspecified forms, fA=1E-2
+AMTD/AMAD, µm	1
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.0E-2	5.7E-3	5.2E-3	3.0E-6	2.1E-5
+0.083333	7.9E-4	2.6E-4	2.0E-4	2.1E-7	1.9E-6
+0.125	3.1E-5	1.1E-5	7.8E-6	1.2E-8	1.2E-7
+0.25	1.9E-9	8.4E-10	4.7E-10	-	-

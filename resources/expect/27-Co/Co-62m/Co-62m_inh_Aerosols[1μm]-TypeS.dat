@@ -1,0 +1,11 @@
+Radionuclide	Co-62m
+Route of Intake	Inhalation
+Material	Aerosols Type S, Cobalt oxide, FAP, PSL, fA=1E-3
+AMTD/AMAD, µm	1
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	2.6E-2	7.3E-3	6.7E-3	2.5E-7	1.2E-6
+0.083333	1.3E-3	4.1E-4	3.2E-4	2.4E-8	1.2E-7
+0.125	6.3E-5	2.3E-5	1.6E-5	1.8E-9	9.5E-9
+0.25	7.8E-9	3.4E-9	2.0E-9	-	-

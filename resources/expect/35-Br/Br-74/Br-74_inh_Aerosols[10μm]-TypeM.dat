@@ -1,0 +1,13 @@
+Radionuclide	Br-74
+Route of Intake	Inhalation
+Material	Aerosols Type M, fA=0.2
+AMTD/AMAD, µm	10
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*
+0.041667	1.5E-1	5.3E-2	7.3E-3
+0.083333	2.8E-2	1.1E-2	1.3E-3
+0.125	5.5E-3	2.3E-3	2.4E-4
+0.25	3.9E-5	1.9E-5	1.5E-6
+0.375	2.8E-7	1.5E-7	1.1E-8
+0.5	2.0E-9	1.2E-9	-

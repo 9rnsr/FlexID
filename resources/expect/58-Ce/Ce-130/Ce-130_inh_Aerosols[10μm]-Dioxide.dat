@@ -1,0 +1,13 @@
+Radionuclide	Ce-130
+Route of Intake	Inhalation
+Material	Aerosols Dioxide, fA=5E-7
+AMTD/AMAD, µm	10
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.2E-1	4.5E-2	6.3E-3	2.0E-7	3.3E-7
+0.083333	2.0E-2	8.1E-3	9.3E-4	5.6E-8	9.2E-8
+0.125	3.2E-3	1.4E-3	1.4E-4	1.2E-8	2.0E-8
+0.25	1.3E-5	7.4E-6	5.7E-7	-	1.5E-10
+0.375	5.6E-8	3.6E-8	2.4E-9	-	-
+0.5	2.3E-10	1.6E-10	-	-	-

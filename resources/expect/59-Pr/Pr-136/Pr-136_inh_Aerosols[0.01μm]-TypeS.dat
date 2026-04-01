@@ -1,0 +1,11 @@
+Radionuclide	Pr-136
+Route of Intake	Inhalation
+Material	Aerosols Type S, fA=5E-6
+AMTD/AMAD, µm	0.01
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	3.7E-2	3.3E-3	2.9E-2	1.6E-6	2.5E-6
+0.083333	1.5E-3	1.6E-4	1.2E-3	1.5E-7	2.5E-7
+0.125	6.3E-5	7.7E-6	4.9E-5	1.0E-8	1.7E-8
+0.25	4.6E-9	7.0E-10	3.5E-9	-	-

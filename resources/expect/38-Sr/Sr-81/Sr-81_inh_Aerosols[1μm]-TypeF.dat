@@ -1,0 +1,12 @@
+Radionuclide	Sr-81
+Route of Intake	Inhalation
+Material	Aerosols Type F, Strontium chloride, sulphate and carbonate, fA=0.25
+AMTD/AMAD, µm	1
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*
+0.041667	7.9E-2	1.8E-2	7.7E-3	2.6E-3
+0.083333	1.2E-2	3.0E-3	4.9E-4	6.8E-4
+0.125	1.8E-3	4.9E-4	4.0E-5	1.4E-4
+0.25	6.4E-6	2.0E-6	6.4E-8	7.0E-7
+0.375	2.3E-8	7.8E-9	1.9E-10	2.9E-9

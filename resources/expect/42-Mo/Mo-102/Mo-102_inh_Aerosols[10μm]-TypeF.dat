@@ -1,0 +1,11 @@
+Radionuclide	Mo-102
+Route of Intake	Inhalation
+Material	Aerosols Type F, Chloride and ammonium molybdate, fA=0.9
+AMTD/AMAD, µm	10
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Liver*
+0.041667	1.9E-2	4.2E-3	6.0E-4	1.1E-3
+0.083333	4.6E-4	7.0E-5	1.1E-5	5.5E-5
+0.125	1.2E-5	1.3E-6	2.6E-7	1.9E-6
+0.25	1.7E-10	-	-	-

@@ -1,0 +1,11 @@
+Radionuclide	Ga-65
+Route of Intake	Inhalation
+Material	Aerosols Type S, fA=1E-5
+AMTD/AMAD, µm	0.001
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	6.3E-2	2.1E-2	9.9E-3	1.7E-6	1.8E-6
+0.083333	4.0E-3	1.6E-3	5.7E-4	2.1E-7	1.8E-7
+0.125	2.6E-4	1.1E-4	3.3E-5	2.0E-8	1.4E-8
+0.25	6.9E-8	3.7E-8	7.7E-9	-	-

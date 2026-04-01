@@ -1,0 +1,12 @@
+Radionuclide	U-242
+Route of Intake	Inhalation
+Material	Aerosols Type M, Uranyl acetylacetonate; depleted uranium aerosols from use of kinetic energy penetrators; vaporised uranium metal; all unspecified forms, fA=4E-3
+AMTD/AMAD, µm	3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	6.5E-2	2.2E-2	8.6E-3	3.1E-5	1.9E-5
+0.083333	5.3E-3	2.0E-3	6.6E-4	4.6E-6	1.7E-6
+0.125	4.5E-4	1.9E-4	5.4E-5	5.5E-7	1.6E-7
+0.25	2.6E-7	1.3E-7	2.9E-8	5.8E-10	1.1E-10
+0.375	1.5E-10	-	-	-	-

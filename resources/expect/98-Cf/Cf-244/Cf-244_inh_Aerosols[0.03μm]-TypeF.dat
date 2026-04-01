@@ -1,0 +1,12 @@
+Radionuclide	Cf-244
+Route of Intake	Inhalation
+Material	Aerosols Type F, Chloride, fA=5E-4
+AMTD/AMAD, µm	0.03
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	7.2E-2	4.3E-3	6.1E-2	1.5E-4	1.2E-4
+0.083333	8.3E-3	6.1E-4	6.8E-3	4.7E-5	2.8E-5
+0.125	9.8E-4	8.1E-5	7.9E-4	9.7E-6	5.1E-6
+0.25	1.6E-6	1.7E-7	1.2E-6	3.8E-8	1.7E-8
+0.375	2.5E-9	3.1E-10	1.8E-9	-	-

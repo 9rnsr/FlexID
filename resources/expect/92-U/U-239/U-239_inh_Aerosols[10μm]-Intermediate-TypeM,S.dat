@@ -1,0 +1,13 @@
+Radionuclide	U-239
+Route of Intake	Inhalation
+Material	Aerosols Intermediate Type M/S: Uranium octoxide, uranium dioxide, fA=6E-4
+AMTD/AMAD, µm	10
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.3E-1	4.7E-2	6.5E-3	2.2E-6	1.2E-6
+0.083333	2.2E-2	8.9E-3	1.0E-3	6.4E-7	2.3E-7
+0.125	3.6E-3	1.6E-3	1.6E-4	1.6E-7	4.5E-8
+0.25	1.7E-5	9.6E-6	7.3E-7	1.4E-9	2.8E-10
+0.375	8.1E-8	5.2E-8	3.5E-9	-	-
+0.5	3.9E-10	2.7E-10	-	-	-

@@ -1,0 +1,11 @@
+Radionuclide	Ba-127
+Route of Intake	Inhalation
+Material	Aerosols Type F, Barium chloride, carbonate, fA=0.2
+AMTD/AMAD, µm	0.001
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*
+0.041667	3.7E-2	1.2E-2	2.8E-3	1.2E-3
+0.083333	1.4E-3	4.9E-4	4.1E-5	7.2E-5
+0.125	5.1E-5	2.0E-5	6.8E-7	3.4E-6
+0.25	2.7E-9	1.3E-9	-	2.4E-10

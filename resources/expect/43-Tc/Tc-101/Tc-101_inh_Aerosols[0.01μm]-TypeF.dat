@@ -1,0 +1,11 @@
+Radionuclide	Tc-101
+Route of Intake	Inhalation
+Material	Aerosols Type F, Pertechnetate, Tc-DTPA, fA=0.9
+AMTD/AMAD, µm	0.01
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	4.7E-2	7.3E-3	2.1E-3	8.9E-4	1.2E-3	3.2E-3
+0.083333	2.4E-3	5.0E-4	6.6E-5	3.7E-5	6.6E-5	2.0E-4
+0.125	1.3E-4	3.0E-5	3.1E-6	1.8E-6	4.0E-6	1.2E-5
+0.25	1.9E-8	5.5E-9	3.5E-10	2.2E-10	7.6E-10	1.7E-9

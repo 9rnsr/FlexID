@@ -1,0 +1,13 @@
+Radionuclide	Pa-235
+Route of Intake	Inhalation
+Material	Aerosols Type S, Oxide, fA=5E-6
+AMTD/AMAD, µm	0.001
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Skeleton*	Liver*
+0.041667	1.8E-1	5.9E-2	2.8E-2	5.2E-6	5.1E-6
+0.083333	3.2E-2	1.3E-2	4.5E-3	1.9E-6	1.4E-6
+0.125	5.8E-3	2.6E-3	7.5E-4	5.4E-7	3.2E-7
+0.25	3.5E-5	1.9E-5	3.9E-6	6.9E-9	2.5E-9
+0.375	2.1E-7	1.3E-7	2.2E-8	-	-
+0.5	1.2E-9	8.5E-10	1.3E-10	-	-

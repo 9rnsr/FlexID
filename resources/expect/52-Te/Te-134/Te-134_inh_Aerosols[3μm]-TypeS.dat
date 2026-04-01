@@ -1,0 +1,16 @@
+Radionuclide	Te-134
+Route of Intake	Inhalation
+Material	Aerosols Type S, fA=3E-3
+AMTD/AMAD, µm	3
+
+Content in an Organ or Excreta Sample per Intake (Reference Bioassay Functions m(t)), Bq per Bq
+Time, days	Whole Body	Alimentary Tract*	Lungs*	Thyroid*	Skeleton*	Liver*
+0.041667	2.9E-1	9.5E-2	3.8E-2	5.9E-8	6.1E-6	8.8E-6
+0.083333	1.0E-1	3.9E-2	1.3E-2	4.6E-8	4.3E-6	6.2E-6
+0.125	3.8E-2	1.6E-2	4.8E-3	2.8E-8	2.4E-6	3.5E-6
+0.25	1.9E-3	9.5E-4	2.3E-4	3.2E-9	2.2E-7	3.3E-7
+0.375	9.2E-5	5.4E-5	1.2E-5	2.6E-10	1.5E-8	2.2E-8
+0.5	4.5E-6	2.9E-6	5.8E-7	-	8.6E-10	1.3E-9
+0.625	2.2E-7	1.5E-7	2.9E-8	-	-	-
+0.75	1.1E-8	7.8E-9	1.5E-9	-	-	-
+0.875	5.2E-10	3.9E-10	-	-	-	-
