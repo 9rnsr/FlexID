@@ -48,8 +48,35 @@ public partial class ViewerViewModel : ObservableObject
 
             selected = result?.Path;
         }
+
+        selected = CheckLogToOutRelation(selected);
+
         if (selected is string path)
             OutputFilePath = path;
+    }
+
+    private static string? CheckLogToOutRelation(string? path)
+    {
+        if (path is null)
+            return null;
+
+        if (Path.GetExtension(path).Equals(".log", StringComparison.OrdinalIgnoreCase) != true)
+            return null;
+
+        var basePath = Path.GetFileNameWithoutExtension(path);
+        if (Path.GetDirectoryName(path) is string dir)
+            basePath = Path.Combine(dir, basePath);
+
+        return Check("_Retention.out") ??
+               Check("_Cumulative.out") ??
+               Check("_Dose.out") ??
+               Check("_DoseRate.out");
+
+        string? Check(string suffix)
+        {
+            var path = basePath + suffix;
+            return File.Exists(path) ? path : null;
+        }
     }
 
     /// <summary>
