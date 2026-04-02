@@ -27,9 +27,13 @@
   <ItemGroup>
     <None Visible="false" Include="$(IntermediateOutputPath)ResourceFiles" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
 
+    <None Visible="false" Include="$(SolutionDir)resources/License_DECDATA.TXT"     LinkBase="licenses" CopyToPublishDirectory="PreserveNewest" />
+    <None Visible="false" Include="$(SolutionDir)resources/LICENSE_OIR_DViewer.TXT" LinkBase="licenses" CopyToPublishDirectory="PreserveNewest" />
+
     <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.BET"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
     <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.RAD"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
     <None Visible="false" Include="$(SolutionDir)resources/lib/ICRP-07.NDX"             LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
+
     <None Visible="false" Include="$(SolutionDir)resources/lib/rcp-a?_*_????-??-??.SAF" LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
     <None Visible="false" Include="$(SolutionDir)resources/lib/sregions_????-??-??.NDX" LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
     <None Visible="false" Include="$(SolutionDir)resources/lib/torgans_????-??-??.NDX"  LinkBase="lib" CopyToPublishDirectory="PreserveNewest" />
