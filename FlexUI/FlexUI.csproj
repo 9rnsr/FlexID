@@ -63,7 +63,7 @@
   </ItemGroup>
 
   <Target Name="CreatePackageList" BeforeTargets="BeforeBuild">
-    <Exec Command="powershell $(SolutionDir)list-packages.ps1 $(IntermediateOutputPath)package-list.json" />
+    <Exec Command="powershell $(SolutionDir)scripts/list-packages.ps1 $(SolutionDir)FlexID.slnx $(IntermediateOutputPath)package-list.json" />
   </Target>
   <ItemGroup>
     <EmbeddedResource Visible="false" Include="$(IntermediateOutputPath)package-list.json" />
