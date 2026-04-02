@@ -1,13 +1,13 @@
-if ($args.Length -ne 1) {
+if ($args.Length -ne 2) {
     Write-Host "First argument should be an output json file path."
     exit 1
 }
 
-$SolutionDir = Join-Path $PSScriptRoot ""
-$OutputJsonFile = $args[0]
+$SolutionFile = $args[0]
+$OutputJsonFile = $args[1]
 
 dotnet tool run nuget-license `
-  --input $SolutionDir\FlexID.slnx `
+  --input $SolutionFile `
   --ignored-packages "Microsoft.WindowsAppSDK;Microsoft.Windows.SDK.BuildTools" `
   --exclude-projects-matching "*Tests*" `
   --output JsonPretty `
