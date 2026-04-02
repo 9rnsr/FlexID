@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <Target Name="CreatePackageList" BeforeTargets="BeforeBuild">
-    <Exec Command="powershell $(SolutionDir)list-packages.ps1 $(SolutionDir)FlexID.slnx $(IntermediateOutputPath)package-list.json" />
-    <Exec Command="powershell $(SolutionDir)create-ThirdPartyNotices.ps1 $(IntermediateOutputPath)package-list.json $(IntermediateOutputPath)ThirdPartyNotices.txt" />
+    <Exec Command="powershell $(SolutionDir)scripts/list-packages.ps1 $(SolutionDir)FlexID.slnx $(IntermediateOutputPath)package-list.json" />
+    <Exec Command="powershell $(SolutionDir)scripts/create-ThirdPartyNotices.ps1 $(IntermediateOutputPath)package-list.json $(IntermediateOutputPath)ThirdPartyNotices.txt" />
   </Target>
   <ItemGroup>
     <None Visible="false" Include="$(IntermediateOutputPath)ThirdPartyNotices.txt" LinkBase="licenses" CopyToPublishDirectory="PreserveNewest" />
