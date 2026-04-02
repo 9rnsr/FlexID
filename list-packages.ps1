@@ -8,7 +8,7 @@ $OutputJsonFile = $args[1]
 
 dotnet tool run nuget-license `
   --input $SolutionFile `
-  --ignored-packages "Microsoft.WindowsAppSDK;Microsoft.Windows.SDK.BuildTools" `
+  --ignored-packages "Microsoft.WindowsAppSDK;Microsoft.Windows.SDK.BuildTools;Microsoft.NET.ILLink.Tasks" `
   --exclude-projects-matching "*Tests*" `
   --output JsonPretty `
   --file-output $OutputJsonFile
