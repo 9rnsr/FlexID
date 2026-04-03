@@ -24,12 +24,15 @@
     <ProjectReference Include="..\FlexID.Core\FlexID.Core.csproj" />
   </ItemGroup>
 
-  <Target Name="CreatePackageList" BeforeTargets="BeforeBuild">
+  <Target Name="CreatePackageList" BeforeTargets="PrepareForPublish">
     <Exec Command="powershell $(SolutionDir)scripts/list-packages.ps1 $(SolutionDir)FlexID.slnx $(IntermediateOutputPath)package-list.json" />
     <Exec Command="powershell $(SolutionDir)scripts/create-ThirdPartyNotices.ps1 $(IntermediateOutputPath)package-list.json $(IntermediateOutputPath)ThirdPartyNotices.txt" />
+
+    <ItemGroup>
+      <ResolvedFileToPublish Include="$(IntermediateOutputPath)ThirdPartyNotices.txt">
+        <RelativePath>licenses\ThirdPartyNotices.txt</RelativePath>
+      </ResolvedFileToPublish>
+    </ItemGroup>
   </Target>
-  <ItemGroup>
-    <None Visible="false" Include="$(IntermediateOutputPath)ThirdPartyNotices.txt" LinkBase="licenses" CopyToPublishDirectory="PreserveNewest" />
-  </ItemGroup>
 
 </Project>

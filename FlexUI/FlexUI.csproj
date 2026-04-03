@@ -62,11 +62,15 @@
     <ProjectReference Include="..\DataTable\DataTable.csproj" />
   </ItemGroup>
 
-  <Target Name="CreatePackageList" BeforeTargets="BeforeBuild">
+  <Target Name="CreatePackageList" BeforeTargets="PrepareForBuild">
+    <MakeDir Directories="$(IntermediateOutputPath)" />
     <Exec Command="powershell $(SolutionDir)scripts/list-packages.ps1 $(SolutionDir)FlexID.slnx $(IntermediateOutputPath)package-list.json" />
+
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)package-list.json">
+        <LogicalName>package-list.json</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
   </Target>
-  <ItemGroup>
-    <EmbeddedResource Visible="false" Include="$(IntermediateOutputPath)package-list.json" />
-  </ItemGroup>
 
 </Project>
