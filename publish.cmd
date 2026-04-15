@@ -1,1 +1,2 @@
-PowerShell ./publish.ps1
+@echo off
+powershell -ExecutionPolicy Bypass -NoProfile -File %~dp0publish.ps1
