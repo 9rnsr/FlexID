@@ -9,7 +9,7 @@
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Converters" Version="8.2.251219" />
-    <PackageVersion Include="EPPlus" Version="8.4.0" />
+    <PackageVersion Include="EPPlus" Version="8.5.3" />
     <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.1721" />
