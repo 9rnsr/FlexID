@@ -25,6 +25,7 @@ public partial class ViewerWindow
             .ToReadOnlyBindableReactiveProperty();
 
         PlotControl.Reset(ViewModel.Graph.PlotModel);
+        PlotControl.Menu = null;
         ViewModel.Graph.RefreshCommand = new RelayCommand(PlotControl.Refresh);
     }
 
