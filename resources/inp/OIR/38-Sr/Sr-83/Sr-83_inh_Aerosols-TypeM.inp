@@ -275,6 +275,54 @@ Sr-83 Inhalation, Aerosols Type M
   Sr-83/UB-con            UB-con                    ---
   Sr-83/Urine             Urine                     ---
 
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Plasma                $sr
+  INT-F                   Plasma                $sr
+  bb-F                    Plasma                $sr
+  bbseq-F                 Plasma                $sr
+  BB-F                    Plasma                $sr
+  BBseq-F                 Plasma                $sr
+  ET2-F                   Plasma                $sr
+  ETseq-F                 Plasma                $sr
+  LNET-F                  Plasma                $sr
+  LNTH-F                  Plasma                $sr
+
+  ALV-S                   Plasma                $ss
+  INT-S                   Plasma                $ss
+  bb-S                    Plasma                $ss
+  bbseq-S                 Plasma                $ss
+  BB-S                    Plasma                $ss
+  BBseq-S                 Plasma                $ss
+  ET2-S                   Plasma                $ss
+  ETseq-S                 Plasma                $ss
+  LNET-S                  Plasma                $ss
+  LNTH-S                  Plasma                $ss
+
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
   Oralcavity              Oesophagus-s            720
@@ -464,11 +512,11 @@ Sr-83 Inhalation, Aerosols Type M
   Sr-83/Exch-T-bone-V     Blood                     1.5
   Sr-83/C-bone-S          Blood                   100
   Sr-83/T-bone-S          Blood                   100
-  Sr-83/ST0               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-83/ST1               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-83/ST2               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-83/RBC               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-83/Muscle            Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-83/OtherTissue       Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-83/ST0               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-83/ST1               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-83/ST2               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-83/RBC               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-83/Muscle            Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-83/OtherTissue       Blood                 $(0.693 / (15/60/24))   # 半減期15分
 
   Blood                   Exhaled                1000   # ≒半減期1分
