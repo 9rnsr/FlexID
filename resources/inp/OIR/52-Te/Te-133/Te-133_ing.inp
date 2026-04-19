@@ -248,7 +248,18 @@ Te-133 Ingestion
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -257,6 +268,24 @@ Te-133 Ingestion
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Te-133/Oralcavity       Oralcavity                ---
+  Te-133/Oesophagus-f     Oesophagus-f              ---
+  Te-133/Oesophagus-s     Oesophagus-s              ---
+  Te-133/St-con           St-con                    ---
+  Te-133/SI-con           SI-con                    ---
+  Te-133/SI-conRe         SI-conRe                  ---
+  Te-133/RC-con           RC-con                    ---
+  Te-133/LC-con           LC-con                    ---
+  Te-133/RS-con           RS-con                    ---
+  Te-133/Faeces           Faeces                    ---
+  Te-133/UB-con           UB-con                    ---
+  Te-133/Urine            Urine                     ---
+
+  I-133/OralcavityRe      Oralcavity                ---
+  I-133/Oesophagus-sRe    Oesophagus-s              ---
+  I-133/St-conRe          St-con                    ---
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -270,21 +299,15 @@ Te-133 Ingestion
 # > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
 # > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
 
-  Te-133/Oralcavity       Exhaled                 100
-  Te-133/Oesophagus-f     Exhaled                 100
-  Te-133/Oesophagus-s     Exhaled                 100
-  Te-133/St-con           Exhaled                 100
-  Te-133/SI-con           Exhaled                 100
-  Te-133/SI-conRe         Exhaled                 100
-  Te-133/RC-con           Exhaled                 100
-  Te-133/LC-con           Exhaled                 100
-  Te-133/RS-con           Exhaled                 100
-  Te-133/UB-con           UB-con                    ---
-
-  I-133/OralcavityRe      Exhaled                 100
-  I-133/Oesophagus-sRe    Exhaled                 100
-  I-133/St-conRe          Exhaled                 100
-  I-133/UB-con            UB-con                    ---
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  SI-conRe                Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
@@ -356,7 +379,18 @@ Te-133 Ingestion
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -366,22 +400,37 @@ Te-133 Ingestion
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.130 Para.38
-  Te-133/Oralcavity       Exhaled                 100
-  Te-133/Oesophagus-f     Exhaled                 100
-  Te-133/Oesophagus-s     Exhaled                 100
-  Te-133/St-con           Exhaled                 100
-  Te-133/SI-con           Exhaled                 100
-  Te-133/SI-conRe         Exhaled                 100
-  Te-133/RC-con           Exhaled                 100
-  Te-133/LC-con           Exhaled                 100
-  Te-133/RS-con           Exhaled                 100
+# from parent to progeny
+  Te-133/Oralcavity       Oralcavity                ---
+  Te-133/Oesophagus-f     Oesophagus-f              ---
+  Te-133/Oesophagus-s     Oesophagus-s              ---
+  Te-133/St-con           St-con                    ---
+  Te-133/SI-con           SI-con                    ---
+  Te-133/SI-conRe         SI-conRe                  ---
+  Te-133/RC-con           RC-con                    ---
+  Te-133/LC-con           LC-con                    ---
+  Te-133/RS-con           RS-con                    ---
+  Te-133/Faeces           Faeces                    ---
   Te-133/UB-con           UB-con                    ---
+  Te-133/Urine            Urine                     ---
 
-  I-133/OralcavityRe      Exhaled                 100
-  I-133/Oesophagus-sRe    Exhaled                 100
-  I-133/St-conRe          Exhaled                 100
-  I-133/UB-con            UB-con                    ---
+  I-133/OralcavityRe      Oralcavity                ---
+  I-133/Oesophagus-sRe    Oesophagus-s              ---
+  I-133/St-conRe          St-con                    ---
+
+  Xe-133m/Blood           Blood                     ---
+  Xe-133m/Exhaled         Exhaled                   ---
+
+# ICRP Publ.130 Para.38
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  SI-conRe                Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
@@ -409,9 +458,5 @@ Te-133 Ingestion
   I-133/St-wall           Blood                  1000
   I-133/Other1            Blood                  1000
   I-133/Other2            Blood                  1000
-
-  Xe-133m/UB-con          UB-con                    ---
-  Xe-133m/Blood           Blood                     ---
-  Xe-133m/Exhaled         Exhaled                   ---
 
   Blood                   Exhaled                1000

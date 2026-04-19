@@ -438,7 +438,42 @@ Te-131 Inhalation, Aerosols Type F
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -447,6 +482,96 @@ Te-131 Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Te-131/ET1-F            ET1-F                     ---
+  Te-131/ET2-F            ET2-F                     ---
+  Te-131/ETseq-F          ETseq-F                   ---
+  Te-131/LNET-F           LNET-F                    ---
+  Te-131/BB-F             BB-F                      ---
+  Te-131/BBseq-F          BBseq-F                   ---
+  Te-131/bb-F             bb-F                      ---
+  Te-131/bbseq-F          bbseq-F                   ---
+  Te-131/ALV-F            ALV-F                     ---
+  Te-131/INT-F            INT-F                     ---
+  Te-131/LNTH-F           LNTH-F                    ---
+  Te-131/ET1-S            ET1-S                     ---
+  Te-131/ET2-S            ET2-S                     ---
+  Te-131/ETseq-S          ETseq-S                   ---
+  Te-131/LNET-S           LNET-S                    ---
+  Te-131/BB-S             BB-S                      ---
+  Te-131/BBseq-S          BBseq-S                   ---
+  Te-131/bb-S             bb-S                      ---
+  Te-131/bbseq-S          bbseq-S                   ---
+  Te-131/ALV-S            ALV-S                     ---
+  Te-131/INT-S            INT-S                     ---
+  Te-131/LNTH-S           LNTH-S                    ---
+  Te-131/Environment      Environment               ---
+
+  Te-131/Oralcavity       Oralcavity                ---
+  Te-131/Oesophagus-f     Oesophagus-f              ---
+  Te-131/Oesophagus-s     Oesophagus-s              ---
+  Te-131/St-con           St-con                    ---
+  Te-131/SI-con           SI-con                    ---
+  Te-131/SI-conRe         SI-conRe                  ---
+  Te-131/RC-con           RC-con                    ---
+  Te-131/LC-con           LC-con                    ---
+  Te-131/RS-con           RS-con                    ---
+  Te-131/Faeces           Faeces                    ---
+  Te-131/UB-con           UB-con                    ---
+  Te-131/Urine            Urine                     ---
+
+  I-131/OralcavityRe      Oralcavity                ---
+  I-131/Oesophagus-sRe    Oesophagus-s              ---
+  I-131/St-conRe          St-con                    ---
+
+# ICRP Publ.130 p.65 Fig.3.4
+# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
+  ALV-F                   bb-F                      0.002
+  ALV-F                   INT-F                     0.001
+  INT-F                   LNTH-F                    0.00003
+  bb-F                    BB-F                      0.2
+  bbseq-F                 LNTH-F                    0.001
+  BB-F                    ET2-F                    10
+  BBseq-F                 LNTH-F                    0.001
+  ET2-F                   Oesophagus-s            100
+  ETseq-F                 LNET-F                    0.001
+  ET1-F                   Environment               0.6
+  ET1-F                   ET2-F                     1.5
+
+  ALV-S                   bb-S                      0.002
+  ALV-S                   INT-S                     0.001
+  INT-S                   LNTH-S                    0.00003
+  bb-S                    BB-S                      0.2
+  bbseq-S                 LNTH-S                    0.001
+  BB-S                    ET2-S                    10
+  BBseq-S                 LNTH-S                    0.001
+  ET2-S                   Oesophagus-s            100
+  ETseq-S                 LNET-S                    0.001
+  ET1-S                   Environment               0.6
+  ET1-S                   ET2-S                     1.5
+
+  ALV-F                   Blood                 $sr
+  INT-F                   Blood                 $sr
+  bb-F                    Blood                 $sr
+  bbseq-F                 Blood                 $sr
+  BB-F                    Blood                 $sr
+  BBseq-F                 Blood                 $sr
+  ET2-F                   Blood                 $sr
+  ETseq-F                 Blood                 $sr
+  LNET-F                  Blood                 $sr
+  LNTH-F                  Blood                 $sr
+
+  ALV-S                   Blood                 $ss
+  INT-S                   Blood                 $ss
+  bb-S                    Blood                 $ss
+  bbseq-S                 Blood                 $ss
+  BB-S                    Blood                 $ss
+  BBseq-S                 Blood                 $ss
+  ET2-S                   Blood                 $ss
+  ETseq-S                 Blood                 $ss
+  LNET-S                  Blood                 $ss
+  LNTH-S                  Blood                 $ss
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -460,44 +585,38 @@ Te-131 Inhalation, Aerosols Type F
 # > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
 # > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
 
-  Te-131/ET1-F            Exhaled                 100
-  Te-131/ET2-F            Exhaled                 100
-  Te-131/ETseq-F          Exhaled                 100
-  Te-131/LNET-F           Exhaled                 100
-  Te-131/BB-F             Exhaled                 100
-  Te-131/BBseq-F          Exhaled                 100
-  Te-131/bb-F             Exhaled                 100
-  Te-131/bbseq-F          Exhaled                 100
-  Te-131/ALV-F            Exhaled                 100
-  Te-131/INT-F            Exhaled                 100
-  Te-131/LNTH-F           Exhaled                 100
-  Te-131/ET1-S            Exhaled                 100
-  Te-131/ET2-S            Exhaled                 100
-  Te-131/ETseq-S          Exhaled                 100
-  Te-131/LNET-S           Exhaled                 100
-  Te-131/BB-S             Exhaled                 100
-  Te-131/BBseq-S          Exhaled                 100
-  Te-131/bb-S             Exhaled                 100
-  Te-131/bbseq-S          Exhaled                 100
-  Te-131/ALV-S            Exhaled                 100
-  Te-131/INT-S            Exhaled                 100
-  Te-131/LNTH-S           Exhaled                 100
+  ET1-F                   Exhaled                 100
+  ET2-F                   Exhaled                 100
+  ETseq-F                 Exhaled                 100
+  LNET-F                  Exhaled                 100
+  BB-F                    Exhaled                 100
+  BBseq-F                 Exhaled                 100
+  bb-F                    Exhaled                 100
+  bbseq-F                 Exhaled                 100
+  ALV-F                   Exhaled                 100
+  INT-F                   Exhaled                 100
+  LNTH-F                  Exhaled                 100
+  ET1-S                   Exhaled                 100
+  ET2-S                   Exhaled                 100
+  ETseq-S                 Exhaled                 100
+  LNET-S                  Exhaled                 100
+  BB-S                    Exhaled                 100
+  BBseq-S                 Exhaled                 100
+  bb-S                    Exhaled                 100
+  bbseq-S                 Exhaled                 100
+  ALV-S                   Exhaled                 100
+  INT-S                   Exhaled                 100
+  LNTH-S                  Exhaled                 100
 
-  Te-131/Oralcavity       Exhaled                 100
-  Te-131/Oesophagus-f     Exhaled                 100
-  Te-131/Oesophagus-s     Exhaled                 100
-  Te-131/St-con           Exhaled                 100
-  Te-131/SI-con           Exhaled                 100
-  Te-131/SI-conRe         Exhaled                 100
-  Te-131/RC-con           Exhaled                 100
-  Te-131/LC-con           Exhaled                 100
-  Te-131/RS-con           Exhaled                 100
-  Te-131/UB-con           UB-con                    ---
-
-  I-131/OralcavityRe      Exhaled                 100
-  I-131/Oesophagus-sRe    Exhaled                 100
-  I-131/St-conRe          Exhaled                 100
-  I-131/UB-con            UB-con                    ---
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  SI-conRe                Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
