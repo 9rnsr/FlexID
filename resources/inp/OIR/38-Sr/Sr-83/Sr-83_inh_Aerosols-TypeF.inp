@@ -512,11 +512,11 @@ Sr-83 Inhalation, Aerosols Type F
   Sr-83/Exch-T-bone-V     Blood                     1.5
   Sr-83/C-bone-S          Blood                   100
   Sr-83/T-bone-S          Blood                   100
-  Sr-83/ST0               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-83/ST1               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-83/ST2               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-83/RBC               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-83/Muscle            Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-83/OtherTissue       Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-83/ST0               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-83/ST1               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-83/ST2               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-83/RBC               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-83/Muscle            Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-83/OtherTissue       Blood                 $(0.693 / (15/60/24))   # 半減期15分
 
   Blood                   Exhaled                1000   # ≒半減期1分

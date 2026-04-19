@@ -708,12 +708,12 @@ Sr-81 Inhalation, Aerosols Type M
   Sr-81/Exch-T-bone-V     Blood                     1.5
   Sr-81/C-bone-S          Blood                   100
   Sr-81/T-bone-S          Blood                   100
-  Sr-81/ST0               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-81/ST1               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-81/ST2               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-81m/RBC              Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-81m/Muscle           Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-81m/OtherTissue      Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-81/ST0               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-81/ST1               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-81/ST2               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-81m/RBC              Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-81m/Muscle           Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-81m/OtherTissue      Blood                 $(0.693 / (15/60/24))   # 半減期15分
 
   Blood                   Exhaled                1000   # ≒半減期1分
 
@@ -782,11 +782,11 @@ Sr-81 Inhalation, Aerosols Type M
   Sr-81/Exch-T-bone-V     Blood                     1.5
   Sr-81/C-bone-S          Blood                   100
   Sr-81/T-bone-S          Blood                   100
-  Sr-81/ST0               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-81/ST1               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Sr-81/ST2               Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-81m/RBC              Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-81m/Muscle           Blood                 $(0.693 / (15/60/25))   # 半減期15分
-  Rb-81m/OtherTissue      Blood                 $(0.693 / (15/60/25))   # 半減期15分
+  Sr-81/ST0               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-81/ST1               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Sr-81/ST2               Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-81m/RBC              Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-81m/Muscle           Blood                 $(0.693 / (15/60/24))   # 半減期15分
+  Rb-81m/OtherTissue      Blood                 $(0.693 / (15/60/24))   # 半減期15分
 
   Blood                   Exhaled                1000   # ≒半減期1分
