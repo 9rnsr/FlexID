@@ -117,7 +117,18 @@ I-135 Injection
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -126,6 +137,24 @@ I-135 Injection
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
+
+# from parent to progeny
+  I-135/Oralcavity        Oralcavity                ---
+  I-135/Oesophagus-f      Oesophagus-f              ---
+  I-135/Oesophagus-s      Oesophagus-s              ---
+  I-135/St-con            St-con                    ---
+  I-135/SI-con            SI-con                    ---
+  I-135/SI-conRe          SI-conRe                  ---
+  I-135/RC-con            RC-con                    ---
+  I-135/LC-con            LC-con                    ---
+  I-135/RS-con            RS-con                    ---
+  I-135/Faeces            Faeces                    ---
+  I-135/UB-con            UB-con                    ---
+  I-135/Urine             Urine                     ---
+
+  I-135/OralcavityRe      Oralcavity                ---
+  I-135/Oesophagus-sRe    Oesophagus-s              ---
+  I-135/St-conRe          St-con                    ---
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -139,19 +168,15 @@ I-135 Injection
 # > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
 # > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
 
-  I-135/Oralcavity        Exhaled                 100
-  I-135/OralcavityRe      Exhaled                 100
-  I-135/Oesophagus-f      Exhaled                 100
-  I-135/Oesophagus-s      Exhaled                 100
-  I-135/Oesophagus-sRe    Exhaled                 100
-  I-135/St-con            Exhaled                 100
-  I-135/St-conRe          Exhaled                 100
-  I-135/SI-con            Exhaled                 100
-  I-135/SI-conRe          Exhaled                 100
-  I-135/RC-con            Exhaled                 100
-  I-135/LC-con            Exhaled                 100
-  I-135/RS-con            Exhaled                 100
-  I-135/UB-con            UB-con                    ---
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  SI-conRe                Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
@@ -198,7 +223,18 @@ I-135 Injection
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -208,20 +244,34 @@ I-135 Injection
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.130 Para.38
-  I-135/Oralcavity        Exhaled                 100
-  I-135/OralcavityRe      Exhaled                 100
-  I-135/Oesophagus-f      Exhaled                 100
-  I-135/Oesophagus-s      Exhaled                 100
-  I-135/Oesophagus-sRe    Exhaled                 100
-  I-135/St-con            Exhaled                 100
-  I-135/St-conRe          Exhaled                 100
-  I-135/SI-con            Exhaled                 100
-  I-135/SI-conRe          Exhaled                 100
-  I-135/RC-con            Exhaled                 100
-  I-135/LC-con            Exhaled                 100
-  I-135/RS-con            Exhaled                 100
+# from parent to progeny
+  I-135/Oralcavity        Oralcavity                ---
+  I-135/Oesophagus-f      Oesophagus-f              ---
+  I-135/Oesophagus-s      Oesophagus-s              ---
+  I-135/St-con            St-con                    ---
+  I-135/SI-con            SI-con                    ---
+  I-135/SI-conRe          SI-conRe                  ---
+  I-135/RC-con            RC-con                    ---
+  I-135/LC-con            LC-con                    ---
+  I-135/RS-con            RS-con                    ---
+  I-135/Faeces            Faeces                    ---
   I-135/UB-con            UB-con                    ---
+  I-135/Urine             Urine                     ---
+
+  I-135/OralcavityRe      Oralcavity                ---
+  I-135/Oesophagus-sRe    Oesophagus-s              ---
+  I-135/St-conRe          St-con                    ---
+
+# ICRP Publ.130 Para.38
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  SI-conRe                Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12

@@ -356,7 +356,17 @@ Sr-81 Ingestion, Other
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -365,6 +375,19 @@ Sr-81 Ingestion, Other
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Sr-81/Oralcavity        Oralcavity                ---
+  Sr-81/Oesophagus-f      Oesophagus-f              ---
+  Sr-81/Oesophagus-s      Oesophagus-s              ---
+  Sr-81/St-con            St-con                    ---
+  Sr-81/SI-con            SI-con                    ---
+  Sr-81/RC-con            RC-con                    ---
+  Sr-81/LC-con            LC-con                    ---
+  Sr-81/RS-con            RS-con                    ---
+  Sr-81/Faeces            Faeces                    ---
+  Sr-81/UB-con            UB-con                    ---
+  Sr-81/Urine             Urine                     ---
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -378,15 +401,14 @@ Sr-81 Ingestion, Other
 # > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
 # > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
 
-  Sr-81/Oralcavity        Exhaled                 100
-  Sr-81/Oesophagus-f      Exhaled                 100
-  Sr-81/Oesophagus-s      Exhaled                 100
-  Sr-81/St-con            Exhaled                 100
-  Sr-81/SI-con            Exhaled                 100
-  Sr-81/RC-con            Exhaled                 100
-  Sr-81/LC-con            Exhaled                 100
-  Sr-81/RS-con            Exhaled                 100
-  Sr-81/UB-con            UB-con                    ---
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
@@ -413,7 +435,17 @@ Sr-81 Ingestion, Other
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -424,20 +456,30 @@ Sr-81 Ingestion, Other
 #-----------------------+---------------------+--------------
 
 # from parent to progeny
-  Kr-81m/UB-con           UB-con                    ---
+  Sr-81/Oralcavity        Oralcavity                ---
+  Sr-81/Oesophagus-f      Oesophagus-f              ---
+  Sr-81/Oesophagus-s      Oesophagus-s              ---
+  Sr-81/St-con            St-con                    ---
+  Sr-81/SI-con            SI-con                    ---
+  Sr-81/RC-con            RC-con                    ---
+  Sr-81/LC-con            LC-con                    ---
+  Sr-81/RS-con            RS-con                    ---
+  Sr-81/Faeces            Faeces                    ---
+  Sr-81/UB-con            UB-con                    ---
+  Sr-81/Urine             Urine                     ---
+
   Kr-81m/Blood            Blood                     ---
   Kr-81m/Exhaled          Exhaled                   ---
 
 # ICRP Publ.130 Para.38
-  Sr-81/Oralcavity        Exhaled                 100
-  Sr-81/Oesophagus-f      Exhaled                 100
-  Sr-81/Oesophagus-s      Exhaled                 100
-  Sr-81/St-con            Exhaled                 100
-  Sr-81/SI-con            Exhaled                 100
-  Sr-81/RC-con            Exhaled                 100
-  Sr-81/LC-con            Exhaled                 100
-  Sr-81/RS-con            Exhaled                 100
-  Sr-81/UB-con            UB-con                    ---
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12

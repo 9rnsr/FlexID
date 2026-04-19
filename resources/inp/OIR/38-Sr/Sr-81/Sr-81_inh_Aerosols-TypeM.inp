@@ -642,7 +642,41 @@ Sr-81 Inhalation, Aerosols Type M
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -651,6 +685,43 @@ Sr-81 Inhalation, Aerosols Type M
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
+
+# from parent to progeny
+  Sr-81/ET1-F             ET1-F                     ---
+  Sr-81/ET2-F             ET2-F                     ---
+  Sr-81/ETseq-F           ETseq-F                   ---
+  Sr-81/LNET-F            LNET-F                    ---
+  Sr-81/BB-F              BB-F                      ---
+  Sr-81/BBseq-F           BBseq-F                   ---
+  Sr-81/bb-F              bb-F                      ---
+  Sr-81/bbseq-F           bbseq-F                   ---
+  Sr-81/ALV-F             ALV-F                     ---
+  Sr-81/INT-F             INT-F                     ---
+  Sr-81/LNTH-F            LNTH-F                    ---
+  Sr-81/ET1-S             ET1-S                     ---
+  Sr-81/ET2-S             ET2-S                     ---
+  Sr-81/ETseq-S           ETseq-S                   ---
+  Sr-81/LNET-S            LNET-S                    ---
+  Sr-81/BB-S              BB-S                      ---
+  Sr-81/BBseq-S           BBseq-S                   ---
+  Sr-81/bb-S              bb-S                      ---
+  Sr-81/bbseq-S           bbseq-S                   ---
+  Sr-81/ALV-S             ALV-S                     ---
+  Sr-81/INT-S             INT-S                     ---
+  Sr-81/LNTH-S            LNTH-S                    ---
+  Sr-81/Environment       Environment               ---
+
+  Sr-81/Oralcavity        Oralcavity                ---
+  Sr-81/Oesophagus-f      Oesophagus-f              ---
+  Sr-81/Oesophagus-s      Oesophagus-s              ---
+  Sr-81/St-con            St-con                    ---
+  Sr-81/SI-con            SI-con                    ---
+  Sr-81/RC-con            RC-con                    ---
+  Sr-81/LC-con            LC-con                    ---
+  Sr-81/RS-con            RS-con                    ---
+  Sr-81/Faeces            Faeces                    ---
+  Sr-81/UB-con            UB-con                    ---
+  Sr-81/Urine             Urine                     ---
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -664,38 +735,37 @@ Sr-81 Inhalation, Aerosols Type M
 # > 消化器系モデルの部位間の移動は起こらないものと仮定される。体内で生成される
 # > このような希ガスの子孫物質は、Para.37に述べた規則に従うものと仮定される。
 
-  Sr-81/ET1-F             Exhaled                 100
-  Sr-81/ET2-F             Exhaled                 100
-  Sr-81/ETseq-F           Exhaled                 100
-  Sr-81/LNET-F            Exhaled                 100
-  Sr-81/BB-F              Exhaled                 100
-  Sr-81/BBseq-F           Exhaled                 100
-  Sr-81/bb-F              Exhaled                 100
-  Sr-81/bbseq-F           Exhaled                 100
-  Sr-81/ALV-F             Exhaled                 100
-  Sr-81/INT-F             Exhaled                 100
-  Sr-81/LNTH-F            Exhaled                 100
-  Sr-81/ET1-S             Exhaled                 100
-  Sr-81/ET2-S             Exhaled                 100
-  Sr-81/ETseq-S           Exhaled                 100
-  Sr-81/LNET-S            Exhaled                 100
-  Sr-81/BB-S              Exhaled                 100
-  Sr-81/BBseq-S           Exhaled                 100
-  Sr-81/bb-S              Exhaled                 100
-  Sr-81/bbseq-S           Exhaled                 100
-  Sr-81/ALV-S             Exhaled                 100
-  Sr-81/INT-S             Exhaled                 100
-  Sr-81/LNTH-S            Exhaled                 100
+  ET1-F                   Exhaled                 100
+  ET2-F                   Exhaled                 100
+  ETseq-F                 Exhaled                 100
+  LNET-F                  Exhaled                 100
+  BB-F                    Exhaled                 100
+  BBseq-F                 Exhaled                 100
+  bb-F                    Exhaled                 100
+  bbseq-F                 Exhaled                 100
+  ALV-F                   Exhaled                 100
+  INT-F                   Exhaled                 100
+  LNTH-F                  Exhaled                 100
+  ET1-S                   Exhaled                 100
+  ET2-S                   Exhaled                 100
+  ETseq-S                 Exhaled                 100
+  LNET-S                  Exhaled                 100
+  BB-S                    Exhaled                 100
+  BBseq-S                 Exhaled                 100
+  bb-S                    Exhaled                 100
+  bbseq-S                 Exhaled                 100
+  ALV-S                   Exhaled                 100
+  INT-S                   Exhaled                 100
+  LNTH-S                  Exhaled                 100
 
-  Sr-81/Oralcavity        Exhaled                 100
-  Sr-81/Oesophagus-f      Exhaled                 100
-  Sr-81/Oesophagus-s      Exhaled                 100
-  Sr-81/St-con            Exhaled                 100
-  Sr-81/SI-con            Exhaled                 100
-  Sr-81/RC-con            Exhaled                 100
-  Sr-81/LC-con            Exhaled                 100
-  Sr-81/RS-con            Exhaled                 100
-  Sr-81/UB-con            UB-con                    ---
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
@@ -722,7 +792,41 @@ Sr-81 Inhalation, Aerosols Type M
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
+  acc   ET1-F                 ET1-sur
+  acc   ET2-F                 ET2-sur
+  acc   ETseq-F               ET2-seq
+  acc   LNET-F                LN-ET
+  acc   BB-F                  Bronchi
+  acc   BBseq-F               Bronchi-q
+  acc   bb-F                  Brchiole
+  acc   bbseq-F               Brchiole-q
+  acc   ALV-F                 ALV
+  acc   INT-F                 ALV
+  acc   LNTH-F                LN-Th
+  acc   ET1-S                 ET1-sur
+  acc   ET2-S                 ET2-sur
+  acc   ETseq-S               ET2-seq
+  acc   LNET-S                LN-ET
+  acc   BB-S                  Bronchi
+  acc   BBseq-S               Bronchi-q
+  acc   bb-S                  Brchiole
+  acc   bbseq-S               Brchiole-q
+  acc   ALV-S                 ALV
+  acc   INT-S                 ALV
+  acc   LNTH-S                LN-Th
+  exc   Environment           ---
+
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
   acc   UB-con                UB-cont
+  exc   Urine                 ---
 
   acc   Blood                 Blood
   exc   Exhaled               ---
@@ -733,43 +837,77 @@ Sr-81 Inhalation, Aerosols Type M
 #-----------------------+---------------------+--------------
 
 # from parent to progeny
-  Kr-81m/UB-con           UB-con                    ---
+  Sr-81/ET1-F             ET1-F                     ---
+  Sr-81/ET2-F             ET2-F                     ---
+  Sr-81/ETseq-F           ETseq-F                   ---
+  Sr-81/LNET-F            LNET-F                    ---
+  Sr-81/BB-F              BB-F                      ---
+  Sr-81/BBseq-F           BBseq-F                   ---
+  Sr-81/bb-F              bb-F                      ---
+  Sr-81/bbseq-F           bbseq-F                   ---
+  Sr-81/ALV-F             ALV-F                     ---
+  Sr-81/INT-F             INT-F                     ---
+  Sr-81/LNTH-F            LNTH-F                    ---
+  Sr-81/ET1-S             ET1-S                     ---
+  Sr-81/ET2-S             ET2-S                     ---
+  Sr-81/ETseq-S           ETseq-S                   ---
+  Sr-81/LNET-S            LNET-S                    ---
+  Sr-81/BB-S              BB-S                      ---
+  Sr-81/BBseq-S           BBseq-S                   ---
+  Sr-81/bb-S              bb-S                      ---
+  Sr-81/bbseq-S           bbseq-S                   ---
+  Sr-81/ALV-S             ALV-S                     ---
+  Sr-81/INT-S             INT-S                     ---
+  Sr-81/LNTH-S            LNTH-S                    ---
+  Sr-81/Environment       Environment               ---
+
+  Sr-81/Oralcavity        Oralcavity                ---
+  Sr-81/Oesophagus-f      Oesophagus-f              ---
+  Sr-81/Oesophagus-s      Oesophagus-s              ---
+  Sr-81/St-con            St-con                    ---
+  Sr-81/SI-con            SI-con                    ---
+  Sr-81/RC-con            RC-con                    ---
+  Sr-81/LC-con            LC-con                    ---
+  Sr-81/RS-con            RS-con                    ---
+  Sr-81/Faeces            Faeces                    ---
+  Sr-81/UB-con            UB-con                    ---
+  Sr-81/Urine             Urine                     ---
+
   Kr-81m/Blood            Blood                     ---
   Kr-81m/Exhaled          Exhaled                   ---
 
 # ICRP Publ.130 Para.38
-  Sr-81/ET1-F             Exhaled                 100
-  Sr-81/ET2-F             Exhaled                 100
-  Sr-81/ETseq-F           Exhaled                 100
-  Sr-81/LNET-F            Exhaled                 100
-  Sr-81/BB-F              Exhaled                 100
-  Sr-81/BBseq-F           Exhaled                 100
-  Sr-81/bb-F              Exhaled                 100
-  Sr-81/bbseq-F           Exhaled                 100
-  Sr-81/ALV-F             Exhaled                 100
-  Sr-81/INT-F             Exhaled                 100
-  Sr-81/LNTH-F            Exhaled                 100
-  Sr-81/ET1-S             Exhaled                 100
-  Sr-81/ET2-S             Exhaled                 100
-  Sr-81/ETseq-S           Exhaled                 100
-  Sr-81/LNET-S            Exhaled                 100
-  Sr-81/BB-S              Exhaled                 100
-  Sr-81/BBseq-S           Exhaled                 100
-  Sr-81/bb-S              Exhaled                 100
-  Sr-81/bbseq-S           Exhaled                 100
-  Sr-81/ALV-S             Exhaled                 100
-  Sr-81/INT-S             Exhaled                 100
-  Sr-81/LNTH-S            Exhaled                 100
+  ET1-F                   Exhaled                 100
+  ET2-F                   Exhaled                 100
+  ETseq-F                 Exhaled                 100
+  LNET-F                  Exhaled                 100
+  BB-F                    Exhaled                 100
+  BBseq-F                 Exhaled                 100
+  bb-F                    Exhaled                 100
+  bbseq-F                 Exhaled                 100
+  ALV-F                   Exhaled                 100
+  INT-F                   Exhaled                 100
+  LNTH-F                  Exhaled                 100
+  ET1-S                   Exhaled                 100
+  ET2-S                   Exhaled                 100
+  ETseq-S                 Exhaled                 100
+  LNET-S                  Exhaled                 100
+  BB-S                    Exhaled                 100
+  BBseq-S                 Exhaled                 100
+  bb-S                    Exhaled                 100
+  bbseq-S                 Exhaled                 100
+  ALV-S                   Exhaled                 100
+  INT-S                   Exhaled                 100
+  LNTH-S                  Exhaled                 100
 
-  Sr-81/Oralcavity        Exhaled                 100
-  Sr-81/Oesophagus-f      Exhaled                 100
-  Sr-81/Oesophagus-s      Exhaled                 100
-  Sr-81/St-con            Exhaled                 100
-  Sr-81/SI-con            Exhaled                 100
-  Sr-81/RC-con            Exhaled                 100
-  Sr-81/LC-con            Exhaled                 100
-  Sr-81/RS-con            Exhaled                 100
-  Sr-81/UB-con            UB-con                    ---
+  Oralcavity              Exhaled                 100
+  Oesophagus-f            Exhaled                 100
+  Oesophagus-s            Exhaled                 100
+  St-con                  Exhaled                 100
+  SI-con                  Exhaled                 100
+  RC-con                  Exhaled                 100
+  LC-con                  Exhaled                 100
+  RS-con                  Exhaled                 100
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
