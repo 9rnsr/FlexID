@@ -1,27 +1,23 @@
-using System.Reflection;
-
 namespace FlexID;
 
 class TestFiles
 {
     static TestFiles()
     {
-        var assembly = Assembly.GetAssembly(typeof(TestFiles));
-        var assemblyDir = Path.GetDirectoryName(assembly.Location);
-
-        testFilesDir = File.ReadLines(Path.Combine(assemblyDir, "TestFiles")).First();
+        var testfilesPath = Path.Combine(AppContext.BaseDirectory, "TestFiles");
+        testfilesDir = File.ReadLines(testfilesPath).First();
     }
 
-    private static readonly string testFilesDir;
+    private static readonly string testfilesDir;
 
     public static string Combine(params string[] paths)
     {
-        return Path.Combine(testFilesDir, Path.Combine(paths));
+        return Path.Combine(testfilesDir, Path.Combine(paths));
     }
 
     public static string ReplaceVar(string str)
     {
-        str = str.Replace("$(TestFiles)", testFilesDir);
+        str = str.Replace("$(TestFiles)", testfilesDir);
         str = str.Replace("$(ResourceFiles)", AppResource.BaseDir);
         return str;
     }
