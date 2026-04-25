@@ -3,26 +3,26 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Converters" Version="8.2.251219" />
-    <PackageVersion Include="EPPlus" Version="8.4.0" />
+    <PackageVersion Include="EPPlus" Version="8.5.3" />
     <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
-    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.8.260209005" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.1721" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.8.260416003" />
     <PackageVersion Include="MSTest" Version="4.0.2" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.9.50" />
     <PackageVersion Include="ObservableCollections.R3" Version="3.3.4" />
     <PackageVersion Include="R3" Version="1.3.0" />
     <PackageVersion Include="R3Extensions.WinUI3" Version="1.3.0" />
-    <PackageVersion Include="ScottPlot.WinUI" Version="5.1.57" />
+    <PackageVersion Include="ScottPlot.WinUI" Version="5.1.58" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Sprache" Version="2.3.1" />
-    <PackageVersion Include="System.CommandLine" Version="2.0.3" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.6" />
     <PackageVersion Include="WinUIEx" Version="2.9.0" />
   </ItemGroup>
 </Project>
