@@ -28,13 +28,6 @@
     Loaded="WindowContent_Loaded"
     PreviewKeyDown="Page_PreviewKeyDown">
 
-    <Grid.KeyboardAccelerators>
-      <KeyboardAccelerator
-        Key="O"
-        Invoked="OnOpen"
-        Modifiers="Control" />
-    </Grid.KeyboardAccelerators>
-
     <i:Interaction.Behaviors>
       <vb:PathDropBehavior AllowDropPath="SingleAny" DropCommand="{x:Bind ViewModel.SelectOutputFilePathCommand}" />
     </i:Interaction.Behaviors>
@@ -86,7 +79,11 @@
       AccessKey="O"
       Command="{x:Bind ViewModel.SelectOutputFilePathCommand}"
       Content="Open"
-      ToolTipService.ToolTip="Open Output file (Ctrl+O)" />
+      ToolTipService.ToolTip="Open Output file (Ctrl+O)">
+      <Button.KeyboardAccelerators>
+        <KeyboardAccelerator Key="O" Modifiers="Control" />
+      </Button.KeyboardAccelerators>
+    </Button>
     <TextBox
       Grid.Column="1"
       Grid.ColumnSpan="3"

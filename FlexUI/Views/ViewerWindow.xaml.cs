@@ -82,14 +82,14 @@ public partial class ViewerWindow
         }
     }
 
-    private void OnOpen(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
-    {
-        // KeyboardAcceleratorはHandledを設定してイベントを消費しないと適切に動作しないため
-        // InvokeCommandActionなどが使えない…
-        args.Handled = true;
+    //private void OnOpen(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    //{
+    //    // KeyboardAcceleratorはHandledを設定してイベントを消費しないと適切に動作しないため
+    //    // InvokeCommandActionなどが使えない…
+    //    args.Handled = true;
 
-        ViewModel.SelectOutputFilePathCommand.Execute(null);
-    }
+    //    ViewModel.SelectOutputFilePathCommand.Execute(null);
+    //}
 
     private void OutputFilePathTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
