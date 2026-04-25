@@ -10,45 +10,44 @@ public class InputErrorTests
     [TestMethod]
     public void DuplicatedSectionErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[title]",
-            "dummy2",
-            "",
-            "[parameter]",
-            "  OutputDose = true",
-            "",
-            "[parameter]",
-            "  OutputDose = true",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[nuclide]",
-            "  Y-90   2.595247E-01",
-            "",
-            "[Sr-90:parameter]",
-            "  #",
-            "",
-            "[Sr-90:parameter]",
-            "  #",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  acc    ST0       ---",
-            "",
-            "[Sr-90:compartment]",
-            "  acc    ST1       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0   100%",
-            "",
-            "[Sr-90:transfer]",
-            "  ST0        ST1   100%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [title]
+            dummy2
+
+            [parameter]
+              OutputDose = true
+
+            [parameter]
+              OutputDose = true
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [nuclide]
+              Y-90   2.595247E-01
+
+            [Sr-90:parameter]
+              #
+
+            [Sr-90:parameter]
+              #
+
+            [Sr-90:compartment]
+              inp    input     ---
+              acc    ST0       ---
+
+            [Sr-90:compartment]
+              acc    ST1       ---
+
+            [Sr-90:transfer]
+              input      ST0   100%
+
+            [Sr-90:transfer]
+              ST0        ST1   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -65,21 +64,20 @@ public class InputErrorTests
     [TestMethod]
     public void MissingSectionErrors1()
     {
-        var reader = CreateReader(
-        [
-            "# [title]",
-            "# dummy",
-            "",
-            "# [nuclide]",
-            "#   Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  acc    ST0       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0   100%",
-        ]);
+        var reader = CreateReader("""
+            # [title]
+            # dummy
+
+            # [nuclide]
+            #   Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              inp    input     ---
+              acc    ST0       ---
+
+            [Sr-90:transfer]
+              input      ST0   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -94,21 +92,20 @@ public class InputErrorTests
     [TestMethod]
     public void MissingSectionErrors2()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "# [Sr-90:compartment]",
-            "#   inp    input     ---",
-            "#   acc    ST0       ---",
-            "",
-            "# [Sr-90:transfer]",
-            "#   input      ST0   100%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            # [Sr-90:compartment]
+            #   inp    input     ---
+            #   acc    ST0       ---
+
+            # [Sr-90:transfer]
+            #   input      ST0   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -121,12 +118,11 @@ public class InputErrorTests
     [TestMethod]
     public void EmptySectionErrors1()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "",
-            "[nuclide]",
-        ]);
+        var reader = CreateReader("""
+            [title]
+
+            [nuclide]
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -139,18 +135,17 @@ public class InputErrorTests
     [TestMethod]
     public void EmptySectionErrors2()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "",
-            "[Sr-90:transfer]",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+
+            [Sr-90:transfer]
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -163,16 +158,15 @@ public class InputErrorTests
     [TestMethod]
     public void TitleSection_UnrecognizedLinesError()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "unrecognized",
-            "",
-            "[nuclide]",
-            "  Sr-90"
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            unrecognized
+
+            [nuclide]
+              Sr-9
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -184,23 +178,22 @@ public class InputErrorTests
     [TestMethod]
     public void NuclideSection_AutoModeErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  Y-90",    // set AutoMode = true
-            "  aaa",
-            "  Sr-90",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  acc    ST0       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0   100%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  Y-90   # set AutoMode = true
+              aaa
+              Sr-90
+
+            [Sr-90:compartment]
+              inp    input     ---
+              acc    ST0       ---
+
+            [Sr-90:transfer]
+              input      ST0   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -213,27 +206,26 @@ public class InputErrorTests
     [TestMethod]
     public void NuclideSection_ManualModeErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  6.596156E-05",
-            "  Sr-90  abcdefg",
-            "  Y-90  -6.596156E-05",
-            "  Zr-93  1.241198E-09  abc",
-            "  Nb-90  1.139420E+00  /1.0",
-            "  Mo-90  2.992002E+00  Nb-90/xyz",
-            "  Nb-93m 1.177330E-04  Nb-93/-1.0",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  acc    ST0       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0   100%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              6.596156E-05
+              Sr-90  abcdefg
+              Y-90  -6.596156E-05
+              Zr-93  1.241198E-09  abc
+              Nb-90  1.139420E+00  /1.0
+              Mo-90  2.992002E+00  Nb-90/xyz
+              Nb-93m 1.177330E-04  Nb-93/-1.0
+
+            [Sr-90:compartment]
+              inp    input     ---
+              acc    ST0       ---
+
+            [Sr-90:transfer]
+              input      ST0   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -251,22 +243,21 @@ public class InputErrorTests
     [TestMethod]
     public void CompartmentSection_SyntaxErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input   # ---",
-            "  acc    ST0       ---",
-            "  add    ST1       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0   100%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              inp    input   # ---
+              acc    ST0       ---
+              add    ST1       ---
+
+            [Sr-90:transfer]
+              input      ST0   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -279,21 +270,20 @@ public class InputErrorTests
     [TestMethod]
     public void CompartmentSection_MissingInpError()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  acc    ST0   ---",
-            "  acc    ST1   ---",
-            "",
-            "[Sr-90:transfer]",
-            "  ST0    ST1   100%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              acc    ST0   ---
+              acc    ST1   ---
+
+            [Sr-90:transfer]
+              ST0    ST1   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -305,30 +295,29 @@ public class InputErrorTests
     [TestMethod]
     public void CompartmentSection_DefineInpErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05  Y-90/1.0",
-            "  Y-90   2.595247E-01",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  inp    input2    ---",
-            "  acc    ST0       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0   100%",
-            "",
-            "[Y-90:compartment]",
-            "  inp    input2    ---",
-            "  acc    ST0       ---",
-            "",
-            "[Y-90:transfer]",
-            "  Sr-90/ST0  ST0   ---"
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05  Y-90/1.0
+              Y-90   2.595247E-01
+
+            [Sr-90:compartment]
+              inp    input     ---
+              inp    input2    ---
+              acc    ST0       ---
+
+            [Sr-90:transfer]
+              input      ST0   100%
+
+            [Y-90:compartment]
+              inp    input2    ---
+              acc    ST0       ---
+
+            [Y-90:transfer]
+              Sr-90/ST0  ST0   --
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -341,21 +330,20 @@ public class InputErrorTests
     [TestMethod]
     public void CompartmentSection_UnknownSourceRegion()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  acc    ST0       Abcde",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0   100%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              inp    input     ---
+              acc    ST0       Abcde
+
+            [Sr-90:transfer]
+              input      ST0   100%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -367,22 +355,21 @@ public class InputErrorTests
     [TestMethod]
     public void TransferSection_SyntexErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  acc    ST0       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input # ST0   100%",
-            "  input   ST0   abc%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              inp    input     ---
+              acc    ST0       ---
+
+            [Sr-90:transfer]
+              input # ST0   100%
+              input   ST0   abc%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -395,34 +382,33 @@ public class InputErrorTests
     [TestMethod]
     public void TransferSection_SemanticErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05  Y-90/1.0",
-            "  Y-90   2.595247E-01",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input     ---",
-            "  acc    ST0       ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0        100%",
-            "  X-00/ST0   ST0        100",
-            "  ST0        X-00/ST0   100",
-            "  ST1        ST0        100",
-            "  ST0        ST1        100",
-            "  ST0        ST0        100",
-            "  input      ST0        50%",
-            "",
-            "[Y-90:compartment]",
-            "  acc    ST0       ---",
-            "",
-            "[Y-90:transfer]",
-            "  ST0  Sr-90/ST0   ---",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05  Y-90/1.0
+              Y-90   2.595247E-01
+
+            [Sr-90:compartment]
+              inp    input     ---
+              acc    ST0       ---
+
+            [Sr-90:transfer]
+              input      ST0        100%
+              X-00/ST0   ST0        100
+              ST0        X-00/ST0   100
+              ST1        ST0        100
+              ST0        ST1        100
+              ST0        ST0        100
+              input      ST0        50%
+
+            [Y-90:compartment]
+              acc    ST0       ---
+
+            [Y-90:transfer]
+              ST0  Sr-90/ST0   ---
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -440,40 +426,39 @@ public class InputErrorTests
     [TestMethod]
     public void TransferSection_PathErrors()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05  Y-90/1.0",
-            "  Y-90   2.595247E-01",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input      ---",
-            "  acc    ST0        ---",
-            "  mix    mix-Blood  ---",
-            "  exc    Excreta    ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input      ST0    ---",
-            "  mix-Blood  ST0    ---",
-            "  ST0        input  100",
-            "  Excreta    ST0    100",
-            "",
-            "[Y-90:compartment]",
-            "  acc    ST0        ---",
-            "  acc    ST1        ---",
-            "  exc    Excreta    ---",
-            "",
-            "[Y-90:transfer]",
-            "  Sr-90/input      ST0  ---",
-            "  Sr-90/mix-Blood  ST0  ---",
-            "  Sr-90/ST0        ST0  100%",
-            "  ST0              ST1  100%",
-            "  Sr-90/Excreta    ST0  ---",
-            "  Sr-90/ST0    Excreta  ---",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05  Y-90/1.0
+              Y-90   2.595247E-01
+
+            [Sr-90:compartment]
+              inp    input      ---
+              acc    ST0        ---
+              mix    mix-Blood  ---
+              exc    Excreta    ---
+
+            [Sr-90:transfer]
+              input      ST0    ---
+              mix-Blood  ST0    ---
+              ST0        input  100
+              Excreta    ST0    100
+
+            [Y-90:compartment]
+              acc    ST0        ---
+              acc    ST1        ---
+              exc    Excreta    ---
+
+            [Y-90:transfer]
+              Sr-90/input      ST0  ---
+              Sr-90/mix-Blood  ST0  ---
+              Sr-90/ST0        ST0  100%
+              ST0              ST1  100%
+              Sr-90/Excreta    ST0  ---
+              Sr-90/ST0    Excreta  ---
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -494,23 +479,22 @@ public class InputErrorTests
     [TestMethod]
     public void TransferSection_NegativeCoefficient()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input      ---",
-            "  acc    ST0        ---",
-            "  acc    ST1        ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input  ST0        100%",
-            "  ST0    ST1        -30",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              inp    input      ---
+              acc    ST0        ---
+              acc    ST1        ---
+
+            [Sr-90:transfer]
+              input  ST0        100%
+              ST0    ST1        -30
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -522,23 +506,22 @@ public class InputErrorTests
     [TestMethod]
     public void Transfersection_SumOfCoefficientsIsNot100Percent()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input      ---",
-            "  acc    ST0        ---",
-            "  acc    ST1        ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input  ST0        63.1462%",
-            "  input  ST1        36.8528%",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              inp    input      ---
+              acc    ST0        ---
+              acc    ST1        ---
+
+            [Sr-90:transfer]
+              input  ST0        63.1462%
+              input  ST1        36.8528%
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -552,23 +535,22 @@ public class InputErrorTests
     [TestMethod]
     public void TransferSection_DivideByZeroCoefficient()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Sr-90  6.596156E-05",
-            "",
-            "[Sr-90:compartment]",
-            "  inp    input      ---",
-            "  acc    ST0        ---",
-            "  acc    ST1        ---",
-            "",
-            "[Sr-90:transfer]",
-            "  input  ST0        100%",
-            "  ST0    ST1      $(10 / 0)",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90  6.596156E-05
+
+            [Sr-90:compartment]
+              inp    input      ---
+              acc    ST0        ---
+              acc    ST1        ---
+
+            [Sr-90:transfer]
+              input  ST0        100%
+              ST0    ST1      $(10 / 0)
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
@@ -583,6 +565,15 @@ static class InputErrorTestHelpers
     public static InputDataReader_OIR CreateReader(string[] inputLines)
     {
         var inputFileBytes = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, inputLines));
+
+        var stream = new MemoryStream(inputFileBytes);
+        var reader = new StreamReader(stream);
+        return new InputDataReader_OIR(reader);
+    }
+
+    public static InputDataReader_OIR CreateReader(string inputText)
+    {
+        var inputFileBytes = Encoding.UTF8.GetBytes(inputText);
 
         var stream = new MemoryStream(inputFileBytes);
         var reader = new StreamReader(stream);

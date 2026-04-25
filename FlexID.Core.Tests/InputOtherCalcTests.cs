@@ -288,29 +288,28 @@ public class InputOtherCalcTests
     [TestMethod]
     public void TestAdjustIncorrectMarrow()
     {
-        var reader = CreateReader(
-        [
-            "[title]",
-            "dummy",
-            "",
-            "[nuclide]",
-            "  Th-232",
-            "",
-            "[Th-232:compartment]",
-            "  inp    input        ---",
-            "  acc    Blood        Blood",
-            "  acc    C-marrow     C-marrow",
-            "  acc    T-marrow     T-marrow",
-            "  acc    R-marrow     R-marrow",
-            "  acc    Y-marrow     Y-marrow",
-            "",
-            "[Th-232:transfer]",
-            "  input  Blood        100%",
-            "  Blood  C-marrow     10",
-            "  Blood  T-marrow     10",
-            "  Blood  R-marrow     10",
-            "  Blood  Y-marrow     10",
-        ]);
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Th-232
+
+            [Th-232:compartment]
+              inp    input        ---
+              acc    Blood        Blood
+              acc    C-marrow     C-marrow
+              acc    T-marrow     T-marrow
+              acc    R-marrow     R-marrow
+              acc    Y-marrow     Y-marrow
+
+            [Th-232:transfer]
+              input  Blood        100%
+              Blood  C-marrow     10
+              Blood  T-marrow     10
+              Blood  R-marrow     10
+              Blood  Y-marrow     10
+            """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
