@@ -845,6 +845,11 @@ Pb-214 Injection
   Pb-214/Liver2           Pb-210/Liver2             ---
   Pb-214/Kidneys1         Pb-210/Kidneys1           ---
   Pb-214/Kidneys2         Pb-210/Kidneys2           ---
+  Bi-214/RedMarrow        Pb-210/RedMarrow          ---
+  Bi-214/Testes           Pb-210/Testes             ---
+  Bi-214/Ovaries          Pb-210/Ovaries            ---
+  Bi-214/Skin             Pb-210/Skin               ---
+  Bi-214/Spleen           Pb-210/Spleen             ---
   Pb-214/Excreta(sweat)            Pb-210/Excreta(sweat)            ---
   Pb-214/Excreta(hair,skin,nails)  Pb-210/Excreta(hair,skin,nails)  ---
 

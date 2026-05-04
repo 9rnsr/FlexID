@@ -314,6 +314,8 @@ Fe-60 Ingestion, Unspecified
   Co-60m/Liver2           Liver2                    ---
   Co-60m/Kidneys1         Kidneys1                  ---
   Co-60m/Kidneys2         Kidneys2                  ---
+  Co-60m/Spleen           Spleen                    ---
+  Co-60m/RedMarrow        RedMarrow                 ---
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

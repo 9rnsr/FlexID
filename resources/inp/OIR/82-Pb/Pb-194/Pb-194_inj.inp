@@ -462,6 +462,11 @@ Pb-194 Injection
   Pb-194/Noch-T-bone-V    Hg-194/Plasma1        $(0.18 / 365.25)
   Pb-194/Liver1           Hg-194/Liver              ---
   Pb-194/Kidneys1         Hg-194/Kidneys            ---
+  Tl-194/RedMarrow        Hg-194/RedMarrow          ---
+  Tl-194/Testes           Hg-194/Testes             ---
+  Tl-194/Ovaries          Hg-194/Ovaries            ---
+  Tl-194/Skin             Hg-194/Skin               ---
+  Tl-194/Spleen           Hg-194/Spleen             ---
 
   Pb-194/ST0              Hg-194/Plasma1        $(0.693 / 20)
   Pb-194/ST1              Hg-194/Plasma1        $(0.693 / 20)
