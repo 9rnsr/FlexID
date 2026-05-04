@@ -604,8 +604,10 @@ Sb-127 Inhalation, Aerosols Type M
   Sb-127/C-bone-V         C-bone-V                  ---
   Sb-127/T-bone-S         T-bone-S                  ---
   Sb-127/T-bone-V         T-bone-V                  ---
+  Te-127m/Liver           Liver                     ---
   Sb-127/Thyroid          Thyroid                   ---
   Sb-127/Kidneys          Kidneys                   ---
+  Te-127m/ST              ST                        ---
   Sb-127/ST0              Blood1                    0.0693
   Sb-127/ST1              Blood1                    0.0693
   Sb-127/ST2              Blood1                    0.0693

@@ -744,6 +744,7 @@ Te-133 Inhalation, Aerosols Type F
   Te-133/ST               Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   I-133/Blood1            Blood                     ---
+  I-133/Blood2            Blood                  1000
   I-133/Liver1            Blood                  1000
   I-133/Liver2            Blood                  1000
   I-133/Kidneys1          Blood                  1000
@@ -947,6 +948,7 @@ Te-133 Inhalation, Aerosols Type F
   Te-133/ST               Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   I-133/Blood1            Blood                     ---
+  I-133/Blood2            Blood                  1000
   I-133/Liver1            Blood                  1000
   I-133/Liver2            Blood                  1000
   I-133/Kidneys1          Blood                  1000

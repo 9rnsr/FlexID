@@ -314,6 +314,16 @@ Tl-198m Inhalation, Aerosols Type F
   Tl-198m/ALV-S           ALV-S                     ---
   Tl-198m/INT-S           INT-S                     ---
   Tl-198m/LNTH-S          LNTH-S                    ---
+  Tl-198m/ET2-B           ET2-B                     ---
+  Tl-198m/ETseq-B         ETseq-B                   ---
+  Tl-198m/LNET-B          LNET-B                    ---
+  Tl-198m/BB-B            BB-B                      ---
+  Tl-198m/BBseq-B         BBseq-B                   ---
+  Tl-198m/bb-B            bb-B                      ---
+  Tl-198m/bbseq-B         bbseq-B                   ---
+  Tl-198m/ALV-B           ALV-B                     ---
+  Tl-198m/INT-B           INT-B                     ---
+  Tl-198m/LNTH-B          LNTH-B                    ---
   Tl-198m/Environment     Environment               ---
 
   Tl-198m/Oralcavity      Oralcavity                ---

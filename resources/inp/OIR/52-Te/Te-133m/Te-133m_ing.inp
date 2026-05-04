@@ -557,6 +557,7 @@ Te-133m Ingestion
   Te-133/Blood1           Blood                     ---
 
   I-133/Blood1            Blood                     ---
+  I-133/Blood2            Blood                  1000
   I-133/Liver1            Blood                  1000
   I-133/Liver2            Blood                  1000
   I-133/Kidneys1          Blood                  1000
@@ -646,6 +647,7 @@ Te-133m Ingestion
   Te-133/Blood1           Blood                     ---
 
   I-133/Blood1            Blood                     ---
+  I-133/Blood2            Blood                  1000
   I-133/Liver1            Blood                  1000
   I-133/Liver2            Blood                  1000
   I-133/Kidneys1          Blood                  1000

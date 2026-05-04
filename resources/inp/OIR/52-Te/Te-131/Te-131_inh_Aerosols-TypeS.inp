@@ -744,6 +744,7 @@ Te-131 Inhalation, Aerosols Type S
   Te-131/ST               Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   I-131/Blood1            Blood                     ---
+  I-131/Blood2            Blood                  1000
   I-131/Liver1            Blood                  1000
   I-131/Liver2            Blood                  1000
   I-131/Kidneys1          Blood                  1000

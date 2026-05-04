@@ -807,6 +807,7 @@ Pb-210 Ingestion
 # > 血漿に移行すると仮定されます。
 
   Pb-210/Plasma           Tl-206/Plasma             ---
+  Hg-206/Plasma2          Tl-206/Plasma          1000
   Pb-210/RBC              Tl-206/RBC                ---
   Pb-210/C-bone-S         Tl-206/C-bone-S           ---
   Pb-210/T-bone-S         Tl-206/T-bone-S           ---
@@ -821,6 +822,11 @@ Pb-210 Ingestion
   Bi-210/Ovaries          Tl-206/Ovaries            ---
   Bi-210/Skin             Tl-206/Skin               ---
   Bi-210/Spleen           Tl-206/Spleen             ---
+  Hg-206/RedMarrow        Tl-206/RedMarrow          ---
+  Hg-206/Testes           Tl-206/Testes             ---
+  Hg-206/Ovaries          Tl-206/Ovaries            ---
+  Hg-206/Skin             Tl-206/Skin               ---
+  Hg-206/Spleen           Tl-206/Spleen             ---
 
   Pb-210/ST0              Tl-206/Plasma             2.5
   Pb-210/ST1              Tl-206/Plasma             2.5

@@ -677,6 +677,8 @@ Fe-60 Inhalation, Aerosols Type M
   Co-60m/Liver2           Liver2                    ---
   Co-60m/Kidneys1         Kidneys1                  ---
   Co-60m/Kidneys2         Kidneys2                  ---
+  Co-60m/Spleen           Spleen                    ---
+  Co-60m/RedMarrow        RedMarrow                 ---
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6

@@ -986,6 +986,7 @@ Te-131m Inhalation, Aerosols Type F
   Te-131/Blood1           Blood                     ---
 
   I-131/Blood1            Blood                     ---
+  I-131/Blood2            Blood                  1000
   I-131/Liver1            Blood                  1000
   I-131/Liver2            Blood                  1000
   I-131/Kidneys1          Blood                  1000
