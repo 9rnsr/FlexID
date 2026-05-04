@@ -1159,6 +1159,53 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         // 移行経路の定義にエラーがないことを確定する。
         errors.RaiseIfAny();
+
+        // 壊変経路の充足を確認する。
+        VerifyDecayPaths(data);
+    }
+
+    /// <summary>
+    /// 崩壊系列に沿って全ての壊変経路が定義されていることを確認する。
+    /// </summary>
+    /// <param name="data"></param>
+    private void VerifyDecayPaths(InputData data)
+    {
+        var decays = data.Organs.ToDictionary(o => o, o => new List<NuclideData>());
+        foreach (var organTo in data.Organs)
+        {
+            foreach (var organFrom in organTo.Inflows
+                            .Select(i => i.Organ).Where(o => o.Nuclide != organTo.Nuclide))
+            {
+                decays[organFrom].Add(organTo.Nuclide);
+            }
+        }
+
+        foreach (var nuclide in data.Nuclides)
+        {
+            if (!CalcProgeny && nuclide.IsProgeny)
+                continue;
+
+            foreach (var organFrom in data.Organs.Where(o => o.Nuclide == nuclide))
+            {
+                if (organFrom.Func == OrganFunc.inp || organFrom.Func == OrganFunc.mix)
+                    return;
+
+                // 排泄後の残留放射能については、厳密に経路を定義しなくてもよいことにする。
+                if (organFrom.Func == OrganFunc.exc)
+                    return;
+
+                var decayNuclides = decays[organFrom];
+
+                var daughters = nuclide.Branches.Select(b => b.Daughter);
+                foreach (var daughter in daughters)
+                {
+                    if (!decayNuclides.Contains(daughter))
+                        errors.AddError($"Missing decay path from '{organFrom}' to daughter '{daughter}'");
+                }
+            }
+        }
+
+        errors.RaiseIfAny();
     }
 
     /// <summary>

@@ -381,4 +381,6 @@ I-131 Inhalation, Aerosols Type M
   I-131/St-wall           Blood                 $(0.693 / (20/60/24))   # 半減期20分
   I-131/Other1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
   I-131/Other2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-131/Other3            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  I-131/Other4            Blood                 $(0.693 / (20/60/24))   # 半減期20分
   Blood                   Exhaled                1000

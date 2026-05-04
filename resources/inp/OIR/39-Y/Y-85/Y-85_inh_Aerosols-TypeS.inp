@@ -670,6 +670,7 @@ Y-85 Inhalation, Aerosols Type S
   Y-85/ST1                Blood                     2.5
   Y-85/Liver0             Blood                     6
   Y-85/Liver1             Blood                     6
+  Sr-85m/Liver            Liver                     ---
   Y-85/Kidneys            Kidneys                   ---
   Y-85/C-bone-S           C-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
   Y-85/C-bone-V           Blood                 $( 3% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
