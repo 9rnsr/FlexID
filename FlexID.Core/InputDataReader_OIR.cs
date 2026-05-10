@@ -659,8 +659,9 @@ public class InputDataReader_OIR : InputDataReaderBase
                 Index = -1,         // 後で設定する。
                 Name = organName,
                 Func = organFunc,
-                BioDecay = 1.0,     // accは後で設定する。
             };
+            if (organFunc == OrganFunc.mix)
+                organ.BioDecay = 1.0;
 
             // 線源領域の名称については、妥当性を後で確認する。
             organ.SourceRegion = sourceRegion;
