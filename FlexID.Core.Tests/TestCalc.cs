@@ -58,7 +58,7 @@ public class TestCalc
         [
             "",
             "Transfers:",
-            "  Cs-134/input         -> Cs-134/Oralcavity      1 = 1 * 100.00%",
+            "  Cs-134/input         -> Cs-134/Oralcavity      1 = 100.00%",
             "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-F  1.8 = 2 * 0.9",
             "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-S  0.2 = 2 * 0.1",
             "  Cs-134/Oesophagus-F  -> Cs-134/Stomach-con     2 = 2 * 1",
