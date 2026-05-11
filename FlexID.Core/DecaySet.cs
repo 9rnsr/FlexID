@@ -507,7 +507,6 @@ internal class DecaySet
             Index = -1,     // 後で設定する。
             Name = "",      // 後で設定する。
             Func = func,
-            BioDecay = 1.0, // accは後で設定する。
             IsDecayCompartment = true,
         };
         DecayCompartments.Add(organDecay);

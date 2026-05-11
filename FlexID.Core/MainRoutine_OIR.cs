@@ -252,9 +252,10 @@ public class MainRoutine_OIR
                 {
                     var organFrom = inflow.Organ;
 
-                    var bioDecay = organFrom.BioDecay;
-                    var rate = organFrom.IsInstantOutflow ? $"{inflow.Rate:P}" : $"{inflow.Rate:G}";
-                    var coeff = $"{bioDecay * inflow.Rate:G} = {bioDecay:G} * {rate}";
+                    var rate = inflow.Rate;
+                    var coeff = organFrom.IsInstantOutflow
+                        ? $"{rate:G} = {rate:P}"
+                        : $"{organFrom.BioDecay * rate:G} = {organFrom.BioDecay:G} * {rate:G}";
 
                     Add(organFrom, organTo, coeff);
                 }
