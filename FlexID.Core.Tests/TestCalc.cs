@@ -58,7 +58,7 @@ public class TestCalc
         [
             "",
             "Transfers:",
-            "  Cs-134/input         -> Cs-134/Oralcavity      1 = 1 * 100.00%",
+            "  Cs-134/input         -> Cs-134/Oralcavity      1 = 100.00%",
             "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-F  1.8 = 2 * 0.9",
             "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-S  0.2 = 2 * 0.1",
             "  Cs-134/Oesophagus-F  -> Cs-134/Stomach-con     2 = 2 * 1",
@@ -155,5 +155,43 @@ public class TestCalc
             else
                 File.Exists(actualFilePath).ShouldBeFalse();
         }
+    }
+
+    [TestMethod]
+    [DataRow("DecayActivityTest_Pb-210.inp")]
+    [DataRow("DecayActivityTest_Pb-212.inp")]
+    [DataRow("DecayActivityTest_Ra-224.inp")]
+    [DataRow("DecayActivityTest_Th-232.inp")]
+    public void DecayActivityTests(string inputFileName)
+    {
+        var testDir = TestFiles.Combine("TestCalc");
+        var inputFilePath = Path.Combine(testDir, inputFileName);
+
+        var expectDir = Path.Combine(testDir, "Expect", "DecayActivityTests");
+        var resultDir = Path.Combine(testDir, "Result~", "DecayActivityTests");
+
+        var data = new InputDataReader_OIR(inputFilePath).Read();
+        data.OutputDose = false;
+        data.OutputDoseRate = false;
+        data.OutputRetention = true;
+        data.OutputCumulative = false;
+
+        var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
+        var outputTimeMeshPath = Path.Combine(testDir, "time-per-1d.dat");
+
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory     /**/= resultDir,
+            OutputFileName      /**/= Path.GetFileNameWithoutExtension(inputFilePath),
+            ComputeTimeMeshPath /**/= computeTimeMeshPath,
+            OutputTimeMeshPath  /**/= outputTimeMeshPath,
+            CommitmentPeriod    /**/= "50years",
+        };
+
+        main.Main(data, default);
+
+        var expectFilePath = Path.Combine(expectDir, main.OutputFileName + "_Retention.out");
+        var actualFilePath = Path.Combine(resultDir, main.OutputFileName + "_Retention.out");
+        File.ReadAllLines(actualFilePath).ShouldBe(File.ReadAllLines(expectFilePath));
     }
 }
