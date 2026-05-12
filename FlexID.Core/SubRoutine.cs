@@ -235,7 +235,12 @@ static class SubRoutine
         double rini = pre.end;  // 初期放射能[Bq/day]
         double rend;            // 末期放射能[Bq/day]
         double rtot;            // 積算放射能[Bq]
-        if (alpha_dT <= 1E-9)
+        if (alpha == 0)
+        {
+            rend = rini + ave * dT;
+            rtot = (rini + ave) * dT;
+        }
+        else if (alpha_dT <= 1E-9)
         {
             rend = ave * alpha_dT / alpha + rini * Math.Exp(-alpha_dT);
             rtot = ave * (dT - alpha_dT / alpha) / alpha + rini / alpha * alpha_dT;
