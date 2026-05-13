@@ -1,0 +1,9 @@
+Permission to Use Material from ICRP Publication 133
+On behalf of the International Commission on Radiological Protection (ICRP), I am pleased to formally grant permission for MHI NS Engineering Co., Ltd. to use the following material from ICRP Publication 133:
+Specific Absorbed Fractions (SAFs) and source/target region data
+This permission includes incorporation of the data into the FlexID internal dose calculation code and its non-commercial distribution, including distribution via GitHub, provided that the material is used faithfully and that ICRP is properly acknowledged as the original source.
+No modifications to the substantive content of the data are permitted.
+
+Sincerely,
+Christopher Clement
+Scientific Secretary & CEO, ICRP
