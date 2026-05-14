@@ -350,10 +350,10 @@ class CalcOut : IDisposable
     /// 出力時間メッシュにおける残留放射能を出力。
     /// </summary>
     /// <param name="outT"></param>
-    /// <param name="Act"></param>
+    /// <param name="res"></param>
     /// <param name="iter"></param>
     /// <param name="maskExcreta"></param>
-    public void ActivityOut(double outT, Activity Act, int iter, bool maskExcreta = false)
+    public void ActivityOut(double outT, RetentionSet res, int iter, bool maskExcreta = false)
     {
         foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
         foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
@@ -374,8 +374,8 @@ class CalcOut : IDisposable
                 if (organ.Func != OrganFunc.acc)
                     continue;
 
-                var rete = lambda * Act.OutNow[organ.Index].end;
-                var cumu = lambda * Act.OutTotalFromIntake[organ.Index];
+                var rete = lambda * res.OutNow[organ.Index].end;
+                var cumu = lambda * res.OutTotalFromIntake[organ.Index];
                 reteWholeBody += rete;
                 cumuWholeBody += cumu;
             }
@@ -387,8 +387,8 @@ class CalcOut : IDisposable
                 if (indexes.Length == 0)
                     return;
 
-                var rete = indexes.Sum(x => lambda * Act.OutNow[x.index].end * x.Rate);
-                var cumu = indexes.Sum(x => lambda * Act.OutTotalFromIntake[x.index] * x.Rate);
+                var rete = indexes.Sum(x => lambda * res.OutNow[x.index].end * x.Rate);
+                var cumu = indexes.Sum(x => lambda * res.OutTotalFromIntake[x.index] * x.Rate);
                 wsRete[i].Write("  {0:0.00000000E+00}", rete);
                 wsCumu[i].Write("  {0:0.00000000E+00}", cumu);
             }
@@ -411,8 +411,8 @@ class CalcOut : IDisposable
             if (lambda == 0)
                 lambda = 1; // 安定核種の場合はBqではなく原子数を出力する。
 
-            var rete = lambda * Act.OutNow[organ.Index].end;
-            var cumu = lambda * Act.OutTotalFromIntake[organ.Index];
+            var rete = lambda * res.OutNow[organ.Index].end;
+            var cumu = lambda * res.OutTotalFromIntake[organ.Index];
 
             var wrRete = wsOrgansRete[organ.Index];
             var wrCumu = wsOrgansCumu[organ.Index];
