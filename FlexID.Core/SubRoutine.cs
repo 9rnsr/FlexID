@@ -153,32 +153,31 @@ static class SubRoutine
 
         for (int i = 0; i < organLo.Inflows.Count; i++)
         {
-            // 丸め誤差が出るので、Roundするか否か
-            var inflowLo = Math.Round(organLo.Inflows[i].Rate, 6);
-            var inflowHi = Math.Round(organHi.Inflows[i].Rate, 6);
+            var rateLo = organLo.Inflows[i].Rate;
+            var rateHi = organHi.Inflows[i].Rate;
 
             double rate;
             if (ageDay <= MainRoutine_EIR.AgeAdult)
             {
                 if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                 {
-                    rate = organLo.Inflows[i].Rate;
+                    rate = rateLo;
                     bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                 }
                 else if (organLo.Name == "SI")
                 {
-                    rate = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
+                    rate = Interpolation(ageDay, rateLo, rateHi, daysLo, daysHi);
                     bioDecay = organLo.BioDecay;
                 }
                 else
                 {
-                    rate = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
+                    rate = Interpolation(ageDay, rateLo, rateHi, daysLo, daysHi);
                     bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                 }
             }
             else
             {
-                rate = organLo.Inflows[i].Rate;
+                rate = rateLo;
                 bioDecay = organLo.BioDecay;
             }
 
@@ -188,7 +187,7 @@ static class SubRoutine
 
             // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
             if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
-                rate = organLo.Inflows[i].Rate;
+                rate = rateLo;
 
             // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
             ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * rate;
