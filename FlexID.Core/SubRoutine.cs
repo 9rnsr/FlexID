@@ -48,16 +48,10 @@ static class SubRoutine
         foreach (var inflow in organ.Inflows)
         {
             var inflowOrgan = inflow.Organ;
+            var rate = inflow.Rate;
 
-            // 流入元の生物学的崩壊定数[/day]
-            var beforeBio = inflowOrgan.BioDecay;
-
-            // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-            if (inflowOrgan.Nuclide != organ.Nuclide)
-                beforeBio = 1;
-
-            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
+            ave += Act.IterPre[inflowOrgan.Index].ave * rate;
         }
 
         // 蓄積した核種の壊変による減衰を適用する。
@@ -80,14 +74,12 @@ static class SubRoutine
         foreach (var inflow in organ.Inflows)
         {
             var inflowOrgan = inflow.Organ;
+            var rate = inflow.Rate;
 
-            // 流入元の生物学的崩壊定数[/day]
-            var beforeBio = inflowOrgan.BioDecay;
-
-            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ini += Act.IterPre[inflowOrgan.Index].ini * beforeBio * inflow.Rate;
-            ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
-            end += Act.IterPre[inflowOrgan.Index].end * beforeBio * inflow.Rate;
+            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
+            ini += Act.IterPre[inflowOrgan.Index].ini * rate;
+            ave += Act.IterPre[inflowOrgan.Index].ave * rate;
+            end += Act.IterPre[inflowOrgan.Index].end * rate;
         }
         Act.IterNow[organ.Index].ini = ini;
         Act.IterNow[organ.Index].ave = ave;
@@ -129,16 +121,10 @@ static class SubRoutine
         foreach (var inflow in organ.Inflows)
         {
             var inflowOrgan = inflow.Organ;
+            var rate = inflow.Rate;
 
-            // 流入元の生物学的崩壊定数[/day]
-            var beforeBio = inflowOrgan.BioDecay;
-
-            // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-            if (inflowOrgan.Nuclide != organ.Nuclide)
-                beforeBio = 1;
-
-            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
+            ave += Act.IterPre[inflowOrgan.Index].ave * rate;
         }
 
         // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
@@ -168,32 +154,31 @@ static class SubRoutine
         for (int i = 0; i < organLo.Inflows.Count; i++)
         {
             // 丸め誤差が出るので、Roundするか否か
-            var inflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
-            var inflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
+            var inflowLo = Math.Round(organLo.Inflows[i].Rate, 6);
+            var inflowHi = Math.Round(organHi.Inflows[i].Rate, 6);
 
-            // 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            double beforeBio;
+            double rate;
             if (ageDay <= MainRoutine_EIR.AgeAdult)
             {
                 if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                 {
-                    beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                    rate = organLo.Inflows[i].Rate;
                     bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                 }
                 else if (organLo.Name == "SI")
                 {
-                    beforeBio = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
+                    rate = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
                     bioDecay = organLo.BioDecay;
                 }
                 else
                 {
-                    beforeBio = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
+                    rate = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
                     bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                 }
             }
             else
             {
-                beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                rate = organLo.Inflows[i].Rate;
                 bioDecay = organLo.BioDecay;
             }
 
@@ -203,10 +188,10 @@ static class SubRoutine
 
             // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
             if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
-                beforeBio = organLo.Inflows[i].Rate;
+                rate = organLo.Inflows[i].Rate;
 
             // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
-            ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio;
+            ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * rate;
         }
 
         // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]

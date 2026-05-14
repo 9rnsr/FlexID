@@ -262,6 +262,12 @@ public class InputDataReader_EIR : InputDataReaderBase
 
                     inflow.Rate = nuclideFrom.Lambda * branch.Fraction;
                 }
+                else
+                {
+                    // 流入元の生物学的崩壊定数*移行割合＝流入経路の移行速度として設定し直す。
+                    var bioDecay = inflow.Organ.BioDecay;
+                    inflow.Rate = bioDecay * inflow.Rate;
+                }
             }
         }
 

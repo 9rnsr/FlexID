@@ -21,7 +21,9 @@ public class Inflow
     public Organ Organ;
 
     /// <summary>
-    /// 流入割合
+    /// 流入元からの移行割合[-]
+    /// ・核種が変わらない場合は、移行速度[/day]
+    /// ・核種が壊変する場合は、親核種の崩壊定数[/day] * 娘核種の分岐比[-]
     /// </summary>
     public double Rate;
 
