@@ -251,7 +251,7 @@ public class InputDataReader_EIR : InputDataReaderBase
                 // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
                 inflow.Organ = data.Organs.First(o => o.ID == inflow.ID);
 
-                // 流入割合がマイナスの時の処理は親からの分岐比とする。
+                // 流入割合がマイナスの時は、親の崩壊定数*親からの分岐比を移行割合として設定する。
                 if (inflow.Rate < 0)
                 {
                     var nuclideFrom = inflow.Organ.Nuclide;
@@ -259,7 +259,8 @@ public class InputDataReader_EIR : InputDataReaderBase
                     var branch = nuclideFrom.Branches.FirstOrDefault(b => b.Daughter == nuclideTo);
                     if (branch == default)
                         throw Program.Error($": There is no decay path from {nuclideFrom.Name} to {nuclideTo.Name}.");
-                    inflow.Rate = branch.Fraction;
+
+                    inflow.Rate = nuclideFrom.Lambda * branch.Fraction;
                 }
             }
         }

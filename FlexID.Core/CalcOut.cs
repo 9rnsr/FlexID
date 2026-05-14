@@ -363,21 +363,22 @@ class CalcOut : IDisposable
         for (int i = 0; i < data.Nuclides.Count; i++)
         {
             var nuclide = data.Nuclides[i];
+            var lambda = nuclide.Lambda;
+            if (lambda == 0)
+                lambda = 1; // 安定核種の場合はBqではなく原子数を出力する。
+
             var reteWholeBody = 0.0;
             var cumuWholeBody = 0.0;
-
             foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
             {
                 if (organ.Func != OrganFunc.acc)
                     continue;
 
-                var retention = Act.OutNow[organ.Index].end;
-                var cumulative = Act.OutTotalFromIntake[organ.Index];
-
-                reteWholeBody += retention;
-                cumuWholeBody += cumulative;
+                var rete = lambda * Act.OutNow[organ.Index].end;
+                var cumu = lambda * Act.OutTotalFromIntake[organ.Index];
+                reteWholeBody += rete;
+                cumuWholeBody += cumu;
             }
-
             wsRete[i].Write("  {0:0.00000000E+00}", reteWholeBody);
             wsCumu[i].Write("  {0:0.00000000E+00}", cumuWholeBody);
 
@@ -385,9 +386,9 @@ class CalcOut : IDisposable
             {
                 if (indexes.Length == 0)
                     return;
-                var rete = indexes.Select(x => Act.OutNow[x.index].end * x.Rate).Sum();
-                var cumu = indexes.Select(x => Act.OutTotalFromIntake[x.index] * x.Rate).Sum();
 
+                var rete = indexes.Sum(x => lambda * Act.OutNow[x.index].end * x.Rate);
+                var cumu = indexes.Sum(x => lambda * Act.OutTotalFromIntake[x.index] * x.Rate);
                 wsRete[i].Write("  {0:0.00000000E+00}", rete);
                 wsCumu[i].Write("  {0:0.00000000E+00}", cumu);
             }
@@ -406,8 +407,12 @@ class CalcOut : IDisposable
             if (organ.IsZeroInflow)
                 continue;
 
-            var retention = Act.OutNow[organ.Index].end;
-            var cumulative = Act.OutTotalFromIntake[organ.Index];
+            var lambda = organ.Nuclide.Lambda;
+            if (lambda == 0)
+                lambda = 1; // 安定核種の場合はBqではなく原子数を出力する。
+
+            var rete = lambda * Act.OutNow[organ.Index].end;
+            var cumu = lambda * Act.OutTotalFromIntake[organ.Index];
 
             var wrRete = wsOrgansRete[organ.Index];
             var wrCumu = wsOrgansCumu[organ.Index];
@@ -415,9 +420,9 @@ class CalcOut : IDisposable
             if (organ.IsExcretaCompatibleWithOIR && maskExcreta)
                 wrRete.Write("       ----     ");
             else
-                wrRete.Write("  {0:0.00000000E+00}", retention);
+                wrRete.Write("  {0:0.00000000E+00}", rete);
 
-            wrCumu.Write("  {0:0.00000000E+00}", cumulative);
+            wrCumu.Write("  {0:0.00000000E+00}", cumu);
         }
 
         foreach (var w in wsRete) w.WriteLine();

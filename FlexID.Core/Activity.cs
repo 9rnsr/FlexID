@@ -1,27 +1,27 @@
 namespace FlexID;
 
 /// <summary>
-/// あるコンパートメントにおける、計算時間メッシュ内の放射能を保持する。
+/// あるコンパートメントにおける、計算時間メッシュ内の原子数を保持する。
 /// </summary>
 public struct OrganActivity
 {
     /// <summary>
-    /// 計算時間メッシュにおける初期放射能[Bq/day]。
+    /// 計算時間メッシュにおける初期原子数[atoms]。
     /// </summary>
     public double ini;
 
     /// <summary>
-    /// 計算時間メッシュにおける平均放射能[Bq/day]。
+    /// 計算時間メッシュにおける1日あたりの平均原子数[atoms/day]。
     /// </summary>
     public double ave;
 
     /// <summary>
-    /// 計算時間メッシュにおける末期放射能[Bq/day]。
+    /// 計算時間メッシュにおける末期原子数[atoms]。
     /// </summary>
     public double end;
 
     /// <summary>
-    /// 計算時間メッシュにおける積算放射能[Bq]。
+    /// 計算時間メッシュにおける積算原子数[atoms]。
     /// </summary>
     public double total;
 }
@@ -34,32 +34,32 @@ public class Activity
     private OrganActivity[] _calcNow;
 
     /// <summary>
-    /// 前回の収束計算回における、コンパートメント毎の放射能。
+    /// 前回の収束計算回における、コンパートメント毎の原子数。
     /// </summary>
     public OrganActivity[] IterPre => _iterPre;
 
     /// <summary>
-    /// 今回の収束計算回における、コンパートメント毎の放射能。
+    /// 今回の収束計算回における、コンパートメント毎の原子数。
     /// </summary>
     public OrganActivity[] IterNow => _iterNow;
 
     /// <summary>
-    /// 前回の計算時間メッシュにおける、コンパートメント毎の放射能。
+    /// 前回の計算時間メッシュにおける、コンパートメント毎の原子数。
     /// </summary>
     public OrganActivity[] CalcPre => _calcPre;
 
     /// <summary>
-    /// 今回の計算時間メッシュにおける、コンパートメント毎の放射能。
+    /// 今回の計算時間メッシュにおける、コンパートメント毎の原子数。
     /// </summary>
     public OrganActivity[] CalcNow => _calcNow;
 
     /// <summary>
-    /// 今回の出力時間メッシュにおける、コンパートメント毎の放射能。
+    /// 今回の出力時間メッシュにおける、コンパートメント毎の原子数。
     /// </summary>
     public OrganActivity[] OutNow { get; }
 
     /// <summary>
-    /// 摂取時からの、コンパートメント毎の積算放射能[Bq]。
+    /// 摂取時からの、コンパートメント毎の積算原子数。
     /// </summary>
     public double[] OutTotalFromIntake { get; }
 
@@ -174,7 +174,7 @@ public class Activity
     {
         foreach (var o in data.Organs)
         {
-            // 前回の末期放射能を今回の初期放射能とする。
+            // 前回の末期原子数を今回の初期原子数とする。
             OutNow[o.Index].ini = OutNow[o.Index].end;
             OutNow[o.Index].ave = 0;
             OutNow[o.Index].end = 0;

@@ -463,10 +463,13 @@ internal class DecaySet
                         continue;
                     }
 
+                    // 壊変経路では、親の崩壊定数*親からの分岐比を移行割合として設定する。
+                    var inflowRate = organFrom.Nuclide.Lambda * fraction;
+
                     organTo.Inflows.Add(new Inflow
                     {
                         ID = organFrom.ID,
-                        Rate = fraction,    // 壊変経路では、親からの分岐比を移行割合としてとする。
+                        Rate = inflowRate,
                         Organ = organFrom,  // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
                     });
 

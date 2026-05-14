@@ -487,15 +487,15 @@ public class MainRoutine_OIR
                 }
             }
 
-            // 時間メッシュ毎の放射能を足していく
+            // 時間メッシュ毎の原子数を足していく
             foreach (var organ in data.Organs)
             {
                 var calcNowTotal = act.CalcNow[organ.Index].total;
 
-                // 今回の出力時間メッシュにおける積算放射能。
+                // 今回の出力時間メッシュにおける積算原子数。
                 act.OutNow[organ.Index].total += calcNowTotal;
 
-                // 摂取時からの積算放射能。
+                // 摂取時からの積算原子数。
                 act.OutTotalFromIntake[organ.Index] += calcNowTotal;
             }
 
@@ -506,7 +506,7 @@ public class MainRoutine_OIR
                     continue;
 
                 // コンパートメントの残留放射能がゼロの場合は何もしない。
-                var activity = act.CalcNow[organ.Index].ave * calcDeltaT;
+                var activity = organ.Nuclide.Lambda * act.CalcNow[organ.Index].ave * calcDeltaT;
                 if (activity == 0)
                     continue;
 
@@ -558,7 +558,7 @@ public class MainRoutine_OIR
                 // 経過時間が24時間に満たない場合は、数値出力を抑制する。
                 var maskExcreta = outNowT < outLastExcretaT + Delta24hourT;
 
-                // 出力時間メッシュにおける平均と末期の残留放射能を計算する。
+                // 出力時間メッシュにおける平均と末期の原子数を計算する。
                 foreach (var organ in data.Organs)
                 {
                     act.OutNow[organ.Index].ave = act.OutNow[organ.Index].total / outDeltaDay;
@@ -591,7 +591,7 @@ public class MainRoutine_OIR
                         if (!organ.IsExcretaCompatibleWithOIR)
                             continue;
 
-                        // OIR互換排泄コンパートメントについて、残留放射能をゼロクリアする。
+                        // OIR互換排泄コンパートメントについて、原子数をゼロクリアする。
                         act.CalcNow[organ.Index].end = 0;
                     }
                 }
