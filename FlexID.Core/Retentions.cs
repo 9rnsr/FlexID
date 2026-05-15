@@ -1,65 +1,68 @@
 namespace FlexID;
 
 /// <summary>
-/// あるコンパートメントにおける、計算時間メッシュ内の放射能を保持する。
+/// ある計算時間メッシュにおける、コンパートメントの残留量を保持する。
 /// </summary>
-public struct OrganActivity
+public struct OrganRetention
 {
     /// <summary>
-    /// 計算時間メッシュにおける初期放射能[Bq/day]。
+    /// 計算時間メッシュにおける初期原子数[atoms]。
     /// </summary>
     public double ini;
 
     /// <summary>
-    /// 計算時間メッシュにおける平均放射能[Bq/day]。
+    /// 計算時間メッシュにおける1日あたりの平均原子数[atoms/day]。
     /// </summary>
     public double ave;
 
     /// <summary>
-    /// 計算時間メッシュにおける末期放射能[Bq/day]。
+    /// 計算時間メッシュにおける末期原子数[atoms]。
     /// </summary>
     public double end;
 
     /// <summary>
-    /// 計算時間メッシュにおける積算放射能[Bq]。
+    /// 計算時間メッシュにおける積算原子数[atoms]。
     /// </summary>
     public double total;
 }
 
-public class Activity
+/// <summary>
+/// ある計算時間メッシュにおける、全てのコンパートメントの残留量を保持する。
+/// </summary>
+public class RetentionSet
 {
-    private OrganActivity[] _iterPre;
-    private OrganActivity[] _iterNow;
-    private OrganActivity[] _calcPre;
-    private OrganActivity[] _calcNow;
+    private OrganRetention[] _iterPre;
+    private OrganRetention[] _iterNow;
+    private OrganRetention[] _calcPre;
+    private OrganRetention[] _calcNow;
 
     /// <summary>
-    /// 前回の収束計算回における、コンパートメント毎の放射能。
+    /// 前回の収束計算回における、コンパートメント毎の残留量。
     /// </summary>
-    public OrganActivity[] IterPre => _iterPre;
+    public OrganRetention[] IterPre => _iterPre;
 
     /// <summary>
-    /// 今回の収束計算回における、コンパートメント毎の放射能。
+    /// 今回の収束計算回における、コンパートメント毎の残留量。
     /// </summary>
-    public OrganActivity[] IterNow => _iterNow;
+    public OrganRetention[] IterNow => _iterNow;
 
     /// <summary>
-    /// 前回の計算時間メッシュにおける、コンパートメント毎の放射能。
+    /// 前回の計算時間メッシュにおける、コンパートメント毎の残留量。
     /// </summary>
-    public OrganActivity[] CalcPre => _calcPre;
+    public OrganRetention[] CalcPre => _calcPre;
 
     /// <summary>
-    /// 今回の計算時間メッシュにおける、コンパートメント毎の放射能。
+    /// 今回の計算時間メッシュにおける、コンパートメント毎の残留量。
     /// </summary>
-    public OrganActivity[] CalcNow => _calcNow;
+    public OrganRetention[] CalcNow => _calcNow;
 
     /// <summary>
-    /// 今回の出力時間メッシュにおける、コンパートメント毎の放射能。
+    /// 今回の出力時間メッシュにおける、コンパートメント毎の残留量。
     /// </summary>
-    public OrganActivity[] OutNow { get; }
+    public OrganRetention[] OutNow { get; }
 
     /// <summary>
-    /// 摂取時からの、コンパートメント毎の積算放射能[Bq]。
+    /// 摂取時からの、コンパートメント毎の積算原子数[atoms]。
     /// </summary>
     public double[] OutTotalFromIntake { get; }
 
@@ -67,15 +70,15 @@ public class Activity
     /// inputから各臓器に初期値を振り分ける。
     /// </summary>
     /// <param name="data"></param>
-    public Activity(InputData data)
+    public RetentionSet(InputData data)
     {
-        _calcPre = new OrganActivity[data.Organs.Count];
-        _calcNow = new OrganActivity[data.Organs.Count];
+        _calcPre = new OrganRetention[data.Organs.Count];
+        _calcNow = new OrganRetention[data.Organs.Count];
 
-        _iterPre = new OrganActivity[data.Organs.Count];
-        _iterNow = new OrganActivity[data.Organs.Count];
+        _iterPre = new OrganRetention[data.Organs.Count];
+        _iterNow = new OrganRetention[data.Organs.Count];
 
-        OutNow = new OrganActivity[data.Organs.Count];
+        OutNow = new OrganRetention[data.Organs.Count];
         OutTotalFromIntake = new double[data.Organs.Count];
 
         // 全ての組織における計算結果をゼロクリアする。
@@ -174,7 +177,7 @@ public class Activity
     {
         foreach (var o in data.Organs)
         {
-            // 前回の末期放射能を今回の初期放射能とする。
+            // 前回の末期原子数を今回の初期原子数とする。
             OutNow[o.Index].ini = OutNow[o.Index].end;
             OutNow[o.Index].ave = 0;
             OutNow[o.Index].end = 0;

@@ -1096,7 +1096,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                 if (organFrom.IsInstantOutflow)
                 {
-                    // 流出放射能に対する移行割合の合計が1.0 == 100%かどうかを確認する。
+                    // 流出路毎の移行割合を合計したものが1.0 == 100%かどうかを確認する。
                     var sum = sumOfOutflowCoeff[organFrom];
                     if (sum != 1)
                     {
@@ -1137,8 +1137,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                 {
                     var sum = sumOfOutflowCoeff[organFrom];
 
-                    // fromからtoへの移行割合 = 移行速度[/d] / fromから流出する移行速度[/d]の総計
-                    inflowRate = sum == 0 ? 0.0 : (double)coeff / (double)sum;
+                    // fromからtoへの移行割合 = 移行速度[/d]
+                    inflowRate = (double)coeff;
                 }
 
                 organTo.Inflows.Add(new Inflow

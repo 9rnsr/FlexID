@@ -58,15 +58,15 @@ public class TestCalc
         [
             "",
             "Transfers:",
-            "  Cs-134/input         -> Cs-134/Oralcavity      1 = 100.00%",
-            "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-F  1.8 = 2 * 0.9",
-            "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-S  0.2 = 2 * 0.1",
-            "  Cs-134/Oesophagus-F  -> Cs-134/Stomach-con     2 = 2 * 1",
-            "  Cs-134/Oesophagus-S  -> Cs-134/Stomach-con     3 = 3 * 1",
-            "  Cs-134/Stomach-con   -> Cs-134/SI-con          5 = 5 * 1",
-            "  Cs-134/SI-wall       -> Cs-134/SI-con          2 = 2 * 1",
-            "  Cs-134/SI-con        -> Cs-134/SI-wall         2 = 4 * 0.5",
-            "  Cs-134/SI-con        -> Cs-134/Faeces          2 = 4 * 0.5",
+            "  Cs-134/input         -> Cs-134/Oralcavity    = 100.00%",
+            "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-F  = 1.8",
+            "  Cs-134/Oralcavity    -> Cs-134/Oesophagus-S  = 0.2",
+            "  Cs-134/Oesophagus-F  -> Cs-134/Stomach-con   = 2",
+            "  Cs-134/Oesophagus-S  -> Cs-134/Stomach-con   = 3",
+            "  Cs-134/Stomach-con   -> Cs-134/SI-con        = 5",
+            "  Cs-134/SI-wall       -> Cs-134/SI-con        = 2",
+            "  Cs-134/SI-con        -> Cs-134/SI-wall       = 2",
+            "  Cs-134/SI-con        -> Cs-134/Faeces        = 2",
         ]);
     }
 
