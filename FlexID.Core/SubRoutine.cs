@@ -5,9 +5,9 @@ static class SubRoutine
     /// <summary>
     /// inputから各臓器に初期値を振り分ける
     /// </summary>
-    /// <param name="act"></param>
+    /// <param name="res"></param>
     /// <param name="data"></param>
-    public static void Init(Activity act, InputData data)
+    public static void Init(RetentionSet res, InputData data)
     {
         foreach (var organ in data.Organs)
         {
@@ -18,14 +18,18 @@ static class SubRoutine
                                                                   i.Organ.Nuclide == nuclide);
             if (inflowFromInp != null)
             {
-                var init = inflowFromInp.Rate;
-                act.CalcNow[organ.Index].ini = init;
-                act.CalcNow[organ.Index].ave = init;
-                act.CalcNow[organ.Index].end = init;
-                act.CalcNow[organ.Index].total = 0;
+                // 親核種の1[Bq]相当の原子数を各コンパートメントに初期配分する。
+                // 親核種が安定核種(λ=0)の場合は、原子数1個を初期配分する。
+                var init = nuclide.Lambda != 0 ? 1.0 / nuclide.Lambda : 1.0;
+
+                var rate = inflowFromInp.Rate;
+                res.CalcNow[organ.Index].ini = init * rate;
+                res.CalcNow[organ.Index].ave = init * rate;
+                res.CalcNow[organ.Index].end = init * rate;
+                res.CalcNow[organ.Index].total = 0;
 
                 // 初期配分結果の出力に使用される。
-                act.OutNow[organ.Index] = act.CalcNow[organ.Index];
+                res.OutNow[organ.Index] = res.CalcNow[organ.Index];
             }
         }
     }
@@ -34,47 +38,34 @@ static class SubRoutine
     /// 排泄
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
+    /// <param name="res">計算結果</param>
     /// <param name="dT">ΔT[day]</param>
-    public static void Excretion(Organ organ, Activity Act, double dT)
+    public static void Excretion(Organ organ, RetentionSet res, double dT)
     {
-        double ini = 0;
-        double ave = 0;
-        double end = 0;
+        // 1日あたりの平均流入量[atoms/day]
+        var ave = 0.0;
 
-        // 排泄コンパートメントでは、計算時間メッシュ期間において
-        // 他のコンパートメントからの流入量のみに着目する。
-        // このため、以下の2つの経路についての計算を行わない。
-        // - 親核種の崩壊による子核種への移行(親exc側からの流出、及び子exc側への流入)
-        // - 蓄積した核種の崩壊による流出(減衰)
         foreach (var inflow in organ.Inflows)
         {
             var inflowOrgan = inflow.Organ;
+            var rate = inflow.Rate;
 
-            // 流入元の生物学的崩壊定数[/day]
-            var beforeBio = inflowOrgan.BioDecay;
-
-            // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-            if (inflowOrgan.Nuclide != organ.Nuclide)
-                beforeBio = organ.NuclideDecay; // TODO: なぜ娘核種のλを乗算するのか？
-
-            // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ini += Act.IterPre[inflowOrgan.Index].ini * beforeBio * inflow.Rate;
-            ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
-            end += Act.IterPre[inflowOrgan.Index].end * beforeBio * inflow.Rate;
+            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
+            ave += res.IterPre[inflowOrgan.Index].ave * rate;
         }
 
         // 蓄積した核種の壊変による減衰を適用する。
         var alpha = organ.NuclideDecay;
-        Accumulation(alpha, dT, ave, in Act.CalcPre[organ.Index], ref Act.IterNow[organ.Index]);
+
+        Accumulation(alpha, dT, ave, in res.CalcPre[organ.Index], ref res.IterNow[organ.Index]);
     }
 
     /// <summary>
     /// 混合
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
-    public static void Mix(Organ organ, Activity Act)
+    /// <param name="res">計算結果</param>
+    public static void Mix(Organ organ, RetentionSet res)
     {
         double ini = 0;
         double ave = 0;
@@ -82,72 +73,64 @@ static class SubRoutine
 
         foreach (var inflow in organ.Inflows)
         {
-            // 流入元の生物学的崩壊定数[/day]
-            var beforeBio = inflow.Organ.BioDecay;
+            var inflowOrgan = inflow.Organ;
+            var rate = inflow.Rate;
 
-            // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ini += Act.IterPre[inflow.Organ.Index].ini * beforeBio * inflow.Rate;
-            ave += Act.IterPre[inflow.Organ.Index].ave * beforeBio * inflow.Rate;
-            end += Act.IterPre[inflow.Organ.Index].end * beforeBio * inflow.Rate;
+            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
+            ini += res.IterPre[inflowOrgan.Index].ini * rate;
+            ave += res.IterPre[inflowOrgan.Index].ave * rate;
+            end += res.IterPre[inflowOrgan.Index].end * rate;
         }
-        Act.IterNow[organ.Index].ini = ini;
-        Act.IterNow[organ.Index].ave = ave;
-        Act.IterNow[organ.Index].end = end;
+        res.IterNow[organ.Index].ini = ini;
+        res.IterNow[organ.Index].ave = ave;
+        res.IterNow[organ.Index].end = end;
 
-        // 混合コンパートメントでは、流入放射能は全て接続先へ流出するため、
-        // 計算時間メッシュ期間における積算放射能をゼロと計算する。
-        Act.IterNow[organ.Index].total = 0;
+        // 混合コンパートメントでは、流入は全て接続先へ流出するため、
+        // 計算時間メッシュ期間における積算量をゼロと計算する。
+        res.IterNow[organ.Index].total = 0;
     }
 
     /// <summary>
     /// 入力
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
-    public static void Input(Organ organ, Activity Act)
+    /// <param name="res">計算結果</param>
+    public static void Input(Organ organ, RetentionSet res)
     {
         // 初期振り分けはしたので0を設定するだけ。
-        Act.IterNow[organ.Index].ini = 0;
-        Act.IterNow[organ.Index].ave = 0;
-        Act.IterNow[organ.Index].end = 0;
+        res.IterNow[organ.Index].ini = 0;
+        res.IterNow[organ.Index].ave = 0;
+        res.IterNow[organ.Index].end = 0;
 
-        // 入力コンパートメントでは、全ての放射能は初期配分によって接続先へ流出するため、
-        // 計算時間メッシュ期間における積算放射能をゼロと計算する。
-        Act.IterNow[organ.Index].total = 0;
+        // 入力コンパートメントでは、全ての流入は初期配分によって接続先へ流出するため、
+        // 計算時間メッシュ期間における積算量をゼロと計算する。
+        res.IterNow[organ.Index].total = 0;
     }
 
     /// <summary>
     /// 蓄積(OIR)
     /// </summary>
     /// <param name="organ">対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
+    /// <param name="res">計算結果</param>
     /// <param name="dT">ΔT[day]</param>
-    public static void Accumulation_OIR(Organ organ, Activity Act, double dT)
+    public static void Accumulation_OIR(Organ organ, RetentionSet res, double dT)
     {
-        // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
-        var alpha = organ.NuclideDecay + organ.BioDecay;
-
-        // 流入する平均放射能[Bq/day]
+        // 1日あたりの平均流入量[atoms/day]
         var ave = 0.0;
 
-        #region 流入臓器の数ループ
         foreach (var inflow in organ.Inflows)
         {
             var inflowOrgan = inflow.Organ;
+            var rate = inflow.Rate;
 
-            // 流入元の生物学的崩壊定数[/day]
-            var beforeBio = inflowOrgan.BioDecay;
-
-            // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
-            if (inflowOrgan.Nuclide != organ.Nuclide)
-                beforeBio = organ.NuclideDecay; // TODO: なぜ娘核種のλを乗算するのか？
-
-            // 放射能[Bq/day] = 流入元の放射能[Bq/day] * 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            ave += Act.IterPre[inflowOrgan.Index].ave * beforeBio * inflow.Rate;
+            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
+            ave += res.IterPre[inflowOrgan.Index].ave * rate;
         }
-        #endregion
 
-        Accumulation(alpha, dT, ave, in Act.CalcPre[organ.Index], ref Act.IterNow[organ.Index]);
+        // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
+        var alpha = organ.NuclideDecay + organ.BioDecay;
+
+        Accumulation(alpha, dT, ave, in res.CalcPre[organ.Index], ref res.IterNow[organ.Index]);
     }
 
     /// <summary>
@@ -155,49 +138,46 @@ static class SubRoutine
     /// </summary>
     /// <param name="organLo">補間期間下限側の対象コンパートメント</param>
     /// <param name="organHi">補間期間上限側の対象コンパートメント</param>
-    /// <param name="Act">計算結果</param>
+    /// <param name="res">計算結果</param>
     /// <param name="dT">ΔT[day]</param>
     /// <param name="ageDay">評価時刻における年齢[day]</param>
     /// <param name="daysLo">補間期間下限側の年齢[day]</param>
     /// <param name="daysHi">補間期間上限側の年齢[day]</param>
-    public static void Accumulation_EIR(Organ organLo, Organ organHi, Activity Act, double dT, double ageDay, int daysLo, int daysHi)
+    public static void Accumulation_EIR(Organ organLo, Organ organHi, RetentionSet res, double dT, double ageDay, int daysLo, int daysHi)
     {
         // 当該臓器の生物学的崩壊定数[/day]
         var bioDecay = organLo.BioDecay;
 
-        // 流入する平均放射能[Bq/day]
+        // 1日あたりの平均流入量[atoms/day]
         var ave = 0.0;
 
-        #region 流入臓器の数ループ
         for (int i = 0; i < organLo.Inflows.Count; i++)
         {
-            // 丸め誤差が出るので、Roundするか否か
-            var inflowLo = Math.Round(organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate, 6);
-            var inflowHi = Math.Round(organHi.Inflows[i].Organ.BioDecay * organHi.Inflows[i].Rate, 6);
+            var rateLo = organLo.Inflows[i].Rate;
+            var rateHi = organHi.Inflows[i].Rate;
 
-            // 流入元の生物学的崩壊定数[/day] * 流入割合[-]
-            double beforeBio;
+            double rate;
             if (ageDay <= MainRoutine_EIR.AgeAdult)
             {
                 if (organLo.Name == "Plasma" && organLo.Inflows[i].Organ.Name == "SI")
                 {
-                    beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                    rate = rateLo;
                     bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                 }
                 else if (organLo.Name == "SI")
                 {
-                    beforeBio = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
+                    rate = Interpolation(ageDay, rateLo, rateHi, daysLo, daysHi);
                     bioDecay = organLo.BioDecay;
                 }
                 else
                 {
-                    beforeBio = Interpolation(ageDay, inflowLo, inflowHi, daysLo, daysHi);
+                    rate = Interpolation(ageDay, rateLo, rateHi, daysLo, daysHi);
                     bioDecay = Interpolation(ageDay, organLo.BioDecay, organHi.BioDecay, daysLo, daysHi);
                 }
             }
             else
             {
-                beforeBio = organLo.Inflows[i].Organ.BioDecay * organLo.Inflows[i].Rate;
+                rate = rateLo;
                 bioDecay = organLo.BioDecay;
             }
 
@@ -207,17 +187,16 @@ static class SubRoutine
 
             // 親核種からの崩壊の場合、同じ臓器内で崩壊するので生物学的崩壊定数の影響を受けない
             if (organLo.Inflows[i].Organ.Nuclide != organLo.Nuclide)
-                beforeBio = organLo.NuclideDecay * organLo.Inflows[i].Rate; // TODO: なぜ娘核種のλを乗算するのか？
+                rate = rateLo;
 
-            // 放射能[Bq/day] = 流入元臓器の放射能[Bq/day] * 流入元臓器の生物学的崩壊定数 * 流入割合
-            ave += Act.IterPre[organLo.Inflows[i].Organ.Index].ave * beforeBio;
+            // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
+            ave += res.IterPre[organLo.Inflows[i].Organ.Index].ave * rate;
         }
-        #endregion
 
         // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
         var alpha = organLo.NuclideDecay + bioDecay;
 
-        Accumulation(alpha, dT, ave, in Act.CalcPre[organLo.Index], ref Act.IterNow[organLo.Index]);
+        Accumulation(alpha, dT, ave, in res.CalcPre[organLo.Index], ref res.IterNow[organLo.Index]);
     }
 
     /// <summary>
@@ -225,16 +204,16 @@ static class SubRoutine
     /// </summary>
     /// <param name="alpha">崩壊定数[/day]。</param>
     /// <param name="dT">時間メッシュの幅[day]</param>
-    /// <param name="ave">流入する平均放射能[Bq/day]</param>
+    /// <param name="ave">1日あたりの平均流入量[atoms/day]</param>
     /// <param name="pre">前回時間メッシュの計算結果。</param>
     /// <param name="now">今回時間メッシュの計算結果。</param>
-    private static void Accumulation(double alpha, double dT, double ave, in OrganActivity pre, ref OrganActivity now)
+    private static void Accumulation(double alpha, double dT, double ave, in OrganRetention pre, ref OrganRetention now)
     {
         var alpha_dT = alpha * dT;
 
-        double rini = pre.end;  // 初期放射能[Bq/day]
-        double rend;            // 末期放射能[Bq/day]
-        double rtot;            // 積算放射能[Bq]
+        double rini = pre.end;  // 初期原子数[atoms]
+        double rend;            // 末期原子数[atoms]
+        double rtot;            // ΔTあたりの積算原子数[atoms]
         if (alpha == 0)
         {
             rend = rini + ave * dT;
@@ -254,7 +233,7 @@ static class SubRoutine
             rtot = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
         }
 
-        var rave = rtot / dT;   // 平均放射能[Bq/day] = 積算放射能[Bq] / Δt[day]
+        var rave = rtot / dT;   // 1日あたりの平均原子数[atoms/day] = ΔTあたりの積算原子数[atoms] / ΔT[day]
 
         // 計算値が1E-60以下の場合は0とする
         if (rave <= 1E-60)
