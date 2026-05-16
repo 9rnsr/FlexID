@@ -72,8 +72,7 @@ public partial class InputScoeffViewModel : ViewModelBase
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FolderPicker(appId)
             {
-                SuggestedStartLocation = Microsoft.Windows.Storage.Pickers.PickerLocationId.Unspecified,
-                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+                SuggestedFolder = OutputDirectory,
             };
 
             var result = await picker.PickSingleFolderAsync();
