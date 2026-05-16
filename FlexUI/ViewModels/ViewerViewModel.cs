@@ -57,11 +57,8 @@ public partial class ViewerViewModel : ObservableObject
 
     private static string? CheckLogToOutRelation(string? path)
     {
-        if (path is null)
-            return null;
-
-        if (Path.GetExtension(path).Equals(".log", StringComparison.OrdinalIgnoreCase) != true)
-            return null;
+        if (Path.GetExtension(path)?.Equals(".log", StringComparison.OrdinalIgnoreCase) != true)
+            return path;
 
         var basePath = Path.GetFileNameWithoutExtension(path);
         if (Path.GetDirectoryName(path) is string dir)
