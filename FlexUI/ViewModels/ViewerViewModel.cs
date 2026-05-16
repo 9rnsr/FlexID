@@ -41,7 +41,7 @@ public partial class ViewerViewModel : ObservableObject
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
             {
-                //SuggestedFolder = Environment.CurrentDirectory, // Windows App SDK 2.0
+                SuggestedFolder = Path.GetDirectoryName(OutputFilePath),
             };
 
             var result = await picker.PickSingleFileAsync();
