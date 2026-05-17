@@ -39,6 +39,11 @@ public class Analysis
         var resultDir = Path.Combine(testDir, "Result~");
 
         var data = new InputDataReader_OIR(inputFilePath).Read();
+        data.OutputDose = false;
+        data.OutputDoseRate = false;
+        data.OutputRetention = false;
+        data.OutputCumulative = false;
+        data.OutputAtoms = true;
 
         var computeTimeMeshPath = Path.Combine(testDir, computeTimeMeshFile);
         var outputTimeMeshPath = Path.Combine(testDir, "otime.dat");
@@ -58,7 +63,7 @@ public class Analysis
         File.Delete(Path.Combine(resultDir, target + ".log"));
 
         CollectionAssert.AreEqual(
-            File.ReadAllLines(Path.Combine(expectDir, target + "_Retention.out")),
-            File.ReadAllLines(Path.Combine(resultDir, target + "_Retention.out")));
+            File.ReadAllLines(Path.Combine(expectDir, target + "_Atoms.out")),
+            File.ReadAllLines(Path.Combine(resultDir, target + "_Atoms.out")));
     }
 }
