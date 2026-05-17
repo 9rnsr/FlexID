@@ -172,9 +172,14 @@ public class NuclideData
     public (NuclideData Daughter, double Fraction)[] Branches;
 
     /// <summary>
-    /// 子孫核種の場合は<c>true</c>。
+    /// 子孫核種の場合は<see langword="true"/>。
     /// </summary>
     public bool IsProgeny { get; set; }
+
+    /// <summary>
+    /// 安定核種の場合は<see langword="true"/>。
+    /// </summary>
+    public bool IsStable => Lambda == 0;
 
     /// <summary>
     /// S係数データにおける各線源領域の名称。
@@ -359,7 +364,7 @@ public abstract class InputDataReaderBase : IDisposable
     private readonly StreamReader reader;
 
     /// <summary>
-    /// 子孫核種のインプットを読み飛ばす場合は<c>true</c>。
+    /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
     /// </summary>
     protected bool CalcProgeny { get; }
 
