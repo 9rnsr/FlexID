@@ -10,6 +10,7 @@ class CalcOut : IDisposable
     public string DoseRatePath { get; }
     public string RetentionPath { get; }
     public string CumulativePath { get; }
+    public string AtomsPath { get; }
 
     // 線量の出力ファイル用
     private readonly TextWriter wDoseM;
@@ -21,12 +22,15 @@ class CalcOut : IDisposable
 
     // 残留放射能の出力ファイル用
     private readonly TextWriter[] wsRete;
+    private readonly TextWriter[] wsOrgansRete;
 
     // 積算放射能の出力ファイル用
     private readonly TextWriter[] wsCumu;
-
-    private readonly TextWriter[] wsOrgansRete;
     private readonly TextWriter[] wsOrgansCumu;
+
+    // 原子数の出力ファイル用
+    private readonly TextWriter[] wsAtoms;
+    private readonly TextWriter[] wsOrgansAtoms;
 
     /// <summary>
     /// 計算処理が正常に終了した場合に<c>true</c>を設定する。
@@ -34,6 +38,8 @@ class CalcOut : IDisposable
     private bool IsFinished = false;
 
     private readonly bool IsMaleOnly;
+
+    private readonly double InitialAtoms;
 
     // StreamWriter.Nullはスレッドセーフでなくテストで問題を発生し得るため、
     // ここでスレッドセーフなラッパーを作り、これを計算処理で使用する。
@@ -53,10 +59,14 @@ class CalcOut : IDisposable
 
         IsMaleOnly = data.StartAge != 0;
 
+        var parentNuclide = data.Nuclides[0];
+        InitialAtoms = parentNuclide.IsStable ? 1.0 : 1.0 / parentNuclide.Lambda;
+
         DosePath = Path.Combine(outputDir, outputName + "_Dose.out");
         DoseRatePath = Path.Combine(outputDir, outputName + "_DoseRate.out");
         RetentionPath = Path.Combine(outputDir, outputName + "_Retention.out");
         CumulativePath = Path.Combine(outputDir, outputName + "_Cumulative.out");
+        AtomsPath = Path.Combine(outputDir, outputName + "_Atoms.out");
 
         // 預託線量の出力ファイルを用意する。
         wDoseM = data.OutputDose ? CreateWriter(DosePath) : NullWriter;
@@ -67,6 +77,9 @@ class CalcOut : IDisposable
         // 残留放射能の出力ファイルを用意する。
         wsRete = (data.OutputRetention ? CreateWriters(RetentionPath) : NullWriters(data.Nuclides.Count)).ToArray();
         wsCumu = (data.OutputCumulative ? CreateWriters(CumulativePath) : NullWriters(data.Nuclides.Count)).ToArray();
+
+        // 原子数の出力ファイルを用意する。
+        wsAtoms = (data.OutputAtoms ? CreateWriters(AtomsPath) : NullWriters(data.Nuclides.Count)).ToArray();
 
         TextWriter CreateWriter(string path, string? suffix = null)
         {
@@ -107,6 +120,8 @@ class CalcOut : IDisposable
         // コンパートメント毎にorgan.Indexでアクセスできるようにする。
         wsOrgansRete = GetOrganWriters(wsRete).ToArray();
         wsOrgansCumu = GetOrganWriters(wsCumu).ToArray();
+
+        wsOrgansAtoms = GetOrganWriters(wsAtoms).ToArray();
 
         IEnumerable<TextWriter> GetOrganWriters(TextWriter[] ws)
         {
@@ -291,6 +306,39 @@ class CalcOut : IDisposable
             }
             wCumu.WriteLine();
         }
+
+        // Atoms
+        foreach (var nuclide in data.Nuclides)
+        {
+            var indexN = data.Nuclides.IndexOf(nuclide);
+            var wAtoms = wsAtoms[indexN];
+
+            if (indexN == 0)
+            {
+                wAtoms.WriteLine("FlexID output: RetentionAtoms");
+                wAtoms.WriteLine(data.Title);
+                wAtoms.WriteLine();
+                wAtoms.WriteLine("Radionuclide: " + string.Join(", ", data.Nuclides.Select(n => n.Name)));
+                wAtoms.WriteLine("Units: day, atoms");
+                wAtoms.WriteLine();
+            }
+
+            wAtoms.WriteLine(nuclide.Name);
+            wAtoms.Write("  Time         ");
+            wAtoms.Write("  {0,-14}", "WholeAtoms");
+            wAtoms.Write("  {0,-14}", "WholeAtomsRate");
+
+            foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+            {
+                if (organ.IsDecayCompartment)
+                    continue;
+                if (organ.IsZeroInflow)
+                    continue;
+
+                wAtoms.Write("  {0,-14}", organ.Name);
+            }
+            wAtoms.WriteLine();
+        }
     }
 
     /// <summary>
@@ -357,6 +405,7 @@ class CalcOut : IDisposable
     {
         foreach (var w in wsRete) w.Write("  {0:0.000000E+00} ", outT);
         foreach (var w in wsCumu) w.Write("  {0:0.000000E+00} ", outT);
+        foreach (var w in wsAtoms) w.Write("  {0:0.000000E+00} ", outT);
 
         // 核種毎にaccコンパートメントの数値を合算したものを
         // 全身の放射能の数値として出力する。
@@ -364,8 +413,6 @@ class CalcOut : IDisposable
         {
             var nuclide = data.Nuclides[i];
             var lambda = nuclide.Lambda;
-            if (lambda == 0)
-                lambda = 1; // 安定核種の場合はBqではなく原子数を出力する。
 
             var reteWholeBody = 0.0;
             var cumuWholeBody = 0.0;
@@ -374,23 +421,23 @@ class CalcOut : IDisposable
                 if (organ.Func != OrganFunc.acc)
                     continue;
 
-                var rete = lambda * res.OutNow[organ.Index].end;
-                var cumu = lambda * res.OutTotalFromIntake[organ.Index];
+                var rete = res.OutNow[organ.Index].end;
+                var cumu = res.OutTotalFromIntake[organ.Index];
                 reteWholeBody += rete;
                 cumuWholeBody += cumu;
             }
-            wsRete[i].Write("  {0:0.00000000E+00}", reteWholeBody);
-            wsCumu[i].Write("  {0:0.00000000E+00}", cumuWholeBody);
+            wsRete[i].Write("  {0:0.00000000E+00}", lambda * reteWholeBody);
+            wsCumu[i].Write("  {0:0.00000000E+00}", lambda * cumuWholeBody);
 
             void WriteOutSum((int index, double Rate)[] indexes)
             {
                 if (indexes.Length == 0)
                     return;
 
-                var rete = indexes.Sum(x => lambda * res.OutNow[x.index].end * x.Rate);
-                var cumu = indexes.Sum(x => lambda * res.OutTotalFromIntake[x.index] * x.Rate);
-                wsRete[i].Write("  {0:0.00000000E+00}", rete);
-                wsCumu[i].Write("  {0:0.00000000E+00}", cumu);
+                var rete = indexes.Sum(x => res.OutNow[x.index].end * x.Rate);
+                var cumu = indexes.Sum(x => res.OutTotalFromIntake[x.index] * x.Rate);
+                wsRete[i].Write("  {0:0.00000000E+00}", lambda * rete);
+                wsCumu[i].Write("  {0:0.00000000E+00}", lambda * cumu);
             }
 
             WriteOutSum(nuclide.AtractIndexes);
@@ -398,6 +445,21 @@ class CalcOut : IDisposable
             WriteOutSum(nuclide.SkeletonIndexes);
             WriteOutSum(nuclide.LiverIndexes);
             WriteOutSum(nuclide.ThyroidIndexes);
+        }
+
+        // Atoms
+        for (int i = 0; i < data.Nuclides.Count; i++)
+        {
+            var nuclide = data.Nuclides[i];
+
+            var totalAtoms = 0.0;
+            foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
+            {
+                var atoms = res.OutNow[organ.Index].end;
+                totalAtoms += atoms;
+            }
+            wsAtoms[i].Write("  {0:0.00000000E+00}", totalAtoms);
+            wsAtoms[i].Write("  {0:0.00000000E+00}", totalAtoms / InitialAtoms);
         }
 
         foreach (var organ in data.Organs)
@@ -408,25 +470,27 @@ class CalcOut : IDisposable
                 continue;
 
             var lambda = organ.Nuclide.Lambda;
-            if (lambda == 0)
-                lambda = 1; // 安定核種の場合はBqではなく原子数を出力する。
 
-            var rete = lambda * res.OutNow[organ.Index].end;
-            var cumu = lambda * res.OutTotalFromIntake[organ.Index];
+            var rete = res.OutNow[organ.Index].end;
+            var cumu = res.OutTotalFromIntake[organ.Index];
 
             var wrRete = wsOrgansRete[organ.Index];
             var wrCumu = wsOrgansCumu[organ.Index];
+            var wrAtoms = wsOrgansAtoms[organ.Index];
 
             if (organ.IsExcretaCompatibleWithOIR && maskExcreta)
                 wrRete.Write("       ----     ");
             else
-                wrRete.Write("  {0:0.00000000E+00}", rete);
+                wrRete.Write("  {0:0.00000000E+00}", lambda * rete);
 
-            wrCumu.Write("  {0:0.00000000E+00}", cumu);
+            wrCumu.Write("  {0:0.00000000E+00}", lambda * cumu);
+
+            wrAtoms.Write("  {0:0.00000000E+00}", rete);
         }
 
         foreach (var w in wsRete) w.WriteLine();
         foreach (var w in wsCumu) w.WriteLine();
+        foreach (var w in wsAtoms) w.WriteLine();
     }
 
     /// <summary>
@@ -480,6 +544,7 @@ class CalcOut : IDisposable
             wRateF.WriteLine(message);
             foreach (var w in wsRete) w.WriteLine(message);
             foreach (var w in wsCumu) w.WriteLine(message);
+            foreach (var w in wsAtoms) w.WriteLine(message);
         }
 
         wDoseM.Dispose();
@@ -488,6 +553,7 @@ class CalcOut : IDisposable
         wRateF.Dispose();
         foreach (var w in wsRete) w.Dispose();
         foreach (var w in wsCumu) w.Dispose();
+        foreach (var w in wsAtoms) w.Dispose();
 
         if (data.OutputDose && !IsMaleOnly)
         {
@@ -542,6 +608,21 @@ class CalcOut : IDisposable
                 var progenyFile = CumulativePath + $".{n}";
                 foreach (var ln in File.ReadLines(progenyFile))
                     wCumu.WriteLine(ln);
+                File.Delete(progenyFile);
+            }
+        }
+        if (nuclideCount >= 2 && data.OutputAtoms)
+        {
+            // 原子数について、子孫核種の出力を親核種の出力ファイルに追記していく。
+            using var wAtoms = new StreamWriter(AtomsPath, append: true);
+
+            for (int n = 1; n < nuclideCount; n++)
+            {
+                wAtoms.WriteLine();
+
+                var progenyFile = AtomsPath + $".{n}";
+                foreach (var ln in File.ReadLines(progenyFile))
+                    wAtoms.WriteLine(ln);
                 File.Delete(progenyFile);
             }
         }

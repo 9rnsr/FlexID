@@ -296,6 +296,7 @@ public class InputData
         "OutputDoseRate",
         "OutputRetention",
         "OutputCumulative",
+        "OutputAtoms",
     ];
 
     internal bool TryGetBooleanParameter(string name, bool defaultValue) =>
@@ -353,6 +354,15 @@ public class InputData
     {
         get => TryGetBooleanParameter("OutputCumulative", true);
         set => Parameters["OutputCumulative"] = value.ToString();
+    }
+
+    /// <summary>
+    /// 計算結果として原子数をファイルに出力する場合は <see langword="true"/>。
+    /// </summary>  
+    public bool OutputAtoms
+    {
+        get => TryGetBooleanParameter("OutputAtoms", false);
+        set => Parameters["OutputAtoms"] = value.ToString();
     }
 }
 
