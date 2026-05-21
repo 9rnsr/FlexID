@@ -307,12 +307,18 @@ public class MainRoutine_OIR
 
         foreach (var nuclide in data.Nuclides)
         {
+            writer.WriteLine();
+            writer.WriteLine($"Nuclide: {nuclide.Name}");
+
+            if (nuclide.IsStable)
+            {
+                writer.WriteLine($"No S-coefficients for Stable nuclide.");
+                continue;
+            }
+
             var indexN = data.Nuclides.IndexOf(nuclide);
             var scoeffTableM = data.SCoeffTablesM[indexN];
             var scoeffTableF = data.SCoeffTablesF[indexN];
-
-            writer.WriteLine();
-            writer.WriteLine($"Nuclide: {nuclide.Name}");
 
             if (printScoeff)
             {

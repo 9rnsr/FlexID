@@ -817,6 +817,11 @@ public class InputDataReader_OIR : InputDataReaderBase
                         errors.AddError(lineNum, $"Unknown source region name '{sourceRegion}'.");
                         continue;
                     }
+                    if (nuclide.IsStable)
+                    {
+                        errors.AddError(lineNum, $"Cannot specify source region for stable nuclide '{nuclide.Name}'.");
+                        continue;
+                    }
 
                     // インプットで明示された線源領域をOtherの内訳から除く。
                     otherSourceRegions.Remove(sourceRegion);
@@ -1252,6 +1257,13 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         foreach (var nuclide in data.Nuclides)
         {
+            if (nuclide.IsStable)
+            {
+                data.SCoeffTablesM.Add([]);
+                data.SCoeffTablesF.Add([]);
+                continue;
+            }
+
             // 核種に対応するS係数データを読み込む。
             var tableSCoeffM = ReadSCoeff(data, nuclide, Sex.Male);
             var tableSCoeffF = ReadSCoeff(data, nuclide, Sex.Female);

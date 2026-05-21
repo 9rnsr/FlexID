@@ -20,7 +20,7 @@ static class SubRoutine
             {
                 // 親核種の1[Bq]相当の原子数を各コンパートメントに初期配分する。
                 // 親核種が安定核種(λ=0)の場合は、原子数1個を初期配分する。
-                var init = nuclide.Lambda != 0 ? 1.0 / nuclide.Lambda : 1.0;
+                var init = nuclide.IsStable ? 1.0 : 1.0 / nuclide.Lambda;
 
                 var rate = inflowFromInp.Rate;
                 res.CalcNow[organ.Index].ini = init * rate;
