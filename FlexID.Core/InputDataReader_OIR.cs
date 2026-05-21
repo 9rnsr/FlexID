@@ -34,8 +34,6 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> nuclideTransfers = [];
 
-    private readonly List<Dictionary<string, double[]>> SCoeffTables = [];
-
     /// <summary>
     /// コンストラクタ。
     /// </summary>
