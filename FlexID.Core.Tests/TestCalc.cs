@@ -194,4 +194,44 @@ public class TestCalc
         var actualFilePath = Path.Combine(resultDir, main.OutputFileName + "_Retention.out");
         File.ReadAllLines(actualFilePath).ShouldBe(File.ReadAllLines(expectFilePath));
     }
+
+    [TestMethod]
+    [DataRow("CalcAtomsTest_S-35.inp")]
+    [DataRow("CalcAtomsTest_Sr-90.inp")]
+    [DataRow("CalcAtomsTest_Th-232.inp")]
+    public void CalcAtomsTests(string target)
+    {
+        var targetDir = TestFiles.Combine("TestCalc");
+
+        var expectDir = Path.Combine(targetDir, "Expect_CalcAtoms");
+        var resultDir = Path.Combine(targetDir, "Result_CalcAtoms~");
+        Directory.CreateDirectory(resultDir);
+
+        var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
+        var outputTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\out-time-OIR.dat");
+
+        var commitmentPeriod = "50years";
+
+        var data = new InputDataReader_OIR(Path.Combine(targetDir, target)).Read();
+        data.OutputDose = false;
+        data.OutputDoseRate = false;
+        data.OutputRetention = false;
+        data.OutputCumulative = false;
+        data.OutputAtoms = true;
+
+        var main = new MainRoutine_OIR()
+        {
+            OutputDirectory     /**/= resultDir,
+            OutputFileName      /**/= Path.GetFileNameWithoutExtension(target),
+            ComputeTimeMeshPath /**/= computeTimeMeshPath,
+            OutputTimeMeshPath  /**/= outputTimeMeshPath,
+            CommitmentPeriod    /**/= commitmentPeriod,
+        };
+
+        main.Main(data, default);
+
+        var expectFilePath = Path.Combine(expectDir, main.OutputFileName + "_Atoms.out");
+        var actualFilePath = Path.Combine(resultDir, main.OutputFileName + "_Atoms.out");
+        File.ReadAllLines(actualFilePath).ShouldBe(File.ReadAllLines(expectFilePath));
+    }
 }

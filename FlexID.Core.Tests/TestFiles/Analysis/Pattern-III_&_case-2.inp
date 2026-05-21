@@ -1,19 +1,13 @@
 [title]
 Pattern III & case 2
 
-[parameter]
-OutputDose = false
-OutputDoseRate = false
-OutputRetention = true
-OutputCumulative = false
-
 [nuclide]
 # Nuclide | λ=ln(2)/t½[/d]   | Branching Fraction
 #---------+-------------------+---------------------
-  Ba-133    0.000000E+00
+  StableN   0.000000E+00
 
 
-[Ba-133:compartment]
+[StableN:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -24,10 +18,10 @@ OutputCumulative = false
   acc   comp.A                ---
   acc   comp.B                ---
 
-  exc   end                   ---
+  acc   end                   ---
 
 
-[Ba-133:transfer]
+[StableN:transfer]
 #-------------+---------------+--------------
 # From        | To            | Transfer rate[/d] or fraction[%]
 #-------------+---------------+--------------

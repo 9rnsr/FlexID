@@ -353,6 +353,31 @@ public class InputErrorTests
     }
 
     [TestMethod]
+    public void CompartmentSection_SpecifySourceRegionForStableNuclide()
+    {
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Zr-90  0.000000E+00
+
+            [Zr-90:compartment]
+              inp    input     ---
+              acc    ST0       Other
+
+            [Zr-90:transfer]
+              input      ST0   100%
+            """);
+
+        var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
+        e.ErrorLines.ShouldBe(
+        [
+            "Line 9: Cannot specify source region for stable nuclide 'Zr-90'.",
+        ]);
+    }
+
+    [TestMethod]
     public void TransferSection_SyntexErrors()
     {
         var reader = CreateReader("""
