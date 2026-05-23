@@ -282,7 +282,7 @@ public partial class InputOirViewModel : ViewModelBase
             {
                 var data = new InputDataReader_OIR(target.InputFilePath, calcProgeny: true).Read();
 
-                var main = new MainRoutine_OIR()
+                var main = new MainRoutine_OIR(data)
                 {
                     OutputDirectory   /**/= outputDir,
                     OutputFileName    /**/= target.Name,
@@ -292,7 +292,7 @@ public partial class InputOirViewModel : ViewModelBase
                     ProgressIndicator /**/= target.ProgressIndicator,
                 };
 
-                main.Main(data, cancellationToken);
+                main.Main(cancellationToken);
 
                 var output = Path.Combine(outputDir, target.Name);
                 target.OutputFilePath = output + "_Retention.out";

@@ -6,6 +6,13 @@ namespace FlexID;
 /// </summary>
 public class MainRoutine_EIR
 {
+    public MainRoutine_EIR(List<InputData> dataList)
+    {
+        this.dataList = dataList;
+    }
+
+    private readonly List<InputData> dataList;
+
     /// <summary>
     /// 出力ディレクトリ。
     /// </summary>
@@ -49,7 +56,7 @@ public class MainRoutine_EIR
     /// </summary>
     public IProgress<double>? ProgressIndicator { get; init; }
 
-    public void Main(List<InputData> dataList, CancellationToken cancellationToken)
+    public void Main(CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
             throw Program.Error("Output directory is not specified");
@@ -69,11 +76,11 @@ public class MainRoutine_EIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(dataList, calcOut, cancellationToken);
+            MainCalc(calcOut, cancellationToken);
         }
     }
 
-    private void MainCalc(List<InputData> dataList, CalcOut calcOut, CancellationToken cancellationToken)
+    private void MainCalc(CalcOut calcOut, CancellationToken cancellationToken)
     {
         InputData dataLo;
         InputData dataHi;

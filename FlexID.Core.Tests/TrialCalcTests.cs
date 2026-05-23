@@ -31,7 +31,7 @@ public class TrialCalcTests
 
         var data = new InputDataReader_OIR(inputPath).Read();
 
-        var main = new MainRoutine_OIR()
+        var main = new MainRoutine_OIR(data)
         {
             OutputDirectory  /**/= resultDir,
             OutputFileName   /**/= target,
@@ -40,7 +40,7 @@ public class TrialCalcTests
             CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
-        main.Main(data, default);
+        main.Main(default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + ".log")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + ".log")));
@@ -88,7 +88,7 @@ public class TrialCalcTests
 
         var dataList = new InputDataReader_EIR(inputPath).Read();
 
-        var main = new MainRoutine_EIR()
+        var main = new MainRoutine_EIR(dataList)
         {
             OutputDirectory  /**/= resultDir,
             OutputFileName   /**/= target,
@@ -98,7 +98,7 @@ public class TrialCalcTests
             ExposureAge      /**/= exposureAge,
         };
 
-        main.Main(dataList, default);
+        main.Main(default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));

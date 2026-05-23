@@ -283,7 +283,7 @@ public partial class InputEirViewModel : ViewModelBase
             {
                 var dataList = new InputDataReader_EIR(target.InputFilePath, calcProgeny: true).Read();
 
-                var main = new MainRoutine_EIR()
+                var main = new MainRoutine_EIR(dataList)
                 {
                     OutputDirectory   /**/= outputDir,
                     OutputFileName    /**/= target.Name,
@@ -294,7 +294,7 @@ public partial class InputEirViewModel : ViewModelBase
                     ProgressIndicator /**/= target.ProgressIndicator,
                 };
 
-                main.Main(dataList, cancellationToken);
+                main.Main(cancellationToken);
 
                 var output = Path.Combine(outputDir, target.Name);
                 target.OutputFilePath = output + "_Retention.out";

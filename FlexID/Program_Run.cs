@@ -187,7 +187,7 @@ internal class Program_Run
             data.OutputRetention = outputRetention;
             data.OutputCumulative = outputCumulative;
 
-            var main = new MainRoutine_OIR()
+            var main = new MainRoutine_OIR(data)
             {
                 OutputDirectory  /**/= outDir,
                 OutputFileName   /**/= outName,
@@ -196,7 +196,7 @@ internal class Program_Run
                 CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
             };
 
-            main.Main(data, cancellationToken);
+            main.Main(cancellationToken);
 
         }, cts.Token);
 

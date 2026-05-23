@@ -48,7 +48,7 @@ public class Analysis
         var computeTimeMeshPath = Path.Combine(testDir, computeTimeMeshFile);
         var outputTimeMeshPath = Path.Combine(testDir, "otime.dat");
 
-        var main = new MainRoutine_OIR()
+        var main = new MainRoutine_OIR(data)
         {
             OutputDirectory  /**/= resultDir,
             OutputFileName   /**/= target,
@@ -57,7 +57,7 @@ public class Analysis
             CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("70years"),
         };
 
-        main.Main(data, default);
+        main.Main(default);
 
         File.Delete(Path.Combine(resultDir, target + ".log"));
 

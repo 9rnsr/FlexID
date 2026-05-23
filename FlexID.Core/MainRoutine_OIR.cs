@@ -6,6 +6,13 @@ namespace FlexID;
 /// </summary>
 public class MainRoutine_OIR
 {
+    public MainRoutine_OIR(InputData data)
+    {
+        this.data = data;
+    }
+
+    private readonly InputData data;
+
     /// <summary>
     /// 出力ディレクトリ。
     /// </summary>
@@ -36,7 +43,7 @@ public class MainRoutine_OIR
     /// </summary>
     public IProgress<double>? ProgressIndicator { get; init; }
 
-    public void Main(InputData data, CancellationToken cancellationToken)
+    public void Main(CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
             throw Program.Error("Output directory is not specified");
@@ -71,11 +78,11 @@ public class MainRoutine_OIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(data, calcOut, cancellationToken);
+            MainCalc(calcOut, cancellationToken);
         }
     }
 
-    private void MainCalc(InputData data, CalcOut calcOut, CancellationToken cancellationToken)
+    private void MainCalc(CalcOut calcOut, CancellationToken cancellationToken)
     {
         const double convergence = 1E-10; // 収束値
         const int iterMax = 1500;  // iterationの最大回数
