@@ -288,7 +288,7 @@ public partial class InputOirViewModel : ViewModelBase
                     OutputFileName      /**/= target.Name,
                     ComputeTimeMeshPath /**/= computeTimeMeshPath,
                     OutputTimeMeshPath  /**/= outputTimeMeshPath,
-                    CommitmentPeriod    /**/= commitmentPeriod,
+                    CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
                     ProgressIndicator   /**/= target.ProgressIndicator,
                 };
 

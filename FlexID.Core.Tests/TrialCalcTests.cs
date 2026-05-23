@@ -29,8 +29,6 @@ public class TrialCalcTests
         var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
         var outputTimeMeshPath = Path.Combine(TestDir, "out-time.dat");
 
-        var commitmentPeriod = "50years";
-
         var data = new InputDataReader_OIR(inputPath).Read();
 
         var main = new MainRoutine_OIR()
@@ -39,7 +37,7 @@ public class TrialCalcTests
             OutputFileName      /**/= target,
             ComputeTimeMeshPath /**/= computeTimeMeshPath,
             OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= commitmentPeriod,
+            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
         main.Main(data, default);
@@ -96,7 +94,7 @@ public class TrialCalcTests
             OutputFileName      /**/= target,
             ComputeTimeMeshPath /**/= cTimeMeshFile,
             OutputTimeMeshPath  /**/= oTimeMeshFile,
-            CommitmentPeriod    /**/= commitmentPeriod,
+            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
             ExposureAge         /**/= exposureAge,
         };
 

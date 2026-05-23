@@ -27,9 +27,9 @@ public class MainRoutine_EIR
     public required string OutputTimeMeshPath { get; init; }
 
     /// <summary>
-    /// 預託期間。
+    /// 預託期間[sec]。
     /// </summary>
-    public required string CommitmentPeriod { get; init; }
+    public required long CommitmentPeriod { get; init; }
 
     /// <summary>
     /// 被ばく時の年齢。
@@ -85,9 +85,6 @@ public class MainRoutine_EIR
 
         const double convergence = 1E-14; // 収束値
         const int iterMax = 1500;  // iterationの最大回数
-
-        // 預託期間[sec]を取得。
-        var commitmentPeriod = TimeMesh.CommitmentPeriodToSeconds(CommitmentPeriod);
 
         var age3monthT /**/= TimeMesh.DaysToSeconds(Age3month);
         var age1yearT  /**/= TimeMesh.DaysToSeconds(Age1year);
@@ -260,10 +257,10 @@ public class MainRoutine_EIR
             calcNowT = calcTimes.Current;
 
             // 預託期間を超える計算は行わない
-            if (commitmentPeriod < calcNowT)
+            if (CommitmentPeriod < calcNowT)
                 break;
 
-            var newProgressValue = (int)((double)calcNowT / commitmentPeriod * 100);
+            var newProgressValue = (int)((double)calcNowT / CommitmentPeriod * 100);
             if (newProgressValue != progressValue)
             {
                 progressValue = newProgressValue;

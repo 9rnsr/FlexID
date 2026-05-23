@@ -136,7 +136,7 @@ public class TestCalc
             OutputFileName      /**/= targetName,
             ComputeTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat"),
             OutputTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat"),
-            CommitmentPeriod    /**/= @"5days",
+            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds("5days"),
         };
 
         // 計算を実行する。
@@ -187,7 +187,7 @@ public class TestCalc
             OutputFileName      /**/= Path.GetFileNameWithoutExtension(inputFilePath),
             ComputeTimeMeshPath /**/= computeTimeMeshPath,
             OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= "50years",
+            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
         main.Main(data, default);
@@ -212,7 +212,7 @@ public class TestCalc
         var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
         var outputTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\out-time-OIR.dat");
 
-        var commitmentPeriod = "50years";
+        var commitmentPeriod = TimeMesh.CommitmentPeriodToSeconds("50years");
 
         var data = new InputDataReader_OIR(Path.Combine(targetDir, target)).Read();
         data.OutputDose = false;

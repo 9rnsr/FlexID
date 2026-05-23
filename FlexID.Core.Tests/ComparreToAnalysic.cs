@@ -47,7 +47,6 @@ public class Analysis
 
         var computeTimeMeshPath = Path.Combine(testDir, computeTimeMeshFile);
         var outputTimeMeshPath = Path.Combine(testDir, "otime.dat");
-        var commitmentPeriod = "70years";
 
         var main = new MainRoutine_OIR()
         {
@@ -55,7 +54,7 @@ public class Analysis
             OutputFileName      /**/= target,
             ComputeTimeMeshPath /**/= computeTimeMeshPath,
             OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= commitmentPeriod,
+            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds("70years"),
         };
 
         main.Main(data, default);

@@ -193,7 +193,7 @@ internal class Program_Run
                 OutputFileName      /**/= outName,
                 ComputeTimeMeshPath /**/= computeTimeMeshPath.FullName,
                 OutputTimeMeshPath  /**/= outputTimeMeshPath.FullName,
-                CommitmentPeriod    /**/= commitmentPeriod,
+                CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
             };
 
             main.Main(data, cancellationToken);

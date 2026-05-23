@@ -289,7 +289,7 @@ public partial class InputEirViewModel : ViewModelBase
                     OutputFileName      /**/= target.Name,
                     ComputeTimeMeshPath /**/= computeTimeMeshPath,
                     OutputTimeMeshPath  /**/= outputTimeMeshPath,
-                    CommitmentPeriod    /**/= commitmentPeriod,
+                    CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
                     ExposureAge         /**/= intakeAge,
                     ProgressIndicator   /**/= target.ProgressIndicator,
                 };

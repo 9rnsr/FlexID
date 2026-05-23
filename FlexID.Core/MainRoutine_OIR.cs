@@ -27,9 +27,9 @@ public class MainRoutine_OIR
     public required string OutputTimeMeshPath { get; init; }
 
     /// <summary>
-    /// 預託期間。
+    /// 預託期間[sec]。
     /// </summary>
-    public required string CommitmentPeriod { get; init; }
+    public required long CommitmentPeriod { get; init; }
 
     /// <summary>
     /// 計算処理の進捗率を0～100で報告する。
@@ -81,9 +81,6 @@ public class MainRoutine_OIR
     {
         const double convergence = 1E-10; // 収束値
         const int iterMax = 1500;  // iterationの最大回数
-
-        // 預託期間[sec]を取得。
-        var commitmentPeriod = TimeMesh.CommitmentPeriodToSeconds(CommitmentPeriod);
 
         // 標的領域の組織加重係数を取得。
         var targetWeights = data.TargetWeights;
@@ -137,10 +134,10 @@ public class MainRoutine_OIR
             calcNowT = calcTimes.Current;
 
             // 預託期間を超える計算は行わない
-            if (commitmentPeriod < calcNowT)
+            if (CommitmentPeriod < calcNowT)
                 break;
 
-            var newProgressValue = (int)((double)calcNowT / commitmentPeriod * 100);
+            var newProgressValue = (int)((double)calcNowT / CommitmentPeriod * 100);
             if (newProgressValue != progressValue)
             {
                 progressValue = newProgressValue;
