@@ -140,7 +140,7 @@ public class TestCalc
         };
 
         // 計算を実行する。
-        main.Main(default);
+        main.Start(default);
 
         // アウトプットファイルの出力有無と、出力されている場合はその内容確認を行う。
         CheckOutputFile(targetName + "_Dose.out", outDose);
@@ -190,7 +190,7 @@ public class TestCalc
             CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
-        main.Main(default);
+        main.Start(default);
 
         var expectFilePath = Path.Combine(expectDir, main.OutputFileName + "_Retention.out");
         var actualFilePath = Path.Combine(resultDir, main.OutputFileName + "_Retention.out");
@@ -230,7 +230,7 @@ public class TestCalc
             CommitmentPeriod /**/= commitmentPeriod,
         };
 
-        main.Main(default);
+        main.Start(default);
 
         var expectFilePath = Path.Combine(expectDir, main.OutputFileName + "_Atoms.out");
         var actualFilePath = Path.Combine(resultDir, main.OutputFileName + "_Atoms.out");

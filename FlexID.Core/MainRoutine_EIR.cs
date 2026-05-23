@@ -56,7 +56,7 @@ public class MainRoutine_EIR
     /// </summary>
     public IProgress<double>? ProgressIndicator { get; init; }
 
-    public void Main(CancellationToken cancellationToken)
+    public void Start(CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
             throw Program.Error("Output directory is not specified");

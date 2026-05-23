@@ -40,7 +40,7 @@ public class TrialCalcTests
             CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
-        main.Main(default);
+        main.Start(default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + ".log")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + ".log")));
@@ -98,7 +98,7 @@ public class TrialCalcTests
             ExposureAge      /**/= exposureAge,
         };
 
-        main.Main(default);
+        main.Start(default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));

@@ -196,7 +196,7 @@ internal class Program_Run
                 CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
             };
 
-            main.Main(cancellationToken);
+            main.Start(cancellationToken);
 
         }, cts.Token);
 

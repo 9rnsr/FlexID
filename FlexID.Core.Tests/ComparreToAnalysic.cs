@@ -57,7 +57,7 @@ public class Analysis
             CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("70years"),
         };
 
-        main.Main(default);
+        main.Start(default);
 
         File.Delete(Path.Combine(resultDir, target + ".log"));
 
