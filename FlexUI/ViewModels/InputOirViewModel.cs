@@ -282,17 +282,17 @@ public partial class InputOirViewModel : ViewModelBase
             {
                 var data = new InputDataReader_OIR(target.InputFilePath, calcProgeny: true).Read();
 
-                var main = new MainRoutine_OIR()
+                var main = new MainRoutine_OIR(data)
                 {
-                    OutputDirectory     /**/= outputDir,
-                    OutputFileName      /**/= target.Name,
-                    ComputeTimeMeshPath /**/= computeTimeMeshPath,
-                    OutputTimeMeshPath  /**/= outputTimeMeshPath,
-                    CommitmentPeriod    /**/= commitmentPeriod,
-                    ProgressIndicator   /**/= target.ProgressIndicator,
+                    OutputDirectory   /**/= outputDir,
+                    OutputFileName    /**/= target.Name,
+                    ComputeTimeMesh   /**/= new TimeMesh(computeTimeMeshPath),
+                    OutputTimeMesh    /**/= new TimeMesh(outputTimeMeshPath),
+                    CommitmentPeriod  /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
+                    ProgressIndicator /**/= target.ProgressIndicator,
                 };
 
-                main.Main(data, cancellationToken);
+                main.Start(cancellationToken);
 
                 var output = Path.Combine(outputDir, target.Name);
                 target.OutputFilePath = output + "_Retention.out";

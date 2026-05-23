@@ -112,7 +112,7 @@ public partial class InputScoeffViewModel : ViewModelBase
             if (!nuclides.Any())
                 throw new Exception("No nuclides selected.");
 
-            var interpolationMethod = CalcPchip ? "PCHIP" : "線形補間";
+            var interpolationMethod = CalcPchip ? InterpolationMethod.PCHIP : InterpolationMethod.Linear;
 
             var isIdacDoseCompatible = IdacDoseCompatible;
 
@@ -134,7 +134,7 @@ public partial class InputScoeffViewModel : ViewModelBase
         }
     }
 
-    private static Task Run(Sex sex, string interpolationMethod, string[] nuclides, string outputDir, bool isIdacDoseCompatible)
+    private static Task Run(Sex sex, InterpolationMethod interpolationMethod, string[] nuclides, string outputDir, bool isIdacDoseCompatible)
     {
         var safdata = SAFDataReader.ReadSAF(sex);
         if (safdata is null)
@@ -142,9 +142,7 @@ public partial class InputScoeffViewModel : ViewModelBase
 
         return Task.WhenAll(nuclides.Select(nuc => Task.Run(() =>
         {
-            var calcS = new CalcScoeff(safdata);
-
-            calcS.InterpolationMethod = interpolationMethod;
+            var calcS = new CalcScoeff(safdata, interpolationMethod);
 
             calcS.CalcS(nuc);
 

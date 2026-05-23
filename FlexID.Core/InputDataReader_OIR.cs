@@ -34,8 +34,6 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> nuclideTransfers = [];
 
-    private readonly List<Dictionary<string, double[]>> SCoeffTables = [];
-
     /// <summary>
     /// コンストラクタ。
     /// </summary>
@@ -240,8 +238,8 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         // 組織加重係数データを読み込む。
         var (ts, ws) = ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
-        if (!Enumerable.SequenceEqual(targetRegions, ts))
-            errors.AddError($"Found mismatch of target region names on tissue weighting factor data.");
+        if (!targetRegions.SequenceEqual(ts))
+            errors.AddError("Found mismatch of target region names on tissue weighting factor data.");
 
         // 外部データの読み込み処理にエラーがないことを確定する。
         errors.RaiseIfAny();
@@ -1298,8 +1296,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var nuc = nuclide.Name;
 
-        var calcScoeff = new CalcScoeff(safdata);
-        calcScoeff.InterpolationMethod = "PCHIP";
+        var calcScoeff = new CalcScoeff(safdata, InterpolationMethod.PCHIP);
         calcScoeff.CalcS(nuc);
 
         var sources = data.SourceRegions.Select(s => s.Name).ToArray();
@@ -1343,9 +1340,6 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         // S係数データに'Other'列を追加する
         table["Other"] = columnOther;
-
-        // 核種が考慮する線源領域の名称を設定する。
-        nuclide.SourceRegions = sources;
 
         return table;
     }

@@ -22,8 +22,9 @@ public class TestCalc
         {
             using var stream = new MemoryStream();
             using var writer = new StreamWriter(stream);
+            using var logOut = new LogOut(data, writer);
 
-            MainRoutine_OIR.WriteOutCompartments(data, writer);
+            logOut.WriteOutCompartments();
 
             stream.Seek(0, SeekOrigin.Begin);
             return ReadLines(stream).ToArray();
@@ -47,8 +48,9 @@ public class TestCalc
         {
             using var stream = new MemoryStream();
             using var writer = new StreamWriter(stream);
+            using var logOut = new LogOut(data, writer);
 
-            MainRoutine_OIR.WriteOutTransfers(data, writer);
+            logOut.WriteOutTransfers();
 
             stream.Seek(0, SeekOrigin.Begin);
             return ReadLines(stream).ToArray();
@@ -128,17 +130,17 @@ public class TestCalc
         data.OutputRetention = outActRete;
         data.OutputCumulative = outActCumu;
 
-        var main = new MainRoutine_OIR()
+        var main = new MainRoutine_OIR(data)
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= targetName,
-            ComputeTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat"),
-            OutputTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat"),
-            CommitmentPeriod    /**/= @"5days",
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= targetName,
+            ComputeTimeMesh  /**/= new TimeMesh(Path.Combine(targetDir, "time-per-1d.dat")),
+            OutputTimeMesh   /**/= new TimeMesh(Path.Combine(targetDir, "time-per-1d.dat")),
+            CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("5days"),
         };
 
         // 計算を実行する。
-        main.Main(data, default);
+        main.Start(default);
 
         // アウトプットファイルの出力有無と、出力されている場合はその内容確認を行う。
         CheckOutputFile(targetName + "_Dose.out", outDose);
@@ -179,16 +181,16 @@ public class TestCalc
         var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
         var outputTimeMeshPath = Path.Combine(testDir, "time-per-1d.dat");
 
-        var main = new MainRoutine_OIR()
+        var main = new MainRoutine_OIR(data)
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= Path.GetFileNameWithoutExtension(inputFilePath),
-            ComputeTimeMeshPath /**/= computeTimeMeshPath,
-            OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= "50years",
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= Path.GetFileNameWithoutExtension(inputFilePath),
+            ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath),
+            OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath),
+            CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
-        main.Main(data, default);
+        main.Start(default);
 
         var expectFilePath = Path.Combine(expectDir, main.OutputFileName + "_Retention.out");
         var actualFilePath = Path.Combine(resultDir, main.OutputFileName + "_Retention.out");
@@ -210,7 +212,7 @@ public class TestCalc
         var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
         var outputTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\out-time-OIR.dat");
 
-        var commitmentPeriod = "50years";
+        var commitmentPeriod = TimeMesh.CommitmentPeriodToSeconds("50years");
 
         var data = new InputDataReader_OIR(Path.Combine(targetDir, target)).Read();
         data.OutputDose = false;
@@ -219,16 +221,16 @@ public class TestCalc
         data.OutputCumulative = false;
         data.OutputAtoms = true;
 
-        var main = new MainRoutine_OIR()
+        var main = new MainRoutine_OIR(data)
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= Path.GetFileNameWithoutExtension(target),
-            ComputeTimeMeshPath /**/= computeTimeMeshPath,
-            OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= commitmentPeriod,
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= Path.GetFileNameWithoutExtension(target),
+            ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath),
+            OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath),
+            CommitmentPeriod /**/= commitmentPeriod,
         };
 
-        main.Main(data, default);
+        main.Start(default);
 
         var expectFilePath = Path.Combine(expectDir, main.OutputFileName + "_Atoms.out");
         var actualFilePath = Path.Combine(resultDir, main.OutputFileName + "_Atoms.out");
