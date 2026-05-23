@@ -285,13 +285,13 @@ public partial class InputEirViewModel : ViewModelBase
 
                 var main = new MainRoutine_EIR()
                 {
-                    OutputDirectory     /**/= outputDir,
-                    OutputFileName      /**/= target.Name,
-                    ComputeTimeMeshPath /**/= computeTimeMeshPath,
-                    OutputTimeMeshPath  /**/= outputTimeMeshPath,
-                    CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
-                    ExposureAge         /**/= intakeAge,
-                    ProgressIndicator   /**/= target.ProgressIndicator,
+                    OutputDirectory   /**/= outputDir,
+                    OutputFileName    /**/= target.Name,
+                    ComputeTimeMesh   /**/= new TimeMesh(computeTimeMeshPath),
+                    OutputTimeMesh    /**/= new TimeMesh(outputTimeMeshPath),
+                    CommitmentPeriod  /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
+                    ExposureAge       /**/= intakeAge,
+                    ProgressIndicator /**/= target.ProgressIndicator,
                 };
 
                 main.Main(dataList, cancellationToken);

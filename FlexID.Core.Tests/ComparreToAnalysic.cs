@@ -50,11 +50,11 @@ public class Analysis
 
         var main = new MainRoutine_OIR()
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= target,
-            ComputeTimeMeshPath /**/= computeTimeMeshPath,
-            OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds("70years"),
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= target,
+            ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath),
+            OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath),
+            CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("70years"),
         };
 
         main.Main(data, default);

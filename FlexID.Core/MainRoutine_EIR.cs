@@ -17,14 +17,14 @@ public class MainRoutine_EIR
     public required string OutputFileName { get; init; }
 
     /// <summary>
-    /// 計算時間メッシュファイルパス。
+    /// 計算時間メッシュ。
     /// </summary>
-    public required string ComputeTimeMeshPath { get; init; }
+    public required TimeMesh ComputeTimeMesh { get; init; }
 
     /// <summary>
-    /// 出力時間メッシュファイルパス。
+    /// 出力時間メッシュ。
     /// </summary>
-    public required string OutputTimeMeshPath { get; init; }
+    public required TimeMesh OutputTimeMesh { get; init; }
 
     /// <summary>
     /// 預託期間[sec]。
@@ -56,9 +56,7 @@ public class MainRoutine_EIR
         if (string.IsNullOrWhiteSpace(OutputFileName))
             throw Program.Error("Output file name is not specified");
 
-        var computeTimeMesh = new TimeMesh(ComputeTimeMeshPath);
-        var outputTimeMesh = new TimeMesh(OutputTimeMeshPath);
-        if (!computeTimeMesh.Cover(outputTimeMesh))
+        if (!ComputeTimeMesh.Cover(OutputTimeMesh))
             throw Program.Error("Computational time mesh does not cover all boundaries of output time mesh.");
 
         Directory.CreateDirectory(OutputDirectory);
@@ -71,11 +69,11 @@ public class MainRoutine_EIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(dataList, computeTimeMesh, outputTimeMesh, calcOut, cancellationToken);
+            MainCalc(dataList, calcOut, cancellationToken);
         }
     }
 
-    private void MainCalc(List<InputData> dataList, TimeMesh computeTimeMesh, TimeMesh outputimeMesh, CalcOut calcOut, CancellationToken cancellationToken)
+    private void MainCalc(List<InputData> dataList, CalcOut calcOut, CancellationToken cancellationToken)
     {
         InputData dataLo;
         InputData dataHi;
@@ -211,13 +209,13 @@ public class MainRoutine_EIR
         var targetWeights = dataList[0].TargetWeights;
 
         // 計算時間メッシュを準備する。
-        var calcTimes = computeTimeMesh.Start();
+        var calcTimes = ComputeTimeMesh.Start();
         long calcPreT;
         long calcNowT = calcTimes.Current;
         int calcIter;   // 計算時間メッシュ毎の収束計算回数
 
         // 出力時間メッシュを準備する。
-        var outTimes = outputimeMesh.Start();
+        var outTimes = OutputTimeMesh.Start();
         long outPreT;
         long outNowT = outTimes.Current;
         int outIter;    // 出力時間メッシュ毎の収束計算回数

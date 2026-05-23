@@ -284,12 +284,12 @@ public partial class InputOirViewModel : ViewModelBase
 
                 var main = new MainRoutine_OIR()
                 {
-                    OutputDirectory     /**/= outputDir,
-                    OutputFileName      /**/= target.Name,
-                    ComputeTimeMeshPath /**/= computeTimeMeshPath,
-                    OutputTimeMeshPath  /**/= outputTimeMeshPath,
-                    CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
-                    ProgressIndicator   /**/= target.ProgressIndicator,
+                    OutputDirectory   /**/= outputDir,
+                    OutputFileName    /**/= target.Name,
+                    ComputeTimeMesh   /**/= new TimeMesh(computeTimeMeshPath),
+                    OutputTimeMesh    /**/= new TimeMesh(outputTimeMeshPath),
+                    CommitmentPeriod  /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
+                    ProgressIndicator /**/= target.ProgressIndicator,
                 };
 
                 main.Main(data, cancellationToken);

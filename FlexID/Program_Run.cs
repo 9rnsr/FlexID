@@ -189,11 +189,11 @@ internal class Program_Run
 
             var main = new MainRoutine_OIR()
             {
-                OutputDirectory     /**/= outDir,
-                OutputFileName      /**/= outName,
-                ComputeTimeMeshPath /**/= computeTimeMeshPath.FullName,
-                OutputTimeMeshPath  /**/= outputTimeMeshPath.FullName,
-                CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
+                OutputDirectory  /**/= outDir,
+                OutputFileName   /**/= outName,
+                ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath.FullName),
+                OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath.FullName),
+                CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
             };
 
             main.Main(data, cancellationToken);

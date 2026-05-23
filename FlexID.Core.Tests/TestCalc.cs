@@ -132,11 +132,11 @@ public class TestCalc
 
         var main = new MainRoutine_OIR()
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= targetName,
-            ComputeTimeMeshPath /**/= Path.Combine(targetDir, "time-per-1d.dat"),
-            OutputTimeMeshPath  /**/= Path.Combine(targetDir, "time-per-1d.dat"),
-            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds("5days"),
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= targetName,
+            ComputeTimeMesh  /**/= new TimeMesh(Path.Combine(targetDir, "time-per-1d.dat")),
+            OutputTimeMesh   /**/= new TimeMesh(Path.Combine(targetDir, "time-per-1d.dat")),
+            CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("5days"),
         };
 
         // 計算を実行する。
@@ -183,11 +183,11 @@ public class TestCalc
 
         var main = new MainRoutine_OIR()
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= Path.GetFileNameWithoutExtension(inputFilePath),
-            ComputeTimeMeshPath /**/= computeTimeMeshPath,
-            OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= Path.GetFileNameWithoutExtension(inputFilePath),
+            ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath),
+            OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath),
+            CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
         main.Main(data, default);
@@ -223,11 +223,11 @@ public class TestCalc
 
         var main = new MainRoutine_OIR()
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= Path.GetFileNameWithoutExtension(target),
-            ComputeTimeMeshPath /**/= computeTimeMeshPath,
-            OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= commitmentPeriod,
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= Path.GetFileNameWithoutExtension(target),
+            ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath),
+            OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath),
+            CommitmentPeriod /**/= commitmentPeriod,
         };
 
         main.Main(data, default);
