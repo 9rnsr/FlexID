@@ -57,7 +57,7 @@ public partial class ViewerViewModel : ObservableObject
 
     private static string? CheckLogToOutRelation(string? path)
     {
-        if (Path.GetExtension(path)?.Equals(".log", StringComparison.OrdinalIgnoreCase) != true)
+        if (path is null || !Path.GetExtension(path).Equals(".log", StringComparison.OrdinalIgnoreCase))
             return path;
 
         var basePath = Path.GetFileNameWithoutExtension(path);
