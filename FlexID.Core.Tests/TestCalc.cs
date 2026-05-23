@@ -22,8 +22,9 @@ public class TestCalc
         {
             using var stream = new MemoryStream();
             using var writer = new StreamWriter(stream);
+            using var logOut = new LogOut(data, writer);
 
-            MainRoutine_OIR.WriteOutCompartments(data, writer);
+            logOut.WriteOutCompartments();
 
             stream.Seek(0, SeekOrigin.Begin);
             return ReadLines(stream).ToArray();
@@ -47,8 +48,9 @@ public class TestCalc
         {
             using var stream = new MemoryStream();
             using var writer = new StreamWriter(stream);
+            using var logOut = new LogOut(data, writer);
 
-            MainRoutine_OIR.WriteOutTransfers(data, writer);
+            logOut.WriteOutTransfers();
 
             stream.Seek(0, SeekOrigin.Begin);
             return ReadLines(stream).ToArray();
