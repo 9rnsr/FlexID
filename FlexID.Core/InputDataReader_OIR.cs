@@ -1296,8 +1296,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var nuc = nuclide.Name;
 
-        var calcScoeff = new CalcScoeff(safdata);
-        calcScoeff.InterpolationMethod = "PCHIP";
+        var calcScoeff = new CalcScoeff(safdata, InterpolationMethod.PCHIP);
         calcScoeff.CalcS(nuc);
 
         var sources = data.SourceRegions.Select(s => s.Name).ToArray();

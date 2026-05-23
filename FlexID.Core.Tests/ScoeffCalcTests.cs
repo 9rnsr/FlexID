@@ -42,8 +42,7 @@ public class ScoeffCalcTests
         foreach (var sex in new[] { Sex.Male, Sex.Female })
         {
             var safdata = sex == Sex.Male ? safdataAM : safdataAF;
-            var calcS = new CalcScoeff(safdata);
-            calcS.InterpolationMethod = "PCHIP";
+            var calcS = new CalcScoeff(safdata, InterpolationMethod.PCHIP);
 
             calcS.CalcS(nuclide);
 
@@ -91,8 +90,7 @@ public class ScoeffCalcTests
         foreach (var sex in new[] { Sex.Male, Sex.Female })
         {
             var safdata = sex == Sex.Male ? safdataAM : safdataAF;
-            var calcS = new CalcScoeff(safdata);
-            calcS.InterpolationMethod = "線形補間";
+            var calcS = new CalcScoeff(safdata, InterpolationMethod.Linear);
 
             calcS.CalcS(nuclide);
 
