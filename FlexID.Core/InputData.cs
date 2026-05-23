@@ -182,11 +182,6 @@ public class NuclideData
     public bool IsStable => Lambda == 0;
 
     /// <summary>
-    /// S係数データにおける各線源領域の名称。
-    /// </summary>
-    public string[] SourceRegions;
-
-    /// <summary>
     /// 動態モデルでコンパートメントとして定義されておらず線源領域Otherの一部として取り扱う
     /// 各線源領域の名称。
     /// </summary>

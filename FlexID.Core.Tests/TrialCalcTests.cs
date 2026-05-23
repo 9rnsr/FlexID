@@ -29,20 +29,18 @@ public class TrialCalcTests
         var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
         var outputTimeMeshPath = Path.Combine(TestDir, "out-time.dat");
 
-        var commitmentPeriod = "50years";
-
         var data = new InputDataReader_OIR(inputPath).Read();
 
-        var main = new MainRoutine_OIR()
+        var main = new MainRoutine_OIR(data)
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= target,
-            ComputeTimeMeshPath /**/= computeTimeMeshPath,
-            OutputTimeMeshPath  /**/= outputTimeMeshPath,
-            CommitmentPeriod    /**/= commitmentPeriod,
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= target,
+            ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath),
+            OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath),
+            CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds("50years"),
         };
 
-        main.Main(data, default);
+        main.Start(default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + ".log")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + ".log")));
@@ -76,8 +74,8 @@ public class TrialCalcTests
         var resultDir = Path.Combine(TestDir, "Result_EIR~", nuclide, exposureAge.Replace(' ', '_'));
         Directory.CreateDirectory(resultDir);
 
-        var cTimeMeshFile = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
-        var oTimeMeshFile = Path.Combine(TestDir, "out-time.dat");
+        var computeTimeMeshPath = Path.Combine(AppResource.BaseDir, @"lib\TimeMesh\time.dat");
+        var outputTimeMeshPath = Path.Combine(TestDir, "out-time.dat");
 
         var commitmentPeriod =
             exposureAge == "3months old" /**/? "25450days" : // 70years - 100days = 25550days - 100days
@@ -90,17 +88,17 @@ public class TrialCalcTests
 
         var dataList = new InputDataReader_EIR(inputPath).Read();
 
-        var main = new MainRoutine_EIR()
+        var main = new MainRoutine_EIR(dataList)
         {
-            OutputDirectory     /**/= resultDir,
-            OutputFileName      /**/= target,
-            ComputeTimeMeshPath /**/= cTimeMeshFile,
-            OutputTimeMeshPath  /**/= oTimeMeshFile,
-            CommitmentPeriod    /**/= commitmentPeriod,
-            ExposureAge         /**/= exposureAge,
+            OutputDirectory  /**/= resultDir,
+            OutputFileName   /**/= target,
+            ComputeTimeMesh  /**/= new TimeMesh(computeTimeMeshPath),
+            OutputTimeMesh   /**/= new TimeMesh(outputTimeMeshPath),
+            CommitmentPeriod /**/= TimeMesh.CommitmentPeriodToSeconds(commitmentPeriod),
+            ExposureAge      /**/= exposureAge,
         };
 
-        main.Main(dataList, default);
+        main.Start(default);
 
         File.ReadAllLines(Path.Combine(resultDir, target + "_Dose.out")).ShouldBe(
         File.ReadAllLines(Path.Combine(expectDir, target + "_Dose.out")));

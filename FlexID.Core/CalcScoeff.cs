@@ -2,14 +2,20 @@ using MathNet.Numerics.Interpolation;
 
 namespace FlexID;
 
+public enum InterpolationMethod
+{
+    PCHIP,
+    Linear,
+}
+
 public class CalcScoeff
 {
-    public string InterpolationMethod = "";
-
     // J/MeVへの変換
     private const double ToJoule = 1.602176634E-13;
 
     private readonly SAFData safdata;
+
+    private readonly InterpolationMethod interpolationMethod;
 
     // 計算結果である、線源領域vs標的領域の組み合わせ毎のS係数値
     public double[] OutTotal { get; }
@@ -23,9 +29,11 @@ public class CalcScoeff
     /// コンストラクタ。
     /// </summary>
     /// <param name="safdata">計算に使用するSAFデータ。</param>
-    public CalcScoeff(SAFData safdata)
+    /// <param name="interpolationMethod">SAF値の補間方法。</param>
+    public CalcScoeff(SAFData safdata, InterpolationMethod interpolationMethod)
     {
         this.safdata = safdata;
+        this.interpolationMethod = interpolationMethod;
 
         // 計算結果である、線源領域vs標的領域の組み合わせ毎のS係数値
         OutTotal = new double[safdata.Count];
@@ -75,7 +83,7 @@ public class CalcScoeff
             Func<double, double> CalcSAFa;
             Func<double, double> CalcSAFp;
             Func<double, double> CalcSAFe;
-            if (InterpolationMethod == "PCHIP")
+            if (interpolationMethod == InterpolationMethod.PCHIP)
             {
                 var pchipA = CubicSpline.InterpolatePchip(safdata.EnergyA, SAFalpha);
                 var pchipP = CubicSpline.InterpolatePchip(safdata.EnergyP, SAFphoton);
@@ -85,14 +93,14 @@ public class CalcScoeff
                 CalcSAFp = Ei => pchipP.Interpolate(Ei);
                 CalcSAFe = Ei => pchipE.Interpolate(Ei);
             }
-            else if (InterpolationMethod == "線形補間")
+            else if (interpolationMethod == InterpolationMethod.Linear)
             {
                 CalcSAFa = Ei => InterpolateLinearSAF(Ei, safdata.EnergyA, SAFalpha);
                 CalcSAFp = Ei => InterpolateLinearSAF(Ei, safdata.EnergyP, SAFphoton);
                 CalcSAFe = Ei => InterpolateLinearSAF(Ei, safdata.EnergyE, SAFelectron);
             }
             else
-                throw new InvalidOperationException(InterpolationMethod);
+                throw new InvalidOperationException(interpolationMethod.ToString());
 
             // α反跳核と核分裂片のS係数計算では、α粒子の2MeVにおけるSAFを使用する。
             //

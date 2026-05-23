@@ -185,8 +185,8 @@ class CalcOut : IDisposable
                 .Where(o => o.SourceRegion == "Blood").Select(o => o.Index).ToArray();
 
             var otherSourceRegions = nuclide.OtherSourceRegions.Select(sr => data.SourceRegions.First(s => s.Name == sr)).ToArray();
-            var massOtherM = otherSourceRegions.Select(s => s.MaleMass).Sum();
-            var massOtherF = otherSourceRegions.Select(s => s.FemaleMass).Sum();
+            var massOtherM = otherSourceRegions.Sum(s => s.MaleMass);
+            var massOtherF = otherSourceRegions.Sum(s => s.FemaleMass);
             var massOther = (massOtherM + massOtherF) / 2;    // 男女平均
 
             (int, double)[] GetIndexes(string[] sregions, double bloodFraction, bool considerOther = true)
@@ -199,14 +199,14 @@ class CalcOut : IDisposable
                 // 線源領域Otherに含まれる集合コンパートメント構成要素の、Other全体に対する質量比を得る。
                 var otherFraction = sregions
                     .Where(sr => nuclide.OtherSourceRegions.Contains(sr) && !explicits.Any(s => s.SourceRegion == sr))
-                    .Select(sr =>
+                    .Sum(sr =>
                     {
                         var sourceRegion = data.SourceRegions.First(s => s.Name == sr);
                         var massRateM = sourceRegion.MaleMass / massOtherM;
                         var massRateF = sourceRegion.FemaleMass / massOtherF;
                         var massRate = (massRateM + massRateF) / 2;
                         return massRate;
-                    }).Sum();
+                    });
 
                 // 明示されたコンパートメントの残留放射能を1.0で、
                 // 血液コンパートメントの残留放射能をbloodFractionで、

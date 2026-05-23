@@ -6,6 +6,13 @@ namespace FlexID;
 /// </summary>
 public class MainRoutine_EIR
 {
+    public MainRoutine_EIR(List<InputData> dataList)
+    {
+        this.dataList = dataList;
+    }
+
+    private readonly List<InputData> dataList;
+
     /// <summary>
     /// 出力ディレクトリ。
     /// </summary>
@@ -17,19 +24,19 @@ public class MainRoutine_EIR
     public required string OutputFileName { get; init; }
 
     /// <summary>
-    /// 計算時間メッシュファイルパス。
+    /// 計算時間メッシュ。
     /// </summary>
-    public required string ComputeTimeMeshPath { get; init; }
+    public required TimeMesh ComputeTimeMesh { get; init; }
 
     /// <summary>
-    /// 出力時間メッシュファイルパス。
+    /// 出力時間メッシュ。
     /// </summary>
-    public required string OutputTimeMeshPath { get; init; }
+    public required TimeMesh OutputTimeMesh { get; init; }
 
     /// <summary>
-    /// 預託期間。
+    /// 預託期間[sec]。
     /// </summary>
-    public required string CommitmentPeriod { get; init; }
+    public required long CommitmentPeriod { get; init; }
 
     /// <summary>
     /// 被ばく時の年齢。
@@ -49,16 +56,14 @@ public class MainRoutine_EIR
     /// </summary>
     public IProgress<double>? ProgressIndicator { get; init; }
 
-    public void Main(List<InputData> dataList, CancellationToken cancellationToken)
+    public void Start(CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(OutputDirectory))
             throw Program.Error("Output directory is not specified");
         if (string.IsNullOrWhiteSpace(OutputFileName))
             throw Program.Error("Output file name is not specified");
 
-        var computeTimeMesh = new TimeMesh(ComputeTimeMeshPath);
-        var outputTimeMesh = new TimeMesh(OutputTimeMeshPath);
-        if (!computeTimeMesh.Cover(outputTimeMesh))
+        if (!ComputeTimeMesh.Cover(OutputTimeMesh))
             throw Program.Error("Computational time mesh does not cover all boundaries of output time mesh.");
 
         Directory.CreateDirectory(OutputDirectory);
@@ -71,11 +76,11 @@ public class MainRoutine_EIR
             // 標的領域の名称をヘッダーとして出力。
             calcOut.CommitmentHeader();
 
-            MainCalc(dataList, computeTimeMesh, outputTimeMesh, calcOut, cancellationToken);
+            MainCalc(calcOut, cancellationToken);
         }
     }
 
-    private void MainCalc(List<InputData> dataList, TimeMesh computeTimeMesh, TimeMesh outputimeMesh, CalcOut calcOut, CancellationToken cancellationToken)
+    private void MainCalc(CalcOut calcOut, CancellationToken cancellationToken)
     {
         InputData dataLo;
         InputData dataHi;
@@ -85,9 +90,6 @@ public class MainRoutine_EIR
 
         const double convergence = 1E-14; // 収束値
         const int iterMax = 1500;  // iterationの最大回数
-
-        // 預託期間[sec]を取得。
-        var commitmentPeriod = TimeMesh.CommitmentPeriodToSeconds(CommitmentPeriod);
 
         var age3monthT /**/= TimeMesh.DaysToSeconds(Age3month);
         var age1yearT  /**/= TimeMesh.DaysToSeconds(Age1year);
@@ -107,8 +109,8 @@ public class MainRoutine_EIR
             throw Program.Error("Please select the age at the time of exposure.");
 
         InputData? dataLoInterp = null;  // 年齢区間の切り替わり検出用。
-        double[][]? sourcesSee = null;
-        double[][]? organsSee = null;
+        double[][] sourcesSee = new double[dataLo.SourceRegions.Length * dataLo.Nuclides.Count][];
+        double[][] organsSee = new double[dataLo.Organs.Count][];
 
         // S係数の補間のための領域を確保する。
         void InterpolationAlloc()
@@ -117,25 +119,18 @@ public class MainRoutine_EIR
                 return;
             dataLoInterp = dataLo;
 
-            // 実際の所、EIRでは全ての年齢区間で線源領域は同じのはずで、
-            // また体内動態モデルを定義するコンパートメント群も同じになるようだが
-            // 現状のデータの持ち方としてこれらが年齢区間毎に異なり得ると想定している。
-            Array.Resize(ref sourcesSee, dataLo.Nuclides.Select(n => n.SourceRegions.Length).Sum());
-            Array.Resize(ref organsSee, dataLo.Organs.Count);
-
             int offsetS = 0;
             foreach (var nuclide in dataLo.Nuclides)
             {
-                var sourcesCount = nuclide.SourceRegions.Length;
+                var sourcesCount = dataLo.SourceRegions.Length;
 
                 for (int indexS = 0; indexS < sourcesCount; indexS++)
                 {
                     // ある核種における線源領域の1つ。
-                    var sourceRegion = nuclide.SourceRegions[indexS];
+                    var sourceRegion = dataLo.SourceRegions[indexS].Name;
 
-                    // 各標的領域への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
-                    var see = sourcesSee[offsetS + indexS];
-                    see = see ?? (sourcesSee[offsetS + indexS] = new double[31]);
+                    // 各標的領域への補間されたS係数値が書き込まれる配列を確保または再利用する。
+                    var see = sourcesSee[offsetS + indexS] ??= new double[31];
 
                     // 線源領域に対応する全てのコンパートメントに、
                     // 補間されたS係数値が書き込まれる予定の配列を割り当てる。
@@ -157,13 +152,12 @@ public class MainRoutine_EIR
                 return;
             dataLoInterp = dataLo;
 
-            sourcesSee = null;
-            Array.Resize(ref organsSee, dataLo.Organs.Count);
-
             foreach (var organ in dataLo.Organs)
             {
                 organsSee[organ.Index] = organ.S_CoefficientsM;
             }
+
+            sourcesSee = null!;
         }
 
         // 指定の計算時間メッシュにおけるS係数の補間計算を実施する。
@@ -177,7 +171,7 @@ public class MainRoutine_EIR
                 int offsetS = 0;
                 foreach (var nuclide in dataLo.Nuclides)
                 {
-                    var sourcesCount = nuclide.SourceRegions.Length;
+                    var sourcesCount = dataLo.SourceRegions.Length;
 
                     int indexN = dataLo.Nuclides.IndexOf(nuclide);
                     var tableLo = dataLo.SCoeffTablesM[indexN];
@@ -186,10 +180,10 @@ public class MainRoutine_EIR
                     for (int indexS = 0; indexS < sourcesCount; indexS++)
                     {
                         // ある核種における線源領域の1つ。
-                        var sourceRegion = nuclide.SourceRegions[indexS];
+                        var sourceRegion = dataLo.SourceRegions[indexS].Name;
 
                         // 各標的領域への補間されたS係数値を書き込むための配列を取得する。
-                        var see = sourcesSee![offsetS + indexS];
+                        var see = sourcesSee[offsetS + indexS];
 
                         var seeLo = tableLo[sourceRegion];
                         var seeHi = tableHi[sourceRegion];
@@ -201,6 +195,7 @@ public class MainRoutine_EIR
                             see[indexT] = scoeff;
                         }
                     }
+
                     offsetS += sourcesCount;
                 }
             }
@@ -214,13 +209,13 @@ public class MainRoutine_EIR
         var targetWeights = dataList[0].TargetWeights;
 
         // 計算時間メッシュを準備する。
-        var calcTimes = computeTimeMesh.Start();
+        var calcTimes = ComputeTimeMesh.Start();
         long calcPreT;
         long calcNowT = calcTimes.Current;
         int calcIter;   // 計算時間メッシュ毎の収束計算回数
 
         // 出力時間メッシュを準備する。
-        var outTimes = outputimeMesh.Start();
+        var outTimes = OutputTimeMesh.Start();
         long outPreT;
         long outNowT = outTimes.Current;
         int outIter;    // 出力時間メッシュ毎の収束計算回数
@@ -260,10 +255,10 @@ public class MainRoutine_EIR
             calcNowT = calcTimes.Current;
 
             // 預託期間を超える計算は行わない
-            if (commitmentPeriod < calcNowT)
+            if (CommitmentPeriod < calcNowT)
                 break;
 
-            var newProgressValue = (int)((double)calcNowT / commitmentPeriod * 100);
+            var newProgressValue = (int)((double)calcNowT / CommitmentPeriod * 100);
             if (newProgressValue != progressValue)
             {
                 progressValue = newProgressValue;
