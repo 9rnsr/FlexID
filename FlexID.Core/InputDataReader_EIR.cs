@@ -38,6 +38,30 @@ public class InputDataReader_EIR : InputDataReaderBase
         dataList.Add(Read("Age:10year"));
         dataList.Add(Read("Age:15year"));
         dataList.Add(Read("Age:adult"));
+
+        // 全ての年齢区間で以下の設定内容が一致することを確認する：
+        // ・コンパートメントの名称と順序
+        // ・線源領域の名称と順序
+        // ・標的領域の名称と順序
+        var dataLo = dataList[0];
+        foreach (var data in dataList.Skip(1))
+        {
+            var sameOrgans = dataLo.Organs.Select(sr => sr.Name)
+                .SequenceEqual(data.Organs.Select(sr => sr.Name));
+            if (!sameOrgans)
+                throw Program.Error("Inconsistent organs across age groups.");
+
+            var sameSourceRegions = dataLo.SourceRegions.Select(sr => sr.Name)
+                       .SequenceEqual(data.SourceRegions.Select(sr => sr.Name));
+            if (!sameSourceRegions)
+                throw Program.Error("Inconsistent source regions across age groups.");
+
+            var sameTargetRegions = dataLo.TargetRegions
+                       .SequenceEqual(data.TargetRegions);
+            if (!sameTargetRegions)
+                throw Program.Error("Inconsistent target regions across age groups.");
+        }
+
         return dataList;
     }
 
@@ -88,11 +112,17 @@ public class InputDataReader_EIR : InputDataReaderBase
 
             branchTable.Add(double.Parse(values[2]));
 
+            // 核種に対応するSEEデータを読み込む。
+            // 線源領域と標的領域の名前についても、SEEデータのものを正とする。
+            var tableSCoeff = ReadSee(data, age, nuclide);
+            data.SCoeffTablesM.Add(tableSCoeff);
+
             if (!isProgeny)
             {
                 // 組織加重係数データを読み込む。
                 var (ts, ws) = ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\EIR\wT.txt"));
-                data.TargetRegions = ts;
+                if (!data.TargetRegions.SequenceEqual(ts))
+                    throw Program.Error("Found mismatch of target region names on tissue weighting factor data.");
                 data.TargetWeights = ws;
 
                 // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
@@ -105,10 +135,6 @@ public class InputDataReader_EIR : InputDataReaderBase
                         break;
                 }
             }
-
-            // 核種に対応するS係数データを読み込む。
-            var tableSCoeff = ReadSee(data, age, nuclide);
-            data.SCoeffTablesM.Add(tableSCoeff);
 
             // 核種の体内動態モデル構成するコンパートメントの定義行を読み込む。
             while (true)
@@ -163,7 +189,7 @@ public class InputDataReader_EIR : InputDataReaderBase
                 if (!IsBar(sourceRegion))
                 {
                     // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
-                    var indexS = Array.IndexOf(nuclide.SourceRegions, sourceRegion);
+                    var indexS = data.SourceRegions.IndexOf(sr => sr.Name == sourceRegion);
                     if (indexS == -1)
                         throw Program.Error($"Line {LineNum}: Unknown source region name: '{sourceRegion}'");
 
@@ -299,22 +325,32 @@ public class InputDataReader_EIR : InputDataReaderBase
         var sources = reader.ReadLine()?.Split(StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
         if (sources is null)
             throw Program.Error($"Incorrect SEE file format: {file}");
-        if (nuclide.SourceRegions != null && !Enumerable.SequenceEqual(nuclide.SourceRegions, sources))
-            throw Program.Error($"Incorrect SEE file format: {file}");
-        var sourcesCount = sources.Length;
+
+        if (data.SourceRegions is null)
+        {
+            // 線源領域の名称を設定する。
+            data.SourceRegions = sources.Select(s => new SourceRegionData { Name = s }).ToArray();
+        }
+        else if (!data.SourceRegions.Select(sr => sr.Name).SequenceEqual(sources))
+        {
+            // SEEファイルは全ての核種で線源領域の名前と順序が一致していなければならない。
+            throw Program.Error("Source region names should be consistent between all nuclides.");
+        }
+
+        var numS = sources.Length;
 
         var targets = new string[31];
         var table = sources.ToDictionary(s => s, s => new double[31]);
         for (int indexT = 0; indexT < 31; indexT++)
         {
             var values = reader.ReadLine()?.Split(StringSplitOptions.RemoveEmptyEntries);
-            if (values?.Length != 1 + sourcesCount) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+            if (values?.Length != 1 + numS) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
 
             // 各行の1列目から標的領域の名称を取得。
             var target = values[0];
             targets[indexT] = target;
 
-            for (int indexS = 0; indexS < sourcesCount; indexS++)
+            for (int indexS = 0; indexS < numS; indexS++)
             {
                 var sourceRegion = sources[indexS];
                 var scoeff = double.Parse(values[1 + indexS]);
@@ -322,11 +358,16 @@ public class InputDataReader_EIR : InputDataReaderBase
             }
         }
 
-        // 核種が考慮する線源領域の名称を設定する。
-        nuclide.SourceRegions = sources;
-
-        if (!Enumerable.SequenceEqual(data.TargetRegions, targets))
-            throw Program.Error($"Found mismatch of target region names between tissue weighting factor data and S-Coefficient data for nuclide {nuc}.");
+        if (data.TargetRegions is null)
+        {
+            // 標的領域の名称を設定する。
+            data.TargetRegions = targets;
+        }
+        else if (!data.TargetRegions.SequenceEqual(targets))
+        {
+            // SEEファイルは全ての核種で標的領域の名前と順序が一致していなければならない。
+            throw Program.Error("Target region names should be consistent between all nuclides.");
+        }
 
         return table;
     }

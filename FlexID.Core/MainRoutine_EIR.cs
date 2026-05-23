@@ -109,8 +109,8 @@ public class MainRoutine_EIR
             throw Program.Error("Please select the age at the time of exposure.");
 
         InputData? dataLoInterp = null;  // 年齢区間の切り替わり検出用。
-        double[][]? sourcesSee = null;
-        double[][]? organsSee = null;
+        double[][] sourcesSee = new double[dataLo.SourceRegions.Length * dataLo.Nuclides.Count][];
+        double[][] organsSee = new double[dataLo.Organs.Count][];
 
         // S係数の補間のための領域を確保する。
         void InterpolationAlloc()
@@ -119,25 +119,18 @@ public class MainRoutine_EIR
                 return;
             dataLoInterp = dataLo;
 
-            // 実際の所、EIRでは全ての年齢区間で線源領域は同じのはずで、
-            // また体内動態モデルを定義するコンパートメント群も同じになるようだが
-            // 現状のデータの持ち方としてこれらが年齢区間毎に異なり得ると想定している。
-            Array.Resize(ref sourcesSee, dataLo.Nuclides.Select(n => n.SourceRegions.Length).Sum());
-            Array.Resize(ref organsSee, dataLo.Organs.Count);
-
             int offsetS = 0;
             foreach (var nuclide in dataLo.Nuclides)
             {
-                var sourcesCount = nuclide.SourceRegions.Length;
+                var sourcesCount = dataLo.SourceRegions.Length;
 
                 for (int indexS = 0; indexS < sourcesCount; indexS++)
                 {
                     // ある核種における線源領域の1つ。
-                    var sourceRegion = nuclide.SourceRegions[indexS];
+                    var sourceRegion = dataLo.SourceRegions[indexS].Name;
 
-                    // 各標的領域への補間されたS係数値が書き込まれる配列を確保(または再利用)する。
-                    var see = sourcesSee[offsetS + indexS];
-                    see = see ?? (sourcesSee[offsetS + indexS] = new double[31]);
+                    // 各標的領域への補間されたS係数値が書き込まれる配列を確保または再利用する。
+                    var see = sourcesSee[offsetS + indexS] ??= new double[31];
 
                     // 線源領域に対応する全てのコンパートメントに、
                     // 補間されたS係数値が書き込まれる予定の配列を割り当てる。
@@ -159,13 +152,12 @@ public class MainRoutine_EIR
                 return;
             dataLoInterp = dataLo;
 
-            sourcesSee = null;
-            Array.Resize(ref organsSee, dataLo.Organs.Count);
-
             foreach (var organ in dataLo.Organs)
             {
                 organsSee[organ.Index] = organ.S_CoefficientsM;
             }
+
+            sourcesSee = null!;
         }
 
         // 指定の計算時間メッシュにおけるS係数の補間計算を実施する。
@@ -179,7 +171,7 @@ public class MainRoutine_EIR
                 int offsetS = 0;
                 foreach (var nuclide in dataLo.Nuclides)
                 {
-                    var sourcesCount = nuclide.SourceRegions.Length;
+                    var sourcesCount = dataLo.SourceRegions.Length;
 
                     int indexN = dataLo.Nuclides.IndexOf(nuclide);
                     var tableLo = dataLo.SCoeffTablesM[indexN];
@@ -188,10 +180,10 @@ public class MainRoutine_EIR
                     for (int indexS = 0; indexS < sourcesCount; indexS++)
                     {
                         // ある核種における線源領域の1つ。
-                        var sourceRegion = nuclide.SourceRegions[indexS];
+                        var sourceRegion = dataLo.SourceRegions[indexS].Name;
 
                         // 各標的領域への補間されたS係数値を書き込むための配列を取得する。
-                        var see = sourcesSee![offsetS + indexS];
+                        var see = sourcesSee[offsetS + indexS];
 
                         var seeLo = tableLo[sourceRegion];
                         var seeHi = tableHi[sourceRegion];
@@ -203,6 +195,7 @@ public class MainRoutine_EIR
                             see[indexT] = scoeff;
                         }
                     }
+
                     offsetS += sourcesCount;
                 }
             }
