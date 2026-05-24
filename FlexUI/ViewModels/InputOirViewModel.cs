@@ -151,6 +151,25 @@ public partial class InputOirViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsCompareWithOir { get; set; } = true;
 
+    public bool CanCompareWithOir => OutputDose && OutputRetention;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanCompareWithOir))]
+    public partial bool OutputDose { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool OutputDoseRate { get; set; } = true;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanCompareWithOir))]
+    public partial bool OutputRetention { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool OutputCumulative { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool OutputAtoms { get; set; } = false;
+
     [ObservableProperty]
     public partial string ComputeTimeMeshFilePath { get; set; }
 
@@ -293,6 +312,11 @@ public partial class InputOirViewModel : ViewModelBase
             await runner.StartAsync((target, cancellationToken) =>
             {
                 var data = new InputDataReader_OIR(target.InputFilePath, calcProgeny: true).Read();
+                data.OutputDose = OutputDose;
+                data.OutputDoseRate = OutputDoseRate;
+                data.OutputRetention = OutputRetention;
+                data.OutputCumulative = OutputCumulative;
+                data.OutputAtoms = OutputAtoms;
 
                 var main = new MainRoutine_OIR(data)
                 {
@@ -309,8 +333,9 @@ public partial class InputOirViewModel : ViewModelBase
                 var output = Path.Combine(outputDir, target.Name);
                 target.OutputFilePath = output + "_Retention.out";
 
+                var isCompareWithOir = IsCompareWithOir && CanCompareWithOir;
                 (string Name, string Path)? compare = null;
-                if (IsCompareWithOir && expects.TryGetValue(target.Name, out var expectPath))
+                if (isCompareWithOir && expects.TryGetValue(target.Name, out var expectPath))
                     compare = (Name: target.Name, Path: expectPath);
 
                 var report = new ReportData(new FileInfo(outputDir), output, compare);
