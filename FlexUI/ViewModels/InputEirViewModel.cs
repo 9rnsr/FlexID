@@ -169,10 +169,14 @@ public partial class InputEirViewModel : ViewModelBase
         var selected = paths?[0];
         if (selected is null)
         {
+            var initialDir = Path.GetDirectoryName(ComputeTimeMeshFilePath) ?? "";
+            if (!Path.IsPathFullyQualified(initialDir))
+                initialDir = Path.Combine(AppResource.BaseDir, initialDir);
+
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
             {
-                SuggestedFolder = Path.GetDirectoryName(ComputeTimeMeshFilePath),
+                SuggestedFolder = initialDir,
             };
 
             var result = await picker.PickSingleFileAsync();
@@ -192,10 +196,14 @@ public partial class InputEirViewModel : ViewModelBase
         var selected = paths?[0];
         if (selected is null)
         {
+            var initialDir = Path.GetDirectoryName(OutputTimeMeshFilePath) ?? "";
+            if (!Path.IsPathFullyQualified(initialDir))
+                initialDir = Path.Combine(AppResource.BaseDir, initialDir);
+
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
             {
-                SuggestedFolder = Path.GetDirectoryName(OutputTimeMeshFilePath),
+                SuggestedFolder = initialDir,
             };
 
             var result = await picker.PickSingleFileAsync();
@@ -215,10 +223,14 @@ public partial class InputEirViewModel : ViewModelBase
         var selected = paths?[0];
         if (selected is null)
         {
+            var initialDir = OutputDirectory;
+            if (!Path.IsPathFullyQualified(initialDir))
+                initialDir = Path.Combine(AppResource.ProcessDir, initialDir);
+
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FolderPicker(appId)
             {
-                SuggestedFolder = OutputDirectory,
+                SuggestedFolder = initialDir,
             };
 
             var result = await picker.PickSingleFolderAsync();
