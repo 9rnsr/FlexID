@@ -26,6 +26,22 @@ public sealed partial class InputsPage : Page
         set => SetValue(IsBuiltinProperty, value);
     }
 
+    public static readonly DependencyProperty IsEnableOirSelectorProperty =
+        DependencyProperty.Register(
+            nameof(IsEnableOirSelector), typeof(bool), typeof(InputsPage),
+            new PropertyMetadata(false, IsEnableOirSelectorPropertyChanged));
+
+    private static void IsEnableOirSelectorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ((InputsPage)d).ElementsTable.IsEnableOirSelector = (bool)e.NewValue;
+    }
+
+    public bool IsEnableOirSelector
+    {
+        get => (bool)GetValue(IsEnableOirSelectorProperty);
+        set => SetValue(IsEnableOirSelectorProperty, value);
+    }
+
     public static readonly DependencyProperty TargetsProperty =
         DependencyProperty.Register(
             nameof(Targets), typeof(CheckableItemsView<InputTarget, InputTargetViewModel>), typeof(InputsPage),
