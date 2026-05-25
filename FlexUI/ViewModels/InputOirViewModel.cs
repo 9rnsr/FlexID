@@ -151,6 +151,25 @@ public partial class InputOirViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsCompareWithOir { get; set; } = true;
 
+    public bool CanCompareWithOir => OutputDose && OutputRetention;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanCompareWithOir))]
+    public partial bool OutputDose { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool OutputDoseRate { get; set; } = true;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanCompareWithOir))]
+    public partial bool OutputRetention { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool OutputCumulative { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool OutputAtoms { get; set; } = false;
+
     [ObservableProperty]
     public partial string ComputeTimeMeshFilePath { get; set; }
 
@@ -160,10 +179,14 @@ public partial class InputOirViewModel : ViewModelBase
         var selected = paths?[0];
         if (selected is null)
         {
+            var initialDir = Path.GetDirectoryName(ComputeTimeMeshFilePath) ?? "";
+            if (!Path.IsPathFullyQualified(initialDir))
+                initialDir = Path.Combine(AppResource.BaseDir, initialDir);
+
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
             {
-                SuggestedFolder = Path.GetDirectoryName(ComputeTimeMeshFilePath),
+                SuggestedFolder = initialDir,
             };
 
             var result = await picker.PickSingleFileAsync();
@@ -183,10 +206,14 @@ public partial class InputOirViewModel : ViewModelBase
         var selected = paths?[0];
         if (selected is null)
         {
+            var initialDir = Path.GetDirectoryName(OutputTimeMeshFilePath) ?? "";
+            if (!Path.IsPathFullyQualified(initialDir))
+                initialDir = Path.Combine(AppResource.BaseDir, initialDir);
+
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(appId)
             {
-                SuggestedFolder = Path.GetDirectoryName(OutputTimeMeshFilePath),
+                SuggestedFolder = initialDir,
             };
 
             var result = await picker.PickSingleFileAsync();
@@ -206,10 +233,14 @@ public partial class InputOirViewModel : ViewModelBase
         var selected = paths?[0];
         if (selected is null)
         {
+            var initialDir = OutputDirectory;
+            if (!Path.IsPathFullyQualified(initialDir))
+                initialDir = Path.Combine(AppResource.ProcessDir, initialDir);
+
             var appId = App.Current.AppWindow!.Id;
             var picker = new Microsoft.Windows.Storage.Pickers.FolderPicker(appId)
             {
-                SuggestedFolder = OutputDirectory,
+                SuggestedFolder = initialDir,
             };
 
             var result = await picker.PickSingleFolderAsync();
@@ -281,6 +312,11 @@ public partial class InputOirViewModel : ViewModelBase
             await runner.StartAsync((target, cancellationToken) =>
             {
                 var data = new InputDataReader_OIR(target.InputFilePath, calcProgeny: true).Read();
+                data.OutputDose = OutputDose;
+                data.OutputDoseRate = OutputDoseRate;
+                data.OutputRetention = OutputRetention;
+                data.OutputCumulative = OutputCumulative;
+                data.OutputAtoms = OutputAtoms;
 
                 var main = new MainRoutine_OIR(data)
                 {
@@ -297,8 +333,9 @@ public partial class InputOirViewModel : ViewModelBase
                 var output = Path.Combine(outputDir, target.Name);
                 target.OutputFilePath = output + "_Retention.out";
 
+                var isCompareWithOir = IsCompareWithOir && CanCompareWithOir;
                 (string Name, string Path)? compare = null;
-                if (IsCompareWithOir && expects.TryGetValue(target.Name, out var expectPath))
+                if (isCompareWithOir && expects.TryGetValue(target.Name, out var expectPath))
                     compare = (Name: target.Name, Path: expectPath);
 
                 var report = new ReportData(new FileInfo(outputDir), output, compare);

@@ -33,6 +33,7 @@
         Grid.Row="0"
         AddCommand="{x:Bind ViewModel.AddInputFilesCommand}"
         IsBuiltin="{x:Bind ViewModel.IsBuiltin, Mode=TwoWay}"
+        IsEnableOirSelector="True"
         RemoveCommand="{x:Bind ViewModel.RemoveInputFilesCommand}"
         Targets="{x:Bind ViewModel.Targets, Mode=OneWay}">
         <i:Interaction.Behaviors>
@@ -72,7 +73,6 @@
         <StackPanel
           Grid.Row="0"
           Grid.Column="1"
-          Grid.ColumnSpan="2"
           Spacing="8"
           Orientation="Horizontal">
           <TextBox
@@ -93,8 +93,34 @@
           <CheckBox
             AccessKey="C"
             Content="Compare with OIR data"
-            IsChecked="{x:Bind ViewModel.IsCompareWithOir, Mode=TwoWay}" />
+            IsChecked="{x:Bind ViewModel.IsCompareWithOir, Mode=TwoWay}"
+            IsEnabled="{x:Bind ViewModel.CanCompareWithOir, Mode=OneWay}" />
         </StackPanel>
+
+        <Button
+          Grid.Row="0"
+          Grid.Column="2"
+          HorizontalAlignment="Stretch"
+          Content="&#xE713;"
+          FontFamily="Segoe Fluent Icons">
+          <Button.Flyout>
+            <Flyout Placement="TopEdgeAlignedRight">
+              <StackPanel Orientation="Vertical">
+                <CheckBox
+                  Content="Output Doses"
+                  IsChecked="{x:Bind ViewModel.OutputDose, Mode=TwoWay}"
+                  IsEnabled="False" />
+                <CheckBox Content="Output Dose Rates" IsChecked="{x:Bind ViewModel.OutputDoseRate, Mode=TwoWay}" />
+                <CheckBox
+                  Content="Output Retention Activities"
+                  IsChecked="{x:Bind ViewModel.OutputRetention, Mode=TwoWay}"
+                  IsEnabled="False" />
+                <CheckBox Content="Output Cumulative Activities" IsChecked="{x:Bind ViewModel.OutputCumulative, Mode=TwoWay}" />
+                <CheckBox Content="Output Atoms" IsChecked="{x:Bind ViewModel.OutputAtoms, Mode=TwoWay}" />
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
+        </Button>
 
         <TextBlock
           Grid.Row="1"
