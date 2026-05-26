@@ -50,9 +50,9 @@ Fe-52 Ingestion, Unspecified
   exc   Excreta               ---
 
 [Fe-52:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -140,9 +140,9 @@ Fe-52 Ingestion, Unspecified
   acc   RedMarrow             R-marrow      # only for progeny of Fe
 
 [Mn-52m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.119 Table 14.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.05
@@ -270,9 +270,9 @@ Fe-52 Ingestion, Unspecified
   acc   RedMarrow             R-marrow      # only for progeny of Fe
 
 [Mn-52:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.119 Table 14.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.05

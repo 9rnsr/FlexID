@@ -113,9 +113,9 @@ Pb-214 Inhalation, Aerosols Type M
   exc   Excreta(hair,skin,nails)    ---
 
 [Pb-214:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -342,9 +342,9 @@ Pb-214 Inhalation, Aerosols Type M
   acc   Spleen                Spleen
 
 [Bi-214:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.05
@@ -669,9 +669,9 @@ Pb-214 Inhalation, Aerosols Type M
   exc   Excreta               ---           # hair,sweat,skin
 
 [Po-214:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
@@ -984,9 +984,9 @@ Pb-214 Inhalation, Aerosols Type M
   acc   Spleen                Spleen
 
 [Tl-210:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.99 # ≒1
@@ -1323,9 +1323,9 @@ Pb-214 Inhalation, Aerosols Type M
   acc   Spleen                Spleen
 
 [Pb-210:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.2
@@ -1699,9 +1699,9 @@ Pb-214 Inhalation, Aerosols Type M
   acc   Spleen                Spleen
 
 [Bi-210:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.05
@@ -2036,9 +2036,9 @@ Pb-214 Inhalation, Aerosols Type M
   exc   Excreta               ---           # hair,sweat,skin
 
 [Po-210:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
@@ -2370,9 +2370,9 @@ Pb-214 Inhalation, Aerosols Type M
   acc   Spleen                Spleen
 
 [Hg-206:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.1
@@ -2711,9 +2711,9 @@ Pb-214 Inhalation, Aerosols Type M
   acc   Spleen                Spleen
 
 [Tl-206:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.99 # ≒1
