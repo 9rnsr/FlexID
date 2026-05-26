@@ -55,7 +55,7 @@ Compartments:
   acc   Y-90 /<decay_from_Sr-90/ST2>   Other
 
 Transfers:
-  Sr-90/input                  -> Sr-90/Oralcavity     = 100.00%
+  Sr-90/input                  -> Sr-90/Oralcavity     = 100%
   Sr-90/Oralcavity             -> Sr-90/Oesophagus-f   = 6480
   Sr-90/Oralcavity             -> Sr-90/Oesophagus-s   = 720
   Sr-90/Oesophagus-f           -> Sr-90/St-con         = 12343
