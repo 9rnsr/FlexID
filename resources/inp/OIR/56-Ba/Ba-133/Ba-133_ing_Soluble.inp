@@ -5,12 +5,22 @@ Ba-133 Ingestion, Soluble
   Ba-133
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Soluble forms
+  $fA = 0.2
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Ba-133:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -38,12 +48,6 @@ Ba-133 Ingestion, Soluble
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Soluble forms
-  $fA = 0.2
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

@@ -5,12 +5,23 @@ Te-134 Injection
   Te-134  I-134
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  $fA    = 0.3
+  $fA_Re = 0.3          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  Blood1                  100.0%
+
+
 [Te-134:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -39,13 +50,6 @@ Te-134 Injection
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood1                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

@@ -5,12 +5,23 @@ Pb-204m Injection
   Pb-204m
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
+  $fA    = 0.2
+  $fA_Re = 0.2          # footnote**
+
+# ICRP Publ.130 p.37 Para.15
+  Plasma                  100.0%
+
+
 [Pb-204m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -46,13 +57,6 @@ Pb-204m Injection
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.2
-  $fA_Re = 0.2          # footnote**
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Plasma                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

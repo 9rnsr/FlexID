@@ -5,12 +5,31 @@ H-3 Inhalation, Gas or Vapor Type F, Unspecified
   H-3
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Absorption type F
+  $sr = 100
+  $ss =   0
+  $fA = 0.99 # ≒1
+
+# ICRP Publ.130 p.62 Para.92
+# ICRP Publ.134 p.20 Table 2.2
+  ET2-F                    19.96%       # = 99.8% of 20%
+  ETseq-F                   0.04%       # =  0.2% of 20%
+  BB-F                      9.98%       # = 99.8% of 10%
+  BBseq-F                   0.02%       # =  0.2% of 10%
+  bb-F                     19.96%       # = 99.8% of 20%
+  bbseq-F                   0.04%       # =  0.2% of 20%
+  ALV-F                    50.0%        # =          50%
+
+
 [H-3:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
   acc   LNET-F                LN-ET
@@ -45,21 +64,6 @@ H-3 Inhalation, Gas or Vapor Type F, Unspecified
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Absorption type F
-  $sr = 100
-  $ss =   0
-  $fA = 0.99 # ≒1
-
-# ICRP Publ.130 p.62 Para.92
-# ICRP Publ.134 p.20 Table 2.2
-  input                   ET2-F                    19.96%       # = 99.8% of 20%
-  input                   ETseq-F                   0.04%       # =  0.2% of 20%
-  input                   BB-F                      9.98%       # = 99.8% of 10%
-  input                   BBseq-F                   0.02%       # =  0.2% of 10%
-  input                   bb-F                     19.96%       # = 99.8% of 20%
-  input                   bbseq-F                   0.04%       # =  0.2% of 20%
-  input                   ALV-F                    50.0%        # =          50%
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6

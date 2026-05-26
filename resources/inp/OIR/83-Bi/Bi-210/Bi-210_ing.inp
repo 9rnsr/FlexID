@@ -5,12 +5,23 @@ Bi-210 Ingestion
   Bi-210  Po-210  Tl-206
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
+  $fA    = 0.05
+  $fA_Re = 0.05         # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Bi-210:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -40,13 +51,6 @@ Bi-210 Ingestion
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d] or [%]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

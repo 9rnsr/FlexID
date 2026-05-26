@@ -5,12 +5,22 @@ C-11 Injection
   C-11
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.53 Table 3.3 / Ingested materials, All chemical forms
+  $fA = 0.99 # ≒1
+
+# ICRP Publ.130 p.37 Para.15
+  Blood0                  100.0%
+
+
 [C-11:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -43,12 +53,6 @@ C-11 Injection
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.53 Table 3.3 / Ingested materials, All chemical forms
-  $fA = 0.99 # ≒1
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood0                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
