@@ -8,12 +8,14 @@ Pb-212 DecayCalc
 #                     \           \
 #                      +-> Tl-208 -+-> (Pb-208)
 
+[intake]
+  C   100.0%
+
+
 [Pb-212:compartment]
-  inp   inp ---
   acc   C   ---
 
 [Pb-212:transfer]
-  inp   C   100.0%
 
 
 [Bi-212:compartment]

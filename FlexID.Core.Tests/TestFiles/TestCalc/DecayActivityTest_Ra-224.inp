@@ -8,12 +8,14 @@ Ra-224 DecayCalc
 #                                                      \           \
 #                                                       +-> Tl-208 -+-> (Pb-208)
 
+[intake]
+  C   100.0%
+
+
 [Ra-224:compartment]
-  inp   inp ---
   acc   C   ---
 
 [Ra-224:transfer]
-  inp   C   100.0%
 
 
 [Rn-220:compartment]

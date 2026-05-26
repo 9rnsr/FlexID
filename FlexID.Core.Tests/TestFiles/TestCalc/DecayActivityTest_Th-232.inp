@@ -9,12 +9,14 @@ Th-232 DecayCalc
 #                                                                                                  \           \
 #                                                                                                   +-> Tl-208 -+-> (Pb-208)
 
+[intake]
+  C   100.0%
+
+
 [Th-232:compartment]
-  inp   inp ---
   acc   C   ---
 
 [Th-232:transfer]
-  inp   C   100.0%
 
 
 [Ra-228:compartment]

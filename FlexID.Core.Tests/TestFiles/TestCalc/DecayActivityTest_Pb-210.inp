@@ -8,12 +8,14 @@ Pb-210 DecayCalc
 #          \           \           \
 #           +-> Hg-206 -+-> Tl-206 -+-> (Pb-206)
 
+[intake]
+  C   100.0%
+
+
 [Pb-210:compartment]
-  inp   inp ---
   acc   C   ---
 
 [Pb-210:transfer]
-  inp   C   100.0%
 
 
 [Bi-210:compartment]

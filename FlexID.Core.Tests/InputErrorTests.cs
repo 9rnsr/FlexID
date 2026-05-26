@@ -29,6 +29,12 @@ public class InputErrorTests
             [nuclide]
               Y-90   2.595247E-01
 
+            [intake]
+              ST0    100%
+
+            [intake]
+              ST0    100%
+
             [Sr-90:parameter]
               #
 
@@ -36,17 +42,16 @@ public class InputErrorTests
               #
 
             [Sr-90:compartment]
-              inp    input     ---
               acc    ST0       ---
 
             [Sr-90:compartment]
               acc    ST1       ---
 
             [Sr-90:transfer]
-              input      ST0   100%
+              ST0    ST1       100
 
             [Sr-90:transfer]
-              ST0        ST1   100%
+              ST1    ST0       100
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
@@ -55,9 +60,10 @@ public class InputErrorTests
             "Line 4: Duplicated [title] section.",
             "Line 10: Duplicated [parameter] section.",
             "Line 16: Duplicated [nuclide] section.",
-            "Line 22: Duplicated [Sr-90:parameter] section.",
-            "Line 29: Duplicated [Sr-90:compartment] section.",
-            "Line 35: Duplicated [Sr-90:transfer] section.",
+            "Line 22: Duplicated [intake] section.",
+            "Line 28: Duplicated [Sr-90:parameter] section.",
+            "Line 34: Duplicated [Sr-90:compartment] section.",
+            "Line 40: Duplicated [Sr-90:transfer] section.",
         ]);
     }
 
@@ -72,7 +78,6 @@ public class InputErrorTests
             #   Sr-90  6.596156E-05
 
             [Sr-90:compartment]
-              inp    input     ---
               acc    ST0       ---
 
             [Sr-90:transfer]
@@ -83,9 +88,10 @@ public class InputErrorTests
         e.ErrorLines.ShouldBe(
         [
             "Line 7: Undefined nuclide 'Sr-90' is used to define compartments.",
-            "Line 11: Undefined nuclide 'Sr-90' is used to define transfers.",
-            "Line 13: Missing [title] section.",
-            "Line 13: Missing [nuclide] section.",
+            "Line 10: Undefined nuclide 'Sr-90' is used to define transfers.",
+            "Line 12: Missing [title] section.",
+            "Line 12: Missing [nuclide] section.",
+            "Line 12: Missing [intake] section.",
         ]);
     }
 
@@ -99,19 +105,20 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
+            [intake]
+              ST0    100%
+
             # [Sr-90:compartment]
-            #   inp    input     ---
             #   acc    ST0       ---
 
             # [Sr-90:transfer]
-            #   input      ST0   100%
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 13: Missing [Sr-90:compartment] section.",
-            "Line 13: Missing [Sr-90:transfer] section.",
+            "Line 14: Missing [Sr-90:compartment] section.",
+            "Line 14: Missing [Sr-90:transfer] section.",
         ]);
     }
 
@@ -142,6 +149,8 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
+            [intake]
+
             [Sr-90:compartment]
 
             [Sr-90:transfer]
@@ -150,8 +159,9 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 7: Empty [Sr-90:compartment] section.",
-            "Line 9: Empty [Sr-90:transfer] section.",
+            "Line 7: Empty [intake] section.",
+            "Line 9: Empty [Sr-90:compartment] section.",
+            // "Line x: Empty [Sr-90:transfer] section.",
         ]);
     }
 
@@ -187,12 +197,13 @@ public class InputErrorTests
               aaa
               Sr-90
 
+            [intake]
+              ST0   100%
+
             [Sr-90:compartment]
-              inp    input     ---
               acc    ST0       ---
 
             [Sr-90:transfer]
-              input      ST0   100%
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
@@ -219,12 +230,13 @@ public class InputErrorTests
               Mo-90  2.992002E+00  Nb-90/xyz
               Nb-93m 1.177330E-04  Nb-93/-1.0
 
+            [intake]
+              ST0   100%
+
             [Sr-90:compartment]
-              inp    input     ---
               acc    ST0       ---
 
             [Sr-90:transfer]
-              input      ST0   100%
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
@@ -250,80 +262,23 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
+            [intake]
+              ST0   100%
+
             [Sr-90:compartment]
-              inp    input   # ---
-              acc    ST0       ---
+              acc    ST0     # ---
               add    ST1       ---
-
-            [Sr-90:transfer]
-              input      ST0   100%
-            """);
-
-        var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(
-        [
-            "Line 8: Compartment definition should have 3 values.",
-            "Line 10: Unrecognized compartment function 'add'.",
-        ]);
-    }
-
-    [TestMethod]
-    public void CompartmentSection_MissingInpError()
-    {
-        var reader = CreateReader("""
-            [title]
-            dummy
-
-            [nuclide]
-              Sr-90  6.596156E-05
-
-            [Sr-90:compartment]
-              acc    ST0   ---
-              acc    ST1   ---
-
-            [Sr-90:transfer]
-              ST0    ST1   100%
-            """);
-
-        var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(
-        [
-            "Line 7: Missing 'inp' compartment.",
-        ]);
-    }
-
-    [TestMethod]
-    public void CompartmentSection_DefineInpErrors()
-    {
-        var reader = CreateReader("""
-            [title]
-            dummy
-
-            [nuclide]
-              Sr-90  6.596156E-05  Y-90/1.0
-              Y-90   2.595247E-01
-
-            [Sr-90:compartment]
               inp    input     ---
-              inp    input2    ---
-              acc    ST0       ---
-
+            
             [Sr-90:transfer]
-              input      ST0   100%
-
-            [Y-90:compartment]
-              inp    input2    ---
-              acc    ST0       ---
-
-            [Y-90:transfer]
-              Sr-90/ST0  ST0   --
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 10: Duplicated 'inp' compartment.",
-            "Line 17: Cannot define 'inp' compartment which belongs to progeny nuclide.",
+            "Line 11: Compartment definition should have 3 values.",
+            "Line 12: Unrecognized compartment function 'add'.",
+            "Line 13: Unrecognized compartment function 'inp'.",
         ]);
     }
 
@@ -337,18 +292,19 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
+            [intake]
+              ST0   100%
+
             [Sr-90:compartment]
-              inp    input     ---
               acc    ST0       Abcde
 
             [Sr-90:transfer]
-              input      ST0   100%
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 9: Unknown source region name 'Abcde'.",
+            "Line 11: Unknown source region name 'Abcde'.",
         ]);
     }
 
@@ -362,18 +318,19 @@ public class InputErrorTests
             [nuclide]
               Zr-90  0.000000E+00
 
+            [intake]
+              ST0   100%
+
             [Zr-90:compartment]
-              inp    input     ---
               acc    ST0       Other
 
             [Zr-90:transfer]
-              input      ST0   100%
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 9: Cannot specify source region for stable nuclide 'Zr-90'.",
+            "Line 11: Cannot specify source region for stable nuclide 'Zr-90'.",
         ]);
     }
 
@@ -387,20 +344,23 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
-            [Sr-90:compartment]
-              inp    input     ---
-              acc    ST0       ---
+            [intake]
+              ST0   100%
 
+            [Sr-90:compartment]
+              acc    ST0    ---
+              acc    ST1    ---
+            
             [Sr-90:transfer]
-              input # ST0   100%
-              input   ST0   abc%
+              ST0  # ST1    100%
+              ST0    ST1    abc%
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 12: Transfer path definition should have 3 values.",
-            "Line 13: Transfer coefficient should be evaluated to a number, not 'abc%'.",
+            "Line 15: Transfer path definition should have 3 values.",
+            "Line 16: Transfer coefficient should be evaluated to a number, not 'abc%'.",
         ]);
     }
 
@@ -415,19 +375,22 @@ public class InputErrorTests
               Sr-90  6.596156E-05  Y-90/1.0
               Y-90   2.595247E-01
 
-            [Sr-90:compartment]
-              inp    input     ---
-              acc    ST0       ---
+            [intake]
+              ST0   100%
 
+            [Sr-90:compartment]
+              acc    ST0       ---
+              acc    ST1       ---
+            
             [Sr-90:transfer]
-              input      ST0        100%
               X-00/ST0   ST0        100
               ST0        X-00/ST0   100
-              ST1        ST0        100
-              ST0        ST1        100
+              XX         ST0        100
+              ST0        XX         100
               ST0        ST0        100
-              input      ST0        50%
-
+              ST0        ST1        100
+              ST0        ST1        200
+            
             [Y-90:compartment]
               acc    ST0       ---
 
@@ -438,13 +401,13 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 14: Undefined nuclide 'X-00'.",
-            "Line 15: Undefined nuclide 'X-00'.",
-            "Line 16: Undefined compartment 'ST1'.",
-            "Line 17: Undefined compartment 'ST1'.",
-            "Line 18: Cannot set transfer path to itself.",
-            "Line 19: Duplicated transfer path from 'input' to 'ST0'.",
-            "Line 25: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
+            "Line 16: Undefined nuclide 'X-00'.",
+            "Line 17: Undefined nuclide 'X-00'.",
+            "Line 18: Undefined compartment 'XX'.",
+            "Line 19: Undefined compartment 'XX'.",
+            "Line 20: Cannot set transfer path to itself.",
+            "Line 22: Duplicated transfer path from 'ST0' to 'ST1'.",
+            "Line 28: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
         ]);
     }
 
@@ -459,16 +422,16 @@ public class InputErrorTests
               Sr-90  6.596156E-05  Y-90/1.0
               Y-90   2.595247E-01
 
+            [intake]
+              ST0   100%
+
             [Sr-90:compartment]
-              inp    input      ---
               acc    ST0        ---
               mix    mix-Blood  ---
               exc    Excreta    ---
 
             [Sr-90:transfer]
-              input      ST0    ---
               mix-Blood  ST0    ---
-              ST0        input  100
               Excreta    ST0    100
 
             [Y-90:compartment]
@@ -477,7 +440,6 @@ public class InputErrorTests
               exc    Excreta    ---
 
             [Y-90:transfer]
-              Sr-90/input      ST0  ---
               Sr-90/mix-Blood  ST0  ---
               Sr-90/ST0        ST0  100%
               ST0              ST1  100%
@@ -488,16 +450,13 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 15: Require fraction of output activity [%] from inp 'input'.",
-            "Line 16: Require fraction of output activity [%] from mix 'mix-Blood'.",
-            "Line 17: Cannot set input path to inp 'input'.",
+            "Line 17: Require fraction of output activity [%] from mix 'mix-Blood'.",
             "Line 18: Cannot set output path from exc 'Excreta'.",
-            "Line 26: Cannot set decay path from inp 'Sr-90/input'.",
-            "Line 27: Cannot set decay path from mix 'Sr-90/mix-Blood'.",
-            "Line 28: Require transfer rate [/d] from acc 'Sr-90/ST0'.",
-            "Line 29: Require transfer rate [/d] from acc 'ST0'.",
-            "Line 30: Cannot set decay path from exc 'Sr-90/Excreta' to non-exc 'ST0'.",
-            "Line 31: Cannot set decay path from acc 'Sr-90/ST0' to non-acc 'Excreta'.",
+            "Line 26: Cannot set decay path from mix 'Sr-90/mix-Blood'.",
+            "Line 27: Require transfer rate [/d] from acc 'Sr-90/ST0'.",
+            "Line 28: Require transfer rate [/d] from acc 'ST0'.",
+            "Line 29: Cannot set decay path from exc 'Sr-90/Excreta' to non-exc 'ST0'.",
+            "Line 30: Cannot set decay path from acc 'Sr-90/ST0' to non-acc 'Excreta'.",
         ]);
     }
 
@@ -511,20 +470,21 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
+            [intake]
+              ST0   100%
+
             [Sr-90:compartment]
-              inp    input      ---
               acc    ST0        ---
               acc    ST1        ---
 
             [Sr-90:transfer]
-              input  ST0        100%
               ST0    ST1        -30
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 14: Transfer coefficient should be positive.",
+            "Line 15: Transfer coefficient should be positive.",
         ]);
     }
 
@@ -538,22 +498,32 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
+            [intake]
+              ST0        63.1462%
+              ST1        36.8528%
+
             [Sr-90:compartment]
-              inp    input      ---
               acc    ST0        ---
               acc    ST1        ---
+              mix    Mix        ---
 
             [Sr-90:transfer]
-              input  ST0        63.1462%
-              input  ST1        36.8528%
+              ST0    Mix        10
+              ST1    Mix       100
+              Mix    ST0        63.1462%
+              Mix    ST1        36.8528%
+            
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 13: Total [%] of transfer paths from 'input' is  not 100%, but 99.999%.",
-            "Line 13:     = 63.1462%",
-            "Line 14:     = 36.8528%",
+            "Line 7: Total [%] of intake paths is not 100%, but 99.999%.",
+            "Line 8:     = 63.1462%",
+            "Line 9:     = 36.8528%",
+            "Line 19: Total [%] of transfer paths from 'Mix' is not 100%, but 99.999%.",
+            "Line 19:     = 63.1462%",
+            "Line 20:     = 36.8528%",
         ]);
     }
 
@@ -567,20 +537,21 @@ public class InputErrorTests
             [nuclide]
               Sr-90  6.596156E-05
 
+            [intake]
+              ST0   100%
+
             [Sr-90:compartment]
-              inp    input      ---
               acc    ST0        ---
               acc    ST1        ---
 
             [Sr-90:transfer]
-              input  ST0        100%
               ST0    ST1      $(10 / 0)
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 14: Transfer coefficient evaluation failed: divide by zero.",
+            "Line 15: Transfer coefficient evaluation failed: divide by zero.",
         ]);
     }
 }
