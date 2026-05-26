@@ -5,12 +5,22 @@ Ra-226 Injection
   Ra-226
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
+  $fA = 0.2
+
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
+
+
 [Ra-226:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -42,12 +52,6 @@ Ra-226 Injection
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
-  $fA = 0.2
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood                   100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

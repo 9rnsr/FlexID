@@ -5,12 +5,23 @@ Pu-242 Ingestion, Soluble
   Pu-242
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
+  $fA    = 5E-4
+  $fA_Re = 5E-4     # footnote§
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Pu-242:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -48,13 +59,6 @@ Pu-242 Ingestion, Soluble
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
-  $fA    = 5E-4
-  $fA_Re = 5E-4     # footnote§
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

@@ -5,12 +5,23 @@ Zr-97 Injection
   Zr-97  Nb-97
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
+  $fA    = 0.002
+  $fA_Re = 0.002        # footnote¶
+
+# ICRP Publ.130 p.37 Para.15
+  Blood1                  100.0%
+
+
 [Zr-97:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -40,13 +51,6 @@ Zr-97 Injection
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA    = 0.002
-  $fA_Re = 0.002        # footnote¶
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood1                  100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

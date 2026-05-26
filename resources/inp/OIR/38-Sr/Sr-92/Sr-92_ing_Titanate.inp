@@ -5,12 +5,22 @@ Sr-92 Ingestion, Strontium titanate
   Sr-92  Y-92
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
+  $fA = 0.01
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Sr-92:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -38,12 +48,6 @@ Sr-92 Ingestion, Strontium titanate
 #-----------------------+---------------------+--------------
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
-  $fA = 0.01
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
