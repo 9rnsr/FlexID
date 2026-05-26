@@ -27,7 +27,7 @@ Compartments:
   acc   Ba-133/Noch-T-bone-V   T-bone-V
 
 Transfers:
-  Ba-133/input          -> Ba-133/Oralcavity     = 100.00%
+  Ba-133/input          -> Ba-133/Oralcavity     = 100%
   Ba-133/Oralcavity     -> Ba-133/Oesophagus-f   = 6480
   Ba-133/Oralcavity     -> Ba-133/Oesophagus-s   = 720
   Ba-133/Oesophagus-f   -> Ba-133/St-con         = 12343
