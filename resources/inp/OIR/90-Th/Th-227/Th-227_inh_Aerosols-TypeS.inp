@@ -112,9 +112,9 @@ Th-227 Inhalation, Aerosols Type S
   acc   ST2                   Other
 
 [Th-227:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -331,9 +331,9 @@ Th-227 Inhalation, Aerosols Type S
   acc   Spleen                Spleen
 
 [Ra-223:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.2
@@ -644,9 +644,9 @@ Th-227 Inhalation, Aerosols Type S
   exc   Exhaled               ---
 
 [Rn-219:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -944,9 +944,9 @@ Th-227 Inhalation, Aerosols Type S
   acc   T-marrow              T-marrow
 
 [Po-215:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
@@ -1309,9 +1309,9 @@ Th-227 Inhalation, Aerosols Type S
   acc   T-marrow              T-marrow
 
 [Pb-211:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.2
@@ -1716,9 +1716,9 @@ Th-227 Inhalation, Aerosols Type S
   acc   T-marrow              T-marrow
 
 [Bi-211:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.05
@@ -2094,9 +2094,9 @@ Th-227 Inhalation, Aerosols Type S
   acc   T-marrow              T-marrow
 
 [Po-211:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
@@ -2452,9 +2452,9 @@ Th-227 Inhalation, Aerosols Type S
   acc   T-marrow              T-marrow
 
 [Tl-207:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.99 # ≒1

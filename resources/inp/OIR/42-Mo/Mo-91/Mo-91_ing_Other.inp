@@ -43,9 +43,9 @@ Mo-91 Ingestion, Other
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
 [Mo-91:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -110,9 +110,9 @@ Mo-91 Ingestion, Other
   acc   ST1                   Other
 
 [Nb-91m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.01
@@ -237,9 +237,9 @@ Mo-91 Ingestion, Other
   acc   ST1                   Other
 
 [Nb-91:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.01

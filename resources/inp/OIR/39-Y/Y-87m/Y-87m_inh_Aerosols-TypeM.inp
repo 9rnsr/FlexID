@@ -94,9 +94,9 @@ Y-87m Inhalation, Aerosols Type M
   acc   T-bone-V              T-bone-V
 
 [Y-87m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -245,9 +245,9 @@ Y-87m Inhalation, Aerosols Type M
   acc   T-bone-V              T-bone-V
 
 [Y-87:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 1E-4
@@ -452,9 +452,9 @@ Y-87m Inhalation, Aerosols Type M
   acc   Noch-T-bone-V         T-bone-V
 
 [Sr-87m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
   $fA_MaxValueOfIng = 0.25

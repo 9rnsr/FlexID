@@ -103,9 +103,9 @@ Au-186 Inhalation, Aerosols Type S
   acc   Other2                Other
 
 [Au-186:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -294,9 +294,9 @@ Au-186 Inhalation, Aerosols Type S
   acc   ST2                   Other
 
 [Pt-186:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.305 Table 34.2 / Ingested materials, Soluble forms
   $fA_MaxValueOfIng = 0.01
@@ -587,9 +587,9 @@ Au-186 Inhalation, Aerosols Type S
   acc   ST2                   Other         # slow turnover
 
 [Ir-186m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.188 Table 8.2 / Ingested materials, All unspecified forms
   $fA_MaxValueOfIng = 0.01
@@ -893,9 +893,9 @@ Au-186 Inhalation, Aerosols Type S
   acc   ST2                   Other         # slow turnover
 
 [Ir-186:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.188 Table 8.2 / Ingested materials, All unspecified forms
   $fA_MaxValueOfIng = 0.01
@@ -1188,9 +1188,9 @@ Au-186 Inhalation, Aerosols Type S
   acc   ST2                   Other
 
 [Os-186:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.298 Table 33.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.01
@@ -1497,9 +1497,9 @@ Au-186 Inhalation, Aerosols Type S
   acc   ST2                   Other
 
 [Os-182:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.298 Table 33.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.01
@@ -1785,9 +1785,9 @@ Au-186 Inhalation, Aerosols Type S
   acc   ST2                   Other
 
 [Re-182m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.288 Table 32.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.9

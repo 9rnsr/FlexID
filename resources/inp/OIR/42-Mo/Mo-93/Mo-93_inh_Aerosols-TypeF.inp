@@ -101,9 +101,9 @@ Mo-93 Inhalation, Aerosols Type F
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
 [Mo-93:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -285,9 +285,9 @@ Mo-93 Inhalation, Aerosols Type F
   acc   ST1                   Other
 
 [Nb-93m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.01

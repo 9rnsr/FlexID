@@ -108,9 +108,9 @@ Fe-60 Inhalation, Aerosols Type S
   exc   Excreta               ---
 
 [Fe-60:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -317,9 +317,9 @@ Fe-60 Inhalation, Aerosols Type S
   acc   RedMarrow             R-marrow      # only for progeny of Fe
 
 [Co-60m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.156 Table 8.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
@@ -596,9 +596,9 @@ Fe-60 Inhalation, Aerosols Type S
   acc   RedMarrow             R-marrow      # only for progeny of Fe
 
 [Co-60:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.156 Table 8.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
