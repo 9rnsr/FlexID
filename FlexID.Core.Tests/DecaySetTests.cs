@@ -1233,14 +1233,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",  "inp  input  ---",
-                                             "acc  Blood  ---",
+                    "[Sb-129:compartment]",  "acc  Blood  ---",
                     "[Te-129m:compartment]", "acc  Blood  ---",
                     "[Te-129:compartment]",  "acc  Blood  ---",
                     "[I-129:compartment]",   "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input         Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood  Blood  ---",   // 親－娘の壊変経路を定義する。
                     "[Te-129:transfer]",  "Sb-129/Blood  Blood  ---",   // 間接的な壊変経路を定義する。
                     "[I-129:transfer]",   "Sb-129/Blood  Blood  ---",   // 間接的な壊変経路を定義する。
@@ -1254,14 +1254,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",  "inp  input  ---",
-                                             "acc  Blood  ---",
+                    "[Sb-129:compartment]",  "acc  Blood  ---",
                     "[Te-129m:compartment]", "acc  Blood  ---",
                     "[Te-129:compartment]",  "acc  Blood  ---",
                     "[I-129:compartment]",   "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input          Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood   Blood  ---",   // 親－娘の壊変経路。
                     "[Te-129:transfer]",  "Sb-129/Blood   Blood  ---",   // 親－娘の壊変経路。
                                           "Te-129m/Blood  Blood  ---",   // 親－娘の壊変経路。
@@ -1277,14 +1277,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",  "inp  input  ---",
-                                             "acc  Blood  ---",
+                    "[Sb-129:compartment]",  "acc  Blood  ---",
                     "[Te-129m:compartment]", "acc  Blood  ---",
                     "[Te-129:compartment]",  "acc  Blood  ---",
                     "[I-129:compartment]",   "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input          Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood   Blood  ---",  // 親－娘の壊変経路。
                     "[Te-129:transfer]",  "Sb-129/Blood   Blood  ---",  // 先に系列を作る。
                                           "Te-129m/Blood  Blood  ---",  // 後で系列内の親－娘の壊変経路を明示している。
@@ -1301,14 +1301,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",  "inp  input  ---",
-                                             "acc  Blood  ---",
+                    "[Sb-129:compartment]",  "acc  Blood  ---",
                     "[Te-129m:compartment]", "acc  Blood  ---",
                     "[Te-129:compartment]",  "acc  Blood  ---",
                     "[I-129:compartment]",   "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input          Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood   Blood  ---",  // 親－娘の壊変経路。
                     "[Te-129:transfer]",
                                           "Te-129m/Blood  Blood  ---",  // 先に系列内の親－娘の壊変経路を明示している。
@@ -1327,14 +1327,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",  "inp  input  ---",
-                                             "acc  Blood  ---",
+                    "[Sb-129:compartment]",  "acc  Blood  ---",
                     "[Te-129m:compartment]", "acc  Blood  ---",
                     "[Te-129:compartment]",  "acc  Blood  ---",
                     "[I-129:compartment]",   "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input          Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood   Blood  ---",  // 親－娘の壊変経路。
                     "[Te-129:transfer]",
                                           "Te-129m/Blood  Blood  ---",  // 先に系列内の親－娘の壊変経路を明示している。
@@ -1385,14 +1385,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",  "inp  input  ---",
-                                             "acc  Blood  ---",
+                    "[Sb-129:compartment]",  "acc  Blood  ---",
                     "[Te-129m:compartment]", "acc  Blood  ---",
                     "[Te-129:compartment]",  "acc  Blood  ---",
                     "[I-129:compartment]",   "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input         Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood  Blood  ---",
                     "[Te-129:transfer]",  "Sb-129/Blood  Blood  ---",
                     "[I-129:transfer]",   "Sb-129/Blood  Blood  100",   // 移行速度付きの壊変経路を、系列先頭の核種Sb-129から設定。
@@ -1405,14 +1405,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",   "inp  input  ---",
-                                              "acc  Blood  ---",
+                    "[Sb-129:compartment]",   "acc  Blood  ---",
                     "[Te-129m:compartment]",  "acc  Blood  ---",
                     "[Te-129:compartment]",   "acc  Blood  ---",
                     "[I-129:compartment]",    "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input          Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood   Blood  ---",
                     "[Te-129:transfer]",  "Sb-129/Blood   Blood  ---",
                     "[I-129:transfer]",   "Te-129m/Blood  Blood  100",   // 移行速度付きの壊変経路を、系列途中の核種Te-129mから設定。
@@ -1425,14 +1425,14 @@ public class DecaySetTests
                 [
                     "[title]", "dummy",
                     "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                    "[intake]", "Blood  100%",
 
-                    "[Sb-129:compartment]",   "inp  input  ---",
-                                              "acc  Blood  ---",
+                    "[Sb-129:compartment]",   "acc  Blood  ---",
                     "[Te-129m:compartment]",  "acc  Blood  ---",
                     "[Te-129:compartment]",   "acc  Blood  ---",
                     "[I-129:compartment]",    "acc  Blood  ---",
 
-                    "[Sb-129:transfer]",  "input          Blood  100%",
+                    "[Sb-129:transfer]",
                     "[Te-129m:transfer]", "Sb-129/Blood   Blood  ---",
                     "[Te-129:transfer]",  "Sb-129/Blood   Blood  ---",
                     "[I-129:transfer]",   "Te-129/Blood   Blood  100",   // 移行速度付きの壊変経路を、系列途中の核種Te-129から設定。
@@ -1452,14 +1452,14 @@ public class DecaySetTests
             [
                 "[title]", "dummy",
                 "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                "[intake]", "Blood  100%",
 
-                "[Sb-129:compartment]",  "inp  input  ---",
-                                            "acc  Blood  ---",
+                "[Sb-129:compartment]",  "acc  Blood  ---",
                 "[Te-129m:compartment]", "acc  Blood  ---",
                 "[Te-129:compartment]",  "acc  Blood  ---",
                 "[I-129:compartment]",   "acc  Blood  ---",
 
-                "[Sb-129:transfer]",  "input         Blood   100%",
+                "[Sb-129:transfer]",
                 "[Te-129m:transfer]", "Sb-129/Blood  Blood    10",  // 系列の起点に同じSb-129/Bloodを設定。
                 "[Te-129:transfer]",  "Sb-129/Blood  Blood   100",  // 同上。
                 "[I-129:transfer]",   "Sb-129/Blood  Blood  1000",  // 同上。
@@ -1511,14 +1511,14 @@ public class DecaySetTests
             [
                 "[title]", "dummy",
                 "[nuclide]", "Sb-129  Te-129m  Te-129  I-129",
+                "[intake]", "Blood  100%",
 
-                "[Sb-129:compartment]",  "inp  input  ---",
-                                         "acc  Blood  ---",
+                "[Sb-129:compartment]",  "acc  Blood  ---",
                 "[Te-129m:compartment]", "acc  Blood  ---",
                 "[Te-129:compartment]",  "acc  Blood  ---",
                 "[I-129:compartment]",   "acc  Blood  ---",
 
-                "[Sb-129:transfer]",  "input          Sb-129/Blood   100%",
+                "[Sb-129:transfer]",
                 "[Te-129m:transfer]", "Sb-129/Blood   Te-129m/Blood   10",  // 1つ目の系列の起点。
                 "[Te-129:transfer]",  "Te-129m/Blood  Te-129/Blood   100",  // 2つ目の系列の起点。
                 "[I-129:transfer]",   "Sb-129/Blood   I-129/Blood   1000",  // 1つ目の系列。
