@@ -446,9 +446,6 @@ $if progeny
   {*}/Skin                Skin                      ---
   {*}/Spleen              Spleen                    ---
 
-  {Pb}/Excreta(sweat)           Excreta(sweat)              ---
-  {Pb}/Excreta(hair,skin,nails) Excreta(hair,skin,nails)    ---
-
   {Pb}/ST0                ST0                       ---
   {Pb}/ST1                ST1                       ---
   {Pb}/ST2                ST2                       ---
@@ -604,10 +601,10 @@ $endif
   {Tl}/Liver              Liver1                    ---     # Publ.137 Para.481 
   {Tl}/Kidneys            Kidneys2                  ---     # Publ.137 Para.481 
   {*}/RedMarrow           RedMarrow                 ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
   {*}/Testes              Testes                    ---
   {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
   {Pb}/ST0                Plasma                 1000       # Publ.151 Annex.B
   {Pb}/ST1                Plasma                 1000       # Publ.151 Annex.B
@@ -742,10 +739,10 @@ $endif
   {Tl}/Liver              Liver1                    ---     # Publ.137 Para.481 
   {Tl}/Kidneys            Kidneys2                  ---     # Publ.137 Para.481 
   {*}/RedMarrow           RedMarrow                 ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
   {*}/Testes              Testes                    ---
   {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
   {Pb}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
   {Pb}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
@@ -754,6 +751,8 @@ $endif
   {Bi}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
   {Bi}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
   {Po}/Other              Other                     ---
+  {Hg}/Other1             Plasma2               $(0.693 / 7)    # 半減期7日
+  {Hg}/Other2             Plasma2               $(0.693 / 7)    # 半減期7日
   {Tl}/Other              Plasma2               $(0.693 / 7)    # 半減期7日
 
 
@@ -907,8 +906,10 @@ $endif
   {Pb,Bi,Po}/Liver2       Plasma1               $(0.693 / 20)
   {Pb,Bi,Po}/Kidneys1     Kidneys                   ---
   {Pb,Bi,Po}/Kidneys2     Plasma1               $(0.693 / 20)
-  {Hg,Tl}/Liver           Liver                     ---
-  {Hg,Tl}/Kidneys         Kidneys                   ---
+  {Hg}/Liver              Liver                     ---
+  {Hg}/Kidneys            Kidneys                   ---
+  {Tl}/Liver              Liver                     ---
+  {Tl}/Kidneys            Plasma1               $(0.693 / 20)
   {*}/RedMarrow           RedMarrow                 ---
   {*}/Testes              Testes                    ---
   {*}/Ovaries             Ovaries                   ---
@@ -1044,8 +1045,10 @@ $endif
   {Pb,Bi,Po}/Liver2       Plasma                    2.5
   {Pb,Bi,Po}/Kidneys1     Plasma                    2.5
   {Pb,Bi,Po}/Kidneys2     Kidneys                   ---
-  {Hg,Tl}/Liver           Liver                     ---
-  {Hg,Tl}/Kidneys         Kidneys                   ---
+  {Hg}/Liver              Liver                     ---
+  {Hg}/Kidneys            Plasma                    2.5
+  {Tl}/Liver              Liver                     ---
+  {Tl}/Kidneys            Kidneys                   ---
   {*}/RedMarrow           RedMarrow                 ---
   {*}/Testes              Testes                    ---
   {*}/Ovaries             Ovaries                   ---
