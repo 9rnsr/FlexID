@@ -46,7 +46,7 @@ $endif
   Oralcavity              100.0%
 
 
-[Sr-90:compartment]
+[{Sr}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -73,7 +73,7 @@ $endif
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
 
-[Sr-90:transfer]
+[{Sr}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -118,7 +118,7 @@ $endif
   Noch-T-bone-V           Blood                     0.000493
 
 
-[Y-90:compartment]
+[{Y}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -147,25 +147,25 @@ $endif
   acc   T-bone-S              T-bone-S
   acc   T-bone-V              T-bone-V
 
-[Y-90:transfer]
+[{Y}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
 # from parent to progeny
-  Sr-90/Oralcavity        Oralcavity                ---
-  Sr-90/Oesophagus-f      Oesophagus-f              ---
-  Sr-90/Oesophagus-s      Oesophagus-s              ---
-  Sr-90/St-con            St-con                    ---
-  Sr-90/SI-con            SI-con                    ---
-  Sr-90/RC-con            RC-con                    ---
-  Sr-90/LC-con            LC-con                    ---
-  Sr-90/RS-con            RS-con                    ---
-  Sr-90/Faeces            Faeces                    ---
-  Sr-90/UB-con            UB-con                    ---
-  Sr-90/Urine             Urine                     ---
+  {Sr}/Oralcavity         Oralcavity                ---
+  {Sr}/Oesophagus-f       Oesophagus-f              ---
+  {Sr}/Oesophagus-s       Oesophagus-s              ---
+  {Sr}/St-con             St-con                    ---
+  {Sr}/SI-con             SI-con                    ---
+  {Sr}/RC-con             RC-con                    ---
+  {Sr}/LC-con             LC-con                    ---
+  {Sr}/RS-con             RS-con                    ---
+  {Sr}/Faeces             Faeces                    ---
+  {Sr}/UB-con             UB-con                    ---
+  {Sr}/Urine              Urine                     ---
 
-  Sr-90/Blood             Blood1                    ---
+  {Sr}/Blood              Blood1                    ---
 
 # ICRP Publ.134 p.223-224 Para.483
 #   Yttrium produced in a soft tissue compartment of the strontium model (ST0, ST1, or ST2)
@@ -173,16 +173,16 @@ $endif
 #   from compartments of other soft tissue in the model for yttrium as a parent), and then
 #   to follow the kinetics of yttrium as a parent radionuclide.
 #
-  Sr-90/ST0               Blood1                    0.23105     # = ln(2)/3
-  Sr-90/ST1               Blood1                    0.23105     # = ln(2)/3
-  Sr-90/ST2               Blood1                    0.23105     # = ln(2)/3
+  {Sr}/ST0                Blood1                    0.23105     # = ln(2)/3
+  {Sr}/ST1                Blood1                    0.23105     # = ln(2)/3
+  {Sr}/ST2                Blood1                    0.23105     # = ln(2)/3
 
-  Sr-90/C-bone-S          C-bone-S                  ---
-  Sr-90/Exch-C-bone-V     C-bone-V                  ---
-  Sr-90/Noch-C-bone-V     C-bone-V                  ---
-  Sr-90/T-bone-S          T-bone-S                  ---
-  Sr-90/Exch-T-bone-V     T-bone-V                  ---
-  Sr-90/Noch-T-bone-V     T-bone-V                  ---
+  {Sr}/C-bone-S           C-bone-S                  ---
+  {Sr}/Exch-C-bone-V      C-bone-V                  ---
+  {Sr}/Noch-C-bone-V      C-bone-V                  ---
+  {Sr}/T-bone-S           T-bone-S                  ---
+  {Sr}/Exch-T-bone-V      T-bone-V                  ---
+  {Sr}/Noch-T-bone-V      T-bone-V                  ---
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

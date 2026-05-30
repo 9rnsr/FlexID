@@ -19,7 +19,7 @@ $endif
   Oralcavity              100.0%
 
 
-[Ba-133:compartment]
+[{Ba}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -46,7 +46,7 @@ $endif
   acc   Exch-T-bone-V         T-bone-V
   acc   Noch-T-bone-V         T-bone-V
 
-[Ba-133:transfer]
+[{Ba}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
