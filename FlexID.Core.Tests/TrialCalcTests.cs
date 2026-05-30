@@ -16,6 +16,11 @@ public class TrialCalcTests
     [DataRow("38-Sr/Sr-90/Sr-90_inh_Aerosols-TypeF")]
     [DataRow("38-Sr/Sr-90/Sr-90_inh_Aerosols-TypeM")]
     [DataRow("38-Sr/Sr-90/Sr-90_inh_Aerosols-TypeS")]
+    [DataRow("82-Pb/Pb-214/Pb-214_ing")]
+    [DataRow("82-Pb/Pb-214/Pb-214_inh_Aerosols-TypeF")]
+    [DataRow("82-Pb/Pb-214/Pb-214_inh_Aerosols-TypeM")]
+    [DataRow("82-Pb/Pb-214/Pb-214_inh_Aerosols-TypeS")]
+    [DataRow("82-Pb/Pb-214/Pb-214_inj")]
     public void Test_OIR(string path)
     {
         var target = Path.GetFileNameWithoutExtension(path);
