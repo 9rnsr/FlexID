@@ -265,6 +265,10 @@ internal class DecaySet
 
                     #endregion
                     consistentPath = false;
+
+                    var (prevTo, prevCoeff) = AfterDecayPath.GetValueOrDefault(decayTo.Organ, (decayTo.Organ, null));
+                    if (organTo == prevTo && coeff == prevCoeff)
+                        return null;
                 }
             }
             else
