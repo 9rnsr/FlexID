@@ -30,7 +30,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private readonly Dictionary<string, Dictionary<string, string>> inputParameters = [];
 
-    private readonly Dictionary<string, List<(int lineNum, Organ)>> inputOrgans = [];
+    private readonly Dictionary<string, List<(int lineNum, OrganFunc func, string name, string sourceRegion)>> inputOrgans = [];
 
     private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> inputTransfers = [];
 
@@ -612,21 +612,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
             }
 
-            var organ = new Organ
-            {
-                Nuclide = null,     // 後で設定する。
-                ID = organs.Count + 1,
-                Index = -1,         // 後で設定する。
-                Name = organName,
-                Func = organFunc,
-            };
-            if (organFunc == OrganFunc.mix)
-                organ.BioDecay = 1.0;
-
-            // 線源領域の名称については、妥当性を後で確認する。
-            organ.SourceRegion = sourceRegion;
-
-            organs.Add((LineNum, organ));
+            organs.Add((LineNum, organFunc, organName, sourceRegion));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -748,8 +734,20 @@ public class InputDataReader_OIR : InputDataReaderBase
                 otherContainsMineralBone = null;
             }
 
-            foreach (var (lineNum, organ) in organs)
+            foreach (var (lineNum, organFunc, organName, sourceRegion) in organs)
             {
+                var organ = new Organ
+                {
+                    Nuclide  /**/= nuclide,
+                    ID       /**/= data.Organs.Count + 1,
+                    Index    /**/= data.Organs.Count,
+                    Name     /**/= organName,
+                    Func     /**/= organFunc,
+                    SourceRegion = sourceRegion,
+                };
+                if (organFunc == OrganFunc.mix)
+                    organ.BioDecay = 1.0;
+
                 if (organ.Func == OrganFunc.inp)
                 {
                     if (nuclide.IsProgeny)
@@ -760,12 +758,9 @@ public class InputDataReader_OIR : InputDataReaderBase
                         input = organ;
                 }
 
-                organ.Nuclide = nuclide;
-                organ.Index = data.Organs.Count;
-
                 data.Organs.Add(organ);
 
-                var sourceRegion = organ.SourceRegion;
+                // 線源領域の名称について、妥当性を確認する。
                 if (!IsBar(sourceRegion))
                 {
                     // コンパートメントに対応する線源領域の名称が有効であることを確認する。
