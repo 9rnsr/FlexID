@@ -705,6 +705,14 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         Organ? input = null;
 
+        // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
+        var validSourceRegions = data.SourceRegions
+            .Select(s => s.Name).Append("Other").ToArray();
+
+        var otherSourceRegionsBase = data.SourceRegions
+            .Where(s => s.MaleID != 0 || s.FemaleID != 0)
+            .Select(s => s.Name).ToList();
+
         foreach (var nuclide in inputNuclides)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
@@ -719,19 +727,16 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             data.Nuclides.Add(nuclide);
 
-            // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
-            var validSourceRegions = data.SourceRegions
-                .Select(s => s.Name).Append("Other").ToArray();
-
-            var otherSourceRegions = data.SourceRegions
-                .Where(s => s.MaleID != 0 || s.FemaleID != 0)
-                .Select(s => s.Name).ToList();
+            var otherSourceRegions = new List<string>(otherSourceRegionsBase);
+            var otherCompartments = new List<Organ>();
+            var anyCTmarrow = false;
+            var anyRYmarrow = false;
+            bool? otherContainsMineralBone;
 
             // Otherから無機質骨の体積組織(C-bone-VとT-bone-V)への分配について制御する。
             var paramOtherContainsMineralBone =
                 (nuclide.Parameters.GetValueOrDefault("OtherContainsMineralBone") ??
                     data.Parameters.GetValueOrDefault("OtherContainsMineralBone") ?? "auto").Trim();
-            bool? otherContainsMineralBone;
             if (bool.TryParse(paramOtherContainsMineralBone, out var v))
             {
                 otherContainsMineralBone = v;
@@ -742,11 +747,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                     errors.AddError($"unrecognized OtherContainsMineralBone parameter: '{paramOtherContainsMineralBone}'");
                 otherContainsMineralBone = null;
             }
-
-            var otherCompartments = new List<Organ>();
-
-            var anyCTmarrow = false;
-            var anyRYmarrow = false;
 
             foreach (var (lineNum, organ) in organs)
             {
