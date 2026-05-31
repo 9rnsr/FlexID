@@ -24,14 +24,14 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private string? inputTitle;
 
-    private List<NuclideData>? nuclides;
+    private List<NuclideData>? inputNuclides;
 
     private Dictionary<string, string>? inputParameters;
     private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
 
-    private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
+    private readonly Dictionary<string, List<(int lineNum, Organ)>> inputOrgans = [];
 
-    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> nuclideTransfers = [];
+    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> inputTransfers = [];
 
     /// <summary>
     /// コンストラクタ。
@@ -122,13 +122,13 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (line is null)
                 break;
 
-            if (inputTitle != null && nuclides != null)
+            if (inputTitle != null && inputNuclides != null)
                 break;
         }
 
         if (inputTitle is null)
             errors.AddError(LineNum, "Missing [title] section.");
-        if (nuclides is null)
+        if (inputNuclides is null)
             errors.AddError(LineNum, "Missing [nuclide] section.");
 
         // インプットの構文に従って読み取りができていることを確定する。
@@ -137,7 +137,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var data = new InputData();
         data.Title = inputTitle!;
-        data.Nuclides.AddRange(nuclides!);
+        data.Nuclides.AddRange(inputNuclides!);
 
         return data;
     }
@@ -200,13 +200,13 @@ public class InputDataReader_OIR : InputDataReaderBase
         // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
         errors.RaiseIfAny();
 
-        foreach (var (lineNum, nuc) in nuclideOrgans.Keys.Except(nuclides?.Select(n => n.Name) ?? [])
+        foreach (var (lineNum, nuc) in inputOrgans.Keys.Except(inputNuclides?.Select(n => n.Name) ?? [])
             .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
         {
             errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define compartments.");
         }
 
-        foreach (var (lineNum, nuc) in nuclideTransfers.Keys.Except(nuclides?.Select(n => n.Name) ?? [])
+        foreach (var (lineNum, nuc) in inputTransfers.Keys.Except(inputNuclides?.Select(n => n.Name) ?? [])
             .Select(nuc => (LineNum: transferSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
         {
             errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
@@ -215,16 +215,16 @@ public class InputDataReader_OIR : InputDataReaderBase
         if (inputTitle is null)
             errors.AddError(LineNum, "Missing [title] section.");
 
-        if (nuclides is null)
+        if (inputNuclides is null)
             errors.AddError(LineNum, "Missing [nuclide] section.");
         else
         {
-            var nuclideNames = nuclides.Select(n => n.Name).ToArray();
+            var nuclideNames = inputNuclides.Select(n => n.Name).ToArray();
 
-            foreach (var nuc in nuclideNames.Where(nuc => !nuclideOrgans.ContainsKey(nuc)))
+            foreach (var nuc in nuclideNames.Where(nuc => !inputOrgans.ContainsKey(nuc)))
                 errors.AddError(LineNum, $"Missing [{nuc}:compartment] section.");
 
-            foreach (var nuc in nuclideNames.Where(nuc => !nuclideTransfers.ContainsKey(nuc)))
+            foreach (var nuc in nuclideNames.Where(nuc => !inputTransfers.ContainsKey(nuc)))
                 errors.AddError(LineNum, $"Missing [{nuc}:transfer] section.");
         }
 
@@ -301,7 +301,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <returns>セクションの次行。</returns>
     private string? GetNuclides()
     {
-        if (nuclides != null)
+        if (inputNuclides != null)
         {
             errors.AddError(LineNum, "Duplicated [nuclide] section.");
             return SkipUntilNextSection();
@@ -310,7 +310,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var olderrors = errors.Count;
         var sectionLineNum = LineNum;
 
-        nuclides = [];
+        inputNuclides = [];
 
         // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
         var autoMode = default(bool?);
@@ -346,7 +346,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                         errors.AddError(LineNum, $"'{nuc}' is not nuclide name.");
                         continue;
                     }
-                    if (nuclides.Any(n => n.Name == nuc))
+                    if (inputNuclides.Any(n => n.Name == nuc))
                     {
                         errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
                         continue;
@@ -361,13 +361,13 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     var nuclide = new NuclideData
                     {
-                        Index = nuclides.Count,
+                        Index = inputNuclides.Count,
                         Name = nuc,
                         HalfLife = halfLife ?? "---",
                         Lambda = lambda ?? 0.0,
-                        IsProgeny = nuclides.Count > 0,
+                        IsProgeny = inputNuclides.Count > 0,
                     };
-                    nuclides.Add(nuclide);
+                    inputNuclides.Add(nuclide);
 
                     branchTable[nuclide] = branches;
                     nuclideLines[nuclide] = LineNum;
@@ -385,7 +385,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 }
 
                 var nuc = values[0];
-                if (nuclides.Any(n => n.Name == nuc))
+                if (inputNuclides.Any(n => n.Name == nuc))
                 {
                     errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
                     continue;
@@ -404,12 +404,12 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                 var nuclide = new NuclideData
                 {
-                    Index = nuclides.Count,
+                    Index = inputNuclides.Count,
                     Name = nuc,
                     Lambda = lambda,
-                    IsProgeny = nuclides.Count > 0,
+                    IsProgeny = inputNuclides.Count > 0,
                 };
-                nuclides.Add(nuclide);
+                inputNuclides.Add(nuclide);
 
                 var branches = new (string Daughter, decimal Fraction)[values.Length - 2];
                 for (int i = 0; i < branches.Length; i++)
@@ -450,7 +450,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         }
         if (errors.IfAny(olderrors))
             return line;
-        if (!nuclides.Any())
+        if (!inputNuclides.Any())
         {
             errors.AddError(sectionLineNum, "Empty [nuclide] section.");
             return line;
@@ -464,7 +464,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             var branches = entry.Value;
 
             NuclideData? GetNuclide(string nuc)
-                => nuclides.FirstOrDefault(n => n.Name == nuc);
+                => inputNuclides.FirstOrDefault(n => n.Name == nuc);
 
             if (autoMode == true)
             {
@@ -488,8 +488,8 @@ public class InputDataReader_OIR : InputDataReaderBase
         }
 
         // 崩壊系列が適切であることを確認する。
-        var root = nuclides.FirstOrDefault();
-        foreach (var nuclide in nuclides)
+        var root = inputNuclides.FirstOrDefault();
+        foreach (var nuclide in inputNuclides)
         {
             var tested = new List<NuclideData>();
 
@@ -603,7 +603,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <returns>セクションの次行。</returns>
     private string? GetCompartments(string nuc)
     {
-        if (nuclideOrgans.TryGetValue(nuc, out var organs))
+        if (inputOrgans.TryGetValue(nuc, out var organs))
         {
             errors.AddError(LineNum, $"Duplicated [{nuc}:compartment] section.");
             return SkipUntilNextSection();
@@ -614,7 +614,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         compartmentSectionLocs[nuc] = sectionLineNum;
 
         organs = [];
-        nuclideOrgans.Add(nuc, organs);
+        inputOrgans.Add(nuc, organs);
 
         string line;
         while (true)
@@ -682,7 +682,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="line"></param>
     private string? GetTransfers(string nuc)
     {
-        if (nuclideTransfers.TryGetValue(nuc, out var transfers))
+        if (inputTransfers.TryGetValue(nuc, out var transfers))
         {
             errors.AddError(LineNum, $"Duplicated [{nuc}:transfer] section.");
             return SkipUntilNextSection();
@@ -693,7 +693,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         transferSectionLocs[nuc] = sectionLineNum;
 
         transfers = [];
-        nuclideTransfers.Add(nuc, transfers);
+        inputTransfers.Add(nuc, transfers);
 
         string line;
         while (true)
@@ -744,13 +744,13 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         Organ? input = null;
 
-        foreach (var nuclide in nuclides!)
+        foreach (var nuclide in inputNuclides!)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
             var nuc = nuclide.Name;
-            if (!nuclideOrgans.TryGetValue(nuc, out var organs))
+            if (!inputOrgans.TryGetValue(nuc, out var organs))
                 continue;
             var sectionLineNum = compartmentSectionLocs[nuc];
 
@@ -899,13 +899,13 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         var decaySet = new DecaySet(data.Nuclides, errors);
 
-        foreach (var nuclide in nuclides!)
+        foreach (var nuclide in inputNuclides!)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
             var nuc = nuclide.Name;
-            if (!nuclideTransfers.TryGetValue(nuc, out var transfers))
+            if (!inputTransfers.TryGetValue(nuc, out var transfers))
                 continue;
 
             var olderrorsN = errors.Count;
@@ -926,7 +926,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 {
                     var nucFrom = from.Substring(0, i);
                     nameFrom = from.Substring(i + 1);
-                    nuclideFrom = nuclides.FirstOrDefault(n => n.Name == nucFrom);
+                    nuclideFrom = inputNuclides.FirstOrDefault(n => n.Name == nucFrom);
                     if (nuclideFrom is null)
                         errors.AddError(lineNum, $"Undefined nuclide '{nucFrom}'.");
                 }
@@ -937,7 +937,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 {
                     var nucTo = to.Substring(0, j);
                     nameTo = to.Substring(j + 1);
-                    nuclideTo = nuclides.FirstOrDefault(n => n.Name == nucTo);
+                    nuclideTo = inputNuclides.FirstOrDefault(n => n.Name == nucTo);
                     if (nuclideTo is null)
                         errors.AddError(lineNum, $"Undefined nuclide '{nucTo}'.");
                 }
