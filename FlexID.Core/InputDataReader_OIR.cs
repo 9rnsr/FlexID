@@ -28,8 +28,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     private bool inputNuclidesRead;
     private readonly List<NuclideData> inputNuclides = [];
 
-    private Dictionary<string, string>? inputParameters;
-    private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
+    private readonly Dictionary<string, Dictionary<string, string>> inputParameters = [];
 
     private readonly Dictionary<string, List<(int lineNum, Organ)>> inputOrgans = [];
 
@@ -247,7 +246,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var data = new InputData();
         data.Title = inputTitle;
-        data.Parameters = inputParameters ?? [];
+        data.Parameters = inputParameters.GetValueOrDefault("") ?? [];
         data.SourceRegions = sourceRegions;
         data.TargetRegions = targetRegions;
         data.TargetWeights = ws;
@@ -542,30 +541,19 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <returns>セクションの次行。</returns>
     private string? GetParameters(string nuc)
     {
-        Dictionary<string, string> parameters;
-        string[] parameterNames;
-        if (nuc == "")
+        if (inputParameters.TryGetValue(nuc, out var parameters))
         {
-            if (inputParameters != null)
-            {
-                errors.AddError(LineNum, "Duplicated [parameter] section.");
-                return SkipUntilNextSection();
-            }
-            parameters = [];
-            parameterNames = InputData.ParameterNames;
-            inputParameters = parameters;
-        }
-        else
-        {
-            if (nuclideParameters.ContainsKey(nuc))
-            {
+            if (nuc == "")
+                errors.AddError(LineNum, $"Duplicated [parameter] section.");
+            else
                 errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
-                return SkipUntilNextSection();
-            }
-            parameters = [];
-            parameterNames = NuclideData.ParameterNames;
-            nuclideParameters.Add(nuc, parameters);
+            return SkipUntilNextSection();
         }
+        inputParameters.Add(nuc, parameters = []);
+
+        var parameterNames = nuc == ""
+            ? InputData.ParameterNames
+            : NuclideData.ParameterNames;
 
         string line;
         while (true)
@@ -751,7 +739,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             var sectionLineNum = compartmentSectionLocs[nuc];
 
-            nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? [];
+            nuclide.Parameters = inputParameters.GetValueOrDefault(nuc) ?? [];
 
             data.Nuclides.Add(nuclide);
 
