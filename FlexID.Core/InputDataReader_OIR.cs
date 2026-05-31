@@ -99,42 +99,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     public InputData ReadRough()
     {
-        var line = GetNextLine();
-        if (line is null)
-            throw Program.Error("Reach to EOF while reading input file.");
-
-        while (true)
-        {
-            var header = GetSectionHeader(line);
-
-            if (Ascii.EqualsIgnoreCase(header, "title"))
-            {
-                line = GetTitle();
-            }
-            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
-            {
-                line = GetNuclides();
-            }
-            else
-            {
-                SkipUntilNextSection();
-            }
-
-            if (line is null)
-                break;
-
-            if (inputTitleRead && inputNuclidesRead)
-                break;
-        }
-
-        if (!inputTitleRead)
-            errors.AddError(LineNum, "Missing [title] section.");
-        if (!inputNuclidesRead)
-            errors.AddError(LineNum, "Missing [nuclide] section.");
-
-        // インプットの構文に従って読み取りができていることを確定する。
-        // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
-        errors.RaiseIfAny();
+        GetInput(isRough: true);
 
         var data = new InputData();
         data.Title = inputTitle;
@@ -149,57 +114,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <returns></returns>
     public InputData Read()
     {
-        var line = GetNextLine();
-        if (line is null)
-            throw Program.Error("Reach to EOF while reading input file.");
-
-        while (true)
-        {
-            var header = GetSectionHeader(line);
-
-            if (Ascii.EqualsIgnoreCase(header, "title"))
-            {
-                line = GetTitle();
-            }
-            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
-            {
-                line = GetNuclides();
-            }
-            else if (Ascii.EqualsIgnoreCase(header, "parameter"))
-            {
-                line = GetParameters("");
-            }
-            else if (header.EndsWith(":parameter", StringComparison.OrdinalIgnoreCase))
-            {
-                var i = header.IndexOf(':');
-                var nuc = header.Slice(0, i).ToString();
-                line = GetParameters(nuc);
-            }
-            else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
-            {
-                var i = header.IndexOf(':');
-                var nuc = header.Slice(0, i).ToString();
-                line = GetCompartments(nuc);
-            }
-            else if (header.EndsWith(":transfer", StringComparison.OrdinalIgnoreCase))
-            {
-                var i = header.IndexOf(':');
-                var nuc = header.Slice(0, i).ToString();
-                line = GetTransfers(nuc);
-            }
-            else
-            {
-                errors.AddError(LineNum, $"Unrecognized section $'[{header.ToString()}]'.");
-                line = SkipUntilNextSection();
-            }
-
-            if (line is null)
-                break;
-        }
-
-        // インプットの構文に従って読み取りができていることを確定する。
-        // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
-        errors.RaiseIfAny();
+        GetInput(isRough: false);
 
         foreach (var (lineNum, nuc) in inputOrgans.Keys.Except(inputNuclides.Select(n => n.Name) ?? [])
             .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
@@ -213,12 +128,6 @@ public class InputDataReader_OIR : InputDataReaderBase
             errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
         }
 
-        if (!inputTitleRead)
-            errors.AddError(LineNum, "Missing [title] section.");
-
-        if (!inputNuclidesRead)
-            errors.AddError(LineNum, "Missing [nuclide] section.");
-        else
         {
             var nuclideNames = inputNuclides.Select(n => n.Name).ToArray();
 
@@ -261,6 +170,73 @@ public class InputDataReader_OIR : InputDataReaderBase
         MarkZeroInflows(data);
 
         return data;
+    }
+
+    private void GetInput(bool isRough)
+    {
+        var line = GetNextLine();
+        if (line is null)
+            throw Program.Error("Reach to EOF while reading input file.");
+
+        while (true)
+        {
+            var header = GetSectionHeader(line);
+
+            if (Ascii.EqualsIgnoreCase(header, "title"))
+            {
+                line = GetTitle();
+            }
+            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
+            {
+                line = GetNuclides();
+            }
+            else if (isRough)
+            {
+                if (inputTitleRead && inputNuclidesRead)
+                    break;
+
+                line = SkipUntilNextSection();
+            }
+            else if (Ascii.EqualsIgnoreCase(header, "parameter"))
+            {
+                line = GetParameters("");
+            }
+            else if (header.EndsWith(":parameter", StringComparison.OrdinalIgnoreCase))
+            {
+                var i = header.IndexOf(':');
+                var nuc = header[..i].ToString();
+                line = GetParameters(nuc);
+            }
+            else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
+            {
+                var i = header.IndexOf(':');
+                var nuc = header.Slice(0, i).ToString();
+                line = GetCompartments(nuc);
+            }
+            else if (header.EndsWith(":transfer", StringComparison.OrdinalIgnoreCase))
+            {
+                var i = header.IndexOf(':');
+                var nuc = header.Slice(0, i).ToString();
+                line = GetTransfers(nuc);
+            }
+            else
+            {
+                errors.AddError(LineNum, $"Unrecognized section $'[{header.ToString()}]'.");
+                line = SkipUntilNextSection();
+            }
+
+            if (line is null)
+                break;
+        }
+
+        if (!inputTitleRead)
+            errors.AddError(LineNum, "Missing [title] section.");
+        if (!inputNuclidesRead)
+            errors.AddError(LineNum, "Missing [nuclide] section.");
+
+        // インプットの構文に従って読み取りができていることを確定する。
+        // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
+        errors.RaiseIfAny();
     }
 
     /// <summary>
