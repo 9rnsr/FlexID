@@ -24,11 +24,10 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private string? inputTitle;
 
-    private Dictionary<string, string>? inputParameters;
-
-    private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
-
     private List<NuclideData>? nuclides;
+
+    private Dictionary<string, string>? inputParameters;
+    private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
 
     private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
 
@@ -161,6 +160,10 @@ public class InputDataReader_OIR : InputDataReaderBase
             {
                 line = GetTitle();
             }
+            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
+            {
+                line = GetNuclides();
+            }
             else if (Ascii.EqualsIgnoreCase(header, "parameter"))
             {
                 line = GetParameters("");
@@ -170,10 +173,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetParameters(nuc);
-            }
-            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
-            {
-                line = GetNuclides();
             }
             else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
             {
@@ -291,68 +290,6 @@ public class InputDataReader_OIR : InputDataReaderBase
         {
             errors.AddError(LineNum, "Unrecognized lines in [title] section.");
             return SkipUntilNextSection();
-        }
-
-        return line;
-    }
-
-    /// <summary>
-    /// パラメーターの定義セクションを読み込む。
-    /// </summary>
-    /// <param name="nuc"></param>
-    /// <returns>セクションの次行。</returns>
-    private string? GetParameters(string nuc)
-    {
-        Dictionary<string, string> parameters;
-        string[] parameterNames;
-        if (nuc == "")
-        {
-            if (inputParameters != null)
-            {
-                errors.AddError(LineNum, "Duplicated [parameter] section.");
-                return SkipUntilNextSection();
-            }
-            parameters = [];
-            parameterNames = InputData.ParameterNames;
-            inputParameters = parameters;
-        }
-        else
-        {
-            if (nuclideParameters.ContainsKey(nuc))
-            {
-                errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
-                return SkipUntilNextSection();
-            }
-            parameters = [];
-            parameterNames = NuclideData.ParameterNames;
-            nuclideParameters.Add(nuc, parameters);
-        }
-
-        string line;
-        while (true)
-        {
-            line = GetNextLine();
-            if (line is null)
-                break;
-            if (CheckSectionHeader(line))
-                break;
-
-            var values = line.Split(["="], 2, StringSplitOptions.RemoveEmptyEntries);
-            if (values.Length != 2)
-            {
-                errors.AddError(LineNum, "Parameter definition should have 2 values.");
-                continue;
-            }
-
-            var paramName = values[0].Trim();
-            var paramValue = values[1].Trim();
-
-            if (!parameterNames.Contains(paramName))
-                errors.AddError(LineNum, $"Unrecognized parameter '{paramName}' definition.");
-            else if (parameters.ContainsKey(paramName))
-                errors.AddError(LineNum, $"Duplicated parameter '{paramName}' definition.");
-            else
-                parameters.Add(paramName, paramValue);
         }
 
         return line;
@@ -592,6 +529,68 @@ public class InputDataReader_OIR : InputDataReaderBase
                     CycleCheck(daughter);
                 }
             }
+        }
+
+        return line;
+    }
+
+    /// <summary>
+    /// パラメーターの定義セクションを読み込む。
+    /// </summary>
+    /// <param name="nuc"></param>
+    /// <returns>セクションの次行。</returns>
+    private string? GetParameters(string nuc)
+    {
+        Dictionary<string, string> parameters;
+        string[] parameterNames;
+        if (nuc == "")
+        {
+            if (inputParameters != null)
+            {
+                errors.AddError(LineNum, "Duplicated [parameter] section.");
+                return SkipUntilNextSection();
+            }
+            parameters = [];
+            parameterNames = InputData.ParameterNames;
+            inputParameters = parameters;
+        }
+        else
+        {
+            if (nuclideParameters.ContainsKey(nuc))
+            {
+                errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
+                return SkipUntilNextSection();
+            }
+            parameters = [];
+            parameterNames = NuclideData.ParameterNames;
+            nuclideParameters.Add(nuc, parameters);
+        }
+
+        string line;
+        while (true)
+        {
+            line = GetNextLine();
+            if (line is null)
+                break;
+            if (CheckSectionHeader(line))
+                break;
+
+            var values = line.Split(["="], 2, StringSplitOptions.RemoveEmptyEntries);
+            if (values.Length != 2)
+            {
+                errors.AddError(LineNum, "Parameter definition should have 2 values.");
+                continue;
+            }
+
+            var paramName = values[0].Trim();
+            var paramValue = values[1].Trim();
+
+            if (!parameterNames.Contains(paramName))
+                errors.AddError(LineNum, $"Unrecognized parameter '{paramName}' definition.");
+            else if (parameters.ContainsKey(paramName))
+                errors.AddError(LineNum, $"Duplicated parameter '{paramName}' definition.");
+            else
+                parameters.Add(paramName, paramValue);
         }
 
         return line;
