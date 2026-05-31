@@ -164,7 +164,9 @@ public class InputDataReader_OIR : InputDataReaderBase
         data.TargetRegions = targetRegions;
         data.TargetWeights = ws;
 
-        DefineParameters(data);
+        var expander = new InputNuclideExpander(inputNuclides, errors);
+
+        DefineParameters(data, expander);
 
         // 全てのコンパートメントを定義する。
         DefineCompartments(data);
@@ -729,29 +731,12 @@ public class InputDataReader_OIR : InputDataReaderBase
         return line;
     }
 
-    IReadOnlyList<NuclideData> ExpandNuclides(int lineNum, string nuc)
-    {
-        if (nuc == "")
-        {
-            return inputNuclides;
-        }
-        else
-        {
-            var nuclide = inputNuclides.FirstOrDefault(n => n.Name == nuc);
-            if (nuclide is null)
-            {
-                errors.AddError(lineNum, $"Undefined nuclide '{nuc}'.");
-                return [];
-            }
-            return [nuclide];
-        }
-    }
-
     /// <summary>
     /// パラメータの定義セクションを読み込む。
     /// </summary>
     /// <param name="data"></param>
-    private void DefineParameters(InputData data)
+    /// <param name="expander"></param>
+    private void DefineParameters(InputData data, InputNuclideExpander expander)
     {
         foreach (var nuclide in inputNuclides)
             inputEvaluators.Add(nuclide, new InputEvaluator(nuclide.Name, errors));
@@ -763,9 +748,11 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         foreach (var (lineNum, isVarDecl, nuc, name, value) in inputParameters)
         {
+            var expandNuclides = nuc == "" ? inputNuclides : expander.ExpandNuclides(lineNum, nuc);
+
             if (isVarDecl)
             {
-                foreach (var nuclide in ExpandNuclides(lineNum, nuc))
+                foreach (var nuclide in expandNuclides)
                 {
                     inputEvaluators[nuclide].TryReadVarDecl(lineNum, name, value);
                 }
@@ -791,7 +778,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
                 }
 
-                foreach (var nuclide in ExpandNuclides(lineNum, nuc))
+                foreach (var nuclide in expandNuclides)
                 {
                     var parameters = nuclideParams[nuclide];
 
