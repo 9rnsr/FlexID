@@ -17,6 +17,28 @@ public class InputDataReader_OIR : InputDataReaderBase
         safdataAF = SAFDataReader.ReadSAF(Sex.Female);
     }
 
+    /// <summary>
+    /// $if ～ $else ～ $endif指令の挙動を制御する状態フラグ。
+    /// </summary>
+    enum ConditionDirectiveState
+    {
+        Disabled = -1,          /// <summary>セクション内では$if ～ $endif指令の使用を禁止する。</summary>
+        OutsideBlock = 0,       /// <summary>セクション内で現在行は$if ～ $endif指令の外にある。</summary>
+        InsideIfBlock = 1,      /// <summary>セクション内で現在行は$ifブロックの中にある。</summary>
+        InsideElseBlock = 2,    /// <summary>セクション内で現在行は$elseブロックの中にある。</summary>
+    }
+    private ConditionDirectiveState conditionDirectiveState = ConditionDirectiveState.Disabled;
+
+    private bool InsideConditionDirective => conditionDirectiveState is ConditionDirectiveState.InsideIfBlock
+                                                                     or ConditionDirectiveState.InsideElseBlock;
+
+    /// <summary>
+    /// $if ～ $endif指令の内部において、現在行が親核種のみを対象とする場合に<see langword="true"/>となる。
+    /// </summary>
+    private bool insideParentBlock;
+
+    private bool? IsParentOnly => InsideConditionDirective ? insideParentBlock : null;
+
     private readonly InputErrors errors;
     private readonly Dictionary<string, int> compartmentSectionLocs = [];
     private readonly Dictionary<string, int> transferSectionLocs = [];
@@ -63,9 +85,69 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     protected override string? GetNextLine()
     {
+        Span<Range> parts = stackalloc Range[3];
+
     Lagain:
         var nextLine = base.GetNextLine();
 
+        if (nextLine is not null && nextLine.StartsWith("$"))
+        {
+            var count = nextLine.SplitAny(parts, [' ', '\t', '\f', '\v'], StringSplitOptions.RemoveEmptyEntries);
+            if (nextLine.AsSpan()[parts[0]].SequenceEqual("$if"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
+
+                if (conditionDirectiveState == ConditionDirectiveState.OutsideBlock && count == 2)
+                {
+                    if (nextLine.AsSpan()[parts[1]].Equals("parent", StringComparison.OrdinalIgnoreCase))
+                    {
+                        conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
+                        insideParentBlock = true;
+                        goto Lagain;
+                    }
+                    else if (nextLine.AsSpan()[parts[1]].Equals("progeny", StringComparison.OrdinalIgnoreCase))
+                    {
+                        conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
+                        insideParentBlock = false;
+                        goto Lagain;
+                    }
+                }
+            }
+            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$else"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
+
+                if (conditionDirectiveState == ConditionDirectiveState.InsideIfBlock && count == 1)
+                {
+                    conditionDirectiveState = ConditionDirectiveState.InsideElseBlock;
+                    insideParentBlock = !insideParentBlock;
+                    goto Lagain;
+                }
+            }
+            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$endif"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
+
+                if (InsideConditionDirective)
+                {
+                    conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+                    goto Lagain;
+                }
+            }
+            else
+            {
+                goto Lcont;
+            }
+
+        LerrorDirective:
+            errors.AddError(LineNum, $"Unrecognized directive line: '{nextLine}'.");
+            goto Lagain;
+        }
+
+    Lcont:
         return nextLine;
     }
 
@@ -189,14 +271,22 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         while (true)
         {
+            if (InsideConditionDirective)
+            {
+                errors.AddError(LineNum, "if directive block should be closed till the end of the section.");
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+            }
+
             var header = GetSectionHeader(line);
 
             if (Ascii.EqualsIgnoreCase(header, "title"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetTitle();
             }
             else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetNuclides();
             }
             else if (isRough)
@@ -204,24 +294,29 @@ public class InputDataReader_OIR : InputDataReaderBase
                 if (inputTitleRead && inputNuclidesRead)
                     break;
 
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
             }
             else if (Ascii.EqualsIgnoreCase(header, "parameter"))
             {
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = GetParameters();
             }
             else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetCompartments(nuc);
             }
             else if (Ascii.EqualsIgnoreCase(header, "intake"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetIntakes();
             }
             else if (header.EndsWith(":transfer", StringComparison.OrdinalIgnoreCase))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetTransfers(nuc);
@@ -229,6 +324,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             else
             {
                 errors.AddError(LineNum, $"Unrecognized section $'[{header.ToString()}]'.");
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
             }
 
@@ -521,11 +617,12 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// インプットから読み取ったパラメータ/変数定義の情報を保持する。
     /// </summary>
     /// <param name="LineNum">行番号。</param>
+    /// <param name="ParentOnly">親核種に対してのみ定義される場合は<see langword="true"/>。</param>
     /// <param name="IsVarDecl">変数定義の場合は<see langword="true"/>。</param>
     /// <param name="Nuclide">核種名。</param>
     /// <param name="Name">パラメータ/変数名。</param>
     /// <param name="Value">パラメータ/変数値。</param>
-    private record class InputParameter(int LineNum, bool IsVarDecl, string Nuclide, string Name, string Value);
+    private record class InputParameter(int LineNum, bool? ParentOnly, bool IsVarDecl, string Nuclide, string Name, string Value);
 
     /// <summary>
     /// パラメーターの定義セクションを読み込む。
@@ -558,10 +655,17 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             var name = values[0].Trim();
             var value = values[1].Trim();
+            var parentOnly = IsParentOnly;
 
             var isVarDecl = name.StartsWith('$');
             if (isVarDecl)
                 name = name[1..];
+            else if (InsideConditionDirective)
+            {
+                var directive = conditionDirectiveState is ConditionDirectiveState.InsideIfBlock ? "$if" : "$else";
+                errors.AddError(LineNum, $"Parameter definition cannot be placed in {directive} directive block.");
+                continue;
+            }
 
             var nuc = "";
             if (name.IndexOf('/') is int j && j != -1)
@@ -570,7 +674,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 name = name[(j + 1)..];
             }
 
-            inputParameters.Add(new InputParameter(LineNum, isVarDecl, nuc, name, value));
+            inputParameters.Add(new InputParameter(LineNum, parentOnly, isVarDecl, nuc, name, value));
         }
 
         return line;
@@ -746,9 +850,14 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         IReadOnlyList<NuclideData> parentNuclide = [inputNuclides[0]];
 
-        foreach (var (lineNum, isVarDecl, nuc, name, value) in inputParameters)
+        foreach (var (lineNum, parentOnly, isVarDecl, nuc, name, value) in inputParameters)
         {
             var expandNuclides = nuc == "" ? inputNuclides : expander.ExpandNuclides(lineNum, nuc);
+
+            if (parentOnly == true)
+                expandNuclides = [.. expandNuclides.Intersect(parentNuclide)];
+            else if (parentOnly == false)
+                expandNuclides = [.. expandNuclides.Except(parentNuclide)];
 
             if (isVarDecl)
             {
