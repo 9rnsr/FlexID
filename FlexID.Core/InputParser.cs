@@ -132,6 +132,8 @@ public class ExpressionVisitor : Visitor<Expr>
 /// </summary>
 public class InputEvaluator : Visitor<(decimal v, bool r)>
 {
+    private readonly string nuc;
+
     private readonly InputErrors errors;
 
     private readonly InputParser<(decimal v, bool r)> parser;
@@ -143,8 +145,9 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
     /// <summary>
     /// コンストラクタ。
     /// </summary>
-    public InputEvaluator(InputErrors errors)
+    public InputEvaluator(string nuc, InputErrors errors)
     {
+        this.nuc = nuc;
         this.errors = errors;
         this.parser = new InputParser<(decimal, bool)>(this);
     }
@@ -153,24 +156,27 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
     /// 変数の定義行の場合にこれの解釈を行う。
     /// </summary>
     /// <param name="lineNum">インプットの行番号。</param>
-    /// <param name="input">入力文字列。</param>
-    /// <returns>変数の定義行の場合はその定義値をテーブルに追加し<see langword="true"/>を返す。</returns>
-    public bool TryReadVarDecl(int lineNum, string? input)
+    /// <param name="varName">変数名。</param>
+    /// <param name="varValue">変数の定義値を表す文字列。</param>
+    /// <returns>変数の定義に成功した場合は<see langword="true"/>を返す。</returns>
+    public bool TryReadVarDecl(int lineNum, string varName, string varValue)
     {
         this.lineNum = lineNum;
 
-        if (input is null)
+        var resultId = parser.Identifier.Token().End().TryParse(varName);
+        var resultIz = parser.Expr.Token().End().TryParse(varValue);
+        if (!resultId.WasSuccessful || !resultIz.WasSuccessful)
             return false;
 
-        var result = parser.VarDecl.Token().End().TryParse(input);
-        if (!result.WasSuccessful)
+        var ident = resultId.Value;
+        var initializer = resultIz.Value;
+
+        // 変数定義の上書きに対してエラーを報告する。
+        if (variables.ContainsKey(ident))
+        {
+            errors.AddError(lineNum, $"Variable '{ident}' is already defined for nuclide '{nuc}'.");
             return false;
-
-        var (ident, initializer) = result.Value;
-
-        // 変数定義の上書きを許可する。
-        // if (variables.TryGetValue(ident, out _))
-        //     throw Program.Error($"Line {lineNum}: Variable '{ident}' is already defined.");
+        }
 
         variables[ident] = initializer;
 
@@ -213,7 +219,7 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
     {
         // 定義されていない変数の使用に対してエラーを報告する。
         if (!variables.TryGetValue(ident, out var v))
-            throw new InputErrorsException(lineNum, $"undefined variable '{ident}'.");
+            throw new InputErrorsException(lineNum, $"Undefined variable '{ident}' for nuclide '{nuc}'.");
         return v;
     }
 
@@ -233,14 +239,14 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
     public (decimal v, bool r) Add((decimal v, bool r) left, (decimal v, bool r) right)
     {
         if (left.r != right.r)
-            throw new InputErrorsException(lineNum, "addition with inconsistent value units");
+            throw new InputErrorsException(lineNum, "Addition with inconsistent value units");
         return (left.v + right.v, left.r);
     }
 
     public (decimal v, bool r) Sub((decimal v, bool r) left, (decimal v, bool r) right)
     {
         if (left.r != right.r)
-            throw new InputErrorsException(lineNum, "subtraction with inconsistent value units");
+            throw new InputErrorsException(lineNum, "Subtraction with inconsistent value units");
         return (left.v - right.v, left.r);
     }
 
