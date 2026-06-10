@@ -1138,6 +1138,8 @@ public class InputDataReader_OIR : InputDataReaderBase
             var lineNum = intake.LineNum;
 
             var nameTo = intake.To;
+            if (!evaluatorTo.TryReadCompartment(lineNum, ref nameTo))
+                continue;
             var organTo = data.Organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
 
             // 移行先がcompartmentセクションで定義済みかを確認する。
@@ -1328,6 +1330,11 @@ public class InputDataReader_OIR : InputDataReaderBase
                 List<Organ> organsFrom = [];
                 foreach (var nuclideFrom in nuclidesFrom)
                 {
+                    var evaluatorFrom = evaluators[nuclideFrom];
+
+                    // 移行元がcompartmentセクションで定義済みかを確認する。
+                    if (!evaluatorFrom.TryReadCompartment(lineNum, ref nameFrom))
+                        continue;
                     var organFrom = organs.FirstOrDefault(o => o.Name == nameFrom && o.Nuclide == nuclideFrom);
 
                     // 移行元がcompartmentセクションで定義済みかを確認する。
@@ -1347,6 +1354,8 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             Organ? GetOrganTo()
             {
+                if (!evaluatorTo.TryReadCompartment(lineNum, ref nameTo))
+                    return null;
                 var organTo = organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
 
                 // 移行先がcompartmentセクションで定義済みかを確認する。
