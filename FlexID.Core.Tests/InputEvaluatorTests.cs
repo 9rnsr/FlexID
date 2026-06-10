@@ -33,6 +33,17 @@ public class InputEvaluatorTests
         return lines;
     }
 
+    private IReadOnlyList<string> TestReadCompartment(int lineNum, string input, out string result)
+    {
+        result = input;
+        if (evaluator.TryReadCompartment(lineNum, ref result))
+            return [];
+
+        var lines = new Action(() => errors.RaiseIfAny()).ShouldThrow<InputErrorsException>().ErrorLines.ToArray();
+        errors.Clear();
+        return lines;
+    }
+
     [TestMethod]
     public void DefineVariable()
     {
@@ -134,5 +145,25 @@ public class InputEvaluatorTests
         var actualToET2S = result.value;
         expectToET2S.ShouldBe((1m - 0.01m) * (1.0m - 0.002m) * 0.2582m);
         expectToET2S.ShouldBe(actualToET2S);
+    }
+
+    [TestMethod]
+    public void CalcCompartment()
+    {
+        string result;
+
+        TestReadCompartment(LineNum, "abc", out result).ShouldBeEmpty();
+        result.ShouldBe("abc");
+
+        TestReadCompartment(LineNum, """$('abc' + 'def')""", out result).ShouldBeEmpty();
+        result.ShouldBe("abcdef");
+
+        TestReadCompartment(LineNum, """$('a\'bc' + "d\"ef")""", out result).ShouldBeEmpty();
+        result.ShouldBe("a'bcd\"ef");
+
+        TestReadCompartment(LineNum, "abc def", out result).ShouldBe(new[]
+        {
+            "Expected a compartment name, not 'abc def'.",
+        });
     }
 }
