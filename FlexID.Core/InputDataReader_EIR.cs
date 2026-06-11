@@ -77,9 +77,11 @@ public class InputDataReader_EIR : InputDataReaderBase
         var data = new InputData()
         {
             Title = title,
+            Parameters = [],
+            SourceRegions = [],
+            TargetRegions = [],
+            TargetWeights = [],
         };
-
-        data.Parameters = [];
 
         data.StartAge =
             age == "Age:3month" /**/? 100 :
@@ -320,11 +322,11 @@ public class InputDataReader_EIR : InputDataReaderBase
         { }
 
         // 2行目から線源領域の名称を配列で取得。
-        var sources = reader.ReadLine()?.Split(StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
-        if (sources is null)
+        var sources = reader.ReadLine()?.Split(StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray() ?? [];
+        if (sources is [])
             throw Program.Error($"Incorrect SEE file format: {file}");
 
-        if (data.SourceRegions is null)
+        if (data.SourceRegions is [])
         {
             // 線源領域の名称を設定する。
             data.SourceRegions = sources.Select(s => new SourceRegionData { Name = s }).ToArray();
@@ -342,7 +344,8 @@ public class InputDataReader_EIR : InputDataReaderBase
         for (int indexT = 0; indexT < 31; indexT++)
         {
             var values = reader.ReadLine()?.Split(StringSplitOptions.RemoveEmptyEntries);
-            if (values?.Length != 1 + numS) throw Program.Error($"Incorrect S-Coefficient file format: {file}");
+            if (values?.Length != 1 + numS)
+                throw Program.Error($"Incorrect S-Coefficient file format: {file}");
 
             // 各行の1列目から標的領域の名称を取得。
             var target = values[0];
@@ -356,7 +359,7 @@ public class InputDataReader_EIR : InputDataReaderBase
             }
         }
 
-        if (data.TargetRegions is null)
+        if (data.TargetRegions is [])
         {
             // 標的領域の名称を設定する。
             data.TargetRegions = targets;

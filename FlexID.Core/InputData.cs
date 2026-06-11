@@ -178,7 +178,7 @@ public class NuclideData
     /// 動態モデルでコンパートメントとして定義されておらず線源領域Otherの一部として取り扱う
     /// 各線源領域の名称。
     /// </summary>
-    public string[] OtherSourceRegions;
+    public string[] OtherSourceRegions = [];
 
     /// <summary>
     /// 消化管に対応するコンパートメント群のインデックスと寄与率。
@@ -208,7 +208,7 @@ public class NuclideData
     /// <summary>
     /// パラメータ定義。
     /// </summary>
-    public Dictionary<string, string> Parameters;
+    public Dictionary<string, string> Parameters = [];
 
     /// <summary>
     /// 有効なパラメータ名の配列。
@@ -239,17 +239,17 @@ public class InputData
     /// <summary>
     /// SAFデータにおける各線源領域の情報。
     /// </summary>
-    public SourceRegionData[] SourceRegions;
+    public required SourceRegionData[] SourceRegions;
 
     /// <summary>
     /// SAFデータにおける各標的領域の名称。
     /// </summary>
-    public string[] TargetRegions;
+    public required string[] TargetRegions;
 
     /// <summary>
     /// 組織加重係数データにおける各標的領域の係数。
     /// </summary>
-    public double[] TargetWeights;
+    public required double[] TargetWeights;
 
     /// <summary>
     /// 核種毎のS係数データ表(男性)。
@@ -269,7 +269,7 @@ public class InputData
     /// <summary>
     /// パラメータ定義。
     /// </summary>
-    public Dictionary<string, string> Parameters;
+    public required Dictionary<string, string> Parameters;
 
     /// <summary>
     /// 有効なパラメータ名の配列。

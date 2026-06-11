@@ -101,9 +101,13 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         GetInput(isRough: true);
 
-        var data = new InputData()
+        var data = new InputData
         {
             Title = inputTitle,
+            Parameters = [],
+            SourceRegions = [],
+            TargetRegions = [],
+            TargetWeights = [],
         };
         data.Nuclides.AddRange(inputNuclides);
 
@@ -158,11 +162,11 @@ public class InputDataReader_OIR : InputDataReaderBase
         var data = new InputData()
         {
             Title = inputTitle,
+            Parameters = inputParameters.GetValueOrDefault("") ?? [],
+            SourceRegions = sourceRegions,
+            TargetRegions = targetRegions,
+            TargetWeights = ws,
         };
-        data.Parameters = inputParameters.GetValueOrDefault("") ?? [];
-        data.SourceRegions = sourceRegions;
-        data.TargetRegions = targetRegions;
-        data.TargetWeights = ws;
 
         // 全てのコンパートメントを定義する。
         DefineCompartments(data);
