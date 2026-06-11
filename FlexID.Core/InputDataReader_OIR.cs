@@ -433,34 +433,28 @@ public class InputDataReader_OIR : InputDataReaderBase
         }
 
         // 壊変する娘核種とその分岐比を設定する。
-        foreach (var entry in branchTable)
+        foreach (var (nuclide, branches) in branchTable)
         {
-            var nuclide = entry.Key;
             var lineNum = nuclideLines[nuclide];
-            var branches = entry.Value;
 
             NuclideData? GetNuclide(string nuc)
                 => inputNuclides.FirstOrDefault(n => n.Name == nuc);
 
-            if (autoMode == true)
+            IEnumerable<(NuclideData Daughter, double Fraction)> GetBranches()
             {
-                // インデックスファイルには定義されているが、インプットでは
-                // 計算対象として指定されていない娘核種への分岐を除去する。
-                nuclide.Branches = branches
-                    .Select(b => (Daughter: GetNuclide(b.Daughter), (double)b.Fraction))
-                    .Where(b => b.Daughter != null).ToArray();
-            }
-            else
-            {
-                // 全ての娘核種の名前が[nuclide]セクションで定義されていることを確認する。
-                nuclide.Branches = branches.Select(b =>
+                foreach (var b in branches)
                 {
-                    var daughter = GetNuclide(b.Daughter);
-                    if (daughter is null)
+                    if (GetNuclide(b.Daughter) is NuclideData daughter)
+                        yield return (Daughter: daughter, (double)b.Fraction);
+
+                    // autoMode == trueでは、インデックスファイルには定義されているが、
+                    // インプットでは計算対象として指定されていない娘核種への分岐を静かに除去する。
+                    // autoMode == falseでは、全ての娘核種の名前が[nuclide]セクションで定義されていることを確認する。
+                    if (autoMode == false)
                         errors.AddError(lineNum, $"Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
-                    return (Daughter: daughter, (double)b.Fraction);
-                }).Where(b => b.Daughter != null).ToArray();
+                }
             }
+            nuclide.Branches = [.. GetBranches()];
         }
 
         // 崩壊系列が適切であることを確認する。
