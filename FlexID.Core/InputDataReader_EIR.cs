@@ -262,10 +262,6 @@ public class InputDataReader_EIR : InputDataReaderBase
                 var daughter = data.Nuclides[i + 1];
                 nuclide.Branches = [(daughter, fraction)];
             }
-            else
-            {
-                nuclide.Branches = [];
-            }
         }
 
         foreach (var organ in data.Organs)

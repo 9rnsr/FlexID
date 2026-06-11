@@ -147,12 +147,12 @@ public class NuclideData
     /// <summary>
     /// 核種名。
     /// </summary>
-    public string Name;
+    public required string Name;
 
     /// <summary>
     /// 半減期(単位付き)。
     /// </summary>
-    public string HalfLife;
+    public string HalfLife = "---";
 
     /// <summary>
     /// 崩壊定数λ[/day]。(＝ ln(2) / 半減期[day])
@@ -162,7 +162,7 @@ public class NuclideData
     /// <summary>
     /// 娘核種への分岐比(100%＝1.00と置いた比で持つ)。
     /// </summary>
-    public (NuclideData Daughter, double Fraction)[] Branches;
+    public (NuclideData Daughter, double Fraction)[] Branches = [];
 
     /// <summary>
     /// 子孫核種の場合は<see langword="true"/>。
