@@ -101,8 +101,10 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         GetInput(isRough: true);
 
-        var data = new InputData();
-        data.Title = inputTitle;
+        var data = new InputData()
+        {
+            Title = inputTitle,
+        };
         data.Nuclides.AddRange(inputNuclides);
 
         return data;
@@ -153,8 +155,10 @@ public class InputDataReader_OIR : InputDataReaderBase
         // 外部データの読み込み処理にエラーがないことを確定する。
         errors.RaiseIfAny();
 
-        var data = new InputData();
-        data.Title = inputTitle;
+        var data = new InputData()
+        {
+            Title = inputTitle,
+        };
         data.Parameters = inputParameters.GetValueOrDefault("") ?? [];
         data.SourceRegions = sourceRegions;
         data.TargetRegions = targetRegions;

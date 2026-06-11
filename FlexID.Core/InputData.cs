@@ -226,7 +226,7 @@ public class InputData
     /// <summary>
     /// インプットのタイトル文字列。
     /// </summary>
-    public string Title;
+    public required string Title { get; init; }
 
     // このコンパートメントモデルが対象とする被ばく評価期間の開始年齢[day]。
     public int StartAge;
@@ -234,7 +234,7 @@ public class InputData
     /// <summary>
     /// 全ての核種。
     /// </summary>
-    public List<NuclideData> Nuclides = [];
+    public List<NuclideData> Nuclides { get; } = [];
 
     /// <summary>
     /// SAFデータにおける各線源領域の情報。

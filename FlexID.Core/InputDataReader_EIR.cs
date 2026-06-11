@@ -74,9 +74,10 @@ public class InputDataReader_EIR : InputDataReaderBase
         if (title is null)
             throw Program.Error("Reach to EOF while reading input file.");
 
-        var data = new InputData();
-
-        data.Title = title;
+        var data = new InputData()
+        {
+            Title = title,
+        };
 
         data.Parameters = [];
 
