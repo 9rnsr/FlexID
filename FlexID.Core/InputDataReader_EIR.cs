@@ -243,6 +243,7 @@ public class InputDataReader_EIR : InputDataReaderBase
                         {
                             ID = inflowID,
                             Rate = inflowRate * 0.01,
+                            Organ = null!, // 後で設定する。
                         });
                     }
                 }

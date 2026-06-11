@@ -11,19 +11,19 @@ public class Inflow
     /// <summary>
     /// 流入元の臓器番号
     /// </summary>
-    public int ID;
+    public required int ID;
 
     /// <summary>
     /// 流入元の臓器
     /// </summary>
-    public Organ Organ;
+    public required Organ Organ;
 
     /// <summary>
     /// 流入元からの移行割合[-]
     /// ・核種が変わらない場合は、移行速度[/day]
     /// ・核種が壊変する場合は、親核種の崩壊定数[/day] * 娘核種の分岐比[-]
     /// </summary>
-    public double Rate;
+    public required double Rate;
 
     public override string ToString() => $"{Organ} =>{Rate}";
 }
