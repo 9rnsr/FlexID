@@ -3,8 +3,6 @@ using System.Text.RegularExpressions;
 
 namespace FlexID;
 
-#nullable disable
-
 /// <summary>
 /// 流入経路を表現する
 /// </summary>
@@ -355,8 +353,6 @@ public class InputData
         set => Parameters["OutputAtoms"] = value.ToString();
     }
 }
-
-#nullable restore
 
 public abstract class InputDataReaderBase : IDisposable
 {
