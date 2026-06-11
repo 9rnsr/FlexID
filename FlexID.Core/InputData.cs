@@ -63,7 +63,7 @@ public class Organ
     /// <summary>
     /// 臓器が対象とする核種。
     /// </summary>
-    public NuclideData Nuclide;
+    public required NuclideData Nuclide;
 
     /// <summary>
     /// 臓器番号。
@@ -78,7 +78,7 @@ public class Organ
     /// <summary>
     /// 臓器名。
     /// </summary>
-    public string Name;
+    public required string Name;
 
     /// <summary>
     /// 臓器機能。
@@ -122,17 +122,17 @@ public class Organ
     /// <summary>
     /// 線源領域の名称。
     /// </summary>
-    public string SourceRegion;
+    public string? SourceRegion;
 
     /// <summary>
     /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数(男性)。
     /// </summary>
-    public double[] S_CoefficientsM;
+    public double[] S_CoefficientsM = [];
 
     /// <summary>
     /// コンパートメントに対応付けられた線源領域から各標的領域へのS係数(女性)。
     /// </summary>
-    public double[] S_CoefficientsF;
+    public double[] S_CoefficientsF = [];
 
     public override string ToString() => $"{Nuclide}/{Name}";
 }

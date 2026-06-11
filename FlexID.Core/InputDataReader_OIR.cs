@@ -743,8 +743,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                     Index    /**/= data.Organs.Count,
                     Name     /**/= organName,
                     Func     /**/= organFunc,
-                    SourceRegion = sourceRegion,
                 };
+
                 if (organFunc == OrganFunc.mix)
                     organ.BioDecay = 1.0;
 
@@ -757,8 +757,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                     else
                         input = organ;
                 }
-
-                data.Organs.Add(organ);
 
                 // 線源領域の名称について、妥当性を確認する。
                 if (!IsBar(sourceRegion))
@@ -775,6 +773,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                         errors.AddError(lineNum, $"Cannot specify source region for stable nuclide '{nuclide.Name}'.");
                         continue;
                     }
+                    organ.SourceRegion = sourceRegion;
 
                     // インプットで明示された線源領域をOtherの内訳から除く。
                     otherSourceRegions.Remove(sourceRegion);
@@ -787,10 +786,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                     if (sourceRegion == "Other")
                         otherCompartments.Add(organ);
                 }
-                else
-                {
-                    organ.SourceRegion = null;
-                }
 
                 if (organ.Func == OrganFunc.exc)
                 {
@@ -799,6 +794,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                         organ.IsExcretaCompatibleWithOIR = true;
                     }
                 }
+
+                data.Organs.Add(organ);
             }
 
             if (!nuclide.IsProgeny && input is null)
