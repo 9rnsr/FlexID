@@ -68,11 +68,6 @@ public class Organ
     public NuclideData Nuclide;
 
     /// <summary>
-    /// 崩壊定数[/day]。(＝ ln(2) / 半減期[day])
-    /// </summary>
-    public double NuclideDecay => Nuclide.Lambda;
-
-    /// <summary>
     /// 臓器番号。
     /// </summary>
     public int ID;

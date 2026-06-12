@@ -55,7 +55,7 @@ static class SubRoutine
         }
 
         // 蓄積した核種の壊変による減衰を適用する。
-        var alpha = organ.NuclideDecay;
+        var alpha = organ.Nuclide.Lambda;
 
         Accumulation(alpha, dT, ave, in res.CalcPre[organ.Index], ref res.IterNow[organ.Index]);
     }
@@ -128,7 +128,7 @@ static class SubRoutine
         }
 
         // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
-        var alpha = organ.NuclideDecay + organ.BioDecay;
+        var alpha = organ.Nuclide.Lambda + organ.BioDecay;
 
         Accumulation(alpha, dT, ave, in res.CalcPre[organ.Index], ref res.IterNow[organ.Index]);
     }
@@ -194,7 +194,7 @@ static class SubRoutine
         }
 
         // alpha = 核種の崩壊定数[/day] + 当該臓器の生物学的崩壊定数[/day]
-        var alpha = organLo.NuclideDecay + bioDecay;
+        var alpha = organLo.Nuclide.Lambda + bioDecay;
 
         Accumulation(alpha, dT, ave, in res.CalcPre[organLo.Index], ref res.IterNow[organLo.Index]);
     }
