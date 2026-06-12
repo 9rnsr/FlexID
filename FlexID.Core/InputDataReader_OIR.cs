@@ -56,7 +56,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         evaluator = new InputEvaluator(errors);
     }
 
-    protected override string GetNextLine()
+    protected override string? GetNextLine()
     {
     Lagain:
         var nextLine = base.GetNextLine();
@@ -263,7 +263,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         inputTitle = title;
 
         var line = GetNextLine();
-        if (!CheckSectionHeader(line))
+        if (line is not null && !CheckSectionHeader(line))
         {
             errors.AddError(LineNum, "Unrecognized lines in [title] section.");
             return SkipUntilNextSection();
@@ -295,7 +295,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var branchTable = new Dictionary<NuclideData, (string Daughter, decimal Fraction)[]>();
         var nuclideLines = new Dictionary<NuclideData, int>();
 
-        string line;
+        string? line;
         while (true)
         {
             line = GetNextLine();
@@ -531,7 +531,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             ? InputData.ParameterNames
             : NuclideData.ParameterNames;
 
-        string line;
+        string? line;
         while (true)
         {
             line = GetNextLine();
@@ -579,7 +579,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var sectionLineNum = LineNum;
         compartmentSectionLocs[nuc] = sectionLineNum;
 
-        string line;
+        string? line;
         while (true)
         {
             line = GetNextLine();
@@ -642,7 +642,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var sectionLineNum = LineNum;
         transferSectionLocs[nuc] = sectionLineNum;
 
-        string line;
+        string? line;
         while (true)
         {
             line = GetNextLine();

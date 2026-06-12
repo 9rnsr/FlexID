@@ -356,6 +356,8 @@ public class InputData
     }
 }
 
+#nullable restore
+
 public abstract class InputDataReaderBase : IDisposable
 {
     /// <summary>
@@ -400,7 +402,7 @@ public abstract class InputDataReaderBase : IDisposable
     /// インプットの次行を読み取る。
     /// </summary>
     /// <returns></returns>
-    protected virtual string GetNextLine()
+    protected virtual string? GetNextLine()
     {
     Lagain:
         var line = reader.ReadLine();
