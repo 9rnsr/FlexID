@@ -4,15 +4,22 @@ Pb-198 Ingestion
 [nuclide]
   Pb-198  Tl-198
 
+[parameter]
+$if parent
+  ${Pb}/fA    = 0.2         # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
+  ${Pb}/fA_Re = 0.2         # footnote**
+$else
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.2
-  $fA_Re = 0.2          # footnote**
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -155,12 +162,6 @@ Pb-198 Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

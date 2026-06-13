@@ -4,15 +4,17 @@ Pu-241 Ingestion, Soluble
 [nuclide]
   Pu-241
 
+[parameter]
+$if parent
+  ${Pu}/fA    = 5E-4        # ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
+  ${Pu}/fA_Re = 5E-4        # footnote§
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
-  $fA    = 5E-4
-  $fA_Re = 5E-4     # footnote§
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

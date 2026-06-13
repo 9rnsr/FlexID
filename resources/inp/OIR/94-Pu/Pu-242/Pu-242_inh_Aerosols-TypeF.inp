@@ -4,20 +4,24 @@ Pu-242 Inhalation, Aerosols Type F
 [nuclide]
   Pu-242
 
+[parameter]
+  # ICRP Publ.141 p.337 Table 22.11 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 0.4
+  $ss = 0
+  $fb = 0.002               # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Pu}/fA    = 5E-4        # ICRP Publ.141 p.337 Table 22.11 / Inhaled particulate materials, Absorption type F
+  ${Pu}/fA_Re = 5E-4        # footnote§
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.141 p.337 Table 22.11 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 0.4
-  $ss = 0
-  $fb = 0.002       # footnote*
-  $sb = 0           # footnote*
-  $fA    = 5E-4
-  $fA_Re = 5E-4     # footnote§
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

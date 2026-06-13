@@ -4,14 +4,14 @@ F-18 Ingestion
 [nuclide]
   F-18
 
+[parameter]
+  $F-18/fA = 0.99 # ≒1     # ICRP Publ.151 p.30 Table 3.3 / Ingested materials, All forms
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.30 Table 3.3 / Ingested materials, All forms
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

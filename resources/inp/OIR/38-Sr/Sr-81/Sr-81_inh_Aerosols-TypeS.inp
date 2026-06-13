@@ -4,17 +4,25 @@ Sr-81 Inhalation, Aerosols Type S
 [nuclide]
   Sr-81  Rb-81m  Rb-81  Kr-81m  Kr-81
 
+[parameter]
+  # ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+
+$if parent
+  ${Sr}/fA = 0.0025         # ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type S
+$else
+  ${Rb}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
+
+  ${^Kr}/fA = fr * fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fA = 0.0025
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -235,12 +243,6 @@ Sr-81 Inhalation, Aerosols Type S
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.30 Part.2
-# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA = fr * fA_MaxValueOfIng
 
 # from parent to progeny
   Sr-81/ET1-F             ET1-F                     ---
@@ -465,12 +467,6 @@ Sr-81 Inhalation, Aerosols Type S
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.30 Part.2
-# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA = fr * fA_MaxValueOfIng
 
 # from parent to progeny
   Sr-81/ET1-F             ET1-F                     ---

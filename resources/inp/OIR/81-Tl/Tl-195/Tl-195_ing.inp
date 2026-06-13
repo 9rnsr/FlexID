@@ -4,15 +4,23 @@ Tl-195 Ingestion
 [nuclide]
   Tl-195  Hg-195m  Hg-195  Au-195
 
+[parameter]
+$if parent
+  ${Tl}/fA    = 0.99 # ≒1  # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
+  ${Tl}/fA_Re = 0.99 # ≒1  # footnote§ (re-absorption)
+$else
+  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
-  $fA    = 0.99 # ≒1
-  $fA_Re = 0.99 # ≒1   # footnote§ (re-absorption)
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -119,12 +127,6 @@ Tl-195 Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Tl-195/Oralcavity       Oralcavity                ---
@@ -248,12 +250,6 @@ Tl-195 Ingestion
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
 # from parent to progeny
   Tl-195/Oralcavity       Oralcavity                ---
   Tl-195/Oesophagus-f     Oesophagus-f              ---
@@ -365,12 +361,6 @@ Tl-195 Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Tl-195/Oralcavity       Oralcavity                ---

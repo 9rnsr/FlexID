@@ -4,15 +4,15 @@ Be-7 Injection
 [nuclide]
   Be-7
 
+[parameter]
+  $Be-7/fA    = 0.005       # ICRP Publ.151 p.21 Table 2.2 / Ingested materials, All forms
+  $Be-7/fA_Re = 0.005       # footnote§
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.21 Table 2.2 / Ingested materials, All forms
-  $fA    = 0.005
-  $fA_Re = 0.005        # footnote§
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%

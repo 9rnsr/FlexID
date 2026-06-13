@@ -4,15 +4,21 @@ Y-85 Ingestion
 [nuclide]
   Y-85  Sr-85m  Sr-85
 
+[parameter]
+$if parent
+  ${Y}/fA    = 1E-4         # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  ${Y}/fA_Re = 1E-4         # footnote**
+$else
+  ${Sr}/fA_MaxValueOfIng = 0.25         # ICRP Publ.134 p.215 Table 10.2 / Ingested materials, All other chemical forms
+
+  $fA = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA    = 1E-4
-  $fA_Re = 1E-4
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -130,11 +136,6 @@ Y-85 Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
-  $fA_MaxValueOfIng = 0.25
-
-  $fA = fA_MaxValueOfIng
 
 # from parent to progeny
   Y-85/Oralcavity         Oralcavity                ---
@@ -305,11 +306,6 @@ Y-85 Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
-  $fA_MaxValueOfIng = 0.25
-
-  $fA = fA_MaxValueOfIng
 
 # from parent to progeny
   Y-85/Oralcavity         Oralcavity                ---

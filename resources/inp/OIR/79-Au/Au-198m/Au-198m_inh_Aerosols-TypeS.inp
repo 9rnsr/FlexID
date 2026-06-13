@@ -4,20 +4,29 @@ Au-198m Inhalation, Aerosols Type S
 [nuclide]
   Au-198m  Au-198
 
+[parameter]
+  # ICRP Publ.151 p.312 Table 35.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Au}/fA    = 0.001       # ICRP Publ.151 p.312 Table 35.2 / Inhaled particulate materials, Absorption type S
+  ${Au}/fA_Re = 0.1         # footnote¶ (re-absorption)
+$else
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fb = 0               # footnote*
-  $sb = 0
-  $fA    = 0.001
-  $fA_Re = 0.1          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -292,12 +301,6 @@ Au-198m Inhalation, Aerosols Type S
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Au-198m/ET1-F           ET1-F                     ---

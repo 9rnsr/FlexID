@@ -4,15 +4,22 @@ Te-116 Injection
 [nuclide]
   Te-116  Sb-116
 
+[parameter]
+$if parent
+  ${Te}/fA    = 0.3         # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${Te}/fA_Re = 0.3         # footnote¶ (re-absorption)
+$else
+  ${Sb}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
@@ -127,12 +134,6 @@ Te-116 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.05
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Te-116/Oralcavity       Oralcavity                ---

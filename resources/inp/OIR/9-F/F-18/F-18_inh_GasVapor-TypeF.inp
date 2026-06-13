@@ -4,15 +4,17 @@ F-18 Inhalation, Gas or Vapor Type F, Unspecified
 [nuclide]
   F-18
 
+[parameter]
+  # ICRP Publ.151 p.30 Table 3.3 / Inhaled particulate materials, Absorption type F
+  $sr = 30
+
+  $F-18/fA = 0.99 # ≒1     # ICRP Publ.151 p.29 Table 3.2 / Chemical form/origin: Unspecified, Absorption type F
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.53 Table 3.2 / Unspecified chemical form, Absorption type F
-  $sr = 30
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.62 Para.92
 # ICRP Publ.151 p.29 Table 3.2

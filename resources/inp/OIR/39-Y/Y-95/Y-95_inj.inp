@@ -4,15 +4,23 @@ Y-95 Injection
 [nuclide]
   Y-95  Zr-95  Nb-95m  Nb-95
 
+[parameter]
+$if parent
+  ${Y}/fA    = 1E-4         # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  ${Y}/fA_Re = 1E-4         # footnote**
+$else
+  ${Zr}/fA_MaxValueOfIng = 0.002        # ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
+  ${Nb}/fA_MaxValueOfIng = 0.01         # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA    = 1E-4
-  $fA_Re = 1E-4
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
@@ -131,12 +139,6 @@ Y-95 Injection
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA_MaxValueOfIng = 0.002
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
 # from parent to progeny
   Y-95/Oralcavity         Oralcavity                ---
   Y-95/Oesophagus-f       Oesophagus-f              ---
@@ -242,12 +244,6 @@ Y-95 Injection
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
 # from parent to progeny
   Y-95/Oralcavity         Oralcavity                ---
   Y-95/Oesophagus-f       Oesophagus-f              ---
@@ -352,12 +348,6 @@ Y-95 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Y-95/Oralcavity         Oralcavity                ---

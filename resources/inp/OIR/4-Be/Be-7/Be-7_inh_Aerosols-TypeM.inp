@@ -4,20 +4,22 @@ Be-7 Inhalation, Aerosols Type M
 [nuclide]
   Be-7
 
+[parameter]
+  # ICRP Publ.151 p.21 Table 2.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+  $Be-7/fA    = 0.001       # ICRP Publ.151 p.21 Table 2.2 / Inhaled particulate materials, Absorption type M
+  $Be-7/fA_Re = 0.005       # footnote§
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.21 Table 2.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fb = 0               # footnote⋆
-  $sb = 0               # footnote⋆
-  $fA    = 0.001
-  $fA_Re = 0.005        # footnote§
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

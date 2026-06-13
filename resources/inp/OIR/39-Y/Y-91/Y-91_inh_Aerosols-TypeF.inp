@@ -4,18 +4,22 @@ Y-91 Inhalation, Aerosols Type F
 [nuclide]
   Y-91
 
+[parameter]
+  # ICRP Publ.134 p.242 Table 11.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 1
+  $ss = 0
+
+$if parent
+  ${Y}/fA    = 1E-4         # ICRP Publ.134 p.242 Table 11.2 / Inhaled particulate materials, Absorption type F
+  ${Y}/fA_Re = 1E-4         # footnote**
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 1
-  $ss = 0
-  $fA    = 1E-4
-  $fA_Re = 1E-4
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

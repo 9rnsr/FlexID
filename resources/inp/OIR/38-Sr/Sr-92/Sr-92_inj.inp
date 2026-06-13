@@ -4,14 +4,21 @@ Sr-92 Injection
 [nuclide]
   Sr-92  Y-92
 
+[parameter]
+$if parent
+  ${Sr}/fA = 0.25           # ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
+$else
+  ${Y}/fA_MaxValueOfIng = 1E-4          # ICRP Publ.134 p.242 Table 11.2 / Ingested material, All chemical forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
-  $fA = 0.25
 
 # ICRP Publ.130 p.37 Para.15
   Blood                   100.0%
@@ -122,34 +129,6 @@ Sr-92 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The default absorption fraction, fA, for a progeny radionuclide produced by
-#     decay in the contents of the alimentary tract (in the small intestine or a higher
-#     compartment) following ingestion of a parent radionuclide, or produced in a
-#     systemic compartment and subsequently transferred into the alimentary tract
-#     content, is the reference value of fA for the progeny radionuclide when ingested
-#     as a parent. If the radionuclide has multiple reference values corresponding to
-#     different chemical or physical forms, the default value of fA is the highest reference
-#     value provided.
-#
-# ICRP Publ.130 p.79 Para.149
-#   Some of the biokinetic models used in this series of reports to predict the
-#   systemic behaviour of radionuclides depict secretion from systemic compartments
-#   into the contents of the alimentary tract. Activity transferred from systemic compartments
-#   into the small intestine or higher segments of the alimentary tract is
-#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
-#   fraction fA for the secreted activity is the reference fA for ingestion of the
-#   radionuclide. If multiple reference values of fA are given for different forms of the
-#   ingested radionuclide, the default fA for the secreted activity is the highest reference
-#   value provided for X.
-#
-# ICRP Publ.134 p.242 Table 11.2 / Ingested material, All chemical forms
-  $fA_MaxValueOfIng = 1E-4
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Sr-92/Oralcavity        Oralcavity                ---

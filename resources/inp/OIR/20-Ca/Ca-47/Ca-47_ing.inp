@@ -4,14 +4,17 @@ Ca-47 Ingestion
 [nuclide]
   Ca-47  Sc-47
 
+[parameter]
+  $Ca-47/fA = 0.4           # ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
+
+  $Sc-47/fA    = 1E-4       # ICRP Publ.30 Part.3
+  $Sc-47/fA_Re = 1E-4       # ICRP Publ.30 Part.3
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
-  $fA = 0.4
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -125,10 +128,6 @@ Ca-47 Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.30 Part.3
-  $fA    = 1E-4
-  $fA_Re = 1E-4
 
 # from parent to progeny
   Ca-47/Oralcavity        Oralcavity                ---

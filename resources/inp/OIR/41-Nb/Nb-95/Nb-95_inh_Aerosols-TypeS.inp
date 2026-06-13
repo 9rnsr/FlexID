@@ -4,20 +4,24 @@ Nb-95 Inhalation, Aerosols Type S
 [nuclide]
   Nb-95
 
+[parameter]
+  # ICRP Publ.134 p.288 Table 13.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Nb}/fA    = 1E-4        # ICRP Publ.134 p.288 Table 13.2 / Inhaled particulate materials, Absorption type S
+  ${Nb}/fA_Re = 0.001       # footnote¶
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 1E-4
-  $fA_Re = 0.001        # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

@@ -4,15 +4,17 @@ C-11 Inhalation, Gas or Vapor Type F, Unspecified
 [nuclide]
   C-11
 
+[parameter]
+  # ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Absorption type F
+  $sr = 100
+
+  $C-11/fA = 0.99 # ≒1     # ICRP Publ.134 p.52 Table 3.2 / Chemical form/origin: Unspecified, Absorption type F
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Absorption type F
-  $sr = 100
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.62 Para.92
 # ICRP Publ.134 p.52 Table 3.2

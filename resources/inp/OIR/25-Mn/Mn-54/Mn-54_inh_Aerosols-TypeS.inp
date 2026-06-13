@@ -4,18 +4,22 @@ Mn-54 Inhalation, Aerosols Type S
 [nuclide]
   Mn-54
 
+[parameter]
+  # ICRP Publ.151 p.119 Table 14.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+
+$if parent
+  ${Mn}/fA    = 5E-4        # ICRP Publ.151 p.119 Table 14.2 / Inhaled particulate materials, Absorption type S
+  ${Mn}/fA_Re = 0.05        # footnote§ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.119 Table 14.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fA    = 5E-4
-  $fA_Re = 0.05         # footnote§ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

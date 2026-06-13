@@ -4,18 +4,22 @@ Te-127 Inhalation, Gas or Vapor Type F
 [nuclide]
   Te-127
 
+[parameter]
+  # ICRP Publ.137 p.72 Table 4.2 / All unspecified compounds
+  $fr = 1                   # Table 4.3 Type-F
+  $sr = 50                  # Table 4.3 Type-F
+  $ss = 0                   # Table 4.3 Type-F
+
+$if parent
+  ${Te}/fA    = 0.3         # Table 4.3 Type-F
+  ${Te}/fA_Re = 0.3         # Table 4.3 footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.72 Table 4.2 / All unspecified compounds
-  $fr = 1               # Table 4.3 Type-F
-  $sr = 50              # Table 4.3 Type-F
-  $ss = 0               # Table 4.3 Type-F
-  $fA    = 0.3
-  $fA_Re = 0.3          # Table 4.3 footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Para.92
 # ICRP Publ.137 p.72 Table 4.2

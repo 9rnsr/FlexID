@@ -4,20 +4,22 @@ S-38 Inhalation, Aerosols Type S
 [nuclide]
   S-38  Cl-38
 
+[parameter]
+  # ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type F
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+  $S-38/fA    = 0.01        # ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type F
+  $S-38/fA_Re = 0.99 # ≒1  # footnote††
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type F
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 0.01
-  $fA_Re = 0.99 # ≒1   # footnote††
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

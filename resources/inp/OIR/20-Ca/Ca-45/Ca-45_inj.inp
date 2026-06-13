@@ -4,14 +4,14 @@ Ca-45 Injection
 [nuclide]
   Ca-45
 
+[parameter]
+  $Ca-45/fA = 0.4           # ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
-  $fA = 0.4
 
 # ICRP Publ.130 p.37 Para.15
   Blood                   100.0%

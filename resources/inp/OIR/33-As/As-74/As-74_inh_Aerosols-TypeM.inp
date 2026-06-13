@@ -4,17 +4,21 @@ As-74 Inhalation, Aerosols Type M
 [nuclide]
   As-74
 
+[parameter]
+  # ICRP Publ.151 p.179 Table 19.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+
+$if parent
+  ${As}/fA = 0.2            # ICRP Publ.151 p.179 Table 19.2 / Inhaled particulate materials, Absorption type M
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.179 Table 19.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fA = 0.2
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

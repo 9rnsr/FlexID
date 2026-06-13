@@ -4,15 +4,17 @@ Ac-226 Ingestion
 [nuclide]
   Ac-226
 
+[parameter]
+$if parent
+  ${Ac}/fA    = 5E-4        # ICRP Publ.141 p.240 Table 19.2 / Ingested materials, All compounds
+  ${Ac}/fA_Re = 5E-4        # footnote¶
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.141 p.240 Table 19.2 / Ingested materials, All compounds
-  $fA    = 5E-4
-  $fA_Re = 5E-4         # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

@@ -4,15 +4,15 @@ S-35 Ingestion, Elemental sulphur and thiosulphate
 [nuclide]
   S-35
 
+[parameter]
+  $S-35/fA    = 0.1         # ICRP Publ.134 p.104 Table 5.3 / Ingested materials, Elemental sulphur and thiosulphate
+  $S-35/fA_Re = 0.99 # ≒1  # footnote††
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.104 Table 5.3 / Ingested materials, Elemental sulphur and thiosulphate
-  $fA    = 0.1
-  $fA_Re = 0.99 # ≒1   # footnote††
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

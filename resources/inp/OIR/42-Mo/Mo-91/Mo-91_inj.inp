@@ -4,15 +4,22 @@ Mo-91 Injection
 [nuclide]
   Mo-91  Nb-91m  Nb-91
 
+[parameter]
+$if parent
+  ${Mo}/fA    = 0.9         # ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
+  ${Mo}/fA_Re = 0.9         # footnote¶
+$else
+  ${Nb}/fA_MaxValueOfIng = 0.01         # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
-  $fA    = 0.9
-  $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
@@ -113,12 +120,6 @@ Mo-91 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-91/Oralcavity        Oralcavity                ---
@@ -240,12 +241,6 @@ Mo-91 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-91/Oralcavity        Oralcavity                ---

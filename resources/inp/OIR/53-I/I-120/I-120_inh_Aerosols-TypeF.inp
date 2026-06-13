@@ -4,18 +4,22 @@ I-120 Inhalation, Aerosols Type F
 [nuclide]
   I-120
 
+[parameter]
+  # ICRP Publ.137 p.97 Table 5.3 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 100
+  $ss =   0
+
+$if parent
+  ${I}/fA    = 0.99 # ≒1   # ICRP Publ.137 p.97 Table 5.3 / Inhaled particulate materials, Absorption type F
+  ${I}/fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 100
-  $ss =   0
-  $fA    = 0.99 # ≒1
-  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

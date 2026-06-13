@@ -4,15 +4,22 @@ Y-86m Ingestion
 [nuclide]
   Y-86m  Y-86
 
+[parameter]
+$if parent
+  ${Y}/fA    = 1E-4         # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  ${Y}/fA_Re = 1E-4         # footnote**
+$else
+  ${Y}/fA_MaxValueOfIng = 1E-4          # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA    = 1E-4
-  $fA_Re = 1E-4
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -130,12 +137,6 @@ Y-86m Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA_MaxValueOfIng = 1E-4
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Y-86m/Oralcavity        Oralcavity                ---

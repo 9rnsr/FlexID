@@ -4,15 +4,17 @@ Sb-118m Injection
 [nuclide]
   Sb-118m
 
+[parameter]
+$if parent
+  ${Sb}/fA    = 0.05        # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+  ${Sb}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Plasma                  100.0%

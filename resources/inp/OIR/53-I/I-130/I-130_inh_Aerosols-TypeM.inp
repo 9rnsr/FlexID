@@ -4,18 +4,22 @@ I-130 Inhalation, Aerosols Type M
 [nuclide]
   I-130
 
+[parameter]
+  # ICRP Publ.137 p.97 Table 5.3 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+
+$if parent
+  ${I}/fA    = 0.2          # ICRP Publ.137 p.97 Table 5.3 / Inhaled particulate materials, Absorption type M
+  ${I}/fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fA    = 0.2
-  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

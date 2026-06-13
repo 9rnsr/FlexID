@@ -4,15 +4,22 @@ Nb-89m Injection
 [nuclide]
   Nb-89m  Zr-89m  Zr-89
 
+[parameter]
+$if parent
+  ${Nb}/fA    = 0.01        # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+  ${Nb}/fA_Re = 0.01        # footnote¶
+$else
+  ${Zr}/fA_MaxValueOfIng = 0.002        # ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA    = 0.01
-  $fA_Re = 0.01         # footnote¶
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
@@ -131,12 +138,6 @@ Nb-89m Injection
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA_MaxValueOfIng = 0.002
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
 # from parent to progeny
   Nb-89m/Oralcavity       Oralcavity                ---
   Nb-89m/Oesophagus-f     Oesophagus-f              ---
@@ -254,12 +255,6 @@ Nb-89m Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA_MaxValueOfIng = 0.002
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Nb-89m/Oralcavity       Oralcavity                ---

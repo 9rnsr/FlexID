@@ -4,20 +4,22 @@ S-35 Inhalation, Gas or Vapor Type F, Organic
 [nuclide]
   S-35
 
+[parameter]
+  # ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 30
+  $ss = 0
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+  $S-35/fA    = 0.99 # ≒1  # ICRP Publ.134 p.100 Table 5.2 / Chemical form/origin: Other organic, Absorption type F
+  $S-35/fA_Re = 0.99 # ≒1  # ICRP Publ.134 p.104 Table 5.3 / footnote††
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 30
-  $ss = 0
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 0.99 # ≒1
-  $fA_Re = 0.99 # ≒1   # footnote††
 
 # ICRP Publ.130 p.62 Para.92
 # ICRP Publ.134 p.100 Table 5.2

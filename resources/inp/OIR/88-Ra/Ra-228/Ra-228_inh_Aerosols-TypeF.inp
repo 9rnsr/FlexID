@@ -4,19 +4,28 @@ Ra-228 Inhalation, Aerosols Type F
 [nuclide]
   Ra-228  Ac-228
 
+[parameter]
+  # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 10
+  $ss =  0
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Ra}/fA = 0.2            # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type F
+$else
+  ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 10
-  $ss =  0
-  $fb = 0           # footnote*
-  $sb = 0           # footnote*
-  $fA = 0.2
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -316,12 +325,6 @@ Ra-228 Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
-  $fA_MaxValueOfIng = 5E-4
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Ra-228/ET1-F            ET1-F                     ---

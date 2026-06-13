@@ -4,15 +4,17 @@ Zn-71m Ingestion
 [nuclide]
   Zn-71m
 
+[parameter]
+$if parent
+  ${Zn}/fA    = 0.5         # ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  ${Zn}/fA_Re = 0.5         # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.5
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

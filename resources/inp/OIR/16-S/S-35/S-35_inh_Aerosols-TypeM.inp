@@ -4,20 +4,22 @@ S-35 Inhalation, Aerosols Type M
 [nuclide]
   S-35
 
+[parameter]
+  # ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+  $S-35/fA    = 0.2         # ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type M
+  $S-35/fA_Re = 0.99 # ≒1  # footnote††
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 0.2
-  $fA_Re = 0.99 # ≒1   # footnote††
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

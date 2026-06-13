@@ -4,15 +4,22 @@ Zn-72 Injection
 [nuclide]
   Zn-72  Ga-72
 
+[parameter]
+$if parent
+  ${Zn}/fA    = 0.5         # ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  ${Zn}/fA_Re = 0.5         # footnote¶ (re-absorption)
+$else
+  ${Ga}/fA_MaxValueOfIng = 0.001        # ICRP Publ.151 p.162 Table 17.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.5
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Plasma                  100.0%
@@ -177,12 +184,6 @@ Zn-72 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.162 Table 17.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.001
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Zn-72/Oralcavity        Oralcavity                ---

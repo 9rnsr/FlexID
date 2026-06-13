@@ -4,14 +4,16 @@ Ra-223 Injection
 [nuclide]
   Ra-223
 
+[parameter]
+$if parent
+  ${Ra}/fA = 0.2            # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
-  $fA = 0.2
 
 # ICRP Publ.130 p.37 Para.15
   Blood                   100.0%

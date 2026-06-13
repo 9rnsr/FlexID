@@ -4,15 +4,22 @@ Sb-124n Ingestion
 [nuclide]
   Sb-124n  Sb-124m  Sb-124
 
+[parameter]
+$if parent
+  ${Sb}/fA    = 0.05        # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+  ${Sb}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$else
+  ${Sb}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -138,12 +145,6 @@ Sb-124n Ingestion
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.05
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
 # from parent to progeny
   Sb-124n/Oralcavity      Oralcavity                ---
   Sb-124n/Oesophagus-f    Oesophagus-f              ---
@@ -255,12 +256,6 @@ Sb-124n Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.05
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Sb-124n/Oralcavity      Oralcavity                ---

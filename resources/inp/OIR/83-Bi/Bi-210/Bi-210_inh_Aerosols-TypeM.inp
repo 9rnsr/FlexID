@@ -4,18 +4,28 @@ Bi-210 Inhalation, Aerosols Type M
 [nuclide]
   Bi-210  Po-210  Tl-206
 
+[parameter]
+  # ICRP Publ.137 p.253 Table 10.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 1
+  $ss = 0.005
+
+$if parent
+  ${Bi}/fA    = 0.01        # ICRP Publ.137 p.253 Table 10.2 / Inhaled particulate materials, Absorption type M
+  ${Bi}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$else
+  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2 / Ingested material, All chemical forms
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Inhaled particulate materials, Absorption type F
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.253 Table 10.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 1
-  $ss = 0.005
-  $fA    = 0.01
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -256,40 +266,6 @@ Bi-210 Inhalation, Aerosols Type M
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.45 Para.37
-#   For all radionuclides with the exception of noble gases:
-#   • The parameter values (sr, ss) describing absorption of the inhaled parent from the
-#     respiratory tract into blood are applied to all members of the decay chain
-#     formed in the respiratory tract.
-#
-#   • The default absorption fraction, fA, for a progeny radionuclide produced in the
-#     respiratory tract following inhalation of a parent, or produced in the alimentary
-#     tract following transfer of activity from the respiratory tract to the alimentary
-#     tract, is the product of the fraction of inhaled material with rapid
-#     dissolution (fr) for the assigned absorption type, and the reference value of
-#     fA for the progeny radionuclide when ingested as a parent radionuclide. If
-#     the progeny radionuclide has multiple reference values of fA when ingested
-#     as a parent, corresponding to different chemical or physical forms, the default
-#     value of fA is the product of fr for the absorption type and the highest reference
-#     value provided.
-#
-# ICRP Publ.130 p.79 Para.149
-#   Some of the biokinetic models used in this series of reports to predict the
-#   systemic behaviour of radionuclides depict secretion from systemic compartments
-#   into the contents of the alimentary tract. Activity transferred from systemic compartments
-#   into the small intestine or higher segments of the alimentary tract is
-#   assumed to be subject to re-absorption into blood. In such cases, the default absorption
-#   fraction fA for the secreted activity is the reference fA for ingestion of the
-#   radionuclide. If multiple reference values of fA are given for different forms of the
-#   ingested radionuclide, the default fA for the secreted activity is the highest reference
-#   value provided for X.
-#
-# ICRP Publ.137 p.279 Table 11.2 / Ingested material, All chemical forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
-
 # from parent to progeny
   Bi-210/ET1-F            ET1-F                     ---
   Bi-210/ET2-F            ET2-F                     ---
@@ -528,12 +504,6 @@ Bi-210 Inhalation, Aerosols Type M
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.344 Table 37.2 / Inhaled particulate materials, Absorption type F
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Bi-210/ET1-F            ET1-F                     ---

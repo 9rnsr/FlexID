@@ -4,14 +4,16 @@ Ba-133 Ingestion, Insoluble
 [nuclide]
   Ba-133
 
+[parameter]
+$if parent
+  ${Ba}/fA = 1E-4           # ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Insoluble forms
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Insoluble forms
-  $fA = 1E-4
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

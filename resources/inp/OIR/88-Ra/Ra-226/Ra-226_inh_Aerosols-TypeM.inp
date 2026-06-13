@@ -4,17 +4,21 @@ Ra-226 Inhalation, Aerosols Type M
 [nuclide]
   Ra-226
 
+[parameter]
+  # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+
+$if parent
+  ${Ra}/fA = 0.04           # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type M
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fA = 0.04
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

@@ -4,20 +4,24 @@ Pb-204m Inhalation, Aerosols Type M
 [nuclide]
   Pb-204m
 
+[parameter]
+  # ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+  $fb = 0.5                 # footnote*
+  $sb = 1.7                 # footnote*
+
+$if parent
+  ${Pb}/fA    = 0.04        # ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type M
+  ${Pb}/fA_Re = 0.2         # footnote**
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fb = 0.5             # footnote*
-  $sb = 1.7             # footnote*
-  $fA    = 0.04
-  $fA_Re = 0.2          # footnote**
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

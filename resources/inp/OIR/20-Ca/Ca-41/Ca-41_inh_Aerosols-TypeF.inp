@@ -4,17 +4,19 @@ Ca-41 Inhalation, Aerosols Type F
 [nuclide]
   Ca-41
 
+[parameter]
+  # ICRP Publ.134 p.118 Table 6.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 70
+  $ss =  0
+
+  $Ca-41/fA = 0.4           # ICRP Publ.134 p.118 Table 6.2 / Inhaled particulate materials, Absorption type F
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.118 Table 6.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 70
-  $ss =  0
-  $fA = 0.4
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

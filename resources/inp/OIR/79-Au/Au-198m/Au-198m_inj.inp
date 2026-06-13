@@ -4,15 +4,22 @@ Au-198m Injection
 [nuclide]
   Au-198m  Au-198
 
+[parameter]
+$if parent
+  ${Au}/fA    = 0.1         # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+  ${Au}/fA_Re = 0.1         # footnote¶ (re-absorption)
+$else
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA    = 0.1
-  $fA_Re = 0.1          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
@@ -117,12 +124,6 @@ Au-198m Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Au-198m/Oralcavity      Oralcavity                ---
