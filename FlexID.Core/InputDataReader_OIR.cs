@@ -30,7 +30,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private readonly Dictionary<string, Dictionary<string, string>> inputParameters = [];
 
-    private readonly Dictionary<string, List<(int lineNum, OrganFunc func, string name, string sourceRegion)>> inputOrgans = [];
+    private readonly Dictionary<string, List<InputOrgan>> inputOrgans = [];
 
     private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> inputTransfers = [];
 
@@ -612,7 +612,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
             }
 
-            organs.Add((LineNum, organFunc, organName, sourceRegion));
+            organs.Add(new InputOrgan(LineNum, organFunc, organName, IsBar(sourceRegion) ? null : sourceRegion));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -684,6 +684,15 @@ public class InputDataReader_OIR : InputDataReaderBase
     }
 
     /// <summary>
+    /// インプットから読み取ったコンパートメント定義の情報を保持する。
+    /// </summary>
+    /// <param name="LineNum">行番号。</param>
+    /// <param name="Func">コンパートメント機能。</param>
+    /// <param name="Name">コンパートメント名。</param>
+    /// <param name="SourceRegion">線源領域。</param>
+    private record class InputOrgan(int LineNum, OrganFunc Func, string Name, string? SourceRegion);
+
+    /// <summary>
     /// 全てのコンパートメントを定義する。
     /// </summary>
     /// <param name="data"></param>
@@ -743,8 +752,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                     Index    /**/= data.Organs.Count,
                     Name     /**/= organName,
                     Func     /**/= organFunc,
-                    SourceRegion = sourceRegion,
                 };
+
                 if (organFunc == OrganFunc.mix)
                     organ.BioDecay = 1.0;
 
@@ -761,7 +770,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 data.Organs.Add(organ);
 
                 // 線源領域の名称について、妥当性を確認する。
-                if (!IsBar(sourceRegion))
+                if (sourceRegion is not null)
                 {
                     // コンパートメントに対応する線源領域の名称が有効であることを確認する。
                     var indexS = Array.IndexOf(validSourceRegions, sourceRegion);
@@ -776,6 +785,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                         continue;
                     }
 
+                    organ.SourceRegion = sourceRegion;
+
                     // インプットで明示された線源領域をOtherの内訳から除く。
                     otherSourceRegions.Remove(sourceRegion);
 
@@ -786,10 +797,6 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     if (sourceRegion == "Other")
                         otherCompartments.Add(organ);
-                }
-                else
-                {
-                    organ.SourceRegion = null;
                 }
 
                 if (organ.Func == OrganFunc.exc)
