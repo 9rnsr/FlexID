@@ -438,10 +438,10 @@ public class InputErrorTests
         [
             "Line 14: Undefined nuclide 'X-00'.",
             "Line 15: Undefined nuclide 'X-00'.",
-            "Line 16: Undefined compartment 'ST1'.",
-            "Line 17: Undefined compartment 'ST1'.",
+            "Line 16: Undefined compartment 'Sr-90/ST1'.",
+            "Line 17: Undefined compartment 'Sr-90/ST1'.",
             "Line 18: Cannot set transfer path to itself.",
-            "Line 19: Duplicated transfer path from 'input' to 'ST0'.",
+            "Line 19: Duplicated transfer path from 'Sr-90/input' to 'Sr-90/ST0'.",
             "Line 25: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
         ]);
     }
