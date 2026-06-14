@@ -6,7 +6,8 @@ As-74 Ingestion, WaterSoluble
 
 [parameter]
 $if parent
-  ${As}/fA = 0.99 # ≒1     # ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Soluble compounds
+  ${As}/fA    = 0.99 # ≒1  # ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Soluble compounds
+  ${As}/fA_Re = 0.99 # ≒1  # footnote§
 $endif
 
 
@@ -28,6 +29,7 @@ $endif
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -61,12 +63,14 @@ $endif
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Plasma                $(fA * 6 / (1 - fA))
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12

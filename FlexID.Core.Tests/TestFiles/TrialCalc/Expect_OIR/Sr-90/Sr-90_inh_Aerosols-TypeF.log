@@ -27,6 +27,16 @@ Compartments:
   acc Z Sr-90/ALV-S                    ALV
   acc Z Sr-90/INT-S                    ALV
   acc Z Sr-90/LNTH-S                   LN-Th
+  acc Z Sr-90/ET2-B                    ET2-bnd
+  acc Z Sr-90/ETseq-B                  ET2-seq
+  acc Z Sr-90/LNET-B                   LN-ET
+  acc Z Sr-90/BB-B                     Bronchi
+  acc Z Sr-90/BBseq-B                  Bronchi-b
+  acc Z Sr-90/bb-B                     Brchiole
+  acc Z Sr-90/bbseq-B                  Brchiole-b
+  acc Z Sr-90/ALV-B                    ALV
+  acc Z Sr-90/INT-B                    ALV
+  acc Z Sr-90/LNTH-B                   LN-Th
   exc   Sr-90/Environment
   acc Z Sr-90/Oralcavity               O-cavity
   acc Z Sr-90/Oesophagus-f             Oesophag-f
@@ -72,6 +82,16 @@ Compartments:
   acc Z Y-90 /ALV-S                    ALV
   acc Z Y-90 /INT-S                    ALV
   acc Z Y-90 /LNTH-S                   LN-Th
+  acc Z Y-90 /ET2-B                    ET2-bnd
+  acc Z Y-90 /ETseq-B                  ET2-seq
+  acc Z Y-90 /LNET-B                   LN-ET
+  acc Z Y-90 /BB-B                     Bronchi
+  acc Z Y-90 /BBseq-B                  Bronchi-b
+  acc Z Y-90 /bb-B                     Brchiole
+  acc Z Y-90 /bbseq-B                  Brchiole-b
+  acc Z Y-90 /ALV-B                    ALV
+  acc Z Y-90 /INT-B                    ALV
+  acc Z Y-90 /LNTH-B                   LN-Th
   exc   Y-90 /Environment
   acc Z Y-90 /Oralcavity               O-cavity
   acc Z Y-90 /Oesophagus-f             Oesophag-f
@@ -135,6 +155,26 @@ Transfers:
   Sr-90/INT-S                  -> Sr-90/LNTH-S         = 3E-05
   Sr-90/bbseq-S                -> Sr-90/LNTH-S         = 0.001
   Sr-90/BBseq-S                -> Sr-90/LNTH-S         = 0.001
+  Sr-90/ET2-F                  -> Sr-90/ET2-B          = 0
+  Sr-90/ET2-S                  -> Sr-90/ET2-B          = 0
+  Sr-90/ETseq-F                -> Sr-90/ETseq-B        = 0
+  Sr-90/ETseq-S                -> Sr-90/ETseq-B        = 0
+  Sr-90/LNET-F                 -> Sr-90/LNET-B         = 0
+  Sr-90/LNET-S                 -> Sr-90/LNET-B         = 0
+  Sr-90/BB-F                   -> Sr-90/BB-B           = 0
+  Sr-90/BB-S                   -> Sr-90/BB-B           = 0
+  Sr-90/BBseq-F                -> Sr-90/BBseq-B        = 0
+  Sr-90/BBseq-S                -> Sr-90/BBseq-B        = 0
+  Sr-90/bb-F                   -> Sr-90/bb-B           = 0
+  Sr-90/bb-S                   -> Sr-90/bb-B           = 0
+  Sr-90/bbseq-F                -> Sr-90/bbseq-B        = 0
+  Sr-90/bbseq-S                -> Sr-90/bbseq-B        = 0
+  Sr-90/ALV-F                  -> Sr-90/ALV-B          = 0
+  Sr-90/ALV-S                  -> Sr-90/ALV-B          = 0
+  Sr-90/INT-F                  -> Sr-90/INT-B          = 0
+  Sr-90/INT-S                  -> Sr-90/INT-B          = 0
+  Sr-90/LNTH-F                 -> Sr-90/LNTH-B         = 0
+  Sr-90/LNTH-S                 -> Sr-90/LNTH-B         = 0
   Sr-90/input                  -> Sr-90/Environment    = 18.04%
   Sr-90/ET1-F                  -> Sr-90/Environment    = 0.6
   Sr-90/ET1-S                  -> Sr-90/Environment    = 0.6
@@ -172,6 +212,16 @@ Transfers:
   Sr-90/ETseq-S                -> Sr-90/Blood          = 0
   Sr-90/LNET-S                 -> Sr-90/Blood          = 0
   Sr-90/LNTH-S                 -> Sr-90/Blood          = 0
+  Sr-90/ALV-B                  -> Sr-90/Blood          = 0
+  Sr-90/INT-B                  -> Sr-90/Blood          = 0
+  Sr-90/bb-B                   -> Sr-90/Blood          = 0
+  Sr-90/bbseq-B                -> Sr-90/Blood          = 0
+  Sr-90/BB-B                   -> Sr-90/Blood          = 0
+  Sr-90/BBseq-B                -> Sr-90/Blood          = 0
+  Sr-90/ET2-B                  -> Sr-90/Blood          = 0
+  Sr-90/ETseq-B                -> Sr-90/Blood          = 0
+  Sr-90/LNET-B                 -> Sr-90/Blood          = 0
+  Sr-90/LNTH-B                 -> Sr-90/Blood          = 0
   Sr-90/SI-con                 -> Sr-90/Blood          = 2
   Sr-90/T-bone-S               -> Sr-90/Blood          = 0.578
   Sr-90/C-bone-S               -> Sr-90/Blood          = 0.578
@@ -214,6 +264,16 @@ Transfers:
   Sr-90/ALV-S                  -> Y-90/ALV-S                   ---
   Sr-90/INT-S                  -> Y-90/INT-S                   ---
   Sr-90/LNTH-S                 -> Y-90/LNTH-S                  ---
+  Sr-90/ET2-B                  -> Y-90/ET2-B                   ---
+  Sr-90/ETseq-B                -> Y-90/ETseq-B                 ---
+  Sr-90/LNET-B                 -> Y-90/LNET-B                  ---
+  Sr-90/BB-B                   -> Y-90/BB-B                    ---
+  Sr-90/BBseq-B                -> Y-90/BBseq-B                 ---
+  Sr-90/bb-B                   -> Y-90/bb-B                    ---
+  Sr-90/bbseq-B                -> Y-90/bbseq-B                 ---
+  Sr-90/ALV-B                  -> Y-90/ALV-B                   ---
+  Sr-90/INT-B                  -> Y-90/INT-B                   ---
+  Sr-90/LNTH-B                 -> Y-90/LNTH-B                  ---
   Sr-90/Environment            -> Y-90/Environment             ---
   Sr-90/Oralcavity             -> Y-90/Oralcavity              ---
   Sr-90/Oesophagus-f           -> Y-90/Oesophagus-f            ---
@@ -254,6 +314,26 @@ Transfers:
   Y-90/INT-S                   -> Y-90/LNTH-S          = 3E-05
   Y-90/bbseq-S                 -> Y-90/LNTH-S          = 0.001
   Y-90/BBseq-S                 -> Y-90/LNTH-S          = 0.001
+  Y-90/ET2-F                   -> Y-90/ET2-B           = 0
+  Y-90/ET2-S                   -> Y-90/ET2-B           = 0
+  Y-90/ETseq-F                 -> Y-90/ETseq-B         = 0
+  Y-90/ETseq-S                 -> Y-90/ETseq-B         = 0
+  Y-90/LNET-F                  -> Y-90/LNET-B          = 0
+  Y-90/LNET-S                  -> Y-90/LNET-B          = 0
+  Y-90/BB-F                    -> Y-90/BB-B            = 0
+  Y-90/BB-S                    -> Y-90/BB-B            = 0
+  Y-90/BBseq-F                 -> Y-90/BBseq-B         = 0
+  Y-90/BBseq-S                 -> Y-90/BBseq-B         = 0
+  Y-90/bb-F                    -> Y-90/bb-B            = 0
+  Y-90/bb-S                    -> Y-90/bb-B            = 0
+  Y-90/bbseq-F                 -> Y-90/bbseq-B         = 0
+  Y-90/bbseq-S                 -> Y-90/bbseq-B         = 0
+  Y-90/ALV-F                   -> Y-90/ALV-B           = 0
+  Y-90/ALV-S                   -> Y-90/ALV-B           = 0
+  Y-90/INT-F                   -> Y-90/INT-B           = 0
+  Y-90/INT-S                   -> Y-90/INT-B           = 0
+  Y-90/LNTH-F                  -> Y-90/LNTH-B          = 0
+  Y-90/LNTH-S                  -> Y-90/LNTH-B          = 0
   Y-90/ET1-F                   -> Y-90/Environment     = 0.6
   Y-90/ET1-S                   -> Y-90/Environment     = 0.6
   Y-90/Oralcavity              -> Y-90/Oesophagus-f    = 6480
@@ -292,6 +372,16 @@ Transfers:
   Y-90/ETseq-S                 -> Y-90/Blood1          = 0
   Y-90/LNET-S                  -> Y-90/Blood1          = 0
   Y-90/LNTH-S                  -> Y-90/Blood1          = 0
+  Y-90/ALV-B                   -> Y-90/Blood1          = 0
+  Y-90/INT-B                   -> Y-90/Blood1          = 0
+  Y-90/bb-B                    -> Y-90/Blood1          = 0
+  Y-90/bbseq-B                 -> Y-90/Blood1          = 0
+  Y-90/BB-B                    -> Y-90/Blood1          = 0
+  Y-90/BBseq-B                 -> Y-90/Blood1          = 0
+  Y-90/ET2-B                   -> Y-90/Blood1          = 0
+  Y-90/ETseq-B                 -> Y-90/Blood1          = 0
+  Y-90/LNET-B                  -> Y-90/Blood1          = 0
+  Y-90/LNTH-B                  -> Y-90/Blood1          = 0
   Y-90/SI-con                  -> Y-90/Blood1          = 0.0006000600060006
   Y-90/SI-conRe                -> Y-90/Blood1          = 0.0006000600060006
   Y-90/Blood2                  -> Y-90/Blood1          = 0.462
