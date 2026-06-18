@@ -313,10 +313,10 @@ Cs-137 Inhalation, Aerosols Type M
 # From                  | To                  | Coefficient[/d or %]
 #-----------------------+---------------------+--------------
 
-# ICRP Publ.137 p.168 Table 7.2 / Inhaled particulate materials, Absorption type M
-  $sr = 3
-  $ss = 0.005
-  $fA = 0.04
+# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Soluble forms
+  $fA_MaxValueOfIng = 0.2
+
+  $fA = fr * fA_MaxValueOfIng
 
 # from parent to progeny
   Cs-137/ET1-F            ET1-F                     ---
