@@ -102,9 +102,9 @@ internal class DecaySet
 
     private readonly IReadOnlyList<NuclideData>[] nuclideProgenies;
 
-    private IReadOnlyList<NuclideData> GetAncestors(NuclideData nuclide) => nuclideAncestors[nuclide.Index];
+    public IReadOnlyList<NuclideData> GetAncestors(NuclideData nuclide) => nuclideAncestors[nuclide.Index];
 
-    private IReadOnlyList<NuclideData> GetProgenies(NuclideData nuclide) => nuclideProgenies[nuclide.Index];
+    public IReadOnlyList<NuclideData> GetProgenies(NuclideData nuclide) => nuclideProgenies[nuclide.Index];
 
     /// <summary>
     /// 対象コンパートメントの核種から始まる崩壊系列の情報を保持する。
