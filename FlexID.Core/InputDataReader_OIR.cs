@@ -937,8 +937,8 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             var otherSourceRegions = new List<string>(otherSourceRegionsBase);
             var otherCompartments = new List<Organ>();
-            var anyCTmarrow = false;
-            var anyRYmarrow = false;
+            List<(int LineNum, Organ Organ)> organsCTmarrow = [];
+            List<(int LineNum, Organ Organ)> organsRYmarrow = [];
             bool? otherContainsMineralBone;
 
             // Otherから無機質骨の体積組織(C-bone-VとT-bone-V)への分配について制御する。
@@ -1007,9 +1007,9 @@ public class InputDataReader_OIR : InputDataReaderBase
                     otherSourceRegions.Remove(sourceRegion);
 
                     if (sourceRegion == "C-marrow" || sourceRegion == "T-marrow")
-                        anyCTmarrow = true;
+                        organsCTmarrow.Add((lineNum, organ));
                     if (sourceRegion == "R-marrow" || sourceRegion == "Y-marrow")
-                        anyRYmarrow = true;
+                        organsRYmarrow.Add((lineNum, organ));
 
                     if (sourceRegion == "Other")
                         otherCompartments.Add(organ);
@@ -1048,7 +1048,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 otherSourceRegions.Remove("T-bone-V");
             }
 
-            if (anyCTmarrow)
+            if (organsCTmarrow.Any())
             {
                 // C/T-marrowがコンパートメントとして明示されている場合は、
                 // OtherからR/Y-marrowへの分配を行わないようにする。
@@ -1056,8 +1056,15 @@ public class InputDataReader_OIR : InputDataReaderBase
                 otherSourceRegions.Remove("Y-marrow");
 
                 // C/T-marrowとR/Y-marrowの組み合わせが両方同時に使用されている場合はエラーとする。
-                if (anyRYmarrow)
-                    errors.AddError(sectionLineNum, "Both of C/T-marrow and R/Y-marrow source region pairs are used.");
+                if (organsRYmarrow.Any())
+                {
+                    var marrowOrgans = organsCTmarrow.Concat(organsRYmarrow).OrderBy(o => o.LineNum).ToArray();
+                    var firstLineNum = marrowOrgans.First().LineNum;
+                    var maxOrganNameLength = marrowOrgans.Max(o => o.Organ.Name.Length);
+                    errors.AddError(firstLineNum, $"Both of C/T-marrow and R/Y-marrow source region pairs are used for nuclide '{nuclide.Name}'.");
+                    foreach (var (lineNum, organ) in marrowOrgans)
+                        errors.AddError(lineNum, $"    {organ.Func}  {organ.Name.PadRight(maxOrganNameLength)}  {organ.SourceRegion}");
+                }
             }
 
             nuclide.OtherSourceRegions = otherSourceRegions;
