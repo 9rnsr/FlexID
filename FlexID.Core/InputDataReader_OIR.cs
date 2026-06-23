@@ -203,28 +203,6 @@ public class InputDataReader_OIR : InputDataReaderBase
         if (!inputIntakesRead)
             errors.AddError(LineNum, "Missing [intake] section.");
 
-        foreach (var (lineNum, nuc) in inputOrgans.Keys.Except(inputNuclides.Select(n => n.Name) ?? [])
-            .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
-        {
-            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define compartments.");
-        }
-
-        foreach (var (lineNum, nuc) in inputTransfers.Keys.Except(inputNuclides.Select(n => n.Name) ?? [])
-            .Select(nuc => (LineNum: transferSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
-        {
-            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
-        }
-
-        {
-            var nuclideNames = inputNuclides.Select(n => n.Name).ToArray();
-
-            foreach (var nuc in nuclideNames.Where(nuc => !inputOrgans.ContainsKey(nuc)))
-                errors.AddError(LineNum, $"Missing [{nuc}:compartment] section.");
-
-            foreach (var nuc in nuclideNames.Where(nuc => !inputTransfers.ContainsKey(nuc)))
-                errors.AddError(LineNum, $"Missing [{nuc}:transfer] section.");
-        }
-
         // 核種定義に対して[compartment]と[transfer]セクションに過不足がないことを確定する。
         errors.RaiseIfAny();
 
