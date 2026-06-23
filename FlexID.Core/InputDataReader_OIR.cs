@@ -229,7 +229,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         DefineParameters(data, expander);
 
         // 全てのコンパートメントを定義する。
-        DefineCompartments(data);
+        DefineCompartments(data, expander);
 
         // コンパートメント間の移行経路を定義する。
         DefineIntakes(data);
@@ -282,7 +282,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             }
             else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
             {
-                conditionDirectiveState = ConditionDirectiveState.Disabled;
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetCompartments(nuc);
@@ -631,9 +631,10 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             }
 
+            var parentOnly = IsParentOnly;
+
             var name = values[0].Trim();
             var value = values[1].Trim();
-            var parentOnly = IsParentOnly;
 
             var isVarDecl = name.StartsWith('$');
             if (isVarDecl)
@@ -693,6 +694,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             }
 
+            var parentOnly = IsParentOnly;
+
             var organFn = values[0];        // コンパートメント機能
             var organName = values[1];      // コンパートメント名
             var sourceRegion = values[2];   // コンパートメントに対応する線源領域の名称
@@ -708,7 +711,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
             }
 
-            organs.Add(new InputOrgan(LineNum, organFunc, organName, IsBar(sourceRegion) ? null : sourceRegion));
+            organs.Add(new InputOrgan(LineNum, parentOnly, organFunc, organName, IsBar(sourceRegion) ? null : sourceRegion));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -898,16 +901,43 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// インプットから読み取ったコンパートメント定義の情報を保持する。
     /// </summary>
     /// <param name="LineNum">行番号。</param>
+    /// <param name="ParentOnly"></param>
     /// <param name="Func">コンパートメント機能。</param>
     /// <param name="Name">コンパートメント名。</param>
     /// <param name="SourceRegion">線源領域。</param>
-    private record class InputOrgan(int LineNum, OrganFunc Func, string Name, string? SourceRegion);
+    private record class InputOrgan(int LineNum, bool? ParentOnly, OrganFunc Func, string Name, string? SourceRegion);
+
+    private Dictionary<NuclideData, List<InputOrgan>> ExpandCompartments(InputNuclideExpander expander)
+    {
+        var resultOrgans = new Dictionary<NuclideData, List<InputOrgan>>();
+
+        foreach (var (nuc, inputs) in inputOrgans)
+        {
+            var lineNum = compartmentSectionLocs[nuc];
+
+            var olderrors = errors.Count;
+            var nuclides = expander.ExpandNuclides(lineNum, nuc);
+            if (errors.IfAny(olderrors))
+                continue;
+
+            foreach (var nuclide in nuclides)
+            {
+                if (!resultOrgans.TryGetValue(nuclide, out var results))
+                    resultOrgans.Add(nuclide, results = []);
+
+                results.AddRange(inputs);
+            }
+        }
+
+        return resultOrgans;
+    }
 
     /// <summary>
     /// 全てのコンパートメントを定義する。
     /// </summary>
     /// <param name="data"></param>
-    private void DefineCompartments(InputData data)
+    /// <param name="expander"></param>
+    private void DefineCompartments(InputData data, InputNuclideExpander expander)
     {
         // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
         var validSourceRegions = data.SourceRegions
@@ -917,15 +947,16 @@ public class InputDataReader_OIR : InputDataReaderBase
             .Where(s => s.MaleID != 0 || s.FemaleID != 0)
             .Select(s => s.Name).ToList();
 
+        // 核種パターンを展開したものを作成する。
+        var expandOrgans = ExpandCompartments(expander);
+
         foreach (var nuclide in inputNuclides)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
-            var nuc = nuclide.Name;
-            if (!inputOrgans.TryGetValue(nuc, out var organs))
+            if (!expandOrgans.TryGetValue(nuclide, out var organs))
                 continue;
-            var sectionLineNum = compartmentSectionLocs[nuc];
 
             data.Nuclides.Add(nuclide);
 
@@ -963,8 +994,11 @@ public class InputDataReader_OIR : InputDataReaderBase
                 data.Organs.Add(input);
             }
 
-            foreach (var (lineNum, organFunc, organName, sourceRegion) in organs)
+            foreach (var (lineNum, parentOnly, organFunc, organName, sourceRegion) in organs)
             {
+                if (nuclide.IsProgeny == parentOnly)
+                    continue;
+
                 var organ = new Organ
                 {
                     Nuclide  /**/= nuclide,
