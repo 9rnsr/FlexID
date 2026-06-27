@@ -6,12 +6,23 @@ Th-232 Injection
   Po-216  Pb-212  Bi-212  Po-212  Tl-208
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.362 Table 14.2 / Ingested materials, All forms
+  $fA    = 5E-4
+  $fA_Re = 5E-4         # footnote**
+
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
+
+
 [Th-232:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -43,16 +54,9 @@ Th-232 Injection
   acc   ST2                   Other
 
 [Th-232:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.362 Table 14.2 / Ingested materials, All forms
-  $fA    = 5E-4
-  $fA_Re = 5E-4         # footnote**
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood                   100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -178,9 +182,9 @@ Th-232 Injection
   acc   Spleen                Spleen
 
 [Ra-228:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.2
@@ -390,9 +394,9 @@ Th-232 Injection
   acc   Spleen                Spleen
 
 [Ac-228:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
   $fA_MaxValueOfIng = 5E-4
@@ -641,9 +645,9 @@ Th-232 Injection
   acc   Spleen                Spleen
 
 [Th-228:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.362 Table 14.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 5E-4
@@ -830,9 +834,9 @@ Th-232 Injection
   acc   Spleen                Spleen
 
 [Ra-224:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.2
@@ -1002,9 +1006,9 @@ Th-232 Injection
   exc   Exhaled               ---
 
 [Rn-220:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 Para.38
 # > (38) Noble gases produced in compartments of the respiratory tract and in the
@@ -1204,9 +1208,9 @@ Th-232 Injection
   acc   T-marrow              T-marrow
 
 [Po-216:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
@@ -1421,9 +1425,9 @@ Th-232 Injection
   acc   T-marrow              T-marrow
 
 [Pb-212:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.2
@@ -1680,9 +1684,9 @@ Th-232 Injection
   acc   T-marrow              T-marrow
 
 [Bi-212:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.05
@@ -1913,9 +1917,9 @@ Th-232 Injection
   acc   T-marrow              T-marrow
 
 [Po-212:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 0.1
@@ -2126,9 +2130,9 @@ Th-232 Injection
   acc   T-marrow              T-marrow
 
 [Tl-208:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.99 # ≒1

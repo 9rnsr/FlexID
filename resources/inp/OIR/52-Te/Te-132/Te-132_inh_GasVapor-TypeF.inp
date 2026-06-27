@@ -5,12 +5,33 @@ Te-132 Inhalation, Gas or Vapor Type F
   Te-132  I-132
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.72 Table 4.2 / All unspecified compounds
+  $fr = 1               # Table 4.3 Type-F
+  $sr = 50              # Table 4.3 Type-F
+  $ss = 0               # Table 4.3 Type-F
+  $fA    = 0.3
+  $fA_Re = 0.3          # Table 4.3 footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.62 Para.92
+# ICRP Publ.137 p.72 Table 4.2
+  ET2-F                 $( (100% - 0.2%) * 20% )
+  ETseq-F               $(         0.2%  * 20% )
+  BB-F                  $( (100% - 0.2%) * 10% )
+  BBseq-F               $(         0.2%  * 10% )
+  bb-F                  $( (100% - 0.2%) * 20% )
+  bbseq-F               $(         0.2%  * 20% )
+  ALV-F                 $(                 50% )
+
+
 [Te-132:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -60,26 +81,9 @@ Te-132 Inhalation, Gas or Vapor Type F
   acc   ST                    Other
 
 [Te-132:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.72 Table 4.2 / All unspecified compounds
-  $fr = 1               # Table 4.3 Type-F
-  $sr = 50              # Table 4.3 Type-F
-  $ss = 0               # Table 4.3 Type-F
-  $fA    = 0.3
-  $fA_Re = 0.3          # Table 4.3 footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.62 Para.92
-# ICRP Publ.137 p.72 Table 4.2
-  input                   ET2-F                 $( (100% - 0.2%) * 20% )
-  input                   ETseq-F               $(         0.2%  * 20% )
-  input                   BB-F                  $( (100% - 0.2%) * 10% )
-  input                   BBseq-F               $(         0.2%  * 10% )
-  input                   bb-F                  $( (100% - 0.2%) * 20% )
-  input                   bbseq-F               $(         0.2%  * 20% )
-  input                   ALV-F                 $(                 50% )
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -230,9 +234,9 @@ Te-132 Inhalation, Gas or Vapor Type F
   acc   Other4                Other
 
 [I-132:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
   $fA_MaxValueOfIng = 0.99 # ≒1

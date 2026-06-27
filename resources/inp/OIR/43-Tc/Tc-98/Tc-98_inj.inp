@@ -5,12 +5,23 @@ Tc-98 Injection
   Tc-98
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+  $fA    = 0.9
+  $fA_Re = 0.9          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
+
+
 [Tc-98:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
@@ -46,16 +57,9 @@ Tc-98 Injection
   acc   ST2                   Other
 
 [Tc-98:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA    = 0.9
-  $fA_Re = 0.9          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood                   100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

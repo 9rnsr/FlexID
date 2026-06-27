@@ -5,12 +5,23 @@ Bi-210 Injection
   Bi-210  Po-210  Tl-206
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
+  $fA    = 0.05
+  $fA_Re = 0.05         # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.37 Para.15
+  Plasma                  100.0%
+
+
 [Bi-210:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -37,16 +48,9 @@ Bi-210 Injection
   acc   ST2                   Other
 
 [Bi-210:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.253 Table 10.2 / Ingested material, All forms
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Plasma                  100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -130,9 +134,9 @@ Bi-210 Injection
   exc   Excreta               ---
 
 [Po-210:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.45 Para.37
 #   For all radionuclides with the exception of noble gases:
@@ -307,9 +311,9 @@ Bi-210 Injection
   acc   Other                 Other
 
 [Tl-206:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.99 # ≒1

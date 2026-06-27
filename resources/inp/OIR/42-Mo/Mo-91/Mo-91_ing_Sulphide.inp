@@ -5,12 +5,23 @@ Mo-91 Ingestion, Sulphide
   Mo-91  Nb-91m  Nb-91
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.305 Table 14.2 / Ingested material, Sulphide
+  $fA    = 0.05
+  $fA_Re = 0.9          # footnote¶
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Mo-91:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -32,16 +43,9 @@ Mo-91 Ingestion, Sulphide
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
 [Mo-91:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, Sulphide
-  $fA    = 0.05
-  $fA_Re = 0.9          # footnote¶
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -106,9 +110,9 @@ Mo-91 Ingestion, Sulphide
   acc   ST1                   Other
 
 [Nb-91m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.01
@@ -233,9 +237,9 @@ Mo-91 Ingestion, Sulphide
   acc   ST1                   Other
 
 [Nb-91:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
   $fA_MaxValueOfIng = 0.01

@@ -5,12 +5,23 @@ Co-57 Ingestion
   Co-57
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.156 Table 8.2 / Ingested materials, All chemical forms
+  $fA    = 0.1
+  $fA_Re = 0.1          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Co-57:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -39,16 +50,9 @@ Co-57 Ingestion
   acc   Kidneys2              Kidneys
 
 [Co-57:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.156 Table 8.2 / Ingested materials, All chemical forms
-  $fA    = 0.1
-  $fA_Re = 0.1          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

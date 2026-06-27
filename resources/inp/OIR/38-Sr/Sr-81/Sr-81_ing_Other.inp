@@ -5,12 +5,22 @@ Sr-81 Ingestion, Other
   Sr-81  Rb-81m  Rb-81  Kr-81m  Kr-81
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
+  $fA = 0.25
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Sr-81:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -35,15 +45,9 @@ Sr-81 Ingestion, Other
   acc   Noch-T-bone-V         T-bone-V
 
 [Sr-81:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
-  $fA = 0.25
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -110,9 +114,9 @@ Sr-81 Ingestion, Other
   exc   Excreta(sweat)        ---
 
 [Rb-81m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.30 Part.2
 # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
@@ -244,9 +248,9 @@ Sr-81 Ingestion, Other
   exc   Excreta(sweat)        ---
 
 [Rb-81:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.30 Part.2
 # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
@@ -372,9 +376,9 @@ Sr-81 Ingestion, Other
   exc   Exhaled               ---
 
 [Kr-81m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sr-81/Oralcavity        Oralcavity                ---
@@ -451,9 +455,9 @@ Sr-81 Ingestion, Other
   exc   Exhaled               ---
 
 [Kr-81:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sr-81/Oralcavity        Oralcavity                ---

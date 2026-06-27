@@ -5,12 +5,23 @@ Zn-62 Ingestion
   Zn-62  Cu-62
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  $fA    = 0.5
+  $fA_Re = 0.5          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Zn-62:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -41,16 +52,9 @@ Zn-62 Ingestion
   exc   Excreta               ---
 
 [Zn-62:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.5
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -141,9 +145,9 @@ Zn-62 Ingestion
   exc   Excreta               ---
 
 [Cu-62:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.201 Para.436
 # > (436) Three isotopes of zinc addressed in this publication have progeny that are

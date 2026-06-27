@@ -5,12 +5,23 @@ Sb-127 Ingestion
   Sb-127  Te-127m  Te-127
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+  $fA    = 0.05
+  $fA_Re = 0.05         # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Sb-127:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -39,16 +50,9 @@ Sb-127 Ingestion
   acc   ST2                   Other
 
 [Sb-127:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -127,9 +131,9 @@ Sb-127 Ingestion
   acc   ST                    Other
 
 [Te-127m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.3
@@ -247,9 +251,9 @@ Sb-127 Ingestion
   acc   ST                    Other
 
 [Te-127:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.3

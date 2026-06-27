@@ -5,12 +5,22 @@ Ca-47 Injection
   Ca-47  Sc-47
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
+  $fA = 0.4
+
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
+
+
 [Ca-47:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -35,15 +45,9 @@ Ca-47 Injection
   acc   Noch-T-bone-V         T-bone-V
 
 [Ca-47:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
-  $fA = 0.4
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood                   100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -118,9 +122,9 @@ Ca-47 Injection
   acc   ST1                   Other
 
 [Sc-47:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.30 Part.3
   $fA    = 1E-4

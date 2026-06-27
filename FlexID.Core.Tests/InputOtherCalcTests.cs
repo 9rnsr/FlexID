@@ -71,12 +71,13 @@ public class InputOtherCalcTests
             "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
+            "[intake]",
+            "  ST0    100%",
+            "",
             "[Sr-90:compartment]",
-            "  inp    input      ---",
             "  acc    ST0        Other",
             "",
             "[Sr-90:transfer]",
-            "  input  ST0        100%",
         ]);
 
         var data = reader.Read();
@@ -137,13 +138,14 @@ public class InputOtherCalcTests
             "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
+            "[intake]",
+            "  Other1   100%",
+            "",
             "[Sr-90:compartment]",
-            "  inp    input      ---",
             "  acc    Other1        Other",
             "  acc    Other2        Other",
             "",
             "[Sr-90:transfer]",
-            "  input  Other1       100%",
             "  Other1 Other2       10",
         ]);
 
@@ -203,8 +205,10 @@ public class InputOtherCalcTests
             "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
+            "[intake]",
+            "  ST0    100%",
+            "",
             "[Sr-90:compartment]",
-            "  inp    input             ---",
             "  acc    LNET-F            LN-ET",
             "  acc    LNTH-F            LN-Th",
             "  acc    ST0               Other",
@@ -216,7 +220,6 @@ public class InputOtherCalcTests
             "  acc    Noch-T-bone-V     T-bone-V",
             "",
             "[Sr-90:transfer]",
-            "  input  ST0        100%",
         ]);
 
         var data = reader.Read();
@@ -253,14 +256,15 @@ public class InputOtherCalcTests
             "[nuclide]",
             "  Th-232",
             "",
+            "[intake]",
+            "  Other    100%",
+            "",
             "[Th-232:compartment]",
-            "  inp    input        ---",
             "  acc    Other        Other",
             (specifyC ? "  acc    C-marrow     C-marrow" : ""),
             (specifyT ? "  acc    T-marrow     T-marrow" : ""),
             "",
             "[Th-232:transfer]",
-            "  input  Other        100%",
             (specifyC ? "  Other  C-marrow     10" : ""),
             (specifyT ? "  Other  T-marrow     10" : ""),
         ]);
@@ -295,8 +299,10 @@ public class InputOtherCalcTests
             [nuclide]
               Th-232
 
+            [intake]
+              Blood  100%
+            
             [Th-232:compartment]
-              inp    input        ---
               acc    Blood        Blood
               acc    C-marrow     C-marrow
               acc    T-marrow     T-marrow
@@ -304,7 +310,6 @@ public class InputOtherCalcTests
               acc    Y-marrow     Y-marrow
 
             [Th-232:transfer]
-              input  Blood        100%
               Blood  C-marrow     10
               Blood  T-marrow     10
               Blood  R-marrow     10
@@ -314,7 +319,7 @@ public class InputOtherCalcTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 7: Both of C/T-marrow and R/Y-marrow source region pairs are used.",
+            "Line 10: Both of C/T-marrow and R/Y-marrow source region pairs are used.",
         ]);
     }
 }

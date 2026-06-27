@@ -3,6 +3,321 @@ Nuclide  Lambda          HalfLife  Branches
 Sr-90    6.596156E-005     28.79y  Y-90/1
 Y-90     2.595247E-001     64.10h
 
+Compartments:
+  inp Z Sr-90/input
+  acc   Sr-90/ET1-F                    ET1-sur
+  acc   Sr-90/ET2-F                    ET2-sur
+  acc   Sr-90/ETseq-F                  ET2-seq
+  acc   Sr-90/LNET-F                   LN-ET
+  acc   Sr-90/BB-F                     Bronchi
+  acc   Sr-90/BBseq-F                  Bronchi-q
+  acc   Sr-90/bb-F                     Brchiole
+  acc   Sr-90/bbseq-F                  Brchiole-q
+  acc   Sr-90/ALV-F                    ALV
+  acc   Sr-90/INT-F                    ALV
+  acc   Sr-90/LNTH-F                   LN-Th
+  acc Z Sr-90/ET1-S                    ET1-sur
+  acc Z Sr-90/ET2-S                    ET2-sur
+  acc Z Sr-90/ETseq-S                  ET2-seq
+  acc Z Sr-90/LNET-S                   LN-ET
+  acc Z Sr-90/BB-S                     Bronchi
+  acc Z Sr-90/BBseq-S                  Bronchi-q
+  acc Z Sr-90/bb-S                     Brchiole
+  acc Z Sr-90/bbseq-S                  Brchiole-q
+  acc Z Sr-90/ALV-S                    ALV
+  acc Z Sr-90/INT-S                    ALV
+  acc Z Sr-90/LNTH-S                   LN-Th
+  exc   Sr-90/Environment
+  acc Z Sr-90/Oralcavity               O-cavity
+  acc Z Sr-90/Oesophagus-f             Oesophag-f
+  acc   Sr-90/Oesophagus-s             Oesophag-s
+  acc   Sr-90/St-con                   St-cont
+  acc   Sr-90/SI-con                   SI-cont
+  acc   Sr-90/RC-con                   RC-cont
+  acc   Sr-90/LC-con                   LC-cont
+  acc   Sr-90/RS-con                   RS-cont
+  exc   Sr-90/Faeces
+  acc   Sr-90/UB-con                   UB-cont
+  exc   Sr-90/Urine
+  acc   Sr-90/Blood                    Blood
+  acc   Sr-90/ST0                      Other
+  acc   Sr-90/ST1                      Other
+  acc   Sr-90/ST2                      Other
+  acc   Sr-90/C-bone-S                 C-bone-S
+  acc   Sr-90/Exch-C-bone-V            C-bone-V
+  acc   Sr-90/Noch-C-bone-V            C-bone-V
+  acc   Sr-90/T-bone-S                 T-bone-S
+  acc   Sr-90/Exch-T-bone-V            T-bone-V
+  acc   Sr-90/Noch-T-bone-V            T-bone-V
+
+  acc   Y-90 /ET1-F                    ET1-sur
+  acc   Y-90 /ET2-F                    ET2-sur
+  acc   Y-90 /ETseq-F                  ET2-seq
+  acc   Y-90 /LNET-F                   LN-ET
+  acc   Y-90 /BB-F                     Bronchi
+  acc   Y-90 /BBseq-F                  Bronchi-q
+  acc   Y-90 /bb-F                     Brchiole
+  acc   Y-90 /bbseq-F                  Brchiole-q
+  acc   Y-90 /ALV-F                    ALV
+  acc   Y-90 /INT-F                    ALV
+  acc   Y-90 /LNTH-F                   LN-Th
+  acc Z Y-90 /ET1-S                    ET1-sur
+  acc Z Y-90 /ET2-S                    ET2-sur
+  acc Z Y-90 /ETseq-S                  ET2-seq
+  acc Z Y-90 /LNET-S                   LN-ET
+  acc Z Y-90 /BB-S                     Bronchi
+  acc Z Y-90 /BBseq-S                  Bronchi-q
+  acc Z Y-90 /bb-S                     Brchiole
+  acc Z Y-90 /bbseq-S                  Brchiole-q
+  acc Z Y-90 /ALV-S                    ALV
+  acc Z Y-90 /INT-S                    ALV
+  acc Z Y-90 /LNTH-S                   LN-Th
+  exc   Y-90 /Environment
+  acc Z Y-90 /Oralcavity               O-cavity
+  acc Z Y-90 /Oesophagus-f             Oesophag-f
+  acc   Y-90 /Oesophagus-s             Oesophag-s
+  acc   Y-90 /St-con                   St-cont
+  acc   Y-90 /SI-con                   SI-cont
+  acc   Y-90 /SI-conRe                 SI-cont
+  acc   Y-90 /RC-con                   RC-cont
+  acc   Y-90 /LC-con                   LC-cont
+  acc   Y-90 /RS-con                   RS-cont
+  exc   Y-90 /Faeces
+  acc   Y-90 /UB-con                   UB-cont
+  exc   Y-90 /Urine
+  acc   Y-90 /Blood1                   Blood
+  acc   Y-90 /Blood2                   Blood
+  acc   Y-90 /ST0                      Other
+  acc   Y-90 /ST1                      Other
+  acc   Y-90 /Liver0                   Liver
+  acc   Y-90 /Liver1                   Liver
+  acc   Y-90 /Kidneys                  Kidneys
+  acc   Y-90 /C-bone-S                 C-bone-S
+  acc   Y-90 /C-bone-V                 C-bone-V
+  acc   Y-90 /T-bone-S                 T-bone-S
+  acc   Y-90 /T-bone-V                 T-bone-V
+  acc   Y-90 /<decay_from_Sr-90/ST0>   Other
+  acc   Y-90 /<decay_from_Sr-90/ST1>   Other
+  acc   Y-90 /<decay_from_Sr-90/ST2>   Other
+
+Transfers:
+  Sr-90/input                  -> Sr-90/ET1-F          = 47.94%
+  Sr-90/input                  -> Sr-90/ET2-F          = 25.76836%
+  Sr-90/BB-F                   -> Sr-90/ET2-F          = 10
+  Sr-90/ET1-F                  -> Sr-90/ET2-F          = 1.5
+  Sr-90/input                  -> Sr-90/ETseq-F        = 0.05164%
+  Sr-90/ETseq-F                -> Sr-90/LNET-F         = 0.001
+  Sr-90/input                  -> Sr-90/BB-F           = 1.77644%
+  Sr-90/bb-F                   -> Sr-90/BB-F           = 0.2
+  Sr-90/input                  -> Sr-90/BBseq-F        = 0.00356%
+  Sr-90/input                  -> Sr-90/bb-F           = 1.0977999999999999%
+  Sr-90/ALV-F                  -> Sr-90/bb-F           = 0.002
+  Sr-90/input                  -> Sr-90/bbseq-F        = 0.0022%
+  Sr-90/input                  -> Sr-90/ALV-F          = 5.319999999999999%
+  Sr-90/ALV-F                  -> Sr-90/INT-F          = 0.001
+  Sr-90/INT-F                  -> Sr-90/LNTH-F         = 3E-05
+  Sr-90/bbseq-F                -> Sr-90/LNTH-F         = 0.001
+  Sr-90/BBseq-F                -> Sr-90/LNTH-F         = 0.001
+  Sr-90/input                  -> Sr-90/ET1-S          = 0%
+  Sr-90/input                  -> Sr-90/ET2-S          = 0%
+  Sr-90/BB-S                   -> Sr-90/ET2-S          = 10
+  Sr-90/ET1-S                  -> Sr-90/ET2-S          = 1.5
+  Sr-90/input                  -> Sr-90/ETseq-S        = 0%
+  Sr-90/ETseq-S                -> Sr-90/LNET-S         = 0.001
+  Sr-90/input                  -> Sr-90/BB-S           = 0%
+  Sr-90/bb-S                   -> Sr-90/BB-S           = 0.2
+  Sr-90/input                  -> Sr-90/BBseq-S        = 0%
+  Sr-90/input                  -> Sr-90/bb-S           = 0%
+  Sr-90/ALV-S                  -> Sr-90/bb-S           = 0.002
+  Sr-90/input                  -> Sr-90/bbseq-S        = 0%
+  Sr-90/input                  -> Sr-90/ALV-S          = 0%
+  Sr-90/ALV-S                  -> Sr-90/INT-S          = 0.001
+  Sr-90/INT-S                  -> Sr-90/LNTH-S         = 3E-05
+  Sr-90/bbseq-S                -> Sr-90/LNTH-S         = 0.001
+  Sr-90/BBseq-S                -> Sr-90/LNTH-S         = 0.001
+  Sr-90/input                  -> Sr-90/Environment    = 18.04%
+  Sr-90/ET1-F                  -> Sr-90/Environment    = 0.6
+  Sr-90/ET1-S                  -> Sr-90/Environment    = 0.6
+  Sr-90/Oralcavity             -> Sr-90/Oesophagus-f   = 6480
+  Sr-90/ET2-F                  -> Sr-90/Oesophagus-s   = 100
+  Sr-90/ET2-S                  -> Sr-90/Oesophagus-s   = 100
+  Sr-90/Oralcavity             -> Sr-90/Oesophagus-s   = 720
+  Sr-90/Oesophagus-f           -> Sr-90/St-con         = 12343
+  Sr-90/Oesophagus-s           -> Sr-90/St-con         = 2160
+  Sr-90/St-con                 -> Sr-90/SI-con         = 20.57
+  Sr-90/SI-con                 -> Sr-90/RC-con         = 6
+  Sr-90/Blood                  -> Sr-90/RC-con         = 0.525
+  Sr-90/RC-con                 -> Sr-90/LC-con         = 2
+  Sr-90/LC-con                 -> Sr-90/RS-con         = 2
+  Sr-90/RS-con                 -> Sr-90/Faeces         = 2
+  Sr-90/Blood                  -> Sr-90/UB-con         = 1.73
+  Sr-90/UB-con                 -> Sr-90/Urine          = 12
+  Sr-90/ALV-F                  -> Sr-90/Blood          = 30
+  Sr-90/INT-F                  -> Sr-90/Blood          = 30
+  Sr-90/bb-F                   -> Sr-90/Blood          = 30
+  Sr-90/bbseq-F                -> Sr-90/Blood          = 30
+  Sr-90/BB-F                   -> Sr-90/Blood          = 30
+  Sr-90/BBseq-F                -> Sr-90/Blood          = 30
+  Sr-90/ET2-F                  -> Sr-90/Blood          = 30
+  Sr-90/ETseq-F                -> Sr-90/Blood          = 30
+  Sr-90/LNET-F                 -> Sr-90/Blood          = 30
+  Sr-90/LNTH-F                 -> Sr-90/Blood          = 30
+  Sr-90/ALV-S                  -> Sr-90/Blood          = 0
+  Sr-90/INT-S                  -> Sr-90/Blood          = 0
+  Sr-90/bb-S                   -> Sr-90/Blood          = 0
+  Sr-90/bbseq-S                -> Sr-90/Blood          = 0
+  Sr-90/BB-S                   -> Sr-90/Blood          = 0
+  Sr-90/BBseq-S                -> Sr-90/Blood          = 0
+  Sr-90/ET2-S                  -> Sr-90/Blood          = 0
+  Sr-90/ETseq-S                -> Sr-90/Blood          = 0
+  Sr-90/LNET-S                 -> Sr-90/Blood          = 0
+  Sr-90/LNTH-S                 -> Sr-90/Blood          = 0
+  Sr-90/SI-con                 -> Sr-90/Blood          = 2
+  Sr-90/T-bone-S               -> Sr-90/Blood          = 0.578
+  Sr-90/C-bone-S               -> Sr-90/Blood          = 0.578
+  Sr-90/ST0                    -> Sr-90/Blood          = 2.5
+  Sr-90/ST1                    -> Sr-90/Blood          = 0.116
+  Sr-90/ST2                    -> Sr-90/Blood          = 0.00038
+  Sr-90/Noch-C-bone-V          -> Sr-90/Blood          = 8.21E-05
+  Sr-90/Noch-T-bone-V          -> Sr-90/Blood          = 0.000493
+  Sr-90/Blood                  -> Sr-90/ST0            = 7.5
+  Sr-90/Blood                  -> Sr-90/ST1            = 1.5
+  Sr-90/Blood                  -> Sr-90/ST2            = 0.003
+  Sr-90/Blood                  -> Sr-90/C-bone-S       = 1.67
+  Sr-90/Exch-C-bone-V          -> Sr-90/C-bone-S       = 0.0043
+  Sr-90/C-bone-S               -> Sr-90/Exch-C-bone-V  = 0.116
+  Sr-90/Exch-C-bone-V          -> Sr-90/Noch-C-bone-V  = 0.0043
+  Sr-90/Blood                  -> Sr-90/T-bone-S       = 2.08
+  Sr-90/Exch-T-bone-V          -> Sr-90/T-bone-S       = 0.0043
+  Sr-90/T-bone-S               -> Sr-90/Exch-T-bone-V  = 0.116
+  Sr-90/Exch-T-bone-V          -> Sr-90/Noch-T-bone-V  = 0.0043
+
+  Sr-90/ET1-F                  -> Y-90/ET1-F                   ---
+  Sr-90/ET2-F                  -> Y-90/ET2-F                   ---
+  Sr-90/ETseq-F                -> Y-90/ETseq-F                 ---
+  Sr-90/LNET-F                 -> Y-90/LNET-F                  ---
+  Sr-90/BB-F                   -> Y-90/BB-F                    ---
+  Sr-90/BBseq-F                -> Y-90/BBseq-F                 ---
+  Sr-90/bb-F                   -> Y-90/bb-F                    ---
+  Sr-90/bbseq-F                -> Y-90/bbseq-F                 ---
+  Sr-90/ALV-F                  -> Y-90/ALV-F                   ---
+  Sr-90/INT-F                  -> Y-90/INT-F                   ---
+  Sr-90/LNTH-F                 -> Y-90/LNTH-F                  ---
+  Sr-90/ET1-S                  -> Y-90/ET1-S                   ---
+  Sr-90/ET2-S                  -> Y-90/ET2-S                   ---
+  Sr-90/ETseq-S                -> Y-90/ETseq-S                 ---
+  Sr-90/LNET-S                 -> Y-90/LNET-S                  ---
+  Sr-90/BB-S                   -> Y-90/BB-S                    ---
+  Sr-90/BBseq-S                -> Y-90/BBseq-S                 ---
+  Sr-90/bb-S                   -> Y-90/bb-S                    ---
+  Sr-90/bbseq-S                -> Y-90/bbseq-S                 ---
+  Sr-90/ALV-S                  -> Y-90/ALV-S                   ---
+  Sr-90/INT-S                  -> Y-90/INT-S                   ---
+  Sr-90/LNTH-S                 -> Y-90/LNTH-S                  ---
+  Sr-90/Environment            -> Y-90/Environment             ---
+  Sr-90/Oralcavity             -> Y-90/Oralcavity              ---
+  Sr-90/Oesophagus-f           -> Y-90/Oesophagus-f            ---
+  Sr-90/Oesophagus-s           -> Y-90/Oesophagus-s            ---
+  Sr-90/St-con                 -> Y-90/St-con                  ---
+  Sr-90/SI-con                 -> Y-90/SI-con                  ---
+  Sr-90/RC-con                 -> Y-90/RC-con                  ---
+  Sr-90/LC-con                 -> Y-90/LC-con                  ---
+  Sr-90/RS-con                 -> Y-90/RS-con                  ---
+  Sr-90/Faeces                 -> Y-90/Faeces                  ---
+  Sr-90/UB-con                 -> Y-90/UB-con                  ---
+  Sr-90/Urine                  -> Y-90/Urine                   ---
+  Sr-90/Blood                  -> Y-90/Blood1                  ---
+  Sr-90/C-bone-S               -> Y-90/C-bone-S                ---
+  Sr-90/Exch-C-bone-V          -> Y-90/C-bone-V                ---
+  Sr-90/Noch-C-bone-V          -> Y-90/C-bone-V                ---
+  Sr-90/T-bone-S               -> Y-90/T-bone-S                ---
+  Sr-90/Exch-T-bone-V          -> Y-90/T-bone-V                ---
+  Sr-90/Noch-T-bone-V          -> Y-90/T-bone-V                ---
+  Sr-90/ST0                    -> Y-90/<decay_from_Sr-90/ST0>  ---
+  Sr-90/ST1                    -> Y-90/<decay_from_Sr-90/ST1>  ---
+  Sr-90/ST2                    -> Y-90/<decay_from_Sr-90/ST2>  ---
+  Y-90/BB-F                    -> Y-90/ET2-F           = 10
+  Y-90/ET1-F                   -> Y-90/ET2-F           = 1.5
+  Y-90/ETseq-F                 -> Y-90/LNET-F          = 0.001
+  Y-90/bb-F                    -> Y-90/BB-F            = 0.2
+  Y-90/ALV-F                   -> Y-90/bb-F            = 0.002
+  Y-90/ALV-F                   -> Y-90/INT-F           = 0.001
+  Y-90/INT-F                   -> Y-90/LNTH-F          = 3E-05
+  Y-90/bbseq-F                 -> Y-90/LNTH-F          = 0.001
+  Y-90/BBseq-F                 -> Y-90/LNTH-F          = 0.001
+  Y-90/BB-S                    -> Y-90/ET2-S           = 10
+  Y-90/ET1-S                   -> Y-90/ET2-S           = 1.5
+  Y-90/ETseq-S                 -> Y-90/LNET-S          = 0.001
+  Y-90/bb-S                    -> Y-90/BB-S            = 0.2
+  Y-90/ALV-S                   -> Y-90/bb-S            = 0.002
+  Y-90/ALV-S                   -> Y-90/INT-S           = 0.001
+  Y-90/INT-S                   -> Y-90/LNTH-S          = 3E-05
+  Y-90/bbseq-S                 -> Y-90/LNTH-S          = 0.001
+  Y-90/BBseq-S                 -> Y-90/LNTH-S          = 0.001
+  Y-90/ET1-F                   -> Y-90/Environment     = 0.6
+  Y-90/ET1-S                   -> Y-90/Environment     = 0.6
+  Y-90/Oralcavity              -> Y-90/Oesophagus-f    = 6480
+  Y-90/ET2-F                   -> Y-90/Oesophagus-s    = 100
+  Y-90/ET2-S                   -> Y-90/Oesophagus-s    = 100
+  Y-90/Oralcavity              -> Y-90/Oesophagus-s    = 720
+  Y-90/Oesophagus-f            -> Y-90/St-con          = 12343
+  Y-90/Oesophagus-s            -> Y-90/St-con          = 2160
+  Y-90/St-con                  -> Y-90/SI-con          = 20.57
+  Y-90/Blood1                  -> Y-90/SI-conRe        = 0.166
+  Y-90/Liver0                  -> Y-90/SI-conRe        = 0.0231
+  Y-90/SI-con                  -> Y-90/RC-con          = 6
+  Y-90/SI-conRe                -> Y-90/RC-con          = 6
+  Y-90/RC-con                  -> Y-90/LC-con          = 2
+  Y-90/LC-con                  -> Y-90/RS-con          = 2
+  Y-90/RS-con                  -> Y-90/Faeces          = 2
+  Y-90/Blood1                  -> Y-90/UB-con          = 2.49
+  Y-90/UB-con                  -> Y-90/Urine           = 12
+  Y-90/<decay_from_Sr-90/ST0>  -> Y-90/Blood1          = 0.23105
+  Y-90/<decay_from_Sr-90/ST1>  -> Y-90/Blood1          = 0.23105
+  Y-90/<decay_from_Sr-90/ST2>  -> Y-90/Blood1          = 0.23105
+  Y-90/ALV-F                   -> Y-90/Blood1          = 30
+  Y-90/INT-F                   -> Y-90/Blood1          = 30
+  Y-90/bb-F                    -> Y-90/Blood1          = 30
+  Y-90/bbseq-F                 -> Y-90/Blood1          = 30
+  Y-90/BB-F                    -> Y-90/Blood1          = 30
+  Y-90/BBseq-F                 -> Y-90/Blood1          = 30
+  Y-90/ET2-F                   -> Y-90/Blood1          = 30
+  Y-90/ETseq-F                 -> Y-90/Blood1          = 30
+  Y-90/LNET-F                  -> Y-90/Blood1          = 30
+  Y-90/LNTH-F                  -> Y-90/Blood1          = 30
+  Y-90/ALV-S                   -> Y-90/Blood1          = 0
+  Y-90/INT-S                   -> Y-90/Blood1          = 0
+  Y-90/bb-S                    -> Y-90/Blood1          = 0
+  Y-90/bbseq-S                 -> Y-90/Blood1          = 0
+  Y-90/BB-S                    -> Y-90/Blood1          = 0
+  Y-90/BBseq-S                 -> Y-90/Blood1          = 0
+  Y-90/ET2-S                   -> Y-90/Blood1          = 0
+  Y-90/ETseq-S                 -> Y-90/Blood1          = 0
+  Y-90/LNET-S                  -> Y-90/Blood1          = 0
+  Y-90/LNTH-S                  -> Y-90/Blood1          = 0
+  Y-90/SI-con                  -> Y-90/Blood1          = 0.0006000600060006
+  Y-90/SI-conRe                -> Y-90/Blood1          = 0.0006000600060006
+  Y-90/Blood2                  -> Y-90/Blood1          = 0.462
+  Y-90/Liver0                  -> Y-90/Blood1          = 0.0924
+  Y-90/Liver1                  -> Y-90/Blood1          = 0.0019
+  Y-90/Kidneys                 -> Y-90/Blood1          = 0.0019
+  Y-90/ST0                     -> Y-90/Blood1          = 0.231
+  Y-90/ST1                     -> Y-90/Blood1          = 0.0019
+  Y-90/T-bone-S                -> Y-90/Blood1          = 0.000493
+  Y-90/T-bone-V                -> Y-90/Blood1          = 0.000493
+  Y-90/C-bone-S                -> Y-90/Blood1          = 8.21E-05
+  Y-90/C-bone-V                -> Y-90/Blood1          = 8.21E-05
+  Y-90/Blood1                  -> Y-90/Blood2          = 0.498
+  Y-90/Blood1                  -> Y-90/ST0             = 3.652
+  Y-90/Blood1                  -> Y-90/ST1             = 1.328
+  Y-90/Blood1                  -> Y-90/Liver0          = 1.66
+  Y-90/Liver0                  -> Y-90/Liver1          = 0.116
+  Y-90/Blood1                  -> Y-90/Kidneys         = 0.166
+  Y-90/Blood1                  -> Y-90/C-bone-S        = 3.32
+  Y-90/C-bone-S                -> Y-90/C-bone-V        = 4.11E-05
+  Y-90/Blood1                  -> Y-90/T-bone-S        = 3.32
+  Y-90/T-bone-S                -> Y-90/T-bone-V        = 0.000247
+
 Nuclide: Sr-90
 
 Source regions those are part of 'Other':

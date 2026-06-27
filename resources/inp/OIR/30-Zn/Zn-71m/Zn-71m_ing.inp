@@ -5,12 +5,23 @@ Zn-71m Ingestion
   Zn-71m
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  $fA    = 0.5
+  $fA_Re = 0.5          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Zn-71m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -41,16 +52,9 @@ Zn-71m Ingestion
   exc   Excreta               ---
 
 [Zn-71m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.5
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

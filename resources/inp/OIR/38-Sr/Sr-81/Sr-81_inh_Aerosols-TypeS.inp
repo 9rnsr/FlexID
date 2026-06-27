@@ -5,12 +5,44 @@ Sr-81 Inhalation, Aerosols Type S
   Sr-81  Rb-81m  Rb-81  Kr-81m  Kr-81
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fA = 0.0025
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
+  ET1-F                 $(      fr  *                 47.94% )
+  ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  ALV-F                 $(      fr  *                  5.32% )
+
+  ET1-S                 $( (1 - fr) *                 47.94% )
+  ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  ALV-S                 $( (1 - fr) *                  5.32% )
+
+  Environment           $(                     100% - 81.96% )
+
+
 [Sr-81:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -59,37 +91,9 @@ Sr-81 Inhalation, Aerosols Type S
   acc   Noch-T-bone-V         T-bone-V
 
 [Sr-81:transfer]
-#-----------------------+---------------------+------------------------
-# From                  | To                  | Transfer Coef.[/d or %]
-#-----------------------+---------------------+------------------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fA = 0.0025
-
-# ICRP Publ.130 p.62 Table 3.1
-# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
-  input                   ET1-F                 $(      fr  *                 47.94% )
-  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
-  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
-  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
-  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
-  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
-  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
-  input                   ALV-F                 $(      fr  *                  5.32% )
-
-  input                   ET1-S                 $( (1 - fr) *                 47.94% )
-  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
-  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
-  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
-  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
-  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
-  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
-  input                   ALV-S                 $( (1 - fr) *                  5.32% )
-
-  input                   Environment           $(                     100% - 81.96% )
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -228,9 +232,9 @@ Sr-81 Inhalation, Aerosols Type S
   exc   Excreta(sweat)        ---
 
 [Rb-81m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.30 Part.2
 # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
@@ -458,9 +462,9 @@ Sr-81 Inhalation, Aerosols Type S
   exc   Excreta(sweat)        ---
 
 [Rb-81:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.30 Part.2
 # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
@@ -682,9 +686,9 @@ Sr-81 Inhalation, Aerosols Type S
   exc   Exhaled               ---
 
 [Kr-81m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sr-81/ET1-F             ET1-F                     ---
@@ -832,9 +836,9 @@ Sr-81 Inhalation, Aerosols Type S
   exc   Exhaled               ---
 
 [Kr-81:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sr-81/ET1-F             ET1-F                     ---

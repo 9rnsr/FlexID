@@ -5,12 +5,23 @@ Y-91m Ingestion
   Y-91m  Y-91
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  $fA    = 1E-4
+  $fA_Re = 1E-4
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Y-91m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -37,16 +48,9 @@ Y-91m Ingestion
   acc   T-bone-V              T-bone-V
 
 [Y-91m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA    = 1E-4
-  $fA_Re = 1E-4
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -123,9 +127,9 @@ Y-91m Ingestion
   acc   T-bone-V              T-bone-V
 
 [Y-91:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
   $fA_MaxValueOfIng = 1E-4

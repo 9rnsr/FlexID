@@ -5,12 +5,23 @@ Mo-99 Ingestion, Other
   Mo-99  Tc-99m  Tc-99
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
+  $fA    = 0.9
+  $fA_Re = 0.9          # footnote¶
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Mo-99:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -32,16 +43,9 @@ Mo-99 Ingestion, Other
   acc   OtherTissue           Other         # ICRP Publ.134 p.310 Includes bone and all soft tissues other than liver and kidneys.
 
 [Mo-99:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
-  $fA    = 0.9
-  $fA_Re = 0.9          # footnote¶
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -115,9 +119,9 @@ Mo-99 Ingestion, Other
   acc   ST2                   Other
 
 [Tc-99m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.9
@@ -283,9 +287,9 @@ Mo-99 Ingestion, Other
   acc   ST2                   Other
 
 [Tc-99:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
   $fA_MaxValueOfIng = 0.9

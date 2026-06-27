@@ -5,12 +5,23 @@ Tc-99m Ingestion
   Tc-99m  Tc-99
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+  $fA    = 0.9
+  $fA_Re = 0.9          # footnote¶ (re-absorption)
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
+
 [Tc-99m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
@@ -46,16 +57,9 @@ Tc-99m Ingestion
   acc   ST2                   Other
 
 [Tc-99m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA    = 0.9
-  $fA_Re = 0.9          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -158,9 +162,9 @@ Tc-99m Ingestion
   acc   ST2                   Other
 
 [Tc-99:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.45 Para.37
 #   For all radionuclides with the exception of noble gases:

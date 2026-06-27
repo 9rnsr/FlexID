@@ -5,12 +5,23 @@ S-38 Injection
   S-38  Cl-38
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.134 p.104 Table 5.3 / Ingested materials, All other forms
+  $fA    = 0.99 # ≒1
+  $fA_Re = 0.99 # ≒1   # footnote††
+
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
+
+
 [S-38:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -31,16 +42,9 @@ S-38 Injection
   acc   Other                 Other
 
 [S-38:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.104 Table 5.3 / Ingested materials, All other forms
-  $fA    = 0.99 # ≒1
-  $fA_Re = 0.99 # ≒1   # footnote††
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood                   100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
