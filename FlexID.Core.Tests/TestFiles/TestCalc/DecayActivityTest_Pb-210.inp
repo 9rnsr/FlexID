@@ -11,36 +11,8 @@ Pb-210 DecayCalc
 [intake]
   C   100.0%
 
-
-[Pb-210:compartment]
+[{*}:compartment]
   acc   C   ---
 
-[Pb-210:transfer]
-
-
-[Bi-210:compartment]
-  acc   C   ---
-
-[Bi-210:transfer]
-  Pb-210/C  Bi-210/C    ---
-
-
-[Po-210:compartment]
-  acc   C   ---
-
-[Po-210:transfer]
-  Pb-210/C  Po-210/C    ---
-
-
-[Hg-206:compartment]
-  acc   C   ---
-
-[Hg-206:transfer]
-  Pb-210/C  Hg-206/C    ---
-
-
-[Tl-206:compartment]
-  acc   C   ---
-
-[Tl-206:transfer]
-  Pb-210/C  Tl-206/C    ---
+[{*}:transfer]
+  {*}/C     C    ---
