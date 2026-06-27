@@ -35,12 +35,6 @@ public class InputErrorTests
             [intake]
               ST0    100%
 
-            [Sr-90:parameter]
-              #
-
-            [Sr-90:parameter]
-              #
-
             [Sr-90:compartment]
               acc    ST0       ---
 
@@ -61,9 +55,8 @@ public class InputErrorTests
             "Line 10: Duplicated [parameter] section.",
             "Line 16: Duplicated [nuclide] section.",
             "Line 22: Duplicated [intake] section.",
-            "Line 28: Duplicated [Sr-90:parameter] section.",
-            "Line 34: Duplicated [Sr-90:compartment] section.",
-            "Line 40: Duplicated [Sr-90:transfer] section.",
+            "Line 28: Duplicated [Sr-90:compartment] section.",
+            "Line 34: Duplicated [Sr-90:transfer] section.",
         ]);
     }
 
@@ -350,14 +343,12 @@ public class InputErrorTests
             
             [Sr-90:transfer]
               ST0  # ST1    100%
-              ST0    ST1    abc%
             """);
 
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
             "Line 15: Transfer path definition should have 3 values.",
-            "Line 16: Transfer coefficient should be evaluated to a number, not 'abc%'.",
         ]);
     }
 
@@ -378,7 +369,8 @@ public class InputErrorTests
             [Sr-90:compartment]
               acc    ST0       ---
               acc    ST1       ---
-            
+              acc    ST2       ---
+
             [Sr-90:transfer]
               X-00/ST0   ST0        100
               ST0        X-00/ST0   100
@@ -387,7 +379,8 @@ public class InputErrorTests
               ST0        ST0        100
               ST0        ST1        100
               ST0        ST1        200
-            
+              ST0        ST2        abc%
+
             [Y-90:compartment]
               acc    ST0       ---
 
@@ -398,13 +391,14 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 16: Undefined nuclide 'X-00'.",
             "Line 17: Undefined nuclide 'X-00'.",
-            "Line 18: Undefined compartment 'Sr-90/XX'.",
+            "Line 18: Undefined nuclide 'X-00'.",
             "Line 19: Undefined compartment 'Sr-90/XX'.",
-            "Line 20: Cannot set transfer path to itself.",
-            "Line 22: Duplicated transfer path from 'Sr-90/ST0' to 'Sr-90/ST1'.",
-            "Line 28: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
+            "Line 20: Undefined compartment 'Sr-90/XX'.",
+            "Line 21: Cannot set transfer path to itself.",
+            "Line 23: Duplicated transfer path from 'Sr-90/ST0' to 'Sr-90/ST1'.",
+            "Line 24: Transfer coefficient should be evaluated to a number, not 'abc%'.",
+            "Line 30: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
         ]);
     }
 

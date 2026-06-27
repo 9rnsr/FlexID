@@ -4,17 +4,21 @@ Ba-133 Inhalation, Aerosols Type F
 [nuclide]
   Ba-133
 
+[parameter]
+  # ICRP Publ.137 p.168 Table 7.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 20
+  $ss =  0
+
+$if parent
+  ${Ba}/fA = 0.2            # ICRP Publ.137 p.168 Table 7.2 / Inhaled particulate materials, Absorption type F
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.168 Table 7.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 20
-  $ss =  0
-  $fA = 0.2
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

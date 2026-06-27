@@ -4,15 +4,17 @@ Sb-117 Ingestion
 [nuclide]
   Sb-117
 
+[parameter]
+$if parent
+  ${Sb}/fA    = 0.05        # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+  ${Sb}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

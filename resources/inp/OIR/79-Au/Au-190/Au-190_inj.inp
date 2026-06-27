@@ -4,15 +4,23 @@ Au-190 Injection
 [nuclide]
   Au-190  Pt-190  Os-186
 
+[parameter]
+$if parent
+  ${Au}/fA    = 0.1         # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+  ${Au}/fA_Re = 0.1         # footnote¶ (re-absorption)
+$else
+  ${Pt}/fA_MaxValueOfIng = 0.01         # ICRP Publ.151 p.305 Table 34.2 / Ingested materials, Soluble forms
+  ${Os}/fA_MaxValueOfIng = 0.01         # ICRP Publ.151 p.298 Table 33.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA    = 0.1
-  $fA_Re = 0.1          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
@@ -122,12 +130,6 @@ Au-190 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.305 Table 34.2 / Ingested materials, Soluble forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Au-190/Oralcavity       Oralcavity                ---
@@ -264,12 +266,6 @@ Au-190 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.298 Table 33.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Au-190/Oralcavity       Oralcavity                ---

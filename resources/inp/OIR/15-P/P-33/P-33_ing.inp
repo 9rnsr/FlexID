@@ -4,15 +4,15 @@ P-33 Ingestion
 [nuclide]
   P-33
 
+[parameter]
+  $P-33/fA    = 0.8         # ICRP Publ.134 p.84 Table 4.2 / Ingested materials, All unspecified forms
+  $P-33/fA_Re = 0.8         # footnote¶
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.84 Table 4.2 / Ingested materials, All unspecified forms
-  $fA    = 0.8
-  $fA_Re = 0.8          # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

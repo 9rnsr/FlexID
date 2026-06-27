@@ -4,15 +4,22 @@ Zr-93 Ingestion
 [nuclide]
   Zr-93  Nb-93m
 
+[parameter]
+$if parent
+  ${Zr}/fA    = 0.002       # ICRP Publ.134 p.264 Table 12.2 / Ingested materials, All chemical forms
+  ${Zr}/fA_Re = 0.002       # footnote¶
+$else
+  ${Nb}/fA_MaxValueOfIng = 0.01         # ICRP Publ.134 p.288 Table 13.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA    = 0.002
-  $fA_Re = 0.002        # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -130,12 +137,6 @@ Zr-93 Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Zr-93/Oralcavity        Oralcavity                ---

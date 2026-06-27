@@ -4,20 +4,24 @@ Ac-225 Inhalation, Aerosols Type M
 [nuclide]
   Ac-225
 
+[parameter]
+  # ICRP Publ.141 p.240 Table 19.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 0.4
+  $ss = 0.005
+  $fb = 0.002               # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Ac}/fA    = 1E-4        # ICRP Publ.141 p.240 Table 19.2 / Inhaled particulate materials, Absorption type M
+  ${Ac}/fA_Re = 5E-4        # footnote¶
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.141 p.240 Table 19.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 0.4
-  $ss = 0.005
-  $fb = 0.002           # footnote*
-  $sb = 0               # footnote*
-  $fA    = 1E-4
-  $fA_Re = 5E-4         # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

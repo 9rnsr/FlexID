@@ -4,15 +4,22 @@ Mo-99 Ingestion, Sulphide
 [nuclide]
   Mo-99  Tc-99m  Tc-99
 
+[parameter]
+$if parent
+  ${Mo}/fA    = 0.05        # ICRP Publ.134 p.305 Table 14.2 / Ingested material, Sulphide
+  ${Mo}/fA_Re = 0.9         # footnote¶
+$else
+  ${Tc}/fA_MaxValueOfIng = 0.9          # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, Sulphide
-  $fA    = 0.05
-  $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -122,12 +129,6 @@ Mo-99 Ingestion, Sulphide
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.9
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-99/Oralcavity        Oralcavity                ---
@@ -290,12 +291,6 @@ Mo-99 Ingestion, Sulphide
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.9
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-99/Oralcavity        Oralcavity                ---

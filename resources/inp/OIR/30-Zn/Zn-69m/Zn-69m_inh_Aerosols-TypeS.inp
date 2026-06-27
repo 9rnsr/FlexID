@@ -4,18 +4,27 @@ Zn-69m Inhalation, Aerosols Type S
 [nuclide]
   Zn-69m  Zn-69
 
+[parameter]
+  # ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+
+$if parent
+  ${Zn}/fA    = 0.005       # ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type S
+  ${Zn}/fA_Re = 0.5         # footnote¶ (re-absorption)
+$else
+  ${Zn}/fA_MaxValueOfIng = 0.5          # ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fA    = 0.005
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -266,12 +275,6 @@ Zn-69m Inhalation, Aerosols Type S
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.5
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Zn-69m/ET1-F            ET1-F                     ---

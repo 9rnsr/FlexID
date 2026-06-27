@@ -4,15 +4,17 @@ Zn-69 Injection
 [nuclide]
   Zn-69
 
+[parameter]
+$if parent
+  ${Zn}/fA    = 0.5         # ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  ${Zn}/fA_Re = 0.5         # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.5
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Plasma                  100.0%

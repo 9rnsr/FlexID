@@ -4,18 +4,28 @@ Sb-129 Inhalation, Aerosols Type M
 [nuclide]
   Sb-129  Te-129m  Te-129  I-129
 
+[parameter]
+  # ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+
+$if parent
+  ${Sb}/fA    = 0.01        # ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type M
+  ${Sb}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$else
+  ${Te}/fA_MaxValueOfIng = 0.3          # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${I}/fA_MaxValueOfIng = 0.99 # ≒1    # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fA    = 0.01
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -253,12 +263,6 @@ Sb-129 Inhalation, Aerosols Type M
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
-
 # from parent to progeny
   Sb-129/ET1-F            ET1-F                     ---
   Sb-129/ET2-F            ET2-F                     ---
@@ -468,12 +472,6 @@ Sb-129 Inhalation, Aerosols Type M
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Sb-129/ET1-F            ET1-F                     ---
@@ -693,12 +691,6 @@ Sb-129 Inhalation, Aerosols Type M
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Sb-129/ET1-F            ET1-F                     ---

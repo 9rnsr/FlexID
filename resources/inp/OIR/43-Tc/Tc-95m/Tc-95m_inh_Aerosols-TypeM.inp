@@ -4,18 +4,27 @@ Tc-95m Inhalation, Aerosols Type M
 [nuclide]
   Tc-95m  Tc-95
 
+[parameter]
+  # ICRP Publ.134 p.322 Table 15.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+
+$if parent
+  ${Tc}/fA    = 0.18        # ICRP Publ.134 p.322 Table 15.2 / Inhaled particulate materials, Absorption type M
+  ${Tc}/fA_Re = 0.9         # footnote¶ (re-absorption)
+$else
+  ${Tc}/fA_MaxValueOfIng = 0.9          # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fA    = 0.18
-  $fA_Re = 0.9          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -283,12 +292,6 @@ Tc-95m Inhalation, Aerosols Type M
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.9
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Tc-95m/ET1-F            ET1-F                     ---

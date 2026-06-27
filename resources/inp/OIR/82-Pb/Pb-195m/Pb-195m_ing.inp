@@ -4,15 +4,24 @@ Pb-195m Ingestion
 [nuclide]
   Pb-195m  Tl-195  Hg-195m  Hg-195  Au-195
 
+[parameter]
+$if parent
+  ${Pb}/fA    = 0.2         # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
+  ${Pb}/fA_Re = 0.2         # footnote**
+$else
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.2
-  $fA_Re = 0.2          # footnote**
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -155,12 +164,6 @@ Pb-195m Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -336,12 +339,6 @@ Pb-195m Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -540,12 +537,6 @@ Pb-195m Ingestion
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
   Oralcavity              Oesophagus-s            720
@@ -730,12 +721,6 @@ Pb-195m Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

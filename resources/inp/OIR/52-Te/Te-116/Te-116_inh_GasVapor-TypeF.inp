@@ -4,18 +4,27 @@ Te-116 Inhalation, Gas or Vapor Type F
 [nuclide]
   Te-116  Sb-116
 
+[parameter]
+  # ICRP Publ.137 p.72 Table 4.2 / All unspecified compounds
+  $fr = 1                   # Table 4.3 Type-F
+  $sr = 50                  # Table 4.3 Type-F
+  $ss = 0                   # Table 4.3 Type-F
+
+$if parent
+  ${Te}/fA    = 0.3         # Table 4.3 Type-F
+  ${Te}/fA_Re = 0.3         # Table 4.3 footnote¶ (re-absorption)
+$else
+  ${Sb}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.72 Table 4.2 / All unspecified compounds
-  $fr = 1               # Table 4.3 Type-F
-  $sr = 50              # Table 4.3 Type-F
-  $ss = 0               # Table 4.3 Type-F
-  $fA    = 0.3
-  $fA_Re = 0.3          # Table 4.3 footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Para.92
 # ICRP Publ.137 p.72 Table 4.2
@@ -233,12 +242,6 @@ Te-116 Inhalation, Gas or Vapor Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.05
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Te-116/ET1-F            ET1-F                     ---

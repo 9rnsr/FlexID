@@ -4,15 +4,17 @@ In-111 Injection
 [nuclide]
   In-111
 
+[parameter]
+$if parent
+  ${In}/fA    = 0.005       # ICRP Publ.151 p.252 Table 27.2 / Ingested materials, All forms
+  ${In}/fA_Re = 0.005       # footnote§ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.252 Table 27.2 / Ingested materials, All forms
-  $fA    = 0.005
-  $fA_Re = 0.005        # footnote§ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Plasma                  100.0%

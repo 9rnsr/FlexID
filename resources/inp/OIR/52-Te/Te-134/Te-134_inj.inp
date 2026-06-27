@@ -4,15 +4,22 @@ Te-134 Injection
 [nuclide]
   Te-134  I-134
 
+[parameter]
+$if parent
+  ${Te}/fA    = 0.3         # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${Te}/fA_Re = 0.3         # footnote¶ (re-absorption)
+$else
+  ${I}/fA_MaxValueOfIng = 0.99 # ≒1    # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
@@ -131,12 +138,6 @@ Te-134 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Te-134/Oralcavity       Oralcavity                ---

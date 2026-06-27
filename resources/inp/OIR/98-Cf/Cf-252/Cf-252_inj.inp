@@ -4,15 +4,17 @@ Cf-252 Injection
 [nuclide]
   Cf-252
 
+[parameter]
+$if parent
+  ${Cf}/fA    = 5E-4        # ICRP Publ.141 p.434 Table 26.2 / Ingested materials, All compounds
+  ${Cf}/fA_Re = 5E-4        # footnote¶
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.141 p.434 Table 26.2 / Ingested materials, All compounds
-  $fA    = 5E-4
-  $fA_Re = 5E-4         # footnote¶
 
 # ICRP Publ.130 p.37 Para.15
   Blood                   100.0%

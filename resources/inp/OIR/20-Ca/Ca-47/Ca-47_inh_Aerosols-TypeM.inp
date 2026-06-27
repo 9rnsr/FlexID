@@ -4,17 +4,22 @@ Ca-47 Inhalation, Aerosols Type M
 [nuclide]
   Ca-47  Sc-47
 
+[parameter]
+  # ICRP Publ.134 p.118 Table 6.2 / Inhaled particulate materials, Absorption type M
+  $fr = 0.2
+  $sr = 3
+  $ss = 0.005
+
+  $Ca-47/fA = 0.08          # ICRP Publ.134 p.118 Table 6.2 / Inhaled particulate materials, Absorption type M
+
+  $Sc-47/fA    = 1E-4       # ICRP Publ.30 Part.3
+  $Sc-47/fA_Re = 1E-4       # ICRP Publ.30 Part.3
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.118 Table 6.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fA = 0.08
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -243,10 +248,6 @@ Ca-47 Inhalation, Aerosols Type M
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.30 Part.3
-  $fA    = 1E-4
-  $fA_Re = 1E-4
 
 # from parent to progeny
   Ca-47/ET1-F             ET1-F                     ---

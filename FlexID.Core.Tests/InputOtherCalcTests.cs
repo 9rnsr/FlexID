@@ -55,6 +55,9 @@ public class InputOtherCalcTests
     [DataRow("OtherContainsMineralBone = true ", "OtherContainsMineralBone = true ", true)]
     public void TestAdjustAuto1_AreAllST(string wholeParameter, string nuclideParameter, bool expectContainsV)
     {
+        if (!string.IsNullOrWhiteSpace(nuclideParameter))
+            nuclideParameter = "Sr-90/" + nuclideParameter;
+
         // auto設定では、線源領域Otherを構成するコンパートメントが全て"ST～"という名称の場合に
         // その他の組織＝軟組織として扱い、無機質骨をOtherの内訳から除外する。
         var reader = CreateReader(
@@ -67,8 +70,6 @@ public class InputOtherCalcTests
             "",
             "[parameter]",
             "  " + wholeParameter,
-            "",
-            "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
             "[intake]",
@@ -122,6 +123,9 @@ public class InputOtherCalcTests
     [DataRow("OtherContainsMineralBone = true ", "OtherContainsMineralBone = true ", true)]
     public void TestAdjustAuto2_AreNotAllST(string wholeParameter, string nuclideParameter, bool expectContansV)
     {
+        if (!string.IsNullOrWhiteSpace(nuclideParameter))
+            nuclideParameter = "Sr-90/" + nuclideParameter;
+
         // auto設定では、線源領域Otherを構成するコンパートメントが全て"ST～"という名称ではない場合は
         // その他の組織には無機質骨が含まれるものとして扱われる。
         var reader = CreateReader(
@@ -134,8 +138,6 @@ public class InputOtherCalcTests
             "",
             "[parameter]",
             "  " + wholeParameter,
-            "",
-            "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
             "[intake]",
@@ -191,6 +193,9 @@ public class InputOtherCalcTests
     [DataRow("OtherContainsMineralBone = true ", "OtherContainsMineralBone = true ")]
     public void TestAdjustAuto3_DropExplicits(string wholeParameter, string nuclideParameter)
     {
+        if (!string.IsNullOrWhiteSpace(nuclideParameter))
+            nuclideParameter = "Sr-90/" + nuclideParameter;
+
         var reader = CreateReader(
         [
             "[title]",
@@ -201,8 +206,6 @@ public class InputOtherCalcTests
             "",
             "[parameter]",
             "  " + wholeParameter,
-            "",
-            "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
             "[intake]",

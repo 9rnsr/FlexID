@@ -4,17 +4,19 @@ H-3 Inhalation, Aerosols Organic
 [nuclide]
   H-3
 
+[parameter]
+  # ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Biogenic organic compounds
+  $fr = 1
+  $sr = 100
+  $ss =   0
+
+  $H-3/fA = 0.99 # ≒1      # ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Biogenic organic compounds
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Biogenic organic compounds
-  $fr = 1
-  $sr = 100
-  $ss =   0
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

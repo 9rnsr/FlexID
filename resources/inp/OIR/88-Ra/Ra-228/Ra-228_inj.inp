@@ -4,14 +4,21 @@ Ra-228 Injection
 [nuclide]
   Ra-228  Ac-228
 
+[parameter]
+$if parent
+  ${Ra}/fA = 0.2            # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
+$else
+  ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
-  $fA = 0.2
 
 # ICRP Publ.130 p.37 Para.15
   Blood                   100.0%
@@ -141,12 +148,6 @@ Ra-228 Injection
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
-  $fA_MaxValueOfIng = 5E-4
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Ra-228/Oralcavity       Oralcavity                ---

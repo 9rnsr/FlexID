@@ -4,20 +4,24 @@ Zr-89 Inhalation, Aerosols Type F
 [nuclide]
   Zr-89
 
+[parameter]
+  # ICRP Publ.134 p.264 Table 12.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 30
+  $ss = 0
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Zr}/fA    = 0.002       # ICRP Publ.134 p.264 Table 12.2 / Inhaled particulate materials, Absorption type F
+  ${Zr}/fA_Re = 0.002       # footnote¶
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.264 Table 12.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 30
-  $ss = 0
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 0.002
-  $fA_Re = 0.002        # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

@@ -4,14 +4,16 @@ As-74 Injection
 [nuclide]
   As-74
 
+[parameter]
+$if parent
+  ${As}/fA = 0.3            # ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Insoluble compounds and arsenic in soil
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Insoluble compounds and arsenic in soil
-  $fA = 0.3
 
 # ICRP Publ.130 p.37 Para.15
   Plasma                  100.0%

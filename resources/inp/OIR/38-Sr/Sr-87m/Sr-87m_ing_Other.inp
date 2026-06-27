@@ -4,14 +4,20 @@ Sr-87m Ingestion, Other
 [nuclide]
   Sr-87m  Rb-87
 
+[parameter]
+$if parent
+  ${Sr}/fA = 0.25           # ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
+$else
+  ${Rb}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
+
+  $fA = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
-  $fA = 0.25
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -117,12 +123,6 @@ Sr-87m Ingestion, Other
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.30 Part.2
-# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA = fA_MaxValueOfIng
 
 # from parent to progeny
   Sr-87m/Oralcavity       Oralcavity                ---

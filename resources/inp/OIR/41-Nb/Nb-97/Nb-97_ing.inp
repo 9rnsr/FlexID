@@ -4,15 +4,17 @@ Nb-97 Ingestion
 [nuclide]
   Nb-97
 
+[parameter]
+$if parent
+  ${Nb}/fA    = 0.01        # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+  ${Nb}/fA_Re = 0.01        # footnote¶
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA    = 0.01
-  $fA_Re = 0.01         # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

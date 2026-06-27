@@ -4,20 +4,30 @@ Mo-93m Inhalation, Aerosols Type S
 [nuclide]
   Mo-93m  Mo-93  Nb-93m
 
+[parameter]
+  # ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Mo}/fA    = 0.009       # ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type S
+  ${Mo}/fA_Re = 0.9         # footnote¶
+$else
+  ${Mo}/fA_MaxValueOfIng = 0.9          # ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
+  ${Nb}/fA_MaxValueOfIng = 0.01         # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.305 Table 14.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 0.009
-  $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -284,12 +294,6 @@ Mo-93m Inhalation, Aerosols Type S
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
-  $fA_MaxValueOfIng = 0.9
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
-
 # from parent to progeny
   Mo-93m/ET1-F            ET1-F                     ---
   Mo-93m/ET2-F            ET2-F                     ---
@@ -528,12 +532,6 @@ Mo-93m Inhalation, Aerosols Type S
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-93m/ET1-F            ET1-F                     ---

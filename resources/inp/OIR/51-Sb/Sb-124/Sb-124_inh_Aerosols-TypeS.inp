@@ -4,18 +4,22 @@ Sb-124 Inhalation, Aerosols Type S
 [nuclide]
   Sb-124
 
+[parameter]
+  # ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+
+$if parent
+  ${Sb}/fA    = 5E-4        # ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type S
+  ${Sb}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fA    = 5E-4
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

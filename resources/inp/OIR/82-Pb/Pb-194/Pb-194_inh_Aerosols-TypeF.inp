@@ -4,20 +4,31 @@ Pb-194 Inhalation, Aerosols Type F
 [nuclide]
   Pb-194  Tl-194  Hg-194  Au-194  Hg-190  Au-190
 
+[parameter]
+  # ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 100
+  $ss = 0
+  $fb = 0.5                 # footnote*
+  $sb = 1.7                 # footnote*
+
+$if parent
+  ${Pb}/fA    = 0.2         # ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type F
+  ${Pb}/fA_Re = 0.2         # footnote**
+$else
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
+  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested materials, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 100
-  $ss = 0
-  $fb = 0.5             # footnote*
-  $sb = 1.7             # footnote*
-  $fA    = 0.2
-  $fA_Re = 0.2          # footnote**
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -330,12 +341,6 @@ Pb-194 Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -662,12 +667,6 @@ Pb-194 Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -999,12 +998,6 @@ Pb-194 Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -1348,12 +1341,6 @@ Pb-194 Inhalation, Aerosols Type F
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
-
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
   ALV-F                   bb-F                      0.002
@@ -1679,12 +1666,6 @@ Pb-194 Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6

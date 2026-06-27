@@ -4,18 +4,28 @@ Te-133m Inhalation, Aerosols Type F
 [nuclide]
   Te-133m  Te-133  I-133  Xe-133m  Xe-133
 
+[parameter]
+  # ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 50
+  $ss = 0
+
+$if parent
+  ${Te}/fA    = 0.3         # ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
+  ${Te}/fA_Re = 0.3         # footnote¶ (re-absorption)
+$else
+  ${Te}/fA_MaxValueOfIng = 0.3          # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${I}/fA_MaxValueOfIng = 0.99 # ≒1    # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+
+  ${^Xe}/fA    = fr * fA_MaxValueOfIng
+  ${^Xe}/fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 50
-  $ss = 0
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -243,12 +253,6 @@ Te-133m Inhalation, Aerosols Type F
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
-
 # from parent to progeny
   Te-133m/ET1-F           ET1-F                     ---
   Te-133m/ET2-F           ET2-F                     ---
@@ -461,12 +465,6 @@ Te-133m Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Te-133m/ET1-F           ET1-F                     ---

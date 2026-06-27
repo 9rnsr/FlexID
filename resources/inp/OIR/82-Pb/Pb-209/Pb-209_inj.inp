@@ -4,15 +4,17 @@ Pb-209 Injection
 [nuclide]
   Pb-209
 
+[parameter]
+$if parent
+  ${Pb}/fA    = 0.2         # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
+  ${Pb}/fA_Re = 0.2         # footnote**
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.2
-  $fA_Re = 0.2          # footnote**
 
 # ICRP Publ.130 p.37 Para.15
   Plasma                  100.0%

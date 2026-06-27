@@ -4,20 +4,24 @@ Hg-203 Inhalation, Gas or Vapor Type F
 [nuclide]
   Hg-203
 
+[parameter]
+  # ICRP Publ.151 p.326 Table 36.2 / Mercury vapor
+  $fr = 0.94
+  $sr = 1000
+  $ss = 0.14
+  $fb = 0.24                # footnote†
+  $sb = 2.1                 # footnote†
+
+$if parent
+  ${Hg}/fA    = 0.094       # ICRP Publ.151 p.326 Table 36.2 / Mercury vapor
+  ${Hg}/fA_Re = 0.1         # ICRP Publ.151 p.327 Table 36.3 footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.326 Table 36.2 / Mercury vapor
-  $fr = 0.94
-  $sr = 1000
-  $ss = 0.14
-  $fb = 0.24        # footnote†
-  $sb = 2.1         # footnote†
-  $fA    = 0.094
-  $fA_Re = 0.1      # Table 36.3 footnote¶ (re-absorption)
 
 # ICRP Publ.151 p.326 Table 36.2
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

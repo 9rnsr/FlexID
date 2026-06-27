@@ -4,14 +4,16 @@ Sr-85 Ingestion, Strontium titanate
 [nuclide]
   Sr-85
 
+[parameter]
+$if parent
+  ${Sr}/fA = 0.01           # ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
-  $fA = 0.01
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

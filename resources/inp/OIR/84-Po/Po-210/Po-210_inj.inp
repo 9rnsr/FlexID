@@ -4,15 +4,17 @@ Po-210 Injection
 [nuclide]
   Po-210
 
+[parameter]
+$if parent
+  ${Po}/fA    = 0.1         # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
+  ${Po}/fA_Re = 0.1         # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
-  $fA    = 0.1
-  $fA_Re = 0.1          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
 # ICRP Publ.137 p.286 Para.590

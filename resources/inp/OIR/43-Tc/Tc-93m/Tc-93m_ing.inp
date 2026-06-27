@@ -4,15 +4,22 @@ Tc-93m Ingestion
 [nuclide]
   Tc-93m  Tc-93
 
+[parameter]
+$if parent
+  ${Tc}/fA    = 0.9         # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+  ${Tc}/fA_Re = 0.9         # footnote¶ (re-absorption)
+$else
+  ${Tc}/fA_MaxValueOfIng = 0.9          # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA    = 0.9
-  $fA_Re = 0.9          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -165,12 +172,6 @@ Tc-93m Ingestion
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.9
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Tc-93m/Oralcavity       Oralcavity                ---

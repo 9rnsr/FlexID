@@ -17,11 +17,33 @@ public class InputDataReader_OIR : InputDataReaderBase
         safdataAF = SAFDataReader.ReadSAF(Sex.Female);
     }
 
+    /// <summary>
+    /// $if ～ $else ～ $endif指令の挙動を制御する状態フラグ。
+    /// </summary>
+    enum ConditionDirectiveState
+    {
+        Disabled = -1,          /// <summary>セクション内では$if ～ $endif指令の使用を禁止する。</summary>
+        OutsideBlock = 0,       /// <summary>セクション内で現在行は$if ～ $endif指令の外にある。</summary>
+        InsideIfBlock = 1,      /// <summary>セクション内で現在行は$ifブロックの中にある。</summary>
+        InsideElseBlock = 2,    /// <summary>セクション内で現在行は$elseブロックの中にある。</summary>
+    }
+    private ConditionDirectiveState conditionDirectiveState = ConditionDirectiveState.Disabled;
+
+    private bool InsideConditionDirective => conditionDirectiveState is ConditionDirectiveState.InsideIfBlock
+                                                                     or ConditionDirectiveState.InsideElseBlock;
+
+    /// <summary>
+    /// $if ～ $endif指令の内部において、現在行が親核種のみを対象とする場合に<see langword="true"/>となる。
+    /// </summary>
+    private bool insideParentBlock;
+
+    private bool? IsParentOnly => InsideConditionDirective ? insideParentBlock : null;
+
     private readonly InputErrors errors;
     private readonly Dictionary<string, int> compartmentSectionLocs = [];
     private readonly Dictionary<string, int> transferSectionLocs = [];
 
-    private readonly InputEvaluator evaluator;
+    private readonly Dictionary<NuclideData, InputEvaluator> inputEvaluators = [];
 
     private bool inputTitleRead;
     private string inputTitle = "";
@@ -29,7 +51,8 @@ public class InputDataReader_OIR : InputDataReaderBase
     private bool inputNuclidesRead;
     private readonly List<NuclideData> inputNuclides = [];
 
-    private readonly Dictionary<string, Dictionary<string, string>> inputParameters = [];
+    private bool inputParametersRead;
+    private readonly List<InputParameter> inputParameters = [];
 
     private readonly Dictionary<string, List<InputOrgan>> inputOrgans = [];
 
@@ -58,17 +81,73 @@ public class InputDataReader_OIR : InputDataReaderBase
         : base(reader, calcProgeny)
     {
         errors = new InputErrors();
-        evaluator = new InputEvaluator(errors);
     }
 
     protected override string? GetNextLine()
     {
+        Span<Range> parts = stackalloc Range[3];
+
     Lagain:
         var nextLine = base.GetNextLine();
 
-        if (evaluator.TryReadVarDecl(LineNum, nextLine))
-            goto Lagain;
+        if (nextLine is not null && nextLine.StartsWith("$"))
+        {
+            var count = nextLine.SplitAny(parts, [' ', '\t', '\f', '\v'], StringSplitOptions.RemoveEmptyEntries);
+            if (nextLine.AsSpan()[parts[0]].SequenceEqual("$if"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
 
+                if (conditionDirectiveState == ConditionDirectiveState.OutsideBlock && count == 2)
+                {
+                    if (nextLine.AsSpan()[parts[1]].Equals("parent", StringComparison.OrdinalIgnoreCase))
+                    {
+                        conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
+                        insideParentBlock = true;
+                        goto Lagain;
+                    }
+                    else if (nextLine.AsSpan()[parts[1]].Equals("progeny", StringComparison.OrdinalIgnoreCase))
+                    {
+                        conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
+                        insideParentBlock = false;
+                        goto Lagain;
+                    }
+                }
+            }
+            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$else"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
+
+                if (conditionDirectiveState == ConditionDirectiveState.InsideIfBlock && count == 1)
+                {
+                    conditionDirectiveState = ConditionDirectiveState.InsideElseBlock;
+                    insideParentBlock = !insideParentBlock;
+                    goto Lagain;
+                }
+            }
+            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$endif"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
+
+                if (InsideConditionDirective)
+                {
+                    conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+                    goto Lagain;
+                }
+            }
+            else
+            {
+                goto Lcont;
+            }
+
+        LerrorDirective:
+            errors.AddError(LineNum, $"Unrecognized directive line: '{nextLine}'.");
+            goto Lagain;
+        }
+
+    Lcont:
         return nextLine;
     }
 
@@ -163,10 +242,13 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var data = new InputData();
         data.Title = inputTitle;
-        data.Parameters = inputParameters.GetValueOrDefault("") ?? [];
         data.SourceRegions = sourceRegions;
         data.TargetRegions = targetRegions;
         data.TargetWeights = ws;
+
+        var expander = new InputNuclideExpander(inputNuclides, errors);
+
+        DefineParameters(data, expander);
 
         // 全てのコンパートメントを定義する。
         DefineCompartments(data);
@@ -189,14 +271,22 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         while (true)
         {
+            if (InsideConditionDirective)
+            {
+                errors.AddError(LineNum, "if directive block should be closed till the end of the section.");
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+            }
+
             var header = GetSectionHeader(line);
 
             if (Ascii.EqualsIgnoreCase(header, "title"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetTitle();
             }
             else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetNuclides();
             }
             else if (isRough)
@@ -204,30 +294,29 @@ public class InputDataReader_OIR : InputDataReaderBase
                 if (inputTitleRead && inputNuclidesRead)
                     break;
 
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
             }
             else if (Ascii.EqualsIgnoreCase(header, "parameter"))
             {
-                line = GetParameters("");
-            }
-            else if (header.EndsWith(":parameter", StringComparison.OrdinalIgnoreCase))
-            {
-                var i = header.IndexOf(':');
-                var nuc = header[..i].ToString();
-                line = GetParameters(nuc);
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+                line = GetParameters();
             }
             else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetCompartments(nuc);
             }
             else if (Ascii.EqualsIgnoreCase(header, "intake"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetIntakes();
             }
             else if (header.EndsWith(":transfer", StringComparison.OrdinalIgnoreCase))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetTransfers(nuc);
@@ -235,6 +324,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             else
             {
                 errors.AddError(LineNum, $"Unrecognized section $'[{header.ToString()}]'.");
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
             }
 
@@ -524,25 +614,28 @@ public class InputDataReader_OIR : InputDataReaderBase
     }
 
     /// <summary>
+    /// インプットから読み取ったパラメータ/変数定義の情報を保持する。
+    /// </summary>
+    /// <param name="LineNum">行番号。</param>
+    /// <param name="ParentOnly">親核種に対してのみ定義される場合は<see langword="true"/>。</param>
+    /// <param name="IsVarDecl">変数定義の場合は<see langword="true"/>。</param>
+    /// <param name="Nuclide">核種名。</param>
+    /// <param name="Name">パラメータ/変数名。</param>
+    /// <param name="Value">パラメータ/変数値。</param>
+    private record class InputParameter(int LineNum, bool? ParentOnly, bool IsVarDecl, string Nuclide, string Name, string Value);
+
+    /// <summary>
     /// パラメーターの定義セクションを読み込む。
     /// </summary>
-    /// <param name="nuc"></param>
     /// <returns>セクションの次行。</returns>
-    private string? GetParameters(string nuc)
+    private string? GetParameters()
     {
-        if (inputParameters.TryGetValue(nuc, out var parameters))
+        if (inputParametersRead)
         {
-            if (nuc == "")
-                errors.AddError(LineNum, $"Duplicated [parameter] section.");
-            else
-                errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
+            errors.AddError(LineNum, "Duplicated [parameter] section.");
             return SkipUntilNextSection();
         }
-        inputParameters.Add(nuc, parameters = []);
-
-        var parameterNames = nuc == ""
-            ? InputData.ParameterNames
-            : NuclideData.ParameterNames;
+        inputParametersRead = true;
 
         string? line;
         while (true)
@@ -560,15 +653,28 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             }
 
-            var paramName = values[0].Trim();
-            var paramValue = values[1].Trim();
+            var name = values[0].Trim();
+            var value = values[1].Trim();
+            var parentOnly = IsParentOnly;
 
-            if (!parameterNames.Contains(paramName))
-                errors.AddError(LineNum, $"Unrecognized parameter '{paramName}' definition.");
-            else if (parameters.ContainsKey(paramName))
-                errors.AddError(LineNum, $"Duplicated parameter '{paramName}' definition.");
-            else
-                parameters.Add(paramName, paramValue);
+            var isVarDecl = name.StartsWith('$');
+            if (isVarDecl)
+                name = name[1..];
+            else if (InsideConditionDirective)
+            {
+                var directive = conditionDirectiveState is ConditionDirectiveState.InsideIfBlock ? "$if" : "$else";
+                errors.AddError(LineNum, $"Parameter definition cannot be placed in {directive} directive block.");
+                continue;
+            }
+
+            var nuc = "";
+            if (name.IndexOf('/') is int j && j != -1)
+            {
+                nuc = name[..j];
+                name = name[(j + 1)..];
+            }
+
+            inputParameters.Add(new InputParameter(LineNum, parentOnly, isVarDecl, nuc, name, value));
         }
 
         return line;
@@ -665,17 +771,9 @@ public class InputDataReader_OIR : InputDataReaderBase
             }
 
             var organTo = values[0];
-            var coeffStr = values[1];    // 移行割合、[%]
+            var coeff = values[1];      // 移行割合、[%]
 
-            var coeff = default(decimal?);
-            if (!IsBar(coeffStr))
-            {
-                if (!evaluator.TryReadCoefficient(LineNum, coeffStr, out var res))
-                    continue;
-                (coeff, _) = res;
-            }
-
-            inputIntakes.Add(new InputIntake(LineNum, organTo, coeff));
+            inputIntakes.Add(new InputIntake(LineNum, organTo, IsBar(coeff) ? null : coeff));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -724,18 +822,9 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             var orgamFrom = values[0];
             var organTo = values[1];
-            var coeffStr = values[2];    // 移行係数、[/d] or [%]
+            var coeff = values[2];      // 移行係数、[/d] or [%]
 
-            var coeff = default(decimal?);
-            var isFrac = false;
-            if (!IsBar(coeffStr))
-            {
-                if (!evaluator.TryReadCoefficient(LineNum, coeffStr, out var res))
-                    continue;
-                (coeff, isFrac) = res;
-            }
-
-            transfers.Add(new InputTransfer(LineNum, orgamFrom, organTo, coeff, isFrac));
+            transfers.Add(new InputTransfer(LineNum, orgamFrom, organTo, IsBar(coeff) ? null : coeff));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -744,6 +833,87 @@ public class InputDataReader_OIR : InputDataReaderBase
         //    errors.AddError(sectionLineNum, $"Empty [{nuc}:transfer] section.");
 
         return line;
+    }
+
+    /// <summary>
+    /// パラメータの定義セクションを読み込む。
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="expander"></param>
+    private void DefineParameters(InputData data, InputNuclideExpander expander)
+    {
+        foreach (var nuclide in inputNuclides)
+            inputEvaluators.Add(nuclide, new InputEvaluator(nuclide.Name, errors));
+
+        var globalParams = new Dictionary<string, string>();
+        var nuclideParams = inputNuclides.ToDictionary(n => n, _ => new Dictionary<string, string>());
+
+        IReadOnlyList<NuclideData> parentNuclide = [inputNuclides[0]];
+
+        foreach (var (lineNum, parentOnly, isVarDecl, nuc, name, value) in inputParameters)
+        {
+            var expandNuclides = nuc == "" ? inputNuclides : expander.ExpandNuclides(lineNum, nuc);
+
+            if (parentOnly == true)
+                expandNuclides = [.. expandNuclides.Intersect(parentNuclide)];
+            else if (parentOnly == false)
+                expandNuclides = [.. expandNuclides.Except(parentNuclide)];
+
+            if (isVarDecl)
+            {
+                foreach (var nuclide in expandNuclides)
+                {
+                    inputEvaluators[nuclide].TryReadVarDecl(lineNum, name, value);
+                }
+            }
+            else if (nuc == "")
+            {
+                if (!InputData.ParameterNames.Contains(name))
+                {
+                    errors.AddError(lineNum, $"Unrecognized parameter '{name}' definition.");
+                    continue;
+                }
+
+                if (globalParams.ContainsKey(name))
+                    errors.AddError(lineNum, $"Duplicated parameter '{name}' definition.");
+                else
+                    globalParams.Add(name, value);
+            }
+            else
+            {
+                if (!NuclideData.ParameterNames.Contains(name))
+                {
+                    errors.AddError(lineNum, $"Unrecognized parameter '{name}' definition.");
+                    continue;
+                }
+
+                foreach (var nuclide in expandNuclides)
+                {
+                    var parameters = nuclideParams[nuclide];
+
+                    if (parameters.ContainsKey(name))
+                        errors.AddError(lineNum, $"Duplicated parameter '{name}' definition.");
+                    else
+                        parameters.Add(name, value);
+                }
+            }
+        }
+
+        // インプット全体に対するパラメータを設定する。
+        data.Parameters = globalParams;
+
+        foreach (var (nuclide, parameters) in nuclideParams)
+        {
+            // 核種を指定した設定がないパラメータについて、インプット全体に対するパラメータ設定を継承する。
+            foreach (var (paramName, paramValue) in globalParams.Where(kv =>
+                NuclideData.ParameterNames.Contains(kv.Key) && !parameters.ContainsKey(kv.Key)))
+            {
+                parameters.Add(paramName, paramValue);
+            }
+
+            // 核種に対するパラメータを設定する。
+            nuclide.Parameters = parameters;
+        }
     }
 
     /// <summary>
@@ -778,8 +948,6 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (!inputOrgans.TryGetValue(nuc, out var organs))
                 continue;
             var sectionLineNum = compartmentSectionLocs[nuc];
-
-            nuclide.Parameters = inputParameters.GetValueOrDefault(nuc) ?? [];
 
             data.Nuclides.Add(nuclide);
 
@@ -921,7 +1089,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="LineNum">行番号。</param>
     /// <param name="To">初期配分先コンパートメントの名前。</param>
     /// <param name="Coeff">初期配分割合。</param>
-    private record class InputIntake(int LineNum, string To, decimal? Coeff);
+    private record class InputIntake(int LineNum, string To, string? Coeff);
 
     /// <summary>
     /// 全ての摂取経路を定義する。
@@ -935,6 +1103,8 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var olderrorsN = errors.Count;
         var sectionLineNum = intakeSectionLoc;
+
+        var evaluatorTo = inputEvaluators[nuclideTo];
 
         // 移行経路の定義が正しいことの確認と、
         // 各コンパートメントから流出する移行係数の総計を求める。
@@ -965,8 +1135,13 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             // 移行割合の入力を要求する。
             // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
-            if (intake.Coeff is decimal coeff)
+            decimal coeff;
+            if (intake.Coeff is not null)
             {
+                if (!evaluatorTo.TryReadCoefficient(LineNum, intake.Coeff, out var res))
+                    continue;
+                (coeff, _) = res;
+
                 // 移行係数が負の値でないことを確認する。
                 if (coeff < 0)
                 {
@@ -1028,22 +1203,23 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="From">移行元コンパートメント。</param>
     /// <param name="To">移行先コンパートメント。</param>
     /// <param name="Coeff">移行係数。</param>
-    /// <param name="IsFrac">移行割合かどうか。</param>
-    private record class InputTransfer(int LineNum, string From, string To, decimal? Coeff, bool IsFrac);
+    private record class InputTransfer(int LineNum, string From, string To, string? Coeff);
 
     private static bool IsDecayPath(Organ from, Organ to) => from.Nuclide != to.Nuclide;
 
     private class TransferParser(
         IReadOnlyList<NuclideData> nuclides,
         IReadOnlyList<Organ> organs,
+        Dictionary<NuclideData, InputEvaluator> evaluators,
         InputErrors errors)
     {
         private readonly HashSet<(Organ from, Organ to)> definedTransfers = [];
 
         public bool TryParse(
             NuclideData nuclide, InputTransfer transfer,
-            out (Organ OrganFrom, Organ OrganTo) result)
+            out (Organ OrganFrom, Organ OrganTo, decimal? Coeff) result)
         {
+            var evaluator = evaluators[nuclide];
             var lineNum = transfer.LineNum;
 
             result = default;
@@ -1115,11 +1291,14 @@ public class InputDataReader_OIR : InputDataReaderBase
             Debug.Assert(organFrom is not null);
             Debug.Assert(organTo is not null);
 
-            var coeff = transfer.Coeff;
-            var isFrac = transfer.IsFrac;
+            var coeff = default(decimal?);
+            var isFrac = false;
             var hasCoeff = false;
-            if (coeff is not null)
+            if (transfer.Coeff is not null)
             {
+                if (!evaluator.TryReadCoefficient(lineNum, transfer.Coeff, out var res))
+                    return false;
+                (coeff, isFrac) = res;
                 hasCoeff = true;
 
                 // 移行係数が負の値でないことを確認する。
@@ -1178,7 +1357,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (errors.IfAny(olderrorsT))
                 return false;
 
-            result = (organFrom, organTo);
+            result = (organFrom, organTo, coeff);
 
             return true;
         }
@@ -1191,7 +1370,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     private void DefineTransfers(InputData data)
     {
         var decaySet = new DecaySet(data.Nuclides, errors);
-        var parser = new TransferParser(inputNuclides, data.Organs, errors);
+        var parser = new TransferParser(inputNuclides, data.Organs, inputEvaluators, errors);
 
         foreach (var nuclide in inputNuclides)
         {
@@ -1205,6 +1384,8 @@ public class InputDataReader_OIR : InputDataReaderBase
             var olderrorsN = errors.Count;
             var sectionLineNum = transferSectionLocs[nuc];
 
+            var evaluator = inputEvaluators[nuclide];
+
             // 移行経路の定義が正しいことの確認と、
             // 各コンパートメントから流出する移行係数の総計を求める。
             var transfersCorrect = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
@@ -1217,7 +1398,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 var lineNum = transfer.LineNum;
                 var organFrom = result.OrganFrom;
                 var organTo = result.OrganTo;
-                var coeff = transfer.Coeff;
+                var coeff = result.Coeff;
 
                 if (IsDecayPath(organFrom, organTo))
                 {

@@ -4,17 +4,21 @@ Ra-224 Inhalation, Aerosols Type F
 [nuclide]
   Ra-224
 
+[parameter]
+  # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 10
+  $ss =  0
+
+$if parent
+  ${Ra}/fA = 0.2            # ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type F
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.325 Table 13.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 10
-  $ss =  0
-  $fA = 0.2
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

@@ -4,18 +4,22 @@ Te-125m Inhalation, Aerosols Type F
 [nuclide]
   Te-125m
 
+[parameter]
+  # ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 50
+  $ss = 0
+
+$if parent
+  ${Te}/fA    = 0.3         # ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
+  ${Te}/fA_Re = 0.3         # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 50
-  $ss = 0
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

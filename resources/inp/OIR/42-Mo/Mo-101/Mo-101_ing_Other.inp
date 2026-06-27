@@ -4,15 +4,22 @@ Mo-101 Ingestion, Other
 [nuclide]
   Mo-101  Tc-101
 
+[parameter]
+$if parent
+  ${Mo}/fA    = 0.9         # ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
+  ${Mo}/fA_Re = 0.9         # footnote¶
+$else
+  ${Tc}/fA_MaxValueOfIng = 0.9          # ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
-  $fA    = 0.9
-  $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -122,12 +129,6 @@ Mo-101 Ingestion, Other
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.322 Table 15.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.9
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-101/Oralcavity       Oralcavity                ---

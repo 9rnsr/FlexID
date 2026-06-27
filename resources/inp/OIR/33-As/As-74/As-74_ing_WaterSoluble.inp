@@ -4,14 +4,16 @@ As-74 Ingestion, WaterSoluble
 [nuclide]
   As-74
 
+[parameter]
+$if parent
+  ${As}/fA = 0.99 # ≒1     # ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Soluble compounds
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Soluble compounds
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

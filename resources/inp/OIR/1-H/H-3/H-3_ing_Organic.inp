@@ -4,14 +4,14 @@ H-3 Ingestion, Organic
 [nuclide]
   H-3
 
+[parameter]
+  $H-3/fA = 0.99 # ≒1      # ICRP Publ.134 p.21 Table 2.3 / Ingested materials, Soluble forms
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.21 Table 2.3 / Ingested materials, Soluble forms
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

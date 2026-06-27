@@ -4,17 +4,19 @@ C-11 Inhalation, Aerosols Barium
 [nuclide]
   C-11
 
+[parameter]
+  # ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Barium carbonate
+  $fr = 1
+  $sr = 100
+  $ss =   0
+
+  $C-11/fA = 0.99 # ≒1     # ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Barium carbonate
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Barium carbonate
-  $fr = 1
-  $sr = 100
-  $ss =   0
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote

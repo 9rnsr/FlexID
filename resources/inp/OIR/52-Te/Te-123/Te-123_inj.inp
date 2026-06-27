@@ -4,15 +4,17 @@ Te-123 Injection
 [nuclide]
   Te-123
 
+[parameter]
+$if parent
+  ${Te}/fA    = 0.3         # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${Te}/fA_Re = 0.3         # footnote¶ (re-absorption)
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%

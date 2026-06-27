@@ -4,20 +4,29 @@ Nb-89m Inhalation, Aerosols Type F
 [nuclide]
   Nb-89m  Zr-89m  Zr-89
 
+[parameter]
+  # ICRP Publ.134 p.288 Table 13.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 30
+  $ss = 0
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Nb}/fA    = 0.01        # ICRP Publ.134 p.288 Table 13.2 / Inhaled particulate materials, Absorption type F
+  ${Nb}/fA_Re = 0.01        # footnote¶
+$else
+  ${Zr}/fA_MaxValueOfIng = 0.002        # ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 30
-  $ss = 0
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 0.01
-  $fA_Re = 0.01         # footnote¶
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -306,12 +315,6 @@ Nb-89m Inhalation, Aerosols Type F
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA_MaxValueOfIng = 0.002
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
-
 # from parent to progeny
   Nb-89m/ET1-F            ET1-F                     ---
   Nb-89m/ET2-F            ET2-F                     ---
@@ -580,12 +583,6 @@ Nb-89m Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA_MaxValueOfIng = 0.002
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Nb-89m/ET1-F            ET1-F                     ---

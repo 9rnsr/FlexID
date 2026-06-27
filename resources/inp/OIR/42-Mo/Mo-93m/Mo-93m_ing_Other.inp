@@ -4,15 +4,23 @@ Mo-93m Ingestion, Other
 [nuclide]
   Mo-93m  Mo-93  Nb-93m
 
+[parameter]
+$if parent
+  ${Mo}/fA    = 0.9         # ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
+  ${Mo}/fA_Re = 0.9         # footnote¶
+$else
+  ${Mo}/fA_MaxValueOfIng = 0.9          # ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
+  ${Nb}/fA_MaxValueOfIng = 0.01         # ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
-  $fA    = 0.9
-  $fA_Re = 0.9          # footnote¶
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%
@@ -109,12 +117,6 @@ Mo-93m Ingestion, Other
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.134 p.305 Table 14.2 / Ingested material, All other forms
-  $fA_MaxValueOfIng = 0.9
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
 # from parent to progeny
   Mo-93m/Oralcavity       Oralcavity                ---
   Mo-93m/Oesophagus-f     Oesophagus-f              ---
@@ -202,12 +204,6 @@ Mo-93m Ingestion, Other
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
 
 # from parent to progeny
   Mo-93m/Oralcavity       Oralcavity                ---

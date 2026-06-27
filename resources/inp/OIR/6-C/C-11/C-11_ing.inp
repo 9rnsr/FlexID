@@ -4,14 +4,14 @@ C-11 Ingestion
 [nuclide]
   C-11
 
+[parameter]
+  $C-11/fA = 0.99 # ≒1     # ICRP Publ.134 p.53 Table 3.3 / Ingested materials, All chemical forms
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.53 Table 3.3 / Ingested materials, All chemical forms
-  $fA = 0.99 # ≒1
 
 # ICRP Publ.130 p.75 Fig.3.6
   Oralcavity              100.0%

@@ -4,18 +4,27 @@ Sb-125 Inhalation, Aerosols Type F
 [nuclide]
   Sb-125  Te-125m
 
+[parameter]
+  # ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 30
+  $ss = 0
+
+$if parent
+  ${Sb}/fA    = 0.05        # ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type F
+  ${Sb}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$else
+  ${Te}/fA_MaxValueOfIng = 0.3          # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 30
-  $ss = 0
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
 
 # ICRP Publ.130 p.62 Table 3.1
 # ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
@@ -252,12 +261,6 @@ Sb-125 Inhalation, Aerosols Type F
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
 
 # from parent to progeny
   Sb-125/ET1-F            ET1-F                     ---

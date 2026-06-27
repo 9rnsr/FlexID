@@ -4,15 +4,17 @@ Y-86 Injection
 [nuclide]
   Y-86
 
+[parameter]
+$if parent
+  ${Y}/fA    = 1E-4         # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  ${Y}/fA_Re = 1E-4         # footnote**
+$endif
+
 
 [intake]
 #---------------------+-------------------
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA    = 1E-4
-  $fA_Re = 1E-4
 
 # ICRP Publ.130 p.37 Para.15
   Blood1                  100.0%
