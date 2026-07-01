@@ -840,7 +840,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     errors.AddError(sectionLineNum, "Both of C/T-marrow and R/Y-marrow source region pairs are used.");
             }
 
-            nuclide.OtherSourceRegions = otherSourceRegions.ToArray();
+            nuclide.OtherSourceRegions = otherSourceRegions;
         }
 
         // コンパートメント定義にエラーがないことを確定する。

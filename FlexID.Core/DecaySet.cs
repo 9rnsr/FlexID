@@ -531,18 +531,13 @@ internal class DecaySet
         var sourceRegion = organFrom.SourceRegion;
         if (sourceRegion != null)
         {
-            var daughter = organDecay.Nuclide;
-
-            // 親核種のコンパートメントに設定された線源領域が、
-            // 子孫核種の動態モデルおいても明示的に設定されているかどうかを調べる。
-            var explicitUsed = compartments.Where(o => o.Nuclide == daughter)
-                                           .Any(o => o.SourceRegion == sourceRegion);
-
-            // 明示的に設定されていない場合は、ambiguous compartmentを'Other'に割り当てる。
-            if (!explicitUsed)
-                sourceRegion = "Other";
-
+            // 親核種のコンパートメントに設定されていた線源領域を、
+            // 生成核種を受ける壊変コンパートメントの線源領域としても設定する。
             organDecay.SourceRegion = sourceRegion;
+
+            // 生成核種のモデルにおける線源領域Otherの内訳から、
+            // 壊変コンパートメントの線源領域を(存在する場合は)取り除く。
+            organDecay.Nuclide.OtherSourceRegions.Remove(sourceRegion);
         }
     }
 }
