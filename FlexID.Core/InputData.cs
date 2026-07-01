@@ -180,7 +180,7 @@ public class NuclideData
     /// 動態モデルでコンパートメントとして定義されておらず線源領域Otherの一部として取り扱う
     /// 各線源領域の名称。
     /// </summary>
-    public string[] OtherSourceRegions;
+    public List<string> OtherSourceRegions;
 
     /// <summary>
     /// 消化管に対応するコンパートメント群のインデックスと寄与率。
