@@ -68,11 +68,6 @@ public class Organ
     public NuclideData Nuclide;
 
     /// <summary>
-    /// 崩壊定数[/day]。(＝ ln(2) / 半減期[day])
-    /// </summary>
-    public double NuclideDecay => Nuclide.Lambda;
-
-    /// <summary>
     /// 臓器番号。
     /// </summary>
     public int ID;
@@ -361,6 +356,8 @@ public class InputData
     }
 }
 
+#nullable restore
+
 public abstract class InputDataReaderBase : IDisposable
 {
     /// <summary>
@@ -405,7 +402,7 @@ public abstract class InputDataReaderBase : IDisposable
     /// インプットの次行を読み取る。
     /// </summary>
     /// <returns></returns>
-    protected virtual string GetNextLine()
+    protected virtual string? GetNextLine()
     {
     Lagain:
         var line = reader.ReadLine();

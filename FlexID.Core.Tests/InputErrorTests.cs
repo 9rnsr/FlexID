@@ -82,8 +82,6 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 7: Undefined nuclide 'Sr-90' is used to define compartments.",
-            "Line 11: Undefined nuclide 'Sr-90' is used to define transfers.",
             "Line 13: Missing [title] section.",
             "Line 13: Missing [nuclide] section.",
         ]);

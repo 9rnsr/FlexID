@@ -155,7 +155,7 @@ public class InputEvaluator : Visitor<(decimal v, bool r)>
     /// <param name="lineNum">インプットの行番号。</param>
     /// <param name="input">入力文字列。</param>
     /// <returns>変数の定義行の場合はその定義値をテーブルに追加し<see langword="true"/>を返す。</returns>
-    public bool TryReadVarDecl(int lineNum, string input)
+    public bool TryReadVarDecl(int lineNum, string? input)
     {
         this.lineNum = lineNum;
 

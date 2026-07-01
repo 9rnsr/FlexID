@@ -22,17 +22,17 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private readonly InputEvaluator evaluator;
 
-    private string? inputTitle;
+    private bool inputTitleRead;
+    private string inputTitle = "";
 
-    private Dictionary<string, string>? inputParameters;
+    private bool inputNuclidesRead;
+    private readonly List<NuclideData> inputNuclides = [];
 
-    private readonly Dictionary<string, Dictionary<string, string>> nuclideParameters = [];
+    private readonly Dictionary<string, Dictionary<string, string>> inputParameters = [];
 
-    private List<NuclideData>? nuclides;
+    private readonly Dictionary<string, List<(int lineNum, OrganFunc func, string name, string sourceRegion)>> inputOrgans = [];
 
-    private readonly Dictionary<string, List<(int lineNum, Organ)>> nuclideOrgans = [];
-
-    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> nuclideTransfers = [];
+    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> inputTransfers = [];
 
     /// <summary>
     /// コンストラクタ。
@@ -56,7 +56,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         evaluator = new InputEvaluator(errors);
     }
 
-    protected override string GetNextLine()
+    protected override string? GetNextLine()
     {
     Lagain:
         var nextLine = base.GetNextLine();
@@ -99,46 +99,11 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     public InputData ReadRough()
     {
-        var line = GetNextLine();
-        if (line is null)
-            throw Program.Error("Reach to EOF while reading input file.");
-
-        while (true)
-        {
-            var header = GetSectionHeader(line);
-
-            if (Ascii.EqualsIgnoreCase(header, "title"))
-            {
-                line = GetTitle();
-            }
-            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
-            {
-                line = GetNuclides();
-            }
-            else
-            {
-                SkipUntilNextSection();
-            }
-
-            if (line is null)
-                break;
-
-            if (inputTitle != null && nuclides != null)
-                break;
-        }
-
-        if (inputTitle is null)
-            errors.AddError(LineNum, "Missing [title] section.");
-        if (nuclides is null)
-            errors.AddError(LineNum, "Missing [nuclide] section.");
-
-        // インプットの構文に従って読み取りができていることを確定する。
-        // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
-        errors.RaiseIfAny();
+        GetInput(isRough: true);
 
         var data = new InputData();
-        data.Title = inputTitle!;
-        data.Nuclides.AddRange(nuclides!);
+        data.Title = inputTitle;
+        data.Nuclides.AddRange(inputNuclides);
 
         return data;
     }
@@ -148,6 +113,66 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// </summary>
     /// <returns></returns>
     public InputData Read()
+    {
+        GetInput(isRough: false);
+
+        foreach (var (lineNum, nuc) in inputOrgans.Keys.Except(inputNuclides.Select(n => n.Name) ?? [])
+            .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
+        {
+            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define compartments.");
+        }
+
+        foreach (var (lineNum, nuc) in inputTransfers.Keys.Except(inputNuclides.Select(n => n.Name) ?? [])
+            .Select(nuc => (LineNum: transferSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
+        {
+            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
+        }
+
+        {
+            var nuclideNames = inputNuclides.Select(n => n.Name).ToArray();
+
+            foreach (var nuc in nuclideNames.Where(nuc => !inputOrgans.ContainsKey(nuc)))
+                errors.AddError(LineNum, $"Missing [{nuc}:compartment] section.");
+
+            foreach (var nuc in nuclideNames.Where(nuc => !inputTransfers.ContainsKey(nuc)))
+                errors.AddError(LineNum, $"Missing [{nuc}:transfer] section.");
+        }
+
+        // 核種定義に対して[compartment]と[transfer]セクションに過不足がないことを確定する。
+        errors.RaiseIfAny();
+
+        // 線源領域と標的領域のデータを読み込む。
+        var sourceRegions = SAFDataReader.ReadSourceRegions();
+        var targetRegions = SAFDataReader.ReadTargetRegions().Select(t => t.Name).ToArray();
+
+        // 組織加重係数データを読み込む。
+        var (ts, ws) = ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
+        if (!targetRegions.SequenceEqual(ts))
+            errors.AddError("Found mismatch of target region names on tissue weighting factor data.");
+
+        // 外部データの読み込み処理にエラーがないことを確定する。
+        errors.RaiseIfAny();
+
+        var data = new InputData();
+        data.Title = inputTitle;
+        data.Parameters = inputParameters.GetValueOrDefault("") ?? [];
+        data.SourceRegions = sourceRegions;
+        data.TargetRegions = targetRegions;
+        data.TargetWeights = ws;
+
+        // 全てのコンパートメントを定義する。
+        DefineCompartments(data);
+
+        // コンパートメント間の移行経路を定義する。
+        DefineTransfers(data);
+
+        // 流入を持たないコンパートメントをマークする。
+        MarkZeroInflows(data);
+
+        return data;
+    }
+
+    private void GetInput(bool isRough)
     {
         var line = GetNextLine();
         if (line is null)
@@ -161,6 +186,17 @@ public class InputDataReader_OIR : InputDataReaderBase
             {
                 line = GetTitle();
             }
+            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
+            {
+                line = GetNuclides();
+            }
+            else if (isRough)
+            {
+                if (inputTitleRead && inputNuclidesRead)
+                    break;
+
+                line = SkipUntilNextSection();
+            }
             else if (Ascii.EqualsIgnoreCase(header, "parameter"))
             {
                 line = GetParameters("");
@@ -168,12 +204,8 @@ public class InputDataReader_OIR : InputDataReaderBase
             else if (header.EndsWith(":parameter", StringComparison.OrdinalIgnoreCase))
             {
                 var i = header.IndexOf(':');
-                var nuc = header.Slice(0, i).ToString();
+                var nuc = header[..i].ToString();
                 line = GetParameters(nuc);
-            }
-            else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
-            {
-                line = GetNuclides();
             }
             else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
             {
@@ -197,70 +229,14 @@ public class InputDataReader_OIR : InputDataReaderBase
                 break;
         }
 
+        if (!inputTitleRead)
+            errors.AddError(LineNum, "Missing [title] section.");
+        if (!inputNuclidesRead)
+            errors.AddError(LineNum, "Missing [nuclide] section.");
+
         // インプットの構文に従って読み取りができていることを確定する。
         // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
         errors.RaiseIfAny();
-
-        foreach (var (lineNum, nuc) in nuclideOrgans.Keys.Except(nuclides?.Select(n => n.Name) ?? [])
-            .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
-        {
-            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define compartments.");
-        }
-
-        foreach (var (lineNum, nuc) in nuclideTransfers.Keys.Except(nuclides?.Select(n => n.Name) ?? [])
-            .Select(nuc => (LineNum: transferSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
-        {
-            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
-        }
-
-        if (inputTitle is null)
-            errors.AddError(LineNum, "Missing [title] section.");
-
-        if (nuclides is null)
-            errors.AddError(LineNum, "Missing [nuclide] section.");
-        else
-        {
-            var nuclideNames = nuclides.Select(n => n.Name).ToArray();
-
-            foreach (var nuc in nuclideNames.Where(nuc => !nuclideOrgans.ContainsKey(nuc)))
-                errors.AddError(LineNum, $"Missing [{nuc}:compartment] section.");
-
-            foreach (var nuc in nuclideNames.Where(nuc => !nuclideTransfers.ContainsKey(nuc)))
-                errors.AddError(LineNum, $"Missing [{nuc}:transfer] section.");
-        }
-
-        // 核種定義に対して[compartment]と[transfer]セクションに過不足がないことを確定する。
-        errors.RaiseIfAny();
-
-        // 線源領域と標的領域のデータを読み込む。
-        var sourceRegions = SAFDataReader.ReadSourceRegions();
-        var targetRegions = SAFDataReader.ReadTargetRegions().Select(t => t.Name).ToArray();
-
-        // 組織加重係数データを読み込む。
-        var (ts, ws) = ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
-        if (!targetRegions.SequenceEqual(ts))
-            errors.AddError("Found mismatch of target region names on tissue weighting factor data.");
-
-        // 外部データの読み込み処理にエラーがないことを確定する。
-        errors.RaiseIfAny();
-
-        var data = new InputData();
-        data.Title = inputTitle;
-        data.Parameters = inputParameters ?? [];
-        data.SourceRegions = sourceRegions;
-        data.TargetRegions = targetRegions;
-        data.TargetWeights = ws;
-
-        // 全てのコンパートメントを定義する。
-        DefineCompartments(data);
-
-        // コンパートメント間の移行経路を定義する。
-        DefineTransfers(data);
-
-        // 流入を持たないコンパートメントをマークする。
-        MarkZeroInflows(data);
-
-        return data;
     }
 
     /// <summary>
@@ -269,17 +245,17 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <returns>セクションの次行。</returns>
     private string? GetTitle()
     {
-        if (inputTitle != null)
+        if (inputTitleRead)
         {
             errors.AddError(LineNum, "Duplicated [title] section.");
             return SkipUntilNextSection();
         }
+        inputTitleRead = true;
 
         var sectionLineNum = LineNum;
         var title = GetNextLine();
         if (title is null || CheckSectionHeader(title))
         {
-            inputTitle = "";
             errors.AddError(sectionLineNum, "Empty [title] section.");
             return title;
         }
@@ -287,72 +263,10 @@ public class InputDataReader_OIR : InputDataReaderBase
         inputTitle = title;
 
         var line = GetNextLine();
-        if (!CheckSectionHeader(line))
+        if (line is not null && !CheckSectionHeader(line))
         {
             errors.AddError(LineNum, "Unrecognized lines in [title] section.");
             return SkipUntilNextSection();
-        }
-
-        return line;
-    }
-
-    /// <summary>
-    /// パラメーターの定義セクションを読み込む。
-    /// </summary>
-    /// <param name="nuc"></param>
-    /// <returns>セクションの次行。</returns>
-    private string? GetParameters(string nuc)
-    {
-        Dictionary<string, string> parameters;
-        string[] parameterNames;
-        if (nuc == "")
-        {
-            if (inputParameters != null)
-            {
-                errors.AddError(LineNum, "Duplicated [parameter] section.");
-                return SkipUntilNextSection();
-            }
-            parameters = [];
-            parameterNames = InputData.ParameterNames;
-            inputParameters = parameters;
-        }
-        else
-        {
-            if (nuclideParameters.ContainsKey(nuc))
-            {
-                errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
-                return SkipUntilNextSection();
-            }
-            parameters = [];
-            parameterNames = NuclideData.ParameterNames;
-            nuclideParameters.Add(nuc, parameters);
-        }
-
-        string line;
-        while (true)
-        {
-            line = GetNextLine();
-            if (line is null)
-                break;
-            if (CheckSectionHeader(line))
-                break;
-
-            var values = line.Split(["="], 2, StringSplitOptions.RemoveEmptyEntries);
-            if (values.Length != 2)
-            {
-                errors.AddError(LineNum, "Parameter definition should have 2 values.");
-                continue;
-            }
-
-            var paramName = values[0].Trim();
-            var paramValue = values[1].Trim();
-
-            if (!parameterNames.Contains(paramName))
-                errors.AddError(LineNum, $"Unrecognized parameter '{paramName}' definition.");
-            else if (parameters.ContainsKey(paramName))
-                errors.AddError(LineNum, $"Duplicated parameter '{paramName}' definition.");
-            else
-                parameters.Add(paramName, paramValue);
         }
 
         return line;
@@ -364,16 +278,15 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <returns>セクションの次行。</returns>
     private string? GetNuclides()
     {
-        if (nuclides != null)
+        if (inputNuclidesRead)
         {
             errors.AddError(LineNum, "Duplicated [nuclide] section.");
             return SkipUntilNextSection();
         }
+        inputNuclidesRead = true;
 
         var olderrors = errors.Count;
         var sectionLineNum = LineNum;
-
-        nuclides = [];
 
         // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
         var autoMode = default(bool?);
@@ -382,7 +295,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         var branchTable = new Dictionary<NuclideData, (string Daughter, decimal Fraction)[]>();
         var nuclideLines = new Dictionary<NuclideData, int>();
 
-        string line;
+        string? line;
         while (true)
         {
             line = GetNextLine();
@@ -409,7 +322,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                         errors.AddError(LineNum, $"'{nuc}' is not nuclide name.");
                         continue;
                     }
-                    if (nuclides.Any(n => n.Name == nuc))
+                    if (inputNuclides.Any(n => n.Name == nuc))
                     {
                         errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
                         continue;
@@ -424,13 +337,13 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                     var nuclide = new NuclideData
                     {
-                        Index = nuclides.Count,
+                        Index = inputNuclides.Count,
                         Name = nuc,
                         HalfLife = halfLife ?? "---",
                         Lambda = lambda ?? 0.0,
-                        IsProgeny = nuclides.Count > 0,
+                        IsProgeny = inputNuclides.Count > 0,
                     };
-                    nuclides.Add(nuclide);
+                    inputNuclides.Add(nuclide);
 
                     branchTable[nuclide] = branches;
                     nuclideLines[nuclide] = LineNum;
@@ -448,7 +361,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 }
 
                 var nuc = values[0];
-                if (nuclides.Any(n => n.Name == nuc))
+                if (inputNuclides.Any(n => n.Name == nuc))
                 {
                     errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
                     continue;
@@ -467,12 +380,12 @@ public class InputDataReader_OIR : InputDataReaderBase
 
                 var nuclide = new NuclideData
                 {
-                    Index = nuclides.Count,
+                    Index = inputNuclides.Count,
                     Name = nuc,
                     Lambda = lambda,
-                    IsProgeny = nuclides.Count > 0,
+                    IsProgeny = inputNuclides.Count > 0,
                 };
-                nuclides.Add(nuclide);
+                inputNuclides.Add(nuclide);
 
                 var branches = new (string Daughter, decimal Fraction)[values.Length - 2];
                 for (int i = 0; i < branches.Length; i++)
@@ -513,7 +426,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         }
         if (errors.IfAny(olderrors))
             return line;
-        if (!nuclides.Any())
+        if (!inputNuclides.Any())
         {
             errors.AddError(sectionLineNum, "Empty [nuclide] section.");
             return line;
@@ -527,7 +440,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             var branches = entry.Value;
 
             NuclideData? GetNuclide(string nuc)
-                => nuclides.FirstOrDefault(n => n.Name == nuc);
+                => inputNuclides.FirstOrDefault(n => n.Name == nuc);
 
             if (autoMode == true)
             {
@@ -551,8 +464,8 @@ public class InputDataReader_OIR : InputDataReaderBase
         }
 
         // 崩壊系列が適切であることを確認する。
-        var root = nuclides.FirstOrDefault();
-        foreach (var nuclide in nuclides)
+        var root = inputNuclides.FirstOrDefault();
+        foreach (var nuclide in inputNuclides)
         {
             var tested = new List<NuclideData>();
 
@@ -598,26 +511,75 @@ public class InputDataReader_OIR : InputDataReaderBase
     }
 
     /// <summary>
+    /// パラメーターの定義セクションを読み込む。
+    /// </summary>
+    /// <param name="nuc"></param>
+    /// <returns>セクションの次行。</returns>
+    private string? GetParameters(string nuc)
+    {
+        if (inputParameters.TryGetValue(nuc, out var parameters))
+        {
+            if (nuc == "")
+                errors.AddError(LineNum, $"Duplicated [parameter] section.");
+            else
+                errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
+            return SkipUntilNextSection();
+        }
+        inputParameters.Add(nuc, parameters = []);
+
+        var parameterNames = nuc == ""
+            ? InputData.ParameterNames
+            : NuclideData.ParameterNames;
+
+        string? line;
+        while (true)
+        {
+            line = GetNextLine();
+            if (line is null)
+                break;
+            if (CheckSectionHeader(line))
+                break;
+
+            var values = line.Split(["="], 2, StringSplitOptions.RemoveEmptyEntries);
+            if (values.Length != 2)
+            {
+                errors.AddError(LineNum, "Parameter definition should have 2 values.");
+                continue;
+            }
+
+            var paramName = values[0].Trim();
+            var paramValue = values[1].Trim();
+
+            if (!parameterNames.Contains(paramName))
+                errors.AddError(LineNum, $"Unrecognized parameter '{paramName}' definition.");
+            else if (parameters.ContainsKey(paramName))
+                errors.AddError(LineNum, $"Duplicated parameter '{paramName}' definition.");
+            else
+                parameters.Add(paramName, paramValue);
+        }
+
+        return line;
+    }
+
+    /// <summary>
     /// コンパートメントの定義セクションを読み込む。
     /// </summary>
     /// <param name="nuc"></param>
     /// <returns>セクションの次行。</returns>
     private string? GetCompartments(string nuc)
     {
-        if (nuclideOrgans.TryGetValue(nuc, out var organs))
+        if (inputOrgans.TryGetValue(nuc, out var organs))
         {
             errors.AddError(LineNum, $"Duplicated [{nuc}:compartment] section.");
             return SkipUntilNextSection();
         }
+        inputOrgans.Add(nuc, organs = []);
 
         var olderrors = errors.Count;
         var sectionLineNum = LineNum;
         compartmentSectionLocs[nuc] = sectionLineNum;
 
-        organs = [];
-        nuclideOrgans.Add(nuc, organs);
-
-        string line;
+        string? line;
         while (true)
         {
             line = GetNextLine();
@@ -650,21 +612,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
             }
 
-            var organ = new Organ
-            {
-                Nuclide = null,     // 後で設定する。
-                ID = organs.Count + 1,
-                Index = -1,         // 後で設定する。
-                Name = organName,
-                Func = organFunc,
-            };
-            if (organFunc == OrganFunc.mix)
-                organ.BioDecay = 1.0;
-
-            // 線源領域の名称については、妥当性を後で確認する。
-            organ.SourceRegion = sourceRegion;
-
-            organs.Add((LineNum, organ));
+            organs.Add((LineNum, organFunc, organName, sourceRegion));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -683,20 +631,18 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="line"></param>
     private string? GetTransfers(string nuc)
     {
-        if (nuclideTransfers.TryGetValue(nuc, out var transfers))
+        if (inputTransfers.TryGetValue(nuc, out var transfers))
         {
             errors.AddError(LineNum, $"Duplicated [{nuc}:transfer] section.");
             return SkipUntilNextSection();
         }
+        inputTransfers.Add(nuc, transfers = []);
 
         var olderrors = errors.Count;
         var sectionLineNum = LineNum;
         transferSectionLocs[nuc] = sectionLineNum;
 
-        transfers = [];
-        nuclideTransfers.Add(nuc, transfers);
-
-        string line;
+        string? line;
         while (true)
         {
             line = GetNextLine();
@@ -745,33 +691,38 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         Organ? input = null;
 
-        foreach (var nuclide in nuclides!)
+        // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
+        var validSourceRegions = data.SourceRegions
+            .Select(s => s.Name).Append("Other").ToArray();
+
+        var otherSourceRegionsBase = data.SourceRegions
+            .Where(s => s.MaleID != 0 || s.FemaleID != 0)
+            .Select(s => s.Name).ToList();
+
+        foreach (var nuclide in inputNuclides)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
             var nuc = nuclide.Name;
-            if (!nuclideOrgans.TryGetValue(nuc, out var organs))
+            if (!inputOrgans.TryGetValue(nuc, out var organs))
                 continue;
             var sectionLineNum = compartmentSectionLocs[nuc];
 
-            nuclide.Parameters = nuclideParameters?.GetValueOrDefault(nuc) ?? [];
+            nuclide.Parameters = inputParameters.GetValueOrDefault(nuc) ?? [];
 
             data.Nuclides.Add(nuclide);
 
-            // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
-            var validSourceRegions = data.SourceRegions
-                .Select(s => s.Name).Append("Other").ToArray();
-
-            var otherSourceRegions = data.SourceRegions
-                .Where(s => s.MaleID != 0 || s.FemaleID != 0)
-                .Select(s => s.Name).ToList();
+            var otherSourceRegions = new List<string>(otherSourceRegionsBase);
+            var otherCompartments = new List<Organ>();
+            var anyCTmarrow = false;
+            var anyRYmarrow = false;
+            bool? otherContainsMineralBone;
 
             // Otherから無機質骨の体積組織(C-bone-VとT-bone-V)への分配について制御する。
             var paramOtherContainsMineralBone =
                 (nuclide.Parameters.GetValueOrDefault("OtherContainsMineralBone") ??
                     data.Parameters.GetValueOrDefault("OtherContainsMineralBone") ?? "auto").Trim();
-            bool? otherContainsMineralBone;
             if (bool.TryParse(paramOtherContainsMineralBone, out var v))
             {
                 otherContainsMineralBone = v;
@@ -783,13 +734,20 @@ public class InputDataReader_OIR : InputDataReaderBase
                 otherContainsMineralBone = null;
             }
 
-            var otherCompartments = new List<Organ>();
-
-            var anyCTmarrow = false;
-            var anyRYmarrow = false;
-
-            foreach (var (lineNum, organ) in organs)
+            foreach (var (lineNum, organFunc, organName, sourceRegion) in organs)
             {
+                var organ = new Organ
+                {
+                    Nuclide  /**/= nuclide,
+                    ID       /**/= data.Organs.Count + 1,
+                    Index    /**/= data.Organs.Count,
+                    Name     /**/= organName,
+                    Func     /**/= organFunc,
+                    SourceRegion = sourceRegion,
+                };
+                if (organFunc == OrganFunc.mix)
+                    organ.BioDecay = 1.0;
+
                 if (organ.Func == OrganFunc.inp)
                 {
                     if (nuclide.IsProgeny)
@@ -800,12 +758,9 @@ public class InputDataReader_OIR : InputDataReaderBase
                         input = organ;
                 }
 
-                organ.Nuclide = nuclide;
-                organ.Index = data.Organs.Count;
-
                 data.Organs.Add(organ);
 
-                var sourceRegion = organ.SourceRegion;
+                // 線源領域の名称について、妥当性を確認する。
                 if (!IsBar(sourceRegion))
                 {
                     // コンパートメントに対応する線源領域の名称が有効であることを確認する。
@@ -900,13 +855,13 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         var decaySet = new DecaySet(data.Nuclides, errors);
 
-        foreach (var nuclide in nuclides!)
+        foreach (var nuclide in inputNuclides)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
             var nuc = nuclide.Name;
-            if (!nuclideTransfers.TryGetValue(nuc, out var transfers))
+            if (!inputTransfers.TryGetValue(nuc, out var transfers))
                 continue;
 
             var olderrorsN = errors.Count;
@@ -927,7 +882,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 {
                     var nucFrom = from.Substring(0, i);
                     nameFrom = from.Substring(i + 1);
-                    nuclideFrom = nuclides.FirstOrDefault(n => n.Name == nucFrom);
+                    nuclideFrom = inputNuclides.FirstOrDefault(n => n.Name == nucFrom);
                     if (nuclideFrom is null)
                         errors.AddError(lineNum, $"Undefined nuclide '{nucFrom}'.");
                 }
@@ -938,7 +893,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 {
                     var nucTo = to.Substring(0, j);
                     nameTo = to.Substring(j + 1);
-                    nuclideTo = nuclides.FirstOrDefault(n => n.Name == nucTo);
+                    nuclideTo = inputNuclides.FirstOrDefault(n => n.Name == nucTo);
                     if (nuclideTo is null)
                         errors.AddError(lineNum, $"Undefined nuclide '{nucTo}'.");
                 }
