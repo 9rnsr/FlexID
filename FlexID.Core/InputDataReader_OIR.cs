@@ -253,9 +253,15 @@ public class InputDataReader_OIR : InputDataReaderBase
         // 全てのコンパートメントを定義する。
         DefineCompartments(data);
 
+        // コンパートメント定義にエラーがないことを確定する。
+        errors.RaiseIfAny();
+
         // コンパートメント間の移行経路を定義する。
         DefineIntakes(data);
         DefineTransfers(data);
+
+        // 移行経路の定義にエラーがないことを確定する。
+        errors.RaiseIfAny();
 
         // 流入を持たないコンパートメントをマークする。
         MarkZeroInflows(data);
@@ -1078,9 +1084,6 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             nuclide.OtherSourceRegions = otherSourceRegions;
         }
-
-        // コンパートメント定義にエラーがないことを確定する。
-        errors.RaiseIfAny();
     }
 
     /// <summary>
@@ -1187,11 +1190,11 @@ public class InputDataReader_OIR : InputDataReaderBase
 
             organTo.Inflows.Add(new Inflow
             {
-                ID = organFrom.ID,
-                Rate = inflowRate,
-
                 // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
+                ID = organFrom.ID,
                 Organ = organFrom,
+
+                Rate = inflowRate,
             });
         }
     }
@@ -1369,8 +1372,13 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="data"></param>
     private void DefineTransfers(InputData data)
     {
+        var olderrorsN = errors.Count;
+
         var decaySet = new DecaySet(data.Nuclides, errors);
         var parser = new TransferParser(inputNuclides, data.Organs, inputEvaluators, errors);
+
+        // 有効な移行経路の定義を収集する
+        var correctTransfers = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
 
         foreach (var nuclide in inputNuclides)
         {
@@ -1381,15 +1389,8 @@ public class InputDataReader_OIR : InputDataReaderBase
             if (!inputTransfers.TryGetValue(nuc, out var transfers))
                 continue;
 
-            var olderrorsN = errors.Count;
-            var sectionLineNum = transferSectionLocs[nuc];
-
             var evaluator = inputEvaluators[nuclide];
 
-            // 移行経路の定義が正しいことの確認と、
-            // 各コンパートメントから流出する移行係数の総計を求める。
-            var transfersCorrect = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
-            var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
             foreach (var transfer in transfers)
             {
                 if (!parser.TryParse(nuclide, transfer, out var result))
@@ -1411,40 +1412,50 @@ public class InputDataReader_OIR : InputDataReaderBase
                     // あるいはインプットで定義済みのコンパートメントを直接使用することで、
                     // 以下のような経路に構成し直す。
                     //   Parent/organFrom
-                    //      ↓
+                    //   ↓
                     //   Progeny_1/organDecay
-                    //   ： ：
-                    //   ↓ ↓
-                    //   ↓ Progeny_i/organDecay --(coeff)--> Progeny_i/organTo  ①移行速度あり
-                    //   ↓ Progeny_i/organDecay == organTo                      ②移行速度なし
-                    //   ↓ ：
-                    //   ↓ ↓
-                    //   Progeny_N/organDecay
+                    //   ：
+                    //   ↓
+                    //   Progeny_i/organDecay --(coeff)--> Progeny_i/organTo  ①移行速度あり
+                    //   Progeny_i/organDecay == organTo                      ②移行速度なし
 
-                    var organDecay = decaySet.AddDecayPath(lineNum, organFrom, organTo, coeff);
-                    if (organDecay is null)
-                        continue;
-
-                    // 以降の処理を核種が同じコンパートメント間organDecay -> organToの経路設定にすり替える。
-                    organFrom = organDecay;
+                    decaySet.AddDecayPath(lineNum, organFrom, organTo, coeff);
                 }
-
-                if (coeff is decimal coeff_v)
+                else
                 {
-                    if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
-                        sum = 0;
-                    sumOfOutflowCoeff[organFrom] = sum + coeff_v;
+                    // パース処理によって、同じ核種での移行経路では必ず移行係数が存在する。
+                    Debug.Assert(coeff is not null);
+
+                    correctTransfers.Add((lineNum, organFrom, organTo, coeff.Value));
                 }
-
-                transfersCorrect.Add((lineNum, organFrom, organTo, coeff ?? 0));
             }
+        }
 
-            // 核種nuclideの動態モデルに入る移行経路にエラーがないことを確定する。
-            if (errors.IfAny(olderrorsN))
+        // 移行速度付き壊変経路によって核種のモデルへ流入する経路を追加する。
+        foreach (var (organDecay, (lineNum, (coeff, organTo))) in decaySet.AfterDecayPath)
+        {
+            correctTransfers.Add((lineNum, organDecay, organTo, coeff));
+        }
+
+        // 全ての核種について陽に設定された移行経路と係数にエラーがないことを確定する。
+        if (errors.IfAny(olderrorsN))
+            return;
+
+        // 各コンパートメントから流出する移行係数の総計を処理する。
+        var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
+        foreach (var (_, organFrom, organTo, coeff) in correctTransfers)
+        {
+            if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
+                sum = 0;
+            sumOfOutflowCoeff[organFrom] = sum + coeff;
+        }
+        foreach (var nuclide in inputNuclides)
+        {
+            if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
-            // あるコンパートメントから同じ核種のまま流出する全ての移行経路について処理する。
-            var outflowGroups = transfersCorrect.GroupBy(t => t.from);
+            // あるコンパートメントから同じ核種のまま流出する全ての移行経路について取り扱う。
+            var outflowGroups = correctTransfers.GroupBy(t => t.from);
             foreach (var outflows in outflowGroups)
             {
                 if (!outflows.Any())
@@ -1452,13 +1463,13 @@ public class InputDataReader_OIR : InputDataReaderBase
                 var organFrom = outflows.Key;
                 var nameFrom = organFrom.Name;
 
-                if (organFrom.IsInstantOutflow)
+                if (organFrom.Func == OrganFunc.mix)
                 {
                     // 流出路毎の移行割合を合計したものが1.0 == 100%かどうかを確認する。
                     var sum = sumOfOutflowCoeff[organFrom];
                     if (sum != 1)
                     {
-                        var ts = transfersCorrect.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
+                        var ts = correctTransfers.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
                         for (int i = 0; i < ts.Length; i++)
                         {
                             var (lineNum, _, _, coeff) = ts[i];
@@ -1474,50 +1485,35 @@ public class InputDataReader_OIR : InputDataReaderBase
                     if (organFrom.Func == OrganFunc.acc)
                         organFrom.BioDecay = (double)sumOfOutflowCoeff[organFrom];
                 }
-
-                // GetDecayChain(organFrom);
-            }
-
-            // 核種nuclideの動態モデルに入る移行経路と係数にエラーがないことを確定する。
-            if (errors.IfAny(olderrorsN))
-                continue;
-
-            // 核種が同じコンパートメントへの流入経路と、移行割合を設定する。
-            foreach (var (_, organFrom, organTo, coeff) in transfersCorrect)
-            {
-                double inflowRate;
-                if (organFrom.IsInstantOutflow)
-                {
-                    // fromからtoへの移行割合 = 移行割合[%]
-                    inflowRate = (double)coeff;
-                }
-                else
-                {
-                    var sum = sumOfOutflowCoeff[organFrom];
-
-                    // fromからtoへの移行割合 = 移行速度[/d]
-                    inflowRate = (double)coeff;
-                }
-
-                organTo.Inflows.Add(new Inflow
-                {
-                    ID = organFrom.ID,
-                    Rate = inflowRate,
-
-                    // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
-                    Organ = organFrom,
-                });
             }
         }
 
-        // 全ての核種について陽に設定された移行経路と係数にエラーがないことを確定する。
-        errors.RaiseIfAny();
+        // 核種nuclideの動態モデルに入る移行経路と係数にエラーがないことを確定する。
+        if (errors.IfAny(olderrorsN))
+            return;
+
+        // 核種が同じコンパートメントへの流入経路と、移行割合を設定する。
+        foreach (var (_, organFrom, organTo, coeff) in correctTransfers)
+        {
+            // fromからtoへの移行割合 = 移行速度[/d] or 移行割合[%]
+            var inflowRate = (double)coeff;
+
+            organTo.Inflows.Add(new Inflow
+            {
+                // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
+                ID = organFrom.ID,
+                Organ = organFrom,
+
+                Rate = inflowRate,
+            });
+        }
 
         // 核種が異なるコンパートメントへの流入経路と、移行割合を設定する。
         decaySet.DefineDecayTransfers(data.Organs);
 
         // 移行経路の定義にエラーがないことを確定する。
-        errors.RaiseIfAny();
+        if (errors.IfAny(olderrorsN))
+            return;
 
         // 壊変経路の充足を確認する。
         VerifyDecayPaths(data);

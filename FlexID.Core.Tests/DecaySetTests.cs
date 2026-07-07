@@ -67,7 +67,7 @@ public class DecaySetTests
         [DataRow(1.23)]
         public void SinglePath(double? coeff)
         {
-            var organDecay = decaySet.AddDecayPath(Line1, C11, C21, (decimal?)coeff);
+            decaySet.AddDecayPath(Line1, C11, C21, (decimal?)coeff);
             errors.GetErrorLines().ShouldBe([]);
 
             decaySet.DecayChains.Count.ShouldBe(1);
@@ -83,11 +83,13 @@ public class DecaySetTests
             }
             else
             {
+                var d21 = decaySet.AfterDecayPath.First(p => p.Value.Outflow == ((decimal)coeff, C21)).Key;
+
                 chain1[N1].ShouldBe((Line1, C11));
-                chain1[N2].ShouldBe((Line1, organDecay));
+                chain1[N2].ShouldBe((Line1, d21));
 
                 decaySet.JointChains[C11].ShouldBe([chain1]);
-                decaySet.JointChains[organDecay].ShouldBe([chain1]);
+                decaySet.JointChains[d21].ShouldBe([chain1]);
             }
         }
 
@@ -132,15 +134,14 @@ public class DecaySetTests
             // 2つの経路設定は、終端側がC21で合流しているように見えるが
             // 2つ目の経路は移行速度付きのため実際はN2位置で壊変コンパートメントが自動作成され、
             // 従ってこれらは独立した2つの壊変経路を作成する。
-            var d11 = decaySet.AddDecayPath(Line1, C11, C21, null);   // 壊変経路1
-            var d21 = decaySet.AddDecayPath(Line2, C12, C21, 123m);   // 壊変経路2: 経路1とは関係ない
+            decaySet.AddDecayPath(Line1, C11, C21, null);   // 壊変経路1
+            decaySet.AddDecayPath(Line2, C12, C21, 123m);   // 壊変経路2: 経路1とは関係ない
             errors.GetErrorLines().ShouldBe([]);
-            d11.ShouldBeNull();
-            d21.ShouldNotBeNull();
 
             decaySet.DecayChains.Count.ShouldBe(2);
             var chain1 = decaySet.DecayChains[0];
             var chain2 = decaySet.DecayChains[1];
+            var d21 = decaySet.AfterDecayPath.First(p => p.Value.Outflow == (123m, C21)).Key;
 
             chain1[N1].ShouldBe((Line1, C11));
             chain1[N2].ShouldBe((Line1, C21));
@@ -193,13 +194,10 @@ public class DecaySetTests
         {
             // 核種N2で合流が発生した場合、その子孫核種であるN3のコンパートメントは
             // 自動的に合流した2つの系列で共有される。
-            var d11 = decaySet.AddDecayPath(Line1, C11, C21, null);
-            var d21 = decaySet.AddDecayPath(Line2, C12, C21, null);
-            var d31 = decaySet.AddDecayPath(Line3, C21, C31, null);
+            decaySet.AddDecayPath(Line1, C11, C21, null);
+            decaySet.AddDecayPath(Line2, C12, C21, null);
+            decaySet.AddDecayPath(Line3, C21, C31, null);
             errors.GetErrorLines().ShouldBe([]);
-            d11.ShouldBeNull();
-            d21.ShouldBeNull();
-            d31.ShouldBeNull();
 
             decaySet.DecayChains.Count.ShouldBe(2);
             var chain1 = decaySet.DecayChains[0];
@@ -270,17 +268,15 @@ public class DecaySetTests
         {
             // 合流が発生した核種N2の子孫核種N3の位置が壊変コンパートメントである場合も、
             // 自動的に合流した2つの系列で共有される。
-            var d11 = decaySet.AddDecayPath(Line1, C11, C21, null);
-            var d21 = decaySet.AddDecayPath(Line2, C12, C21, null);
-            var d31 = decaySet.AddDecayPath(Line3, C21, C31, 123m);
+            decaySet.AddDecayPath(Line1, C11, C21, null);
+            decaySet.AddDecayPath(Line2, C12, C21, null);
+            decaySet.AddDecayPath(Line3, C21, C31, 123m);
             errors.GetErrorLines().ShouldBe([]);
-            d11.ShouldBeNull();
-            d21.ShouldBeNull();
-            d31.ShouldNotBeNull();
 
             decaySet.DecayChains.Count.ShouldBe(2);
             var chain1 = decaySet.DecayChains[0];
             var chain2 = decaySet.DecayChains[1];
+            var d31 = decaySet.AfterDecayPath.First(p => p.Value.Outflow == (123m, C31)).Key;
 
             chain1[N1].ShouldBe((Line1, C11));
             chain1[N2].ShouldBe((Line1, C21));
@@ -540,9 +536,9 @@ public class DecaySetTests
             decaySet.AddDecayPath(Line2, C11, C22, (decimal?)coeff2);
             errors.GetErrorLines().ShouldBe(
             [
-                $"Line {Line2}: Decay paths conflict each other:",
-                $"    the previous: '{C11}' --> '{C21}'" + (coeff1 is null ? "": $" (with coeff. {coeff1.Value})") + $" at Line {Line1}",
-                $"    and here    : '{C11}' --> '{C22}'" + (coeff2 is null ? "": $" (with coeff. {coeff2.Value})"),
+                $"Line {Line2}: Conflict of decay path definitions found:",
+                $"Line {Line1}:     previous, decay to '{C21}' {(coeff1 is null ? "without coefficient": $"with coefficient {coeff1.Value}")},",
+                $"Line {Line2}:     and here, decay to '{C22}' {(coeff2 is null ? "without coefficient": $"with coefficient {coeff2.Value}")}.",
             ]);
         }
 
@@ -586,9 +582,9 @@ public class DecaySetTests
             decaySet.AddDecayPath(Line4, C12, C32, null);
             errors.GetErrorLines().ShouldBe(
             [
-                $"Line {Line4}: Decay paths conflict each other:",
-                $"    the previous: '{C12}' --> '{C31}'" + $" at Line {Line3}",
-                $"    and here    : '{C12}' --> '{C32}'",
+                $"Line {Line4}: Conflict of decay path definitions found:",
+                $"Line {Line3}:     previous, decay to '{C31}' without coefficient,",
+                $"Line {Line4}:     and here, decay to '{C32}' without coefficient.",
             ]);
         }
 
@@ -624,9 +620,9 @@ public class DecaySetTests
             decaySet.AddDecayPath(Line4, C12, C21, null);
             errors.GetErrorLines().ShouldBe(
             [
-                $"Line 4: Decay paths conflict each other:",
-                $"    the previous: '{C21}' --> '{C31}' at Line {Line1}",
-                $"    and another : '{C21}' --> '{C32}' at Line {Line2}",
+                $"Line 4: Conflict of decay path definitions found:",
+                $"Line 1:     previous,  decay to '{C31}' without coefficient,",
+                $"Line 2:     and there, decay to '{C32}' without coefficient.",
             ]);
         }
 
@@ -874,7 +870,7 @@ public class DecaySetTests
             var chain1 = decaySet.DecayChains[0];
             var chain2 = decaySet.DecayChains[1];
 
-            chain1[N1].ShouldBe(default);
+            chain1[N1].ShouldBe((Line3, C11));
             chain1[N2].ShouldBe((Line1, C21));
             chain1[N3].ShouldBe((Line1, C31));
 
@@ -882,7 +878,7 @@ public class DecaySetTests
             chain2[N2].ShouldBe((Line3, C21));
             chain2[N3].ShouldBe((Line2, C31));
 
-            decaySet.JointChains[C11].ShouldBe([chain2]);
+            decaySet.JointChains[C11].ShouldBe([chain1, chain2], ignoreOrder: true);
             decaySet.JointChains[C21].ShouldBe([chain1, chain2], ignoreOrder: true);
             decaySet.JointChains[C31].ShouldBe([chain1, chain2], ignoreOrder: true);
         }
@@ -933,11 +929,11 @@ public class DecaySetTests
             chain1[N2].ShouldBe((Line3, C21));
             chain1[N3].ShouldBe((Line1, C31));
 
-            chain2[N1].ShouldBe(default);
+            chain2[N1].ShouldBe((Line3, C11));
             chain2[N2].ShouldBe((Line2, C21));
             chain2[N3].ShouldBe((Line2, C31));
 
-            decaySet.JointChains[C11].ShouldBe([chain1]);
+            decaySet.JointChains[C11].ShouldBe([chain1, chain2], ignoreOrder: true);
             decaySet.JointChains[C21].ShouldBe([chain2, chain1], ignoreOrder: true);
             decaySet.JointChains[C31].ShouldBe([chain1, chain2], ignoreOrder: true);
         }
