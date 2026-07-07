@@ -123,9 +123,6 @@ Transfers:
   Y-90/RS-con                  -> Y-90/Faeces          = 2
   Y-90/Blood1                  -> Y-90/UB-con          = 2.49
   Y-90/UB-con                  -> Y-90/Urine           = 12
-  Y-90/<decay_from_Sr-90/ST0>  -> Y-90/Blood1          = 0.23105
-  Y-90/<decay_from_Sr-90/ST1>  -> Y-90/Blood1          = 0.23105
-  Y-90/<decay_from_Sr-90/ST2>  -> Y-90/Blood1          = 0.23105
   Y-90/SI-con                  -> Y-90/Blood1          = 0.0006000600060006
   Y-90/SI-conRe                -> Y-90/Blood1          = 0.0006000600060006
   Y-90/Blood2                  -> Y-90/Blood1          = 0.462
@@ -138,6 +135,9 @@ Transfers:
   Y-90/T-bone-V                -> Y-90/Blood1          = 0.000493
   Y-90/C-bone-S                -> Y-90/Blood1          = 8.21E-05
   Y-90/C-bone-V                -> Y-90/Blood1          = 8.21E-05
+  Y-90/<decay_from_Sr-90/ST0>  -> Y-90/Blood1          = 0.23105
+  Y-90/<decay_from_Sr-90/ST1>  -> Y-90/Blood1          = 0.23105
+  Y-90/<decay_from_Sr-90/ST2>  -> Y-90/Blood1          = 0.23105
   Y-90/Blood1                  -> Y-90/Blood2          = 0.498
   Y-90/Blood1                  -> Y-90/ST0             = 3.652
   Y-90/Blood1                  -> Y-90/ST1             = 1.328

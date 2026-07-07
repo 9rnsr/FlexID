@@ -2,14 +2,12 @@ using System.Diagnostics;
 
 namespace FlexID;
 
-#nullable disable
-
 /// <summary>
 /// インプットで設定されてる壊変経路の集合から、
 /// 暗黙に構成される崩壊系列の集合を計算する。またこれらの中で
 /// 暗黙に作成される壊変コンパートメントを取り扱う。
 /// </summary>
-internal class DecaySet
+public class DecaySet
 {
     /// <summary>
     /// 処理対象となる核種のリスト。
@@ -32,14 +30,15 @@ internal class DecaySet
     public List<Organ> DecayCompartments { get; } = [];
 
     /// <summary>
-    /// コンパートメントをキーとし、当該位置を共有する崩壊系列のリストを値とする辞書。
+    /// 定義済みのコンパートメントをキーとし、当該位置を共有する崩壊系列のリストを値とする辞書。
     /// </summary>
     public Dictionary<Organ, List<DecayChain>> JointChains { get; } = [];
 
     /// <summary>
-    /// 移行速度付きの壊変経路が移行した先(organDecay)をキーとし、そこから同じ核種のまま移行した先とその係数を値とする辞書。
+    /// 移行速度付きの壊変経路に対して自動作成されたOrganDecayをキーとし、
+    /// そこから同じ核種のまま移行した先であるOragnToとその係数Coeffを値とする辞書。
     /// </summary>
-    private Dictionary<Organ, (Organ OrganTo, decimal? Coeff)> AfterDecayPath { get; } = [];
+    public Dictionary<Organ, (int LineNum, (decimal Coeff, Organ OrganTo) Outflow)> AfterDecayPath { get; } = [];
 
     /// <summary>
     /// コンストラクタ。
@@ -51,7 +50,7 @@ internal class DecaySet
         Nuclides = nuclides;
         Errors = errors;
 
-        nuclideAncestors = Nuclides.Select(root =>
+        nuclideAncestors = [.. Nuclides.Select(root =>
         {
             // 対象核種を末端とする崩壊系列を構成する祖先核種を列挙する。
             var results = new List<NuclideData> { root };
@@ -72,9 +71,9 @@ internal class DecaySet
             // rootを除いた、祖先核種のみの配列を返す。
             results.RemoveAt(0);
             return (IReadOnlyList<NuclideData>)results;
-        }).ToArray();
+        })];
 
-        nuclideProgenies = Nuclides.Select(root =>
+        nuclideProgenies = [.. Nuclides.Select(root =>
         {
             // 対象核種を始点とする崩壊系列を構成する子孫核種を列挙する。
             var results = new List<NuclideData> { root };
@@ -95,7 +94,7 @@ internal class DecaySet
             // rootを除いた、子孫核種のみの配列を返す。
             results.RemoveAt(0);
             return (IReadOnlyList<NuclideData>)results;
-        }).ToArray();
+        })];
     }
 
     private readonly IReadOnlyList<NuclideData>[] nuclideAncestors;
@@ -109,7 +108,7 @@ internal class DecaySet
     /// <summary>
     /// 対象コンパートメントの核種から始まる崩壊系列の情報を保持する。
     /// </summary>
-    internal class DecayChain
+    public class DecayChain
     {
         /// <summary>
         /// コンストラクタ。
@@ -117,26 +116,25 @@ internal class DecaySet
         /// <param name="nuclideCount">核種の総数。</param>
         public DecayChain(int nuclideCount)
         {
-            Compartments = new (int, Organ)[nuclideCount];
+            Compartments = new (int, Organ?)[nuclideCount];
         }
 
         /// <summary>
         /// 崩壊系列において、これを構成する核種毎の位置を占めるコンパートメントを保持する。
         /// </summary>
-        public (int LineNum, Organ Organ)[] Compartments;
+        public (int LineNum, Organ? Organ)[] Compartments;
 
         /// <summary>
         /// 指定の子孫核種に対応する壊変コンパートメントを取得する。
         /// </summary>
         /// <param name="progeny"></param>
         /// <returns></returns>
-        public ref (int LineNum, Organ Organ) this[NuclideData progeny] => ref Compartments[progeny.Index];
+        public ref (int LineNum, Organ? Organ) this[NuclideData progeny] => ref Compartments[progeny.Index];
 
-        public bool IsSubsetOf(DecayChain other)
-        {
-            return other.Compartments.Zip(this.Compartments)
-                        .All(x => x.Item1.Organ == x.Item2.Organ || x.Item2.Organ is null);
-        }
+        public bool IsSubsetOf(DecayChain other) =>
+            other.Compartments
+                 .Zip(this.Compartments)
+                 .All(x => x.First.Organ == x.Second.Organ || x.Second.Organ is null);
 
         public override string ToString()
         {
@@ -151,280 +149,249 @@ internal class DecaySet
     /// <param name="organFrom"></param>
     /// <param name="organTo"></param>
     /// <param name="coeff"></param>
-    /// <remarks>organFrom + organTo + coeffの組み合わせは高々1回だけ与えられることを前提としている。</remarks>
-    /// <returns></returns>
-    public Organ AddDecayPath(int lineNum, Organ organFrom, Organ organTo, decimal? coeff)
+    public void AddDecayPath(int lineNum, Organ organFrom, Organ organTo, decimal? coeff)
     {
         var nuclideFrom = organFrom.Nuclide;
         var nuclideTo = organTo.Nuclide;
-        var hasCoeff = coeff is not null;
 
         // 分岐比が不明な壊変経路は定義できない。
         if (!GetProgenies(nuclideFrom).Contains(nuclideTo))
         {
             Errors.AddError(lineNum, $"There is no decay path from {nuclideFrom.Name} to {nuclideTo.Name}.");
-            return null;
+            return;
         }
 
-        // organFrom位置を共有する崩壊系列の1つをtargetChainとして取得する。
-        DecayChain targetChain;
-        if (JointChains.TryGetValue(organFrom, out var chainsFrom))
+        List<DecayChain> GetJointChainsAt(Organ organ)
         {
-            targetChain = chainsFrom[0];
-        }
-        else if (!hasCoeff &&
-            JointChains.TryGetValue(organTo, out chainsFrom) && chainsFrom.Count == 1 &&
-            GetAncestors(nuclideTo).All(ancestor => chainsFrom[0][ancestor].Organ is null))
-        {
-            // nuclideTo位置を通るただ1つの崩壊系列が、nuclideToの祖先核種全てについてコンパートメント未設定の場合に、
-            // これをorganFrom位置も通る崩壊系列として扱い、これに対してorganFromからorganToへの経路を「接ぎ木」する。
-            targetChain = chainsFrom[0];
-            targetChain[nuclideFrom] = (lineNum, organFrom);
-
-            chainsFrom = [targetChain];
-            JointChains.Add(organFrom, chainsFrom);
-        }
-        else
-        {
-            targetChain = new DecayChain(Nuclides.Count);
-            DecayChains.Add(targetChain);
-
-            ref var decayFrom = ref targetChain[nuclideFrom];
-            decayFrom = (lineNum, organFrom);
-
-            chainsFrom = [targetChain];
-            JointChains.Add(organFrom, chainsFrom);
+            if (!JointChains.TryGetValue(organ, out var chains))
+                JointChains.Add(organ, chains = []);
+            return chains;
         }
 
-        // organFromから壊変によって生成された子孫核種を
-        // nuclideTo位置で受けるためのコンパートメントorganDecayを取得する。
-        Organ organDecay;
+        void AddJointChainsAt(int lineNum, Organ organ, DecayChain chain)
         {
-            var decayTo = targetChain[nuclideTo];
-            bool consistentPath;
-            if (hasCoeff)
+            chain[organ.Nuclide] = (lineNum, organ);
+
+            if (!JointChains.TryGetValue(organ, out var chains))
+                JointChains.Add(organ, [chain]);
+            else if (!chains.Contains(chain))
+                chains.Add(chain);
+        }
+
+        // organFrom位置を共有する崩壊系列のリストを取得する。
+        var chainsFrom = GetJointChainsAt(organFrom);
+
+        // 移行速度付きの壊変経路を処理する場合は、organToを
+        // organFromで生成された核種をnuclideTo位置で直接受け止めるための
+        // 暗黙生成されるコンパートメントに置き換える。
+        if (coeff is not null)
+        {
+            // 元々のorganToを、崩壊系列のnuclideTo位置から移行係数coeffで流出する経路の移行先として保存する。
+            var organOutflowTo = organTo;
+
+            // 新しいorganToとして、organFrom位置を共有する崩壊系列において既にnuclideTo位置を占めるものが
+            // 有ればそれを、無ければ新しい壊変コンパートメントを取得する。
+            organTo = chainsFrom.FirstOrDefault()?[nuclideTo].Organ
+                   ?? CreateDecayCompartment(nuclideTo, organFrom.Func);
+
+            if (organTo.IsDecayCompartment == false)
             {
-                organDecay = decayTo.Organ;
+                // 以前に設定されたorganFromからorganToへ速度なし壊変経路が
+                // 今回の設定と衝突するため、これについてエラーを報告する。
+                var prevNum = chainsFrom[0][nuclideTo].LineNum;
+                Errors.AddError(lineNum, $"Conflict of decay path definitions found:");
+                Errors.AddError(prevNum, $"    previous, decay to '{organTo}' without coefficient,");
+                Errors.AddError(lineNum, $"    and here, decay to '{organOutflowTo}' with coefficient {coeff.Value}.");
+                return;
+            }
 
-                if (decayTo.Organ is null)
+            var path2 = (LineNum: lineNum, Outflow: (Coeff: coeff.Value, OrganTo: organOutflowTo));
+            if (!AfterDecayPath.TryGetValue(organTo, out var path1))
+            {
+                AfterDecayPath[organTo] = path2;
+            }
+            else if (path1.Outflow != path2.Outflow)
+            {
+                // 以前に設定されたorganToからnucideToモデル内へ流出する経路が
+                // 今回の設定と衝突するため、これについてエラーを報告する。
+                var prevNum = path1.LineNum;
+                var outflow1 = path1.Outflow;
+                var outflow2 = path2.Outflow;
+                Errors.AddError(lineNum, $"Conflict of decay path definitions found:");
+                Errors.AddError(prevNum, $"    previous, decay to '{outflow1.OrganTo}' with coefficient {outflow1.Coeff},");
+                Errors.AddError(lineNum, $"    and here, decay to '{outflow2.OrganTo}' with coefficient {outflow2.Coeff}.");
+                return;
+            }
+        }
+
+        // organTo位置を共有する崩壊系列のリストを取得する。
+        var chainsTo = GetJointChainsAt(organTo);
+
+        var ancestorsOfTo = GetAncestors(nuclideTo);
+
+        if (chainsFrom.Count != 0)
+        {
+            // chainsFromに含まれる崩壊系列は、nuclideToより子孫の全ての位置について同じ共有状態を持つため
+            // nuclideTo位置の整合性確認にはその1つだけを対象とすればよい。
+            var chainFrom = chainsFrom[0];
+
+            // organFromを共有している崩壊系列は、全てがorganTo位置も暗黙に共有していることになるため
+            // ここでorganTo位置の共有を明示的に設定し、矛盾する場合はエラーを報告する。
+            ref var decay = ref chainFrom[nuclideTo];
+            if (decay.Organ is null)
+            {
+                // chainsToも更新される。
+                foreach (var chain in chainsFrom)
+                    AddJointChainsAt(lineNum, organTo, chain);
+            }
+            else if (decay.Organ != organTo)
+            {
+                ConflictDecayPathsError(decay!, (lineNum, organTo));
+                return;
+            }
+
+            // nuclideFromより子孫の核種位置で合流しorganTo位置へ流入する崩壊系列の集合は、
+            // organFrom位置を通過していないためchainsFromには含まれない、またその中でも
+            // organTo位置をまだ共有していないものはchainsToにも含まれていないため、
+            // ここでこれらを収集し、organTo位置の共有を設定する。
+            foreach (var ancestor in GetProgenies(nuclideFrom).Intersect(ancestorsOfTo))
+            {
+                var organAncestor = chainFrom[ancestor].Organ;
+                if (organAncestor is null)
+                    continue;
+
+                var chainsMore = JointChains[organAncestor].Except(chainsTo).ToList();
+                if (chainsMore.Count == 0)
+                    continue;
+
+                // chainsMoreに含まれる崩壊系列は、ancestorより子孫の全ての位置について同じ共有状態を持つため
+                // nuclideTo位置の整合性確認にはその1つだけを対象とすればよい。
+                var chainMore = chainsMore[0];
+
+                // chainsMoreはancestor位置でchainsFromと既に合流しているため、
+                // もしnuclideTo位置について共有済み(decay.Organ != null)であるならば
+                // すなわちchainsMoreはchainsToに既に含まれているはずであり、
+                // これはchainsMoreの取得条件と矛盾するため、
+                // 従ってnuclideTo位置については必ず未共有(decay.Organ is null)であることが成り立つ。
+                decay = ref chainMore[nuclideTo];
+                Debug.Assert(decay.Organ is null);
+
+                // chainsToも更新されうる。
+                foreach (var chain in chainsMore)
+                    AddJointChainsAt(lineNum, organTo, chain);
+            }
+        }
+
+        // 移行速度がない壊変経路では、organTo位置を共有する崩壊系列は、
+        // 基本的にはnuclideFrom位置を共有せず、nuclideTo位置で合流するだけの
+        // 独立した壊変経路の集合として考える必要がある。
+        // 従ってここでは、nuclideToより祖先の位置全てにまだ共有を持たない崩壊系列群を対象に
+        // organFrom位置の共有を設定する。
+        foreach (var chain in chainsTo.Where(c => ancestorsOfTo.All(n => c[n].Organ is null)))
+        {
+            // chainsFromも更新される。
+            AddJointChainsAt(lineNum, organFrom, chain);
+        }
+
+        if (chainsFrom.Count == 0)
+        {
+            // 今回設定されているorganFromからorganToへの壊変経路の情報を格納する
+            // 既存の崩壊系列が存在しないため、これを行う新しい崩壊系列を作成する。
+            var chain = new DecayChain(Nuclides.Count);
+            DecayChains.Add(chain);
+
+            AddJointChainsAt(lineNum, organFrom, chain);
+            AddJointChainsAt(lineNum, organTo, chain);
+        }
+        else if (chainsTo.Count == 0)
+        {
+            // organFrom位置を共有する全ての崩壊系列は、
+            // nuclideFrom位置より子孫の全ての位置についても既に共有済みであるため
+            // ここではこれ以上何もしなくてよい。
+            return;
+        }
+
+        var chainsMerged = chainsFrom.Concat(chainsTo).Distinct().ToList();
+        if (chainsMerged.Count != 0)
+        {
+            // organToを共有する全ての崩壊系列は、nuclideTo位置より子孫の全ての位置を互いに共有する必要がある。
+            foreach (var progeny in GetProgenies(nuclideTo))
+            {
+                var decay1 = chainsMerged.Select(chain => chain[progeny]).FirstOrDefault(d => d.Organ is not null);
+
+                // progeny位置はchainsMergedのすべての崩壊系列で未設定なので、これ以上は何もしない。
+                if (decay1.Organ is null)
+                    continue;
+                var organProgeny1 = decay1.Organ;
+
+                foreach (var chain in chainsMerged)
                 {
-                    organDecay = CreateDecayCompartment(nuclideTo, organFrom.Func);
-                    AfterDecayPath.Add(organDecay, (organTo, coeff));
-                    consistentPath = true;
-                }
-                else
-                {
-                    // 係数付きの壊変経路は、nuclideTo位置を高々一度だけ占めることができる。
-                    // 言い換えると、以前の経路設定でnuclideTo位置を(係数あり・なしにかかわらず)
-                    // 既に占めている場合はエラーにする。
-                    #region 詳細な説明
+                    ref var decay2 = ref chain[progeny];
+                    if (decay2.Organ is null)
+                    {
+                        AddJointChainsAt(decay1.LineNum, organProgeny1, chain);
+                        continue;
+                    }
+                    if (decay2.Organ == organProgeny1)
+                        continue;
+                    var organProgeny2 = decay2.Organ;
 
-                    // 係数なしの壊変経路の場合は、同じ崩壊系列を辿る場合でもfromが違えば経路設定が可能となっている。
-                    // 具体例を示すと：
-                    //   N1/C1 -> N2/C2 -> N3/C3 の崩壊系列に対して以下の3つの経路設定を行う場合に、
-                    //   - N1/C1 -> N2/C2
-                    //   - N1/C1 -> N3/C3 (経路A)
-                    //   - N2/C2 -> N3/C3 (経路B)
-                    //   これらをどのような順序で設定しても経路Aと経路Bが衝突なく受け付けられる。
-                    //   このとき、設定順序によってはDecayChainが2個作成され得るが、その場合でも設定順序に関係なく
-                    //   2つのDecayChainのN1,N2,N3位置のそれぞれはC1,C2,C3の3つのコンパートメントによって共有され、
-                    //   従って最終的にただ1つの崩壊系列を構成するためである。
-                    //
-                    // しかし係数付きの壊変経路では、organDecayを経路設定時に明示できないため、もしここで禁止している
-                    // 経路設定を受け付けると、設定順序に依存する挙動が生じる。
-                    // 具体例を示すと：
-                    //   N1/C1 -> N2/C2 -> N3/C3 の崩壊系列に対して以下の3つの経路設定を行う場合に、
-                    //   - N1/C1 -> N2/C2
-                    //   - N1/C1 -> N3/C3 + 移行速度 (経路X)
-                    //   - N2/C2 -> N3/C3 + 移行速度 (経路Y)
-                    //
-                    //     設定順序A：
-                    //     (1) N1/C1 -> N2/C2
-                    //     (2) N1/C1 -> N3/C3 + 移行速度 (経路X)
-                    //     (3) N2/C2 -> N3/C3 + 移行速度 (経路Y)
-                    //     …(2)の時点で DecayChain1 { C1, C2, organDecay } だけが作成される
-                    //     …(3)の時点で設定される経路Yは、この1つだけ存在するDecayChain1の一部と判断できるため、
-                    //       経路Yの設定は経路Xと衝突せず受け付けられる。
-                    //     
-                    //     設定順序B：
-                    //     (1) N1/C1 -> N3/C3 + 移行速度 (経路X)
-                    //     (2) N2/C2 -> N3/C3 + 移行速度 (経路Y)
-                    //     (3) N1/C1 -> N2/C2
-                    //     …(1)の時点で DecayChain1 { C1, null, organDecay1 } が作成される。
-                    //     …(2)の時点で DecayChain2 { null, C2, organDecay2 } が作成される。これは経路Yの設定が
-                    //       N3位置についてorganDecay1を明示できず、従ってDecayChain1とこれを共有するかどうかを
-                    //       この時点では判断できないためである。
-                    //       ※ 例えば、もしこの後に N1/C1 -> N4/C41 と N2/C2 -> N4/C42 という2つの経路設定が行われる場合、
-                    //          明らかにDecayChain1とDecayChain2は独立した2つの崩壊系列を構成することになる。
-                    //     …(3)の経路設定によって、DecayChain1とDecayChain2の2つがN1,N2位置についてそれぞれC1,C2を共有する形が作られるが、
-                    //       N3位置についてはorganDecay1とorganDecay2という異なるコンパートメントが設定済みであるため、
-                    //       2つの崩壊系列の分岐が検出されてエラーが報告される。
-                    //
-                    // このように設定順序に依存してエラーの有無が変わることを避けるため、
-                    // 係数付きの壊変経路では、経路Yを設定しようとした時点でエラーを報告する仕様としている。
+                    if (organProgeny1.IsDecayCompartment && organProgeny2.IsDecayCompartment)
+                    {
+                        var outflow1 = AfterDecayPath[organProgeny1].Outflow;
+                        var outflow2 = AfterDecayPath[organProgeny2].Outflow;
+                        if (outflow1 == outflow2)
+                        {
+                            // organProgenyからprogenyの動態モデルに入るための移行先と速度(outflow1)が
+                            // decay.Organ からprogenyの動態モデルに入るためのもの(outflow2)と一致する場合は
+                            // 後者を前者にマージする。
+                            decay2.Organ = organProgeny1;
 
-                    #endregion
-                    consistentPath = false;
+                            JointChains[organProgeny1].AddRange(JointChains[organProgeny2]);
+                            JointChains.Remove(organProgeny2);
+
+                            AfterDecayPath.Remove(organProgeny2);
+                            continue;
+                        }
+                    }
+
+                    ConflictDecayPathsError(decay1!, decay2!);
+                    return;
                 }
+            }
+        }
+
+        void ConflictDecayPathsError((int LineNum, Organ Organ) decay1, (int LineNum, Organ Organ) decay2)
+        {
+            if (decay1.LineNum > decay2.LineNum)
+                (decay1, decay2) = (decay2, decay1);
+
+            var (leading1, leading2) = decay2.LineNum == lineNum
+                ? ("previous,", "and here,")
+                : ("previous, ", "and there,");
+
+            Errors.AddError(lineNum, $"Conflict of decay path definitions found:");
+
+            if (decay1.Organ.IsDecayCompartment)
+            {
+                var outflow1 = AfterDecayPath[decay1.Organ].Outflow;
+                Errors.AddError(decay1.LineNum, $"    {leading1} decay to '{outflow1.OrganTo}' with coefficient {outflow1.Coeff},");
             }
             else
             {
-                organDecay = organTo;
-
-                if (decayTo.Organ is null)
-                {
-                    consistentPath = true;
-                }
-                else
-                {
-                    // 以前に設定された係数なしの壊変経路と、organDecay(== organTo)が整合している。
-                    consistentPath = decayTo.Organ == organDecay;
-                }
+                Errors.AddError(decay1.LineNum, $"    {leading1} decay to '{decay1.Organ}' without coefficient,");
             }
 
-            if (!consistentPath)
+            if (decay2.Organ.IsDecayCompartment)
             {
-                // 今回と前回の矛盾する2つの設定経路について、
-                // nuclideFrom位置からnuclideTo位置までを表示する。
-                var (prevTo, prevCoeff) = AfterDecayPath.GetValueOrDefault(decayTo.Organ, (decayTo.Organ, null));
-                var prev = $"'{prevTo.ToString()}'";
-                if (prevCoeff is decimal v) prev += $" (with coeff. {v})";
-
-                var here = $"'{organTo.ToString()}'";
-                if (hasCoeff) here += $" (with coeff. {coeff.Value})";
-
-                Errors.AddError(lineNum, "Decay paths conflict each other:");
-                Errors.AddError($"    the previous: '{organFrom}' --> {prev} at Line {decayTo.LineNum}");
-                Errors.AddError($"    and here    : '{organFrom}' --> {here}");
-                return null;
+                var outflow2 = AfterDecayPath[decay2.Organ].Outflow;
+                Errors.AddError(decay2.LineNum, $"    {leading2} decay to '{outflow2.OrganTo}' with coefficient {outflow2.Coeff}.");
+            }
+            else
+            {
+                Errors.AddError(decay2.LineNum, $"    {leading2} decay to '{decay2.Organ}' without coefficient.");
             }
         }
-
-        // nuclideTo位置に新たに合流する崩壊系列の集合を取得する。
-        var chainsInflow = CalcChainsInflow(targetChain, nuclideTo);
-
-        // organDecay位置を共有する崩壊系列のリストを取得する。
-        if (!JointChains.TryGetValue(organDecay, out var chainsTo))
-        {
-            chainsTo = chainsInflow;
-
-            // chainsToのnuclideTo位置にorganDecayを設定する。
-            foreach (var chain in chainsTo)
-            {
-                Debug.Assert(chain[nuclideTo].Organ is null);
-                chain[nuclideTo] = (lineNum, organDecay);
-            }
-
-            // organDecay位置を共有する崩壊系列群を設定する。
-            JointChains.Add(organDecay, chainsTo);
-        }
-        else
-        {
-            // chainsToに含まれる、言い換えるとnuclideTo位置を既に
-            // organDecayで占めている崩壊系列をchainsInflowから除外する。
-            // その結果、chainsToへ追加されるべき崩壊系列が0個となる場合は何もしない。
-            chainsInflow.RemoveAll(chain => chainsTo.Contains(chain));
-            if (chainsInflow.Count == 0)
-                goto Lend;
-
-            // ここからの処理で、
-            // organDecay位置を既に占めている崩壊系列群chainsToに
-            // organDecay位置へ新たに合流する崩壊系列群chainsInflowを追加する。
-
-            // chainsInflowのnuclideTo位置にorganDecayを設定する。
-            foreach (var chain in chainsInflow)
-            {
-                Debug.Assert(chain[nuclideTo].Organ is null);
-                chain[nuclideTo] = (lineNum, organDecay);
-            }
-
-            // chainsToとchainsInflowの間に、nuclideToより子孫核種の位置で矛盾がないことを確認する。
-            // 比較処理のために、2つの集合からそれぞれ1つずつ代表となる崩壊系列を取得する。
-            var chainTo = chainsTo[0];
-            var chainInflow = chainsInflow[0];
-            foreach (var progeny in GetProgenies(nuclideTo))
-            {
-                var decayTo = chainTo[progeny];
-                var decayInflow = chainInflow[progeny];
-
-                // 全ての崩壊系列がprogeny位置をまだ共有していない場合は何もしない。
-                if (decayInflow.Organ is null && decayTo.Organ is null)
-                    continue;
-
-                if (decayTo.Organ is null)
-                {
-                    foreach (var chain in chainsTo)
-                        chain[progeny] = decayInflow;
-                }
-                else if (decayInflow.Organ is null)
-                {
-                    foreach (var chain in chainsInflow)
-                        chain[progeny] = decayTo;
-                }
-                else if (decayTo.Organ != decayInflow.Organ)
-                {
-                    // nuclideTo位置より子孫のコンパートメントが全て共有されるべきにもかかわらず
-                    // nuclideToの子孫核種progenyの位置で分岐が生じてしまう2つの壊変経路について、
-                    // nuclideTo位置からprogeny位置までを表示する。
-                    var organStart = chainTo[nuclideTo].Organ;
-
-                    var (prevTo, prevCoeff) = AfterDecayPath.GetValueOrDefault(decayTo.Organ, (decayTo.Organ, null));
-                    var prev = $"'{prevTo.ToString()}'";
-                    if (prevCoeff.HasValue) prev += $" (with coeff. {prevCoeff.Value})";
-
-                    var (hereTo, hereCoeff) = AfterDecayPath.GetValueOrDefault(decayInflow.Organ, (decayInflow.Organ, null));
-                    var here = $"'{hereTo.ToString()}'";
-                    if (hereCoeff.HasValue) here += $" (with coeff. {hereCoeff.Value})";
-
-                    Errors.AddError(lineNum, "Decay paths conflict each other:");
-                    Errors.AddError($"    the previous: '{organStart}' --> {prev} at Line {decayTo.LineNum}");
-                    Errors.AddError($"    and another : '{organStart}' --> {here} at Line {decayInflow.LineNum}");
-                    return null;
-                }
-
-                // progeny位置を共有する崩壊系列にchainsInflowを追加する。
-                var chainsProgeny = JointChains[decayTo.Organ];
-                foreach (var chain in chainsInflow)
-                {
-                    if (!chainsProgeny.Contains(chain))
-                        chainsProgeny.Add(chain);
-                }
-            }
-
-            chainsTo.AddRange(chainsInflow);
-        }
-
-    Lend:
-        // chainsToの全ての崩壊系列は、nuclideTo位置でorganDecayコンパートメントを共有している。
-        Debug.Assert(chainsTo.All(chain => chain[nuclideTo].Organ == organDecay));
-
-        return hasCoeff ? organDecay : null;
-    }
-
-    /// <summary>
-    /// targetChain上でnuclideTo位置に流入している崩壊系列の集合を計算する。
-    /// </summary>
-    /// <param name="targetChain"></param>
-    /// <param name="nuclideTo"></param>
-    /// <returns>結果を新しいリストに格納して返す。結果には少なくともtargetChainが含まれる。</returns>
-    private List<DecayChain> CalcChainsInflow(DecayChain targetChain, NuclideData nuclideTo)
-    {
-        List<DecayChain> results = [targetChain];
-
-        // targetChain上で、nuclideToの祖先核種の位置を確認し、コンパートメントが設定済みの箇所については
-        // それらの位置を共有する崩壊系列を全て取得しそれらの集合を返す。
-        foreach (var nuclide in GetAncestors(nuclideTo))
-        {
-            if (targetChain[nuclide].Organ is not Organ organ)
-                continue;
-            foreach (var chain in JointChains[organ])
-            {
-                if (!results.Contains(chain))
-                    results.Add(chain);
-            }
-        }
-
-        return results;
     }
 
     /// <summary>
@@ -435,7 +402,7 @@ internal class DecaySet
     {
         foreach (var decayChain in DecayChains)
         {
-            var froms = decayChain.Compartments.Select(o => o.Organ).Where(o => o != null).ToList();
+            var froms = decayChain.Compartments.Select(o => o.Organ).OfType<Organ>().ToList();
 
             // デバッグ用
             var decayCompartmentName = $"<decay_from_{froms[0].Nuclide.Name}/{froms[0].Name}>";
