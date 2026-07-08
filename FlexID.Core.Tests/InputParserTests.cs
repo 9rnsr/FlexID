@@ -9,6 +9,7 @@ class StringifyVisitor : Visitor<string>
 {
     public string Var(string ident) => ident;
     public string Number(string value, string unit) => $"{value}{unit}";
+    public string String(string value) => $"'{value.Replace("'", "\\'")}'";
     public string Pos(string expr) => $"+{expr}";
     public string Neg(string expr) => $"-{expr}";
     public string Add(string left, string right) => $"({left} + {right})";
@@ -68,6 +69,24 @@ public class InputParserTests
     }
 
     [TestMethod]
+    public void ParseString()
+    {
+        var (Success, Failure) = MakeTesters(parser.StringExpr);
+
+        Success(@"''");
+        Success(@"'abc'");
+        Success(@"""abc""");
+        Success(@"'a\nc'");
+        Success(@"'a\\c'");
+
+        Failure(@"abc");
+        Failure(@"'abc");
+        Failure(@"""abc");
+        Failure(@"'abc""");
+        Failure(@"""abc'");
+    }
+
+    [TestMethod]
     public void ParseUnaryExpr()
     {
         var (Success, Failure) = MakeTesters(parser.Expr);
@@ -110,10 +129,12 @@ public class InputParserTests
         Success("ident")    /**/.ShouldBe("ident");
         Success("1234")     /**/.ShouldBe("1234");
         Success("3.1415")   /**/.ShouldBe("3.1415");
+        Success("'abc'")    /**/.ShouldBe("'abc'");
 
         Success("(ident)")  /**/.ShouldBe("ident");
         Success("(1234)")   /**/.ShouldBe("1234");
         Success("(3.1415)") /**/.ShouldBe("3.1415");
+        Success("('abc')")  /**/.ShouldBe("'abc'");
 
         Success("-(1.2 + +(a * b) - (-c / +d))");
 

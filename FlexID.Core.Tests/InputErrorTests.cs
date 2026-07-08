@@ -86,33 +86,6 @@ public class InputErrorTests
     }
 
     [TestMethod]
-    public void MissingSectionErrors2()
-    {
-        var reader = CreateReader("""
-            [title]
-            dummy
-
-            [nuclide]
-              Sr-90  6.596156E-05
-
-            [intake]
-              ST0    100%
-
-            # [Sr-90:compartment]
-            #   acc    ST0       ---
-
-            # [Sr-90:transfer]
-            """);
-
-        var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
-        e.ErrorLines.ShouldBe(
-        [
-            "Line 14: Missing [Sr-90:compartment] section.",
-            "Line 14: Missing [Sr-90:transfer] section.",
-        ]);
-    }
-
-    [TestMethod]
     public void EmptySectionErrors1()
     {
         var reader = CreateReader("""
