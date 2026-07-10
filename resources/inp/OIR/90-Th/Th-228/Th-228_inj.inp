@@ -90,7 +90,7 @@ $endif
   {*}/Urine               Urine                     ---
 
 
-[Th-228:compartment]
+[{Th}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -111,7 +111,24 @@ $endif
   acc   ST1                   Other
   acc   ST2                   Other
 
-[Th-228:transfer]
+$if progeny
+
+#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのトリウムは、ラジウム子孫元素としてのモデルを用いる。
+# → ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) The model for thorium as a progeny of radium is a modification of the systemic
+# > model applied in this publication to thorium as a parent radionuclide. Two
+# > compartments, one representing spleen and the other representing skin, are added to
+# > that model.
+# > (715) ラジウムの子孫核種としてのトリウムのモデルは、本論文でトリウムを親核種として
+# > 適用した全身モデルを修正したものである。このモデルには、脾臓と皮膚を表す2つの
+# > コンパートメントが追加されている。
+
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+$endif
+
+[{Th}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -131,7 +148,9 @@ $endif
   Blood                   Testes                    0.00068
   Blood                   Ovaries                   0.00021
   Blood                   ST0                       0.832
+$if parent
   Blood                   ST1                       0.243
+$endif
   Blood                   ST2                       0.0388
   Liver1                  Blood                     0.000475
   Liver1                  Liver2                    0.00095
@@ -153,11 +172,105 @@ $endif
   T-marrow                Blood                     0.0076
   T-bone-V                T-marrow                  0.000493
 
+$if progeny
 
-#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラジウムは、ラジウム子孫元素としてのモデルを用いる
-# → ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) ... Spleen and skin are assumed to exchange thorium with blood. Parameter
+# > values for these compartments are based on limited data from animal studies and
+# > human autopsy studies (Stover et al., 1960; Thomas et al., 1963; Larsen et al., 1984;
+# > Singh et al., 1983; Stehney and Lucas, 2000; Glover et al., 2001). Spleen and skin are
+# > assumed to receive 0.5% and 2%, respectively, of thorium ‘leaving the circulation’ as
+# > defined in Section 14. The transfer coefficient from blood to the intermediate-term soft
+# > tissue compartment ST1 (Fig. 14.2) is reduced to maintain the original removal halftime
+# > from blood. The assumed removal half-time from spleen and skin to blood is 2 y,
+# > the same as the removal half-time from ST1 to blood.
+# > (715) ... 脾臓と皮膚はトリウムを血液と交換すると仮定されている。
+# > これらのコンパートメントのパラメータ値は、動物実験およびヒト剖検研究から得られた
+# > 限られたデータに基づいている（Stover et al., 1960; Thomas et al., 1963; Larsen et al.,
+# > 1984; Singh et al., 1983; Stehney and Lucas, 2000; Glover et al., 2001）。
+# > 脾臓と皮膚は、第 14 節で定義される「循環系から排出される」トリウムのそれぞれ 0.5% と 2% を
+# > 受け取ると仮定する。血液から中間期の軟部組織コンパートメント ST1 への移行係数（図 14.2）は、
+# > 血液からの元の除去半減期を維持するために低減される。脾臓および皮膚から血液への
+# > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じである。
 
-[Ra-224:compartment]
+  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
+  Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
+  Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
+  Spleen                  Blood                 $(0.693 / 2/365.25)
+  Skin                    Blood                 $(0.693 / 2/365.25)
+
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) ... Thorium produced in a compartment
+# > of a preceding chain member that is not identifiable with a compartment in
+# > the thorium model is assumed to transfer to the blood compartment of the thorium
+# > model at the following rate: 1000 d⁻¹ if produced in a blood compartment; 0.462 d⁻¹ if
+# > produced in a soft tissue compartment (the highest rate of removal from a compartment
+# > of other soft tissues in the thorium model); and at the rate of bone turnover if
+# > produced in an exchangeable bone volume compartment.
+# > (715) ... トリウムモデル内のコンパートメントと識別できない先行する連鎖メンバーのコンパートメントで
+# > 生成されたトリウムは、トリウムモデルの血液コンパートメントに以下の速度で移行すると仮定する。
+# > 血液コンパートメントで生成された場合は 1000 d⁻¹、軟部組織コンパートメントで生成された
+# > 場合は 0.462 d⁻¹（トリウムモデルにおける他の軟部組織のコンパートメントからの除去速度が
+# > 最も高い）。交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
+
+  {Th,Ra,Ac}/Blood        Blood                     ---
+
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Th,Ac}/C-bone-V        C-bone-V                  ---
+  {Th,Ac}/T-bone-V        T-bone-V                  ---
+  {Ra}/Noch-C-bone-V      C-bone-V                  ---
+  {Ra}/Noch-T-bone-V      T-bone-V                  ---
+  {Ra}/Exch-C-bone-V      Blood                 $(0.03 / 365.25)
+  {Ra}/Exch-T-bone-V      Blood                 $(0.18 / 365.25)
+
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Th}/ST0                ST0                       ---
+  {Th}/ST1                ST1                       ---
+  {Th}/ST2                ST2                       ---
+  {Ra}/ST0                Blood                     0.462
+  {Ra}/ST1                Blood                     0.462
+  {Ra}/ST2                Blood                     0.462
+  {Ac}/ST0                Blood                     0.462
+  {Ac}/ST1                Blood                     0.462
+  {Ac}/ST2                Blood                     0.462
+
+$endif
+
+
+# ICRP Publ.137 p.370 Para.812
+# > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
+# > thallium, francium, and astatine produced systemically by serial decay of members of
+# > a thorium chain are the same as the models applied to these elements as progeny of
+# > radium (see Section 13). The model for thorium as a radium progeny is applied to
+# > protactinium as a thorium progeny based on the similar systemic behaviours of
+# > protactinium and thorium in rats (Lanz et al., 1946; Schuppler et al., 1988;
+# > Durbin, 2011). A radionuclide produced in a bone volume compartment that is
+# > ambiguous with regard to the model for that element (e.g. radium produced in trabecular
+# > or cortical bone volume in the thorium model) is assumed to be produced in
+# > non-exchangeable bone.
+# > (812) トリウム系列の各元素の連続崩壊によって体系的に生成されるアクチニウム、
+# > トリウム、ラジウム、ラドン、ポロニウム、鉛、ビスマス、タリウム、フランシウム、
+# > およびアスタチンのモデルは、ラジウムの子孫元素としてのこれらの元素に適用される
+# > モデルと同じである（第13節参照）。ラジウムの子孫元素としてのトリウムのモデルは、
+# > ラットにおけるプロトアクチニウムとトリウムの類似した全身的挙動に基づいて、
+# > トリウムの子孫元素としてのプロトアクチニウムにも適用される(Lanz et al., 1946;
+# > Schuppler et al., 1988; Durbin, 2011)。骨体積コンパートメントで生成される
+# > 放射性核種のうち、その元素のモデルに関して曖昧なもの（例えば、トリウムモデルにおいて
+# > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
+
+
+[{Ra}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -176,7 +289,14 @@ $endif
   acc   ST1                   Other
   acc   ST2                   Other
 
-# ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
+#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラジウムは、ラジウム子孫元素としてのモデルを用いる
+# → ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
+# > (716) ... Single compartments representing spleen, trabecular marrow,
+# > cortical marrow, testes, ovaries, and skin are added for consistency
+# > with the models for other progeny of radium.  ...
+# > (716) ... ラジウムの他の子孫核種のモデルとの整合性を保つため、脾臓、
+# > 骨梁骨髄、皮質骨髄、精巣、卵巣、皮膚を表す個々のコンパートメントが
+# > 追加されました。 ...
 
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
@@ -185,7 +305,7 @@ $endif
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
-[Ra-224:transfer]
+[{Ra}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -225,9 +345,34 @@ $endif
   Noch-T-bone-V           Blood                     0.000493
 
 # ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
+# > (716) ... The six added compartments are taken from the intermediate-and
+# > long-term soft tissue compartments ST1 and ST2, respectively, in the
+# > model for radium as a parent. ... The deposition fractions for ST1 and ST2
+# > are reduced uniformly (each by the same percentage) for mass balance. ...
+# > (716) ... 追加された6つのコンパートメントは、ラジウムを親核種とする
+# > モデルにおける中期および長期の軟部組織コンパートメントST1およびST2から
+# > それぞれ抽出されます。 ... ST1とST2の沈着分率は、質量バランスを保つため、
+# > 均一に（それぞれ同じ割合で）減少します。 ...
+#
+#   Blood → {Spleen + T-marrow + C-marrow + Testes + Overies + Skin}
+#   0.43208 = 0.0093 + 0.165    + 0.055    + 0.0021 + 0.00068 + 0.2
 
   Blood                   ST1               $(  3.5  * (1 - 0.43208/(3.5+0.07))  )
   Blood                   ST2               $(  0.07 * (1 - 0.43208/(3.5+0.07))  )
+
+# ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
+# > (716) ... The derived transfer cofficients from blood to spleen,
+# > trabecular marrow, cortical marrow, testes, ovaries, and skin are
+# > 0.0093 d⁻¹, 0.165 d⁻¹, 0.055 d⁻¹, 0.0021 d⁻¹, 0.00068 d⁻¹, and
+# > 0.2 d⁻¹, respectively. The removal rate from each added compartment is
+# > set at 0.02 d⁻¹, which is a rounded value based on an effective
+# > removal half-time from ST1+ST2. ...
+# > (716) ... 血液から脾臓、骨梁骨髄、皮質骨髄、精巣、卵巣、皮膚への
+# > 導出された移行係数は、それぞれ0.0093 d⁻¹、0.165 d⁻¹、0.055 d⁻¹、
+# > 0.0021 d⁻¹、0.00068 d⁻¹、0.2 d⁻¹である。追加された各コンパートメントからの
+# > 除去率は0.02 d⁻¹に設定されており、これはST1+ST2からの有効除去半減時間に
+# > 基づいて丸められた値である。 ...
+
   Blood                   Spleen                    0.0093
   Blood                   T-marrow                  0.165
   Blood                   C-marrow                  0.055
@@ -254,23 +399,37 @@ $endif
 # > 軟部組織コンパートメントで生成された場合は6.98 d⁻¹である。6.98 d⁻¹という値は、
 # > ラジウムの特性モデルにおける他の軟部組織コンパートメントからの除去速度の最大値である。
 
-  Th-228/Blood            Ra-224/Blood              ---
-  Th-228/C-bone-S         Ra-224/C-bone-S           ---
-  Th-228/T-bone-S         Ra-224/T-bone-S           ---
-  Th-228/C-bone-V         Ra-224/Noch-C-bone-V      ---     # Publ.137 Para.812
-  Th-228/T-bone-V         Ra-224/Noch-T-bone-V      ---     # Publ.137 Para.812
-  Th-228/C-marrow         Ra-224/C-marrow           ---
-  Th-228/T-marrow         Ra-224/T-marrow           ---
-  Th-228/Liver1           Ra-224/Liver1             ---
-  Th-228/Liver2           Ra-224/Liver2             ---
-  Th-228/Kidneys1         Ra-224/Kidneys1           ---
-  Th-228/Kidneys2         Ra-224/Kidneys2           ---
-  Th-228/Testes           Ra-224/Testes             ---
-  Th-228/Ovaries          Ra-224/Ovaries            ---
+  {Th,Ra,Ac}/Blood        Blood                     ---
 
-  Th-228/ST0              Ra-224/Blood              6.98
-  Th-228/ST1              Ra-224/Blood              6.98
-  Th-228/ST2              Ra-224/Blood              6.98
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Th,Ac}/C-bone-V        Noch-C-bone-V             ---     # Publ.137 Para.812
+  {Th,Ac}/T-bone-V        Noch-T-bone-V             ---     # Publ.137 Para.812
+  {Ra}/Noch-C-bone-V      Noch-C-bone-V             ---
+  {Ra}/Noch-T-bone-V      Noch-T-bone-V             ---
+  {Ra}/Exch-C-bone-V      Exch-C-bone-V             ---
+  {Ra}/Exch-T-bone-V      Exch-T-bone-V             ---
+
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Th}/ST0                Blood                     6.98
+  {Th}/ST1                Blood                     6.98
+  {Th}/ST2                Blood                     6.98
+  {Ra}/ST0                ST0                       ---
+  {Ra}/ST1                ST1                       ---
+  {Ra}/ST2                ST2                       ---
+  {Ac}/ST0                Blood                     6.98
+  {Ac}/ST1                Blood                     6.98
+  {Ac}/ST2                Blood                     6.98
 
 
 #   ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラドンは、ラジウム子孫元素としてのモデルを用いる。
@@ -292,14 +451,14 @@ $endif
 # > 全身コンパートメント内で放射性崩壊によって生成されたラドンに適用された一般的な
 # > モデルである。 ...
 
-[Rn-220:compartment]
+[{Rn}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   acc   Blood                 Blood
   exc   Exhaled               ---
 
-[Rn-220:transfer]
+[{Rn}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -371,30 +530,37 @@ $endif
 # > 移行します。血液中で生成された、または血液に入ったラドンは、1000 d⁻¹で体から（呼気として）
 # > 除去されます。
 
-  Th-228/Blood            Rn-220/Blood              ---
-  Th-228/C-bone-V         Rn-220/Blood              0.36    # Ra-224/Noch-C-bone-Vを経由する
-  Th-228/T-bone-V         Rn-220/Blood              0.36    # Ra-224/Noch-T-bone-Vを経由する
-  Ra-224/Exch-C-bone-V    Rn-220/Blood              1.5
-  Ra-224/Exch-T-bone-V    Rn-220/Blood              1.5
-  Th-228/C-bone-S         Rn-220/Blood            100
-  Th-228/T-bone-S         Rn-220/Blood            100
-  Th-228/C-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/T-marrow         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Liver1           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Liver2           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Kidneys1         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Kidneys2         Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Testes           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Th-228/Ovaries          Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Skin             Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
-  Ra-224/Spleen           Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分
+  {Th,Ra,Ac}/Blood        Blood                     ---
 
-  Th-228/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Th-228/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Th-228/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Ra-224/ST0              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Ra-224/ST1              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  Ra-224/ST2              Rn-220/Blood      $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {*}/C-bone-S            Blood                   100
+  {*}/T-bone-S            Blood                   100
+  {Th,Ac}/C-bone-V        Blood                     0.36
+  {Th,Ac}/T-bone-V        Blood                     0.36
+  {Ra}/Noch-C-bone-V      Blood                     0.36
+  {Ra}/Noch-T-bone-V      Blood                     0.36
+  {Ra}/Exch-C-bone-V      Blood                     1.5
+  {Ra}/Exch-T-bone-V      Blood                     1.5
+
+  {*}/C-marrow            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/T-marrow            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Liver1              Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Liver2              Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Kidneys1            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Kidneys2            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Testes              Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Ovaries             Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Skin                Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Spleen              Blood             $(0.693 / (30/60/24))   # 半減期30分
+
+  {Th}/ST0                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Th}/ST1                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Th}/ST2                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ra}/ST0                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ra}/ST1                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ra}/ST2                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ac}/ST0                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ac}/ST1                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ac}/ST2                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
 
   Blood                   Exhaled                1000       # ≒半減期1分
 
@@ -433,7 +599,7 @@ $endif
 # > 適用されている全身モデル(第11節)と同一である。ただし、子孫核種モデルでは、呼吸器系と
 # > 消化器系から血液に入るポロニウムを区別しない点が異なる。 ...
 
-[Po-216:compartment]
+[{Po}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -471,14 +637,14 @@ $endif
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Po-216:transfer]
+[{Po}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
 # > (484) ... polonium as a progeny transferred to blood from either the respiratory
-# > or alimentary tract is assigned to Plasma 2.  ...
+# > or alimentary tract is assigned to Plasma 2. ...
 # > (484) ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
 # > 血漿2に割り当てられる。 ...
 
@@ -553,30 +719,49 @@ $endif
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
 # > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
 
-  Th-228/Blood            Po-216/Plasma2         1000
-  Th-228/C-bone-S         Po-216/C-bone-S           ---
-  Th-228/T-bone-S         Po-216/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Po-216/Plasma2        $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Po-216/Plasma2        $(0.18 / 365.25)
-  Ra-224/Noch-C-bone-V    Po-216/Plasma2        $(0.03 / 365.25)
-  Ra-224/Noch-T-bone-V    Po-216/Plasma2        $(0.18 / 365.25)
-  Th-228/C-marrow         Po-216/C-marrow           ---
-  Th-228/T-marrow         Po-216/T-marrow           ---
-  Th-228/Liver1           Po-216/Liver1             ---
-  Th-228/Liver2           Po-216/Liver2             ---
-  Th-228/Kidneys1         Po-216/Kidneys1           ---
-  Th-228/Kidneys2         Po-216/Kidneys2           ---
-  Th-228/Testes           Po-216/Testes             ---
-  Th-228/Ovaries          Po-216/Ovaries            ---
-  Ra-224/Skin             Po-216/Skin               ---
-  Ra-224/Spleen           Po-216/Spleen             ---
+  {Th,Ra,Ac,Rn}/Blood     Plasma2                1000
+  {Pb,Bi,Tl}/Plasma       Plasma2                1000
+ #{Po}/Plasma1            Plasma1                   ---
+ #{Po}/Plasma2            Plasma2                   ---
+ #{Po}/Plasma3            Plasma3                   ---
+  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
-  Th-228/ST0              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST1              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST2              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST0              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST1              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST2              Po-216/Plasma2        $(0.693 / 7)    # 半減期7日
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Th,Ac}/C-bone-V        Plasma2               $(0.03 / 365.25)
+  {Th,Ac}/T-bone-V        Plasma2               $(0.18 / 365.25)
+  {Ra}/Noch-C-bone-V      Plasma2               $(0.03 / 365.25)
+  {Ra}/Noch-T-bone-V      Plasma2               $(0.18 / 365.25)
+  {Ra}/Exch-C-bone-V      Plasma2               $(0.03 / 365.25)
+  {Ra}/Exch-T-bone-V      Plasma2               $(0.18 / 365.25)
+
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Th}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Th}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Th}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Ra}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Ra}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Ra}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Ac}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Ac}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Ac}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Po}/Other              Other                     ---
+  {Pb}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Pb}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Pb}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Bi}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Bi}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
+  {Bi}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としての鉛は、ラジウム子孫元素としてのモデルを用いる
@@ -587,7 +772,7 @@ $endif
 # > (482) 鉛の子孫核種としての鉛の全身モデルは、上述の(訳注：親核種としての)
 # > 鉛の特性モデルの拡張である。 ...
 
-[Pb-212:compartment]
+[{Pb}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -637,7 +822,7 @@ $endif
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Pb-212:transfer]
+[{Pb}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -758,35 +943,42 @@ $endif
 # > 生成された鉛が鉛モデルの血液コンパートメントと識別できない場合、血漿への移行速度は
 # > 1000 d⁻¹と割り当てられる。
 
-  Th-228/Blood            Pb-212/Plasma          1000
-  Po-216/Plasma1          Pb-212/Plasma             ---
-  Po-216/Plasma2          Pb-212/Plasma             ---
-  Po-216/Plasma3          Pb-212/Plasma             ---
-  Po-216/RBC              Pb-212/RBC                ---
-  Th-228/C-bone-S         Pb-212/C-bone-S           ---
-  Th-228/T-bone-S         Pb-212/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Pb-212/Exch-C-bone-V      ---
-  Ra-224/Exch-T-bone-V    Pb-212/Exch-T-bone-V      ---
-  Ra-224/Noch-C-bone-V    Pb-212/Noch-C-bone-V      ---
-  Ra-224/Noch-T-bone-V    Pb-212/Noch-T-bone-V      ---
-  Th-228/C-marrow         Pb-212/C-marrow           ---
-  Th-228/T-marrow         Pb-212/T-marrow           ---
-  Th-228/Liver1           Pb-212/Liver1             ---
-  Th-228/Liver2           Pb-212/Liver2             ---
-  Th-228/Kidneys1         Pb-212/Kidneys1           ---
-  Th-228/Kidneys2         Pb-212/Kidneys2           ---
-  Th-228/Testes           Pb-212/Testes             ---
-  Th-228/Ovaries          Pb-212/Ovaries            ---
-  Ra-224/Skin             Pb-212/Skin               ---
-  Ra-224/Spleen           Pb-212/Spleen             ---
+  {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
+  {Po}/Plasma1            Plasma                    ---
+  {Po}/Plasma2            Plasma                    ---
+  {Po}/Plasma3            Plasma                    ---
+  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
-  Th-228/ST0              Pb-212/Plasma             7.39
-  Th-228/ST1              Pb-212/Plasma             7.39
-  Th-228/ST2              Pb-212/Plasma             7.39
-  Ra-224/ST0              Pb-212/Plasma             7.39
-  Ra-224/ST1              Pb-212/Plasma             7.39
-  Ra-224/ST2              Pb-212/Plasma             7.39
-  Po-216/Other            Pb-212/Plasma             7.39
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Th,Ac}/C-bone-V        Noch-C-bone-V             ---
+  {Th,Ac}/T-bone-V        Noch-T-bone-V             ---
+  {Ra}/Noch-C-bone-V      Noch-C-bone-V             ---
+  {Ra}/Noch-T-bone-V      Noch-T-bone-V             ---
+  {Ra}/Exch-C-bone-V      Exch-C-bone-V             ---
+  {Ra}/Exch-T-bone-V      Exch-T-bone-V             ---
+
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Th}/ST0                Plasma                    7.39
+  {Th}/ST1                Plasma                    7.39
+  {Th}/ST2                Plasma                    7.39
+  {Ra}/ST0                Plasma                    7.39
+  {Ra}/ST1                Plasma                    7.39
+  {Ra}/ST2                Plasma                    7.39
+  {Ac}/ST0                Plasma                    7.39
+  {Ac}/ST1                Plasma                    7.39
+  {Ac}/ST2                Plasma                    7.39
+  {Po}/Other              Plasma                    7.39
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのビスマスは、ラジウム子孫元素としてのモデルを用いる
@@ -797,7 +989,7 @@ $endif
 # > (483) 鉛の子孫元素としてのビスマスの全身モデルは、本論文で適用されているビスマスの特性モデルに
 # > 基づいています。...
 
-[Bi-212:compartment]
+[{Bi}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -845,7 +1037,7 @@ $endif
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Bi-212:transfer]
+[{Bi}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -939,206 +1131,50 @@ $endif
 # > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
-  Th-228/Blood            Bi-212/Plasma          1000
-  Pb-212/Plasma           Bi-212/Plasma             ---
-  Pb-212/RBC              Bi-212/RBC                ---
-  Th-228/C-bone-S         Bi-212/C-bone-S           ---
-  Th-228/T-bone-S         Bi-212/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Bi-212/Plasma         $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Bi-212/Plasma         $(0.18 / 365.25)
-  Ra-224/Noch-C-bone-V    Bi-212/Plasma         $(0.03 / 365.25)
-  Ra-224/Noch-T-bone-V    Bi-212/Plasma         $(0.18 / 365.25)
-  Th-228/C-marrow         Bi-212/C-marrow           ---
-  Th-228/T-marrow         Bi-212/T-marrow           ---
-  Th-228/Liver1           Bi-212/Liver1             ---
-  Th-228/Liver2           Bi-212/Liver2             ---
-  Th-228/Kidneys1         Bi-212/Kidneys1           ---
-  Th-228/Kidneys2         Bi-212/Kidneys2           ---
-  Th-228/Testes           Bi-212/Testes             ---
-  Th-228/Ovaries          Bi-212/Ovaries            ---
-  Ra-224/Skin             Bi-212/Skin               ---
-  Ra-224/Spleen           Bi-212/Spleen             ---
+  {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
+  {Pb,Bi,Tl}/Plasma       Plasma                    ---
+ #{Po}/Plasma1            Plasma                 1000
+ #{Po}/Plasma2            Plasma                 1000
+ #{Po}/Plasma3            Plasma                 1000
+  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
+
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Th,Ac}/C-bone-V        Plasma                $(0.03 / 365.25)
+  {Th,Ac}/T-bone-V        Plasma                $(0.18 / 365.25)
+  {Ra}/Noch-C-bone-V      Plasma                $(0.03 / 365.25)
+  {Ra}/Noch-T-bone-V      Plasma                $(0.18 / 365.25)
+  {Ra}/Exch-C-bone-V      Plasma                $(0.03 / 365.25)
+  {Ra}/Exch-T-bone-V      Plasma                $(0.18 / 365.25)
+
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
 # Publ.137 Para.482には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
 # ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
 # を採用する。
 
-  Th-228/ST0              Bi-212/Plasma            66.54
-  Th-228/ST1              Bi-212/Plasma            66.54
-  Th-228/ST2              Bi-212/Plasma            66.54
-  Ra-224/ST0              Bi-212/Plasma            66.54
-  Ra-224/ST1              Bi-212/Plasma            66.54
-  Ra-224/ST2              Bi-212/Plasma            66.54
-  Po-216/Other            Bi-212/Plasma            66.54
-  Pb-212/ST0              Bi-212/Plasma            66.54
-  Pb-212/ST1              Bi-212/Plasma            66.54
-  Pb-212/ST2              Bi-212/Plasma            66.54
-
-
-#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのポロニウムは、ラジウム子孫元素としてのモデルを用いる
-# → ICRP Publ.137 p.331 Para.712 / ラジウム子孫元素としてのポロニウムには、鉛子孫元素としてのモデルを修正して用いる
-# → ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
-# > (484) The systemic model for polonium as a member of a lead chain is the same as
-# > the systemic model applied in this publication to polonium as a parent radionuclide
-# > (Section 11), except that no distinction is made in the progeny model between
-# > polonium entering blood from the respiratory and alimentary tracts. ...
-# > (484) 鉛鎖の一員としてのポロニウムの全身モデルは、本書で親核種としてのポロニウムに
-# > 適用されている全身モデル(第11節)と同一である。ただし、子孫核種モデルでは、呼吸器系と
-# > 消化器系から血液に入るポロニウムを区別しない点が異なる。 ...
-
-[Po-212:compartment]
-#-----+---------------------| S-Coefficient
-# Func| Compartment         | Source Region
-#-----+---------------------+---------------
-  acc   Plasma1               Blood
-  acc   Plasma2               Blood
-  acc   Plasma3               Blood
-  acc   RBC                   Blood
-  mix   BoneSurface           ---           # Publ.137 Para.605
-  acc   C-bone-S              C-bone-S      # Publ.137 Para.605
-  acc   T-bone-S              T-bone-S      # Publ.137 Para.605
- #acc   RedMarrow             R-marrow      # Publ.137 Para.712
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   Kidneys1              Kidneys       # Urinary path
-  acc   Kidneys2              Kidneys       # Other kidney tissues
-  acc   Testes                Testes
-  acc   Ovaries               Ovaries
-  acc   Skin                  Skin
-  acc   Spleen                Spleen
-  acc   Other                 Other
-  exc   Excreta               ---           # hair,sweat,skin
-
-# ICRP Publ.137 p.331 Para.712 / ラジウム子孫元素としてのポロニウム
-# > (712) ... For each of these four elements, the red marrow compartment
-# > is replaced by a compartment with the same kinetics (i.e. the same paths and rates of
-# > inflow and outflow) named ‘trabecular marrow’ for consistency with the models for
-# > other radium progeny; a compartment is added to represent cortical marrow, which is
-# > assumed to exchange activity with plasma; ...
-# > (712) ... これら4元素それぞれに
-# > ついて、赤色骨髄コンパートメントは、他のラジウム子孫元素のモデルとの整合性を図るため、
-# > 同じ動態（すなわち、同じ経路および流入・流出速度）を持つ「骨梁骨髄」と呼ばれる
-# > コンパートメントに置き換えられる。皮質骨髄を表すコンパートメントが追加され、この
-# > コンパートメントは血漿と放射能を交換すると仮定される。...
-
-  acc   C-marrow              C-marrow
-  acc   T-marrow              T-marrow
-
-[Po-212:transfer]
-#-----------------------+---------------------+--------------------
-# From                  | To                  | Transfer Coef.[/d]
-#-----------------------+---------------------+--------------------
-
-# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
-# > (484) ... polonium as a progeny transferred to blood from either the respiratory
-# > or alimentary tract is assigned to Plasma 2. ...
-# > (484) ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
-# > 血漿2に割り当てられる。 ...
-
-# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Plasma2       $(fA    * 6 / (1 - fA   ))      # Plasma1をPlasma2に置換
-  SI-conRe                Plasma2       $(fA_Re * 6 / (1 - fA_Re))      # Plasma1をPlasma2に置換
-
-# ICRP Publ.137 p.285 Table 11.3
-  Plasma2                 Plasma1                 800
-  Plasma2                 Kidneys1                200
-  Plasma1                 Plasma3                   4
-  Plasma1                 RBC                       6
-  Plasma1                 Liver1                   17.5
-  Plasma1                 Liver2                   17.5
-  Plasma1                 Kidneys1                  5
-  Plasma1                 Kidneys2                  5
-  Plasma1                 Skin                      5
- #Plasma1                 RedMarrow                 4           # fix
-  Plasma1                 BoneSurface               1.5
-  Plasma1                 Spleen                    2
-  Plasma1                 Testes                    0.1
-  Plasma1                 Ovaries                   0.05
- #Plasma1                 Other                    32.35        # fix
-  Plasma3                 Plasma1                   0.099
-  RBC                     Plasma1                   0.099
-  Liver1                  SI-conRe                  0.139
-  Liver2                  Plasma1                   0.099
-  Kidneys1                UB-con                    0.173
-  Kidneys2                Plasma1                   0.099
-  Skin                    Plasma1                   0.00693
-  Skin                    Excreta                   0.00693
- #RedMarrow               Plasma1                   0.099       # fix
-  BoneSurface             C-bone-S                 50%          # Publ.137 Para.605
-  BoneSurface             T-bone-S                 50%          # Publ.137 Para.605
-  C-bone-S                Plasma1                   0.0231      # Publ.137 Para.605
-  T-bone-S                Plasma1                   0.0231      # Publ.137 Para.605
-  Spleen                  Plasma1                   0.099
-  Testes                  Plasma1                   0.0139
-  Ovaries                 Plasma1                   0.0139
-  Other                   Plasma1                   0.099
-
-# ICRP Publ.137 p.331 Para.712 / ラジウム子孫元素としてのポロニウム
-# > (712) ... the transfer coefficient from plasma to
-# > cortical marrow is one-third of the transfer coefficient from plasma to trabecular
-# > marrow; the removal half-time from cortical marrow is the same as that for trabecular
-# > marrow; and the transfer coefficient from plasma to ST1 is reduced to maintain the
-# > original total outflow rate from plasma to all destinations.
-# > (712) ... 血漿から皮質骨髄への移行係数は、
-# > 血漿から骨梁骨髄への移行係数の3分の1である。皮質骨髄からの除去半減期は、骨梁骨髄の場合と
-# > 同じである。血漿からST1への移行係数は、血漿からすべての目的地への元の総流出速度を
-# > 維持するために低減される。
-
-  Plasma1                 T-marrow                  4           # RedMarrowをT-marrowに置換
-  Plasma1                 C-marrow                  1.33        # Plasma1→T-marrowの移行速度の1/3
-  Plasma1                 Other                    31.02        # Plasma1→C-marrowの速度を差し引く
-  T-marrow                Plasma1                   0.099       # RedMarrowをT-marrowに置換
-  C-marrow                Plasma1                   0.099       # T-marrow→Plasma1の移行速度と同じ
-
-# ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
-# > (484) ... Polonium produced in a blood compartment
-# > that is not identifiable with a blood compartment of the polonium model is
-# > assumed to transfer to Plasma 2 in the polonium model (Fig. 11.1) at the rate
-# > 1000 d⁻¹. Polonium produced in a soft tissue compartment not identifiable with a
-# > compartment of the polonium model is assumed to move to Plasma 2 with a halftime
-# > of 7 d. Polonium produced in a compartment of cortical or trabecular bone
-# > volume is assumed to transfer to Plasma 2 at the reference rate of turnover of that
-# > bone type.
-# > (484) ... ポロニウムモデルの血液コンパートメントと
-# > 識別できない血液コンパートメントで生成されたポロニウムは、ポロニウムモデル(図11.1)において、
-# > 1000 d⁻¹の速度で血漿2に移行すると仮定される。ポロニウムモデルのコンパートメントに
-# > 識別できない軟部組織コンパートメントで生成されたポロニウムは、7日の半減期で血漿2に
-# > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
-# > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
-
-  Th-228/Blood            Po-212/Plasma2         1000
-  Pb-212/Plasma           Po-212/Plasma2         1000               # Bi-212/Plasmaを経由する
-  Po-216/RBC              Po-212/RBC                ---
-  Th-228/C-bone-S         Po-212/C-bone-S           ---
-  Th-228/T-bone-S         Po-212/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Po-212/Plasma2        $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Po-212/Plasma2        $(0.18 / 365.25)
-  Th-228/C-bone-V         Po-212/Plasma2        $(0.03 / 365.25)    # Ra-224/Noch-C-bone-Vを経由する
-  Th-228/T-bone-V         Po-212/Plasma2        $(0.18 / 365.25)    # Ra-224/Noch-T-bone-Vを経由する
-  Th-228/C-marrow         Po-212/C-marrow           ---
-  Th-228/T-marrow         Po-212/T-marrow           ---
-  Th-228/Liver1           Po-212/Liver1             ---
-  Th-228/Liver2           Po-212/Liver2             ---
-  Th-228/Kidneys1         Po-212/Kidneys1           ---
-  Th-228/Kidneys2         Po-212/Kidneys2           ---
-  Th-228/Testes           Po-212/Testes             ---
-  Th-228/Ovaries          Po-212/Ovaries            ---
-  Ra-224/Skin             Po-212/Skin               ---
-  Ra-224/Spleen           Po-212/Spleen             ---
-
-  Th-228/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Th-228/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Ra-224/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Po-216/Other            Po-212/Other              ---
-  Pb-212/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Pb-212/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Pb-212/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Bi-212/ST0              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Bi-212/ST1              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
-  Bi-212/ST2              Po-212/Plasma2        $(0.693 / 7)    # 半減期7日
+  {Th}/ST0                Plasma                   66.54
+  {Th}/ST1                Plasma                   66.54
+  {Th}/ST2                Plasma                   66.54
+  {Ra}/ST0                Plasma                   66.54
+  {Ra}/ST1                Plasma                   66.54
+  {Ra}/ST2                Plasma                   66.54
+  {Ac}/ST0                Plasma                   66.54
+  {Ac}/ST1                Plasma                   66.54
+  {Ac}/ST2                Plasma                   66.54
+  {Po}/Other              Plasma                   66.54
+  {Pb}/ST0                Plasma                   66.54
+  {Pb}/ST1                Plasma                   66.54
+  {Pb}/ST2                Plasma                   66.54
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのタリウムは、ラジウム子孫元素としてのモデルを用いる
@@ -1148,7 +1184,7 @@ $endif
 # > intake of lead. ...
 # > (481) 鉛摂取後に体内で生成されるタリウムには、以下の全身モデルが適用されます。 ...
 
-[Tl-208:compartment]
+[{Tl}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -1183,7 +1219,7 @@ $endif
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
-[Tl-208:transfer]
+[{Tl}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -1272,36 +1308,43 @@ $endif
 # > 血漿に移行すると仮定されます。皮質骨または海綿骨の容積コンパートメントで生成されたタリウムは、
 # > その骨の種類の基準代謝速度で血漿に移行すると仮定されます。
 
-  Th-228/Blood            Tl-208/Plasma          1000
-  Pb-212/Plasma           Tl-208/Plasma             ---
-  Po-216/RBC              Tl-208/RBC                ---
-  Th-228/C-bone-S         Tl-208/C-bone-S           ---
-  Th-228/T-bone-S         Tl-208/T-bone-S           ---
-  Ra-224/Exch-C-bone-V    Tl-208/Plasma         $(0.03 / 365.25)
-  Ra-224/Exch-T-bone-V    Tl-208/Plasma         $(0.18 / 365.25)
-  Th-228/C-bone-V         Tl-208/Plasma         $(0.03 / 365.25)    # Ra-224/Noch-C-bone-Vを経由する
-  Th-228/T-bone-V         Tl-208/Plasma         $(0.18 / 365.25)    # Ra-224/Noch-T-bone-Vを経由する
-  Th-228/C-marrow         Tl-208/C-marrow           ---
-  Th-228/T-marrow         Tl-208/T-marrow           ---
-  Th-228/Liver1           Tl-208/Liver              ---
-  Th-228/Kidneys2         Tl-208/Kidneys            ---
-  Th-228/Testes           Tl-208/Testes             ---
-  Th-228/Ovaries          Tl-208/Ovaries            ---
-  Ra-224/Skin             Tl-208/Skin               ---
-  Ra-224/Spleen           Tl-208/Spleen             ---
+  {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
+  {Pb,Bi,Tl}/Plasma       Plasma                    ---
+  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
-  Th-228/ST0              Tl-208/Plasma             2.5
-  Th-228/ST1              Tl-208/Plasma             2.5
-  Th-228/ST2              Tl-208/Plasma             2.5
-  Th-228/Liver2           Tl-208/Plasma             2.5
-  Th-228/Kidneys1         Tl-208/Plasma             2.5
-  Ra-224/ST0              Tl-208/Plasma             2.5
-  Ra-224/ST1              Tl-208/Plasma             2.5
-  Ra-224/ST2              Tl-208/Plasma             2.5
-  Po-216/Other            Tl-208/Plasma             2.5
-  Pb-212/ST0              Tl-208/Plasma             2.5
-  Pb-212/ST1              Tl-208/Plasma             2.5
-  Pb-212/ST2              Tl-208/Plasma             2.5
-  Bi-212/ST0              Tl-208/Plasma             2.5
-  Bi-212/ST1              Tl-208/Plasma             2.5
-  Bi-212/ST2              Tl-208/Plasma             2.5
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Th,Ac}/C-bone-V        Plasma                $(0.03 / 365.25)
+  {Th,Ac}/T-bone-V        Plasma                $(0.18 / 365.25)
+  {Ra}/Noch-C-bone-V      Plasma                $(0.03 / 365.25)
+  {Ra}/Noch-T-bone-V      Plasma                $(0.18 / 365.25)
+  {Ra}/Exch-C-bone-V      Plasma                $(0.03 / 365.25)
+  {Ra}/Exch-T-bone-V      Plasma                $(0.18 / 365.25)
+
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver                     ---
+  {*}/Liver2              Plasma                    2.5
+  {*}/Kidneys1            Plasma                    2.5
+  {*}/Kidneys2            Kidneys                   ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Th}/ST0                Plasma                    2.5
+  {Th}/ST1                Plasma                    2.5
+  {Th}/ST2                Plasma                    2.5
+  {Ra}/ST0                Plasma                    2.5
+  {Ra}/ST1                Plasma                    2.5
+  {Ra}/ST2                Plasma                    2.5
+  {Ac}/ST0                Plasma                    2.5
+  {Ac}/ST1                Plasma                    2.5
+  {Ac}/ST2                Plasma                    2.5
+  {Po}/Other              Plasma                    2.5
+  {Pb}/ST0                Plasma                    2.5
+  {Pb}/ST1                Plasma                    2.5
+  {Pb}/ST2                Plasma                    2.5
+  {Bi}/ST0                Plasma                    2.5
+  {Bi}/ST1                Plasma                    2.5
+  {Bi}/ST2                Plasma                    2.5
