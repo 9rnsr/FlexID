@@ -721,9 +721,9 @@ $endif
 
   {Th,Ra,Ac,Rn}/Blood     Plasma2                1000
   {Pb,Bi,Tl}/Plasma       Plasma2                1000
- #{Po}/Plasma1            Plasma1                   ---
- #{Po}/Plasma2            Plasma2                   ---
- #{Po}/Plasma3            Plasma3                   ---
+  {Po}/Plasma1            Plasma1                   ---
+  {Po}/Plasma2            Plasma2                   ---
+  {Po}/Plasma3            Plasma3                   ---
   {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
   {*}/C-bone-S            C-bone-S                  ---
@@ -944,9 +944,10 @@ $endif
 # > 1000 d⁻¹と割り当てられる。
 
   {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
-  {Po}/Plasma1            Plasma                    ---
-  {Po}/Plasma2            Plasma                    ---
-  {Po}/Plasma3            Plasma                    ---
+  {Pb,Bi,Tl}/Plasma       Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
   {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
   {*}/C-bone-S            C-bone-S                  ---
@@ -1133,9 +1134,9 @@ $endif
 
   {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
   {Pb,Bi,Tl}/Plasma       Plasma                    ---
- #{Po}/Plasma1            Plasma                 1000
- #{Po}/Plasma2            Plasma                 1000
- #{Po}/Plasma3            Plasma                 1000
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
   {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
   {*}/C-bone-S            C-bone-S                  ---
@@ -1310,6 +1311,9 @@ $endif
 
   {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
   {Pb,Bi,Tl}/Plasma       Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
   {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
   {*}/C-bone-S            C-bone-S                  ---

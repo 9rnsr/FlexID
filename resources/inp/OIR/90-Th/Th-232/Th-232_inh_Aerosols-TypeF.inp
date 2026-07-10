@@ -1389,6 +1389,7 @@ $endif
 # > 1000 d⁻¹と割り当てられる。
 
   {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
+  {Pb,Bi,Tl}/Plasma       Plasma                    ---
   {Po}/Plasma1            Plasma                 1000
   {Po}/Plasma2            Plasma                 1000
   {Po}/Plasma3            Plasma                 1000
@@ -1755,6 +1756,9 @@ $endif
 
   {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
   {Pb,Bi,Tl}/Plasma       Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
   {Pb,Bi,Po,Tl}/RBC       RBC                       ---
 
   {*}/C-bone-S            C-bone-S                  ---
