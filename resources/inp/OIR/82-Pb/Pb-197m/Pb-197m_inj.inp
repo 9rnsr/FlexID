@@ -9,9 +9,12 @@ $if parent
   ${Pb}/fA    = 0.2         # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
   ${Pb}/fA_Re = 0.2         # footnote**
 $else
+  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
+  ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2 / Ingested materials, All forms
   ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2 / Ingested materials, All forms
-  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
   ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested materials, All forms
+  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
 
   $fA    = fA_MaxValueOfIng
   $fA_Re = fA_MaxValueOfIng
@@ -27,7 +30,7 @@ $endif
   Plasma                  100.0%
 
 
-[Pb-197m:compartment]
+[{*}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -41,28 +44,11 @@ $endif
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Plasma                Blood
-  acc   RBC                   Blood
-  acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   Exch-T-bone-V         T-bone-V
-  acc   Noch-T-bone-V         T-bone-V
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   Kidneys1              Kidneys       # Urinary path
-  acc   Kidneys2              Kidneys       # Other kidney tissues
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   ST2                   Other
-  exc   Excreta(sweat)              ---
-  exc   Excreta(hair,skin,nails)    ---
-
-[Pb-197m:transfer]
+[{*}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -79,72 +65,30 @@ $endif
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
-  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+# decay for HATM
+  {*}/Oralcavity          Oralcavity                ---
+  {*}/Oesophagus-f        Oesophagus-f              ---
+  {*}/Oesophagus-s        Oesophagus-s              ---
+  {*}/St-con              St-con                    ---
+  {*}/SI-con              SI-con                    ---
+  {*}/SI-conRe            SI-conRe                  ---
+  {*}/RC-con              RC-con                    ---
+  {*}/LC-con              LC-con                    ---
+  {*}/RS-con              RS-con                    ---
+  {*}/Faeces              Faeces                    ---
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
 
-# ICRP Publ.137 p.225 Table 9.3
-  Plasma                  UB-con                    1.75
-  Plasma                  RC-con                    0.7
-  Plasma                  T-bone-S                  4.86
-  Plasma                  C-bone-S                  3.89
-  Plasma                  ST0                      22.16
-  Plasma                  ST1                       0.7
-  Plasma                  ST2                       0.14
-  Plasma                  Liver1                    4.9
-  Plasma                  Kidneys1                  2.45
-  Plasma                  Kidneys2                  0.0245
-  Plasma                  RBC                      28
-  Plasma                  Excreta(sweat)            0.42
-  RBC                     Plasma                    0.139
-  T-bone-S                Plasma                    0.5
-  T-bone-S                Exch-T-bone-V             0.5
-  C-bone-S                Plasma                    0.5
-  C-bone-S                Exch-C-bone-V             0.5
-  Exch-T-bone-V           T-bone-S                  0.0185
-  Exch-T-bone-V           Noch-T-bone-V             0.0046
-  Exch-C-bone-V           C-bone-S                  0.0185
-  Exch-C-bone-V           Noch-C-bone-V             0.0046
-  Noch-T-bone-V           Plasma                    0.000493
-  Noch-C-bone-V           Plasma                    0.0000821
-  Liver1                  Plasma                    0.0312
-  Liver1                  SI-conRe                  0.0312
-  Liver1                  Liver2                    0.00693
-  Liver2                  Plasma                    0.0019
-  Kidneys1                UB-con                    0.139
-  Kidneys2                Plasma                    0.0019
-  ST0                     Plasma                    7.39
-  ST1                     Plasma                    0.00416
-  ST2                     Plasma                    0.00038
-  ST1                     Excreta(hair,skin,nails)  0.00277
+# decay for UB
+  {*}/UB-con              UB-con                    ---
+  {*}/Urine               Urine                     ---
 
 
-# ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
-# > (482) The systemic model for lead as a progeny of lead is an extension of the
-# > characteristic model for lead described above. ...
-# > (482) 鉛の子孫核種としての鉛の全身モデルは、上述の(訳注：親核種としての)
-# > 鉛の特性モデルの拡張である。 ...
-
-[Pb-197:compartment]
+[{Pb}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
@@ -163,12 +107,16 @@ $endif
   exc   Excreta(sweat)              ---
   exc   Excreta(hair,skin,nails)    ---
 
+$if progeny
+
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
-# > ... Compartments representing red
+# > (482) The systemic model for lead as a progeny of lead is an extension of the
+# > characteristic model for lead described above. Compartments representing red
 # > marrow, spleen, skin, testes, and ovaries are added to the model structure for consistency
 # > with the models for other lead progeny.
-# >  ... 他の鉛子孫核種のモデルとの整合性を図るため、赤色骨髄、脾臓、皮膚、精巣、および卵巣を
-# > 表すコンパートメントがモデル構造に追加されている。
+# > (482) 鉛の子孫核種としての鉛の全身モデルは、上述の(訳注：親核種としての)
+# > 鉛の特性モデルの拡張である。他の鉛子孫核種のモデルとの整合性を図るため、
+# > 赤色骨髄、脾臓、皮膚、精巣、および卵巣を表すコンパートメントがモデル構造に追加されている。
 
   acc   RedMarrow             R-marrow
   acc   Testes                Testes
@@ -176,38 +124,27 @@ $endif
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
-[Pb-197:transfer]
+$endif
+
+[{Pb}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.225 Table 9.3
   Plasma                  UB-con                    1.75
   Plasma                  RC-con                    0.7
   Plasma                  T-bone-S                  4.86
   Plasma                  C-bone-S                  3.89
- #Plasma                  ST0                      22.16            # fix(1)
- #Plasma                  ST1                       0.7             # fix(1)
- #Plasma                  ST2                       0.14            # fix(1)
+$if parent
+  Plasma                  ST0                      22.16
+  Plasma                  ST1                       0.7
+  Plasma                  ST2                       0.14
+$endif
   Plasma                  Liver1                    4.9
   Plasma                  Kidneys1                  2.45
   Plasma                  Kidneys2                  0.0245
@@ -234,6 +171,8 @@ $endif
   ST1                     Plasma                    0.00416
   ST2                     Plasma                    0.00038
   ST1                     Excreta(hair,skin,nails)  0.00277
+
+$if progeny
 
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
 # > ... Each of the added compartments is
@@ -283,20 +222,6 @@ $endif
   Testes                  Plasma                    0.0019
   Ovaries                 Plasma                    0.0019
 
-# from parent to progeny
-  Pb-197m/Oralcavity      Pb-197/Oralcavity         ---
-  Pb-197m/Oesophagus-f    Pb-197/Oesophagus-f       ---
-  Pb-197m/Oesophagus-s    Pb-197/Oesophagus-s       ---
-  Pb-197m/St-con          Pb-197/St-con             ---
-  Pb-197m/SI-con          Pb-197/SI-con             ---
-  Pb-197m/SI-conRe        Pb-197/SI-conRe           ---
-  Pb-197m/RC-con          Pb-197/RC-con             ---
-  Pb-197m/LC-con          Pb-197/LC-con             ---
-  Pb-197m/RS-con          Pb-197/RS-con             ---
-  Pb-197m/Faeces          Pb-197/Faeces             ---
-  Pb-197m/UB-con          Pb-197/UB-con             ---
-  Pb-197m/Urine           Pb-197/Urine              ---
-
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
 # > ... Lead produced in a soft tissue compartment of a
 # > preceding chain member not identifiable with a compartment of the lead model is
@@ -310,24 +235,50 @@ $endif
 # > 生成された鉛は、鉛モデルの血液コンパートメントと識別できない場合、血漿へ1000 d⁻¹の速度で
 # > 移行すると仮定されます。
 
-  Pb-197m/Plasma          Pb-197/Plasma             ---
-  Pb-197m/RBC             Pb-197/RBC                ---
-  Pb-197m/C-bone-S        Pb-197/C-bone-S           ---
-  Pb-197m/T-bone-S        Pb-197/T-bone-S           ---
-  Pb-197m/Exch-C-bone-V   Pb-197/Exch-C-bone-V      ---
-  Pb-197m/Exch-T-bone-V   Pb-197/Exch-T-bone-V      ---
-  Pb-197m/Noch-C-bone-V   Pb-197/Noch-C-bone-V      ---
-  Pb-197m/Noch-T-bone-V   Pb-197/Noch-T-bone-V      ---
-  Pb-197m/Liver1          Pb-197/Liver1             ---
-  Pb-197m/Liver2          Pb-197/Liver2             ---
-  Pb-197m/Kidneys1        Pb-197/Kidneys1           ---
-  Pb-197m/Kidneys2        Pb-197/Kidneys2           ---
-  Pb-197m/Excreta(sweat)            Pb-197/Excreta(sweat)            ---
-  Pb-197m/Excreta(hair,skin,nails)  Pb-197/Excreta(hair,skin,nails)  ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
+  {Bi,Pb,Tl}/Plasma       Plasma                    ---
+  {Hg}/Plasma1            Plasma                    ---
+  {Hg}/Plasma2            Plasma                 1000
+  {Po,Bi,Pb,Tl,Hg}/RBC    RBC                       ---
+  {Au}/Blood1             Plasma                    ---
+  {Au}/Blood2             Plasma                 1000
 
-  Pb-197m/ST0             Pb-197/ST0                ---
-  Pb-197m/ST1             Pb-197/ST1                ---
-  Pb-197m/ST2             Pb-197/ST2                ---
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Pb}/Exch-C-bone-V      Exch-C-bone-V             ---
+  {Pb}/Exch-T-bone-V      Exch-T-bone-V             ---
+  {Pb}/Noch-C-bone-V      Noch-C-bone-V             ---
+  {Pb}/Noch-T-bone-V      Noch-T-bone-V             ---
+
+  {Po,Bi,Pb}/Liver1       Liver1                    ---
+  {Po,Bi,Pb}/Liver2       Liver2                    ---
+  {Tl,Hg,Au}/Liver        Liver1                    ---
+  {Po,Bi,Pb}/Kidneys1     Kidneys1                  ---
+  {Po,Bi,Pb}/Kidneys2     Kidneys2                  ---
+  {Tl}/Kidneys            Kidneys2                  ---
+  {Hg,Au}/Kidneys         Kidneys1                  ---
+  {*}/RedMarrow           RedMarrow                 ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Po}/Other              Plasma                    7.39
+  {Bi}/ST0                Plasma                    7.39
+  {Bi}/ST1                Plasma                    7.39
+  {Bi}/ST2                Plasma                    7.39
+  {Pb}/ST0                ST0                       ---
+  {Pb}/ST1                ST1                       ---
+  {Pb}/ST2                ST2                       ---
+  {Tl}/Other              Plasma                    7.39
+  {Hg}/Other1             Plasma                    7.39
+  {Hg}/Other2             Plasma                    7.39
+  {Au}/Other1             Plasma                    7.39
+  {Au}/Other2             Plasma                    7.39
+
+$endif
 
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
@@ -335,23 +286,10 @@ $endif
 # > intake of lead. ...
 # > (481) 鉛摂取後に体内で生成されるタリウムには、以下の全身モデルが適用されます。 ...
 
-[Tl-197:compartment]
+[{Tl}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
@@ -368,29 +306,14 @@ $endif
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
-[Tl-197:transfer]
+[{Tl}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > ... Thallium leaves the central blood compartment (plasma) at the
@@ -438,20 +361,6 @@ $endif
   Testes                  Plasma                    2.5
   Ovaries                 Plasma                    2.5
 
-# from parent to progeny
-  Pb-197m/Oralcavity      Tl-197/Oralcavity         ---
-  Pb-197m/Oesophagus-f    Tl-197/Oesophagus-f       ---
-  Pb-197m/Oesophagus-s    Tl-197/Oesophagus-s       ---
-  Pb-197m/St-con          Tl-197/St-con             ---
-  Pb-197m/SI-con          Tl-197/SI-con             ---
-  Pb-197m/SI-conRe        Tl-197/SI-conRe           ---
-  Pb-197m/RC-con          Tl-197/RC-con             ---
-  Pb-197m/LC-con          Tl-197/LC-con             ---
-  Pb-197m/RS-con          Tl-197/RS-con             ---
-  Pb-197m/Faeces          Tl-197/Faeces             ---
-  Pb-197m/UB-con          Tl-197/UB-con             ---
-  Pb-197m/Urine           Tl-197/Urine              ---
-
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
 # > in the model for lead (Fig. 9.1).
@@ -470,27 +379,48 @@ $endif
 # > 体積コンパートメントで生成されたタリウムは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
-  Pb-197m/Plasma          Tl-197/Plasma             ---
-  Pb-197m/RBC             Tl-197/RBC                ---
-  Pb-197m/C-bone-S        Tl-197/C-bone-S           ---
-  Pb-197m/T-bone-S        Tl-197/T-bone-S           ---
-  Pb-197m/Exch-C-bone-V   Tl-197/Plasma         $(0.03 / 365.25)
-  Pb-197m/Exch-T-bone-V   Tl-197/Plasma         $(0.18 / 365.25)
-  Pb-197m/Noch-C-bone-V   Tl-197/Plasma         $(0.03 / 365.25)
-  Pb-197m/Noch-T-bone-V   Tl-197/Plasma         $(0.18 / 365.25)
-  Pb-197m/Liver1          Tl-197/Liver              ---
-  Pb-197m/Kidneys2        Tl-197/Kidneys            ---
-  Pb-197/RedMarrow        Tl-197/RedMarrow          ---
-  Pb-197/Testes           Tl-197/Testes             ---
-  Pb-197/Ovaries          Tl-197/Ovaries            ---
-  Pb-197/Skin             Tl-197/Skin               ---
-  Pb-197/Spleen           Tl-197/Spleen             ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
+  {Bi,Pb,Tl}/Plasma       Plasma                    ---
+  {Hg}/Plasma1            Plasma                    ---
+  {Hg}/Plasma2            Plasma                 1000
+  {Po,Bi,Pb,Tl,Hg}/RBC    RBC                       ---
+  {Au}/Blood1             Plasma                    ---
+  {Au}/Blood2             Plasma                 1000
 
-  Pb-197m/ST0             Tl-197/Plasma             2.5
-  Pb-197m/ST1             Tl-197/Plasma             2.5
-  Pb-197m/ST2             Tl-197/Plasma             2.5
-  Pb-197m/Liver2          Tl-197/Plasma             2.5
-  Pb-197m/Kidneys1        Tl-197/Plasma             2.5
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Pb}/Exch-C-bone-V      Plasma                $(0.03 / 365.25)
+  {Pb}/Exch-T-bone-V      Plasma                $(0.18 / 365.25)
+  {Pb}/Noch-C-bone-V      Plasma                $(0.03 / 365.25)
+  {Pb}/Noch-T-bone-V      Plasma                $(0.18 / 365.25)
+
+  {Po,Bi,Pb}/Liver1       Liver                     ---
+  {Po,Bi,Pb}/Liver2       Plasma                    2.5
+  {Tl,Hg,Au}/Liver        Liver                     ---
+  {Po,Bi,Pb}/Kidneys1     Plasma                    2.5
+  {Po,Bi,Pb}/Kidneys2     Kidneys                   ---
+  {Tl}/Kidneys            Kidneys                   ---
+  {Hg,Au}/Kidneys         Plasma                    2.5
+  {*}/RedMarrow           RedMarrow                 ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Po}/Other              Plasma                    2.5
+  {Bi}/ST0                Plasma                    2.5
+  {Bi}/ST1                Plasma                    2.5
+  {Bi}/ST2                Plasma                    2.5
+  {Pb}/ST0                Plasma                    2.5
+  {Pb}/ST1                Plasma                    2.5
+  {Pb}/ST2                Plasma                    2.5
+  {Tl}/Other              Other                     ---
+  {Hg}/Other1             Plasma                    2.5
+  {Hg}/Other2             Plasma                    2.5
+  {Au}/Other1             Plasma                    2.5
+  {Au}/Other2             Plasma                    2.5
 
 
 # ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
@@ -509,23 +439,10 @@ $endif
 #
 # 作成者注：Para.479の移行係数についての記述に「皮膚」の言及があるので、これも構成コンパートメントに含まれる。
 
-[Hg-197:compartment]
+[{Hg}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Plasma1               Blood
   acc   Plasma2               Blood
   acc   RBC                   Blood
@@ -548,29 +465,14 @@ $endif
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
-[Hg-197:transfer]
+[{Hg}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma1               $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma1               $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
 # > ... The total transfer coefficient from Plasma 1 to all destinations is 16.636 h⁻¹, corresponding
@@ -635,20 +537,6 @@ $endif
   Testes                  Plasma1               $(0.693 / 20)
   Ovaries                 Plasma1               $(0.693 / 20)
 
-# from parent to progeny
-  Pb-197m/Oralcavity      Hg-197/Oralcavity         ---
-  Pb-197m/Oesophagus-f    Hg-197/Oesophagus-f       ---
-  Pb-197m/Oesophagus-s    Hg-197/Oesophagus-s       ---
-  Pb-197m/St-con          Hg-197/St-con             ---
-  Pb-197m/SI-con          Hg-197/SI-con             ---
-  Pb-197m/SI-conRe        Hg-197/SI-conRe           ---
-  Pb-197m/RC-con          Hg-197/RC-con             ---
-  Pb-197m/LC-con          Hg-197/LC-con             ---
-  Pb-197m/RS-con          Hg-197/RS-con             ---
-  Pb-197m/Faeces          Hg-197/Faeces             ---
-  Pb-197m/UB-con          Hg-197/UB-con             ---
-  Pb-197m/Urine           Hg-197/Urine              ---
-
 # ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
 # > ... Plasma 1, kidneys, and liver are identified with plasma,
 # > Kidneys 1, and Liver 1, respectively, in the model for lead (Fig. 9.1).
@@ -666,25 +554,45 @@ $endif
 # > 半減期20日で血漿1に移行すると仮定されます。皮質骨または海綿骨の体積コンパートメントで
 # > 生成された水銀は、その骨の種類における基準代謝率で血漿1に移行すると仮定されます。
 
-  Pb-197m/Plasma          Hg-197/Plasma1            ---
-  Pb-197m/RBC             Hg-197/RBC                ---
-  Pb-197m/C-bone-S        Hg-197/C-bone-S           ---
-  Pb-197m/T-bone-S        Hg-197/T-bone-S           ---
-  Pb-197m/Exch-C-bone-V   Hg-197/Plasma1        $(0.03 / 365.25)
-  Pb-197m/Exch-T-bone-V   Hg-197/Plasma1        $(0.18 / 365.25)
-  Pb-197m/Noch-C-bone-V   Hg-197/Plasma1        $(0.03 / 365.25)
-  Pb-197m/Noch-T-bone-V   Hg-197/Plasma1        $(0.18 / 365.25)
-  Pb-197m/Liver1          Hg-197/Liver              ---
-  Pb-197m/Kidneys1        Hg-197/Kidneys            ---
-  Pb-197/RedMarrow        Hg-197/RedMarrow          ---
-  Pb-197/Testes           Hg-197/Testes             ---
-  Pb-197/Ovaries          Hg-197/Ovaries            ---
-  Pb-197/Skin             Hg-197/Skin               ---
-  Pb-197/Spleen           Hg-197/Spleen             ---
+  {Po}/Plasma1            Plasma1                1000
+  {Po}/Plasma2            Plasma1                1000
+  {Po}/Plasma3            Plasma1                1000
+  {Bi,Pb,Tl}/Plasma       Plasma1                   ---
+  {Hg}/Plasma1            Plasma1                   ---
+  {Hg}/Plasma2            Plasma2                   ---
+  {Po,Bi,Pb,Tl,Hg}/RBC    RBC                       ---
+  {Au}/Blood1             Plasma1                   ---
+  {Au}/Blood2             Plasma1                1000
 
-  Pb-197m/ST0             Hg-197/Plasma1        $(0.693 / 20)
-  Pb-197m/ST1             Hg-197/Plasma1        $(0.693 / 20)
-  Pb-197m/ST2             Hg-197/Plasma1        $(0.693 / 20)
-  Pb-197m/Liver2          Hg-197/Plasma1        $(0.693 / 20)
-  Pb-197m/Kidneys2        Hg-197/Plasma1        $(0.693 / 20)       # Tl-197/Kidneysを経由
-  Tl-197/Other            Hg-197/Plasma1        $(0.693 / 20)
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {Pb}/Exch-C-bone-V      Plasma1               $(0.03 / 365.25)
+  {Pb}/Exch-T-bone-V      Plasma1               $(0.18 / 365.25)
+  {Pb}/Noch-C-bone-V      Plasma1               $(0.03 / 365.25)
+  {Pb}/Noch-T-bone-V      Plasma1               $(0.18 / 365.25)
+
+  {Po,Bi,Pb}/Liver1       Liver                     ---
+  {Po,Bi,Pb}/Liver2       Plasma1               $(0.693 / 20)
+  {Tl,Hg,Au}/Liver        Liver                     ---
+  {Po,Bi,Pb}/Kidneys1     Kidneys                   ---
+  {Po,Bi,Pb}/Kidneys2     Plasma1               $(0.693 / 20)
+  {Tl}/Kidneys            Plasma1               $(0.693 / 20)
+  {Hg,Au}/Kidneys         Kidneys                   ---
+  {*}/RedMarrow           RedMarrow                 ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
+
+  {Po}/Other              Plasma1               $(0.693 / 20)   # 半減期20日
+  {Bi}/ST0                Plasma1               $(0.693 / 20)   # 半減期20日
+  {Bi}/ST1                Plasma1               $(0.693 / 20)   # 半減期20日
+  {Bi}/ST2                Plasma1               $(0.693 / 20)   # 半減期20日
+  {Pb}/ST0                Plasma1               $(0.693 / 20)   # 半減期20日
+  {Pb}/ST1                Plasma1               $(0.693 / 20)   # 半減期20日
+  {Pb}/ST2                Plasma1               $(0.693 / 20)   # 半減期20日
+  {Tl}/Other              Plasma1               $(0.693 / 20)   # 半減期20日
+  {Hg}/Other1             Other1                    ---
+  {Hg}/Other2             Other2                    ---
+  {Au}/Other1             Plasma1               $(0.693 / 20)   # 半減期20日
+  {Au}/Other2             Plasma1               $(0.693 / 20)   # 半減期20日
