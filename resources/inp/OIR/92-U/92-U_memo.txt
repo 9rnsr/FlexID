@@ -1,0 +1,110 @@
+# 翻訳メモ
+
+ICRP Publ.137 p.421 Para.918 - 921
+
+```
+15.3.3. Treatment of radioactive progeny
+
+(918) The radioactive progeny of uranium isotopes addressed in the derivation of
+dose coefficients for the uranium parents are isotopes of actinium, thorium, protactinium,
+uranium, neptunium, plutonium, radium, radon, polonium, lead, bismuth,
+thallium, francium, and astatine.
+(918) ウラン親核種の線量係数の導出において考慮されるウラン同位体の放射性娘核種は、
+アクチニウム、トリウム、プロトアクチニウム、ウラン、ネプツニウム、プルトニウム、
+ラジウム、ラドン、ポロニウム、鉛、ビスマス、タリウム、フランシウム、およびアスタチンの
+同位体である。
+
+(919) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
+thallium, francium, and astatine as radium or thorium progeny are applied to these
+elements as uranium progeny. The models for protactinium and uranium as thorium
+progeny are applied to protactinium and uranium, respectively, as uranium progeny.
+(919) ラジウムまたはトリウムの娘核種としての、アクチニウム、トリウム、ラジウム、
+ラドン、ポロニウム、鉛、ビスマス、タリウム、フランシウム、およびアスタチンのモデルは、
+ウランの娘核種としてのこれら元素にも適用される。トリウムの娘核種としてのプロトアクチニウム
+およびウランのモデルは、ウランの娘核種としてのプロトアクチニウムおよびウランに、
+それぞれ適用される。
+
+(920) A modified version of the characteristic model for neptunium applied in
+Publication 67 (ICRP, 1993) and a later part of the OIR series is applied to neptunium
+as a uranium progeny. Two compartments, one representing spleen and the
+other representing skin, are added to the explicitly identified source regions in the
+characteristic model for neptunium. Skin and spleen are taken from the intermediate
+soft tissue compartment ST1; that is, the deposition fraction for ST1 is reduced by
+the deposition fractions assigned to spleen and skin, and the removal half-time from
+ST1 to blood is assigned to spleen and skin. Deposition in skin is calculated as its
+mass fraction of other soft tissues times its deposition fraction in other soft tissues,
+excluding deposition in the fast-turnover compartment ST0. The deposition fraction
+for spleen is set at one-third of the deposition fraction for skin, considering the
+relative masses of these tissues and the typically higher concentrations of actinides
+in spleen than skin observed in laboratory animals and human subjects. If neptunium
+is produced in a compartment that is not identifiable with a compartment in its
+characteristic model, it is assumed to transfer to neptunium's central blood compartment
+at the rate 1000 d-¹ if produced in a blood compartment, at the rate of transfer
+from the fast-turnover soft tissue compartment ST0 to blood (0.693 d-¹) if produced
+in a soft tissue compartment, and at the rate of bone turnover if produced in a bone
+volume compartment.
+(920) ウランの娘核種としてのネプツニウムに対しては、Publication 67 (ICRP, 1993) および
+OIRシリーズの後の巻で採用されたネプツニウムの特性モデルを修正したものが適用される。
+このネプツニウム特性モデルにおいて明示的に特定された給源領域に、脾臓を表すコンパートメントと
+皮膚を表すコンパートメントの2つが追加される。皮膚および脾臓は、中間軟部組織コンパートメント
+ST1から区分けされる。すなわち、ST1の沈着分率は、脾臓および皮膚に割り当てられる沈着分率の分だけ
+減じられ、ST1から血液への除去半減期が脾臓および皮膚にも適用される。皮膚への沈着量は、
+「他の軟部組織」における皮膚の質量分率に、「他の軟部組織」への沈着分率を乗じることで
+算出される（ただし、代謝回転の速いコンパートメントST0への沈着は除外される）。
+脾臓の沈着分率は、皮膚の沈着分率の3分の1に設定される。これは、これらの組織の相対的な質量や、
+実験動物およびヒトにおいて皮膚よりも脾臓の方がアクチニド濃度が高くなる傾向があることを
+考慮したものである。もしネプツニウムが、その特性モデル上のコンパートメントと特定できない
+コンパートメント内で生成された場合、その移動速度は次のように仮定される。すなわち、
+血液コンパートメント内で生成された場合は1000 d⁻¹、代謝回転の速い軟部組織コンパートメント
+ST0から血液への移動速度（0.693 d⁻¹）で軟部組織コンパートメント内で生成された場合、
+そして骨体積コンパートメント内で生成された場合は骨代謝回転速度である。
+
+(921) The model for plutonium as a uranium progeny is a simplification of the
+characteristic model for plutonium applied in a later part of the OIR series (also see
+Leggett et al., 2005b). The model structure applied to plutonium as a uranium progeny
+is the generic model structure for bone-surface-seeking radionuclides (see Fig.
+14.2) with two added compartments representing spleen and skin. It is assumed that
+the outflow rate from blood to all destinations is 1 d-¹, that 30% of outflow deposits
+in a compartment of other soft tissues with relatively fast turnover (ST0, considered
+as part of the circulation), and that 70% of the outflow leaves the circulation. It is
+assumed that 60% of plutonium that leaves the circulation deposits in Liver 1, 18%
+on trabecular bone surfaces, 12% on cortical bone surfaces, 2.1% in right colon
+contents, 2% in urinary bladder contents, 1% in Kidneys 1 (urinary path), 0.05% in
+Kidneys 2 (other kidney tissue), 0.035% in testes, 0.011% in ovaries, 0.1% in spleen,
+0.3% in skin, 3% in a compartment of other soft tissues with relatively slow turnover
+(ST2), and the remaining 1.404% in a compartment of other soft tissues with intermediate
+turnover (ST1). Plutonium leaves Liver 1 with a half-time of 1 y, with 1%
+moving to the small intestine contents via biliary secretion, 80% returning to blood,
+and 19% depositing in Liver 2. Plutonium transfers from ST0 to blood with a halftime
+of 7 d; from spleen, skin, and ST1 to blood with a half-time of 500 d; from Liver
+2, Kidneys 2, and ST2 to blood with a half-time of 15 y; from Kidneys 1 to urinary
+bladder contents with a half-time of 40 d; and from testes and ovaries to blood with a
+half-time of 5 y. Plutonium depositing on bone surfaces follows the generic model for
+bone-volume-seeking radionuclides. Plutonium produced in a compartment that is
+not identifiable with a compartment in the plutonium model is assumed to transfer to
+the blood compartment of the plutonium model at the rate 1000 d-¹ if produced in a
+blood compartment, at the rate of bone turnover if produced in an exchangeable
+bone volume compartment, and at the rate 0.099 d-¹ (t1/2=7 d) for remaining
+unidentifiable or ambiguous compartments.
+(921) ウランの娘核種としてのプルトニウムに関するモデルは、OIRシリーズの後半で
+適用されるプルトニウムの特性モデルを簡略化したものである（Leggett et al., 2005bも参照）。
+ウランの娘核種としてのプルトニウムに適用されるモデル構造は、骨表面親和性放射性核種のための
+一般的なモデル構造（図14.2参照）に、脾臓と皮膚を表す2つのコンパートメントを追加したものである。
+血液からすべての移行先への流出速度は1 d⁻¹と仮定され、流出量の30%は比較的代謝回転の速い
+「その他の軟部組織」コンパートメント（ST0：循環系の一部とみなされる）に沈着し、
+70%は循環系から離脱すると仮定される。循環系から離脱したプルトニウムのうち、
+60%は肝臓1（Liver 1）に、18%は海綿骨表面に、12%は皮質骨表面に、2.1%は上行結腸内容物に、
+2%は膀胱内容物に、1%は腎臓1（尿路系）に、0.05%は腎臓2（その他の腎組織）に、0.035%は精巣に、
+0.011%は卵巣に、0.1%は脾臓に、0.3%は皮膚に、3%は比較的代謝回転の遅い
+「その他の軟部組織」コンパートメント（ST2）に沈着し、残りの1.404%は中程度の代謝回転の
+「その他の軟部組織」コンパートメント（ST1）に沈着すると仮定される。プルトニウムは
+半減期1年で肝臓1から消失し、そのうち1%は胆汁分泌を介して小腸内容物へ移行し、80%は血液へ戻り、
+19%は肝臓2（Liver 2）に沈着する。プルトニウムは、ST0から血液へは半減期7日で、
+脾臓、皮膚、ST1から血液へは半減期500日で、肝臓2、腎臓2、ST2から血液へは半減期15年で、
+腎臓1から膀胱内容物へは半減期40日で移行する。また、精巣や卵巣から血液へは、半減期5年で移行する。
+骨表面に沈着するプルトニウムの挙動は、骨体積親和性放射性核種に関する一般的なモデルに従う。
+プルトニウム・モデル上のどの区画にも該当しない区画で生成されたプルトニウムについては、
+次のように血液区画へ移行すると仮定される。すなわち、血液区画で生成された場合は1000 d⁻¹の速度で、
+交換可能な骨体積区画で生成された場合は骨代謝回転速度で、そしてその他の特定不能または
+不明確な区画で生成された場合は0.099 d⁻¹（半減期7日）の速度で移行するとされる。
+```
