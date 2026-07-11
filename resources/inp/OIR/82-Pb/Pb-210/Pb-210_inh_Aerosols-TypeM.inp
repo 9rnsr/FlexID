@@ -275,10 +275,10 @@ $endif
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
   acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
   acc   Noch-T-bone-V         T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
