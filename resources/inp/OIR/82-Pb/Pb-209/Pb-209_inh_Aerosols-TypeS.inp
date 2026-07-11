@@ -12,6 +12,11 @@ Pb-209 Inhalation, Aerosols Type S
   $fb = 0.5                 # footnote*
   $sb = 1.7                 # footnote*
 
+  ${Po}/Blood       = 'Plasma2'
+  ${Bi,Pb,Tl}/Blood = 'Plasma'
+  ${Hg}/Blood       = 'Plasma1'
+  ${Au}/Blood       = 'Blood1'
+
 $if parent
   ${Pb}/fA    = 0.002       # ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type S
   ${Pb}/fA_Re = 0.2         # footnote**
@@ -46,7 +51,7 @@ $endif
   Environment           $(                     100% - 81.96% )
 
 
-[Pb-209:compartment]
+[{*}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -94,28 +99,11 @@ $endif
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Plasma                Blood
-  acc   RBC                   Blood
-  acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   Exch-T-bone-V         T-bone-V
-  acc   Noch-T-bone-V         T-bone-V
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   Kidneys1              Kidneys       # Urinary path
-  acc   Kidneys2              Kidneys       # Other kidney tissues
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   ST2                   Other
-  exc   Excreta(sweat)              ---
-  exc   Excreta(hair,skin,nails)    ---
-
-[Pb-209:transfer]
+[{*}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -170,38 +158,73 @@ $endif
   LNET-S                  LNET-B                $(      fb  * ss )
   LNTH-S                  LNTH-B                $(      fb  * ss )
 
-  ALV-F                   Plasma                $( (1 - fb) * sr )
-  INT-F                   Plasma                $( (1 - fb) * sr )
-  bb-F                    Plasma                $( (1 - fb) * sr )
-  bbseq-F                 Plasma                $( (1 - fb) * sr )
-  BB-F                    Plasma                $( (1 - fb) * sr )
-  BBseq-F                 Plasma                $( (1 - fb) * sr )
-  ET2-F                   Plasma                $( (1 - fb) * sr )
-  ETseq-F                 Plasma                $( (1 - fb) * sr )
-  LNET-F                  Plasma                $( (1 - fb) * sr )
-  LNTH-F                  Plasma                $( (1 - fb) * sr )
+  ALV-F                   $Blood                $( (1 - fb) * sr )
+  INT-F                   $Blood                $( (1 - fb) * sr )
+  bb-F                    $Blood                $( (1 - fb) * sr )
+  bbseq-F                 $Blood                $( (1 - fb) * sr )
+  BB-F                    $Blood                $( (1 - fb) * sr )
+  BBseq-F                 $Blood                $( (1 - fb) * sr )
+  ET2-F                   $Blood                $( (1 - fb) * sr )
+  ETseq-F                 $Blood                $( (1 - fb) * sr )
+  LNET-F                  $Blood                $( (1 - fb) * sr )
+  LNTH-F                  $Blood                $( (1 - fb) * sr )
 
-  ALV-S                   Plasma                $( (1 - fb) * ss )
-  INT-S                   Plasma                $( (1 - fb) * ss )
-  bb-S                    Plasma                $( (1 - fb) * ss )
-  bbseq-S                 Plasma                $( (1 - fb) * ss )
-  BB-S                    Plasma                $( (1 - fb) * ss )
-  BBseq-S                 Plasma                $( (1 - fb) * ss )
-  ET2-S                   Plasma                $( (1 - fb) * ss )
-  ETseq-S                 Plasma                $( (1 - fb) * ss )
-  LNET-S                  Plasma                $( (1 - fb) * ss )
-  LNTH-S                  Plasma                $( (1 - fb) * ss )
+  ALV-S                   $Blood                $( (1 - fb) * ss )
+  INT-S                   $Blood                $( (1 - fb) * ss )
+  bb-S                    $Blood                $( (1 - fb) * ss )
+  bbseq-S                 $Blood                $( (1 - fb) * ss )
+  BB-S                    $Blood                $( (1 - fb) * ss )
+  BBseq-S                 $Blood                $( (1 - fb) * ss )
+  ET2-S                   $Blood                $( (1 - fb) * ss )
+  ETseq-S                 $Blood                $( (1 - fb) * ss )
+  LNET-S                  $Blood                $( (1 - fb) * ss )
+  LNTH-S                  $Blood                $( (1 - fb) * ss )
 
-  ALV-B                   Plasma                $sb
-  INT-B                   Plasma                $sb
-  bb-B                    Plasma                $sb
-  bbseq-B                 Plasma                $sb
-  BB-B                    Plasma                $sb
-  BBseq-B                 Plasma                $sb
-  ET2-B                   Plasma                $sb
-  ETseq-B                 Plasma                $sb
-  LNET-B                  Plasma                $sb
-  LNTH-B                  Plasma                $sb
+  ALV-B                   $Blood                $sb
+  INT-B                   $Blood                $sb
+  bb-B                    $Blood                $sb
+  bbseq-B                 $Blood                $sb
+  BB-B                    $Blood                $sb
+  BBseq-B                 $Blood                $sb
+  ET2-B                   $Blood                $sb
+  ETseq-B                 $Blood                $sb
+  LNET-B                  $Blood                $sb
+  LNTH-B                  $Blood                $sb
+
+# decay for HRTM
+  {*}/ET1-F               ET1-F                     ---
+  {*}/ET2-F               ET2-F                     ---
+  {*}/ETseq-F             ETseq-F                   ---
+  {*}/LNET-F              LNET-F                    ---
+  {*}/BB-F                BB-F                      ---
+  {*}/BBseq-F             BBseq-F                   ---
+  {*}/bb-F                bb-F                      ---
+  {*}/bbseq-F             bbseq-F                   ---
+  {*}/ALV-F               ALV-F                     ---
+  {*}/INT-F               INT-F                     ---
+  {*}/LNTH-F              LNTH-F                    ---
+  {*}/ET1-S               ET1-S                     ---
+  {*}/ET2-S               ET2-S                     ---
+  {*}/ETseq-S             ETseq-S                   ---
+  {*}/LNET-S              LNET-S                    ---
+  {*}/BB-S                BB-S                      ---
+  {*}/BBseq-S             BBseq-S                   ---
+  {*}/bb-S                bb-S                      ---
+  {*}/bbseq-S             bbseq-S                   ---
+  {*}/ALV-S               ALV-S                     ---
+  {*}/INT-S               INT-S                     ---
+  {*}/LNTH-S              LNTH-S                    ---
+  {*}/ET2-B               ET2-B                     ---
+  {*}/ETseq-B             ETseq-B                   ---
+  {*}/LNET-B              LNET-B                    ---
+  {*}/BB-B                BB-B                      ---
+  {*}/BBseq-B             BBseq-B                   ---
+  {*}/bb-B                bb-B                      ---
+  {*}/bbseq-B             bbseq-B                   ---
+  {*}/ALV-B               ALV-B                     ---
+  {*}/INT-B               INT-B                     ---
+  {*}/LNTH-B              LNTH-B                    ---
+  {*}/Environment         Environment               ---
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -215,12 +238,56 @@ $endif
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
-  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+# decay for HATM
+  {*}/Oralcavity          Oralcavity                ---
+  {*}/Oesophagus-f        Oesophagus-f              ---
+  {*}/Oesophagus-s        Oesophagus-s              ---
+  {*}/St-con              St-con                    ---
+  {*}/SI-con              SI-con                    ---
+  {*}/SI-conRe            SI-conRe                  ---
+  {*}/RC-con              RC-con                    ---
+  {*}/LC-con              LC-con                    ---
+  {*}/RS-con              RS-con                    ---
+  {*}/Faeces              Faeces                    ---
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
+
+# decay for UB
+  {*}/UB-con              UB-con                    ---
+  {*}/Urine               Urine                     ---
+
+
+[Pb-209:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  exc   Excreta(sweat)              ---
+  exc   Excreta(hair,skin,nails)    ---
+
+[Pb-209:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.137 p.225 Table 9.3
   Plasma                  UB-con                    1.75

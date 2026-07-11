@@ -12,13 +12,21 @@ Pb-194 Inhalation, Aerosols Type F
   $fb = 0.5                 # footnote*
   $sb = 1.7                 # footnote*
 
+  ${Po}/Blood       = 'Plasma2'
+  ${Bi,Pb,Tl}/Blood = 'Plasma'
+  ${Hg}/Blood       = 'Plasma1'
+  ${Au}/Blood       = 'Blood1'
+
 $if parent
   ${Pb}/fA    = 0.2         # ICRP Publ.137 p.220 Table 9.2 / Inhaled particulate materials, Absorption type F
   ${Pb}/fA_Re = 0.2         # footnote**
 $else
-  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
-  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
+  ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2 / Ingested materials, All forms
+  ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2 / Ingested materials, All forms
   ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested materials, All forms
+  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
 
   $fA    = fr * fA_MaxValueOfIng
   $fA_Re =      fA_MaxValueOfIng
@@ -53,7 +61,7 @@ $endif
   Environment           $(                     100% - 81.96% )
 
 
-[Pb-194:compartment]
+[{*}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -101,28 +109,11 @@ $endif
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Plasma                Blood
-  acc   RBC                   Blood
-  acc   C-bone-S              C-bone-S
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-C-bone-V         C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   Exch-T-bone-V         T-bone-V
-  acc   Noch-T-bone-V         T-bone-V
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   Kidneys1              Kidneys       # Urinary path
-  acc   Kidneys2              Kidneys       # Other kidney tissues
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   ST2                   Other
-  exc   Excreta(sweat)              ---
-  exc   Excreta(hair,skin,nails)    ---
-
-[Pb-194:transfer]
+[{*}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -177,38 +168,73 @@ $endif
   LNET-S                  LNET-B                $(      fb  * ss )
   LNTH-S                  LNTH-B                $(      fb  * ss )
 
-  ALV-F                   Plasma                $( (1 - fb) * sr )
-  INT-F                   Plasma                $( (1 - fb) * sr )
-  bb-F                    Plasma                $( (1 - fb) * sr )
-  bbseq-F                 Plasma                $( (1 - fb) * sr )
-  BB-F                    Plasma                $( (1 - fb) * sr )
-  BBseq-F                 Plasma                $( (1 - fb) * sr )
-  ET2-F                   Plasma                $( (1 - fb) * sr )
-  ETseq-F                 Plasma                $( (1 - fb) * sr )
-  LNET-F                  Plasma                $( (1 - fb) * sr )
-  LNTH-F                  Plasma                $( (1 - fb) * sr )
+  ALV-F                   $Blood                $( (1 - fb) * sr )
+  INT-F                   $Blood                $( (1 - fb) * sr )
+  bb-F                    $Blood                $( (1 - fb) * sr )
+  bbseq-F                 $Blood                $( (1 - fb) * sr )
+  BB-F                    $Blood                $( (1 - fb) * sr )
+  BBseq-F                 $Blood                $( (1 - fb) * sr )
+  ET2-F                   $Blood                $( (1 - fb) * sr )
+  ETseq-F                 $Blood                $( (1 - fb) * sr )
+  LNET-F                  $Blood                $( (1 - fb) * sr )
+  LNTH-F                  $Blood                $( (1 - fb) * sr )
 
-  ALV-S                   Plasma                $( (1 - fb) * ss )
-  INT-S                   Plasma                $( (1 - fb) * ss )
-  bb-S                    Plasma                $( (1 - fb) * ss )
-  bbseq-S                 Plasma                $( (1 - fb) * ss )
-  BB-S                    Plasma                $( (1 - fb) * ss )
-  BBseq-S                 Plasma                $( (1 - fb) * ss )
-  ET2-S                   Plasma                $( (1 - fb) * ss )
-  ETseq-S                 Plasma                $( (1 - fb) * ss )
-  LNET-S                  Plasma                $( (1 - fb) * ss )
-  LNTH-S                  Plasma                $( (1 - fb) * ss )
+  ALV-S                   $Blood                $( (1 - fb) * ss )
+  INT-S                   $Blood                $( (1 - fb) * ss )
+  bb-S                    $Blood                $( (1 - fb) * ss )
+  bbseq-S                 $Blood                $( (1 - fb) * ss )
+  BB-S                    $Blood                $( (1 - fb) * ss )
+  BBseq-S                 $Blood                $( (1 - fb) * ss )
+  ET2-S                   $Blood                $( (1 - fb) * ss )
+  ETseq-S                 $Blood                $( (1 - fb) * ss )
+  LNET-S                  $Blood                $( (1 - fb) * ss )
+  LNTH-S                  $Blood                $( (1 - fb) * ss )
 
-  ALV-B                   Plasma                $sb
-  INT-B                   Plasma                $sb
-  bb-B                    Plasma                $sb
-  bbseq-B                 Plasma                $sb
-  BB-B                    Plasma                $sb
-  BBseq-B                 Plasma                $sb
-  ET2-B                   Plasma                $sb
-  ETseq-B                 Plasma                $sb
-  LNET-B                  Plasma                $sb
-  LNTH-B                  Plasma                $sb
+  ALV-B                   $Blood                $sb
+  INT-B                   $Blood                $sb
+  bb-B                    $Blood                $sb
+  bbseq-B                 $Blood                $sb
+  BB-B                    $Blood                $sb
+  BBseq-B                 $Blood                $sb
+  ET2-B                   $Blood                $sb
+  ETseq-B                 $Blood                $sb
+  LNET-B                  $Blood                $sb
+  LNTH-B                  $Blood                $sb
+
+# decay for HRTM
+  {*}/ET1-F               ET1-F                     ---
+  {*}/ET2-F               ET2-F                     ---
+  {*}/ETseq-F             ETseq-F                   ---
+  {*}/LNET-F              LNET-F                    ---
+  {*}/BB-F                BB-F                      ---
+  {*}/BBseq-F             BBseq-F                   ---
+  {*}/bb-F                bb-F                      ---
+  {*}/bbseq-F             bbseq-F                   ---
+  {*}/ALV-F               ALV-F                     ---
+  {*}/INT-F               INT-F                     ---
+  {*}/LNTH-F              LNTH-F                    ---
+  {*}/ET1-S               ET1-S                     ---
+  {*}/ET2-S               ET2-S                     ---
+  {*}/ETseq-S             ETseq-S                   ---
+  {*}/LNET-S              LNET-S                    ---
+  {*}/BB-S                BB-S                      ---
+  {*}/BBseq-S             BBseq-S                   ---
+  {*}/bb-S                bb-S                      ---
+  {*}/bbseq-S             bbseq-S                   ---
+  {*}/ALV-S               ALV-S                     ---
+  {*}/INT-S               INT-S                     ---
+  {*}/LNTH-S              LNTH-S                    ---
+  {*}/ET2-B               ET2-B                     ---
+  {*}/ETseq-B             ETseq-B                   ---
+  {*}/LNET-B              LNET-B                    ---
+  {*}/BB-B                BB-B                      ---
+  {*}/BBseq-B             BBseq-B                   ---
+  {*}/bb-B                bb-B                      ---
+  {*}/bbseq-B             bbseq-B                   ---
+  {*}/ALV-B               ALV-B                     ---
+  {*}/INT-B               INT-B                     ---
+  {*}/LNTH-B              LNTH-B                    ---
+  {*}/Environment         Environment               ---
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -222,12 +248,56 @@ $endif
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
-# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
-  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+# decay for HATM
+  {*}/Oralcavity          Oralcavity                ---
+  {*}/Oesophagus-f        Oesophagus-f              ---
+  {*}/Oesophagus-s        Oesophagus-s              ---
+  {*}/St-con              St-con                    ---
+  {*}/SI-con              SI-con                    ---
+  {*}/SI-conRe            SI-conRe                  ---
+  {*}/RC-con              RC-con                    ---
+  {*}/LC-con              LC-con                    ---
+  {*}/RS-con              RS-con                    ---
+  {*}/Faeces              Faeces                    ---
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
+
+# decay for UB
+  {*}/UB-con              UB-con                    ---
+  {*}/Urine               Urine                     ---
+
+
+[Pb-194:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+  exc   Excreta(sweat)              ---
+  exc   Excreta(hair,skin,nails)    ---
+
+[Pb-194:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.137 p.225 Table 9.3
   Plasma                  UB-con                    1.75
@@ -274,53 +344,6 @@ $endif
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-bnd
-  acc   ETseq-B               ET2-seq
-  acc   LNET-B                LN-ET
-  acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-b
-  acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-b
-  acc   ALV-B                 ALV
-  acc   INT-B                 ALV
-  acc   LNTH-B                LN-Th
-  exc   Environment           ---
-
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
@@ -342,107 +365,9 @@ $endif
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
-  ALV-F                   bb-F                      0.002
-  ALV-F                   INT-F                     0.001
-  INT-F                   LNTH-F                    0.00003
-  bb-F                    BB-F                      0.2
-  bbseq-F                 LNTH-F                    0.001
-  BB-F                    ET2-F                    10
-  BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-s            100
-  ETseq-F                 LNET-F                    0.001
-  ET1-F                   Environment               0.6
-  ET1-F                   ET2-F                     1.5
-
-  ALV-S                   bb-S                      0.002
-  ALV-S                   INT-S                     0.001
-  INT-S                   LNTH-S                    0.00003
-  bb-S                    BB-S                      0.2
-  bbseq-S                 LNTH-S                    0.001
-  BB-S                    ET2-S                    10
-  BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-s            100
-  ETseq-S                 LNET-S                    0.001
-  ET1-S                   Environment               0.6
-  ET1-S                   ET2-S                     1.5
-
-# ICRP Publ.130 p.67 Fig.3.5(a)
-# ICRP Publ.130 p.68 Para.107
-  ALV-F                   ALV-B                 $(      fb  * sr )
-  INT-F                   INT-B                 $(      fb  * sr )
-  bb-F                    bb-B                  $(      fb  * sr )
-  bbseq-F                 bbseq-B               $(      fb  * sr )
-  BB-F                    BB-B                  $(      fb  * sr )
-  BBseq-F                 BBseq-B               $(      fb  * sr )
-  ET2-F                   ET2-B                 $(      fb  * sr )
-  ETseq-F                 ETseq-B               $(      fb  * sr )
-  LNET-F                  LNET-B                $(      fb  * sr )
-  LNTH-F                  LNTH-B                $(      fb  * sr )
-
-  ALV-S                   ALV-B                 $(      fb  * ss )
-  INT-S                   INT-B                 $(      fb  * ss )
-  bb-S                    bb-B                  $(      fb  * ss )
-  bbseq-S                 bbseq-B               $(      fb  * ss )
-  BB-S                    BB-B                  $(      fb  * ss )
-  BBseq-S                 BBseq-B               $(      fb  * ss )
-  ET2-S                   ET2-B                 $(      fb  * ss )
-  ETseq-S                 ETseq-B               $(      fb  * ss )
-  LNET-S                  LNET-B                $(      fb  * ss )
-  LNTH-S                  LNTH-B                $(      fb  * ss )
-
-  ALV-F                   Plasma                $( (1 - fb) * sr )
-  INT-F                   Plasma                $( (1 - fb) * sr )
-  bb-F                    Plasma                $( (1 - fb) * sr )
-  bbseq-F                 Plasma                $( (1 - fb) * sr )
-  BB-F                    Plasma                $( (1 - fb) * sr )
-  BBseq-F                 Plasma                $( (1 - fb) * sr )
-  ET2-F                   Plasma                $( (1 - fb) * sr )
-  ETseq-F                 Plasma                $( (1 - fb) * sr )
-  LNET-F                  Plasma                $( (1 - fb) * sr )
-  LNTH-F                  Plasma                $( (1 - fb) * sr )
-
-  ALV-S                   Plasma                $( (1 - fb) * ss )
-  INT-S                   Plasma                $( (1 - fb) * ss )
-  bb-S                    Plasma                $( (1 - fb) * ss )
-  bbseq-S                 Plasma                $( (1 - fb) * ss )
-  BB-S                    Plasma                $( (1 - fb) * ss )
-  BBseq-S                 Plasma                $( (1 - fb) * ss )
-  ET2-S                   Plasma                $( (1 - fb) * ss )
-  ETseq-S                 Plasma                $( (1 - fb) * ss )
-  LNET-S                  Plasma                $( (1 - fb) * ss )
-  LNTH-S                  Plasma                $( (1 - fb) * ss )
-
-  ALV-B                   Plasma                $sb
-  INT-B                   Plasma                $sb
-  bb-B                    Plasma                $sb
-  bbseq-B                 Plasma                $sb
-  BB-B                    Plasma                $sb
-  BBseq-B                 Plasma                $sb
-  ET2-B                   Plasma                $sb
-  ETseq-B                 Plasma                $sb
-  LNET-B                  Plasma                $sb
-  LNTH-B                  Plasma                $sb
-
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > ... Thallium leaves the central blood compartment (plasma) at the
@@ -489,54 +414,6 @@ $endif
   Spleen                  Plasma                    2.5
   Testes                  Plasma                    2.5
   Ovaries                 Plasma                    2.5
-
-# from parent to progeny
-  Pb-194/ET1-F            Tl-194/ET1-F              ---
-  Pb-194/ET2-F            Tl-194/ET2-F              ---
-  Pb-194/ETseq-F          Tl-194/ETseq-F            ---
-  Pb-194/LNET-F           Tl-194/LNET-F             ---
-  Pb-194/BB-F             Tl-194/BB-F               ---
-  Pb-194/BBseq-F          Tl-194/BBseq-F            ---
-  Pb-194/bb-F             Tl-194/bb-F               ---
-  Pb-194/bbseq-F          Tl-194/bbseq-F            ---
-  Pb-194/ALV-F            Tl-194/ALV-F              ---
-  Pb-194/INT-F            Tl-194/INT-F              ---
-  Pb-194/LNTH-F           Tl-194/LNTH-F             ---
-  Pb-194/ET1-S            Tl-194/ET1-S              ---
-  Pb-194/ET2-S            Tl-194/ET2-S              ---
-  Pb-194/ETseq-S          Tl-194/ETseq-S            ---
-  Pb-194/LNET-S           Tl-194/LNET-S             ---
-  Pb-194/BB-S             Tl-194/BB-S               ---
-  Pb-194/BBseq-S          Tl-194/BBseq-S            ---
-  Pb-194/bb-S             Tl-194/bb-S               ---
-  Pb-194/bbseq-S          Tl-194/bbseq-S            ---
-  Pb-194/ALV-S            Tl-194/ALV-S              ---
-  Pb-194/INT-S            Tl-194/INT-S              ---
-  Pb-194/LNTH-S           Tl-194/LNTH-S             ---
-  Pb-194/ET2-B            Tl-194/ET2-B              ---
-  Pb-194/ETseq-B          Tl-194/ETseq-B            ---
-  Pb-194/LNET-B           Tl-194/LNET-B             ---
-  Pb-194/BB-B             Tl-194/BB-B               ---
-  Pb-194/BBseq-B          Tl-194/BBseq-B            ---
-  Pb-194/bb-B             Tl-194/bb-B               ---
-  Pb-194/bbseq-B          Tl-194/bbseq-B            ---
-  Pb-194/ALV-B            Tl-194/ALV-B              ---
-  Pb-194/INT-B            Tl-194/INT-B              ---
-  Pb-194/LNTH-B           Tl-194/LNTH-B             ---
-  Pb-194/Environment      Tl-194/Environment        ---
-
-  Pb-194/Oralcavity       Tl-194/Oralcavity         ---
-  Pb-194/Oesophagus-f     Tl-194/Oesophagus-f       ---
-  Pb-194/Oesophagus-s     Tl-194/Oesophagus-s       ---
-  Pb-194/St-con           Tl-194/St-con             ---
-  Pb-194/SI-con           Tl-194/SI-con             ---
-  Pb-194/SI-conRe         Tl-194/SI-conRe           ---
-  Pb-194/RC-con           Tl-194/RC-con             ---
-  Pb-194/LC-con           Tl-194/LC-con             ---
-  Pb-194/RS-con           Tl-194/RS-con             ---
-  Pb-194/Faeces           Tl-194/Faeces             ---
-  Pb-194/UB-con           Tl-194/UB-con             ---
-  Pb-194/Urine            Tl-194/Urine              ---
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
@@ -594,53 +471,6 @@ $endif
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-bnd
-  acc   ETseq-B               ET2-seq
-  acc   LNET-B                LN-ET
-  acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-b
-  acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-b
-  acc   ALV-B                 ALV
-  acc   INT-B                 ALV
-  acc   LNTH-B                LN-Th
-  exc   Environment           ---
-
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Plasma1               Blood
   acc   Plasma2               Blood
   acc   RBC                   Blood
@@ -668,107 +498,9 @@ $endif
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
-  ALV-F                   bb-F                      0.002
-  ALV-F                   INT-F                     0.001
-  INT-F                   LNTH-F                    0.00003
-  bb-F                    BB-F                      0.2
-  bbseq-F                 LNTH-F                    0.001
-  BB-F                    ET2-F                    10
-  BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-s            100
-  ETseq-F                 LNET-F                    0.001
-  ET1-F                   Environment               0.6
-  ET1-F                   ET2-F                     1.5
-
-  ALV-S                   bb-S                      0.002
-  ALV-S                   INT-S                     0.001
-  INT-S                   LNTH-S                    0.00003
-  bb-S                    BB-S                      0.2
-  bbseq-S                 LNTH-S                    0.001
-  BB-S                    ET2-S                    10
-  BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-s            100
-  ETseq-S                 LNET-S                    0.001
-  ET1-S                   Environment               0.6
-  ET1-S                   ET2-S                     1.5
-
-# ICRP Publ.130 p.67 Fig.3.5(a)
-# ICRP Publ.130 p.68 Para.107
-  ALV-F                   ALV-B                 $(      fb  * sr )
-  INT-F                   INT-B                 $(      fb  * sr )
-  bb-F                    bb-B                  $(      fb  * sr )
-  bbseq-F                 bbseq-B               $(      fb  * sr )
-  BB-F                    BB-B                  $(      fb  * sr )
-  BBseq-F                 BBseq-B               $(      fb  * sr )
-  ET2-F                   ET2-B                 $(      fb  * sr )
-  ETseq-F                 ETseq-B               $(      fb  * sr )
-  LNET-F                  LNET-B                $(      fb  * sr )
-  LNTH-F                  LNTH-B                $(      fb  * sr )
-
-  ALV-S                   ALV-B                 $(      fb  * ss )
-  INT-S                   INT-B                 $(      fb  * ss )
-  bb-S                    bb-B                  $(      fb  * ss )
-  bbseq-S                 bbseq-B               $(      fb  * ss )
-  BB-S                    BB-B                  $(      fb  * ss )
-  BBseq-S                 BBseq-B               $(      fb  * ss )
-  ET2-S                   ET2-B                 $(      fb  * ss )
-  ETseq-S                 ETseq-B               $(      fb  * ss )
-  LNET-S                  LNET-B                $(      fb  * ss )
-  LNTH-S                  LNTH-B                $(      fb  * ss )
-
-  ALV-F                   Plasma1               $( (1 - fb) * sr )
-  INT-F                   Plasma1               $( (1 - fb) * sr )
-  bb-F                    Plasma1               $( (1 - fb) * sr )
-  bbseq-F                 Plasma1               $( (1 - fb) * sr )
-  BB-F                    Plasma1               $( (1 - fb) * sr )
-  BBseq-F                 Plasma1               $( (1 - fb) * sr )
-  ET2-F                   Plasma1               $( (1 - fb) * sr )
-  ETseq-F                 Plasma1               $( (1 - fb) * sr )
-  LNET-F                  Plasma1               $( (1 - fb) * sr )
-  LNTH-F                  Plasma1               $( (1 - fb) * sr )
-
-  ALV-S                   Plasma1               $( (1 - fb) * ss )
-  INT-S                   Plasma1               $( (1 - fb) * ss )
-  bb-S                    Plasma1               $( (1 - fb) * ss )
-  bbseq-S                 Plasma1               $( (1 - fb) * ss )
-  BB-S                    Plasma1               $( (1 - fb) * ss )
-  BBseq-S                 Plasma1               $( (1 - fb) * ss )
-  ET2-S                   Plasma1               $( (1 - fb) * ss )
-  ETseq-S                 Plasma1               $( (1 - fb) * ss )
-  LNET-S                  Plasma1               $( (1 - fb) * ss )
-  LNTH-S                  Plasma1               $( (1 - fb) * ss )
-
-  ALV-B                   Plasma1               $sb
-  INT-B                   Plasma1               $sb
-  bb-B                    Plasma1               $sb
-  bbseq-B                 Plasma1               $sb
-  BB-B                    Plasma1               $sb
-  BBseq-B                 Plasma1               $sb
-  ET2-B                   Plasma1               $sb
-  ETseq-B                 Plasma1               $sb
-  LNET-B                  Plasma1               $sb
-  LNTH-B                  Plasma1               $sb
-
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma1               $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma1               $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
 # > ... The total transfer coefficient from Plasma 1 to all destinations is 16.636 h⁻¹, corresponding
@@ -833,54 +565,6 @@ $endif
   Testes                  Plasma1               $(0.693 / 20)
   Ovaries                 Plasma1               $(0.693 / 20)
 
-# from parent to progeny
-  Pb-194/ET1-F            Hg-194/ET1-F              ---
-  Pb-194/ET2-F            Hg-194/ET2-F              ---
-  Pb-194/ETseq-F          Hg-194/ETseq-F            ---
-  Pb-194/LNET-F           Hg-194/LNET-F             ---
-  Pb-194/BB-F             Hg-194/BB-F               ---
-  Pb-194/BBseq-F          Hg-194/BBseq-F            ---
-  Pb-194/bb-F             Hg-194/bb-F               ---
-  Pb-194/bbseq-F          Hg-194/bbseq-F            ---
-  Pb-194/ALV-F            Hg-194/ALV-F              ---
-  Pb-194/INT-F            Hg-194/INT-F              ---
-  Pb-194/LNTH-F           Hg-194/LNTH-F             ---
-  Pb-194/ET1-S            Hg-194/ET1-S              ---
-  Pb-194/ET2-S            Hg-194/ET2-S              ---
-  Pb-194/ETseq-S          Hg-194/ETseq-S            ---
-  Pb-194/LNET-S           Hg-194/LNET-S             ---
-  Pb-194/BB-S             Hg-194/BB-S               ---
-  Pb-194/BBseq-S          Hg-194/BBseq-S            ---
-  Pb-194/bb-S             Hg-194/bb-S               ---
-  Pb-194/bbseq-S          Hg-194/bbseq-S            ---
-  Pb-194/ALV-S            Hg-194/ALV-S              ---
-  Pb-194/INT-S            Hg-194/INT-S              ---
-  Pb-194/LNTH-S           Hg-194/LNTH-S             ---
-  Pb-194/ET2-B            Hg-194/ET2-B              ---
-  Pb-194/ETseq-B          Hg-194/ETseq-B            ---
-  Pb-194/LNET-B           Hg-194/LNET-B             ---
-  Pb-194/BB-B             Hg-194/BB-B               ---
-  Pb-194/BBseq-B          Hg-194/BBseq-B            ---
-  Pb-194/bb-B             Hg-194/bb-B               ---
-  Pb-194/bbseq-B          Hg-194/bbseq-B            ---
-  Pb-194/ALV-B            Hg-194/ALV-B              ---
-  Pb-194/INT-B            Hg-194/INT-B              ---
-  Pb-194/LNTH-B           Hg-194/LNTH-B             ---
-  Pb-194/Environment      Hg-194/Environment        ---
-
-  Pb-194/Oralcavity       Hg-194/Oralcavity         ---
-  Pb-194/Oesophagus-f     Hg-194/Oesophagus-f       ---
-  Pb-194/Oesophagus-s     Hg-194/Oesophagus-s       ---
-  Pb-194/St-con           Hg-194/St-con             ---
-  Pb-194/SI-con           Hg-194/SI-con             ---
-  Pb-194/SI-conRe         Hg-194/SI-conRe           ---
-  Pb-194/RC-con           Hg-194/RC-con             ---
-  Pb-194/LC-con           Hg-194/LC-con             ---
-  Pb-194/RS-con           Hg-194/RS-con             ---
-  Pb-194/Faeces           Hg-194/Faeces             ---
-  Pb-194/UB-con           Hg-194/UB-con             ---
-  Pb-194/Urine            Hg-194/Urine              ---
-
 # ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
 # > ... Plasma 1, kidneys, and liver are identified with plasma,
 # > Kidneys 1, and Liver 1, respectively, in the model for lead (Fig. 9.1).
@@ -930,53 +614,6 @@ $endif
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-bnd
-  acc   ETseq-B               ET2-seq
-  acc   LNET-B                LN-ET
-  acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-b
-  acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-b
-  acc   ALV-B                 ALV
-  acc   INT-B                 ALV
-  acc   LNTH-B                LN-Th
-  exc   Environment           ---
-
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   C-bone-S              C-bone-S
@@ -999,107 +636,9 @@ $endif
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
-  ALV-F                   bb-F                      0.002
-  ALV-F                   INT-F                     0.001
-  INT-F                   LNTH-F                    0.00003
-  bb-F                    BB-F                      0.2
-  bbseq-F                 LNTH-F                    0.001
-  BB-F                    ET2-F                    10
-  BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-s            100
-  ETseq-F                 LNET-F                    0.001
-  ET1-F                   Environment               0.6
-  ET1-F                   ET2-F                     1.5
-
-  ALV-S                   bb-S                      0.002
-  ALV-S                   INT-S                     0.001
-  INT-S                   LNTH-S                    0.00003
-  bb-S                    BB-S                      0.2
-  bbseq-S                 LNTH-S                    0.001
-  BB-S                    ET2-S                    10
-  BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-s            100
-  ETseq-S                 LNET-S                    0.001
-  ET1-S                   Environment               0.6
-  ET1-S                   ET2-S                     1.5
-
-# ICRP Publ.130 p.67 Fig.3.5(a)
-# ICRP Publ.130 p.68 Para.107
-  ALV-F                   ALV-B                 $(      fb  * sr )
-  INT-F                   INT-B                 $(      fb  * sr )
-  bb-F                    bb-B                  $(      fb  * sr )
-  bbseq-F                 bbseq-B               $(      fb  * sr )
-  BB-F                    BB-B                  $(      fb  * sr )
-  BBseq-F                 BBseq-B               $(      fb  * sr )
-  ET2-F                   ET2-B                 $(      fb  * sr )
-  ETseq-F                 ETseq-B               $(      fb  * sr )
-  LNET-F                  LNET-B                $(      fb  * sr )
-  LNTH-F                  LNTH-B                $(      fb  * sr )
-
-  ALV-S                   ALV-B                 $(      fb  * ss )
-  INT-S                   INT-B                 $(      fb  * ss )
-  bb-S                    bb-B                  $(      fb  * ss )
-  bbseq-S                 bbseq-B               $(      fb  * ss )
-  BB-S                    BB-B                  $(      fb  * ss )
-  BBseq-S                 BBseq-B               $(      fb  * ss )
-  ET2-S                   ET2-B                 $(      fb  * ss )
-  ETseq-S                 ETseq-B               $(      fb  * ss )
-  LNET-S                  LNET-B                $(      fb  * ss )
-  LNTH-S                  LNTH-B                $(      fb  * ss )
-
-  ALV-F                   Blood1                $( (1 - fb) * sr )
-  INT-F                   Blood1                $( (1 - fb) * sr )
-  bb-F                    Blood1                $( (1 - fb) * sr )
-  bbseq-F                 Blood1                $( (1 - fb) * sr )
-  BB-F                    Blood1                $( (1 - fb) * sr )
-  BBseq-F                 Blood1                $( (1 - fb) * sr )
-  ET2-F                   Blood1                $( (1 - fb) * sr )
-  ETseq-F                 Blood1                $( (1 - fb) * sr )
-  LNET-F                  Blood1                $( (1 - fb) * sr )
-  LNTH-F                  Blood1                $( (1 - fb) * sr )
-
-  ALV-S                   Blood1                $( (1 - fb) * ss )
-  INT-S                   Blood1                $( (1 - fb) * ss )
-  bb-S                    Blood1                $( (1 - fb) * ss )
-  bbseq-S                 Blood1                $( (1 - fb) * ss )
-  BB-S                    Blood1                $( (1 - fb) * ss )
-  BBseq-S                 Blood1                $( (1 - fb) * ss )
-  ET2-S                   Blood1                $( (1 - fb) * ss )
-  ETseq-S                 Blood1                $( (1 - fb) * ss )
-  LNET-S                  Blood1                $( (1 - fb) * ss )
-  LNTH-S                  Blood1                $( (1 - fb) * ss )
-
-  ALV-B                   Blood1                $sb
-  INT-B                   Blood1                $sb
-  bb-B                    Blood1                $sb
-  bbseq-B                 Blood1                $sb
-  BB-B                    Blood1                $sb
-  BBseq-B                 Blood1                $sb
-  ET2-B                   Blood1                $sb
-  ETseq-B                 Blood1                $sb
-  LNET-B                  Blood1                $sb
-  LNTH-B                  Blood1                $sb
-
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.227 Para.477 / 鉛子孫元素としての金
 # >  ... Gold leaves the central blood compartment (Blood 1) at the rate 1d 1
@@ -1156,54 +695,6 @@ $endif
   Ovaries                 Blood1                    0.0693      # ln(2) / 10
   RedMarrow               Blood1                    0.0693      # ln(2) / 10
   Skin                    Blood1                    0.0693      # ln(2) / 10
-
-# from parent to progeny
-  Pb-194/ET1-F            Au-194/ET1-F              ---
-  Pb-194/ET2-F            Au-194/ET2-F              ---
-  Pb-194/ETseq-F          Au-194/ETseq-F            ---
-  Pb-194/LNET-F           Au-194/LNET-F             ---
-  Pb-194/BB-F             Au-194/BB-F               ---
-  Pb-194/BBseq-F          Au-194/BBseq-F            ---
-  Pb-194/bb-F             Au-194/bb-F               ---
-  Pb-194/bbseq-F          Au-194/bbseq-F            ---
-  Pb-194/ALV-F            Au-194/ALV-F              ---
-  Pb-194/INT-F            Au-194/INT-F              ---
-  Pb-194/LNTH-F           Au-194/LNTH-F             ---
-  Pb-194/ET1-S            Au-194/ET1-S              ---
-  Pb-194/ET2-S            Au-194/ET2-S              ---
-  Pb-194/ETseq-S          Au-194/ETseq-S            ---
-  Pb-194/LNET-S           Au-194/LNET-S             ---
-  Pb-194/BB-S             Au-194/BB-S               ---
-  Pb-194/BBseq-S          Au-194/BBseq-S            ---
-  Pb-194/bb-S             Au-194/bb-S               ---
-  Pb-194/bbseq-S          Au-194/bbseq-S            ---
-  Pb-194/ALV-S            Au-194/ALV-S              ---
-  Pb-194/INT-S            Au-194/INT-S              ---
-  Pb-194/LNTH-S           Au-194/LNTH-S             ---
-  Pb-194/ET2-B            Au-194/ET2-B              ---
-  Pb-194/ETseq-B          Au-194/ETseq-B            ---
-  Pb-194/LNET-B           Au-194/LNET-B             ---
-  Pb-194/BB-B             Au-194/BB-B               ---
-  Pb-194/BBseq-B          Au-194/BBseq-B            ---
-  Pb-194/bb-B             Au-194/bb-B               ---
-  Pb-194/bbseq-B          Au-194/bbseq-B            ---
-  Pb-194/ALV-B            Au-194/ALV-B              ---
-  Pb-194/INT-B            Au-194/INT-B              ---
-  Pb-194/LNTH-B           Au-194/LNTH-B             ---
-  Pb-194/Environment      Au-194/Environment        ---
-
-  Pb-194/Oralcavity       Au-194/Oralcavity         ---
-  Pb-194/Oesophagus-f     Au-194/Oesophagus-f       ---
-  Pb-194/Oesophagus-s     Au-194/Oesophagus-s       ---
-  Pb-194/St-con           Au-194/St-con             ---
-  Pb-194/SI-con           Au-194/SI-con             ---
-  Pb-194/SI-conRe         Au-194/SI-conRe           ---
-  Pb-194/RC-con           Au-194/RC-con             ---
-  Pb-194/LC-con           Au-194/LC-con             ---
-  Pb-194/RS-con           Au-194/RS-con             ---
-  Pb-194/Faeces           Au-194/Faeces             ---
-  Pb-194/UB-con           Au-194/UB-con             ---
-  Pb-194/Urine            Au-194/Urine              ---
 
 # ICRP Publ.137 p.227 Para.477 / 鉛子孫元素としての金
 # > ... Blood 1, kidneys, and liver are identified with plasma, Kidneys 1, and Liver 1,
@@ -1267,53 +758,6 @@ $endif
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-bnd
-  acc   ETseq-B               ET2-seq
-  acc   LNET-B                LN-ET
-  acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-b
-  acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-b
-  acc   ALV-B                 ALV
-  acc   INT-B                 ALV
-  acc   LNTH-B                LN-Th
-  exc   Environment           ---
-
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Plasma1               Blood
   acc   Plasma2               Blood
   acc   RBC                   Blood
@@ -1341,107 +785,9 @@ $endif
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
-  ALV-F                   bb-F                      0.002
-  ALV-F                   INT-F                     0.001
-  INT-F                   LNTH-F                    0.00003
-  bb-F                    BB-F                      0.2
-  bbseq-F                 LNTH-F                    0.001
-  BB-F                    ET2-F                    10
-  BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-s            100
-  ETseq-F                 LNET-F                    0.001
-  ET1-F                   Environment               0.6
-  ET1-F                   ET2-F                     1.5
-
-  ALV-S                   bb-S                      0.002
-  ALV-S                   INT-S                     0.001
-  INT-S                   LNTH-S                    0.00003
-  bb-S                    BB-S                      0.2
-  bbseq-S                 LNTH-S                    0.001
-  BB-S                    ET2-S                    10
-  BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-s            100
-  ETseq-S                 LNET-S                    0.001
-  ET1-S                   Environment               0.6
-  ET1-S                   ET2-S                     1.5
-
-# ICRP Publ.130 p.67 Fig.3.5(a)
-# ICRP Publ.130 p.68 Para.107
-  ALV-F                   ALV-B                 $(      fb  * sr )
-  INT-F                   INT-B                 $(      fb  * sr )
-  bb-F                    bb-B                  $(      fb  * sr )
-  bbseq-F                 bbseq-B               $(      fb  * sr )
-  BB-F                    BB-B                  $(      fb  * sr )
-  BBseq-F                 BBseq-B               $(      fb  * sr )
-  ET2-F                   ET2-B                 $(      fb  * sr )
-  ETseq-F                 ETseq-B               $(      fb  * sr )
-  LNET-F                  LNET-B                $(      fb  * sr )
-  LNTH-F                  LNTH-B                $(      fb  * sr )
-
-  ALV-S                   ALV-B                 $(      fb  * ss )
-  INT-S                   INT-B                 $(      fb  * ss )
-  bb-S                    bb-B                  $(      fb  * ss )
-  bbseq-S                 bbseq-B               $(      fb  * ss )
-  BB-S                    BB-B                  $(      fb  * ss )
-  BBseq-S                 BBseq-B               $(      fb  * ss )
-  ET2-S                   ET2-B                 $(      fb  * ss )
-  ETseq-S                 ETseq-B               $(      fb  * ss )
-  LNET-S                  LNET-B                $(      fb  * ss )
-  LNTH-S                  LNTH-B                $(      fb  * ss )
-
-  ALV-F                   Plasma1               $( (1 - fb) * sr )
-  INT-F                   Plasma1               $( (1 - fb) * sr )
-  bb-F                    Plasma1               $( (1 - fb) * sr )
-  bbseq-F                 Plasma1               $( (1 - fb) * sr )
-  BB-F                    Plasma1               $( (1 - fb) * sr )
-  BBseq-F                 Plasma1               $( (1 - fb) * sr )
-  ET2-F                   Plasma1               $( (1 - fb) * sr )
-  ETseq-F                 Plasma1               $( (1 - fb) * sr )
-  LNET-F                  Plasma1               $( (1 - fb) * sr )
-  LNTH-F                  Plasma1               $( (1 - fb) * sr )
-
-  ALV-S                   Plasma1               $( (1 - fb) * ss )
-  INT-S                   Plasma1               $( (1 - fb) * ss )
-  bb-S                    Plasma1               $( (1 - fb) * ss )
-  bbseq-S                 Plasma1               $( (1 - fb) * ss )
-  BB-S                    Plasma1               $( (1 - fb) * ss )
-  BBseq-S                 Plasma1               $( (1 - fb) * ss )
-  ET2-S                   Plasma1               $( (1 - fb) * ss )
-  ETseq-S                 Plasma1               $( (1 - fb) * ss )
-  LNET-S                  Plasma1               $( (1 - fb) * ss )
-  LNTH-S                  Plasma1               $( (1 - fb) * ss )
-
-  ALV-B                   Plasma1               $sb
-  INT-B                   Plasma1               $sb
-  bb-B                    Plasma1               $sb
-  bbseq-B                 Plasma1               $sb
-  BB-B                    Plasma1               $sb
-  BBseq-B                 Plasma1               $sb
-  ET2-B                   Plasma1               $sb
-  ETseq-B                 Plasma1               $sb
-  LNET-B                  Plasma1               $sb
-  LNTH-B                  Plasma1               $sb
-
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma1               $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma1               $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
 # > ... The total transfer coefficient from Plasma 1 to all destinations is 16.636 h⁻¹, corresponding
@@ -1506,54 +852,6 @@ $endif
   Testes                  Plasma1               $(0.693 / 20)
   Ovaries                 Plasma1               $(0.693 / 20)
 
-# from parent to progeny
-  Pb-194/ET1-F            Hg-190/ET1-F              ---
-  Pb-194/ET2-F            Hg-190/ET2-F              ---
-  Pb-194/ETseq-F          Hg-190/ETseq-F            ---
-  Pb-194/LNET-F           Hg-190/LNET-F             ---
-  Pb-194/BB-F             Hg-190/BB-F               ---
-  Pb-194/BBseq-F          Hg-190/BBseq-F            ---
-  Pb-194/bb-F             Hg-190/bb-F               ---
-  Pb-194/bbseq-F          Hg-190/bbseq-F            ---
-  Pb-194/ALV-F            Hg-190/ALV-F              ---
-  Pb-194/INT-F            Hg-190/INT-F              ---
-  Pb-194/LNTH-F           Hg-190/LNTH-F             ---
-  Pb-194/ET1-S            Hg-190/ET1-S              ---
-  Pb-194/ET2-S            Hg-190/ET2-S              ---
-  Pb-194/ETseq-S          Hg-190/ETseq-S            ---
-  Pb-194/LNET-S           Hg-190/LNET-S             ---
-  Pb-194/BB-S             Hg-190/BB-S               ---
-  Pb-194/BBseq-S          Hg-190/BBseq-S            ---
-  Pb-194/bb-S             Hg-190/bb-S               ---
-  Pb-194/bbseq-S          Hg-190/bbseq-S            ---
-  Pb-194/ALV-S            Hg-190/ALV-S              ---
-  Pb-194/INT-S            Hg-190/INT-S              ---
-  Pb-194/LNTH-S           Hg-190/LNTH-S             ---
-  Pb-194/ET2-B            Hg-190/ET2-B              ---
-  Pb-194/ETseq-B          Hg-190/ETseq-B            ---
-  Pb-194/LNET-B           Hg-190/LNET-B             ---
-  Pb-194/BB-B             Hg-190/BB-B               ---
-  Pb-194/BBseq-B          Hg-190/BBseq-B            ---
-  Pb-194/bb-B             Hg-190/bb-B               ---
-  Pb-194/bbseq-B          Hg-190/bbseq-B            ---
-  Pb-194/ALV-B            Hg-190/ALV-B              ---
-  Pb-194/INT-B            Hg-190/INT-B              ---
-  Pb-194/LNTH-B           Hg-190/LNTH-B             ---
-  Pb-194/Environment      Hg-190/Environment        ---
-
-  Pb-194/Oralcavity       Hg-190/Oralcavity         ---
-  Pb-194/Oesophagus-f     Hg-190/Oesophagus-f       ---
-  Pb-194/Oesophagus-s     Hg-190/Oesophagus-s       ---
-  Pb-194/St-con           Hg-190/St-con             ---
-  Pb-194/SI-con           Hg-190/SI-con             ---
-  Pb-194/SI-conRe         Hg-190/SI-conRe           ---
-  Pb-194/RC-con           Hg-190/RC-con             ---
-  Pb-194/LC-con           Hg-190/LC-con             ---
-  Pb-194/RS-con           Hg-190/RS-con             ---
-  Pb-194/Faeces           Hg-190/Faeces             ---
-  Pb-194/UB-con           Hg-190/UB-con             ---
-  Pb-194/Urine            Hg-190/Urine              ---
-
 # ICRP Publ.137 p.229 Para.479 / 鉛子孫元素としての水銀
 # > ... Plasma 1, kidneys, and liver are identified with plasma,
 # > Kidneys 1, and Liver 1, respectively, in the model for lead (Fig. 9.1).
@@ -1598,53 +896,6 @@ $endif
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-bnd
-  acc   ETseq-B               ET2-seq
-  acc   LNET-B                LN-ET
-  acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-b
-  acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-b
-  acc   ALV-B                 ALV
-  acc   INT-B                 ALV
-  acc   LNTH-B                LN-Th
-  exc   Environment           ---
-
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Blood1                Blood
   acc   Blood2                Blood
   acc   C-bone-S              C-bone-S
@@ -1667,107 +918,9 @@ $endif
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
-  ALV-F                   bb-F                      0.002
-  ALV-F                   INT-F                     0.001
-  INT-F                   LNTH-F                    0.00003
-  bb-F                    BB-F                      0.2
-  bbseq-F                 LNTH-F                    0.001
-  BB-F                    ET2-F                    10
-  BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-s            100
-  ETseq-F                 LNET-F                    0.001
-  ET1-F                   Environment               0.6
-  ET1-F                   ET2-F                     1.5
-
-  ALV-S                   bb-S                      0.002
-  ALV-S                   INT-S                     0.001
-  INT-S                   LNTH-S                    0.00003
-  bb-S                    BB-S                      0.2
-  bbseq-S                 LNTH-S                    0.001
-  BB-S                    ET2-S                    10
-  BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-s            100
-  ETseq-S                 LNET-S                    0.001
-  ET1-S                   Environment               0.6
-  ET1-S                   ET2-S                     1.5
-
-# ICRP Publ.130 p.67 Fig.3.5(a)
-# ICRP Publ.130 p.68 Para.107
-  ALV-F                   ALV-B                 $(      fb  * sr )
-  INT-F                   INT-B                 $(      fb  * sr )
-  bb-F                    bb-B                  $(      fb  * sr )
-  bbseq-F                 bbseq-B               $(      fb  * sr )
-  BB-F                    BB-B                  $(      fb  * sr )
-  BBseq-F                 BBseq-B               $(      fb  * sr )
-  ET2-F                   ET2-B                 $(      fb  * sr )
-  ETseq-F                 ETseq-B               $(      fb  * sr )
-  LNET-F                  LNET-B                $(      fb  * sr )
-  LNTH-F                  LNTH-B                $(      fb  * sr )
-
-  ALV-S                   ALV-B                 $(      fb  * ss )
-  INT-S                   INT-B                 $(      fb  * ss )
-  bb-S                    bb-B                  $(      fb  * ss )
-  bbseq-S                 bbseq-B               $(      fb  * ss )
-  BB-S                    BB-B                  $(      fb  * ss )
-  BBseq-S                 BBseq-B               $(      fb  * ss )
-  ET2-S                   ET2-B                 $(      fb  * ss )
-  ETseq-S                 ETseq-B               $(      fb  * ss )
-  LNET-S                  LNET-B                $(      fb  * ss )
-  LNTH-S                  LNTH-B                $(      fb  * ss )
-
-  ALV-F                   Blood1                $( (1 - fb) * sr )
-  INT-F                   Blood1                $( (1 - fb) * sr )
-  bb-F                    Blood1                $( (1 - fb) * sr )
-  bbseq-F                 Blood1                $( (1 - fb) * sr )
-  BB-F                    Blood1                $( (1 - fb) * sr )
-  BBseq-F                 Blood1                $( (1 - fb) * sr )
-  ET2-F                   Blood1                $( (1 - fb) * sr )
-  ETseq-F                 Blood1                $( (1 - fb) * sr )
-  LNET-F                  Blood1                $( (1 - fb) * sr )
-  LNTH-F                  Blood1                $( (1 - fb) * sr )
-
-  ALV-S                   Blood1                $( (1 - fb) * ss )
-  INT-S                   Blood1                $( (1 - fb) * ss )
-  bb-S                    Blood1                $( (1 - fb) * ss )
-  bbseq-S                 Blood1                $( (1 - fb) * ss )
-  BB-S                    Blood1                $( (1 - fb) * ss )
-  BBseq-S                 Blood1                $( (1 - fb) * ss )
-  ET2-S                   Blood1                $( (1 - fb) * ss )
-  ETseq-S                 Blood1                $( (1 - fb) * ss )
-  LNET-S                  Blood1                $( (1 - fb) * ss )
-  LNTH-S                  Blood1                $( (1 - fb) * ss )
-
-  ALV-B                   Blood1                $sb
-  INT-B                   Blood1                $sb
-  bb-B                    Blood1                $sb
-  bbseq-B                 Blood1                $sb
-  BB-B                    Blood1                $sb
-  BBseq-B                 Blood1                $sb
-  ET2-B                   Blood1                $sb
-  ETseq-B                 Blood1                $sb
-  LNET-B                  Blood1                $sb
-  LNTH-B                  Blood1                $sb
-
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.227 Para.477 / 鉛子孫元素としての金
 # >  ... Gold leaves the central blood compartment (Blood 1) at the rate 1d 1
@@ -1824,54 +977,6 @@ $endif
   Ovaries                 Blood1                    0.0693      # ln(2) / 10
   RedMarrow               Blood1                    0.0693      # ln(2) / 10
   Skin                    Blood1                    0.0693      # ln(2) / 10
-
-# from parent to progeny
-  Pb-194/ET1-F            Au-190/ET1-F              ---
-  Pb-194/ET2-F            Au-190/ET2-F              ---
-  Pb-194/ETseq-F          Au-190/ETseq-F            ---
-  Pb-194/LNET-F           Au-190/LNET-F             ---
-  Pb-194/BB-F             Au-190/BB-F               ---
-  Pb-194/BBseq-F          Au-190/BBseq-F            ---
-  Pb-194/bb-F             Au-190/bb-F               ---
-  Pb-194/bbseq-F          Au-190/bbseq-F            ---
-  Pb-194/ALV-F            Au-190/ALV-F              ---
-  Pb-194/INT-F            Au-190/INT-F              ---
-  Pb-194/LNTH-F           Au-190/LNTH-F             ---
-  Pb-194/ET1-S            Au-190/ET1-S              ---
-  Pb-194/ET2-S            Au-190/ET2-S              ---
-  Pb-194/ETseq-S          Au-190/ETseq-S            ---
-  Pb-194/LNET-S           Au-190/LNET-S             ---
-  Pb-194/BB-S             Au-190/BB-S               ---
-  Pb-194/BBseq-S          Au-190/BBseq-S            ---
-  Pb-194/bb-S             Au-190/bb-S               ---
-  Pb-194/bbseq-S          Au-190/bbseq-S            ---
-  Pb-194/ALV-S            Au-190/ALV-S              ---
-  Pb-194/INT-S            Au-190/INT-S              ---
-  Pb-194/LNTH-S           Au-190/LNTH-S             ---
-  Pb-194/ET2-B            Au-190/ET2-B              ---
-  Pb-194/ETseq-B          Au-190/ETseq-B            ---
-  Pb-194/LNET-B           Au-190/LNET-B             ---
-  Pb-194/BB-B             Au-190/BB-B               ---
-  Pb-194/BBseq-B          Au-190/BBseq-B            ---
-  Pb-194/bb-B             Au-190/bb-B               ---
-  Pb-194/bbseq-B          Au-190/bbseq-B            ---
-  Pb-194/ALV-B            Au-190/ALV-B              ---
-  Pb-194/INT-B            Au-190/INT-B              ---
-  Pb-194/LNTH-B           Au-190/LNTH-B             ---
-  Pb-194/Environment      Au-190/Environment        ---
-
-  Pb-194/Oralcavity       Au-190/Oralcavity         ---
-  Pb-194/Oesophagus-f     Au-190/Oesophagus-f       ---
-  Pb-194/Oesophagus-s     Au-190/Oesophagus-s       ---
-  Pb-194/St-con           Au-190/St-con             ---
-  Pb-194/SI-con           Au-190/SI-con             ---
-  Pb-194/SI-conRe         Au-190/SI-conRe           ---
-  Pb-194/RC-con           Au-190/RC-con             ---
-  Pb-194/LC-con           Au-190/LC-con             ---
-  Pb-194/RS-con           Au-190/RS-con             ---
-  Pb-194/Faeces           Au-190/Faeces             ---
-  Pb-194/UB-con           Au-190/UB-con             ---
-  Pb-194/Urine            Au-190/Urine              ---
 
 # ICRP Publ.137 p.227 Para.477 / 鉛子孫元素としての金
 # > ... Blood 1, kidneys, and liver are identified with plasma, Kidneys 1, and Liver 1,

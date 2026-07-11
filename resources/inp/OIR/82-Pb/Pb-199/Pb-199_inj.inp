@@ -9,7 +9,12 @@ $if parent
   ${Pb}/fA    = 0.2         # ICRP Publ.137 p.220 Table 9.2 / Ingested materials, All forms
   ${Pb}/fA_Re = 0.2         # footnote**
 $else
-  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested material, All forms
+  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
+  ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2 / Ingested materials, All forms
+  ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2 / Ingested materials, All forms
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested materials, All forms
+  ${Hg}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.327 Table 36.3 / Ingested materials, All forms
+  ${Au}/fA_MaxValueOfIng = 0.1          # ICRP Publ.151 p.312 Table 35.2 / Ingested materials, All forms
 
   $fA    = fA_MaxValueOfIng
   $fA_Re = fA_MaxValueOfIng
@@ -25,7 +30,7 @@ $endif
   Plasma                  100.0%
 
 
-[Pb-199:compartment]
+[{*}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -39,9 +44,51 @@ $endif
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
+[{*}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# decay for HATM
+  {*}/Oralcavity          Oralcavity                ---
+  {*}/Oesophagus-f        Oesophagus-f              ---
+  {*}/Oesophagus-s        Oesophagus-s              ---
+  {*}/St-con              St-con                    ---
+  {*}/SI-con              SI-con                    ---
+  {*}/SI-conRe            SI-conRe                  ---
+  {*}/RC-con              RC-con                    ---
+  {*}/LC-con              LC-con                    ---
+  {*}/RS-con              RS-con                    ---
+  {*}/Faeces              Faeces                    ---
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# decay for UB
+  {*}/UB-con              UB-con                    ---
+  {*}/Urine               Urine                     ---
+
+
+[Pb-199:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
@@ -65,24 +112,9 @@ $endif
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.225 Table 9.3
   Plasma                  UB-con                    1.75
@@ -129,19 +161,6 @@ $endif
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
@@ -163,24 +182,9 @@ $endif
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
   SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > ... Thallium leaves the central blood compartment (plasma) at the
@@ -227,20 +231,6 @@ $endif
   Spleen                  Plasma                    2.5
   Testes                  Plasma                    2.5
   Ovaries                 Plasma                    2.5
-
-# from parent to progeny
-  Pb-199/Oralcavity       Tl-199/Oralcavity         ---
-  Pb-199/Oesophagus-f     Tl-199/Oesophagus-f       ---
-  Pb-199/Oesophagus-s     Tl-199/Oesophagus-s       ---
-  Pb-199/St-con           Tl-199/St-con             ---
-  Pb-199/SI-con           Tl-199/SI-con             ---
-  Pb-199/SI-conRe         Tl-199/SI-conRe           ---
-  Pb-199/RC-con           Tl-199/RC-con             ---
-  Pb-199/LC-con           Tl-199/LC-con             ---
-  Pb-199/RS-con           Tl-199/RS-con             ---
-  Pb-199/Faeces           Tl-199/Faeces             ---
-  Pb-199/UB-con           Tl-199/UB-con             ---
-  Pb-199/Urine            Tl-199/Urine              ---
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
