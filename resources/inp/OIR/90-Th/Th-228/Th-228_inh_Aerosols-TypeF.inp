@@ -13,20 +13,33 @@ Th-228 Inhalation, Aerosols Type F
   $fb = 0                   # footnote*
   $sb = 0                   # footnote*
 
-  ${Th,Ra,Ac}/Blood = 'Blood'
-  ${Pb,Bi,Tl}/Blood = 'Plasma'
-  ${Po}/Blood       = 'Plasma2'
-  ${Hg}/Blood       = 'Plasma1'
+  ${U,Bi,Pb,Tl}/Blood       = 'Plasma'
+  ${Po}/Blood               = 'Plasma2'
+  ${Pa,Th,Ac,Ra,Rn}/Blood   = 'Blood'
 
 $if parent
   ${Th}/fA    = 5E-4        # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type F
   ${Th}/fA_Re = 5E-4        # footnote**
 $else
-  ${Ra}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
-  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2 / Ingested materials, All chemical forms
-  ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2 / Ingested materials, All forms
-  ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2 / Ingested materials, All forms
-  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2 / Ingested materials, All forms
+  ${Fm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.454 Table 28.2  / Ingested materials, All compounds
+  ${Es}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.446 Table 27.2  / Ingested materials, All compounds
+  ${Cf}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.434 Table 26.2  / Ingested materials, All compounds
+  ${Bk}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.424 Table 25.2  / Ingested materials, All compounds
+  ${Cm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.408 Table 24.2  / Ingested materials, All compounds
+  ${Am}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.382 Table 23.5  / Ingested materials, All compounds
+  ${Pu}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
+  ${Np}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.262 Table 21.2  / Ingested materials, All chemical forms
+  ${U}/fA_MaxValueOfIng  = 0.02         # ICRP Publ.137 p.409 Table 15.2  / Ingested materials, Soluble forms
+  ${Pa}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.251 Table 20.2  / Ingested materials, All forms
+  ${Th}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.137 p.362 Table 14.2  / Ingested materials, All forms
+  ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2  / Ingested materials, All compounds
+  ${Ra}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.325 Table 13.2  / Ingested materials, All forms
+  ${Fr}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.363 Table 39.2  / Ingested materials, All forms
+  ${At}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.356 Table 38.3  / Ingested materials, All forms
+  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2  / Ingested materials, All chemical forms
+  ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2  / Ingested materials, All forms
+  ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2  / Ingested materials, All forms
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2  / Ingested materials, All forms
 
   ${^Rn}/fA    = fr * fA_MaxValueOfIng
   ${^Rn}/fA_Re =      fA_MaxValueOfIng
@@ -396,37 +409,56 @@ $if progeny
 # > 場合は 0.462 d⁻¹（トリウムモデルにおける他の軟部組織のコンパートメントからの除去速度が
 # > 最も高い）。交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
 
-  {Th,Ra,Ac}/Blood        Blood                     ---
+  {U,Bi,Pb,Tl}/Plasma         Blood              1000
+  {Po}/Plasma1                Blood              1000
+  {Po}/Plasma2                Blood              1000
+  {Po}/Plasma3                Blood              1000
+  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
+  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
 
-  {*}/C-bone-S            C-bone-S                  ---
-  {*}/T-bone-S            T-bone-S                  ---
-  {Th,Ac}/C-bone-V        C-bone-V                  ---
-  {Th,Ac}/T-bone-V        T-bone-V                  ---
-  {Ra}/Noch-C-bone-V      C-bone-V                  ---
-  {Ra}/Noch-T-bone-V      T-bone-V                  ---
-  {Ra}/Exch-C-bone-V      Blood                 $(0.03 / 365.25)
-  {Ra}/Exch-T-bone-V      Blood                 $(0.18 / 365.25)
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         C-bone-V              ---
+  {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
+  {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
+  {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
+  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365.25)
+  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365.25)
 
-  {*}/C-marrow            C-marrow                  ---
-  {*}/T-marrow            T-marrow                  ---
-  {*}/Liver1              Liver1                    ---
-  {*}/Liver2              Liver2                    ---
-  {*}/Kidneys1            Kidneys1                  ---
-  {*}/Kidneys2            Kidneys2                  ---
-  {*}/Testes              Testes                    ---
-  {*}/Ovaries             Ovaries                   ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
 
-  {Th}/ST0                ST0                       ---
-  {Th}/ST1                ST1                       ---
-  {Th}/ST2                ST2                       ---
-  {Ra}/ST0                Blood                     0.462
-  {Ra}/ST1                Blood                     0.462
-  {Ra}/ST2                Blood                     0.462
-  {Ac}/ST0                Blood                     0.462
-  {Ac}/ST1                Blood                     0.462
-  {Ac}/ST2                Blood                     0.462
+  {U}/ST0                     Blood                 0.462
+  {U}/ST1                     Blood                 0.462
+  {U}/ST2                     Blood                 0.462
+  {Pa}/ST0                    Blood                 0.462
+  {Pa}/ST1                    Blood                 0.462
+  {Pa}/ST2                    Blood                 0.462
+  {Th}/ST0                    ST0                   ---
+  {Th}/ST1                    ST1                   ---
+  {Th}/ST2                    ST2                   ---
+  {Ac}/ST0                    Blood                 0.462
+  {Ac}/ST1                    Blood                 0.462
+  {Ac}/ST2                    Blood                 0.462
+  {Ra}/ST0                    Blood                 0.462
+  {Ra}/ST1                    Blood                 0.462
+  {Ra}/ST2                    Blood                 0.462
+  {Po}/Other                  Blood                 0.462
+  {Bi}/ST0                    Blood                 0.462
+  {Bi}/ST1                    Blood                 0.462
+  {Bi}/ST2                    Blood                 0.462
+  {Pb}/ST0                    Blood                 0.462
+  {Pb}/ST1                    Blood                 0.462
+  {Pb}/ST2                    Blood                 0.462
+  {Tl}/Other                  Blood                 0.462
 
 $endif
 
@@ -582,37 +614,56 @@ $endif
 # > 軟部組織コンパートメントで生成された場合は6.98 d⁻¹である。6.98 d⁻¹という値は、
 # > ラジウムの特性モデルにおける他の軟部組織コンパートメントからの除去速度の最大値である。
 
-  {Th,Ra,Ac}/Blood        Blood                     ---
+  {U,Bi,Pb,Tl}/Plasma         Blood              1000
+  {Po}/Plasma1                Blood              1000
+  {Po}/Plasma2                Blood              1000
+  {Po}/Plasma3                Blood              1000
+  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
+  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
 
-  {*}/C-bone-S            C-bone-S                  ---
-  {*}/T-bone-S            T-bone-S                  ---
-  {Th,Ac}/C-bone-V        Noch-C-bone-V             ---     # Publ.137 Para.812
-  {Th,Ac}/T-bone-V        Noch-T-bone-V             ---     # Publ.137 Para.812
-  {Ra}/Noch-C-bone-V      Noch-C-bone-V             ---
-  {Ra}/Noch-T-bone-V      Noch-T-bone-V             ---
-  {Ra}/Exch-C-bone-V      Exch-C-bone-V             ---
-  {Ra}/Exch-T-bone-V      Exch-T-bone-V             ---
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---     # Publ.137 Para.812
+  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---     # Publ.137 Para.812
+  {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
+  {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
+  {U,Ra,Pb}/Exch-C-bone-V     Exch-C-bone-V         ---
+  {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
 
-  {*}/C-marrow            C-marrow                  ---
-  {*}/T-marrow            T-marrow                  ---
-  {*}/Liver1              Liver1                    ---
-  {*}/Liver2              Liver2                    ---
-  {*}/Kidneys1            Kidneys1                  ---
-  {*}/Kidneys2            Kidneys2                  ---
-  {*}/Testes              Testes                    ---
-  {*}/Ovaries             Ovaries                   ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
 
-  {Th}/ST0                Blood                     6.98
-  {Th}/ST1                Blood                     6.98
-  {Th}/ST2                Blood                     6.98
-  {Ra}/ST0                ST0                       ---
-  {Ra}/ST1                ST1                       ---
-  {Ra}/ST2                ST2                       ---
-  {Ac}/ST0                Blood                     6.98
-  {Ac}/ST1                Blood                     6.98
-  {Ac}/ST2                Blood                     6.98
+  {U}/ST0                     Blood                 6.98
+  {U}/ST1                     Blood                 6.98
+  {U}/ST2                     Blood                 6.98
+  {Pa}/ST0                    Blood                 6.98
+  {Pa}/ST1                    Blood                 6.98
+  {Pa}/ST2                    Blood                 6.98
+  {Th}/ST0                    Blood                 6.98
+  {Th}/ST1                    Blood                 6.98
+  {Th}/ST2                    Blood                 6.98
+  {Ac}/ST0                    Blood                 6.98
+  {Ac}/ST1                    Blood                 6.98
+  {Ac}/ST2                    Blood                 6.98
+  {Ra}/ST0                    ST0                   ---
+  {Ra}/ST1                    ST1                   ---
+  {Ra}/ST2                    ST2                   ---
+  {Po}/Other                  Blood                 6.98
+  {Bi}/ST0                    Blood                 6.98
+  {Bi}/ST1                    Blood                 6.98
+  {Bi}/ST2                    Blood                 6.98
+  {Pb}/ST0                    Blood                 6.98
+  {Pb}/ST1                    Blood                 6.98
+  {Pb}/ST2                    Blood                 6.98
+  {Tl}/Other                  Blood                 6.98
 
 
 #   ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラドンは、ラジウム子孫元素としてのモデルを用いる。
@@ -746,39 +797,58 @@ $endif
 # > 移行します。血液中で生成された、または血液に入ったラドンは、1000 d⁻¹で体から（呼気として）
 # > 除去されます。
 
-  {Th,Ra,Ac}/Blood        Blood                     ---
+  {U,Bi,Pb,Tl}/Plasma         Blood              1000       # Publ.151 Annex.B
+  {Po}/Plasma1                Blood              1000       # Publ.151 Annex.B
+  {Po}/Plasma2                Blood              1000       # Publ.151 Annex.B
+  {Po}/Plasma3                Blood              1000       # Publ.151 Annex.B
+  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000       # Publ.151 Annex.B
+  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
 
-  {*}/C-bone-S            Blood                   100
-  {*}/T-bone-S            Blood                   100
-  {Th,Ac}/C-bone-V        Blood                     0.36
-  {Th,Ac}/T-bone-V        Blood                     0.36
-  {Ra}/Noch-C-bone-V      Blood                     0.36
-  {Ra}/Noch-T-bone-V      Blood                     0.36
-  {Ra}/Exch-C-bone-V      Blood                     1.5
-  {Ra}/Exch-T-bone-V      Blood                     1.5
+  {^Rn}/C-bone-S              Blood               100
+  {^Rn}/T-bone-S              Blood               100
+  {Pa,Th,Ac}/C-bone-V         Blood                 0.36
+  {Pa,Th,Ac}/T-bone-V         Blood                 0.36
+  {U,Ra,Pb}/Noch-C-bone-V     Blood                 0.36
+  {U,Ra,Pb}/Noch-T-bone-V     Blood                 0.36
+  {U,Ra,Pb}/Exch-C-bone-V     Blood                 1.5
+  {U,Ra,Pb}/Exch-T-bone-V     Blood                 1.5
 
-  {*}/C-marrow            Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/T-marrow            Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Liver1              Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Liver2              Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Kidneys1            Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Kidneys2            Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Testes              Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Ovaries             Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Skin                Blood             $(0.693 / (30/60/24))   # 半減期30分
-  {*}/Spleen              Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/C-marrow              Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/T-marrow              Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Liver1                Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Liver2                Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Kidneys1              Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Kidneys2              Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Testes                Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Ovaries               Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Skin                  Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {^Rn}/Spleen                Blood         $(0.693 / (30/60/24))   # 半減期30分
 
-  {Th}/ST0                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Th}/ST1                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Th}/ST2                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Ra}/ST0                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Ra}/ST1                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Ra}/ST2                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Ac}/ST0                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Ac}/ST1                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {Ac}/ST2                Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {U}/ST0                     Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {U}/ST1                     Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {U}/ST2                     Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Pa}/ST0                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Pa}/ST1                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Pa}/ST2                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Th}/ST0                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Th}/ST1                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Th}/ST2                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ac}/ST0                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ac}/ST1                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ac}/ST2                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ra}/ST0                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ra}/ST1                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Ra}/ST2                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Po}/Other                  Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Bi}/ST0                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Bi}/ST1                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Bi}/ST2                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Pb}/ST0                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Pb}/ST1                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Pb}/ST2                    Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {Tl}/Other                  Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
 
-  Blood                   Exhaled                1000       # ≒半減期1分
+  Blood                       Exhaled            1000       # ≒半減期1分
 
 
 # ICRP Publ.137 p.331 Para.712
@@ -935,49 +1005,56 @@ $endif
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
 # > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
 
-  {Th,Ra,Ac,Rn}/Blood     Plasma2                1000
-  {Pb,Bi,Tl}/Plasma       Plasma2                1000
-  {Po}/Plasma1            Plasma1                   ---
-  {Po}/Plasma2            Plasma2                   ---
-  {Po}/Plasma3            Plasma3                   ---
-  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
+  {U,Bi,Pb,Tl}/Plasma         Plasma2            1000
+  {Po}/Plasma1                Plasma1               ---
+  {Po}/Plasma2                Plasma2               ---
+  {Po}/Plasma3                Plasma3               ---
+  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
+  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma2            1000
 
-  {*}/C-bone-S            C-bone-S                  ---
-  {*}/T-bone-S            T-bone-S                  ---
-  {Th,Ac}/C-bone-V        Plasma2               $(0.03 / 365.25)
-  {Th,Ac}/T-bone-V        Plasma2               $(0.18 / 365.25)
-  {Ra}/Noch-C-bone-V      Plasma2               $(0.03 / 365.25)
-  {Ra}/Noch-T-bone-V      Plasma2               $(0.18 / 365.25)
-  {Ra}/Exch-C-bone-V      Plasma2               $(0.03 / 365.25)
-  {Ra}/Exch-T-bone-V      Plasma2               $(0.18 / 365.25)
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         Plasma2           $(0.03 / 365.25)
+  {Pa,Th,Ac}/T-bone-V         Plasma2           $(0.18 / 365.25)
+  {U,Ra,Pb}/Noch-C-bone-V     Plasma2           $(0.03 / 365.25)
+  {U,Ra,Pb}/Noch-T-bone-V     Plasma2           $(0.18 / 365.25)
+  {U,Ra,Pb}/Exch-C-bone-V     Plasma2           $(0.03 / 365.25)
+  {U,Ra,Pb}/Exch-T-bone-V     Plasma2           $(0.18 / 365.25)
 
-  {*}/C-marrow            C-marrow                  ---
-  {*}/T-marrow            T-marrow                  ---
-  {*}/Liver1              Liver1                    ---
-  {*}/Liver2              Liver2                    ---
-  {*}/Kidneys1            Kidneys1                  ---
-  {*}/Kidneys2            Kidneys2                  ---
-  {*}/Testes              Testes                    ---
-  {*}/Ovaries             Ovaries                   ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
 
-  {Th}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Th}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Th}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Ra}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Ra}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Ra}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Ac}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Ac}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Ac}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Po}/Other              Other                     ---
-  {Pb}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Pb}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Pb}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Bi}/ST0                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Bi}/ST1                Plasma2               $(0.693 / 7)    # 半減期7日
-  {Bi}/ST2                Plasma2               $(0.693 / 7)    # 半減期7日
+  {U}/ST0                     Plasma2           $(0.693 / 7)    # 半減期7日
+  {U}/ST1                     Plasma2           $(0.693 / 7)    # 半減期7日
+  {U}/ST2                     Plasma2           $(0.693 / 7)    # 半減期7日
+  {Pa}/ST0                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Pa}/ST1                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Pa}/ST2                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Th}/ST0                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Th}/ST1                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Th}/ST2                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Ac}/ST0                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Ac}/ST1                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Ac}/ST2                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Ra}/ST0                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Ra}/ST1                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Ra}/ST2                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Po}/Other                  Other                 ---
+  {Bi}/ST0                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Bi}/ST1                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Bi}/ST2                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Pb}/ST0                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Pb}/ST1                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Pb}/ST2                    Plasma2           $(0.693 / 7)    # 半減期7日
+  {Tl}/Other                  Plasma2           $(0.693 / 7)    # 半減期7日
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としての鉛は、ラジウム子孫元素としてのモデルを用いる
@@ -1159,43 +1236,56 @@ $endif
 # > 生成された鉛が鉛モデルの血液コンパートメントと識別できない場合、血漿への移行速度は
 # > 1000 d⁻¹と割り当てられる。
 
-  {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
-  {Pb,Bi,Tl}/Plasma       Plasma                    ---
-  {Po}/Plasma1            Plasma                 1000
-  {Po}/Plasma2            Plasma                 1000
-  {Po}/Plasma3            Plasma                 1000
-  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
+  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
+  {Po}/Plasma1                Plasma             1000
+  {Po}/Plasma2                Plasma             1000
+  {Po}/Plasma3                Plasma             1000
+  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
+  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000
 
-  {*}/C-bone-S            C-bone-S                  ---
-  {*}/T-bone-S            T-bone-S                  ---
-  {Th,Ac}/C-bone-V        Noch-C-bone-V             ---
-  {Th,Ac}/T-bone-V        Noch-T-bone-V             ---
-  {Ra}/Noch-C-bone-V      Noch-C-bone-V             ---
-  {Ra}/Noch-T-bone-V      Noch-T-bone-V             ---
-  {Ra}/Exch-C-bone-V      Exch-C-bone-V             ---
-  {Ra}/Exch-T-bone-V      Exch-T-bone-V             ---
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---     # Publ.137 Para.812
+  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---     # Publ.137 Para.812
+  {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
+  {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
+  {U,Ra,Pb}/Exch-C-bone-V     Exch-C-bone-V         ---
+  {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
 
-  {*}/C-marrow            C-marrow                  ---
-  {*}/T-marrow            T-marrow                  ---
-  {*}/Liver1              Liver1                    ---
-  {*}/Liver2              Liver2                    ---
-  {*}/Kidneys1            Kidneys1                  ---
-  {*}/Kidneys2            Kidneys2                  ---
-  {*}/Testes              Testes                    ---
-  {*}/Ovaries             Ovaries                   ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
 
-  {Th}/ST0                Plasma                    7.39
-  {Th}/ST1                Plasma                    7.39
-  {Th}/ST2                Plasma                    7.39
-  {Ra}/ST0                Plasma                    7.39
-  {Ra}/ST1                Plasma                    7.39
-  {Ra}/ST2                Plasma                    7.39
-  {Ac}/ST0                Plasma                    7.39
-  {Ac}/ST1                Plasma                    7.39
-  {Ac}/ST2                Plasma                    7.39
-  {Po}/Other              Plasma                    7.39
+  {U}/ST0                     Plasma                7.39
+  {U}/ST1                     Plasma                7.39
+  {U}/ST2                     Plasma                7.39
+  {Pa}/ST0                    Plasma                7.39
+  {Pa}/ST1                    Plasma                7.39
+  {Pa}/ST2                    Plasma                7.39
+  {Th}/ST0                    Plasma                7.39
+  {Th}/ST1                    Plasma                7.39
+  {Th}/ST2                    Plasma                7.39
+  {Ac}/ST0                    Plasma                7.39
+  {Ac}/ST1                    Plasma                7.39
+  {Ac}/ST2                    Plasma                7.39
+  {Ra}/ST0                    Plasma                7.39
+  {Ra}/ST1                    Plasma                7.39
+  {Ra}/ST2                    Plasma                7.39
+  {Po}/Other                  Plasma                7.39
+  {Bi}/ST0                    Plasma                7.39
+  {Bi}/ST1                    Plasma                7.39
+  {Bi}/ST2                    Plasma                7.39
+  {Pb}/ST0                    ST0                   ---
+  {Pb}/ST1                    ST1                   ---
+  {Pb}/ST2                    ST2                   ---
+  {Tl}/Other                  Plasma                7.39
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのビスマスは、ラジウム子孫元素としてのモデルを用いる
@@ -1348,50 +1438,60 @@ $endif
 # > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
-  {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
-  {Pb,Bi,Tl}/Plasma       Plasma                    ---
-  {Po}/Plasma1            Plasma                 1000
-  {Po}/Plasma2            Plasma                 1000
-  {Po}/Plasma3            Plasma                 1000
-  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
+  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
+  {Po}/Plasma1                Plasma             1000
+  {Po}/Plasma2                Plasma             1000
+  {Po}/Plasma3                Plasma             1000
+  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
+  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000
 
-  {*}/C-bone-S            C-bone-S                  ---
-  {*}/T-bone-S            T-bone-S                  ---
-  {Th,Ac}/C-bone-V        Plasma                $(0.03 / 365.25)
-  {Th,Ac}/T-bone-V        Plasma                $(0.18 / 365.25)
-  {Ra}/Noch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Ra}/Noch-T-bone-V      Plasma                $(0.18 / 365.25)
-  {Ra}/Exch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Ra}/Exch-T-bone-V      Plasma                $(0.18 / 365.25)
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365.25)
+  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365.25)
+  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365.25)
+  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365.25)
+  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365.25)
+  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365.25)
 
-  {*}/C-marrow            C-marrow                  ---
-  {*}/T-marrow            T-marrow                  ---
-  {*}/Liver1              Liver1                    ---
-  {*}/Liver2              Liver2                    ---
-  {*}/Kidneys1            Kidneys1                  ---
-  {*}/Kidneys2            Kidneys2                  ---
-  {*}/Testes              Testes                    ---
-  {*}/Ovaries             Ovaries                   ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
 
 # Publ.137 Para.482には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
 # ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
 # を採用する。
 
-  {Th}/ST0                Plasma                   66.54
-  {Th}/ST1                Plasma                   66.54
-  {Th}/ST2                Plasma                   66.54
-  {Ra}/ST0                Plasma                   66.54
-  {Ra}/ST1                Plasma                   66.54
-  {Ra}/ST2                Plasma                   66.54
-  {Ac}/ST0                Plasma                   66.54
-  {Ac}/ST1                Plasma                   66.54
-  {Ac}/ST2                Plasma                   66.54
-  {Po}/Other              Plasma                   66.54
-  {Pb}/ST0                Plasma                   66.54
-  {Pb}/ST1                Plasma                   66.54
-  {Pb}/ST2                Plasma                   66.54
+  {U}/ST0                     Plasma               66.54
+  {U}/ST1                     Plasma               66.54
+  {U}/ST2                     Plasma               66.54
+  {Pa}/ST0                    Plasma               66.54
+  {Pa}/ST1                    Plasma               66.54
+  {Pa}/ST2                    Plasma               66.54
+  {Th}/ST0                    Plasma               66.54
+  {Th}/ST1                    Plasma               66.54
+  {Th}/ST2                    Plasma               66.54
+  {Ac}/ST0                    Plasma               66.54
+  {Ac}/ST1                    Plasma               66.54
+  {Ac}/ST2                    Plasma               66.54
+  {Ra}/ST0                    Plasma               66.54
+  {Ra}/ST1                    Plasma               66.54
+  {Ra}/ST2                    Plasma               66.54
+  {Po}/Other                  Plasma               66.54
+  {Bi}/ST0                    ST0                   ---
+  {Bi}/ST1                    ST1                   ---
+  {Bi}/ST2                    ST2                   ---
+  {Pb}/ST0                    Plasma               66.54
+  {Pb}/ST1                    Plasma               66.54
+  {Pb}/ST2                    Plasma               66.54
+  {Tl}/Other                  Plasma               66.54
 
 
 #    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのタリウムは、ラジウム子孫元素としてのモデルを用いる
@@ -1525,46 +1625,53 @@ $endif
 # > 血漿に移行すると仮定されます。皮質骨または海綿骨の容積コンパートメントで生成されたタリウムは、
 # > その骨の種類の基準代謝速度で血漿に移行すると仮定されます。
 
-  {Th,Ra,Ac,Rn}/Blood     Plasma                 1000
-  {Pb,Bi,Tl}/Plasma       Plasma                    ---
-  {Po}/Plasma1            Plasma                 1000
-  {Po}/Plasma2            Plasma                 1000
-  {Po}/Plasma3            Plasma                 1000
-  {Pb,Bi,Po,Tl}/RBC       RBC                       ---
+  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
+  {Po}/Plasma1                Plasma             1000
+  {Po}/Plasma2                Plasma             1000
+  {Po}/Plasma3                Plasma             1000
+  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
+  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000
 
-  {*}/C-bone-S            C-bone-S                  ---
-  {*}/T-bone-S            T-bone-S                  ---
-  {Th,Ac}/C-bone-V        Plasma                $(0.03 / 365.25)
-  {Th,Ac}/T-bone-V        Plasma                $(0.18 / 365.25)
-  {Ra}/Noch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Ra}/Noch-T-bone-V      Plasma                $(0.18 / 365.25)
-  {Ra}/Exch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Ra}/Exch-T-bone-V      Plasma                $(0.18 / 365.25)
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365.25)
+  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365.25)
+  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365.25)
+  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365.25)
+  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365.25)
+  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365.25)
 
-  {*}/C-marrow            C-marrow                  ---
-  {*}/T-marrow            T-marrow                  ---
-  {*}/Liver1              Liver                     ---
-  {*}/Liver2              Plasma                    2.5
-  {*}/Kidneys1            Plasma                    2.5
-  {*}/Kidneys2            Kidneys                   ---
-  {*}/Testes              Testes                    ---
-  {*}/Ovaries             Ovaries                   ---
-  {*}/Skin                Skin                      ---
-  {*}/Spleen              Spleen                    ---
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver                 ---
+  {^Rn}/Liver2                Plasma                2.5
+  {^Rn}/Kidneys1              Plasma                2.5
+  {^Rn}/Kidneys2              Kidneys               ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
 
-  {Th}/ST0                Plasma                    2.5
-  {Th}/ST1                Plasma                    2.5
-  {Th}/ST2                Plasma                    2.5
-  {Ra}/ST0                Plasma                    2.5
-  {Ra}/ST1                Plasma                    2.5
-  {Ra}/ST2                Plasma                    2.5
-  {Ac}/ST0                Plasma                    2.5
-  {Ac}/ST1                Plasma                    2.5
-  {Ac}/ST2                Plasma                    2.5
-  {Po}/Other              Plasma                    2.5
-  {Pb}/ST0                Plasma                    2.5
-  {Pb}/ST1                Plasma                    2.5
-  {Pb}/ST2                Plasma                    2.5
-  {Bi}/ST0                Plasma                    2.5
-  {Bi}/ST1                Plasma                    2.5
-  {Bi}/ST2                Plasma                    2.5
+  {U}/ST0                     Plasma                2.5
+  {U}/ST1                     Plasma                2.5
+  {U}/ST2                     Plasma                2.5
+  {Pa}/ST0                    Plasma                2.5
+  {Pa}/ST1                    Plasma                2.5
+  {Pa}/ST2                    Plasma                2.5
+  {Th}/ST0                    Plasma                2.5
+  {Th}/ST1                    Plasma                2.5
+  {Th}/ST2                    Plasma                2.5
+  {Ac}/ST0                    Plasma                2.5
+  {Ac}/ST1                    Plasma                2.5
+  {Ac}/ST2                    Plasma                2.5
+  {Ra}/ST0                    Plasma                2.5
+  {Ra}/ST1                    Plasma                2.5
+  {Ra}/ST2                    Plasma                2.5
+  {Po}/Other                  Plasma                2.5
+  {Bi}/ST0                    Plasma                2.5
+  {Bi}/ST1                    Plasma                2.5
+  {Bi}/ST2                    Plasma                2.5
+  {Pb}/ST0                    Plasma                2.5
+  {Pb}/ST1                    Plasma                2.5
+  {Pb}/ST2                    Plasma                2.5
+  {Tl}/Other                  Other                 ---
