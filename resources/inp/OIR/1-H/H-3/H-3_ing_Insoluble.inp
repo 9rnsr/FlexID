@@ -4,13 +4,23 @@ H-3 Ingestion, Insoluble
 [nuclide]
   H-3
 
+[parameter]
+  $H-3/fA = 0.1             # ICRP Publ.134 p.21 Table 2.3 / Ingested materials, Relatively insoluble forms
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [H-3:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -31,15 +41,9 @@ H-3 Ingestion, Insoluble
   exc   Skin(discharge)       ---
 
 [H-3:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.21 Table 2.3 / Ingested materials, Relatively insoluble forms
-  $fA = 0.1
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

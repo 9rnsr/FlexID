@@ -1,16 +1,29 @@
 [title]
-Pu-242 Injection
+(Incomplete) Pu-242 Injection
 
 [nuclide]
   Pu-242
+
+[parameter]
+$if parent
+  ${Pu}/fA    = 5E-4        # ICRP Publ.141 p.337 Table 22.11 / Ingested materials, All other unidentified chemical forms
+  ${Pu}/fA_Re = 5E-4        # footnote§
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.37 Para.15
+  Blood0                  100.0%
 
 
 [Pu-242:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -45,16 +58,9 @@ Pu-242 Injection
   acc   ST2                   Other
 
 [Pu-242:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.141 p.337 Table 22.11 / Ingested materials, All other unidentified chemical forms
-  $fA    = 5E-4
-  $fA_Re = 5E-4     # footnote§
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood0                  100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

@@ -1,16 +1,33 @@
 [title]
-Ra-228 Injection
+(Incomplete) Ra-228 Injection
 
 [nuclide]
   Ra-228  Ac-228
+
+[parameter]
+$if parent
+  ${Ra}/fA = 0.2            # ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
+$else
+  ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
 
 
 [Ra-228:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -39,15 +56,9 @@ Ra-228 Injection
   acc   Noch-T-bone-V         T-bone-V
 
 [Ra-228:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.325 Table 13.2 / Ingested materials, All forms
-  $fA = 0.2
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Blood                   100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -134,15 +145,9 @@ Ra-228 Injection
   acc   Spleen                Spleen        # only for progeny of Ra
 
 [Ac-228:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.141 p.240 Table 19.2 / Ingested material, All compounds
-  $fA_MaxValueOfIng = 5E-4
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Ra-228/Oralcavity       Oralcavity                ---
@@ -195,11 +200,11 @@ Ra-228 Injection
   Ra-228/Kidneys1         Kidneys1                  ---
   Ra-228/Kidneys2         Kidneys2                  ---
   Ra-228/C-bone-S         C-bone-S                  ---
-  Ra-228/Exch-C-bone-V    Blood                 $(0.18 / 365.25)
-  Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365.25)
+  Ra-228/Exch-C-bone-V    Blood                 $(0.18 / 365)
+  Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365)
   Ra-228/T-bone-S         T-bone-S                  ---
-  Ra-228/Exch-T-bone-V    Blood                 $(0.18 / 365.25)
-  Ra-228/Noch-T-bone-V    Blood                 $(0.03 / 365.25)
+  Ra-228/Exch-T-bone-V    Blood                 $(0.18 / 365)
+  Ra-228/Noch-T-bone-V    Blood                 $(0.03 / 365)
   Ra-228/ST0              ST0                       ---
   Ra-228/ST1              ST1                       ---
   Ra-228/ST2              ST2                       ---

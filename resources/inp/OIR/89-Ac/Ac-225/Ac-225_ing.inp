@@ -1,16 +1,29 @@
 [title]
-Ac-225 Ingestion
+(Incomplete) Ac-225 Ingestion
 
 [nuclide]
   Ac-225
+
+[parameter]
+$if parent
+  ${Ac}/fA    = 5E-4        # ICRP Publ.141 p.240 Table 19.2 / Ingested materials, All compounds
+  ${Ac}/fA_Re = 5E-4        # footnote¶
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
 
 
 [Ac-225:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -42,16 +55,9 @@ Ac-225 Ingestion
   acc   ST2                   Other
 
 [Ac-225:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.141 p.240 Table 19.2 / Ingested materials, All compounds
-  $fA    = 5E-4
-  $fA_Re = 5E-4         # footnote¶
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

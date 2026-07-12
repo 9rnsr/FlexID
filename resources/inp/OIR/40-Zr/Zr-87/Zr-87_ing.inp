@@ -4,13 +4,32 @@ Zr-87 Ingestion
 [nuclide]
   Zr-87  Y-87m  Y-87  Sr-87m
 
+[parameter]
+$if parent
+  ${Zr}/fA    = 0.002       # ICRP Publ.134 p.264 Table 12.2 / Ingested materials, All chemical forms
+  ${Zr}/fA_Re = 0.002       # footnote¶
+$else
+  ${Y}/fA_MaxValueOfIng = 1E-4          # ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
+  ${Sr}/fA_MaxValueOfIng = 0.25         # ICRP Publ.134 p.215 Table 10.2 / Ingested materials, All other chemical forms
+
+  $fA          = fA_MaxValueOfIng
+  ${^Sr}/fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [Zr-87:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -37,16 +56,9 @@ Zr-87 Ingestion
   acc   ST1                   Other
 
 [Zr-87:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA    = 0.002
-  $fA_Re = 0.002        # footnote¶
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -123,15 +135,9 @@ Zr-87 Ingestion
   acc   ST1                   Other
 
 [Y-87m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA_MaxValueOfIng = 1E-4
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Zr-87/Oralcavity        Oralcavity                ---
@@ -253,15 +259,9 @@ Zr-87 Ingestion
   acc   ST1                   Other
 
 [Y-87:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.242 Table 11.2 / Ingested materials, All chemical forms
-  $fA_MaxValueOfIng = 1E-4
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Zr-87/Oralcavity        Oralcavity                ---
@@ -365,14 +365,9 @@ Zr-87 Ingestion
   acc   ST2                   Other
 
 [Sr-87m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
-  $fA_MaxValueOfIng = 0.25
-
-  $fA = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Zr-87/Oralcavity        Oralcavity                ---
@@ -509,9 +504,9 @@ Zr-87 Ingestion
   Zr-87/Blood1            Blood                     ---
   Zr-87/Blood2            Blood                  1000
   Zr-87/C-bone-S          C-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
-  Zr-87/C-bone-V          Blood                 $( 3% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+  Zr-87/C-bone-V          Blood                 $( 3% / 365)        # 明示されていないため、骨ターンオーバーと判断
   Zr-87/T-bone-S          T-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
-  Zr-87/T-bone-V          Blood                 $(18% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+  Zr-87/T-bone-V          Blood                 $(18% / 365)        # 明示されていないため、骨ターンオーバーと判断
   Zr-87/Liver0            Blood                     6
   Zr-87/Liver1            Blood                     6
   Zr-87/Kidneys           Kidneys                   ---

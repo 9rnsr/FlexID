@@ -30,6 +30,8 @@ public class TrialCalcTests
         var outputTimeMeshPath = Path.Combine(TestDir, "out-time.dat");
 
         var data = new InputDataReader_OIR(inputPath).Read();
+        data.PrintCompartments = true;
+        data.PrintTransfers = true;
 
         var main = new MainRoutine_OIR(data)
         {

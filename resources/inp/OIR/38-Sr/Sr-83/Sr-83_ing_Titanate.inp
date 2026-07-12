@@ -4,13 +4,29 @@ Sr-83 Ingestion, Strontium titanate
 [nuclide]
   Sr-83  Rb-83  Kr-83m
 
+[parameter]
+$if parent
+  ${Sr}/fA = 0.01           # ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
+$else
+  ${Rb}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
+
+  ${^Kr}/fA = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [Sr-83:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -35,15 +51,9 @@ Sr-83 Ingestion, Strontium titanate
   acc   Noch-T-bone-V         T-bone-V
 
 [Sr-83:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, Strontium titanate
-  $fA = 0.01
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -110,15 +120,9 @@ Sr-83 Ingestion, Strontium titanate
   exc   Excreta(sweat)        ---
 
 [Rb-83:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.30 Part.2
-# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sr-83/Oralcavity        Oralcavity                ---
@@ -209,11 +213,11 @@ Sr-83 Ingestion, Strontium titanate
 
   Sr-83/Blood             Plasma                    ---
   Sr-83/C-bone-S          C-bone-S                  ---
-  Sr-83/Exch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
-  Sr-83/Noch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-83/Exch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
+  Sr-83/Noch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
   Sr-83/T-bone-S          T-bone-S                  ---
-  Sr-83/Exch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
-  Sr-83/Noch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-83/Exch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
+  Sr-83/Noch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
   Sr-83/ST0               Plasma                   10.3
   Sr-83/ST1               Plasma                   10.3
   Sr-83/ST2               Plasma                   10.3
@@ -272,9 +276,9 @@ Sr-83 Ingestion, Strontium titanate
   exc   Exhaled               ---
 
 [Kr-83m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sr-83/Oralcavity        Oralcavity                ---

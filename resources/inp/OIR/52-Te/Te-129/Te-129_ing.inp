@@ -4,13 +4,31 @@ Te-129 Ingestion
 [nuclide]
   Te-129  I-129
 
+[parameter]
+$if parent
+  ${Te}/fA    = 0.3         # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${Te}/fA_Re = 0.3         # footnote¶ (re-absorption)
+$else
+  ${I}/fA_MaxValueOfIng = 0.99 # ≒1    # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [Te-129:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -36,16 +54,9 @@ Te-129 Ingestion
   acc   ST                    Other
 
 [Te-129:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -135,15 +146,9 @@ Te-129 Ingestion
   acc   Other2                Other         #   organic
 
 [I-129:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Te-129/Oralcavity       Oralcavity                ---
@@ -309,9 +314,9 @@ Te-129 Ingestion
   Te-129/Blood1           Blood1                    ---
   Te-129/Blood2           Blood1                 1000
   Te-129/C-bone-S         Blood1                  200
-  Te-129/C-bone-V         Blood1                $(0.03 / 365.25)
+  Te-129/C-bone-V         Blood1                $(0.03 / 365)
   Te-129/T-bone-S         Blood1                  200
-  Te-129/T-bone-V         Blood1                $(0.18 / 365.25)
+  Te-129/T-bone-V         Blood1                $(0.18 / 365)
   Te-129/Liver            Blood1                  100
   Te-129/Thyroid          Blood1                   36
   Te-129/Kidneys          Blood1                  100

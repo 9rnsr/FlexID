@@ -196,7 +196,7 @@ internal class LogOut : IDisposable
 
                     var rate = inflow.Rate;
                     var coeff = organFrom.IsInstantOutflow
-                        ? $"= {rate:P}" : $"= {rate:G}";
+                        ? $"= {rate * 100:G}%" : $"= {rate:G}";
 
                     Add(organFrom, organTo, coeff);
                 }

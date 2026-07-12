@@ -4,13 +4,32 @@ I-119 Ingestion
 [nuclide]
   I-119  Te-119m  Te-119  Sb-119
 
+[parameter]
+$if parent
+  ${I}/fA    = 0.99 # ≒1   # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+  ${I}/fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
+$else
+  ${Te}/fA_MaxValueOfIng = 0.3          # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${Sb}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [I-119:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
@@ -43,16 +62,9 @@ I-119 Ingestion
   acc   Other4                Other
 
 [I-119:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
-  $fA    = 0.99 # ≒1
-  $fA_Re = 0.99 # ≒1   # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -142,15 +154,9 @@ I-119 Ingestion
   acc   ST                    Other
 
 [Te-119m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   I-119/Oralcavity        Oralcavity                ---
@@ -269,15 +275,9 @@ I-119 Ingestion
   acc   ST                    Other
 
 [Te-119:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   I-119/Oralcavity        Oralcavity                ---
@@ -385,15 +385,9 @@ I-119 Ingestion
   acc   ST2                   Other
 
 [Sb-119:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.05
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   I-119/Oralcavity        Oralcavity                ---

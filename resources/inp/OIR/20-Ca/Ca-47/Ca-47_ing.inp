@@ -4,13 +4,26 @@ Ca-47 Ingestion
 [nuclide]
   Ca-47  Sc-47
 
+[parameter]
+  $Ca-47/fA = 0.4           # ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
+
+  $Sc-47/fA    = 1E-4       # ICRP Publ.30 Part.3
+  $Sc-47/fA_Re = 1E-4       # ICRP Publ.30 Part.3
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [Ca-47:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -35,15 +48,9 @@ Ca-47 Ingestion
   acc   Noch-T-bone-V         T-bone-V
 
 [Ca-47:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.118 Table 6.2 / Ingested materials, All unspecified forms
-  $fA = 0.4
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -118,13 +125,9 @@ Ca-47 Ingestion
   acc   ST1                   Other
 
 [Sc-47:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.30 Part.3
-  $fA    = 1E-4
-  $fA_Re = 1E-4
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Ca-47/Oralcavity        Oralcavity                ---
@@ -190,12 +193,12 @@ Ca-47 Ingestion
   Kidneys                 Blood1                $(0.693 /  20      )
   T-marrow                Blood1                $(0.693 / 100      )
   C-marrow                Blood1                $(0.693 / 100      )
-  Spleen                  Blood1                $(0.693 / 365.25   )
+  Spleen                  Blood1                $(0.693 / 365      )
   ST0                     Blood1                $(0.693 /   3      )
   ST1                     Blood1                $(0.693 / 100      )
-  T-bone-S                Blood1                $(0.18 / 365.25 * 1.5 * 2/3)
-  T-bone-S                T-bone-V              $(0.18 / 365.25 * 1.5 * 1/3)
-  T-bone-V                Blood1                $(0.18 / 365.25            )
-  C-bone-S                Blood1                $(0.03 / 365.25 * 1.5 * 2/3)
-  C-bone-S                C-bone-V              $(0.03 / 365.25 * 1.5 * 1/3)
-  C-bone-V                Blood1                $(0.03 / 365.25            )
+  T-bone-S                Blood1                $(0.18 / 365 * 1.5 * 2/3)
+  T-bone-S                T-bone-V              $(0.18 / 365 * 1.5 * 1/3)
+  T-bone-V                Blood1                $(0.18 / 365            )
+  C-bone-S                Blood1                $(0.03 / 365 * 1.5 * 2/3)
+  C-bone-S                C-bone-V              $(0.03 / 365 * 1.5 * 1/3)
+  C-bone-V                Blood1                $(0.03 / 365            )

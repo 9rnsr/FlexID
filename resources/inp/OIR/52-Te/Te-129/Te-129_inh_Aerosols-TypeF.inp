@@ -4,13 +4,55 @@ Te-129 Inhalation, Aerosols Type F
 [nuclide]
   Te-129  I-129
 
+[parameter]
+  # ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 50
+  $ss = 0
+
+$if parent
+  ${Te}/fA    = 0.3         # ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
+  ${Te}/fA_Re = 0.3         # footnote¶ (re-absorption)
+$else
+  ${I}/fA_MaxValueOfIng = 0.99 # ≒1    # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
+  ET1-F                 $(      fr  *                 47.94% )
+  ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  ALV-F                 $(      fr  *                  5.32% )
+
+  ET1-S                 $( (1 - fr) *                 47.94% )
+  ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  ALV-S                 $( (1 - fr) *                  5.32% )
+
+  Environment           $(                     100% - 81.96% )
+
 
 [Te-129:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -60,38 +102,9 @@ Te-129 Inhalation, Aerosols Type F
   acc   ST                    Other
 
 [Te-129:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Inhaled particulate materials, Absorption type F
-  $fr = 1
-  $sr = 50
-  $ss = 0
-  $fA    = 0.3
-  $fA_Re = 0.3          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.62 Table 3.1
-# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
-  input                   ET1-F                 $(      fr  *                 47.94% )
-  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
-  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
-  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
-  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
-  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
-  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
-  input                   ALV-F                 $(      fr  *                  5.32% )
-
-  input                   ET1-S                 $( (1 - fr) *                 47.94% )
-  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
-  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
-  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
-  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
-  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
-  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
-  input                   ALV-S                 $( (1 - fr) *                  5.32% )
-
-  input                   Environment           $(                     100% - 81.96% )
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -253,15 +266,9 @@ Te-129 Inhalation, Aerosols Type F
   acc   Other2                Other         #   organic
 
 [I-129:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Te-129/ET1-F            ET1-F                     ---
@@ -499,9 +506,9 @@ Te-129 Inhalation, Aerosols Type F
   Te-129/Blood1           Blood1                    ---
   Te-129/Blood2           Blood1                 1000
   Te-129/C-bone-S         Blood1                  200
-  Te-129/C-bone-V         Blood1                $(0.03 / 365.25)
+  Te-129/C-bone-V         Blood1                $(0.03 / 365)
   Te-129/T-bone-S         Blood1                  200
-  Te-129/T-bone-V         Blood1                $(0.18 / 365.25)
+  Te-129/T-bone-V         Blood1                $(0.18 / 365)
   Te-129/Liver            Blood1                  100
   Te-129/Thyroid          Blood1                   36
   Te-129/Kidneys          Blood1                  100

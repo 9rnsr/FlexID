@@ -4,13 +4,26 @@ In-111 Ingestion
 [nuclide]
   In-111
 
+[parameter]
+$if parent
+  ${In}/fA    = 0.005       # ICRP Publ.151 p.252 Table 27.2 / Ingested materials, All forms
+  ${In}/fA_Re = 0.005       # footnote§ (re-absorption)
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [In-111:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -36,16 +49,9 @@ In-111 Ingestion
   acc   ST1                   Other
 
 [In-111:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.151 p.252 Table 27.2 / Ingested materials, All forms
-  $fA    = 0.005
-  $fA_Re = 0.005        # footnote§ (re-absorption)
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
