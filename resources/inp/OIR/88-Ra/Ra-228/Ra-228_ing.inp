@@ -200,11 +200,11 @@ $endif
   Ra-228/Kidneys1         Kidneys1                  ---
   Ra-228/Kidneys2         Kidneys2                  ---
   Ra-228/C-bone-S         C-bone-S                  ---
-  Ra-228/Exch-C-bone-V    Blood                 $(0.18 / 365.25)
-  Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365.25)
+  Ra-228/Exch-C-bone-V    Blood                 $(0.18 / 365)
+  Ra-228/Noch-C-bone-V    Blood                 $(0.03 / 365)
   Ra-228/T-bone-S         T-bone-S                  ---
-  Ra-228/Exch-T-bone-V    Blood                 $(0.18 / 365.25)
-  Ra-228/Noch-T-bone-V    Blood                 $(0.03 / 365.25)
+  Ra-228/Exch-T-bone-V    Blood                 $(0.18 / 365)
+  Ra-228/Noch-T-bone-V    Blood                 $(0.03 / 365)
   Ra-228/ST0              ST0                       ---
   Ra-228/ST1              ST1                       ---
   Ra-228/ST2              ST2                       ---

@@ -504,9 +504,9 @@ $endif
   Zr-87/Blood1            Blood                     ---
   Zr-87/Blood2            Blood                  1000
   Zr-87/C-bone-S          C-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
-  Zr-87/C-bone-V          Blood                 $( 3% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+  Zr-87/C-bone-V          Blood                 $( 3% / 365)        # 明示されていないため、骨ターンオーバーと判断
   Zr-87/T-bone-S          T-bone-S                  ---             # 明示されていないため、同一区画であるとと判断
-  Zr-87/T-bone-V          Blood                 $(18% / 365.25)     # 明示されていないため、骨ターンオーバーと判断
+  Zr-87/T-bone-V          Blood                 $(18% / 365)        # 明示されていないため、骨ターンオーバーと判断
   Zr-87/Liver0            Blood                     6
   Zr-87/Liver1            Blood                     6
   Zr-87/Kidneys           Kidneys                   ---

@@ -518,9 +518,9 @@ $endif
   Sb-129/Plasma           Blood1                    ---
   Sb-129/RBC              Blood1                 1000
   Sb-129/C-bone-S         Blood1                  200
-  Sb-129/C-bone-V         Blood1                $(0.03 / 365.25)
+  Sb-129/C-bone-V         Blood1                $(0.03 / 365)
   Sb-129/T-bone-S         Blood1                  200
-  Sb-129/T-bone-V         Blood1                $(0.03 / 365.25)
+  Sb-129/T-bone-V         Blood1                $(0.03 / 365)
   Sb-129/Liver1           Blood1                  100
   Sb-129/Liver2           Blood1                  100
   Sb-129/Thyroid          Blood1                   36

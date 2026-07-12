@@ -411,10 +411,10 @@ $endif
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
-  {Pb}/Noch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Pb}/Noch-T-bone-V      Plasma                $(0.18 / 365.25)
-  {Pb}/Exch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Pb}/Exch-T-bone-V      Plasma                $(0.18 / 365.25)
+  {Pb}/Noch-C-bone-V      Plasma                $(0.03 / 365)
+  {Pb}/Noch-T-bone-V      Plasma                $(0.18 / 365)
+  {Pb}/Exch-C-bone-V      Plasma                $(0.03 / 365)
+  {Pb}/Exch-T-bone-V      Plasma                $(0.18 / 365)
 
   {Po,Bi,Pb}/Liver1       Liver1                    ---
   {Po,Bi,Pb}/Liver2       Liver2                    ---
@@ -552,10 +552,10 @@ $endif
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
-  {Pb}/Exch-C-bone-V      Plasma2               $(0.03 / 365.25)
-  {Pb}/Exch-T-bone-V      Plasma2               $(0.18 / 365.25)
-  {Pb}/Noch-C-bone-V      Plasma2               $(0.03 / 365.25)
-  {Pb}/Noch-T-bone-V      Plasma2               $(0.18 / 365.25)
+  {Pb}/Exch-C-bone-V      Plasma2               $(0.03 / 365)
+  {Pb}/Exch-T-bone-V      Plasma2               $(0.18 / 365)
+  {Pb}/Noch-C-bone-V      Plasma2               $(0.03 / 365)
+  {Pb}/Noch-T-bone-V      Plasma2               $(0.18 / 365)
 
   {Po,Bi,Pb}/Liver1       Liver1                    ---
   {Po,Bi,Pb}/Liver2       Liver2                    ---
@@ -727,10 +727,10 @@ $endif
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
-  {Pb}/Exch-C-bone-V      Plasma1               $(0.03 / 365.25)
-  {Pb}/Exch-T-bone-V      Plasma1               $(0.18 / 365.25)
-  {Pb}/Noch-C-bone-V      Plasma1               $(0.03 / 365.25)
-  {Pb}/Noch-T-bone-V      Plasma1               $(0.18 / 365.25)
+  {Pb}/Exch-C-bone-V      Plasma1               $(0.03 / 365)
+  {Pb}/Exch-T-bone-V      Plasma1               $(0.18 / 365)
+  {Pb}/Noch-C-bone-V      Plasma1               $(0.03 / 365)
+  {Pb}/Noch-T-bone-V      Plasma1               $(0.18 / 365)
 
   {Po,Bi,Pb}/Liver1       Liver                     ---
   {Po,Bi,Pb}/Liver2       Plasma1               $(0.693 / 20)
@@ -869,10 +869,10 @@ $endif
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
-  {Pb}/Exch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Pb}/Exch-T-bone-V      Plasma                $(0.18 / 365.25)
-  {Pb}/Noch-C-bone-V      Plasma                $(0.03 / 365.25)
-  {Pb}/Noch-T-bone-V      Plasma                $(0.18 / 365.25)
+  {Pb}/Exch-C-bone-V      Plasma                $(0.03 / 365)
+  {Pb}/Exch-T-bone-V      Plasma                $(0.18 / 365)
+  {Pb}/Noch-C-bone-V      Plasma                $(0.03 / 365)
+  {Pb}/Noch-T-bone-V      Plasma                $(0.18 / 365)
 
   {Po,Bi,Pb}/Liver1       Liver                     ---
   {Po,Bi,Pb}/Liver2       Plasma                    2.5

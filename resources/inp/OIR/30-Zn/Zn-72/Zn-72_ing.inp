@@ -228,8 +228,8 @@ $endif
   Zn-72/ST2               Blood                 $(0.693 / 0.5)          # 半減期0.5日
   Zn-72/C-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
   Zn-72/T-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
-  Zn-72/C-bone-V          Blood                 $( 3% / 365.25)         # 成人の骨ターンオーバー
-  Zn-72/T-bone-V          Blood                 $(18% / 365.25)         # 成人の骨ターンオーバー
+  Zn-72/C-bone-V          Blood                 $( 3% / 365)            # 成人の骨ターンオーバー
+  Zn-72/T-bone-V          Blood                 $(18% / 365)            # 成人の骨ターンオーバー
 
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -288,7 +288,7 @@ $endif
   Blood                   ST0                   $(5 * 37.9%)                        # == 1.895  # <--
   Blood                   ST1                   $(5 * 10%)                          # == 0.5
   ST0                     Blood                 $(0.693 / 0.5)      # 半減期0.5日   # == 1.39
-  ST1                     Blood                 $(0.693 / 365.25)   # 半減期1年     # == 0.0019
+  ST1                     Blood                 $(0.693 / 365)      # 半減期1年     # == 0.0019
   Liver                   Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Spleen                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Pancreas                Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139

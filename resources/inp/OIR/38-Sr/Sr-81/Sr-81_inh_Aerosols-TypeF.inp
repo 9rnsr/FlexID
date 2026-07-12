@@ -405,11 +405,11 @@ $endif
 
   Sr-81/Blood             Plasma                    ---
   Sr-81/C-bone-S          C-bone-S                  ---
-  Sr-81/Exch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
-  Sr-81/Noch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-81/Exch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
+  Sr-81/Noch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
   Sr-81/T-bone-S          T-bone-S                  ---
-  Sr-81/Exch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
-  Sr-81/Noch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-81/Exch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
+  Sr-81/Noch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
   Sr-81/ST0               Plasma                   10.3
   Sr-81/ST1               Plasma                   10.3
   Sr-81/ST2               Plasma                   10.3
@@ -595,11 +595,11 @@ $endif
 
   Sr-81/Blood             Plasma                    ---
   Sr-81/C-bone-S          C-bone-S                  ---
-  Sr-81/Exch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
-  Sr-81/Noch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-81/Exch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
+  Sr-81/Noch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
   Sr-81/T-bone-S          T-bone-S                  ---
-  Sr-81/Exch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
-  Sr-81/Noch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-81/Exch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
+  Sr-81/Noch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
   Sr-81/ST0               Plasma                   10.3
   Sr-81/ST1               Plasma                   10.3
   Sr-81/ST2               Plasma                   10.3

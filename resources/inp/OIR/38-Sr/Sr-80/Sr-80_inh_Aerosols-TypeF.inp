@@ -405,11 +405,11 @@ $endif
 
   Sr-80/Blood             Plasma                    ---
   Sr-80/C-bone-S          C-bone-S                  ---
-  Sr-80/Exch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
-  Sr-80/Noch-C-bone-V     Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-80/Exch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
+  Sr-80/Noch-C-bone-V     Plasma                $( 3% / 365)        # 骨ターンオーバー
   Sr-80/T-bone-S          T-bone-S                  ---
-  Sr-80/Exch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
-  Sr-80/Noch-T-bone-V     Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-80/Exch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
+  Sr-80/Noch-T-bone-V     Plasma                $(18% / 365)        # 骨ターンオーバー
   Sr-80/ST0               Plasma                   10.3
   Sr-80/ST1               Plasma                   10.3
   Sr-80/ST2               Plasma                   10.3

@@ -417,8 +417,8 @@ $endif
   C-bone-S                C-bone-V              $(0.693 / 40 *  1%)
   T-bone-S                Plasma                $(0.693 / 40 * 99%)
   T-bone-S                T-bone-V              $(0.693 / 40 *  1%)
-  C-bone-V                Plasma                $( 3% / 365.25)         # 成人の骨ターンオーバー
-  T-bone-V                Plasma                $(18% / 365.25)         # 成人の骨ターンオーバー
+  C-bone-V                Plasma                $( 3% / 365)            # 成人の骨ターンオーバー
+  T-bone-V                Plasma                $(18% / 365)            # 成人の骨ターンオーバー
   Brain                   Plasma                $(0.693 / 150)          # 半減期150日
   RBC                     Plasma                $(0.693 /  83.2)        # 半減期 83.2日
 
@@ -654,8 +654,8 @@ $endif
   C-bone-S                C-bone-V              $(0.693 / 40 *  1%)
   T-bone-S                Plasma                $(0.693 / 40 * 99%)
   T-bone-S                T-bone-V              $(0.693 / 40 *  1%)
-  C-bone-V                Plasma                $( 3% / 365.25)         # 成人の骨ターンオーバー
-  T-bone-V                Plasma                $(18% / 365.25)         # 成人の骨ターンオーバー
+  C-bone-V                Plasma                $( 3% / 365)            # 成人の骨ターンオーバー
+  T-bone-V                Plasma                $(18% / 365)            # 成人の骨ターンオーバー
   Brain                   Plasma                $(0.693 / 150)          # 半減期150日
   RBC                     Plasma                $(0.693 /  83.2)        # 半減期 83.2日
 
