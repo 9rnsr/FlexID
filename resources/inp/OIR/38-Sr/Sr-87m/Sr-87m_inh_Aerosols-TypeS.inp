@@ -405,11 +405,11 @@ $endif
 
   Sr-87m/Blood            Plasma                    ---
   Sr-87m/C-bone-S         C-bone-S                  ---
-  Sr-87m/Exch-C-bone-V    Plasma                $( 3% / 365.25)     # 骨ターンオーバー
-  Sr-87m/Noch-C-bone-V    Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-87m/Exch-C-bone-V    Plasma                $( 3% / 365)        # 骨ターンオーバー
+  Sr-87m/Noch-C-bone-V    Plasma                $( 3% / 365)        # 骨ターンオーバー
   Sr-87m/T-bone-S         T-bone-S                  ---
-  Sr-87m/Exch-T-bone-V    Plasma                $(18% / 365.25)     # 骨ターンオーバー
-  Sr-87m/Noch-T-bone-V    Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-87m/Exch-T-bone-V    Plasma                $(18% / 365)        # 骨ターンオーバー
+  Sr-87m/Noch-T-bone-V    Plasma                $(18% / 365)        # 骨ターンオーバー
   Sr-87m/ST0              Plasma                   10.3
   Sr-87m/ST1              Plasma                   10.3
   Sr-87m/ST2              Plasma                   10.3

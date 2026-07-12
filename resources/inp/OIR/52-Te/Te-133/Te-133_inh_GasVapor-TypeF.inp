@@ -494,9 +494,9 @@ $endif
   Te-133/Blood1           Blood1                    ---
   Te-133/Blood2           Blood1                 1000
   Te-133/C-bone-S         Blood1                  200
-  Te-133/C-bone-V         Blood1                $(0.03 / 365.25)
+  Te-133/C-bone-V         Blood1                $(0.03 / 365)
   Te-133/T-bone-S         Blood1                  200
-  Te-133/T-bone-V         Blood1                $(0.18 / 365.25)
+  Te-133/T-bone-V         Blood1                $(0.18 / 365)
   Te-133/Liver            Blood1                  100
   Te-133/Thyroid          Blood1                   36
   Te-133/Kidneys          Blood1                  100

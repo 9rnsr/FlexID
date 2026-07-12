@@ -902,9 +902,9 @@ $endif
   Sb-131/Plasma           Blood1                    ---
   Sb-131/RBC              Blood1                 1000
   Sb-131/C-bone-S         Blood1                  200
-  Sb-131/C-bone-V         Blood1                $(0.03 / 365.25)
+  Sb-131/C-bone-V         Blood1                $(0.03 / 365)
   Sb-131/T-bone-S         Blood1                  200
-  Sb-131/T-bone-V         Blood1                $(0.03 / 365.25)
+  Sb-131/T-bone-V         Blood1                $(0.03 / 365)
   Sb-131/Liver1           Blood1                  100
   Sb-131/Liver2           Blood1                  100
   Sb-131/Thyroid          Blood1                   36

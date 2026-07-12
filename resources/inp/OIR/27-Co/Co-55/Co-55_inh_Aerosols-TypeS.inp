@@ -380,9 +380,9 @@ $endif
   Co-55/ST1               OtherPlasma               1.39
   Co-55/ST2               OtherPlasma               1.39
   Co-55/C-bone-S          OtherPlasma               1.39
-  Co-55/C-bone-V          OtherPlasma           $(0.03 / 365.25)
+  Co-55/C-bone-V          OtherPlasma           $(0.03 / 365)
   Co-55/T-bone-S          OtherPlasma               1.39
-  Co-55/T-bone-V          OtherPlasma           $(0.03 / 365.25)
+  Co-55/T-bone-V          OtherPlasma           $(0.03 / 365)
   Co-55/Liver1            OtherPlasma               1.39
   Co-55/Liver2            OtherPlasma               1.39
   Co-55/Kidneys1          OtherPlasma               1.39

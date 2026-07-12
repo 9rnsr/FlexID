@@ -739,9 +739,9 @@ $endif
   Te-131m/Blood1          Blood1                    ---
   Te-131m/Blood2          Blood1                 1000
   Te-131m/C-bone-S        Blood1                  200
-  Te-131m/C-bone-V        Blood1                $(0.03 / 365.25)
+  Te-131m/C-bone-V        Blood1                $(0.03 / 365)
   Te-131m/T-bone-S        Blood1                  200
-  Te-131m/T-bone-V        Blood1                $(0.18 / 365.25)
+  Te-131m/T-bone-V        Blood1                $(0.18 / 365)
   Te-131m/Liver           Blood1                  100
   Te-131m/Thyroid         Blood1                   36
   Te-131m/Kidneys         Blood1                  100

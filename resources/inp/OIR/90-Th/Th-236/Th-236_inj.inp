@@ -211,8 +211,8 @@ $if progeny
   Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
   Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
   Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
-  Spleen                  Blood                 $(0.693 / 2/365.25)
-  Skin                    Blood                 $(0.693 / 2/365.25)
+  Spleen                  Blood                 $(0.693 / 2/365)
+  Skin                    Blood                 $(0.693 / 2/365)
 
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
 # > (715) ... Thorium produced in a compartment
@@ -241,8 +241,8 @@ $if progeny
   {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
   {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
   {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365.25)
-  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365.25)
+  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365)
+  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365)
 
   {^Rn}/C-marrow              C-marrow              ---
   {^Rn}/T-marrow              T-marrow              ---
@@ -414,8 +414,8 @@ $endif
   Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
   Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
   Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
-  Spleen                  Blood                 $(0.693 / 2/365.25)
-  Skin                    Blood                 $(0.693 / 2/365.25)
+  Spleen                  Blood                 $(0.693 / 2/365)
+  Skin                    Blood                 $(0.693 / 2/365)
 
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
 # > (715) ... Thorium produced in a compartment
@@ -444,8 +444,8 @@ $endif
   {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
   {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
   {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365.25)
-  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365.25)
+  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365)
+  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365)
 
   {^Rn}/C-marrow              C-marrow              ---
   {^Rn}/T-marrow              T-marrow              ---
@@ -1060,8 +1060,8 @@ $endif
   {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
   {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
   {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365.25)
-  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365.25)
+  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365)
+  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365)
 
   {^Rn}/C-marrow              C-marrow              ---
   {^Rn}/T-marrow              T-marrow              ---
@@ -1414,12 +1414,12 @@ $endif
 
   {^Rn}/C-bone-S              C-bone-S              ---
   {^Rn}/T-bone-S              T-bone-S              ---
-  {Pa,Th,Ac}/C-bone-V         Plasma2           $(0.03 / 365.25)
-  {Pa,Th,Ac}/T-bone-V         Plasma2           $(0.18 / 365.25)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma2           $(0.03 / 365.25)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma2           $(0.18 / 365.25)
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma2           $(0.03 / 365.25)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma2           $(0.18 / 365.25)
+  {Pa,Th,Ac}/C-bone-V         Plasma2           $(0.03 / 365)
+  {Pa,Th,Ac}/T-bone-V         Plasma2           $(0.18 / 365)
+  {U,Ra,Pb}/Noch-C-bone-V     Plasma2           $(0.03 / 365)
+  {U,Ra,Pb}/Noch-T-bone-V     Plasma2           $(0.18 / 365)
+  {U,Ra,Pb}/Exch-C-bone-V     Plasma2           $(0.03 / 365)
+  {U,Ra,Pb}/Exch-T-bone-V     Plasma2           $(0.18 / 365)
 
   {^Rn}/C-marrow              C-marrow              ---
   {^Rn}/T-marrow              T-marrow              ---
@@ -1847,12 +1847,12 @@ $endif
 
   {^Rn}/C-bone-S              C-bone-S              ---
   {^Rn}/T-bone-S              T-bone-S              ---
-  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365.25)
-  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365.25)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365.25)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365.25)
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365.25)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365.25)
+  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365)
+  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365)
+  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365)
+  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365)
+  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365)
+  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365)
 
   {^Rn}/C-marrow              C-marrow              ---
   {^Rn}/T-marrow              T-marrow              ---
@@ -2034,12 +2034,12 @@ $endif
 
   {^Rn}/C-bone-S              C-bone-S              ---
   {^Rn}/T-bone-S              T-bone-S              ---
-  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365.25)
-  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365.25)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365.25)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365.25)
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365.25)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365.25)
+  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365)
+  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365)
+  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365)
+  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365)
+  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365)
+  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365)
 
   {^Rn}/C-marrow              C-marrow              ---
   {^Rn}/T-marrow              T-marrow              ---
