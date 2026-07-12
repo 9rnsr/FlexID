@@ -8,7 +8,7 @@
 
 [parameter]
 $if parent
-  ${U}/fA    = 0.02         # ICRP Publ.137 p.409 Table 15.2 / Inhaled particulate materials, Absorption type F
+  ${U}/fA    = 0.002        # ICRP Publ.137 p.409 Table 15.2 / Ingested materials, Relatively insoluble forms
   ${U}/fA_Re = 0.02         # footnote††
 $else
   ${Pu}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
