@@ -722,8 +722,8 @@ public class InputDataReader_OIR : InputDataReaderBase
         if (errors.IfAny(olderrors))
             return line;
 
-        if (!organs.Any())
-            errors.AddError(sectionLineNum, $"Empty [{nuc}:compartment] section.");
+        //if (!organs.Any())
+        //    errors.AddError(sectionLineNum, $"Empty [{nuc}:compartment] section.");
 
         return line;
     }
