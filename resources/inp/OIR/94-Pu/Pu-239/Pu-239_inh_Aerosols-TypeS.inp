@@ -12,9 +12,34 @@
   $fb = 0.002               # footnote*
   $sb = 0                   # footnote*
 
+  ${Pu}/Blood = 'Blood0'
+
 $if parent
   ${Pu}/fA    = 5E-6        # ICRP Publ.141 p.337 Table 22.11 / Inhaled particulate materials, Absorption type S
   ${Pu}/fA_Re = 5E-4        # footnote§
+$else
+  ${Fm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.454 Table 28.2  / Ingested materials, All compounds
+  ${Es}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.446 Table 27.2  / Ingested materials, All compounds
+  ${Cf}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.434 Table 26.2  / Ingested materials, All compounds
+  ${Bk}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.424 Table 25.2  / Ingested materials, All compounds
+  ${Cm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.408 Table 24.2  / Ingested materials, All compounds
+  ${Am}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.382 Table 23.5  / Ingested materials, All compounds
+  ${Pu}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
+  ${Np}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.262 Table 21.2  / Ingested materials, All chemical forms
+  ${U}/fA_MaxValueOfIng  = 0.02         # ICRP Publ.137 p.409 Table 15.2  / Ingested materials, Soluble forms
+  ${Pa}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.251 Table 20.2  / Ingested materials, All forms
+  ${Th}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.137 p.362 Table 14.2  / Ingested materials, All forms
+  ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2  / Ingested materials, All compounds
+  ${Ra}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.325 Table 13.2  / Ingested materials, All forms
+  ${Fr}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.363 Table 39.2  / Ingested materials, All forms
+  ${At}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.356 Table 38.3  / Ingested materials, All forms
+  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2  / Ingested materials, All chemical forms
+  ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2  / Ingested materials, All forms
+  ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2  / Ingested materials, All forms
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2  / Ingested materials, All forms
+
+  ${^Rn}/fA    = fA_MaxValueOfIng
+  ${^Rn}/fA_Re = fA_MaxValueOfIng
 $endif
 
 
@@ -46,7 +71,7 @@ $endif
   Environment           $(                     100% - 81.96% )
 
 
-[Pu-239:compartment]
+[{*}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
@@ -94,30 +119,11 @@ $endif
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
   exc   Faeces                ---
+
   acc   UB-con                UB-cont
   exc   Urine                 ---
 
-  acc   Blood0                Blood
-  acc   Blood1                Blood
-  acc   Blood2                Blood
-  acc   Liver0                Liver
-  acc   Liver1                Liver
-  acc   Liver2                Liver
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   C-marrow              C-marrow
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   T-marrow              T-marrow
-  acc   RenalTubules          Kidneys
-  acc   OtherKidneys          Kidneys
-  acc   Ovaries               Ovaries
-  acc   Testes                Testes
-  acc   ST0                   Other
-  acc   ST1                   Other
-  acc   ST2                   Other
-
-[Pu-239:transfer]
+[{^Rn,Fr,At}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -172,38 +178,38 @@ $endif
   LNET-S                  LNET-B                $(      fb  * ss )
   LNTH-S                  LNTH-B                $(      fb  * ss )
 
-  ALV-F                   Blood0                $( (1 - fb) * sr )
-  INT-F                   Blood0                $( (1 - fb) * sr )
-  bb-F                    Blood0                $( (1 - fb) * sr )
-  bbseq-F                 Blood0                $( (1 - fb) * sr )
-  BB-F                    Blood0                $( (1 - fb) * sr )
-  BBseq-F                 Blood0                $( (1 - fb) * sr )
-  ET2-F                   Blood0                $( (1 - fb) * sr )
-  ETseq-F                 Blood0                $( (1 - fb) * sr )
-  LNET-F                  Blood0                $( (1 - fb) * sr )
-  LNTH-F                  Blood0                $( (1 - fb) * sr )
+  ALV-F                   $Blood                $( (1 - fb) * sr )
+  INT-F                   $Blood                $( (1 - fb) * sr )
+  bb-F                    $Blood                $( (1 - fb) * sr )
+  bbseq-F                 $Blood                $( (1 - fb) * sr )
+  BB-F                    $Blood                $( (1 - fb) * sr )
+  BBseq-F                 $Blood                $( (1 - fb) * sr )
+  ET2-F                   $Blood                $( (1 - fb) * sr )
+  ETseq-F                 $Blood                $( (1 - fb) * sr )
+  LNET-F                  $Blood                $( (1 - fb) * sr )
+  LNTH-F                  $Blood                $( (1 - fb) * sr )
 
-  ALV-S                   Blood0                $( (1 - fb) * ss )
-  INT-S                   Blood0                $( (1 - fb) * ss )
-  bb-S                    Blood0                $( (1 - fb) * ss )
-  bbseq-S                 Blood0                $( (1 - fb) * ss )
-  BB-S                    Blood0                $( (1 - fb) * ss )
-  BBseq-S                 Blood0                $( (1 - fb) * ss )
-  ET2-S                   Blood0                $( (1 - fb) * ss )
-  ETseq-S                 Blood0                $( (1 - fb) * ss )
-  LNET-S                  Blood0                $( (1 - fb) * ss )
-  LNTH-S                  Blood0                $( (1 - fb) * ss )
+  ALV-S                   $Blood                $( (1 - fb) * ss )
+  INT-S                   $Blood                $( (1 - fb) * ss )
+  bb-S                    $Blood                $( (1 - fb) * ss )
+  bbseq-S                 $Blood                $( (1 - fb) * ss )
+  BB-S                    $Blood                $( (1 - fb) * ss )
+  BBseq-S                 $Blood                $( (1 - fb) * ss )
+  ET2-S                   $Blood                $( (1 - fb) * ss )
+  ETseq-S                 $Blood                $( (1 - fb) * ss )
+  LNET-S                  $Blood                $( (1 - fb) * ss )
+  LNTH-S                  $Blood                $( (1 - fb) * ss )
 
-  ALV-B                   Blood0                $sb
-  INT-B                   Blood0                $sb
-  bb-B                    Blood0                $sb
-  bbseq-B                 Blood0                $sb
-  BB-B                    Blood0                $sb
-  BBseq-B                 Blood0                $sb
-  ET2-B                   Blood0                $sb
-  ETseq-B                 Blood0                $sb
-  LNET-B                  Blood0                $sb
-  LNTH-B                  Blood0                $sb
+  ALV-B                   $Blood                $sb
+  INT-B                   $Blood                $sb
+  bb-B                    $Blood                $sb
+  bbseq-B                 $Blood                $sb
+  BB-B                    $Blood                $sb
+  BBseq-B                 $Blood                $sb
+  ET2-B                   $Blood                $sb
+  ETseq-B                 $Blood                $sb
+  LNET-B                  $Blood                $sb
+  LNTH-B                  $Blood                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -218,11 +224,97 @@ $endif
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood0                $(fA    * 6 / (1 - fA   ))
-  SI-conRe                Blood0                $(fA_Re * 6 / (1 - fA_Re))
+  SI-con                  $Blood                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                $Blood                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
+
+[{*}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# decay for HRTM
+  {*}/ET1-F               ET1-F                     ---
+  {*}/ET2-F               ET2-F                     ---
+  {*}/ETseq-F             ETseq-F                   ---
+  {*}/LNET-F              LNET-F                    ---
+  {*}/BB-F                BB-F                      ---
+  {*}/BBseq-F             BBseq-F                   ---
+  {*}/bb-F                bb-F                      ---
+  {*}/bbseq-F             bbseq-F                   ---
+  {*}/ALV-F               ALV-F                     ---
+  {*}/INT-F               INT-F                     ---
+  {*}/LNTH-F              LNTH-F                    ---
+  {*}/ET1-S               ET1-S                     ---
+  {*}/ET2-S               ET2-S                     ---
+  {*}/ETseq-S             ETseq-S                   ---
+  {*}/LNET-S              LNET-S                    ---
+  {*}/BB-S                BB-S                      ---
+  {*}/BBseq-S             BBseq-S                   ---
+  {*}/bb-S                bb-S                      ---
+  {*}/bbseq-S             bbseq-S                   ---
+  {*}/ALV-S               ALV-S                     ---
+  {*}/INT-S               INT-S                     ---
+  {*}/LNTH-S              LNTH-S                    ---
+  {*}/ET2-B               ET2-B                     ---
+  {*}/ETseq-B             ETseq-B                   ---
+  {*}/LNET-B              LNET-B                    ---
+  {*}/BB-B                BB-B                      ---
+  {*}/BBseq-B             BBseq-B                   ---
+  {*}/bb-B                bb-B                      ---
+  {*}/bbseq-B             bbseq-B                   ---
+  {*}/ALV-B               ALV-B                     ---
+  {*}/INT-B               INT-B                     ---
+  {*}/LNTH-B              LNTH-B                    ---
+  {*}/Environment         Environment               ---
+
+# decay for HATM
+  {*}/Oralcavity          Oralcavity                ---
+  {*}/Oesophagus-f        Oesophagus-f              ---
+  {*}/Oesophagus-s        Oesophagus-s              ---
+  {*}/St-con              St-con                    ---
+  {*}/SI-con              SI-con                    ---
+  {*}/SI-conRe            SI-conRe                  ---
+  {*}/RC-con              RC-con                    ---
+  {*}/LC-con              LC-con                    ---
+  {*}/RS-con              RS-con                    ---
+  {*}/Faeces              Faeces                    ---
+
+# decay for UB
+  {*}/UB-con              UB-con                    ---
+  {*}/Urine               Urine                     ---
+
+
+[{Pu}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Blood0                Blood
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   RenalTubules          Kidneys
+  acc   OtherKidneys          Kidneys
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[{Pu}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.141 p.225 Table 18.6
   Blood0                  ST0                       3.0000E+2
