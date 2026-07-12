@@ -10,107 +10,160 @@ public class InputEvaluatorTests
     public InputEvaluatorTests()
     {
         errors = new InputErrors();
-        evaluator = new InputEvaluator(errors);
+        evaluator = new InputEvaluator("test", errors);
     }
 
-    private (decimal value, bool isFrac) SuccessReadCoefficient(int lineNum, string input)
+    private IReadOnlyList<string> TestReadVarDecl(int lineNum, string varName, string varValue)
     {
-        if (evaluator.TryReadCoefficient(lineNum, input, out var result))
-            return result;
-        Assert.Fail();
-        return default; // unreachable
+        if (evaluator.TryReadVarDecl(lineNum, varName, varValue))
+            return [];
+
+        var lines = new Action(() => errors.RaiseIfAny()).ShouldThrow<InputErrorsException>().ErrorLines.ToArray();
+        errors.Clear();
+        return lines;
     }
 
-    private IReadOnlyList<string> FailureReadCoefficient(int lineNum, string input)
+    private IReadOnlyList<string> TestReadCoefficient(int lineNum, string input, out (decimal value, bool isFrac) result)
     {
-        if (!evaluator.TryReadCoefficient(lineNum, input, out var _))
-        {
-            var lines = new Action(() => errors.RaiseIfAny()).ShouldThrow<InputErrorsException>().ErrorLines.ToArray();
-            errors.Clear();
-            return lines;
-        }
-        Assert.Fail();
-        return default; // unreachable
+        if (evaluator.TryReadCoefficient(lineNum, input, out result))
+            return [];
+
+        var lines = new Action(() => errors.RaiseIfAny()).ShouldThrow<InputErrorsException>().ErrorLines.ToArray();
+        errors.Clear();
+        return lines;
+    }
+
+    private IReadOnlyList<string> TestReadCompartment(int lineNum, string input, out string result)
+    {
+        result = input;
+        if (evaluator.TryReadCompartment(lineNum, ref result))
+            return [];
+
+        var lines = new Action(() => errors.RaiseIfAny()).ShouldThrow<InputErrorsException>().ErrorLines.ToArray();
+        errors.Clear();
+        return lines;
     }
 
     [TestMethod]
     public void DefineVariable()
     {
-        FailureReadCoefficient(LineNum, "$var").ShouldBe([$"undefined variable 'var'."]);
+        (decimal value, bool isFrac) result;
 
-        evaluator.TryReadVarDecl(LineNum, "$var = 123").ShouldBeTrue();
-        SuccessReadCoefficient(LineNum, "$var").ShouldBe((123m, false));
+        TestReadCoefficient(LineNum, "$var", out _).ShouldBe(["Undefined variable 'var' for nuclide 'test'."]);
 
-        evaluator.TryReadVarDecl(LineNum, "$var = 456.78").ShouldBeTrue();
-        SuccessReadCoefficient(LineNum, "$var").ShouldBe((456.78m, false));
+        TestReadVarDecl(LineNum, "var", "123").ShouldBeEmpty();
+
+        TestReadCoefficient(LineNum, "$var", out result).ShouldBeEmpty();
+        result.ShouldBe((123m, false));
+
+        TestReadVarDecl(LineNum, "var", "456.78").ShouldBe(["Variable 'var' is already defined for nuclide 'test'."]);
     }
 
     [TestMethod]
     public void DefineVariable2()
     {
-        evaluator.TryReadVarDecl(LineNum, "$var = 12.3%").ShouldBeTrue();
-        SuccessReadCoefficient(LineNum, "$var").ShouldBe((0.123m, true));
+        (decimal value, bool isFrac) result;
 
-        SuccessReadCoefficient(LineNum, "$(var + 45.6%)").ShouldBe((0.123m + 0.456m, true));
+        TestReadVarDecl(LineNum, "var", "12.3%").ShouldBeEmpty();
+
+        TestReadCoefficient(LineNum, "$var", out result).ShouldBeEmpty();
+        result.ShouldBe((0.123m, true));
+
+        TestReadCoefficient(LineNum, "$(var + 45.6%)", out result).ShouldBeEmpty();
+        result.ShouldBe((0.123m + 0.456m, true));
     }
 
     [TestMethod]
     public void CalcAddSub()
     {
-        SuccessReadCoefficient(LineNum, "$(12  + 34 )").ShouldBe((46m, false));
-        SuccessReadCoefficient(LineNum, "$(12% + 34%)").ShouldBe((0.46m, true));
+        (decimal value, bool isFrac) result;
 
-        SuccessReadCoefficient(LineNum, "$(34  - 12 )").ShouldBe((22m, false));
-        SuccessReadCoefficient(LineNum, "$(34% - 12%)").ShouldBe((0.22m, true));
+        TestReadCoefficient(LineNum, "$(12  + 34 )", out result).ShouldBeEmpty();
+        result.ShouldBe((46m, false));
 
-        var errorAdd = new[] { $"addition with inconsistent value units" };
-        FailureReadCoefficient(LineNum, "$(12  + 34%)").ShouldBe(errorAdd);
-        FailureReadCoefficient(LineNum, "$(12% + 34 )").ShouldBe(errorAdd);
+        TestReadCoefficient(LineNum, "$(12% + 34%)", out result).ShouldBeEmpty();
+        result.ShouldBe((0.46m, true));
 
-        var errorSub = new[] { $"subtraction with inconsistent value units" };
-        FailureReadCoefficient(LineNum, "$(12  - 34%)").ShouldBe(errorSub);
-        FailureReadCoefficient(LineNum, "$(12% - 34 )").ShouldBe(errorSub);
+        TestReadCoefficient(LineNum, "$(34  - 12 )", out result).ShouldBeEmpty();
+        result.ShouldBe((22m, false));
+
+        TestReadCoefficient(LineNum, "$(34% - 12%)", out result).ShouldBeEmpty();
+        result.ShouldBe((0.22m, true));
+
+        var errorAdd = new[] { $"Addition with inconsistent value units" };
+        TestReadCoefficient(LineNum, "$(12  + 34%)", out _).ShouldBe(errorAdd);
+        TestReadCoefficient(LineNum, "$(12% + 34 )", out _).ShouldBe(errorAdd);
+
+        var errorSub = new[] { $"Subtraction with inconsistent value units" };
+        TestReadCoefficient(LineNum, "$(12  - 34%)", out _).ShouldBe(errorSub);
+        TestReadCoefficient(LineNum, "$(12% - 34 )", out _).ShouldBe(errorSub);
     }
 
     [TestMethod]
     public void CalcMulDiv()
     {
-        SuccessReadCoefficient(LineNum, "$(12  * 34 )").ShouldBe((408m, false));
-        SuccessReadCoefficient(LineNum, "$(12% * 34%)").ShouldBe((0.0408m, true));
+        (decimal value, bool isFrac) result;
 
-        SuccessReadCoefficient(LineNum, "$(30  / 12 )").ShouldBe((2.5m, false));
-        SuccessReadCoefficient(LineNum, "$(30% / 12%)").ShouldBe((2.5m, true));
+        TestReadCoefficient(LineNum, "$(12  * 34 )", out result).ShouldBeEmpty(); result.ShouldBe((408m, false));
+        TestReadCoefficient(LineNum, "$(12% * 34%)", out result).ShouldBeEmpty(); result.ShouldBe((0.0408m, true));
 
-        SuccessReadCoefficient(LineNum, "$(12  * 34%)").ShouldBe((4.08m, false));
-        SuccessReadCoefficient(LineNum, "$(12% * 34 )").ShouldBe((4.08m, false));
+        TestReadCoefficient(LineNum, "$(30  / 12 )", out result).ShouldBeEmpty(); result.ShouldBe((2.5m, false));
+        TestReadCoefficient(LineNum, "$(30% / 12%)", out result).ShouldBeEmpty(); result.ShouldBe((2.5m, true));
 
-        SuccessReadCoefficient(LineNum, "$(30% / 12 )").ShouldBe((0.025m, false));
-        SuccessReadCoefficient(LineNum, "$(30  / 12%)").ShouldBe((250m, false));
+        TestReadCoefficient(LineNum, "$(12  * 34%)", out result).ShouldBeEmpty(); result.ShouldBe((4.08m, false));
+        TestReadCoefficient(LineNum, "$(12% * 34 )", out result).ShouldBeEmpty(); result.ShouldBe((4.08m, false));
+
+        TestReadCoefficient(LineNum, "$(30% / 12 )", out result).ShouldBeEmpty(); result.ShouldBe((0.025m, false));
+        TestReadCoefficient(LineNum, "$(30  / 12%)", out result).ShouldBeEmpty(); result.ShouldBe((250m, false));
     }
 
     [TestMethod]
     public void CalcSItoBlood()
     {
-        evaluator.TryReadVarDecl(LineNum, "$fA = 1E-4").ShouldBeTrue();
+        TestReadVarDecl(LineNum, "fA", "1E-4").ShouldBeEmpty();
 
         var expect = 1E-4m * 6 / (1 - 1E-4m);
-        var actual = SuccessReadCoefficient(LineNum, "$(fA * 6 / (1 - fA))").value;
-        actual.ShouldBe(expect);
+        TestReadCoefficient(LineNum, "$(fA * 6 / (1 - fA))", out var actual).ShouldBeEmpty();
+        actual.value.ShouldBe(expect);
     }
 
     [TestMethod]
     public void CalcInputToHRTM()
     {
-        evaluator.TryReadVarDecl(LineNum, "$fr = 0.01").ShouldBeTrue();
+        TestReadVarDecl(LineNum, "fr", "0.01").ShouldBeEmpty();
 
+        (decimal value, bool isFrac) result;
+
+        TestReadCoefficient(LineNum, "$(      fr  * (100% - 0.2%) * 25.82% )", out result);
         var expectToET2F = 0.002576836m;
-        var actualToET2F = SuccessReadCoefficient(LineNum, "$(      fr  * (100% - 0.2%) * 25.82% )").value;
+        var actualToET2F = result.value;
         expectToET2F.ShouldBe(0.01m * (1.0m - 0.002m) * 0.2582m);
         actualToET2F.ShouldBe(expectToET2F);
 
+        TestReadCoefficient(LineNum, "$( (1 - fr) * (100% - 0.2%) * 25.82% )", out result);
         var expectToET2S = 0.255106764m;
-        var actualToET2S = SuccessReadCoefficient(LineNum, "$( (1 - fr) * (100% - 0.2%) * 25.82% )").value;
+        var actualToET2S = result.value;
         expectToET2S.ShouldBe((1m - 0.01m) * (1.0m - 0.002m) * 0.2582m);
         expectToET2S.ShouldBe(actualToET2S);
+    }
+
+    [TestMethod]
+    public void CalcCompartment()
+    {
+        string result;
+
+        TestReadCompartment(LineNum, "abc", out result).ShouldBeEmpty();
+        result.ShouldBe("abc");
+
+        TestReadCompartment(LineNum, """$('abc' + 'def')""", out result).ShouldBeEmpty();
+        result.ShouldBe("abcdef");
+
+        TestReadCompartment(LineNum, """$('a\'bc' + "d\"ef")""", out result).ShouldBeEmpty();
+        result.ShouldBe("a'bcd\"ef");
+
+        TestReadCompartment(LineNum, "abc def", out result).ShouldBe(new[]
+        {
+            "Expected a compartment name, not 'abc def'.",
+        });
     }
 }

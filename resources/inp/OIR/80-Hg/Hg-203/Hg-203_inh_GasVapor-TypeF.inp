@@ -4,13 +4,55 @@ Hg-203 Inhalation, Gas or Vapor Type F
 [nuclide]
   Hg-203
 
+[parameter]
+  # ICRP Publ.151 p.326 Table 36.2 / Mercury vapor
+  $fr = 0.94
+  $sr = 1000
+  $ss = 0.14
+  $fb = 0.24                # footnote†
+  $sb = 2.1                 # footnote†
+
+$if parent
+  ${Hg}/fA    = 0.094       # ICRP Publ.151 p.326 Table 36.2 / Mercury vapor
+  ${Hg}/fA_Re = 0.1         # ICRP Publ.151 p.327 Table 36.3 footnote¶ (re-absorption)
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.151 p.326 Table 36.2
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
+# > Rates shown alongside arrows are reference values in units of d⁻¹. It is assumed that 0.2% of
+# > material deposited in the posterior nasal passage, pharynx, and larynx (ET2), bronchi (BB),
+# > and bronchioles (bb) is retained in the airway wall (ETseq, BBseq, and bbseq, respectively).
+# > 矢印と共に示された速度は、d⁻¹ を単位とする参照値である。後鼻腔、咽頭、喉頭(ET2)、気管支(BB)、
+# > 細気管支(bb)に沈着した物質の0.2%が気道壁に滞留すると仮定する(それぞれETseq、BBseq、bbseq)。
+  ET2-F                 $(      fr  * (100% - 0.2%) *  2% )
+  ETseq-F               $(      fr  *         0.2%  *  2% )
+  BB-F                  $(      fr  * (100% - 0.2%) *  1% )
+  BBseq-F               $(      fr  *         0.2%  *  1% )
+  bb-F                  $(      fr  * (100% - 0.2%) *  2% )
+  bbseq-F               $(      fr  *         0.2%  *  2% )
+  ALV-F                 $(      fr  *                 75% )
+
+  ET2-S                 $( (1 - fr) * (100% - 0.2%) *  2% )
+  ETseq-S               $( (1 - fr) *         0.2%  *  2% )
+  BB-S                  $( (1 - fr) * (100% - 0.2%) *  1% )
+  BBseq-S               $( (1 - fr) *         0.2%  *  1% )
+  bb-S                  $( (1 - fr) * (100% - 0.2%) *  2% )
+  bbseq-S               $( (1 - fr) *         0.2%  *  2% )
+  ALV-S                 $( (1 - fr) *                 75% )
+
+  Environment           $(                     100% - 80% )
+
 
 [Hg-203:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
   acc   LNET-F                LN-ET
@@ -71,43 +113,9 @@ Hg-203 Inhalation, Gas or Vapor Type F
   exc   OtherExcreta          ---
 
 [Hg-203:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.151 p.326 Table 36.2 / Mercury vapor
-  $fr = 0.94
-  $sr = 1000
-  $ss = 0.14
-  $fb = 0.24        # footnote†
-  $sb = 2.1         # footnote†
-  $fA    = 0.094
-  $fA_Re = 0.1      # Table 36.3 footnote¶ (re-absorption)
-
-# ICRP Publ.151 p.326 Table 36.2
-# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
-# > Rates shown alongside arrows are reference values in units of d⁻¹. It is assumed that 0.2% of
-# > material deposited in the posterior nasal passage, pharynx, and larynx (ET2), bronchi (BB),
-# > and bronchioles (bb) is retained in the airway wall (ETseq, BBseq, and bbseq, respectively).
-# > 矢印と共に示された速度は、d⁻¹ を単位とする参照値である。後鼻腔、咽頭、喉頭(ET2)、気管支(BB)、
-# > 細気管支(bb)に沈着した物質の0.2%が気道壁に滞留すると仮定する(それぞれETseq、BBseq、bbseq)。
-  input                   ET2-F                 $(      fr  * (100% - 0.2%) *  2% )
-  input                   ETseq-F               $(      fr  *         0.2%  *  2% )
-  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1% )
-  input                   BBseq-F               $(      fr  *         0.2%  *  1% )
-  input                   bb-F                  $(      fr  * (100% - 0.2%) *  2% )
-  input                   bbseq-F               $(      fr  *         0.2%  *  2% )
-  input                   ALV-F                 $(      fr  *                 75% )
-
-  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) *  2% )
-  input                   ETseq-S               $( (1 - fr) *         0.2%  *  2% )
-  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1% )
-  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1% )
-  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  2% )
-  input                   bbseq-S               $( (1 - fr) *         0.2%  *  2% )
-  input                   ALV-S                 $( (1 - fr) *                 75% )
-
-  input                   Environment           $(                     100% - 80% )
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6

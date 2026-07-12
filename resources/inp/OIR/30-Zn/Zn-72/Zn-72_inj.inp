@@ -4,13 +4,31 @@ Zn-72 Injection
 [nuclide]
   Zn-72  Ga-72
 
+[parameter]
+$if parent
+  ${Zn}/fA    = 0.5         # ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
+  ${Zn}/fA_Re = 0.5         # footnote¶ (re-absorption)
+$else
+  ${Ga}/fA_MaxValueOfIng = 0.001        # ICRP Publ.151 p.162 Table 17.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.37 Para.15
+  Plasma                  100.0%
+
 
 [Zn-72:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -41,16 +59,9 @@ Zn-72 Injection
   exc   Excreta               ---
 
 [Zn-72:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Ingested materials, All forms
-  $fA    = 0.5
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Plasma                  100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -170,15 +181,9 @@ Zn-72 Injection
   acc   ST1                   Other
 
 [Ga-72:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.151 p.162 Table 17.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.001
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Zn-72/Oralcavity        Oralcavity                ---
@@ -223,8 +228,8 @@ Zn-72 Injection
   Zn-72/ST2               Blood                 $(0.693 / 0.5)          # 半減期0.5日
   Zn-72/C-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
   Zn-72/T-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
-  Zn-72/C-bone-V          Blood                 $( 3% / 365.25)         # 成人の骨ターンオーバー
-  Zn-72/T-bone-V          Blood                 $(18% / 365.25)         # 成人の骨ターンオーバー
+  Zn-72/C-bone-V          Blood                 $( 3% / 365)            # 成人の骨ターンオーバー
+  Zn-72/T-bone-V          Blood                 $(18% / 365)            # 成人の骨ターンオーバー
 
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
@@ -283,7 +288,7 @@ Zn-72 Injection
   Blood                   ST0                   $(5 * 37.9%)                        # == 1.895  # <--
   Blood                   ST1                   $(5 * 10%)                          # == 0.5
   ST0                     Blood                 $(0.693 / 0.5)      # 半減期0.5日   # == 1.39
-  ST1                     Blood                 $(0.693 / 365.25)   # 半減期1年     # == 0.0019
+  ST1                     Blood                 $(0.693 / 365)      # 半減期1年     # == 0.0019
   Liver                   Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Spleen                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Pancreas                Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139

@@ -2,6 +2,64 @@
 Nuclide  Lambda          HalfLife
 Ba-133   1.805165E-004     10.52y
 
+Compartments:
+  inp Z Ba-133/input
+  acc   Ba-133/Oralcavity      O-cavity
+  acc   Ba-133/Oesophagus-f    Oesophag-f
+  acc   Ba-133/Oesophagus-s    Oesophag-s
+  acc   Ba-133/St-con          St-cont
+  acc   Ba-133/SI-con          SI-cont
+  acc   Ba-133/RC-con          RC-cont
+  acc   Ba-133/LC-con          LC-cont
+  acc   Ba-133/RS-con          RS-cont
+  exc   Ba-133/Faeces
+  acc   Ba-133/UB-con          UB-cont
+  exc   Ba-133/Urine
+  acc   Ba-133/Plasma          Blood
+  acc   Ba-133/ST0             Other
+  acc   Ba-133/ST1             Other
+  acc   Ba-133/ST2             Other
+  acc   Ba-133/C-bone-S        C-bone-S
+  acc   Ba-133/Exch-C-bone-V   C-bone-V
+  acc   Ba-133/Noch-C-bone-V   C-bone-V
+  acc   Ba-133/T-bone-S        T-bone-S
+  acc   Ba-133/Exch-T-bone-V   T-bone-V
+  acc   Ba-133/Noch-T-bone-V   T-bone-V
+
+Transfers:
+  Ba-133/input          -> Ba-133/Oralcavity     = 100%
+  Ba-133/Oralcavity     -> Ba-133/Oesophagus-f   = 6480
+  Ba-133/Oralcavity     -> Ba-133/Oesophagus-s   = 720
+  Ba-133/Oesophagus-f   -> Ba-133/St-con         = 12343
+  Ba-133/Oesophagus-s   -> Ba-133/St-con         = 2160
+  Ba-133/St-con         -> Ba-133/SI-con         = 20.57
+  Ba-133/SI-con         -> Ba-133/RC-con         = 6
+  Ba-133/Plasma         -> Ba-133/RC-con         = 20.16
+  Ba-133/RC-con         -> Ba-133/LC-con         = 2
+  Ba-133/LC-con         -> Ba-133/RS-con         = 2
+  Ba-133/RS-con         -> Ba-133/Faeces         = 2
+  Ba-133/Plasma         -> Ba-133/UB-con         = 2.24
+  Ba-133/UB-con         -> Ba-133/Urine          = 12
+  Ba-133/SI-con         -> Ba-133/Plasma         = 0.0006000600060006
+  Ba-133/T-bone-S       -> Ba-133/Plasma         = 0.578
+  Ba-133/C-bone-S       -> Ba-133/Plasma         = 0.578
+  Ba-133/ST0            -> Ba-133/Plasma         = 7.67
+  Ba-133/ST1            -> Ba-133/Plasma         = 0.693
+  Ba-133/ST2            -> Ba-133/Plasma         = 0.00038
+  Ba-133/Noch-C-bone-V  -> Ba-133/Plasma         = 8.21E-05
+  Ba-133/Noch-T-bone-V  -> Ba-133/Plasma         = 0.000493
+  Ba-133/Plasma         -> Ba-133/ST0            = 23
+  Ba-133/Plasma         -> Ba-133/ST1            = 7
+  Ba-133/Plasma         -> Ba-133/ST2            = 0.14
+  Ba-133/Plasma         -> Ba-133/C-bone-S       = 7.78
+  Ba-133/Exch-C-bone-V  -> Ba-133/C-bone-S       = 0.0097
+  Ba-133/C-bone-S       -> Ba-133/Exch-C-bone-V  = 0.116
+  Ba-133/Exch-C-bone-V  -> Ba-133/Noch-C-bone-V  = 0.0042
+  Ba-133/Plasma         -> Ba-133/T-bone-S       = 9.72
+  Ba-133/Exch-T-bone-V  -> Ba-133/T-bone-S       = 0.0097
+  Ba-133/T-bone-S       -> Ba-133/Exch-T-bone-V  = 0.116
+  Ba-133/Exch-T-bone-V  -> Ba-133/Noch-T-bone-V  = 0.0042
+
 Nuclide: Ba-133
 
 Source regions those are part of 'Other':

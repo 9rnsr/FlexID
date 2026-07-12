@@ -4,13 +4,57 @@ Zn-72 Inhalation, Aerosols Type S
 [nuclide]
   Zn-72  Ga-72
 
+[parameter]
+  # ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type S
+  $fr = 0.01
+  $sr = 3
+  $ss = 1E-4
+  $fb = 0                   # footnote*
+  $sb = 0                   # footnote*
+
+$if parent
+  ${Zn}/fA    = 0.005       # ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type S
+  ${Zn}/fA_Re = 0.5         # footnote¶ (re-absorption)
+$else
+  ${Ga}/fA_MaxValueOfIng = 0.001        # ICRP Publ.151 p.162 Table 17.2 / Ingested materials, All forms
+
+  $fA    = fr * fA_MaxValueOfIng
+  $fA_Re =      fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.62 Table 3.1
+# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
+  ET1-F                 $(      fr  *                 47.94% )
+  ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
+  ETseq-F               $(      fr  *         0.2%  * 25.82% )
+  BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
+  BBseq-F               $(      fr  *         0.2%  *  1.78% )
+  bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
+  bbseq-F               $(      fr  *         0.2%  *  1.10% )
+  ALV-F                 $(      fr  *                  5.32% )
+
+  ET1-S                 $( (1 - fr) *                 47.94% )
+  ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
+  ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
+  BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
+  BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
+  bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
+  bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
+  ALV-S                 $( (1 - fr) *                  5.32% )
+
+  Environment           $(                     100% - 81.96% )
+
 
 [Zn-72:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   ET1-F                 ET1-sur
   acc   ET2-F                 ET2-sur
   acc   ETseq-F               ET2-seq
@@ -75,40 +119,9 @@ Zn-72 Inhalation, Aerosols Type S
   exc   Excreta               ---
 
 [Zn-72:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.186 Table 9.2 / Inhaled particulate materials, Absorption type S
-  $fr = 0.01
-  $sr = 3
-  $ss = 1E-4
-  $fb = 0               # footnote*
-  $sb = 0               # footnote*
-  $fA    = 0.005
-  $fA_Re = 0.5          # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.62 Table 3.1
-# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
-  input                   ET1-F                 $(      fr  *                 47.94% )
-  input                   ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
-  input                   ETseq-F               $(      fr  *         0.2%  * 25.82% )
-  input                   BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
-  input                   BBseq-F               $(      fr  *         0.2%  *  1.78% )
-  input                   bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
-  input                   bbseq-F               $(      fr  *         0.2%  *  1.10% )
-  input                   ALV-F                 $(      fr  *                  5.32% )
-
-  input                   ET1-S                 $( (1 - fr) *                 47.94% )
-  input                   ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
-  input                   ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
-  input                   BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
-  input                   BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
-  input                   bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
-  input                   bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
-  input                   ALV-S                 $( (1 - fr) *                  5.32% )
-
-  input                   Environment           $(                     100% - 81.96% )
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -311,15 +324,9 @@ Zn-72 Inhalation, Aerosols Type S
   acc   ST1                   Other
 
 [Ga-72:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.151 p.162 Table 17.2 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.001
-
-  $fA    = fr * fA_MaxValueOfIng
-  $fA_Re =      fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Zn-72/ET1-F             ET1-F                     ---
@@ -398,8 +405,8 @@ Zn-72 Inhalation, Aerosols Type S
   Zn-72/ST2               Blood                 $(0.693 / 0.5)          # 半減期0.5日
   Zn-72/C-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
   Zn-72/T-bone-S          Blood                 $(0.693 / 2)            # 半減期2日
-  Zn-72/C-bone-V          Blood                 $( 3% / 365.25)         # 成人の骨ターンオーバー
-  Zn-72/T-bone-V          Blood                 $(18% / 365.25)         # 成人の骨ターンオーバー
+  Zn-72/C-bone-V          Blood                 $( 3% / 365)            # 成人の骨ターンオーバー
+  Zn-72/T-bone-V          Blood                 $(18% / 365)            # 成人の骨ターンオーバー
 
 # ICRP Publ.130 p.65 Fig.3.4
 # ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
@@ -540,7 +547,7 @@ Zn-72 Inhalation, Aerosols Type S
   Blood                   ST0                   $(5 * 37.9%)                        # == 1.895  # <--
   Blood                   ST1                   $(5 * 10%)                          # == 0.5
   ST0                     Blood                 $(0.693 / 0.5)      # 半減期0.5日   # == 1.39
-  ST1                     Blood                 $(0.693 / 365.25)   # 半減期1年     # == 0.0019
+  ST1                     Blood                 $(0.693 / 365)      # 半減期1年     # == 0.0019
   Liver                   Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Spleen                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Pancreas                Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139

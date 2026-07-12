@@ -4,13 +4,25 @@ Ba-133 Injection
 [nuclide]
   Ba-133
 
+[parameter]
+$if parent
+  ${Ba}/fA = 1E-4           # ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Insoluble forms
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.37 Para.15
+  Plasma                  100.0%
+
 
 [Ba-133:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -35,15 +47,9 @@ Ba-133 Injection
   acc   Noch-T-bone-V         T-bone-V
 
 [Ba-133:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Insoluble forms
-  $fA = 1E-4
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Plasma                  100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

@@ -4,13 +4,29 @@ Sr-87m Ingestion, Other
 [nuclide]
   Sr-87m  Rb-87
 
+[parameter]
+$if parent
+  ${Sr}/fA = 0.25           # ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
+$else
+  ${Rb}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
+
+  $fA = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [Sr-87m:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -35,15 +51,9 @@ Sr-87m Ingestion, Other
   acc   Noch-T-bone-V         T-bone-V
 
 [Sr-87m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d] or [%]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.215 Table 10.2 / Ingested material, All other chemical forms
-  $fA = 0.25
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -110,15 +120,9 @@ Sr-87m Ingestion, Other
   exc   Excreta(sweat)        ---
 
 [Rb-87:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.30 Part.2
-# ICRP Publ.151 p.202 Table 22.2 Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sr-87m/Oralcavity       Oralcavity                ---
@@ -209,11 +213,11 @@ Sr-87m Ingestion, Other
 
   Sr-87m/Blood            Plasma                    ---
   Sr-87m/C-bone-S         C-bone-S                  ---
-  Sr-87m/Exch-C-bone-V    Plasma                $( 3% / 365.25)     # 骨ターンオーバー
-  Sr-87m/Noch-C-bone-V    Plasma                $( 3% / 365.25)     # 骨ターンオーバー
+  Sr-87m/Exch-C-bone-V    Plasma                $( 3% / 365)        # 骨ターンオーバー
+  Sr-87m/Noch-C-bone-V    Plasma                $( 3% / 365)        # 骨ターンオーバー
   Sr-87m/T-bone-S         T-bone-S                  ---
-  Sr-87m/Exch-T-bone-V    Plasma                $(18% / 365.25)     # 骨ターンオーバー
-  Sr-87m/Noch-T-bone-V    Plasma                $(18% / 365.25)     # 骨ターンオーバー
+  Sr-87m/Exch-T-bone-V    Plasma                $(18% / 365)        # 骨ターンオーバー
+  Sr-87m/Noch-T-bone-V    Plasma                $(18% / 365)        # 骨ターンオーバー
   Sr-87m/ST0              Plasma                   10.3
   Sr-87m/ST1              Plasma                   10.3
   Sr-87m/ST2              Plasma                   10.3

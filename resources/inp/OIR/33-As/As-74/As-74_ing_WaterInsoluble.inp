@@ -4,13 +4,25 @@ As-74 Ingestion, WaterInsoluble
 [nuclide]
   As-74
 
+[parameter]
+$if parent
+  ${As}/fA = 0.3            # ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Insoluble compounds and arsenic in soil
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [As-74:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -38,15 +50,9 @@ As-74 Ingestion, WaterInsoluble
   acc   T-bone-V              T-bone-V
 
 [As-74:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.151 p.179 Table 19.2 / Ingested materials, Water-Insoluble compounds and arsenic in soil
-  $fA = 0.3
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480

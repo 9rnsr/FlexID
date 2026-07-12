@@ -6,11 +6,16 @@ test1
 #---------+-------------------+---------------------
   Cs-134    0.23104906
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+  Oralcavity              100%
+
 [Cs-134:compartment]
 #-----+-----------------| S-Coefficient
 # Func| Compartment     | Source Region
 #-----+-----------------+---------------
-  inp   input             -
   acc   Oralcavity        O-cavity
   acc   Oesophagus-F      Oesophag-f
   acc   Oesophagus-S      Oesophag-s
@@ -20,10 +25,9 @@ test1
   exc   Faeces            -
 
 [Cs-134:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-  input                   Oralcavity            100%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
   Oralcavity              Oesophagus-F          1.8
   Oralcavity              Oesophagus-S          0.2
   Oesophagus-F            Stomach-con           2.0

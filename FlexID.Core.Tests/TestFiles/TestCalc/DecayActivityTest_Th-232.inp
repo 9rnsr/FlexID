@@ -9,79 +9,11 @@ Th-232 DecayCalc
 #                                                                                                  \           \
 #                                                                                                   +-> Tl-208 -+-> (Pb-208)
 
-[Th-232:compartment]
-  inp   inp ---
+[intake]
+  C   100.0%
+
+[{*}:compartment]
   acc   C   ---
 
-[Th-232:transfer]
-  inp   C   100.0%
-
-
-[Ra-228:compartment]
-  acc   C   ---
-
-[Ra-228:transfer]
-  Th-232/C  Ra-228/C    ---
-
-
-[Ac-228:compartment]
-  acc   C   ---
-
-[Ac-228:transfer]
-  Th-232/C  Ac-228/C    ---
-
-
-[Th-228:compartment]
-  acc   C   ---
-
-[Th-228:transfer]
-  Th-232/C  Th-228/C    ---
-
-
-[Ra-224:compartment]
-  acc   C   ---
-
-[Ra-224:transfer]
-  Th-232/C  Ra-224/C    ---
-
-
-[Rn-220:compartment]
-  acc   C   ---
-
-[Rn-220:transfer]
-  Th-232/C  Rn-220/C    ---
-
-
-[Po-216:compartment]
-  acc   C   ---
-
-[Po-216:transfer]
-  Th-232/C  Po-216/C    ---
-
-
-[Pb-212:compartment]
-  acc   C   ---
-
-[Pb-212:transfer]
-  Th-232/C  Pb-212/C    ---
-
-
-[Bi-212:compartment]
-  acc   C   ---
-
-[Bi-212:transfer]
-  Th-232/C  Bi-212/C    ---
-
-
-[Po-212:compartment]
-  acc   C   ---
-
-[Po-212:transfer]
-  Th-232/C  Po-212/C    ---
-
-
-[Tl-208:compartment]
-  acc   C   ---
-
-[Tl-208:transfer]
-  Th-232/C  Tl-208/C    ---
+[{*}:transfer]
+  {*}/C     C    ---

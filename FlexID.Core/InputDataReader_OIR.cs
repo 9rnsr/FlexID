@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 
 namespace FlexID;
@@ -16,11 +17,33 @@ public class InputDataReader_OIR : InputDataReaderBase
         safdataAF = SAFDataReader.ReadSAF(Sex.Female);
     }
 
+    /// <summary>
+    /// $if ～ $else ～ $endif指令の挙動を制御する状態フラグ。
+    /// </summary>
+    enum ConditionDirectiveState
+    {
+        Disabled = -1,          /// <summary>セクション内では$if ～ $endif指令の使用を禁止する。</summary>
+        OutsideBlock = 0,       /// <summary>セクション内で現在行は$if ～ $endif指令の外にある。</summary>
+        InsideIfBlock = 1,      /// <summary>セクション内で現在行は$ifブロックの中にある。</summary>
+        InsideElseBlock = 2,    /// <summary>セクション内で現在行は$elseブロックの中にある。</summary>
+    }
+    private ConditionDirectiveState conditionDirectiveState = ConditionDirectiveState.Disabled;
+
+    private bool InsideConditionDirective => conditionDirectiveState is ConditionDirectiveState.InsideIfBlock
+                                                                     or ConditionDirectiveState.InsideElseBlock;
+
+    /// <summary>
+    /// $if ～ $endif指令の内部において、現在行が親核種のみを対象とする場合に<see langword="true"/>となる。
+    /// </summary>
+    private bool insideParentBlock;
+
+    private bool? IsParentOnly => InsideConditionDirective ? insideParentBlock : null;
+
     private readonly InputErrors errors;
     private readonly Dictionary<string, int> compartmentSectionLocs = [];
     private readonly Dictionary<string, int> transferSectionLocs = [];
 
-    private readonly InputEvaluator evaluator;
+    private readonly Dictionary<NuclideData, InputEvaluator> inputEvaluators = [];
 
     private bool inputTitleRead;
     private string inputTitle = "";
@@ -28,11 +51,16 @@ public class InputDataReader_OIR : InputDataReaderBase
     private bool inputNuclidesRead;
     private readonly List<NuclideData> inputNuclides = [];
 
-    private readonly Dictionary<string, Dictionary<string, string>> inputParameters = [];
+    private bool inputParametersRead;
+    private readonly List<InputParameter> inputParameters = [];
 
-    private readonly Dictionary<string, List<(int lineNum, OrganFunc func, string name, string sourceRegion)>> inputOrgans = [];
+    private readonly Dictionary<string, List<InputOrgan>> inputOrgans = [];
 
-    private readonly Dictionary<string, List<(int lineNum, string from, string to, decimal? coeff, bool isFrac)>> inputTransfers = [];
+    private bool inputIntakesRead;
+    private int intakeSectionLoc;
+    private readonly List<InputIntake> inputIntakes = [];
+
+    private readonly Dictionary<string, List<InputTransfer>> inputTransfers = [];
 
     /// <summary>
     /// コンストラクタ。
@@ -53,17 +81,73 @@ public class InputDataReader_OIR : InputDataReaderBase
         : base(reader, calcProgeny)
     {
         errors = new InputErrors();
-        evaluator = new InputEvaluator(errors);
     }
 
     protected override string? GetNextLine()
     {
+        Span<Range> parts = stackalloc Range[3];
+
     Lagain:
         var nextLine = base.GetNextLine();
 
-        if (evaluator.TryReadVarDecl(LineNum, nextLine))
-            goto Lagain;
+        if (nextLine is not null && nextLine.StartsWith("$"))
+        {
+            var count = nextLine.SplitAny(parts, [' ', '\t', '\f', '\v'], StringSplitOptions.RemoveEmptyEntries);
+            if (nextLine.AsSpan()[parts[0]].SequenceEqual("$if"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
 
+                if (conditionDirectiveState == ConditionDirectiveState.OutsideBlock && count == 2)
+                {
+                    if (nextLine.AsSpan()[parts[1]].Equals("parent", StringComparison.OrdinalIgnoreCase))
+                    {
+                        conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
+                        insideParentBlock = true;
+                        goto Lagain;
+                    }
+                    else if (nextLine.AsSpan()[parts[1]].Equals("progeny", StringComparison.OrdinalIgnoreCase))
+                    {
+                        conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
+                        insideParentBlock = false;
+                        goto Lagain;
+                    }
+                }
+            }
+            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$else"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
+
+                if (conditionDirectiveState == ConditionDirectiveState.InsideIfBlock && count == 1)
+                {
+                    conditionDirectiveState = ConditionDirectiveState.InsideElseBlock;
+                    insideParentBlock = !insideParentBlock;
+                    goto Lagain;
+                }
+            }
+            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$endif"))
+            {
+                if (conditionDirectiveState == ConditionDirectiveState.Disabled)
+                    goto LerrorDirective;
+
+                if (InsideConditionDirective)
+                {
+                    conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+                    goto Lagain;
+                }
+            }
+            else
+            {
+                goto Lcont;
+            }
+
+        LerrorDirective:
+            errors.AddError(LineNum, $"Unrecognized directive line: '{nextLine}'.");
+            goto Lagain;
+        }
+
+    Lcont:
         return nextLine;
     }
 
@@ -116,27 +200,8 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         GetInput(isRough: false);
 
-        foreach (var (lineNum, nuc) in inputOrgans.Keys.Except(inputNuclides.Select(n => n.Name) ?? [])
-            .Select(nuc => (LineNum: compartmentSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
-        {
-            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define compartments.");
-        }
-
-        foreach (var (lineNum, nuc) in inputTransfers.Keys.Except(inputNuclides.Select(n => n.Name) ?? [])
-            .Select(nuc => (LineNum: transferSectionLocs[nuc], nuc)).OrderBy(t => t.LineNum))
-        {
-            errors.AddError(lineNum, $"Undefined nuclide '{nuc}' is used to define transfers.");
-        }
-
-        {
-            var nuclideNames = inputNuclides.Select(n => n.Name).ToArray();
-
-            foreach (var nuc in nuclideNames.Where(nuc => !inputOrgans.ContainsKey(nuc)))
-                errors.AddError(LineNum, $"Missing [{nuc}:compartment] section.");
-
-            foreach (var nuc in nuclideNames.Where(nuc => !inputTransfers.ContainsKey(nuc)))
-                errors.AddError(LineNum, $"Missing [{nuc}:transfer] section.");
-        }
+        if (!inputIntakesRead)
+            errors.AddError(LineNum, "Missing [intake] section.");
 
         // 核種定義に対して[compartment]と[transfer]セクションに過不足がないことを確定する。
         errors.RaiseIfAny();
@@ -155,16 +220,26 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         var data = new InputData();
         data.Title = inputTitle;
-        data.Parameters = inputParameters.GetValueOrDefault("") ?? [];
         data.SourceRegions = sourceRegions;
         data.TargetRegions = targetRegions;
         data.TargetWeights = ws;
 
+        var expander = new InputNuclideExpander(inputNuclides, errors);
+
+        DefineParameters(data, expander);
+
         // 全てのコンパートメントを定義する。
-        DefineCompartments(data);
+        DefineCompartments(data, expander);
+
+        // コンパートメント定義にエラーがないことを確定する。
+        errors.RaiseIfAny();
 
         // コンパートメント間の移行経路を定義する。
-        DefineTransfers(data);
+        DefineIntakes(data);
+        DefineTransfers(data, expander);
+
+        // 移行経路の定義にエラーがないことを確定する。
+        errors.RaiseIfAny();
 
         // 流入を持たないコンパートメントをマークする。
         MarkZeroInflows(data);
@@ -180,14 +255,22 @@ public class InputDataReader_OIR : InputDataReaderBase
 
         while (true)
         {
+            if (InsideConditionDirective)
+            {
+                errors.AddError(LineNum, "if directive block should be closed till the end of the section.");
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+            }
+
             var header = GetSectionHeader(line);
 
             if (Ascii.EqualsIgnoreCase(header, "title"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetTitle();
             }
             else if (Ascii.EqualsIgnoreCase(header, "nuclide"))
             {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
                 line = GetNuclides();
             }
             else if (isRough)
@@ -195,26 +278,29 @@ public class InputDataReader_OIR : InputDataReaderBase
                 if (inputTitleRead && inputNuclidesRead)
                     break;
 
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
             }
             else if (Ascii.EqualsIgnoreCase(header, "parameter"))
             {
-                line = GetParameters("");
-            }
-            else if (header.EndsWith(":parameter", StringComparison.OrdinalIgnoreCase))
-            {
-                var i = header.IndexOf(':');
-                var nuc = header[..i].ToString();
-                line = GetParameters(nuc);
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
+                line = GetParameters();
             }
             else if (header.EndsWith(":compartment", StringComparison.OrdinalIgnoreCase))
             {
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetCompartments(nuc);
             }
+            else if (Ascii.EqualsIgnoreCase(header, "intake"))
+            {
+                conditionDirectiveState = ConditionDirectiveState.Disabled;
+                line = GetIntakes();
+            }
             else if (header.EndsWith(":transfer", StringComparison.OrdinalIgnoreCase))
             {
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 var i = header.IndexOf(':');
                 var nuc = header.Slice(0, i).ToString();
                 line = GetTransfers(nuc);
@@ -222,6 +308,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             else
             {
                 errors.AddError(LineNum, $"Unrecognized section $'[{header.ToString()}]'.");
+                conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
             }
 
@@ -511,25 +598,28 @@ public class InputDataReader_OIR : InputDataReaderBase
     }
 
     /// <summary>
+    /// インプットから読み取ったパラメータ/変数定義の情報を保持する。
+    /// </summary>
+    /// <param name="LineNum">行番号。</param>
+    /// <param name="ParentOnly">親核種に対してのみ定義される場合は<see langword="true"/>。</param>
+    /// <param name="IsVarDecl">変数定義の場合は<see langword="true"/>。</param>
+    /// <param name="Nuclide">核種名。</param>
+    /// <param name="Name">パラメータ/変数名。</param>
+    /// <param name="Value">パラメータ/変数値。</param>
+    private record class InputParameter(int LineNum, bool? ParentOnly, bool IsVarDecl, string Nuclide, string Name, string Value);
+
+    /// <summary>
     /// パラメーターの定義セクションを読み込む。
     /// </summary>
-    /// <param name="nuc"></param>
     /// <returns>セクションの次行。</returns>
-    private string? GetParameters(string nuc)
+    private string? GetParameters()
     {
-        if (inputParameters.TryGetValue(nuc, out var parameters))
+        if (inputParametersRead)
         {
-            if (nuc == "")
-                errors.AddError(LineNum, $"Duplicated [parameter] section.");
-            else
-                errors.AddError(LineNum, $"Duplicated [{nuc}:parameter] section.");
+            errors.AddError(LineNum, "Duplicated [parameter] section.");
             return SkipUntilNextSection();
         }
-        inputParameters.Add(nuc, parameters = []);
-
-        var parameterNames = nuc == ""
-            ? InputData.ParameterNames
-            : NuclideData.ParameterNames;
+        inputParametersRead = true;
 
         string? line;
         while (true)
@@ -547,15 +637,29 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             }
 
-            var paramName = values[0].Trim();
-            var paramValue = values[1].Trim();
+            var parentOnly = IsParentOnly;
 
-            if (!parameterNames.Contains(paramName))
-                errors.AddError(LineNum, $"Unrecognized parameter '{paramName}' definition.");
-            else if (parameters.ContainsKey(paramName))
-                errors.AddError(LineNum, $"Duplicated parameter '{paramName}' definition.");
-            else
-                parameters.Add(paramName, paramValue);
+            var name = values[0].Trim();
+            var value = values[1].Trim();
+
+            var isVarDecl = name.StartsWith('$');
+            if (isVarDecl)
+                name = name[1..];
+            else if (InsideConditionDirective)
+            {
+                var directive = conditionDirectiveState is ConditionDirectiveState.InsideIfBlock ? "$if" : "$else";
+                errors.AddError(LineNum, $"Parameter definition cannot be placed in {directive} directive block.");
+                continue;
+            }
+
+            var nuc = "";
+            if (name.IndexOf('/') is int j && j != -1)
+            {
+                nuc = name[..j];
+                name = name[(j + 1)..];
+            }
+
+            inputParameters.Add(new InputParameter(LineNum, parentOnly, isVarDecl, nuc, name, value));
         }
 
         return line;
@@ -596,6 +700,8 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             }
 
+            var parentOnly = IsParentOnly;
+
             var organFn = values[0];        // コンパートメント機能
             var organName = values[1];      // コンパートメント名
             var sourceRegion = values[2];   // コンパートメントに対応する線源領域の名称
@@ -603,7 +709,6 @@ public class InputDataReader_OIR : InputDataReaderBase
             OrganFunc organFunc;
             switch (organFn)
             {
-                case "inp": organFunc = OrganFunc.inp; break;
                 case "acc": organFunc = OrganFunc.acc; break;
                 case "mix": organFunc = OrganFunc.mix; break;
                 case "exc": organFunc = OrganFunc.exc; break;
@@ -612,13 +717,56 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
             }
 
-            organs.Add((LineNum, organFunc, organName, sourceRegion));
+            organs.Add(new InputOrgan(LineNum, parentOnly, organFunc, organName, IsBar(sourceRegion) ? null : sourceRegion));
         }
         if (errors.IfAny(olderrors))
             return line;
 
         if (!organs.Any())
             errors.AddError(sectionLineNum, $"Empty [{nuc}:compartment] section.");
+
+        return line;
+    }
+
+    private string? GetIntakes()
+    {
+        if (inputIntakesRead)
+        {
+            errors.AddError(LineNum, $"Duplicated [intake] section.");
+            return SkipUntilNextSection();
+        }
+        inputIntakesRead = true;
+
+        var olderrors = errors.Count;
+        var sectionLineNum = LineNum;
+        intakeSectionLoc = sectionLineNum;
+
+        string? line;
+        while (true)
+        {
+            line = GetNextLine();
+            if (line is null)
+                break;
+            if (CheckSectionHeader(line))
+                break;
+
+            var values = line.Split(2, StringSplitOptions.RemoveEmptyEntries);
+            if (values.Length != 2)
+            {
+                errors.AddError(LineNum, "Intake path definition should have 2 values.");
+                continue;
+            }
+
+            var organTo = values[0];
+            var coeff = values[1];      // 移行割合、[%]
+
+            inputIntakes.Add(new InputIntake(LineNum, organTo, IsBar(coeff) ? null : coeff));
+        }
+        if (errors.IfAny(olderrors))
+            return line;
+
+        if (!inputIntakes.Any())
+            errors.AddError(sectionLineNum, $"Empty [intake] section.");
 
         return line;
     }
@@ -659,38 +807,146 @@ public class InputDataReader_OIR : InputDataReaderBase
                 continue;
             }
 
+            var parentOnly = IsParentOnly;
+
             var orgamFrom = values[0];
             var organTo = values[1];
-            var coeffStr = values[2];    // 移行係数、[/d] or [%]
+            var coeff = values[2];      // 移行係数、[/d] or [%]
 
-            var coeff = default(decimal?);
-            var isFrac = false;
-            if (!IsBar(coeffStr))
-            {
-                if (!evaluator.TryReadCoefficient(LineNum, coeffStr, out var res))
-                    continue;
-                (coeff, isFrac) = res;
-            }
-
-            transfers.Add((LineNum, orgamFrom, organTo, coeff, isFrac));
+            transfers.Add(new InputTransfer(LineNum, parentOnly, orgamFrom, organTo, IsBar(coeff) ? null : coeff));
         }
         if (errors.IfAny(olderrors))
             return line;
 
-        if (!transfers.Any())
-            errors.AddError(sectionLineNum, $"Empty [{nuc}:transfer] section.");
+        //if (!transfers.Any())
+        //    errors.AddError(sectionLineNum, $"Empty [{nuc}:transfer] section.");
 
         return line;
+    }
+
+    /// <summary>
+    /// パラメータの定義セクションを読み込む。
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="expander"></param>
+    private void DefineParameters(InputData data, InputNuclideExpander expander)
+    {
+        foreach (var nuclide in inputNuclides)
+            inputEvaluators.Add(nuclide, new InputEvaluator(nuclide.Name, errors));
+
+        var globalParams = new Dictionary<string, string>();
+        var nuclideParams = inputNuclides.ToDictionary(n => n, _ => new Dictionary<string, string>());
+
+        IReadOnlyList<NuclideData> parentNuclide = [inputNuclides[0]];
+
+        foreach (var (lineNum, parentOnly, isVarDecl, nuc, name, value) in inputParameters)
+        {
+            var expandNuclides = nuc == "" ? inputNuclides : expander.ExpandNuclides(lineNum, nuc);
+
+            if (parentOnly == true)
+                expandNuclides = [.. expandNuclides.Intersect(parentNuclide)];
+            else if (parentOnly == false)
+                expandNuclides = [.. expandNuclides.Except(parentNuclide)];
+
+            if (isVarDecl)
+            {
+                foreach (var nuclide in expandNuclides)
+                {
+                    inputEvaluators[nuclide].TryReadVarDecl(lineNum, name, value);
+                }
+            }
+            else if (nuc == "")
+            {
+                if (!InputData.ParameterNames.Contains(name))
+                {
+                    errors.AddError(lineNum, $"Unrecognized parameter '{name}' definition.");
+                    continue;
+                }
+
+                if (globalParams.ContainsKey(name))
+                    errors.AddError(lineNum, $"Duplicated parameter '{name}' definition.");
+                else
+                    globalParams.Add(name, value);
+            }
+            else
+            {
+                if (!NuclideData.ParameterNames.Contains(name))
+                {
+                    errors.AddError(lineNum, $"Unrecognized parameter '{name}' definition.");
+                    continue;
+                }
+
+                foreach (var nuclide in expandNuclides)
+                {
+                    var parameters = nuclideParams[nuclide];
+
+                    if (parameters.ContainsKey(name))
+                        errors.AddError(lineNum, $"Duplicated parameter '{name}' definition.");
+                    else
+                        parameters.Add(name, value);
+                }
+            }
+        }
+
+        // インプット全体に対するパラメータを設定する。
+        data.Parameters = globalParams;
+
+        foreach (var (nuclide, parameters) in nuclideParams)
+        {
+            // 核種を指定した設定がないパラメータについて、インプット全体に対するパラメータ設定を継承する。
+            foreach (var (paramName, paramValue) in globalParams.Where(kv =>
+                NuclideData.ParameterNames.Contains(kv.Key) && !parameters.ContainsKey(kv.Key)))
+            {
+                parameters.Add(paramName, paramValue);
+            }
+
+            // 核種に対するパラメータを設定する。
+            nuclide.Parameters = parameters;
+        }
+    }
+
+    /// <summary>
+    /// インプットから読み取ったコンパートメント定義の情報を保持する。
+    /// </summary>
+    /// <param name="LineNum">行番号。</param>
+    /// <param name="ParentOnly"></param>
+    /// <param name="Func">コンパートメント機能。</param>
+    /// <param name="Name">コンパートメント名。</param>
+    /// <param name="SourceRegion">線源領域。</param>
+    private record class InputOrgan(int LineNum, bool? ParentOnly, OrganFunc Func, string Name, string? SourceRegion);
+
+    private Dictionary<NuclideData, List<InputOrgan>> ExpandCompartments(InputNuclideExpander expander)
+    {
+        var resultOrgans = new Dictionary<NuclideData, List<InputOrgan>>();
+
+        foreach (var (nuc, inputs) in inputOrgans)
+        {
+            var lineNum = compartmentSectionLocs[nuc];
+
+            var olderrors = errors.Count;
+            var nuclides = expander.ExpandNuclides(lineNum, nuc);
+            if (errors.IfAny(olderrors))
+                continue;
+
+            foreach (var nuclide in nuclides)
+            {
+                if (!resultOrgans.TryGetValue(nuclide, out var results))
+                    resultOrgans.Add(nuclide, results = []);
+
+                results.AddRange(inputs);
+            }
+        }
+
+        return resultOrgans;
     }
 
     /// <summary>
     /// 全てのコンパートメントを定義する。
     /// </summary>
     /// <param name="data"></param>
-    private void DefineCompartments(InputData data)
+    /// <param name="expander"></param>
+    private void DefineCompartments(InputData data, InputNuclideExpander expander)
     {
-        Organ? input = null;
-
         // 'Other'は、線源領域「その他の組織」に関連付ける際の名称。
         var validSourceRegions = data.SourceRegions
             .Select(s => s.Name).Append("Other").ToArray();
@@ -699,24 +955,23 @@ public class InputDataReader_OIR : InputDataReaderBase
             .Where(s => s.MaleID != 0 || s.FemaleID != 0)
             .Select(s => s.Name).ToList();
 
+        // 核種パターンを展開したものを作成する。
+        var expandOrgans = ExpandCompartments(expander);
+
         foreach (var nuclide in inputNuclides)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
-            var nuc = nuclide.Name;
-            if (!inputOrgans.TryGetValue(nuc, out var organs))
+            if (!expandOrgans.TryGetValue(nuclide, out var organs))
                 continue;
-            var sectionLineNum = compartmentSectionLocs[nuc];
-
-            nuclide.Parameters = inputParameters.GetValueOrDefault(nuc) ?? [];
 
             data.Nuclides.Add(nuclide);
 
             var otherSourceRegions = new List<string>(otherSourceRegionsBase);
             var otherCompartments = new List<Organ>();
-            var anyCTmarrow = false;
-            var anyRYmarrow = false;
+            List<(int LineNum, Organ Organ)> organsCTmarrow = [];
+            List<(int LineNum, Organ Organ)> organsRYmarrow = [];
             bool? otherContainsMineralBone;
 
             // Otherから無機質骨の体積組織(C-bone-VとT-bone-V)への分配について制御する。
@@ -734,8 +989,24 @@ public class InputDataReader_OIR : InputDataReaderBase
                 otherContainsMineralBone = null;
             }
 
-            foreach (var (lineNum, organFunc, organName, sourceRegion) in organs)
+            if (!nuclide.IsProgeny)
             {
+                var input = new Organ
+                {
+                    Nuclide /**/= nuclide,
+                    ID      /**/= data.Organs.Count + 1,
+                    Index   /**/= data.Organs.Count,
+                    Name    /**/= "input",
+                    Func    /**/= OrganFunc.inp,
+                };
+                data.Organs.Add(input);
+            }
+
+            foreach (var (lineNum, parentOnly, organFunc, organName, sourceRegion) in organs)
+            {
+                if (nuclide.IsProgeny == parentOnly)
+                    continue;
+
                 var organ = new Organ
                 {
                     Nuclide  /**/= nuclide,
@@ -743,25 +1014,15 @@ public class InputDataReader_OIR : InputDataReaderBase
                     Index    /**/= data.Organs.Count,
                     Name     /**/= organName,
                     Func     /**/= organFunc,
-                    SourceRegion = sourceRegion,
                 };
+
                 if (organFunc == OrganFunc.mix)
                     organ.BioDecay = 1.0;
-
-                if (organ.Func == OrganFunc.inp)
-                {
-                    if (nuclide.IsProgeny)
-                        errors.AddError(lineNum, "Cannot define 'inp' compartment which belongs to progeny nuclide.");
-                    else if (input != null)
-                        errors.AddError(lineNum, "Duplicated 'inp' compartment.");
-                    else
-                        input = organ;
-                }
 
                 data.Organs.Add(organ);
 
                 // 線源領域の名称について、妥当性を確認する。
-                if (!IsBar(sourceRegion))
+                if (sourceRegion is not null)
                 {
                     // コンパートメントに対応する線源領域の名称が有効であることを確認する。
                     var indexS = Array.IndexOf(validSourceRegions, sourceRegion);
@@ -776,20 +1037,18 @@ public class InputDataReader_OIR : InputDataReaderBase
                         continue;
                     }
 
+                    organ.SourceRegion = sourceRegion;
+
                     // インプットで明示された線源領域をOtherの内訳から除く。
                     otherSourceRegions.Remove(sourceRegion);
 
                     if (sourceRegion == "C-marrow" || sourceRegion == "T-marrow")
-                        anyCTmarrow = true;
+                        organsCTmarrow.Add((lineNum, organ));
                     if (sourceRegion == "R-marrow" || sourceRegion == "Y-marrow")
-                        anyRYmarrow = true;
+                        organsRYmarrow.Add((lineNum, organ));
 
                     if (sourceRegion == "Other")
                         otherCompartments.Add(organ);
-                }
-                else
-                {
-                    organ.SourceRegion = null;
                 }
 
                 if (organ.Func == OrganFunc.exc)
@@ -800,9 +1059,6 @@ public class InputDataReader_OIR : InputDataReaderBase
                     }
                 }
             }
-
-            if (!nuclide.IsProgeny && input is null)
-                errors.AddError(sectionLineNum, "Missing 'inp' compartment.");
 
             if (otherContainsMineralBone is null)
             {
@@ -828,7 +1084,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                 otherSourceRegions.Remove("T-bone-V");
             }
 
-            if (anyCTmarrow)
+            if (organsCTmarrow.Any())
             {
                 // C/T-marrowがコンパートメントとして明示されている場合は、
                 // OtherからR/Y-marrowへの分配を行わないようにする。
@@ -836,215 +1092,478 @@ public class InputDataReader_OIR : InputDataReaderBase
                 otherSourceRegions.Remove("Y-marrow");
 
                 // C/T-marrowとR/Y-marrowの組み合わせが両方同時に使用されている場合はエラーとする。
-                if (anyRYmarrow)
-                    errors.AddError(sectionLineNum, "Both of C/T-marrow and R/Y-marrow source region pairs are used.");
+                if (organsRYmarrow.Any())
+                {
+                    var marrowOrgans = organsCTmarrow.Concat(organsRYmarrow).OrderBy(o => o.LineNum).ToArray();
+                    var firstLineNum = marrowOrgans.First().LineNum;
+                    var maxOrganNameLength = marrowOrgans.Max(o => o.Organ.Name.Length);
+                    errors.AddError(firstLineNum, $"Both of C/T-marrow and R/Y-marrow source region pairs are used for nuclide '{nuclide.Name}'.");
+                    foreach (var (lineNum, organ) in marrowOrgans)
+                        errors.AddError(lineNum, $"    {organ.Func}  {organ.Name.PadRight(maxOrganNameLength)}  {organ.SourceRegion}");
+                }
             }
 
             nuclide.OtherSourceRegions = otherSourceRegions;
         }
+    }
 
-        // コンパートメント定義にエラーがないことを確定する。
-        errors.RaiseIfAny();
+    /// <summary>
+    /// インプットから読み取った摂取経路の情報を保持する。
+    /// </summary>
+    /// <param name="LineNum">行番号。</param>
+    /// <param name="To">初期配分先コンパートメントの名前。</param>
+    /// <param name="Coeff">初期配分割合。</param>
+    private record class InputIntake(int LineNum, string To, string? Coeff);
+
+    /// <summary>
+    /// 全ての摂取経路を定義する。
+    /// </summary>
+    /// <param name="data"></param>
+    private void DefineIntakes(InputData data)
+    {
+        var organFrom = data.Organs.First(); // inp
+        var nuclideFrom = organFrom.Nuclide;
+        var nuclideTo = inputNuclides.First();
+
+        var olderrorsN = errors.Count;
+        var sectionLineNum = intakeSectionLoc;
+
+        var evaluatorTo = inputEvaluators[nuclideTo];
+
+        // 移行経路の定義が正しいことの確認と、
+        // 各コンパートメントから流出する移行係数の総計を求める。
+        var definedTransfers = new HashSet<Organ>();
+        var transfersCorrect = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
+        decimal sum = 0;
+        foreach (var intake in inputIntakes)
+        {
+            var olderrorsT = errors.Count;
+            var lineNum = intake.LineNum;
+
+            var nameTo = intake.To;
+            if (!evaluatorTo.TryReadCompartment(lineNum, ref nameTo))
+                continue;
+            var organTo = data.Organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
+
+            // 移行先がcompartmentセクションで定義済みかを確認する。
+            if (organTo is null)
+            {
+                errors.AddError(lineNum, $"Undefined compartment '{nuclideFrom.Name}/{nameTo}'.");
+            }
+            else if (!definedTransfers.Add(organTo))
+            {
+                // 同じ移行経路が複数回定義されていないことを確認する。
+                errors.AddError(lineNum, $"Duplicated intake path to '{nameTo}'.");
+            }
+            // 以降の処理でorganToが存在していることを確定する。
+            if (errors.IfAny(olderrorsT))
+                continue;
+
+            // 移行割合の入力を要求する。
+            // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
+            decimal coeff;
+            if (intake.Coeff is not null)
+            {
+                if (!evaluatorTo.TryReadCoefficient(LineNum, intake.Coeff, out var res))
+                    continue;
+                (coeff, _) = res;
+
+                // 移行係数が負の値でないことを確認する。
+                if (coeff < 0)
+                {
+                    errors.AddError(lineNum, "Transfer coefficient should be positive.");
+                    continue;
+                }
+
+                sum += coeff;
+            }
+            else
+            {
+                errors.AddError(lineNum, $"Require fraction of intake activity [%].");
+                continue;
+            }
+
+            transfersCorrect.Add((lineNum, organFrom, organTo!, coeff));
+        }
+
+        if (errors.IfAny(olderrorsN))
+            return;
+
+        // 流出放射能に対する移行割合の合計が1.0 == 100%かどうかを確認する。
+        if (sum != 1)
+        {
+            errors.AddError(sectionLineNum, $"Total [%] of intake paths is not 100%, but {sum * 100:G29}%.");
+            var ts = transfersCorrect.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
+            for (int i = 0; i < ts.Length; i++)
+            {
+                var (lineNum, _, _, coeff) = ts[i];
+                errors.AddError(lineNum, $"    = {coeff * 100:G29}%");
+            }
+        }
+
+        // 核種nuclideの動態モデルに入る移行経路と係数にエラーがないことを確定する。
+        if (errors.IfAny(olderrorsN))
+            return;
+
+        // 核種が同じコンパートメントへの流入経路と、移行割合を設定する。
+        foreach (var (_, _, organTo, coeff) in transfersCorrect)
+        {
+            // fromからtoへの移行割合 = 移行割合[%]
+            var inflowRate = (double)coeff;
+
+            organTo.Inflows.Add(new Inflow
+            {
+                // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
+                ID = organFrom.ID,
+                Organ = organFrom,
+
+                Rate = inflowRate,
+            });
+        }
+    }
+
+    /// <summary>
+    /// インプットから読み取った移行経路定義の情報を保持する。
+    /// </summary>
+    /// <param name="LineNum">行番号。</param>
+    /// <param name="ParentOnly"></param>
+    /// <param name="From">移行元コンパートメント。</param>
+    /// <param name="To">移行先コンパートメント。</param>
+    /// <param name="Coeff">移行係数。</param>
+    private record class InputTransfer(int LineNum, bool? ParentOnly, string From, string To, string? Coeff);
+
+    private static bool IsDecayPath(Organ from, Organ to) => from.Nuclide != to.Nuclide;
+
+    private Dictionary<NuclideData, List<InputTransfer>> ExpandTransfers(InputNuclideExpander expander)
+    {
+        var resultTransfers = new Dictionary<NuclideData, List<InputTransfer>>();
+
+        foreach (var (nuc, inputs) in inputTransfers)
+        {
+            var lineNum = transferSectionLocs[nuc];
+
+            var olderrors = errors.Count;
+            var nuclides = expander.ExpandNuclides(lineNum, nuc);
+            if (errors.IfAny(olderrors))
+                continue;
+
+            foreach (var nuclide in nuclides)
+            {
+                if (!resultTransfers.TryGetValue(nuclide, out var results))
+                    resultTransfers.Add(nuclide, results = []);
+
+                results.AddRange(inputs);
+            }
+        }
+
+        return resultTransfers;
+    }
+
+    private class TransferParser(
+        IReadOnlyList<Organ> organs,
+        DecaySet decaySet,
+        InputNuclideExpander expander,
+        Dictionary<NuclideData, InputEvaluator> evaluators,
+        InputErrors errors)
+    {
+        private readonly HashSet<(Organ from, Organ to)> definedTransfers = [];
+
+        public bool TryParse(
+            NuclideData nuclide, InputTransfer transfer,
+            out (IReadOnlyList<Organ> OrgansFrom, Organ OrganTo, decimal? Coeff) result)
+        {
+            result = default;
+
+            var olderrorsT = errors.Count;
+            var lineNum = transfer.LineNum;
+
+            // 移行元コンパートメントを読み取る。
+            IReadOnlyList<NuclideData> nuclidesFrom;
+            var nameFrom = transfer.From;
+            var isFromPattern = false;
+            if (nameFrom.IndexOf('/') is int i && i != -1)
+            {
+                var nucFrom = nameFrom[..i];
+                nameFrom = nameFrom[(i + 1)..];
+
+                isFromPattern = nucFrom.StartsWith('{');
+                nuclidesFrom = expander.ExpandNuclides(lineNum, nucFrom);
+
+                // 移行元の核種がパターン指定されている場合は、nuclideの祖先核種に集合を狭める。
+                if (isFromPattern)
+                    nuclidesFrom = [.. nuclidesFrom.Intersect(decaySet.GetAncestors(nuclide))];
+            }
+            else
+            {
+                // 移行元と移行先が同じ核種の場合。
+                nuclidesFrom = [nuclide];
+            }
+
+            // 移行先コンパートメントを読み取る。
+            var nuclideTo = nuclide;
+            var nameTo = transfer.To;
+            if (nameTo.IndexOf('/') is int j && j != -1)
+            {
+                var nucTo = nameTo[..j];
+                nameTo = nameTo[(j + 1)..];
+                nuclideTo = decaySet.Nuclides.FirstOrDefault(n => n.Name == nucTo);
+                if (nuclideTo is null)
+                {
+                    errors.AddError(lineNum, $"Undefined nuclide '{nucTo}'.");
+                }
+                else if (nuclideTo != nuclide)
+                {
+                    // 移行先は定義している核種に属するコンパートメントのみとする。
+                    errors.AddError(lineNum, $"Cannot set transfer path to a compartment which is not belong to '{nuclide.Name}'.");
+                }
+            }
+
+            // 以降の処理でnuclidesFromとnuclideToの両方が存在していることを確定する。
+            if (errors.IfAny(olderrorsT))
+                return false;
+            Debug.Assert(nuclideTo is not null);
+
+            var evaluatorTo = evaluators[nuclideTo];
+
+            var organsFrom = GetOrgansFrom();
+            var organTo = GetOrganTo();
+
+            IReadOnlyList<Organ> GetOrgansFrom()
+            {
+                List<Organ> organsFrom = [];
+                foreach (var nuclideFrom in nuclidesFrom)
+                {
+                    var evaluatorFrom = evaluators[nuclideFrom];
+
+                    // 移行元がcompartmentセクションで定義済みかを確認する。
+                    if (!evaluatorFrom.TryReadCompartment(lineNum, ref nameFrom))
+                        continue;
+                    var organFrom = organs.FirstOrDefault(o => o.Name == nameFrom && o.Nuclide == nuclideFrom);
+
+                    // 移行元がcompartmentセクションで定義済みかを確認する。
+                    if (organFrom is null)
+                    {
+                        // 壊変経路の親核種側がパターン指定されている場合は、移行元コンパートメントが見つからない状態を
+                        // エラーにはせず、経路定義が有効な経路を設定できないだけであるように扱う。
+                        if (!isFromPattern)
+                            errors.AddError(lineNum, $"Undefined compartment '{nuclideFrom.Name}/{nameFrom}'.");
+                        continue;
+                    }
+
+                    organsFrom.Add(organFrom);
+                }
+                return organsFrom;
+            }
+
+            Organ? GetOrganTo()
+            {
+                if (!evaluatorTo.TryReadCompartment(lineNum, ref nameTo))
+                    return null;
+                var organTo = organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
+
+                // 移行先がcompartmentセクションで定義済みかを確認する。
+                if (organTo is null)
+                {
+                    errors.AddError(lineNum, $"Undefined compartment '{nuclideTo.Name}/{nameTo}'.");
+                    return null;
+                }
+
+                // 自分自身への移行経路を定義していないことを確認する。
+                if (organsFrom.Contains(organTo))
+                {
+                    errors.AddError(lineNum, "Cannot set transfer path to itself.");
+                    return null;
+                }
+
+                // 同じ移行経路が複数回定義されていないことを確認する。
+                foreach (var organFrom in organsFrom)
+                {
+                    if (!definedTransfers.Add((organFrom, organTo)))
+                        errors.AddError(lineNum, $"Duplicated transfer path from '{organFrom}' to '{organTo}'.");
+                }
+
+                return organTo!;
+            }
+
+            // 以降の処理でorgansFromとorganToの両方が存在していることを確定する。
+            if (errors.IfAny(olderrorsT))
+                return false;
+            if (organsFrom is [])
+                return false;
+            Debug.Assert(organTo is not null);
+
+            var coeff = default(decimal?);
+            var isFrac = false;
+            var hasCoeff = false;
+            if (transfer.Coeff is not null)
+            {
+                if (!evaluatorTo.TryReadCoefficient(lineNum, transfer.Coeff, out var res))
+                    return false;
+                (coeff, isFrac) = res;
+                hasCoeff = true;
+
+                // 移行係数が負の値でないことを確認する。
+                if (coeff < 0)
+                    errors.AddError(lineNum, "Transfer coefficient should be positive.");
+            }
+
+            foreach (var organFrom in organsFrom)
+            {
+                // 設定された移行経路が有効かどうかを確認する。
+                var funcFrom = organFrom.Func;
+                var funcTo = organTo.Func;
+                if (IsDecayPath(organFrom, organTo))
+                {
+                    if (funcFrom == OrganFunc.acc)
+                    {
+                        // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
+                        // パーセント値(移行割合)の設定はエラーとする。
+                        if (isFrac)
+                            errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{organFrom}'.");
+
+                        // accからの壊変経路はaccにしか移行できない。
+                        // ただし、excへの係数付きの壊変経路は、実際には途中に壊変コンパートメントとしてのaccが生成されるため許可する。
+                        if (funcTo != OrganFunc.acc && !(funcTo == OrganFunc.exc && hasCoeff))
+                            errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{organFrom}' to non-acc '{organTo.Name}'.");
+                    }
+
+                    // excからの壊変経路では、子孫核種のexcへの移行のみ許可する。
+                    if (funcFrom == OrganFunc.exc && funcTo != OrganFunc.exc)
+                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{organFrom}' to non-exc '{organTo.Name}'.");
+
+                    // mixからの壊変経路は定義できない。
+                    if (funcFrom == OrganFunc.mix)
+                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{organFrom}'.");
+                }
+                else
+                {
+                    // accからの流出経路では、移行速度の入力を要求する。
+                    // 係数なし、またはパーセント値(移行割合)の設定はエラーとする。
+                    if (funcFrom == OrganFunc.acc && (!hasCoeff || isFrac))
+                        errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{organFrom.Name}'.");
+
+                    // excからの流出は定義できない。
+                    if (funcFrom == OrganFunc.exc)
+                        errors.AddError(lineNum, $"Cannot set output path from exc '{organFrom.Name}'.");
+
+                    // TODO: mixからmixへの経路は定義できない。
+                    //if (funcFrom == OrganFunc.mix && funcTo == OrganFunc.mix)
+                    //    errors.AddError(lineNum, "Cannot set transfer path from 'mix' to 'mix'.");
+
+                    // mixからの同核種での移行経路では、移行割合の入力を要求する。
+                    // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
+                    if (funcFrom == OrganFunc.mix && !hasCoeff)
+                        errors.AddError(lineNum, $"Require fraction of output activity [%] from {funcFrom} '{organFrom.Name}'.");
+                }
+            }
+
+            // 以降の処理で移行経路の設定位置が有効であることを確定する。
+            if (errors.IfAny(olderrorsT))
+                return false;
+
+            result = (organsFrom, organTo, coeff);
+
+            return true;
+        }
     }
 
     /// <summary>
     /// 全ての移行経路を定義する。
     /// </summary>
     /// <param name="data"></param>
-    private void DefineTransfers(InputData data)
+    /// <param name="expander"></param>
+    private void DefineTransfers(InputData data, InputNuclideExpander expander)
     {
+        var olderrorsN = errors.Count;
+
         var decaySet = new DecaySet(data.Nuclides, errors);
+        var parser = new TransferParser(data.Organs, decaySet, expander, inputEvaluators, errors);
+
+        // 核種パターンを展開したものを作成する。
+        var expandTransfers = ExpandTransfers(expander);
+
+        // 有効な移行経路の定義を収集する
+        var correctTransfers = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
 
         foreach (var nuclide in inputNuclides)
         {
             if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
-
-            var nuc = nuclide.Name;
-            if (!inputTransfers.TryGetValue(nuc, out var transfers))
+            if (!expandTransfers.TryGetValue(nuclide, out var transfers))
                 continue;
 
-            var olderrorsN = errors.Count;
-            var sectionLineNum = transferSectionLocs[nuc];
+            var evaluator = inputEvaluators[nuclide];
 
-            // 移行経路の定義が正しいことの確認と、
-            // 各コンパートメントから流出する移行係数の総計を求める。
-            var definedTransfers = new HashSet<(string from, string to)>();
-            var transfersCorrect = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
-            var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
-            foreach (var (lineNum, from, to, coeff, isFrac) in transfers)
+            foreach (var transfer in transfers)
             {
-                var olderrorsT = errors.Count;
-
-                var nameFrom = from;
-                var nuclideFrom = nuclide;
-                if (from.IndexOf('/') is int i && i != -1)
-                {
-                    var nucFrom = from.Substring(0, i);
-                    nameFrom = from.Substring(i + 1);
-                    nuclideFrom = inputNuclides.FirstOrDefault(n => n.Name == nucFrom);
-                    if (nuclideFrom is null)
-                        errors.AddError(lineNum, $"Undefined nuclide '{nucFrom}'.");
-                }
-
-                var nameTo = to;
-                var nuclideTo = nuclide;
-                if (to.IndexOf('/') is int j && j != -1)
-                {
-                    var nucTo = to.Substring(0, j);
-                    nameTo = to.Substring(j + 1);
-                    nuclideTo = inputNuclides.FirstOrDefault(n => n.Name == nucTo);
-                    if (nuclideTo is null)
-                        errors.AddError(lineNum, $"Undefined nuclide '{nucTo}'.");
-                }
-
-                // 移行先は定義している核種に属するコンパートメントのみとする。
-                if (nuclideTo != null && nuclideTo != nuclide)
-                    errors.AddError(lineNum, $"Cannot set transfer path to a compartment which is not belong to '{nuc}'.");
-
-                // 以降の処理でnuclideFromとnuclideToの両方が存在していることを確定する。
-                if (errors.IfAny(olderrorsT))
+                if (nuclide.IsProgeny == transfer.ParentOnly)
+                    continue;
+                if (!parser.TryParse(nuclide, transfer, out var result))
                     continue;
 
-                var organFrom = data.Organs.FirstOrDefault(o => o.Name == nameFrom && o.Nuclide == nuclideFrom);
-                var organTo = data.Organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
+                var lineNum = transfer.LineNum;
+                var organsFrom = result.OrgansFrom;
+                var organTo = result.OrganTo;
+                var coeff = result.Coeff;
 
-                // 移行元と移行先のそれぞれがcompartmentセクションで定義済みかを確認する。
-                if (organFrom is null || organTo is null)
+                foreach (var organFrom in organsFrom)
                 {
-                    if (organFrom is null)
-                        errors.AddError(lineNum, $"Undefined compartment '{from}'.");
-                    if (organTo is null)
-                        errors.AddError(lineNum, $"Undefined compartment '{to}'.");
-                }
-                else if (organTo == organFrom)
-                {
-                    // 自分自身への移行経路は定義できない。
-                    errors.AddError(lineNum, "Cannot set transfer path to itself.");
-                }
-                else if (!definedTransfers.Add((from, to)))
-                {
-                    // 同じ移行経路が複数回定義されていないことを確認する。
-                    errors.AddError(lineNum, $"Duplicated transfer path from '{from}' to '{to}'.");
-                }
-                // 以降の処理でorganFromとorganToの両方が存在していることを確定する。
-                if (errors.IfAny(olderrorsT))
-                    continue;
-
-                // 正しくないコンパートメント機能間の移行経路が定義されていないことを確認する。
-                var funcFrom = organFrom!.Func;
-                var funcTo = organTo!.Func;
-                var isDecayPath = nuclideFrom != nuclideTo;
-                var hasCoeff = coeff != null;
-
-                if (isDecayPath)
-                {
-                    // inpへの流入は定義できない。
-                    if (funcTo == OrganFunc.inp)
-                        errors.AddError(lineNum, $"Cannot set decay path to inp '{to}'.");
-
-                    if (funcFrom == OrganFunc.acc)
+                    if (IsDecayPath(organFrom, organTo))
                     {
-                        // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
-                        // パーセント値(移行割合)の設定はエラーとする。
-                        if (isFrac)
-                            errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{from}'.");
+                        // 次のような壊変経路を、
+                        //   Parent/organFrom --(coeff)--> Progeny_i/organTo  ①移行速度あり
+                        //   Parent/organFrom -----------> Progeny_i/organTo  ②移行速度なし
+                        //
+                        // 親核種ParentがコンパートメントorganFromから移動しないまま壊変することで生成された
+                        // 子孫核種Progeny_1～Nのそれぞれを受けるorganDecayを、自動的に追加定義する、
+                        // あるいはインプットで定義済みのコンパートメントを直接使用することで、
+                        // 以下のような経路に構成し直す。
+                        //   Parent/organFrom
+                        //   ↓
+                        //   Progeny_1/organDecay
+                        //   ：
+                        //   ↓
+                        //   Progeny_i/organDecay --(coeff)--> Progeny_i/organTo  ①移行速度あり
+                        //   Progeny_i/organDecay == organTo                      ②移行速度なし
 
-                        // accからの壊変経路はaccにしか移行できない。
-                        // ただし、excへの係数付きの壊変経路は、実際には途中に壊変コンパートメントとしてのaccが生成されるため許可する。
-                        if (funcTo != OrganFunc.acc && !(funcTo == OrganFunc.exc && hasCoeff))
-                            errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{from}' to non-acc '{to}'.");
+                        decaySet.AddDecayPath(lineNum, organFrom, organTo, coeff);
                     }
-
-                    // excからの壊変経路では、子孫核種のexcへの移行のみ許可する。
-                    if (funcFrom == OrganFunc.exc && funcTo != OrganFunc.exc)
-                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{from}' to non-exc '{to}'.");
-
-                    // inpやmixからの壊変経路は定義できない。
-                    if (organFrom.IsInstantOutflow)
-                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{from}'.");
-                }
-                else
-                {
-                    // inpへの流入は定義できない。
-                    if (funcTo == OrganFunc.inp)
-                        errors.AddError(lineNum, $"Cannot set input path to inp '{to}'.");
-
-                    // accからの流出経路では、移行速度の入力を要求する。
-                    // 係数なし、またはパーセント値(移行割合)の設定はエラーとする。
-                    if (funcFrom == OrganFunc.acc && (!hasCoeff || isFrac))
-                        errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{from}'.");
-
-                    // excからの流出は定義できない。
-                    if (funcFrom == OrganFunc.exc)
-                        errors.AddError(lineNum, $"Cannot set output path from exc '{from}'.");
-
-                    // TODO: mixからmixへの経路は定義できない。
-                    //if (funcFrom == OrganFunc.mix && funcTo == OrganFunc.mix)
-                    //    errors.AddError(lineNum, "Cannot set transfer path from 'mix' to 'mix'.");
-
-                    // inpまたはmixからの同核種での移行経路では、移行割合の入力を要求する。
-                    // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
-                    if (organFrom.IsInstantOutflow && !hasCoeff)
-                        errors.AddError(lineNum, $"Require fraction of output activity [%] from {funcFrom} '{from}'.");
-                }
-
-                // 以降の処理で移行経路の設定位置が有効であることを確定する。
-                if (errors.IfAny(olderrorsT))
-                    continue;
-
-                if (isDecayPath)
-                {
-                    // 次のような壊変経路を、
-                    //   Parent/organFrom --(coeff)--> Progeny_i/organTo  ①移行速度あり
-                    //   Parent/organFrom -----------> Progeny_i/organTo  ②移行速度なし
-                    //
-                    // 親核種ParentがコンパートメントorganFromから移動しないまま壊変することで生成された
-                    // 子孫核種Progeny_1～Nのそれぞれを受けるorganDecayを、自動的に追加定義する、
-                    // あるいはインプットで定義済みのコンパートメントを直接使用することで、
-                    // 以下ような経路に構成し直す。
-                    //   Parent/organFrom
-                    //      ↓
-                    //   Progeny_1/organDecay
-                    //   ： ：
-                    //   ↓ ↓
-                    //   ↓ Progeny_i/organDecay --(coeff)--> Progeny_i/organTo  ①移行速度あり
-                    //   ↓ Progeny_i/organDecay == organTo                      ②移行速度なし
-                    //   ↓ ：
-                    //   ↓ ↓
-                    //   Progeny_N/organDecay
-
-                    var organDecay = decaySet.AddDecayPath(lineNum, organFrom, organTo, coeff);
-                    if (organDecay is null)
-                        continue;
-
-                    // 以降の処理を核種が同じコンパートメント間organDecay -> organToの経路設定にすり替える。
-                    organFrom = organDecay;
-                }
-
-                if (coeff is decimal coeff_v)
-                {
-                    // 移行係数が負の値でないことを確認する。
-                    if (coeff_v < 0)
+                    else
                     {
-                        errors.AddError(lineNum, "Transfer coefficient should be positive.");
-                        continue;
+                        // パース処理によって、同じ核種での移行経路では必ず移行係数が存在する。
+                        Debug.Assert(coeff is not null);
+
+                        correctTransfers.Add((lineNum, organFrom, organTo, coeff.Value));
                     }
-
-                    if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
-                        sum = 0;
-                    sumOfOutflowCoeff[organFrom] = sum + coeff_v;
                 }
-
-                transfersCorrect.Add((lineNum, organFrom, organTo, coeff ?? 0));
             }
+        }
 
-            // 核種nuclideの動態モデルに入る移行経路にエラーがないことを確定する。
-            if (errors.IfAny(olderrorsN))
+        // 移行速度付き壊変経路によって核種のモデルへ流入する経路を追加する。
+        foreach (var (organDecay, (lineNum, (coeff, organTo))) in decaySet.AfterDecayPath)
+        {
+            correctTransfers.Add((lineNum, organDecay, organTo, coeff));
+        }
+
+        // 全ての核種について陽に設定された移行経路と係数にエラーがないことを確定する。
+        if (errors.IfAny(olderrorsN))
+            return;
+
+        // 各コンパートメントから流出する移行係数の総計を処理する。
+        var sumOfOutflowCoeff = new Dictionary<Organ, decimal>();
+        foreach (var (_, organFrom, organTo, coeff) in correctTransfers)
+        {
+            if (!sumOfOutflowCoeff.TryGetValue(organFrom, out var sum))
+                sum = 0;
+            sumOfOutflowCoeff[organFrom] = sum + coeff;
+        }
+        foreach (var nuclide in inputNuclides)
+        {
+            if (!CalcProgeny && nuclide.IsProgeny)
                 continue;
 
-            // あるコンパートメントから同じ核種のまま流出する全ての移行経路について処理する。
-            var outflowGroups = transfersCorrect.GroupBy(t => t.from);
+            // あるコンパートメントから同じ核種のまま流出する全ての移行経路について取り扱う。
+            var outflowGroups = correctTransfers.GroupBy(t => t.from);
             foreach (var outflows in outflowGroups)
             {
                 if (!outflows.Any())
@@ -1052,18 +1571,18 @@ public class InputDataReader_OIR : InputDataReaderBase
                 var organFrom = outflows.Key;
                 var nameFrom = organFrom.Name;
 
-                if (organFrom.IsInstantOutflow)
+                if (organFrom.Func == OrganFunc.mix)
                 {
                     // 流出路毎の移行割合を合計したものが1.0 == 100%かどうかを確認する。
                     var sum = sumOfOutflowCoeff[organFrom];
                     if (sum != 1)
                     {
-                        var ts = transfersCorrect.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
+                        var ts = correctTransfers.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
                         for (int i = 0; i < ts.Length; i++)
                         {
                             var (lineNum, _, _, coeff) = ts[i];
                             if (i == 0)
-                                errors.AddError(lineNum, $"Total [%] of transfer paths from '{nameFrom}' is  not 100%, but {sum * 100:G29}%.");
+                                errors.AddError(lineNum, $"Total [%] of transfer paths from '{nameFrom}' is not 100%, but {sum * 100:G29}%.");
                             errors.AddError(lineNum, $"    = {coeff * 100:G29}%");
                         }
                     }
@@ -1074,50 +1593,35 @@ public class InputDataReader_OIR : InputDataReaderBase
                     if (organFrom.Func == OrganFunc.acc)
                         organFrom.BioDecay = (double)sumOfOutflowCoeff[organFrom];
                 }
-
-                // GetDecayChain(organFrom);
-            }
-
-            // 核種nuclideの動態モデルに入る移行経路と係数にエラーがないことを確定する。
-            if (errors.IfAny(olderrorsN))
-                continue;
-
-            // 核種が同じコンパートメントへの流入経路と、移行割合を設定する。
-            foreach (var (_, organFrom, organTo, coeff) in transfersCorrect)
-            {
-                double inflowRate;
-                if (organFrom.IsInstantOutflow)
-                {
-                    // fromからtoへの移行割合 = 移行割合[%]
-                    inflowRate = (double)coeff;
-                }
-                else
-                {
-                    var sum = sumOfOutflowCoeff[organFrom];
-
-                    // fromからtoへの移行割合 = 移行速度[/d]
-                    inflowRate = (double)coeff;
-                }
-
-                organTo.Inflows.Add(new Inflow
-                {
-                    ID = organFrom.ID,
-                    Rate = inflowRate,
-
-                    // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
-                    Organ = organFrom,
-                });
             }
         }
 
-        // 全ての核種について陽に設定された移行経路と係数にエラーがないことを確定する。
-        errors.RaiseIfAny();
+        // 核種nuclideの動態モデルに入る移行経路と係数にエラーがないことを確定する。
+        if (errors.IfAny(olderrorsN))
+            return;
+
+        // 核種が同じコンパートメントへの流入経路と、移行割合を設定する。
+        foreach (var (_, organFrom, organTo, coeff) in correctTransfers)
+        {
+            // fromからtoへの移行割合 = 移行速度[/d] or 移行割合[%]
+            var inflowRate = (double)coeff;
+
+            organTo.Inflows.Add(new Inflow
+            {
+                // 流入経路から流入元臓器の情報を直接引くための参照を設定する。
+                ID = organFrom.ID,
+                Organ = organFrom,
+
+                Rate = inflowRate,
+            });
+        }
 
         // 核種が異なるコンパートメントへの流入経路と、移行割合を設定する。
         decaySet.DefineDecayTransfers(data.Organs);
 
         // 移行経路の定義にエラーがないことを確定する。
-        errors.RaiseIfAny();
+        if (errors.IfAny(olderrorsN))
+            return;
 
         // 壊変経路の充足を確認する。
         VerifyDecayPaths(data);

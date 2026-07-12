@@ -55,6 +55,9 @@ public class InputOtherCalcTests
     [DataRow("OtherContainsMineralBone = true ", "OtherContainsMineralBone = true ", true)]
     public void TestAdjustAuto1_AreAllST(string wholeParameter, string nuclideParameter, bool expectContainsV)
     {
+        if (!string.IsNullOrWhiteSpace(nuclideParameter))
+            nuclideParameter = "Sr-90/" + nuclideParameter;
+
         // auto設定では、線源領域Otherを構成するコンパートメントが全て"ST～"という名称の場合に
         // その他の組織＝軟組織として扱い、無機質骨をOtherの内訳から除外する。
         var reader = CreateReader(
@@ -67,16 +70,15 @@ public class InputOtherCalcTests
             "",
             "[parameter]",
             "  " + wholeParameter,
-            "",
-            "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
+            "[intake]",
+            "  ST0    100%",
+            "",
             "[Sr-90:compartment]",
-            "  inp    input      ---",
             "  acc    ST0        Other",
             "",
             "[Sr-90:transfer]",
-            "  input  ST0        100%",
         ]);
 
         var data = reader.Read();
@@ -121,6 +123,9 @@ public class InputOtherCalcTests
     [DataRow("OtherContainsMineralBone = true ", "OtherContainsMineralBone = true ", true)]
     public void TestAdjustAuto2_AreNotAllST(string wholeParameter, string nuclideParameter, bool expectContansV)
     {
+        if (!string.IsNullOrWhiteSpace(nuclideParameter))
+            nuclideParameter = "Sr-90/" + nuclideParameter;
+
         // auto設定では、線源領域Otherを構成するコンパートメントが全て"ST～"という名称ではない場合は
         // その他の組織には無機質骨が含まれるものとして扱われる。
         var reader = CreateReader(
@@ -133,17 +138,16 @@ public class InputOtherCalcTests
             "",
             "[parameter]",
             "  " + wholeParameter,
-            "",
-            "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
+            "[intake]",
+            "  Other1   100%",
+            "",
             "[Sr-90:compartment]",
-            "  inp    input      ---",
             "  acc    Other1        Other",
             "  acc    Other2        Other",
             "",
             "[Sr-90:transfer]",
-            "  input  Other1       100%",
             "  Other1 Other2       10",
         ]);
 
@@ -189,6 +193,9 @@ public class InputOtherCalcTests
     [DataRow("OtherContainsMineralBone = true ", "OtherContainsMineralBone = true ")]
     public void TestAdjustAuto3_DropExplicits(string wholeParameter, string nuclideParameter)
     {
+        if (!string.IsNullOrWhiteSpace(nuclideParameter))
+            nuclideParameter = "Sr-90/" + nuclideParameter;
+
         var reader = CreateReader(
         [
             "[title]",
@@ -199,12 +206,12 @@ public class InputOtherCalcTests
             "",
             "[parameter]",
             "  " + wholeParameter,
-            "",
-            "[Sr-90:parameter]",
             "  " + nuclideParameter,
             "",
+            "[intake]",
+            "  ST0    100%",
+            "",
             "[Sr-90:compartment]",
-            "  inp    input             ---",
             "  acc    LNET-F            LN-ET",
             "  acc    LNTH-F            LN-Th",
             "  acc    ST0               Other",
@@ -216,7 +223,6 @@ public class InputOtherCalcTests
             "  acc    Noch-T-bone-V     T-bone-V",
             "",
             "[Sr-90:transfer]",
-            "  input  ST0        100%",
         ]);
 
         var data = reader.Read();
@@ -253,14 +259,15 @@ public class InputOtherCalcTests
             "[nuclide]",
             "  Th-232",
             "",
+            "[intake]",
+            "  Other    100%",
+            "",
             "[Th-232:compartment]",
-            "  inp    input        ---",
             "  acc    Other        Other",
             (specifyC ? "  acc    C-marrow     C-marrow" : ""),
             (specifyT ? "  acc    T-marrow     T-marrow" : ""),
             "",
             "[Th-232:transfer]",
-            "  input  Other        100%",
             (specifyC ? "  Other  C-marrow     10" : ""),
             (specifyT ? "  Other  T-marrow     10" : ""),
         ]);
@@ -295,8 +302,10 @@ public class InputOtherCalcTests
             [nuclide]
               Th-232
 
+            [intake]
+              Blood  100%
+            
             [Th-232:compartment]
-              inp    input        ---
               acc    Blood        Blood
               acc    C-marrow     C-marrow
               acc    T-marrow     T-marrow
@@ -304,7 +313,6 @@ public class InputOtherCalcTests
               acc    Y-marrow     Y-marrow
 
             [Th-232:transfer]
-              input  Blood        100%
               Blood  C-marrow     10
               Blood  T-marrow     10
               Blood  R-marrow     10
@@ -314,7 +322,11 @@ public class InputOtherCalcTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 7: Both of C/T-marrow and R/Y-marrow source region pairs are used.",
+            "Line 12: Both of C/T-marrow and R/Y-marrow source region pairs are used for nuclide 'Th-232'.",
+            "Line 12:     acc  C-marrow  C-marrow",
+            "Line 13:     acc  T-marrow  T-marrow",
+            "Line 14:     acc  R-marrow  R-marrow",
+            "Line 15:     acc  Y-marrow  Y-marrow",
         ]);
     }
 }

@@ -1,0 +1,168 @@
+[title]
+(Incomplete) Pa-227 Injection
+
+[nuclide]
+  Pa-227
+
+[parameter]
+$if parent
+  ${Pa}/fA    = 5E-4        # ICRP Publ.141 p.251 Table 20.2 / Ingested materials, All forms
+  ${Pa}/fA_Re = 5E-4        # footnote**
+$else
+  ${Fm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.454 Table 28.2  / Ingested materials, All compounds
+  ${Es}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.446 Table 27.2  / Ingested materials, All compounds
+  ${Cf}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.434 Table 26.2  / Ingested materials, All compounds
+  ${Bk}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.424 Table 25.2  / Ingested materials, All compounds
+  ${Cm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.408 Table 24.2  / Ingested materials, All compounds
+  ${Am}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.382 Table 23.5  / Ingested materials, All compounds
+  ${Pu}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
+  ${Np}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.262 Table 21.2  / Ingested materials, All chemical forms
+  ${U}/fA_MaxValueOfIng  = 0.02         # ICRP Publ.137 p.409 Table 15.2  / Ingested materials, Soluble forms
+  ${Pa}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.251 Table 20.2  / Ingested materials, All forms
+  ${Th}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.137 p.362 Table 14.2  / Ingested materials, All forms
+  ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2  / Ingested materials, All compounds
+  ${Ra}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.325 Table 13.2  / Ingested materials, All forms
+  ${Fr}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.363 Table 39.2  / Ingested materials, All forms
+  ${At}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.356 Table 38.3  / Ingested materials, All forms
+  ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2  / Ingested materials, All chemical forms
+  ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2  / Ingested materials, All forms
+  ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2  / Ingested materials, All forms
+  ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2  / Ingested materials, All forms
+
+  ${^Rn}/fA    = fA_MaxValueOfIng
+  ${^Rn}/fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
+
+
+[{*}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+[{^Rn}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+[{*}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# decay for HATM
+  {*}/Oralcavity          Oralcavity                ---
+  {*}/Oesophagus-f        Oesophagus-f              ---
+  {*}/Oesophagus-s        Oesophagus-s              ---
+  {*}/St-con              St-con                    ---
+  {*}/SI-con              SI-con                    ---
+  {*}/SI-conRe            SI-conRe                  ---
+  {*}/RC-con              RC-con                    ---
+  {*}/LC-con              LC-con                    ---
+  {*}/RS-con              RS-con                    ---
+  {*}/Faeces              Faeces                    ---
+
+# decay for UB
+  {*}/UB-con              UB-con                    ---
+  {*}/Urine               Urine                     ---
+
+
+[{Pa}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+[{Pa}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.141 p.234 Table 18.9
+  Blood                   Liver1                    0.097
+  Blood                   T-bone-S                  0.679
+  Blood                   C-bone-S                  0.679
+  Blood                   Kidneys1                  0.0679
+  Blood                   Kidneys2                  0.0194
+  Blood                   UB-con                    0.107
+  Blood                   RC-con                    0.0097
+  Blood                   Testes                    0.00068
+  Blood                   Ovaries                   0.00021
+  Blood                   ST0                       0.832
+  Blood                   ST1                       0.243
+  Blood                   ST2                       0.0388
+  Liver1                  SI-con                    0.000475
+  Liver1                  Liver2                    0.00095
+  Liver1                  Blood                     0.000475
+  Liver2                  Blood                     0.000211
+  T-bone-S                T-marrow                  4.93E-4
+  T-bone-S                T-bone-V                  2.47E-4
+  T-bone-V                T-marrow                  4.93E-4
+  T-marrow                Blood                     0.0076
+  C-bone-S                C-marrow                  8.21E-5
+  C-bone-S                C-bone-V                  4.11E-5
+  C-bone-V                C-marrow                  8.21E-5
+  C-marrow                Blood                     0.0076
+  C-marrow                C-bone-S                  0
+  Kidneys1                UB-con                    0.0462
+  Kidneys2                Blood                     0.00038
+  Testes                  Blood                     0.00038
+  Ovaries                 Blood                     0.00038
+  ST0                     Blood                     0.462
+  ST1                     Blood                     0.00095
+  ST2                     Blood                     1.9E-5

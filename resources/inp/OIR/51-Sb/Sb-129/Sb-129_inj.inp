@@ -4,13 +4,32 @@ Sb-129 Injection
 [nuclide]
   Sb-129  Te-129m  Te-129  I-129
 
+[parameter]
+$if parent
+  ${Sb}/fA    = 0.05        # ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
+  ${Sb}/fA_Re = 0.05        # footnote¶ (re-absorption)
+$else
+  ${Te}/fA_MaxValueOfIng = 0.3          # ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
+  ${I}/fA_MaxValueOfIng = 0.99 # ≒1    # ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.37 Para.15
+  Plasma                  100.0%
+
 
 [Sb-129:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -39,16 +58,9 @@ Sb-129 Injection
   acc   ST2                   Other
 
 [Sb-129:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.48 Table 3.2 / Ingested materials, All forms
-  $fA    = 0.05
-  $fA_Re = 0.05         # footnote¶ (re-absorption)
-
-# ICRP Publ.130 p.37 Para.15
-  input                   Plasma                  100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -127,15 +139,9 @@ Sb-129 Injection
   acc   ST                    Other
 
 [Te-129m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sb-129/Oralcavity       Oralcavity                ---
@@ -247,15 +253,9 @@ Sb-129 Injection
   acc   ST                    Other
 
 [Te-129:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.73 Table 4.3 / Ingested materials, All forms
-  $fA_MaxValueOfIng = 0.3
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sb-129/Oralcavity       Oralcavity                ---
@@ -376,15 +376,9 @@ Sb-129 Injection
   acc   Other2                Other         #   organic
 
 [I-129:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.137 p.97 Table 5.3 / Ingested materials, All unspecified forms
-  $fA_MaxValueOfIng = 0.99 # ≒1
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Sb-129/Oralcavity       Oralcavity                ---
@@ -524,9 +518,9 @@ Sb-129 Injection
   Sb-129/Plasma           Blood1                    ---
   Sb-129/RBC              Blood1                 1000
   Sb-129/C-bone-S         Blood1                  200
-  Sb-129/C-bone-V         Blood1                $(0.03 / 365.25)
+  Sb-129/C-bone-V         Blood1                $(0.03 / 365)
   Sb-129/T-bone-S         Blood1                  200
-  Sb-129/T-bone-V         Blood1                $(0.03 / 365.25)
+  Sb-129/T-bone-V         Blood1                $(0.03 / 365)
   Sb-129/Liver1           Blood1                  100
   Sb-129/Liver2           Blood1                  100
   Sb-129/Thyroid          Blood1                   36

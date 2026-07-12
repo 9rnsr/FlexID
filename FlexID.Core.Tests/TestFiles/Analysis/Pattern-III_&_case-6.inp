@@ -7,11 +7,17 @@ Pattern III & case 6
   StableN   0.000000E+00
 
 
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+  PatternI                100%
+
+
 [StableN:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
   acc   PatternI              ---
   acc   PatternIII            ---
 
@@ -22,11 +28,9 @@ Pattern III & case 6
 
 
 [StableN:transfer]
-#-------------+---------------+--------------
-# From        | To            | Transfer rate[/d] or fraction[%]
-#-------------+---------------+--------------
-
-  input         PatternI          100%
+#-------------+---------------+--------------------
+# From        | To            | Transfer Coef.[/d]
+#-------------+---------------+--------------------
   PatternI      PatternIII        100
   PatternIII    comp.A              0.0001
 

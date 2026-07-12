@@ -2,6 +2,145 @@
 Nuclide  Lambda          HalfLife
 Ba-133   1.805165E-004     10.52y
 
+Compartments:
+  inp Z Ba-133/input
+  acc   Ba-133/ET1-F           ET1-sur
+  acc   Ba-133/ET2-F           ET2-sur
+  acc   Ba-133/ETseq-F         ET2-seq
+  acc   Ba-133/LNET-F          LN-ET
+  acc   Ba-133/BB-F            Bronchi
+  acc   Ba-133/BBseq-F         Bronchi-q
+  acc   Ba-133/bb-F            Brchiole
+  acc   Ba-133/bbseq-F         Brchiole-q
+  acc   Ba-133/ALV-F           ALV
+  acc   Ba-133/INT-F           ALV
+  acc   Ba-133/LNTH-F          LN-Th
+  acc Z Ba-133/ET1-S           ET1-sur
+  acc Z Ba-133/ET2-S           ET2-sur
+  acc Z Ba-133/ETseq-S         ET2-seq
+  acc Z Ba-133/LNET-S          LN-ET
+  acc Z Ba-133/BB-S            Bronchi
+  acc Z Ba-133/BBseq-S         Bronchi-q
+  acc Z Ba-133/bb-S            Brchiole
+  acc Z Ba-133/bbseq-S         Brchiole-q
+  acc Z Ba-133/ALV-S           ALV
+  acc Z Ba-133/INT-S           ALV
+  acc Z Ba-133/LNTH-S          LN-Th
+  exc   Ba-133/Environment
+  acc Z Ba-133/Oralcavity      O-cavity
+  acc Z Ba-133/Oesophagus-f    Oesophag-f
+  acc   Ba-133/Oesophagus-s    Oesophag-s
+  acc   Ba-133/St-con          St-cont
+  acc   Ba-133/SI-con          SI-cont
+  acc   Ba-133/RC-con          RC-cont
+  acc   Ba-133/LC-con          LC-cont
+  acc   Ba-133/RS-con          RS-cont
+  exc   Ba-133/Faeces
+  acc   Ba-133/UB-con          UB-cont
+  exc   Ba-133/Urine
+  acc   Ba-133/Plasma          Blood
+  acc   Ba-133/ST0             Other
+  acc   Ba-133/ST1             Other
+  acc   Ba-133/ST2             Other
+  acc   Ba-133/C-bone-S        C-bone-S
+  acc   Ba-133/Exch-C-bone-V   C-bone-V
+  acc   Ba-133/Noch-C-bone-V   C-bone-V
+  acc   Ba-133/T-bone-S        T-bone-S
+  acc   Ba-133/Exch-T-bone-V   T-bone-V
+  acc   Ba-133/Noch-T-bone-V   T-bone-V
+
+Transfers:
+  Ba-133/input          -> Ba-133/ET1-F          = 47.94%
+  Ba-133/input          -> Ba-133/ET2-F          = 25.76836%
+  Ba-133/BB-F           -> Ba-133/ET2-F          = 10
+  Ba-133/ET1-F          -> Ba-133/ET2-F          = 1.5
+  Ba-133/input          -> Ba-133/ETseq-F        = 0.05164%
+  Ba-133/ETseq-F        -> Ba-133/LNET-F         = 0.001
+  Ba-133/input          -> Ba-133/BB-F           = 1.77644%
+  Ba-133/bb-F           -> Ba-133/BB-F           = 0.2
+  Ba-133/input          -> Ba-133/BBseq-F        = 0.00356%
+  Ba-133/input          -> Ba-133/bb-F           = 1.0977999999999999%
+  Ba-133/ALV-F          -> Ba-133/bb-F           = 0.002
+  Ba-133/input          -> Ba-133/bbseq-F        = 0.0022%
+  Ba-133/input          -> Ba-133/ALV-F          = 5.319999999999999%
+  Ba-133/ALV-F          -> Ba-133/INT-F          = 0.001
+  Ba-133/INT-F          -> Ba-133/LNTH-F         = 3E-05
+  Ba-133/bbseq-F        -> Ba-133/LNTH-F         = 0.001
+  Ba-133/BBseq-F        -> Ba-133/LNTH-F         = 0.001
+  Ba-133/input          -> Ba-133/ET1-S          = 0%
+  Ba-133/input          -> Ba-133/ET2-S          = 0%
+  Ba-133/BB-S           -> Ba-133/ET2-S          = 10
+  Ba-133/ET1-S          -> Ba-133/ET2-S          = 1.5
+  Ba-133/input          -> Ba-133/ETseq-S        = 0%
+  Ba-133/ETseq-S        -> Ba-133/LNET-S         = 0.001
+  Ba-133/input          -> Ba-133/BB-S           = 0%
+  Ba-133/bb-S           -> Ba-133/BB-S           = 0.2
+  Ba-133/input          -> Ba-133/BBseq-S        = 0%
+  Ba-133/input          -> Ba-133/bb-S           = 0%
+  Ba-133/ALV-S          -> Ba-133/bb-S           = 0.002
+  Ba-133/input          -> Ba-133/bbseq-S        = 0%
+  Ba-133/input          -> Ba-133/ALV-S          = 0%
+  Ba-133/ALV-S          -> Ba-133/INT-S          = 0.001
+  Ba-133/INT-S          -> Ba-133/LNTH-S         = 3E-05
+  Ba-133/bbseq-S        -> Ba-133/LNTH-S         = 0.001
+  Ba-133/BBseq-S        -> Ba-133/LNTH-S         = 0.001
+  Ba-133/input          -> Ba-133/Environment    = 18.04%
+  Ba-133/ET1-F          -> Ba-133/Environment    = 0.6
+  Ba-133/ET1-S          -> Ba-133/Environment    = 0.6
+  Ba-133/Oralcavity     -> Ba-133/Oesophagus-f   = 6480
+  Ba-133/ET2-F          -> Ba-133/Oesophagus-s   = 100
+  Ba-133/ET2-S          -> Ba-133/Oesophagus-s   = 100
+  Ba-133/Oralcavity     -> Ba-133/Oesophagus-s   = 720
+  Ba-133/Oesophagus-f   -> Ba-133/St-con         = 12343
+  Ba-133/Oesophagus-s   -> Ba-133/St-con         = 2160
+  Ba-133/St-con         -> Ba-133/SI-con         = 20.57
+  Ba-133/SI-con         -> Ba-133/RC-con         = 6
+  Ba-133/Plasma         -> Ba-133/RC-con         = 20.16
+  Ba-133/RC-con         -> Ba-133/LC-con         = 2
+  Ba-133/LC-con         -> Ba-133/RS-con         = 2
+  Ba-133/RS-con         -> Ba-133/Faeces         = 2
+  Ba-133/Plasma         -> Ba-133/UB-con         = 2.24
+  Ba-133/UB-con         -> Ba-133/Urine          = 12
+  Ba-133/ALV-F          -> Ba-133/Plasma         = 20
+  Ba-133/INT-F          -> Ba-133/Plasma         = 20
+  Ba-133/bb-F           -> Ba-133/Plasma         = 20
+  Ba-133/bbseq-F        -> Ba-133/Plasma         = 20
+  Ba-133/BB-F           -> Ba-133/Plasma         = 20
+  Ba-133/BBseq-F        -> Ba-133/Plasma         = 20
+  Ba-133/ET2-F          -> Ba-133/Plasma         = 20
+  Ba-133/ETseq-F        -> Ba-133/Plasma         = 20
+  Ba-133/LNET-F         -> Ba-133/Plasma         = 20
+  Ba-133/LNTH-F         -> Ba-133/Plasma         = 20
+  Ba-133/ALV-S          -> Ba-133/Plasma         = 0
+  Ba-133/INT-S          -> Ba-133/Plasma         = 0
+  Ba-133/bb-S           -> Ba-133/Plasma         = 0
+  Ba-133/bbseq-S        -> Ba-133/Plasma         = 0
+  Ba-133/BB-S           -> Ba-133/Plasma         = 0
+  Ba-133/BBseq-S        -> Ba-133/Plasma         = 0
+  Ba-133/ET2-S          -> Ba-133/Plasma         = 0
+  Ba-133/ETseq-S        -> Ba-133/Plasma         = 0
+  Ba-133/LNET-S         -> Ba-133/Plasma         = 0
+  Ba-133/LNTH-S         -> Ba-133/Plasma         = 0
+  Ba-133/SI-con         -> Ba-133/Plasma         = 1.5
+  Ba-133/T-bone-S       -> Ba-133/Plasma         = 0.578
+  Ba-133/C-bone-S       -> Ba-133/Plasma         = 0.578
+  Ba-133/ST0            -> Ba-133/Plasma         = 7.67
+  Ba-133/ST1            -> Ba-133/Plasma         = 0.693
+  Ba-133/ST2            -> Ba-133/Plasma         = 0.00038
+  Ba-133/Noch-C-bone-V  -> Ba-133/Plasma         = 8.21E-05
+  Ba-133/Noch-T-bone-V  -> Ba-133/Plasma         = 0.000493
+  Ba-133/Plasma         -> Ba-133/ST0            = 23
+  Ba-133/Plasma         -> Ba-133/ST1            = 7
+  Ba-133/Plasma         -> Ba-133/ST2            = 0.14
+  Ba-133/Plasma         -> Ba-133/C-bone-S       = 7.78
+  Ba-133/Exch-C-bone-V  -> Ba-133/C-bone-S       = 0.0097
+  Ba-133/C-bone-S       -> Ba-133/Exch-C-bone-V  = 0.116
+  Ba-133/Exch-C-bone-V  -> Ba-133/Noch-C-bone-V  = 0.0042
+  Ba-133/Plasma         -> Ba-133/T-bone-S       = 9.72
+  Ba-133/Exch-T-bone-V  -> Ba-133/T-bone-S       = 0.0097
+  Ba-133/T-bone-S       -> Ba-133/Exch-T-bone-V  = 0.116
+  Ba-133/Exch-T-bone-V  -> Ba-133/Noch-T-bone-V  = 0.0042
+
 Nuclide: Ba-133
 
 Source regions those are part of 'Other':

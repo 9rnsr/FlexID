@@ -4,13 +4,31 @@ Zr-95 Ingestion
 [nuclide]
   Zr-95  Nb-95m  Nb-95
 
+[parameter]
+$if parent
+  ${Zr}/fA    = 0.002       # ICRP Publ.134 p.264 Table 12.2 / Ingested materials, All chemical forms
+  ${Zr}/fA_Re = 0.002       # footnote¶
+$else
+  ${Nb}/fA_MaxValueOfIng = 0.01         # ICRP Publ.134 p.288 Table 13.2 / Ingested materials, All forms
+
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
+$endif
+
+
+[intake]
+#---------------------+-------------------
+# To                  | Transfer Coef.[%]
+#---------------------+-------------------
+
+# ICRP Publ.130 p.75 Fig.3.6
+  Oralcavity              100.0%
+
 
 [Zr-95:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  inp   input                 ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -37,16 +55,9 @@ Zr-95 Ingestion
   acc   ST1                   Other
 
 [Zr-95:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.264 Table 12.2 / Ingested material, All chemical forms
-  $fA    = 0.002
-  $fA_Re = 0.002        # footnote¶
-
-# ICRP Publ.130 p.75 Fig.3.6
-  input                   Oralcavity              100.0%
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -123,127 +134,9 @@ Zr-95 Ingestion
   acc   ST1                   Other
 
 [Nb-95m:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-
-# from parent to progeny
-  Zr-95/Oralcavity        Oralcavity                ---
-  Zr-95/Oesophagus-f      Oesophagus-f              ---
-  Zr-95/Oesophagus-s      Oesophagus-s              ---
-  Zr-95/St-con            St-con                    ---
-  Zr-95/SI-con            SI-con                    ---
-  Zr-95/SI-conRe          SI-conRe                  ---
-  Zr-95/RC-con            RC-con                    ---
-  Zr-95/LC-con            LC-con                    ---
-  Zr-95/RS-con            RS-con                    ---
-  Zr-95/Faeces            Faeces                    ---
-  Zr-95/UB-con            UB-con                    ---
-  Zr-95/Urine             Urine                     ---
-
-# ICRP Publ.130 p.76 Table 3.4 & footnote
-  Oralcavity              Oesophagus-f           6480
-  Oralcavity              Oesophagus-s            720
-  Oesophagus-f            St-con                12343
-  Oesophagus-s            St-con                 2160
-  St-con                  SI-con                   20.57
-  SI-con                  RC-con                    6
-  SI-conRe                RC-con                    6
-  RC-con                  LC-con                    2
-  LC-con                  RS-con                    2
-  RS-con                  Faeces                    2
-
-# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
-  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
-
-# ICRP Publ.134 p.294 Table 13.3
-  Blood1                  Blood2                    3.2
-  Blood1                  Liver0                    0.24
-  Blood1                  Kidneys                   0.04
-  Blood1                  ST0                       3.2
-  Blood1                  ST1                       0.12
-  Blood1                  UB-con                    0.88
-  Blood1                  SI-conRe                  0.08
-  Blood1                  T-bone-S                  0.12
-  Blood1                  C-bone-S                  0.12
-  Blood2                  Blood1                    1.39
-  Liver0                  SI-conRe                  0.0578
-  Liver0                  Blood1                    0.0578
-  Liver0                  Liver1                    0.231
-  Liver1                  Blood1                    0.005
-  Kidneys                 Blood1                    0.005
-  ST0                     Blood1                    1.39
-  ST1                     Blood1                    0.01
-  T-bone-S                Blood1                    0.000493
-  T-bone-S                T-bone-V                  0.000247
-  T-bone-V                Blood1                    0.000493
-  C-bone-S                Blood1                    0.0000821
-  C-bone-S                C-bone-V                  0.0000411
-  C-bone-V                Blood1                    0.0000821
-
-# ICRP Publ.134 p.275 Para.577
-  Zr-95/Blood1            Blood1                    ---
-  Zr-95/Blood2            Blood2                    ---
-  Zr-95/C-bone-S          C-bone-S                  ---
-  Zr-95/C-bone-V          C-bone-V                  ---
-  Zr-95/T-bone-S          T-bone-S                  ---
-  Zr-95/T-bone-V          T-bone-V                  ---
-  Zr-95/Liver0            Liver0                    ---
-  Zr-95/Liver1            Liver1                    ---
-  Zr-95/Kidneys           Kidneys                   ---
-  Zr-95/ST0               ST0                       ---
-  Zr-95/ST1               ST1                       ---
-
-
-[Nb-95:compartment]
-#-----+---------------------| S-Coefficient
-# Func| Compartment         | Source Region
-#-----+---------------------+---------------
-  acc   Oralcavity            O-cavity
-  acc   Oesophagus-f          Oesophag-f
-  acc   Oesophagus-s          Oesophag-s
-  acc   St-con                St-cont
-  acc   SI-con                SI-cont
-  acc   SI-conRe              SI-cont
-  acc   RC-con                RC-cont
-  acc   LC-con                LC-cont
-  acc   RS-con                RS-cont
-  exc   Faeces                ---
-  acc   UB-con                UB-cont
-  exc   Urine                 ---
-
-  acc   Blood1                Blood
-  acc   Blood2                Blood
-  acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
-  acc   T-bone-S              T-bone-S
-  acc   T-bone-V              T-bone-V
-  acc   Liver0                Liver
-  acc   Liver1                Liver
-  acc   Kidneys               Kidneys
-  acc   ST0                   Other
-  acc   ST1                   Other
-
-[Nb-95:transfer]
-#-----------------------+---------------------+--------------
-# From                  | To                  | Coefficient[/d or %]
-#-----------------------+---------------------+--------------
-
-# ICRP Publ.134 p.288 Table 13.2 / Ingested material, All forms
-  $fA_MaxValueOfIng = 0.01
-
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
 
 # from parent to progeny
   Zr-95/Oralcavity        Oralcavity                ---
@@ -322,6 +215,112 @@ Zr-95 Ingestion
 # > イットリウムの項（11.2.3項）で説明したイットリウム親核種の摂取後に生成される
 # > ストロンチウムのモデルと同じである。
 
+  Zr-95/Blood1            Blood1                    ---
+  Zr-95/Blood2            Blood2                    ---
+  Zr-95/C-bone-S          C-bone-S                  ---
+  Zr-95/C-bone-V          C-bone-V                  ---
+  Zr-95/T-bone-S          T-bone-S                  ---
+  Zr-95/T-bone-V          T-bone-V                  ---
+  Zr-95/Liver0            Liver0                    ---
+  Zr-95/Liver1            Liver1                    ---
+  Zr-95/Kidneys           Kidneys                   ---
+  Zr-95/ST0               ST0                       ---
+  Zr-95/ST1               ST1                       ---
+
+
+[Nb-95:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Oralcavity            O-cavity
+  acc   Oesophagus-f          Oesophag-f
+  acc   Oesophagus-s          Oesophag-s
+  acc   St-con                St-cont
+  acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
+  acc   RC-con                RC-cont
+  acc   LC-con                LC-cont
+  acc   RS-con                RS-cont
+  exc   Faeces                ---
+  acc   UB-con                UB-cont
+  exc   Urine                 ---
+
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-S              T-bone-S
+  acc   T-bone-V              T-bone-V
+  acc   Liver0                Liver
+  acc   Liver1                Liver
+  acc   Kidneys               Kidneys
+  acc   ST0                   Other
+  acc   ST1                   Other
+
+[Nb-95:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# from parent to progeny
+  Zr-95/Oralcavity        Oralcavity                ---
+  Zr-95/Oesophagus-f      Oesophagus-f              ---
+  Zr-95/Oesophagus-s      Oesophagus-s              ---
+  Zr-95/St-con            St-con                    ---
+  Zr-95/SI-con            SI-con                    ---
+  Zr-95/SI-conRe          SI-conRe                  ---
+  Zr-95/RC-con            RC-con                    ---
+  Zr-95/LC-con            LC-con                    ---
+  Zr-95/RS-con            RS-con                    ---
+  Zr-95/Faeces            Faeces                    ---
+  Zr-95/UB-con            UB-con                    ---
+  Zr-95/Urine             Urine                     ---
+
+# ICRP Publ.130 p.76 Table 3.4 & footnote
+  Oralcavity              Oesophagus-f           6480
+  Oralcavity              Oesophagus-s            720
+  Oesophagus-f            St-con                12343
+  Oesophagus-s            St-con                 2160
+  St-con                  SI-con                   20.57
+  SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
+  RC-con                  LC-con                    2
+  LC-con                  RS-con                    2
+  RS-con                  Faeces                    2
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood1                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+# ICRP Publ.134 p.294 Table 13.3
+  Blood1                  Blood2                    3.2
+  Blood1                  Liver0                    0.24
+  Blood1                  Kidneys                   0.04
+  Blood1                  ST0                       3.2
+  Blood1                  ST1                       0.12
+  Blood1                  UB-con                    0.88
+  Blood1                  SI-conRe                  0.08
+  Blood1                  T-bone-S                  0.12
+  Blood1                  C-bone-S                  0.12
+  Blood2                  Blood1                    1.39
+  Liver0                  SI-conRe                  0.0578
+  Liver0                  Blood1                    0.0578
+  Liver0                  Liver1                    0.231
+  Liver1                  Blood1                    0.005
+  Kidneys                 Blood1                    0.005
+  ST0                     Blood1                    1.39
+  ST1                     Blood1                    0.01
+  T-bone-S                Blood1                    0.000493
+  T-bone-S                T-bone-V                  0.000247
+  T-bone-V                Blood1                    0.000493
+  C-bone-S                Blood1                    0.0000821
+  C-bone-S                C-bone-V                  0.0000411
+  C-bone-V                Blood1                    0.0000821
+
+# ICRP Publ.134 p.275 Para.577
   Zr-95/Blood1            Blood1                    ---
   Zr-95/Blood2            Blood2                    ---
   Zr-95/C-bone-S          C-bone-S                  ---
