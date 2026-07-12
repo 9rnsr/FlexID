@@ -1,24 +1,14 @@
 [title]
-Th-227 Inhalation, Aerosols Type M
+Th-236 Injection
 
 [nuclide]
-  Th-227  Ra-223  Rn-219
-  Po-215  Pb-211  Bi-211  Po-211  Tl-207
+  Th-236  Pa-236  U-236   Th-232  Ra-228  Ac-228
+  Th-228  Ra-224  Rn-220  Po-216  Pb-212  Bi-212
+  Po-212  Tl-208
 
 [parameter]
-  # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
-  $fb = 0                   # footnote*
-  $sb = 0                   # footnote*
-
-  ${U,Bi,Pb,Tl}/Blood       = 'Plasma'
-  ${Po}/Blood               = 'Plasma2'
-  ${Pa,Th,Ac,Ra,Rn}/Blood   = 'Blood'
-
 $if parent
-  ${Th}/fA    = 1E-4        # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type M
+  ${Th}/fA    = 5E-4        # ICRP Publ.137 p.362 Table 14.2 / Ingested materials, All forms
   ${Th}/fA_Re = 5E-4        # footnote**
 $else
   ${Fm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.454 Table 28.2  / Ingested materials, All compounds
@@ -41,8 +31,8 @@ $else
   ${Pb}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.220 Table  9.2  / Ingested materials, All forms
   ${Tl}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.344 Table 37.2  / Ingested materials, All forms
 
-  ${^Rn}/fA    = fr * fA_MaxValueOfIng
-  ${^Rn}/fA_Re =      fA_MaxValueOfIng
+  ${^Rn}/fA    = fA_MaxValueOfIng
+  ${^Rn}/fA_Re = fA_MaxValueOfIng
 $endif
 
 
@@ -51,67 +41,14 @@ $endif
 # To                  | Transfer Coef.[%]
 #---------------------+-------------------
 
-# ICRP Publ.130 p.62 Table 3.1
-# ICRP Publ.130 p.64 Para.98 & p.65 Fig.3.4 footnote
-  ET1-F                 $(      fr  *                 47.94% )
-  ET2-F                 $(      fr  * (100% - 0.2%) * 25.82% )
-  ETseq-F               $(      fr  *         0.2%  * 25.82% )
-  BB-F                  $(      fr  * (100% - 0.2%) *  1.78% )
-  BBseq-F               $(      fr  *         0.2%  *  1.78% )
-  bb-F                  $(      fr  * (100% - 0.2%) *  1.10% )
-  bbseq-F               $(      fr  *         0.2%  *  1.10% )
-  ALV-F                 $(      fr  *                  5.32% )
-
-  ET1-S                 $( (1 - fr) *                 47.94% )
-  ET2-S                 $( (1 - fr) * (100% - 0.2%) * 25.82% )
-  ETseq-S               $( (1 - fr) *         0.2%  * 25.82% )
-  BB-S                  $( (1 - fr) * (100% - 0.2%) *  1.78% )
-  BBseq-S               $( (1 - fr) *         0.2%  *  1.78% )
-  bb-S                  $( (1 - fr) * (100% - 0.2%) *  1.10% )
-  bbseq-S               $( (1 - fr) *         0.2%  *  1.10% )
-  ALV-S                 $( (1 - fr) *                  5.32% )
-
-  Environment           $(                     100% - 81.96% )
+# ICRP Publ.130 p.37 Para.15
+  Blood                   100.0%
 
 
 [{*}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   ET1-F                 ET1-sur
-  acc   ET2-F                 ET2-sur
-  acc   ETseq-F               ET2-seq
-  acc   LNET-F                LN-ET
-  acc   BB-F                  Bronchi
-  acc   BBseq-F               Bronchi-q
-  acc   bb-F                  Brchiole
-  acc   bbseq-F               Brchiole-q
-  acc   ALV-F                 ALV
-  acc   INT-F                 ALV
-  acc   LNTH-F                LN-Th
-  acc   ET1-S                 ET1-sur
-  acc   ET2-S                 ET2-sur
-  acc   ETseq-S               ET2-seq
-  acc   LNET-S                LN-ET
-  acc   BB-S                  Bronchi
-  acc   BBseq-S               Bronchi-q
-  acc   bb-S                  Brchiole
-  acc   bbseq-S               Brchiole-q
-  acc   ALV-S                 ALV
-  acc   INT-S                 ALV
-  acc   LNTH-S                LN-Th
-  acc   ET2-B                 ET2-bnd
-  acc   ETseq-B               ET2-seq
-  acc   LNET-B                LN-ET
-  acc   BB-B                  Bronchi
-  acc   BBseq-B               Bronchi-b
-  acc   bb-B                  Brchiole
-  acc   bbseq-B               Brchiole-b
-  acc   ALV-B                 ALV
-  acc   INT-B                 ALV
-  acc   LNTH-B                LN-Th
-  exc   Environment           ---
-
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
@@ -130,89 +67,6 @@ $endif
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# ICRP Publ.130 p.65 Fig.3.4
-# ICRP Publ.130 p.77 Para.143 & p.75 Fig.3.6
-  ALV-F                   bb-F                      0.002
-  ALV-F                   INT-F                     0.001
-  INT-F                   LNTH-F                    0.00003
-  bb-F                    BB-F                      0.2
-  bbseq-F                 LNTH-F                    0.001
-  BB-F                    ET2-F                    10
-  BBseq-F                 LNTH-F                    0.001
-  ET2-F                   Oesophagus-s            100
-  ETseq-F                 LNET-F                    0.001
-  ET1-F                   Environment               0.6
-  ET1-F                   ET2-F                     1.5
-
-  ALV-S                   bb-S                      0.002
-  ALV-S                   INT-S                     0.001
-  INT-S                   LNTH-S                    0.00003
-  bb-S                    BB-S                      0.2
-  bbseq-S                 LNTH-S                    0.001
-  BB-S                    ET2-S                    10
-  BBseq-S                 LNTH-S                    0.001
-  ET2-S                   Oesophagus-s            100
-  ETseq-S                 LNET-S                    0.001
-  ET1-S                   Environment               0.6
-  ET1-S                   ET2-S                     1.5
-
-# ICRP Publ.130 p.67 Fig.3.5(a)
-# ICRP Publ.130 p.68 Para.107
-  ALV-F                   ALV-B                 $(      fb  * sr )
-  INT-F                   INT-B                 $(      fb  * sr )
-  bb-F                    bb-B                  $(      fb  * sr )
-  bbseq-F                 bbseq-B               $(      fb  * sr )
-  BB-F                    BB-B                  $(      fb  * sr )
-  BBseq-F                 BBseq-B               $(      fb  * sr )
-  ET2-F                   ET2-B                 $(      fb  * sr )
-  ETseq-F                 ETseq-B               $(      fb  * sr )
-  LNET-F                  LNET-B                $(      fb  * sr )
-  LNTH-F                  LNTH-B                $(      fb  * sr )
-
-  ALV-S                   ALV-B                 $(      fb  * ss )
-  INT-S                   INT-B                 $(      fb  * ss )
-  bb-S                    bb-B                  $(      fb  * ss )
-  bbseq-S                 bbseq-B               $(      fb  * ss )
-  BB-S                    BB-B                  $(      fb  * ss )
-  BBseq-S                 BBseq-B               $(      fb  * ss )
-  ET2-S                   ET2-B                 $(      fb  * ss )
-  ETseq-S                 ETseq-B               $(      fb  * ss )
-  LNET-S                  LNET-B                $(      fb  * ss )
-  LNTH-S                  LNTH-B                $(      fb  * ss )
-
-  ALV-F                   $Blood                $( (1 - fb) * sr )
-  INT-F                   $Blood                $( (1 - fb) * sr )
-  bb-F                    $Blood                $( (1 - fb) * sr )
-  bbseq-F                 $Blood                $( (1 - fb) * sr )
-  BB-F                    $Blood                $( (1 - fb) * sr )
-  BBseq-F                 $Blood                $( (1 - fb) * sr )
-  ET2-F                   $Blood                $( (1 - fb) * sr )
-  ETseq-F                 $Blood                $( (1 - fb) * sr )
-  LNET-F                  $Blood                $( (1 - fb) * sr )
-  LNTH-F                  $Blood                $( (1 - fb) * sr )
-
-  ALV-S                   $Blood                $( (1 - fb) * ss )
-  INT-S                   $Blood                $( (1 - fb) * ss )
-  bb-S                    $Blood                $( (1 - fb) * ss )
-  bbseq-S                 $Blood                $( (1 - fb) * ss )
-  BB-S                    $Blood                $( (1 - fb) * ss )
-  BBseq-S                 $Blood                $( (1 - fb) * ss )
-  ET2-S                   $Blood                $( (1 - fb) * ss )
-  ETseq-S                 $Blood                $( (1 - fb) * ss )
-  LNET-S                  $Blood                $( (1 - fb) * ss )
-  LNTH-S                  $Blood                $( (1 - fb) * ss )
-
-  ALV-B                   $Blood                $sb
-  INT-B                   $Blood                $sb
-  bb-B                    $Blood                $sb
-  bbseq-B                 $Blood                $sb
-  BB-B                    $Blood                $sb
-  BBseq-B                 $Blood                $sb
-  ET2-B                   $Blood                $sb
-  ETseq-B                 $Blood                $sb
-  LNET-B                  $Blood                $sb
-  LNTH-B                  $Blood                $sb
 
 # ICRP Publ.130 p.76 Table 3.4 & footnote
   Oralcavity              Oesophagus-f           6480
@@ -233,41 +87,6 @@ $endif
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
-
-# decay for HRTM
-  {*}/ET1-F               ET1-F                     ---
-  {*}/ET2-F               ET2-F                     ---
-  {*}/ETseq-F             ETseq-F                   ---
-  {*}/LNET-F              LNET-F                    ---
-  {*}/BB-F                BB-F                      ---
-  {*}/BBseq-F             BBseq-F                   ---
-  {*}/bb-F                bb-F                      ---
-  {*}/bbseq-F             bbseq-F                   ---
-  {*}/ALV-F               ALV-F                     ---
-  {*}/INT-F               INT-F                     ---
-  {*}/LNTH-F              LNTH-F                    ---
-  {*}/ET1-S               ET1-S                     ---
-  {*}/ET2-S               ET2-S                     ---
-  {*}/ETseq-S             ETseq-S                   ---
-  {*}/LNET-S              LNET-S                    ---
-  {*}/BB-S                BB-S                      ---
-  {*}/BBseq-S             BBseq-S                   ---
-  {*}/bb-S                bb-S                      ---
-  {*}/bbseq-S             bbseq-S                   ---
-  {*}/ALV-S               ALV-S                     ---
-  {*}/INT-S               INT-S                     ---
-  {*}/LNTH-S              LNTH-S                    ---
-  {*}/ET2-B               ET2-B                     ---
-  {*}/ETseq-B             ETseq-B                   ---
-  {*}/LNET-B              LNET-B                    ---
-  {*}/BB-B                BB-B                      ---
-  {*}/BBseq-B             BBseq-B                   ---
-  {*}/bb-B                bb-B                      ---
-  {*}/bbseq-B             bbseq-B                   ---
-  {*}/ALV-B               ALV-B                     ---
-  {*}/INT-B               INT-B                     ---
-  {*}/LNTH-B              LNTH-B                    ---
-  {*}/Environment         Environment               ---
 
 # decay for HATM
   {*}/Oralcavity          Oralcavity                ---
@@ -485,6 +304,374 @@ $endif
 # > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
 
 
+# ICRP Publ.317 p.370 Para.812
+# > (812) ... The model for thorium as a radium progeny is applied to
+# > protactinium as a thorium progeny based on the similar systemic behaviours of
+# > protactinium and thorium in rats (Lanz et al., 1946; Schuppler et al., 1988;
+# > Durbin, 2011). 
+# > (812) ... ラジウムの子孫元素としてのトリウムのモデルは、
+# > ラットにおけるプロトアクチニウムとトリウムの類似した全身的挙動に基づいて、
+# > トリウムの子孫元素としてのプロトアクチニウムにも適用される(Lanz et al., 1946;
+# > Schuppler et al., 1988; Durbin, 2011)。
+
+[{Pa}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのプロトアクチニウムは、ラジウム子孫元素としてのトリウムのモデルを用いる。
+# → ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) The model for thorium as a progeny of radium is a modification of the systemic
+# > model applied in this publication to thorium as a parent radionuclide. Two
+# > compartments, one representing spleen and the other representing skin, are added to
+# > that model.
+# > (715) ラジウムの子孫核種としてのトリウムのモデルは、本論文でトリウムを親核種として
+# > 適用した全身モデルを修正したものである。このモデルには、脾臓と皮膚を表す2つの
+# > コンパートメントが追加されている。
+
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[{Pa}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.141 p.234 Table 18.9
+  Blood                   Liver1                    0.097
+  Blood                   T-bone-S                  0.679
+  Blood                   C-bone-S                  0.679
+  Blood                   Kidneys1                  0.0679
+  Blood                   Kidneys2                  0.0194
+  Blood                   UB-con                    0.107
+  Blood                   RC-con                    0.0097
+  Blood                   Testes                    0.00068
+  Blood                   Ovaries                   0.00021
+  Blood                   ST0                       0.832
+ #Blood                   ST1                       0.243       # fix
+  Blood                   ST2                       0.0388
+  Liver1                  SI-con                    0.000475
+  Liver1                  Liver2                    0.00095
+  Liver1                  Blood                     0.000475
+  Liver2                  Blood                     0.000211
+  T-bone-S                T-marrow                  4.93E-4
+  T-bone-S                T-bone-V                  2.47E-4
+  T-bone-V                T-marrow                  4.93E-4
+  T-marrow                Blood                     0.0076
+  C-bone-S                C-marrow                  8.21E-5
+  C-bone-S                C-bone-V                  4.11E-5
+  C-bone-V                C-marrow                  8.21E-5
+  C-marrow                Blood                     0.0076
+  C-marrow                C-bone-S                  0
+  Kidneys1                UB-con                    0.0462
+  Kidneys2                Blood                     0.00038
+  Testes                  Blood                     0.00038
+  Ovaries                 Blood                     0.00038
+  ST0                     Blood                     0.462
+  ST1                     Blood                     0.00095
+  ST2                     Blood                     1.9E-5
+
+#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのプロトアクチニウムは、ラジウム子孫元素としてのトリウムのモデルを用いる。
+# → ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) ... Spleen and skin are assumed to exchange thorium with blood. Parameter
+# > values for these compartments are based on limited data from animal studies and
+# > human autopsy studies (Stover et al., 1960; Thomas et al., 1963; Larsen et al., 1984;
+# > Singh et al., 1983; Stehney and Lucas, 2000; Glover et al., 2001). Spleen and skin are
+# > assumed to receive 0.5% and 2%, respectively, of thorium ‘leaving the circulation’ as
+# > defined in Section 14. The transfer coefficient from blood to the intermediate-term soft
+# > tissue compartment ST1 (Fig. 14.2) is reduced to maintain the original removal halftime
+# > from blood. The assumed removal half-time from spleen and skin to blood is 2 y,
+# > the same as the removal half-time from ST1 to blood.
+# > (715) ... 脾臓と皮膚はトリウムを血液と交換すると仮定されている。
+# > これらのコンパートメントのパラメータ値は、動物実験およびヒト剖検研究から得られた
+# > 限られたデータに基づいている（Stover et al., 1960; Thomas et al., 1963; Larsen et al.,
+# > 1984; Singh et al., 1983; Stehney and Lucas, 2000; Glover et al., 2001）。
+# > 脾臓と皮膚は、第 14 節で定義される「循環系から排出される」トリウムのそれぞれ 0.5% と 2% を
+# > 受け取ると仮定する。血液から中間期の軟部組織コンパートメント ST1 への移行係数（図 14.2）は、
+# > 血液からの元の除去半減期を維持するために低減される。脾臓および皮膚から血液への
+# > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じである。
+
+  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
+  Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
+  Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
+  Spleen                  Blood                 $(0.693 / 2/365.25)
+  Skin                    Blood                 $(0.693 / 2/365.25)
+
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) ... Thorium produced in a compartment
+# > of a preceding chain member that is not identifiable with a compartment in
+# > the thorium model is assumed to transfer to the blood compartment of the thorium
+# > model at the following rate: 1000 d⁻¹ if produced in a blood compartment; 0.462 d⁻¹ if
+# > produced in a soft tissue compartment (the highest rate of removal from a compartment
+# > of other soft tissues in the thorium model); and at the rate of bone turnover if
+# > produced in an exchangeable bone volume compartment.
+# > (715) ... トリウムモデル内のコンパートメントと識別できない先行する連鎖メンバーのコンパートメントで
+# > 生成されたトリウムは、トリウムモデルの血液コンパートメントに以下の速度で移行すると仮定する。
+# > 血液コンパートメントで生成された場合は 1000 d⁻¹、軟部組織コンパートメントで生成された
+# > 場合は 0.462 d⁻¹（トリウムモデルにおける他の軟部組織のコンパートメントからの除去速度が
+# > 最も高い）。交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
+
+  {U,Bi,Pb,Tl}/Plasma         Blood              1000
+  {Po}/Plasma1                Blood              1000
+  {Po}/Plasma2                Blood              1000
+  {Po}/Plasma3                Blood              1000
+  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
+  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
+
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         C-bone-V              ---
+  {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
+  {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
+  {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
+  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365.25)
+  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365.25)
+
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
+
+  {U}/ST0                     Blood                 0.462
+  {U}/ST1                     Blood                 0.462
+  {U}/ST2                     Blood                 0.462
+  {Pa}/ST0                    ST0                   ---
+  {Pa}/ST1                    ST1                   ---
+  {Pa}/ST2                    ST2                   ---
+  {Th}/ST0                    Blood                 0.462
+  {Th}/ST1                    Blood                 0.462
+  {Th}/ST2                    Blood                 0.462
+  {Ac}/ST0                    Blood                 0.462
+  {Ac}/ST1                    Blood                 0.462
+  {Ac}/ST2                    Blood                 0.462
+  {Ra}/ST0                    Blood                 0.462
+  {Ra}/ST1                    Blood                 0.462
+  {Ra}/ST2                    Blood                 0.462
+  {Po}/Other                  Blood                 0.462
+  {Bi}/ST0                    Blood                 0.462
+  {Bi}/ST1                    Blood                 0.462
+  {Bi}/ST2                    Blood                 0.462
+  {Pb}/ST0                    Blood                 0.462
+  {Pb}/ST1                    Blood                 0.462
+  {Pb}/ST2                    Blood                 0.462
+  {Tl}/Other                  Blood                 0.462
+
+
+[{U}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Plasma                Blood
+  acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissues
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+# ICRP Publ.137 p.369 Para.811 / トリウム系列子孫元素としてのウラン
+# ICRP Publ.137 p.369 Para.811
+# > (811) ... The model for uranium
+# > produced by serial decay of members of a uranium chain is a modification of the
+# > model for uranium as a parent radionuclide (see Section 15). Single compartments
+# > representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
+# > added for consistency with the models for other progeny of thorium. 
+# > (811) ... ウラン系列の核種の逐次崩壊によって
+# > 生成されるウランのモデルは、親放射性核種としてのウランのモデルを修正したものである
+# > （セクション15を参照）。トリウムの他の娘核種のモデルとの整合性をとるため、脾臓、海綿骨髄、
+# > 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されています。
+
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[{U}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.137 p.415 Table 15.4
+  Plasma                  ST0                      10.5
+  Plasma                  RBC                       0.245
+  Plasma                  UB-con                   15.43
+  Plasma                  Kidneys1                  2.94
+  Plasma                  Kidneys2                  0.0122
+  Plasma                  RC-con                    0.122
+  Plasma                  Liver1                    0.367
+ #Plasma                  ST1                       1.63        # fix
+  Plasma                  ST2                       0.0735
+  Plasma                  T-bone-S                  2.04
+  Plasma                  C-bone-S                  1.63
+  ST0                     Plasma                    8.32
+  RBC                     Plasma                    0.347
+  Kidneys1                UB-con                    0.099
+  Kidneys2                Plasma                    0.00038
+  Liver1                  Plasma                    0.092
+  Liver1                  Liver2                    0.00693
+  Liver2                  Plasma                    0.00019
+  ST1                     Plasma                    0.0347
+  ST2                     Plasma                    0.000019
+  T-bone-S                Plasma                    0.0693
+  T-bone-S                Exch-T-bone-V             0.0693
+  C-bone-S                Plasma                    0.0693
+  C-bone-S                Exch-C-bone-V             0.0693
+  Noch-T-bone-V           Plasma                    0.000493
+  Noch-C-bone-V           Plasma                    0.0000821
+  Exch-T-bone-V           T-bone-S                  0.0173
+  Exch-T-bone-V           Noch-T-bone-V             0.00578
+  Exch-C-bone-V           C-bone-S                  0.0173
+  Exch-C-bone-V           Noch-C-bone-V             0.00578
+
+# ICRP Publ.137 p.369 Para.811
+# (811) ... Single compartments
+# representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
+# added for consistency with the models for other progeny of thorium. The six added
+# compartments are taken from the intermediate-term soft tissue compartment ST1 in
+# the model for uranium as a parent. Deposition of uranium as a progeny in spleen,
+# trabecular marrow + cortical marrow (i.e. total combined marrow), testes, ovaries,
+# or skin is calculated as its mass fraction of other soft tissues times the deposition
+# fraction for ST1 (0.0665 of uranium ‘leaving the circulation’, as defined in Section
+# 15). Deposition in trabecular marrow is assumed to be three times greater than
+# deposition in cortical marrow. The derived transfer cofficients from blood to
+# spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are 0.004 d-¹,
+# 0.075 d-¹, 0.025 d-¹, 0.001 d-¹, 0.0003 d-¹, and 0.09 d-¹, respectively. The removal
+# half-time from each added compartment is set at 20 d, the removal half-time from
+# ST1. The deposition fraction for ST1 is reduced by the sum of deposition fractions
+# for the six added compartments. 
+# (811) ... トリウムの他の娘核種のモデルとの整合性をとるため、脾臓、海綿骨髄、
+# 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されている。
+# これら6つの追加コンパートメントは、親核種としてのウランのモデルにおける中期的軟部組織
+# コンパートメントST1から採用されたものである。脾臓、海綿骨髄＋皮質骨髄（すなわち、合わせた全骨髄）、
+# 精巣、卵巣、または皮膚における娘核種としてのウランの沈着量は、ST1の沈着割合（セクション15で
+# 定義される「循環から離脱する」ウランの0.0665）に、他の軟部組織に対する当該組織の質量分率を
+# 乗じることによって算出される。海綿骨髄における沈着量は、皮質骨髄における沈着量の3倍であると
+# 仮定される。血液から脾臓、海綿骨髄、皮質骨髄、精巣、卵巣、および皮膚への移行係数は、それぞれ
+# 0.004 d⁻¹、0.075 d⁻¹、0.025 d⁻¹、0.001 d⁻¹、0.0003 d⁻¹、および0.09 d⁻¹と導出される。
+# 各追加コンパートメントからの除去半減期は、ST1からの除去半減期である20日と設定される。
+# ST1の沈着割合は、これら6つの追加コンパートメントの沈着割合の合計分だけ低減される。
+
+  Plasma                  ST1           $(1.63 - (0.025+0.075+0.001+0.0003+0.09+0.004))
+  Plasma                  C-marrow                  0.025
+  Plasma                  T-marrow                  0.075
+  Plasma                  Testes                    0.001
+  Plasma                  Ovaries                   0.0003
+  Plasma                  Skin                      0.09
+  Plasma                  Spleen                    0.004
+
+  C-marrow                Plasma                $(0.693 / 20)   # 半減期20日
+  T-marrow                Plasma                $(0.693 / 20)   # 半減期20日
+  Testes                  Plasma                $(0.693 / 20)   # 半減期20日
+  Ovaries                 Plasma                $(0.693 / 20)   # 半減期20日
+  Skin                    Plasma                $(0.693 / 20)   # 半減期20日
+  Spleen                  Plasma                $(0.693 / 20)   # 半減期20日
+
+# ICRP Publ.137 p.369 Para.811
+# (811) ... Uranium produced in a soft tissue compartment
+# that is not identifiable with a compartment in the characteristic model for uranium is
+# assumed to transfer to plasma at the rate 8.32 d-¹, the highest rate of loss from any
+# compartment of other soft tissue in the characteristic model for uranium. Uranium
+# produced in a bone volume compartment that is ambiguous with regard to the
+# uranium model (e.g. trabecular or cortical bone volume in the thorium model) is
+# assumed to be produced in non-exchangeable bone.
+# (811) ... ウランの特性モデルにおけるコンパートメントと同一視できない
+# 軟部組織コンパートメント内で生成されたウランは、8.32 d⁻¹の速度で血漿へ移行すると仮定される。
+# この速度は、ウランの特性モデルにおける他の軟部組織のどのコンパートメントからの消失速度よりも
+# 高いものである。ウランのモデルに関してその帰属が不明確な骨体積区画（例：トリウムモデルにおける
+# 海綿骨または皮質骨の体積）で生成されるウランは、非交換性骨で生成されるものと仮定される。
+
+  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
+  {Po}/Plasma1                Plasma             1000       # Publ.151 Annex.B
+  {Po}/Plasma2                Plasma             1000       # Publ.151 Annex.B
+  {Po}/Plasma3                Plasma             1000       # Publ.151 Annex.B
+  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
+  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000       # Publ.151 Annex.B
+
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---     # Publ.137 Para.812
+  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---     # Publ.137 Para.812
+  {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
+  {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
+  {U,Ra,Pb}/Exch-C-bone-V     Exch-C-bone-V         ---
+  {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
+
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
+
+  {U}/ST0                     ST0                   ---
+  {U}/ST1                     ST1                   ---
+  {U}/ST2                     ST2                   ---
+  {Pa}/ST0                    Plasma                8.32
+  {Pa}/ST1                    Plasma                8.32
+  {Pa}/ST2                    Plasma                8.32
+  {Th}/ST0                    Plasma                8.32
+  {Th}/ST1                    Plasma                8.32
+  {Th}/ST2                    Plasma                8.32
+  {Ac}/ST0                    Plasma                8.32
+  {Ac}/ST1                    Plasma                8.32
+  {Ac}/ST2                    Plasma                8.32
+  {Ra}/ST0                    Plasma                8.32
+  {Ra}/ST1                    Plasma                8.32
+  {Ra}/ST2                    Plasma                8.32
+  {Po}/Other                  Plasma                8.32
+  {Bi}/ST0                    Plasma                8.32
+  {Bi}/ST1                    Plasma                8.32
+  {Bi}/ST2                    Plasma                8.32
+  {Pb}/ST0                    Plasma                8.32
+  {Pb}/ST1                    Plasma                8.32
+  {Pb}/ST2                    Plasma                8.32
+  {Tl}/Other                  Plasma                8.32
+
+
 [{Ra}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
@@ -666,6 +853,252 @@ $endif
   {Tl}/Other                  Blood                 6.98
 
 
+[{Ac}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Blood                 Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
+  acc   T-bone-V              T-bone-V
+  acc   C-marrow              C-marrow
+  acc   T-marrow              T-marrow
+  acc   Liver1                Liver
+  acc   Liver2                Liver
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
+  acc   Testes                Testes
+  acc   Ovaries               Ovaries
+  acc   ST0                   Other
+  acc   ST1                   Other
+  acc   ST2                   Other
+
+#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのアクチニウムは、ラジウム子孫元素としてのモデルを用いる
+# → ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
+# なお、子孫核種としてのアクチニウムの挙動については、ICRP Publ.141 p.235 Para.566にも
+# 同等の記載が存在するため、ここではPubl.137 Para.714 と併せて引用する。
+
+# ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
+# > (714) For application to actinium as a progeny of radium, two compartments representing
+# > the spleen and skin are added to the explicitly identified source regions in the
+# > characteristic model for actinium for consistency with the source regions addressed in
+# > models for other radium progeny. ...
+# > (714) ラジウムの子孫核種としてのアクチニウムへの適用では、他のラジウム子孫核種のモデルで
+# > 扱われている線源領域との整合性を図るため、アクチニウムの特性モデルで明示的に特定された
+# > 線源領域に、脾臓と皮膚を表す2つのコンパートメントが追加される。 ...
+
+# ICRP Publ.141 p.566 Para.566 / 子孫元素としてのアクチニウム
+# > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
+# > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
+# > progeny are modifications of their characteristic models described earlier in this
+# > section. For a given element in this group, two compartments representing the
+# > skin and spleen are added to the explicitly identified source regions in the element's
+# > characteristic model. ...
+# > (566) アクチニウム、プロトアクチニウム、ネプツニウム、プルトニウム、アメリシウム、
+# > キュリウム、バークリウム、カリホルニウム、アインスタイニウム、フェルミウムを
+# > アクチニド娘元素として適用するモデルは、このセクションで先に説明した特性モデルを
+# > 修正したものである。このグループの特定の元素について、その元素の特性モデルで明示的に
+# > 特定された供給源領域に、皮膚と脾臓を表す2つの区画が追加される。 ...
+
+  acc   Skin                  Skin
+  acc   Spleen                Spleen
+
+[{Ac}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  Blood                 $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Blood                 $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.141 p.234 Table 18.9
+  Blood                   Liver1                    11.6
+  Blood                   T-bone-S                  3.49
+  Blood                   C-bone-S                  3.49
+  Blood                   Kidneys1                  0.466
+  Blood                   Kidneys2                  0.116
+  Blood                   UB-con                    1.63
+  Blood                   RC-con                    0.303
+  Blood                   Testes                    0.0082
+  Blood                   Ovaries                   0.0026
+  Blood                   ST0                       10.0
+ #Blood                   ST1                       1.67        # fix
+  Blood                   ST2                       0.466
+  Liver1                  SI-conRe                  0.0006
+  Liver1                  Liver2                    0.0225
+  Liver1                  Blood                     0
+  Liver2                  Blood                     0.0019
+  T-bone-S                T-marrow                  4.93E-4
+  T-bone-S                T-bone-V                  2.47E-4
+  T-bone-V                T-marrow                  4.93E-4
+  T-marrow                Blood                     0.0076
+  C-bone-S                C-marrow                  8.21E-5
+  C-bone-S                C-bone-V                  4.11E-5
+  C-bone-V                C-marrow                  8.21E-5
+  C-marrow                Blood                     0.0076
+  C-marrow                C-bone-S                  0
+  Kidneys1                UB-con                    0.099
+  Kidneys2                Blood                     0.00139
+  Testes                  Blood                     0.00038
+  Ovaries                 Blood                     0.00038
+  ST0                     Blood                     1.39
+  ST1                     Blood                     0.0139
+  ST2                     Blood                     1.9E-5
+
+# ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
+# > (714) ... Skin and spleen are taken from the intermediate soft
+# > tissue compartment ST1; that is, the deposition fraction for ST1 is reduced by the
+# > deposition fractions assigned to spleen and skin, and the removal half-time from ST1
+# > to blood is assigned to spleen and skin. Deposition in skin is calculated as its mass
+# > fraction of other soft tissues times its deposition fraction in other soft tissues, excluding
+# > deposition in the fast-turnover compartment ST0. The deposition fraction for spleen is
+# > set at one-third of the deposition fraction for skin, considering the relative masses of
+# > these tissues and the typically higher concentrations of actinides in spleen than skin
+# > observed in laboratory animals and human subjects.
+# > (714) ... 皮膚と脾臓は中間代謝軟組織コンパートメントST1から取得されます。すなわち、
+# > ST1の沈着割合は脾臓と皮膚に割り当てられた沈着割合によって減少し、ST1から血液への
+# > 除去半減期が脾臓と皮膚に割り当てられます。皮膚における沈着は、その他の軟組織の質量割合と、
+# > 急速代謝コンパートメントST0への沈着を除くその他の軟組織への沈着割合を乗じて計算されます。
+# > 脾臓への沈着割合は、これらの組織の相対質量と、実験動物やヒトにおいて脾臓の方が皮膚よりも
+# > アクチニドの濃度が通常高いことを考慮して、皮膚への沈着割合の3分の1に設定されます。
+
+# ICRP Publ.141 p.566 Para.566 / 子孫元素としてのアクチニウム
+# > (566) ... These compartments are taken from the intermediate soft tissue
+# > compartment, ST1; that is, the deposition fraction for ST1 is reduced by the deposition
+# > fractions assigned to the spleen and skin, and the removal half-time from ST1 is
+# > assigned to these added compartments. Deposition of the element in the skin is
+# > calculated as its mass fraction of other soft tissue times its deposition fraction in
+# > other soft tissue excluding the rapid-turnover compartment, ST0. The deposition
+# > fraction for the spleen is set at one-third of the deposition fraction for the skin,
+# > considering the relative masses of these tissues and the typically higher concentrations
+# > of the actinides in the spleen than the skin observed in laboratory animals and
+# > humans. 
+# > これらのコンパートメント(訳注：皮膚と脾臓)は、中間代謝軟組織コンパートメントST1から
+# > 取得されます。すなわち、ST1の沈着割合は脾臓と皮膚に割り当てられた沈着割合によって減少し、
+# > ST1からの除去半減期がこれらの追加されたコンパートメントに割り当てられます。皮膚における
+# > 元素の沈着は、その他の軟組織の質量割合と、急速代謝コンパートメントST0を除く
+# > その他の軟組織の沈着割合を乗じて計算されます。脾臓への沈着割合は、これらの組織の相対質量と、
+# > 実験動物やヒトにおいて脾臓の方が皮膚よりもアクチニドの濃度が通常高いことを考慮して、
+# > 皮膚への沈着割合の3分の1に設定されます。
+
+# 親核種としての、SkinとSpleenを明示していないアクチニウムモデルにおける軟組織の総質量は
+# sregions_2016-08-12.NDX で定義された男性の線源領域から以下のように計算される。
+#   O-mucosa  + Teeth-V   + Tonsils   + Oesophag-w + St-wall   + SI-wall   +
+#   RC-wall   + LC-wall   + RS-wall   + LN-ET      + LN-Th     + Adrenals  +
+#   Brain     + Breast    + Eye-lens  + GB-wall    + Ht-wall   + LN-Sys    +
+#   Pancreas  + P-gland   + Prostate  + S-glands   + Thymus    + Thyroid   +
+#   Ureters   + UB-wall   + Uterus    + Adipose    + Cartilage + Muscle    +
+#   ET1-wall  + ET2-wall  + Lung-Tis  + Skin       + Spleen
+# = 3.583E-02 + 5.000E-02 + 3.000E-03 + 4.000E-02  + 1.500E-01 + 6.500E-01 + 
+#   1.500E-01 + 1.500E-01 + 7.000E-02 + 1.500E-02  + 1.500E-02 + 1.400E-02 + 
+#   1.450E+00 + 2.500E-02 + 4.000E-04 + 1.000E-02  + 3.300E-01 + 1.484E-01 + 
+#   1.400E-01 + 6.000E-04 + 1.700E-02 + 8.500E-02  + 2.500E-02 + 2.000E-02 + 
+#   1.600E-02 + 5.000E-02 + 0.000E+00 + 1.723E+01  + 1.100E+00 + 2.900E+01 +
+#   2.923E-03 + 2.923E-03 + 5.000E-01 + 3.300E+00  + 1.500E-01
+# = 54.946076
+#
+# 同様に、親核種としてのモデルにおいて血液からST0以外の軟組織に沈着する割合は
+#   Blood → ST1     1.67
+#   Blood → ST2     0.466
+# であるため、血液からST1,ST2の軟組織に沈着する総割合は 1.67 + 0.466 = 2.136 となる。
+#
+# これらからの数値から、子孫核種における移行係数は以下のように計算される。
+#   血液から皮膚への沈着割合は、軟組織(ST1 + ST2)に対する皮膚の質量分率より、
+#   Blood → Skin    (1.67 + 0.466) * (3.300E+00 / 54.946076) ≒ 0.128286
+#
+#   血液から脾臓への沈着割合は、皮膚への沈着率の1/3となることから、
+#   Blood → Spleen  0.128285776 / 3 ≒ 0.042762
+# 
+#   血液からST1への沈着割合は、皮膚と脾臓に割り当てられた分を差し引くことになり、
+#   Blood → ST1     1.67 - 0.128286 - 0.042762 ≒ 1.498952
+
+  Blood                   ST1                   $(1.67 - 0.128286 - 0.128286/3)
+  Blood                   Skin                  $(0.128286)
+  Blood                   Spleen                $(0.128286 / 3)
+  Skin                    Blood                     0.0139
+  Spleen                  Blood                     0.0139
+
+# ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
+# > (714) ... If actinium is produced in a
+# > compartment that is not identifiable with a compartment in its characteristic model,
+# > it is assumed to transfer to actinium’s central blood compartment at the rate 1000 d⁻¹
+# > if produced in a blood compartment, at the rate of transfer from the fast-turnover soft
+# > tissue compartment ST0 to blood (1.386 d⁻¹) if produced in a soft tissue compartment,
+# > and at the rate of bone turnover if produced in a bone volume compartment.
+# > (714) ... アクチニウムが、その特性モデルのコンパートメントと識別
+# > できないコンパートメントで生成される場合、血液コンパートメントで生成された場合は1000 d⁻¹の
+# > 速度でアクチニウムの中心血液コンパートメントに、軟部組織コンパートメントで生成された場合は
+# > 回転の速い軟部組織コンパートメントST0から血液への移行速度（1.386 d⁻¹）で、骨量コンパートメントで
+# > 生成された場合は骨代謝速度でアクチニウムの中心血液コンパートメントに移行すると仮定される。
+
+# ICRP Publ.141 p.566 Para.566 / 子孫元素としてのアクチニウム
+# > (566) ... If the element is produced in a compartment that is not identifiable with a
+# > compartment in its characteristic model, it is assumed to transfer to the element's
+# > blood compartment [Blood 1 in the case of plutonium, which has multiple blood
+# > compartments (see Table 18.6)] at the rate 1000 d⁻¹ if produced in a blood compartment,
+# > at the rate of transfer from the fast-turnover soft tissue compartment ST0 to
+# > blood if produced in a soft tissue compartment, and at the rate of bone turnover if
+# > produced in a bone volume compartment.
+# > (566) ... 元素がその特性モデルのコンパートメントと識別できないコンパートメントで生成される場合、
+# > 血液コンパートメントで生成された場合は1000 d⁻¹の速度で、軟組織コンパートメントで生成された場合は
+# > 回転の速い軟組織コンパートメントST0から血液への移行速度で、骨量コンパートメントで生成された
+# > 場合は骨代謝速度で、元素の血液コンパートメント [複数の血液コンパートメントを持つプルトニウムの
+# > 場合はBlood 1 (表 18.6 を参照)] に移行すると想定される。
+
+  {U,Bi,Pb,Tl}/Plasma         Blood              1000
+  {Po}/Plasma1                Blood              1000
+  {Po}/Plasma2                Blood              1000
+  {Po}/Plasma3                Blood              1000
+  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
+  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
+
+  {^Rn}/C-bone-S              C-bone-S              ---
+  {^Rn}/T-bone-S              T-bone-S              ---
+  {Pa,Th,Ac}/C-bone-V         C-bone-V              ---
+  {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
+  {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
+  {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
+  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365.25)
+  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365.25)
+
+  {^Rn}/C-marrow              C-marrow              ---
+  {^Rn}/T-marrow              T-marrow              ---
+  {^Rn}/Liver1                Liver1                ---
+  {^Rn}/Liver2                Liver2                ---
+  {^Rn}/Kidneys1              Kidneys1              ---
+  {^Rn}/Kidneys2              Kidneys2              ---
+  {^Rn}/Testes                Testes                ---
+  {^Rn}/Ovaries               Ovaries               ---
+  {^Rn}/Skin                  Skin                  ---
+  {^Rn}/Spleen                Spleen                ---
+
+  {U}/ST0                     Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {U}/ST1                     Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {U}/ST2                     Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Pa}/ST0                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Pa}/ST1                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Pa}/ST2                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Th}/ST0                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Th}/ST1                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Th}/ST2                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Ac}/ST0                    ST0                   ---
+  {Ac}/ST1                    ST1                   ---
+  {Ac}/ST2                    ST2                   ---
+  {Ra}/ST0                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Ra}/ST1                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Ra}/ST2                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Po}/Other                  Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Bi}/ST0                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Bi}/ST1                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Bi}/ST2                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Pb}/ST0                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Pb}/ST1                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Pb}/ST2                    Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Tl}/Other                  Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+
+
 #   ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラドンは、ラジウム子孫元素としてのモデルを用いる。
 # →ICRP Publ.137 p.331 Para.711 / ラジウム子孫元素としてのラドン
 # なお、子孫核種としてのラドンの挙動については、ICRP Publ.141 p.235 Para.563にも
@@ -715,39 +1148,6 @@ $endif
 # > of 100 d⁻¹is applied in this series of reports.
 # > (129) 計算のために、この一連の報告書では、呼吸器系内で子孫核種として生成される
 # > ラドンを含む希ガスが100 d⁻¹の速度で体から排出されるという仮定を適用している。
-
-  ET1-F                   Exhaled                 100
-  ET2-F                   Exhaled                 100
-  ETseq-F                 Exhaled                 100
-  LNET-F                  Exhaled                 100
-  BB-F                    Exhaled                 100
-  BBseq-F                 Exhaled                 100
-  bb-F                    Exhaled                 100
-  bbseq-F                 Exhaled                 100
-  ALV-F                   Exhaled                 100
-  INT-F                   Exhaled                 100
-  LNTH-F                  Exhaled                 100
-  ET1-S                   Exhaled                 100
-  ET2-S                   Exhaled                 100
-  ETseq-S                 Exhaled                 100
-  LNET-S                  Exhaled                 100
-  BB-S                    Exhaled                 100
-  BBseq-S                 Exhaled                 100
-  bb-S                    Exhaled                 100
-  bbseq-S                 Exhaled                 100
-  ALV-S                   Exhaled                 100
-  INT-S                   Exhaled                 100
-  LNTH-S                  Exhaled                 100
-  ET2-B                   Exhaled                 100
-  ETseq-B                 Exhaled                 100
-  LNET-B                  Exhaled                 100
-  BB-B                    Exhaled                 100
-  BBseq-B                 Exhaled                 100
-  bb-B                    Exhaled                 100
-  bbseq-B                 Exhaled                 100
-  ALV-B                   Exhaled                 100
-  INT-B                   Exhaled                 100
-  LNTH-B                  Exhaled                 100
 
   Oralcavity              Exhaled                 100
   Oesophagus-f            Exhaled                 100

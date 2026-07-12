@@ -1,15 +1,15 @@
 [title]
-Th-227 Inhalation, Aerosols Type M
+Th-226 Inhalation, Aerosols Type F
 
 [nuclide]
-  Th-227  Ra-223  Rn-219
-  Po-215  Pb-211  Bi-211  Po-211  Tl-207
+  Th-226  Ra-222  Rn-218
+  Po-214  Pb-210  Bi-210  Po-210  Tl-206
 
 [parameter]
-  # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type M
-  $fr = 0.2
-  $sr = 3
-  $ss = 0.005
+  # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type F
+  $fr = 1
+  $sr = 50
+  $ss = 0
   $fb = 0                   # footnote*
   $sb = 0                   # footnote*
 
@@ -18,7 +18,7 @@ Th-227 Inhalation, Aerosols Type M
   ${Pa,Th,Ac,Ra,Rn}/Blood   = 'Blood'
 
 $if parent
-  ${Th}/fA    = 1E-4        # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type M
+  ${Th}/fA    = 5E-4        # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type F
   ${Th}/fA_Re = 5E-4        # footnote**
 $else
   ${Fm}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.454 Table 28.2  / Ingested materials, All compounds

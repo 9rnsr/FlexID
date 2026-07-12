@@ -1,9 +1,9 @@
 [title]
-Th-227 Inhalation, Aerosols Type M
+Th-226 Inhalation, Aerosols Type M
 
 [nuclide]
-  Th-227  Ra-223  Rn-219
-  Po-215  Pb-211  Bi-211  Po-211  Tl-207
+  Th-226  Ra-222  Rn-218
+  Po-214  Pb-210  Bi-210  Po-210  Tl-206
 
 [parameter]
   # ICRP Publ.137 p.362 Table 14.2 / Inhaled particulate materials, Absorption type M
