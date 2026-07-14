@@ -455,6 +455,11 @@ class CalcOut : IDisposable
             var totalAtoms = 0.0;
             foreach (var organ in data.Organs.Where(o => o.Nuclide == nuclide))
             {
+                // mixのend値は、Retention.outファイルの出力互換性を維持するためだけのもので、
+                // 体内に存在する原子数としてはカウントすべきではない。
+                if (organ.Func == OrganFunc.mix)
+                    continue;
+
                 var atoms = res.OutNow[organ.Index].end;
                 totalAtoms += atoms;
             }
