@@ -263,6 +263,8 @@ class CalcOut : IDisposable
                     continue;
                 if (organ.IsZeroInflow)
                     continue;
+                if (organ.Func == OrganFunc.mix)
+                    continue;
 
                 wRete.Write("  {0,-14}", organ.Name);
             }
@@ -301,6 +303,8 @@ class CalcOut : IDisposable
                     continue;
                 if (organ.IsZeroInflow)
                     continue;
+                if (organ.Func == OrganFunc.mix)
+                    continue;
 
                 wCumu.Write("  {0,-14}", organ.Name);
             }
@@ -333,6 +337,8 @@ class CalcOut : IDisposable
                 if (organ.IsDecayCompartment)
                     continue;
                 if (organ.IsZeroInflow)
+                    continue;
+                if (organ.Func == OrganFunc.mix)
                     continue;
 
                 wAtoms.Write("  {0,-14}", organ.Name);
@@ -467,6 +473,8 @@ class CalcOut : IDisposable
             if (organ.IsDecayCompartment)
                 continue;
             if (organ.IsZeroInflow)
+                continue;
+            if (organ.Func == OrganFunc.mix)
                 continue;
 
             var lambda = organ.Nuclide.Lambda;

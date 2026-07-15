@@ -67,9 +67,7 @@ static class SubRoutine
     /// <param name="res">計算結果</param>
     public static void Mix(Organ organ, RetentionSet res)
     {
-        double ini = 0;
-        double ave = 0;
-        double end = 0;
+        var ave = 0.0;
 
         foreach (var inflow in organ.Inflows)
         {
@@ -77,13 +75,9 @@ static class SubRoutine
             var rate = inflow.Rate;
 
             // 平均流入量[atoms/day] = 流入元の平均量[atoms/day] * 流入割合[-]
-            ini += res.IterPre[inflowOrgan.Index].ini * rate;
             ave += res.IterPre[inflowOrgan.Index].ave * rate;
-            end += res.IterPre[inflowOrgan.Index].end * rate;
         }
-        res.IterNow[organ.Index].ini = ini;
         res.IterNow[organ.Index].ave = ave;
-        res.IterNow[organ.Index].end = end;
 
         // 混合コンパートメントでは、流入は全て接続先へ流出するため、
         // 計算時間メッシュ期間における積算量をゼロと計算する。
