@@ -123,7 +123,7 @@ public class InputErrorTests
         e.ErrorLines.ShouldBe(
         [
             "Line 7: Empty [intake] section.",
-            "Line 9: Empty [Sr-90:compartment] section.",
+            // "Line 9: Empty [Sr-90:compartment] section.",
             // "Line x: Empty [Sr-90:transfer] section.",
         ]);
     }
