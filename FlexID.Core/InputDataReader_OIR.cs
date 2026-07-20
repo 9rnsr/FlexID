@@ -17,10 +17,19 @@ public class InputDataReader_OIR : IDisposable
         safdataAF = SAFDataReader.ReadSAF(Sex.Female);
     }
 
-    /// <summary>
-    /// インプットファイルの読み出し用TextReader。
-    /// </summary>
-    private readonly StreamReader reader;
+    private struct IncludeEntry
+    {
+        public StreamReader Reader;
+        public string BaseDir;
+        public Location Loc;
+
+        public IncludeEntry(StreamReader reader, string baseDir, Location loc)
+        {
+            Reader = reader;
+            BaseDir = baseDir;
+            Loc = loc;
+        }
+    }
 
     /// <summary>
     /// 処理対象となっているインプットファイル情報。
@@ -30,7 +39,12 @@ public class InputDataReader_OIR : IDisposable
     /// <summary>
     /// 現在の読み取り位置。
     /// </summary>
-    private Location Loc;
+    private Location Loc => IncludeStack[^1].Loc;
+
+    /// <summary>
+    /// インプットファイルの読み出し対象。
+    /// </summary>
+    private readonly List<IncludeEntry> IncludeStack = [];
 
     /// <summary>
     /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
@@ -90,8 +104,9 @@ public class InputDataReader_OIR : IDisposable
     public InputDataReader_OIR(string inputPath, bool calcProgeny = true)
     {
         var reader = new StreamReader(File.OpenRead(inputPath));
-        this.reader = reader;
-        this.TopLoc = this.Loc = new Location { FilePath = Path.GetFileName(inputPath) };
+        this.TopLoc = new Location { FilePath = Path.GetFileName(inputPath) };
+        this.IncludeStack.Add(new IncludeEntry(reader, Path.GetDirectoryName(inputPath) ?? "", TopLoc));
+
         this.CalcProgeny = calcProgeny;
     }
 
@@ -102,20 +117,37 @@ public class InputDataReader_OIR : IDisposable
     /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
     public InputDataReader_OIR(StreamReader reader, bool calcProgeny = true)
     {
-        this.reader = reader;
-        this.TopLoc = this.Loc = new Location { FilePath = null };
+        this.TopLoc = new Location { FilePath = null };
+        this.IncludeStack.Add(new IncludeEntry(reader, "", TopLoc));
+
         this.CalcProgeny = calcProgeny;
     }
 
-    public void Dispose() => reader.Dispose();
+    public void Dispose()
+    {
+        foreach (var entry in Enumerable.Reverse(IncludeStack))
+        {
+            entry.Reader.Dispose();
+        }
+    }
 
     private string? BaseGetNextLine()
     {
     Lagain:
-        var line = reader.ReadLine();
-        Loc.LineNum++;
+        var entry = IncludeStack[^1];
+        var line = entry.Reader.ReadLine();
+        entry.Loc.LineNum++;
+        IncludeStack[^1] = entry;
         if (line is null)
+        {
+            if (IncludeStack.Count > 1)
+            {
+                entry.Reader.Dispose();
+                IncludeStack.RemoveAt(IncludeStack.Count - 1);
+                goto Lagain;
+            }
             return null;
+        }
         line = line.Trim();
 
         // 空行を読み飛ばす。
@@ -338,6 +370,36 @@ public class InputDataReader_OIR : IDisposable
 
                 conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
+            }
+            else if (header.StartsWith("include:", StringComparison.OrdinalIgnoreCase))
+            {
+                var i = header.IndexOf(':');
+                var path = header[(i + 1)..].ToString();
+
+                var basePath = IncludeStack[^1].BaseDir;
+                var fullPath = Path.GetFullPath(Path.Combine(basePath, path));
+
+                StreamReader? reader = null;
+                try
+                {
+                    reader = new StreamReader(File.OpenRead(fullPath));
+                }
+                catch (FileNotFoundException)
+                {
+                    errors.AddError(Loc, $"Cannot open include file '{path}'.");
+                }
+                catch (Exception ex)
+                {
+                    errors.AddError(Loc, $"Unexpected error: {ex.Message}");
+                }
+                if (reader is not null)
+                {
+                    IncludeStack.Add(new IncludeEntry(reader, Path.GetDirectoryName(fullPath) ?? "", new Location { FilePath = path }));
+
+                    line = GetNextLine();
+                }
+                else
+                    line = SkipUntilNextSection();
             }
             else if (Ascii.EqualsIgnoreCase(header, "parameter"))
             {

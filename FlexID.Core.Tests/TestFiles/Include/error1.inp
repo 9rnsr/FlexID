@@ -1,0 +1,14 @@
+[title]
+input for include section test
+
+[nuclide]
+Sr-90
+
+[parameter]
+  OutputDose = abc
+
+[include:error-sub1.inc]
+
+[include:error-sub2.inc]
+
+[include:unexisting.inc]
