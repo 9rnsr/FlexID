@@ -6,7 +6,7 @@ namespace FlexID;
 /// <summary>
 /// OIR用インプットファイルの読み取り処理。
 /// </summary>
-public class InputDataReader_OIR : InputDataReaderBase
+public class InputDataReader_OIR : IDisposable
 {
     private static readonly SAFData safdataAM;
     private static readonly SAFData safdataAF;
@@ -16,6 +16,21 @@ public class InputDataReader_OIR : InputDataReaderBase
         safdataAM = SAFDataReader.ReadSAF(Sex.Male);
         safdataAF = SAFDataReader.ReadSAF(Sex.Female);
     }
+
+    /// <summary>
+    /// インプットファイルの読み出し用TextReader。
+    /// </summary>
+    private readonly StreamReader reader;
+
+    /// <summary>
+    /// 行番号(1始まり)。
+    /// </summary>
+    private int LineNum { get; set; }
+
+    /// <summary>
+    /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
+    /// </summary>
+    private bool CalcProgeny { get; }
 
     /// <summary>
     /// $if ～ $else ～ $endif指令の挙動を制御する状態フラグ。
@@ -39,7 +54,7 @@ public class InputDataReader_OIR : InputDataReaderBase
 
     private bool? IsParentOnly => InsideConditionDirective ? insideParentBlock : null;
 
-    private readonly InputErrors errors;
+    private readonly InputErrors errors = new();
     private readonly Dictionary<string, int> compartmentSectionLocs = [];
     private readonly Dictionary<string, int> transferSectionLocs = [];
 
@@ -68,8 +83,10 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="inputPath">インプットファイルのパス文字列。</param>
     /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
     public InputDataReader_OIR(string inputPath, bool calcProgeny = true)
-        : this(new StreamReader(File.OpenRead(inputPath)), calcProgeny)
     {
+        var reader = new StreamReader(File.OpenRead(inputPath));
+        this.reader = reader;
+        this.CalcProgeny = calcProgeny;
     }
 
     /// <summary>
@@ -78,35 +95,66 @@ public class InputDataReader_OIR : InputDataReaderBase
     /// <param name="reader">インプットの読み込み元。</param>
     /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
     public InputDataReader_OIR(StreamReader reader, bool calcProgeny = true)
-        : base(reader, calcProgeny)
     {
-        errors = new InputErrors();
+        this.reader = reader;
+        this.CalcProgeny = calcProgeny;
     }
 
-    protected override string? GetNextLine()
+    public void Dispose() => reader.Dispose();
+
+    private string? BaseGetNextLine()
+    {
+    Lagain:
+        var line = reader.ReadLine();
+        LineNum++;
+        if (line is null)
+            return null;
+        line = line.Trim();
+
+        // 空行を読み飛ばす。
+        if (line.Length == 0)
+            goto Lagain;
+
+        // コメント行を読み飛ばす。
+        if (line.StartsWith('#'))
+            goto Lagain;
+
+        // 行末コメントを除去する。
+        var trailingComment = line.IndexOf('#');
+        if (trailingComment != -1)
+            line = line.Substring(0, trailingComment).TrimEnd();
+        return line;
+    }
+
+    /// <summary>
+    /// インプットの次行を読み取る。
+    /// </summary>
+    /// <returns></returns>
+    private string? GetNextLine()
     {
         Span<Range> parts = stackalloc Range[3];
 
     Lagain:
-        var nextLine = base.GetNextLine();
+        var line = BaseGetNextLine();
 
-        if (nextLine is not null && nextLine.StartsWith("$"))
+        // $if ～ $else ～ $endif指令を処理する。
+        if (line is not null && line.StartsWith('$'))
         {
-            var count = nextLine.SplitAny(parts, [' ', '\t', '\f', '\v'], StringSplitOptions.RemoveEmptyEntries);
-            if (nextLine.AsSpan()[parts[0]].SequenceEqual("$if"))
+            var count = line.SplitAny(parts, [' ', '\t', '\f', '\v'], StringSplitOptions.RemoveEmptyEntries);
+            if (line.AsSpan()[parts[0]].SequenceEqual("$if"))
             {
                 if (conditionDirectiveState == ConditionDirectiveState.Disabled)
                     goto LerrorDirective;
 
                 if (conditionDirectiveState == ConditionDirectiveState.OutsideBlock && count == 2)
                 {
-                    if (nextLine.AsSpan()[parts[1]].Equals("parent", StringComparison.OrdinalIgnoreCase))
+                    if (line.AsSpan()[parts[1]].Equals("parent", StringComparison.OrdinalIgnoreCase))
                     {
                         conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
                         insideParentBlock = true;
                         goto Lagain;
                     }
-                    else if (nextLine.AsSpan()[parts[1]].Equals("progeny", StringComparison.OrdinalIgnoreCase))
+                    else if (line.AsSpan()[parts[1]].Equals("progeny", StringComparison.OrdinalIgnoreCase))
                     {
                         conditionDirectiveState = ConditionDirectiveState.InsideIfBlock;
                         insideParentBlock = false;
@@ -114,7 +162,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     }
                 }
             }
-            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$else"))
+            else if (line.AsSpan()[parts[0]].SequenceEqual("$else"))
             {
                 if (conditionDirectiveState == ConditionDirectiveState.Disabled)
                     goto LerrorDirective;
@@ -126,7 +174,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     goto Lagain;
                 }
             }
-            else if (nextLine.AsSpan()[parts[0]].SequenceEqual("$endif"))
+            else if (line.AsSpan()[parts[0]].SequenceEqual("$endif"))
             {
                 if (conditionDirectiveState == ConditionDirectiveState.Disabled)
                     goto LerrorDirective;
@@ -143,15 +191,15 @@ public class InputDataReader_OIR : InputDataReaderBase
             }
 
         LerrorDirective:
-            errors.AddError(LineNum, $"Unrecognized directive line: '{nextLine}'.");
+            errors.AddError(LineNum, $"Unrecognized directive line: '{line}'.");
             goto Lagain;
         }
 
     Lcont:
-        return nextLine;
+        return line;
     }
 
-    private static bool CheckSectionHeader(string ln) => ln.StartsWith("[");
+    private static bool CheckSectionHeader(string ln) => ln.StartsWith('[');
 
     private ReadOnlySpan<char> GetSectionHeader(string ln)
     {
@@ -173,7 +221,7 @@ public class InputDataReader_OIR : InputDataReaderBase
     {
         while (true)
         {
-            var line = base.GetNextLine();
+            var line = BaseGetNextLine();
             if (line is null)
                 return null;
             if (CheckSectionHeader(line))
@@ -717,7 +765,7 @@ public class InputDataReader_OIR : InputDataReaderBase
                     continue;
             }
 
-            organs.Add(new InputOrgan(LineNum, parentOnly, organFunc, organName, IsBar(sourceRegion) ? null : sourceRegion));
+            organs.Add(new InputOrgan(LineNum, parentOnly, organFunc, organName, InputData.IsBar(sourceRegion) ? null : sourceRegion));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -760,7 +808,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             var organTo = values[0];
             var coeff = values[1];      // 移行割合、[%]
 
-            inputIntakes.Add(new InputIntake(LineNum, organTo, IsBar(coeff) ? null : coeff));
+            inputIntakes.Add(new InputIntake(LineNum, organTo, InputData.IsBar(coeff) ? null : coeff));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -813,7 +861,7 @@ public class InputDataReader_OIR : InputDataReaderBase
             var organTo = values[1];
             var coeff = values[2];      // 移行係数、[/d] or [%]
 
-            transfers.Add(new InputTransfer(LineNum, parentOnly, orgamFrom, organTo, IsBar(coeff) ? null : coeff));
+            transfers.Add(new InputTransfer(LineNum, parentOnly, orgamFrom, organTo, InputData.IsBar(coeff) ? null : coeff));
         }
         if (errors.IfAny(olderrors))
             return line;

@@ -3,16 +3,33 @@ namespace FlexID;
 /// <summary>
 /// EIR用インプットファイルの読み取り処理。
 /// </summary>
-public class InputDataReader_EIR : InputDataReaderBase
+public class InputDataReader_EIR : IDisposable
 {
+    /// <summary>
+    /// インプットファイルの読み出し用TextReader。
+    /// </summary>
+    private readonly StreamReader reader;
+
+    /// <summary>
+    /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
+    /// </summary>
+    private bool CalcProgeny { get; }
+
+    /// <summary>
+    /// 行番号(1始まり)。
+    /// </summary>
+    private int LineNum { get; set; }
+
     /// <summary>
     /// コンストラクタ。
     /// </summary>
     /// <param name="inputPath">インプットファイルのパス文字列。</param>
     /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
     public InputDataReader_EIR(string inputPath, bool calcProgeny = true)
-        : this(new StreamReader(File.OpenRead(inputPath)), calcProgeny)
     {
+        var reader = new StreamReader(File.OpenRead(inputPath));
+        this.reader = reader;
+        this.CalcProgeny = calcProgeny;
     }
 
     /// <summary>
@@ -21,8 +38,49 @@ public class InputDataReader_EIR : InputDataReaderBase
     /// <param name="reader">インプットの読み込み元。</param>
     /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
     public InputDataReader_EIR(StreamReader reader, bool calcProgeny = true)
-        : base(reader, calcProgeny)
     {
+        this.reader = reader;
+        this.CalcProgeny = calcProgeny;
+    }
+
+    public void Dispose() => reader.Dispose();
+
+    /// <summary>
+    /// 読み取り位置をファイル先頭に戻す。
+    /// </summary>
+    private void ResetPosition()
+    {
+        reader.BaseStream.Position = 0;
+        reader.DiscardBufferedData();
+        LineNum = 0;
+    }
+
+    /// <summary>
+    /// インプットの次行を読み取る。
+    /// </summary>
+    /// <returns></returns>
+    private string? GetNextLine()
+    {
+    Lagain:
+        var line = reader.ReadLine();
+        LineNum++;
+        if (line is null)
+            return null;
+        line = line.Trim();
+
+        // 空行を読み飛ばす。
+        if (line.Length == 0)
+            goto Lagain;
+
+        // コメント行を読み飛ばす。
+        if (line.StartsWith('#'))
+            goto Lagain;
+
+        // 行末コメントを除去する。
+        var trailingComment = line.IndexOf('#');
+        if (trailingComment != -1)
+            line = line.Substring(0, trailingComment).TrimEnd();
+        return line;
     }
 
     /// <summary>
@@ -186,7 +244,7 @@ public class InputDataReader_EIR : InputDataReaderBase
                     BioDecay = bioDecay,
                 };
 
-                if (!IsBar(sourceRegion))
+                if (!InputData.IsBar(sourceRegion))
                 {
                     // コンパートメントに対応する線源領域がS係数データに存在することを確認する。
                     var indexS = data.SourceRegions.IndexOf(sr => sr.Name == sourceRegion);

@@ -354,82 +354,13 @@ public class InputData
         get => TryGetBooleanParameter("OutputAtoms", false);
         set => Parameters["OutputAtoms"] = value.ToString();
     }
-}
-
-#nullable restore
-
-public abstract class InputDataReaderBase : IDisposable
-{
-    /// <summary>
-    /// インプットファイルの読み出し用TextReader。
-    /// </summary>
-    private readonly StreamReader reader;
-
-    /// <summary>
-    /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
-    /// </summary>
-    protected bool CalcProgeny { get; }
-
-    /// <summary>
-    /// 行番号(1始まり)。
-    /// </summary>
-    protected int LineNum { get; private set; }
-
-    /// <summary>
-    /// コンストラクタ。
-    /// </summary>
-    /// <param name="reader">インプットの読み込み元。</param>
-    /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
-    public InputDataReaderBase(StreamReader reader, bool calcProgeny = true)
-    {
-        this.reader = reader;
-        this.CalcProgeny = calcProgeny;
-    }
-
-    public void Dispose() => reader.Dispose();
-
-    /// <summary>
-    /// 読み取り位置をファイル先頭に戻す。
-    /// </summary>
-    protected void ResetPosition()
-    {
-        reader.BaseStream.Position = 0;
-        reader.DiscardBufferedData();
-        LineNum = 0;
-    }
-
-    /// <summary>
-    /// インプットの次行を読み取る。
-    /// </summary>
-    /// <returns></returns>
-    protected virtual string? GetNextLine()
-    {
-    Lagain:
-        var line = reader.ReadLine();
-        LineNum++;
-        if (line is null)
-            return null;
-        line = line.Trim();
-
-        // 空行を読み飛ばす。
-        if (line.Length == 0)
-            goto Lagain;
-
-        // コメント行を読み飛ばす。
-        if (line.StartsWith("#"))
-            goto Lagain;
-
-        // 行末コメントを除去する。
-        var trailingComment = line.IndexOf("#");
-        if (trailingComment != -1)
-            line = line.Substring(0, trailingComment).TrimEnd();
-        return line;
-    }
 
     private static readonly Regex patternBar = new("^-+$", RegexOptions.Compiled);
 
-    protected static bool IsBar(string s) => patternBar.IsMatch(s);
+    public static bool IsBar(string s) => patternBar.IsMatch(s);
 }
+
+#nullable restore
 
 /// <summary>
 /// 組織加重係数データを保持する。
