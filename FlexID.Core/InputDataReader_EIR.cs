@@ -120,10 +120,10 @@ public class InputDataReader_EIR : InputDataReaderBase
             if (!isProgeny)
             {
                 // 組織加重係数データを読み込む。
-                var (ts, ws) = ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\EIR\wT.txt"));
-                if (!data.TargetRegions.SequenceEqual(ts))
+                var tw = TissueWeightData.Read(Path.Combine(AppResource.BaseDir, @"lib\EIR\wT.txt"));
+                if (!data.TargetRegions.SequenceEqual(tw.TargetRegions))
                     throw Program.Error("Found mismatch of target region names on tissue weighting factor data.");
-                data.TargetWeights = ws;
+                data.TargetWeights = tw.TargetWeights;
 
                 // 親核種の場合、指定年齢に対するインプットが定義された行まで読み飛ばす。
                 while (true)

@@ -251,7 +251,7 @@ public class InputData
     /// <summary>
     /// 組織加重係数データにおける各標的領域の係数。
     /// </summary>
-    public double[] TargetWeights;
+    public IReadOnlyList<double> TargetWeights;
 
     /// <summary>
     /// 核種毎のS係数データ表(男性)。
@@ -426,12 +426,31 @@ public abstract class InputDataReaderBase : IDisposable
         return line;
     }
 
+    private static readonly Regex patternBar = new("^-+$", RegexOptions.Compiled);
+
+    protected static bool IsBar(string s) => patternBar.IsMatch(s);
+}
+
+/// <summary>
+/// 組織加重係数データを保持する。
+/// </summary>
+public class TissueWeightData
+{
+    public IReadOnlyList<string> TargetRegions { get; }
+    public IReadOnlyList<double> TargetWeights { get; }
+
+    private TissueWeightData(IReadOnlyList<string> ts, IReadOnlyList<double> ws)
+    {
+        TargetRegions = ts;
+        TargetWeights = ws;
+    }
+
     /// <summary>
     /// 組織加重係数データを読み込む。
     /// </summary>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public static (string[] targets, double[] weights) ReadTissueWeights(string fileName)
+    public static TissueWeightData Read(string fileName)
     {
         var targets = new List<string>();
         var weights = new List<double>();
@@ -447,12 +466,8 @@ public abstract class InputDataReaderBase : IDisposable
             weights.Add(weight);
         }
 
-        return (targets.ToArray(), weights.ToArray());
+        return new TissueWeightData(targets, weights);
     }
-
-    private static readonly Regex patternBar = new("^-+$", RegexOptions.Compiled);
-
-    protected static bool IsBar(string s) => patternBar.IsMatch(s);
 }
 
 /// <summary>

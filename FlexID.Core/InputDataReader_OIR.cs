@@ -211,8 +211,8 @@ public class InputDataReader_OIR : InputDataReaderBase
         var targetRegions = SAFDataReader.ReadTargetRegions().Select(t => t.Name).ToArray();
 
         // 組織加重係数データを読み込む。
-        var (ts, ws) = ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
-        if (!targetRegions.SequenceEqual(ts))
+        var tw = TissueWeightData.Read(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
+        if (!targetRegions.SequenceEqual(tw.TargetRegions))
             errors.AddError("Found mismatch of target region names on tissue weighting factor data.");
 
         // 外部データの読み込み処理にエラーがないことを確定する。
@@ -222,7 +222,7 @@ public class InputDataReader_OIR : InputDataReaderBase
         data.Title = inputTitle;
         data.SourceRegions = sourceRegions;
         data.TargetRegions = targetRegions;
-        data.TargetWeights = ws;
+        data.TargetWeights = tw.TargetWeights;
 
         var expander = new InputNuclideExpander(inputNuclides, errors);
 
