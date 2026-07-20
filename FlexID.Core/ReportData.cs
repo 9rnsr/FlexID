@@ -492,7 +492,7 @@ public class ReportData
     private static Dose GetOutputDoses(ReportData report)
     {
         // 組織加重係数データを読み込む。
-        var (ts, ws) = InputDataReaderBase.ReadTissueWeights(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
+        var tw = TissueWeightData.Read(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
 
         using var reader = new OutputDataReader(report.OutputDosePath);
 
@@ -506,7 +506,7 @@ public class ReportData
             ?? throw new InvalidDataException($"Missing '{targetRegion}' data column");
 
         double GetTissueWeight(string targetRegion)
-            => ws[Array.IndexOf(ts, targetRegion)];
+            => tw.TargetWeights[tw.TargetRegions.IndexOf(targetRegion)];
 
         (double Male, double Female) GetResult(string targetRegion, params string[] moreTargetRegions)
         {
