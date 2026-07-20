@@ -7,12 +7,12 @@
   $sb = 0                   # footnote*
 
 $if parent
-  ${Pu}/Blood               = 'Blood0'
+  ${Pu}/Blood                       = 'Blood0'
 $else
-  ${Pu}/Blood               = 'Blood1'
-  ${Pa,Th,Ac,Ra,Rn}/Blood   = 'Blood'
-  ${Po}/Blood               = 'Plasma2'
-  ${U,Bi,Pb,Tl}/Blood       = 'Plasma'
+  ${Pu}/Blood                       = 'Blood1'
+  ${Cm,Am,Np,Pa,Th,Ac,Ra,Rn}/Blood  = 'Blood'
+  ${Po}/Blood                       = 'Plasma2'
+  ${U,Bi,Pb,Tl}/Blood               = 'Plasma'
 $endif
 
 $if parent

@@ -13,10 +13,16 @@ Pu-238 Injection
 
 [include:../common_HATM+UB.inc]
 
+[include:../96-Cm.inc]
+[include:../95-Am.inc]
 [include:../94-Pu.inc]
+[include:../93-Np.inc]
 [include:../92-U.inc]
+[include:../91-Pa.inc]
 [include:../90-Th.inc]
+[include:../89-Ac.inc]
 [include:../88-Ra.inc]
+[include:../87-Fr.inc]
 [include:../86-Rn.inc]
 [include:../85-At.inc]
 [include:../84-Po.inc]
