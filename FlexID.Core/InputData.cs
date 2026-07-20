@@ -401,21 +401,42 @@ public class TissueWeightData
     }
 }
 
+public record struct Location
+{
+    /// <summary>
+    /// ファイルパス。
+    /// </summary>
+    public string? FilePath;
+
+    /// <summary>
+    /// 行番号(1始まり)。
+    /// </summary>
+    public int LineNum;
+
+    public override string ToString()
+    {
+        var location = FilePath ?? "";
+        if (LineNum > 0)
+            location += $"({LineNum})";
+        if (location.Length == 0)
+            return "Error";
+        return location;
+    }
+}
+
 /// <summary>
 /// インプット読み込み中に見つかったエラーの集合を保持する。
 /// </summary>
 public class InputErrors
 {
-    private readonly List<(int LineNum, string Message)> errors = [];
+    private readonly List<(Location Loc, string Message)> errors = [];
 
     /// <summary>
     /// 現在保持されているエラーの数を取得する。
     /// </summary>
     public int Count => errors.Count;
 
-    public void AddError(string message) => errors.Add((0, message));
-
-    public void AddError(int lineNum, string message) => errors.Add((lineNum, message));
+    public void AddError(Location loc, string message) => errors.Add((loc, message));
 
     public void AddErrors(InputErrorsException exception) => errors.AddRange(exception.Errors);
 
@@ -435,21 +456,21 @@ public class InputErrors
 /// </summary>
 public class InputErrorsException : ApplicationException
 {
-    public InputErrorsException(int lineNum, string message)
-        : this([(lineNum, message)])
+    public InputErrorsException(Location loc, string message)
+        : this([(loc, message)])
     {
     }
 
-    public InputErrorsException(IReadOnlyList<(int LineNum, string Message)> errors)
+    public InputErrorsException(IReadOnlyList<(Location Loc, string Message)> errors)
         : base(string.Join("\n", CreateMessageFromErrors(errors)))
     {
         Errors = errors;
     }
 
-    public IReadOnlyList<(int LineNum, string Message)> Errors { get; }
+    public IReadOnlyList<(Location Loc, string Message)> Errors { get; }
 
     public IEnumerable<string> ErrorLines => CreateMessageFromErrors(Errors);
 
-    internal static IEnumerable<string> CreateMessageFromErrors(IEnumerable<(int LineNum, string Message)> errors) =>
-        errors.Select(x => x.LineNum < 1 ? x.Message : $"Line {x.LineNum}: {x.Message}");
+    internal static IEnumerable<string> CreateMessageFromErrors(IEnumerable<(Location Loc, string Message)> errors) =>
+        errors.Select(x => $"{x.Loc}: {x.Message}");
 }

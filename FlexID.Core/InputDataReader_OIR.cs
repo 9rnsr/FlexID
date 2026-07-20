@@ -23,9 +23,14 @@ public class InputDataReader_OIR : IDisposable
     private readonly StreamReader reader;
 
     /// <summary>
-    /// 行番号(1始まり)。
+    /// 処理対象となっているインプットファイル情報。
     /// </summary>
-    private int LineNum { get; set; }
+    private Location TopLoc;
+
+    /// <summary>
+    /// 現在の読み取り位置。
+    /// </summary>
+    private Location Loc;
 
     /// <summary>
     /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
@@ -55,8 +60,8 @@ public class InputDataReader_OIR : IDisposable
     private bool? IsParentOnly => InsideConditionDirective ? insideParentBlock : null;
 
     private readonly InputErrors errors = new();
-    private readonly Dictionary<string, int> compartmentSectionLocs = [];
-    private readonly Dictionary<string, int> transferSectionLocs = [];
+    private readonly Dictionary<string, Location> compartmentSectionLocs = [];
+    private readonly Dictionary<string, Location> transferSectionLocs = [];
 
     private readonly Dictionary<NuclideData, InputEvaluator> inputEvaluators = [];
 
@@ -72,7 +77,7 @@ public class InputDataReader_OIR : IDisposable
     private readonly Dictionary<string, List<InputOrgan>> inputOrgans = [];
 
     private bool inputIntakesRead;
-    private int intakeSectionLoc;
+    private Location intakeSectionLoc;
     private readonly List<InputIntake> inputIntakes = [];
 
     private readonly Dictionary<string, List<InputTransfer>> inputTransfers = [];
@@ -86,6 +91,7 @@ public class InputDataReader_OIR : IDisposable
     {
         var reader = new StreamReader(File.OpenRead(inputPath));
         this.reader = reader;
+        this.TopLoc = this.Loc = new Location { FilePath = Path.GetFileName(inputPath) };
         this.CalcProgeny = calcProgeny;
     }
 
@@ -97,6 +103,7 @@ public class InputDataReader_OIR : IDisposable
     public InputDataReader_OIR(StreamReader reader, bool calcProgeny = true)
     {
         this.reader = reader;
+        this.TopLoc = this.Loc = new Location { FilePath = null };
         this.CalcProgeny = calcProgeny;
     }
 
@@ -106,7 +113,7 @@ public class InputDataReader_OIR : IDisposable
     {
     Lagain:
         var line = reader.ReadLine();
-        LineNum++;
+        Loc.LineNum++;
         if (line is null)
             return null;
         line = line.Trim();
@@ -191,7 +198,7 @@ public class InputDataReader_OIR : IDisposable
             }
 
         LerrorDirective:
-            errors.AddError(LineNum, $"Unrecognized directive line: '{line}'.");
+            errors.AddError(Loc, $"Unrecognized directive line: '{line}'.");
             goto Lagain;
         }
 
@@ -206,9 +213,9 @@ public class InputDataReader_OIR : IDisposable
         var olderrors = errors.Count;
 
         if (!CheckSectionHeader(ln))
-            errors.AddError(LineNum, "Section header should start with '['");
+            errors.AddError(Loc, "Section header should start with '['");
         if (!ln.EndsWith("]"))
-            errors.AddError(LineNum, "Section header should be closed with ']'.");
+            errors.AddError(Loc, "Section header should be closed with ']'.");
 
         // セクションヘッダが見つからないとそれ以上のエラーを報告することは
         // 難しいため、ここでインプット読み取りを終える。
@@ -249,7 +256,7 @@ public class InputDataReader_OIR : IDisposable
         GetInput(isRough: false);
 
         if (!inputIntakesRead)
-            errors.AddError(LineNum, "Missing [intake] section.");
+            errors.AddError(Loc, "Missing [intake] section.");
 
         // 核種定義に対して[compartment]と[transfer]セクションに過不足がないことを確定する。
         errors.RaiseIfAny();
@@ -259,9 +266,12 @@ public class InputDataReader_OIR : IDisposable
         var targetRegions = SAFDataReader.ReadTargetRegions().Select(t => t.Name).ToArray();
 
         // 組織加重係数データを読み込む。
-        var tw = TissueWeightData.Read(Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt"));
+        var tissueWeightFilePath = Path.Combine(AppResource.BaseDir, @"lib\OIR\wT.txt");
+        var tw = TissueWeightData.Read(tissueWeightFilePath);
         if (!targetRegions.SequenceEqual(tw.TargetRegions))
-            errors.AddError("Found mismatch of target region names on tissue weighting factor data.");
+            errors.AddError(
+                new Location { FilePath = tissueWeightFilePath },
+                "Found mismatch of target region names on tissue weighting factor data.");
 
         // 外部データの読み込み処理にエラーがないことを確定する。
         errors.RaiseIfAny();
@@ -305,7 +315,7 @@ public class InputDataReader_OIR : IDisposable
         {
             if (InsideConditionDirective)
             {
-                errors.AddError(LineNum, "if directive block should be closed till the end of the section.");
+                errors.AddError(Loc, "if directive block should be closed till the end of the section.");
                 conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
             }
 
@@ -355,7 +365,7 @@ public class InputDataReader_OIR : IDisposable
             }
             else
             {
-                errors.AddError(LineNum, $"Unrecognized section $'[{header.ToString()}]'.");
+                errors.AddError(Loc, $"Unrecognized section $'[{header.ToString()}]'.");
                 conditionDirectiveState = ConditionDirectiveState.OutsideBlock;
                 line = SkipUntilNextSection();
             }
@@ -365,9 +375,9 @@ public class InputDataReader_OIR : IDisposable
         }
 
         if (!inputTitleRead)
-            errors.AddError(LineNum, "Missing [title] section.");
+            errors.AddError(Loc, "Missing [title] section.");
         if (!inputNuclidesRead)
-            errors.AddError(LineNum, "Missing [nuclide] section.");
+            errors.AddError(Loc, "Missing [nuclide] section.");
 
         // インプットの構文に従って読み取りができていることを確定する。
         // なお、[nuclide]セクションについては実質的な意味解析まで完了している状態となる。
@@ -382,12 +392,12 @@ public class InputDataReader_OIR : IDisposable
     {
         if (inputTitleRead)
         {
-            errors.AddError(LineNum, "Duplicated [title] section.");
+            errors.AddError(Loc, "Duplicated [title] section.");
             return SkipUntilNextSection();
         }
         inputTitleRead = true;
 
-        var sectionLineNum = LineNum;
+        var sectionLineNum = Loc;
         var title = GetNextLine();
         if (title is null || CheckSectionHeader(title))
         {
@@ -400,7 +410,7 @@ public class InputDataReader_OIR : IDisposable
         var line = GetNextLine();
         if (line is not null && !CheckSectionHeader(line))
         {
-            errors.AddError(LineNum, "Unrecognized lines in [title] section.");
+            errors.AddError(Loc, "Unrecognized lines in [title] section.");
             return SkipUntilNextSection();
         }
 
@@ -415,20 +425,20 @@ public class InputDataReader_OIR : IDisposable
     {
         if (inputNuclidesRead)
         {
-            errors.AddError(LineNum, "Duplicated [nuclide] section.");
+            errors.AddError(Loc, "Duplicated [nuclide] section.");
             return SkipUntilNextSection();
         }
         inputNuclidesRead = true;
 
         var olderrors = errors.Count;
-        var sectionLineNum = LineNum;
+        var sectionLineNum = Loc;
 
         // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
         var autoMode = default(bool?);
 
         Dictionary<string, IndexData>? indexTable = null;
         var branchTable = new Dictionary<NuclideData, (string Daughter, decimal Fraction)[]>();
-        var nuclideLines = new Dictionary<NuclideData, int>();
+        var nuclideLines = new Dictionary<NuclideData, Location>();
 
         string? line;
         while (true)
@@ -454,12 +464,12 @@ public class InputDataReader_OIR : IDisposable
                 {
                     if (!ElementTable.PatternNuclide.IsMatch(nuc))
                     {
-                        errors.AddError(LineNum, $"'{nuc}' is not nuclide name.");
+                        errors.AddError(Loc, $"'{nuc}' is not nuclide name.");
                         continue;
                     }
                     if (inputNuclides.Any(n => n.Name == nuc))
                     {
-                        errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
+                        errors.AddError(Loc, $"Duplicated nuclide definition for '{nuc}'.");
                         continue;
                     }
 
@@ -481,7 +491,7 @@ public class InputDataReader_OIR : IDisposable
                     inputNuclides.Add(nuclide);
 
                     branchTable[nuclide] = branches;
-                    nuclideLines[nuclide] = LineNum;
+                    nuclideLines[nuclide] = Loc;
                 }
             }
             else
@@ -491,25 +501,25 @@ public class InputDataReader_OIR : IDisposable
 
                 if (values.Length < 2)
                 {
-                    errors.AddError(LineNum, "Nuclide definition should have at least 2 values.");
+                    errors.AddError(Loc, "Nuclide definition should have at least 2 values.");
                     continue;
                 }
 
                 var nuc = values[0];
                 if (inputNuclides.Any(n => n.Name == nuc))
                 {
-                    errors.AddError(LineNum, $"Duplicated nuclide definition for '{nuc}'.");
+                    errors.AddError(Loc, $"Duplicated nuclide definition for '{nuc}'.");
                     continue;
                 }
 
                 if (!double.TryParse(values[1], out var lambda))
                 {
-                    errors.AddError(LineNum, "Cannot get nuclide Lambda.");
+                    errors.AddError(Loc, "Cannot get nuclide Lambda.");
                     continue;
                 }
                 if (lambda < 0)
                 {
-                    errors.AddError(LineNum, "Nuclide Lambda should be positive.");
+                    errors.AddError(Loc, "Nuclide Lambda should be positive.");
                     continue;
                 }
 
@@ -530,12 +540,12 @@ public class InputDataReader_OIR : IDisposable
                     var iSep = part.IndexOf('/');
                     if (iSep == -1)
                     {
-                        errors.AddError(LineNum, "Daughter name and branching fraction should be separated with '/'.");
+                        errors.AddError(Loc, "Daughter name and branching fraction should be separated with '/'.");
                         continue;
                     }
                     if (iSep == 0)
                     {
-                        errors.AddError(LineNum, "Daughter name should not be empty.");
+                        errors.AddError(Loc, "Daughter name should not be empty.");
                         continue;
                     }
 
@@ -544,19 +554,19 @@ public class InputDataReader_OIR : IDisposable
 
                     if (!decimal.TryParse(frac, out var fraction))
                     {
-                        errors.AddError(LineNum, "Cannot get branching fraction.");
+                        errors.AddError(Loc, "Cannot get branching fraction.");
                         continue;
                     }
                     if (fraction < 0)
                     {
-                        errors.AddError(LineNum, "Branching fraction should be positive.");
+                        errors.AddError(Loc, "Branching fraction should be positive.");
                         continue;
                     }
 
                     branches[i] = (daughter, fraction);
                 }
                 branchTable[nuclide] = branches;
-                nuclideLines[nuclide] = LineNum;
+                nuclideLines[nuclide] = Loc;
             }
         }
         if (errors.IfAny(olderrors))
@@ -648,13 +658,13 @@ public class InputDataReader_OIR : IDisposable
     /// <summary>
     /// インプットから読み取ったパラメータ/変数定義の情報を保持する。
     /// </summary>
-    /// <param name="LineNum">行番号。</param>
+    /// <param name="Loc">位置情報。</param>
     /// <param name="ParentOnly">親核種に対してのみ定義される場合は<see langword="true"/>。</param>
     /// <param name="IsVarDecl">変数定義の場合は<see langword="true"/>。</param>
     /// <param name="Nuclide">核種名。</param>
     /// <param name="Name">パラメータ/変数名。</param>
     /// <param name="Value">パラメータ/変数値。</param>
-    private record class InputParameter(int LineNum, bool? ParentOnly, bool IsVarDecl, string Nuclide, string Name, string Value);
+    private record class InputParameter(Location Loc, bool? ParentOnly, bool IsVarDecl, string Nuclide, string Name, string Value);
 
     /// <summary>
     /// パラメーターの定義セクションを読み込む。
@@ -664,7 +674,7 @@ public class InputDataReader_OIR : IDisposable
     {
         if (inputParametersRead)
         {
-            errors.AddError(LineNum, "Duplicated [parameter] section.");
+            errors.AddError(Loc, "Duplicated [parameter] section.");
             return SkipUntilNextSection();
         }
         inputParametersRead = true;
@@ -681,7 +691,7 @@ public class InputDataReader_OIR : IDisposable
             var values = line.Split(["="], 2, StringSplitOptions.RemoveEmptyEntries);
             if (values.Length != 2)
             {
-                errors.AddError(LineNum, "Parameter definition should have 2 values.");
+                errors.AddError(Loc, "Parameter definition should have 2 values.");
                 continue;
             }
 
@@ -696,7 +706,7 @@ public class InputDataReader_OIR : IDisposable
             else if (InsideConditionDirective)
             {
                 var directive = conditionDirectiveState is ConditionDirectiveState.InsideIfBlock ? "$if" : "$else";
-                errors.AddError(LineNum, $"Parameter definition cannot be placed in {directive} directive block.");
+                errors.AddError(Loc, $"Parameter definition cannot be placed in {directive} directive block.");
                 continue;
             }
 
@@ -707,7 +717,7 @@ public class InputDataReader_OIR : IDisposable
                 name = name[(j + 1)..];
             }
 
-            inputParameters.Add(new InputParameter(LineNum, parentOnly, isVarDecl, nuc, name, value));
+            inputParameters.Add(new InputParameter(Loc, parentOnly, isVarDecl, nuc, name, value));
         }
 
         return line;
@@ -722,13 +732,13 @@ public class InputDataReader_OIR : IDisposable
     {
         if (inputOrgans.TryGetValue(nuc, out var organs))
         {
-            errors.AddError(LineNum, $"Duplicated [{nuc}:compartment] section.");
+            errors.AddError(Loc, $"Duplicated [{nuc}:compartment] section.");
             return SkipUntilNextSection();
         }
         inputOrgans.Add(nuc, organs = []);
 
         var olderrors = errors.Count;
-        var sectionLineNum = LineNum;
+        var sectionLineNum = Loc;
         compartmentSectionLocs[nuc] = sectionLineNum;
 
         string? line;
@@ -744,7 +754,7 @@ public class InputDataReader_OIR : IDisposable
 
             if (values.Length != 3)
             {
-                errors.AddError(LineNum, "Compartment definition should have 3 values.");
+                errors.AddError(Loc, "Compartment definition should have 3 values.");
                 continue;
             }
 
@@ -761,11 +771,11 @@ public class InputDataReader_OIR : IDisposable
                 case "mix": organFunc = OrganFunc.mix; break;
                 case "exc": organFunc = OrganFunc.exc; break;
                 default:
-                    errors.AddError(LineNum, $"Unrecognized compartment function '{organFn}'.");
+                    errors.AddError(Loc, $"Unrecognized compartment function '{organFn}'.");
                     continue;
             }
 
-            organs.Add(new InputOrgan(LineNum, parentOnly, organFunc, organName, InputData.IsBar(sourceRegion) ? null : sourceRegion));
+            organs.Add(new InputOrgan(Loc, parentOnly, organFunc, organName, InputData.IsBar(sourceRegion) ? null : sourceRegion));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -780,13 +790,13 @@ public class InputDataReader_OIR : IDisposable
     {
         if (inputIntakesRead)
         {
-            errors.AddError(LineNum, $"Duplicated [intake] section.");
+            errors.AddError(Loc, $"Duplicated [intake] section.");
             return SkipUntilNextSection();
         }
         inputIntakesRead = true;
 
         var olderrors = errors.Count;
-        var sectionLineNum = LineNum;
+        var sectionLineNum = Loc;
         intakeSectionLoc = sectionLineNum;
 
         string? line;
@@ -801,14 +811,14 @@ public class InputDataReader_OIR : IDisposable
             var values = line.Split(2, StringSplitOptions.RemoveEmptyEntries);
             if (values.Length != 2)
             {
-                errors.AddError(LineNum, "Intake path definition should have 2 values.");
+                errors.AddError(Loc, "Intake path definition should have 2 values.");
                 continue;
             }
 
             var organTo = values[0];
             var coeff = values[1];      // 移行割合、[%]
 
-            inputIntakes.Add(new InputIntake(LineNum, organTo, InputData.IsBar(coeff) ? null : coeff));
+            inputIntakes.Add(new InputIntake(Loc, organTo, InputData.IsBar(coeff) ? null : coeff));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -829,13 +839,13 @@ public class InputDataReader_OIR : IDisposable
     {
         if (inputTransfers.TryGetValue(nuc, out var transfers))
         {
-            errors.AddError(LineNum, $"Duplicated [{nuc}:transfer] section.");
+            errors.AddError(Loc, $"Duplicated [{nuc}:transfer] section.");
             return SkipUntilNextSection();
         }
         inputTransfers.Add(nuc, transfers = []);
 
         var olderrors = errors.Count;
-        var sectionLineNum = LineNum;
+        var sectionLineNum = Loc;
         transferSectionLocs[nuc] = sectionLineNum;
 
         string? line;
@@ -851,7 +861,7 @@ public class InputDataReader_OIR : IDisposable
 
             if (values.Length != 3)
             {
-                errors.AddError(LineNum, "Transfer path definition should have 3 values.");
+                errors.AddError(Loc, "Transfer path definition should have 3 values.");
                 continue;
             }
 
@@ -861,7 +871,7 @@ public class InputDataReader_OIR : IDisposable
             var organTo = values[1];
             var coeff = values[2];      // 移行係数、[/d] or [%]
 
-            transfers.Add(new InputTransfer(LineNum, parentOnly, orgamFrom, organTo, InputData.IsBar(coeff) ? null : coeff));
+            transfers.Add(new InputTransfer(Loc, parentOnly, orgamFrom, organTo, InputData.IsBar(coeff) ? null : coeff));
         }
         if (errors.IfAny(olderrors))
             return line;
@@ -887,9 +897,9 @@ public class InputDataReader_OIR : IDisposable
 
         IReadOnlyList<NuclideData> parentNuclide = [inputNuclides[0]];
 
-        foreach (var (lineNum, parentOnly, isVarDecl, nuc, name, value) in inputParameters)
+        foreach (var (loc, parentOnly, isVarDecl, nuc, name, value) in inputParameters)
         {
-            var expandNuclides = nuc == "" ? inputNuclides : expander.ExpandNuclides(lineNum, nuc);
+            var expandNuclides = nuc == "" ? inputNuclides : expander.ExpandNuclides(loc, nuc);
 
             if (parentOnly == true)
                 expandNuclides = [.. expandNuclides.Intersect(parentNuclide)];
@@ -900,19 +910,19 @@ public class InputDataReader_OIR : IDisposable
             {
                 foreach (var nuclide in expandNuclides)
                 {
-                    inputEvaluators[nuclide].TryReadVarDecl(lineNum, name, value);
+                    inputEvaluators[nuclide].TryReadVarDecl(loc, name, value);
                 }
             }
             else if (nuc == "")
             {
                 if (!InputData.ParameterNames.Contains(name))
                 {
-                    errors.AddError(lineNum, $"Unrecognized parameter '{name}' definition.");
+                    errors.AddError(loc, $"Unrecognized parameter '{name}' definition.");
                     continue;
                 }
 
                 if (globalParams.ContainsKey(name))
-                    errors.AddError(lineNum, $"Duplicated parameter '{name}' definition.");
+                    errors.AddError(loc, $"Duplicated parameter '{name}' definition.");
                 else
                     globalParams.Add(name, value);
             }
@@ -920,7 +930,7 @@ public class InputDataReader_OIR : IDisposable
             {
                 if (!NuclideData.ParameterNames.Contains(name))
                 {
-                    errors.AddError(lineNum, $"Unrecognized parameter '{name}' definition.");
+                    errors.AddError(loc, $"Unrecognized parameter '{name}' definition.");
                     continue;
                 }
 
@@ -929,7 +939,7 @@ public class InputDataReader_OIR : IDisposable
                     var parameters = nuclideParams[nuclide];
 
                     if (parameters.ContainsKey(name))
-                        errors.AddError(lineNum, $"Duplicated parameter '{name}' definition.");
+                        errors.AddError(loc, $"Duplicated parameter '{name}' definition.");
                     else
                         parameters.Add(name, value);
                 }
@@ -956,12 +966,12 @@ public class InputDataReader_OIR : IDisposable
     /// <summary>
     /// インプットから読み取ったコンパートメント定義の情報を保持する。
     /// </summary>
-    /// <param name="LineNum">行番号。</param>
+    /// <param name="Loc">位置情報。</param>
     /// <param name="ParentOnly"></param>
     /// <param name="Func">コンパートメント機能。</param>
     /// <param name="Name">コンパートメント名。</param>
     /// <param name="SourceRegion">線源領域。</param>
-    private record class InputOrgan(int LineNum, bool? ParentOnly, OrganFunc Func, string Name, string? SourceRegion);
+    private record class InputOrgan(Location Loc, bool? ParentOnly, OrganFunc Func, string Name, string? SourceRegion);
 
     private Dictionary<NuclideData, List<InputOrgan>> ExpandCompartments(InputNuclideExpander expander)
     {
@@ -1018,8 +1028,8 @@ public class InputDataReader_OIR : IDisposable
 
             var otherSourceRegions = new List<string>(otherSourceRegionsBase);
             var otherCompartments = new List<Organ>();
-            List<(int LineNum, Organ Organ)> organsCTmarrow = [];
-            List<(int LineNum, Organ Organ)> organsRYmarrow = [];
+            List<(Location Loc, Organ Organ)> organsCTmarrow = [];
+            List<(Location Loc, Organ Organ)> organsRYmarrow = [];
             bool? otherContainsMineralBone;
 
             // Otherから無機質骨の体積組織(C-bone-VとT-bone-V)への分配について制御する。
@@ -1033,7 +1043,7 @@ public class InputDataReader_OIR : IDisposable
             else
             {
                 if (!paramOtherContainsMineralBone.Equals("auto", StringComparison.OrdinalIgnoreCase))
-                    errors.AddError($"unrecognized OtherContainsMineralBone parameter: '{paramOtherContainsMineralBone}'");
+                    errors.AddError(TopLoc, $"unrecognized OtherContainsMineralBone parameter: '{paramOtherContainsMineralBone}'");
                 otherContainsMineralBone = null;
             }
 
@@ -1050,7 +1060,7 @@ public class InputDataReader_OIR : IDisposable
                 data.Organs.Add(input);
             }
 
-            foreach (var (lineNum, parentOnly, organFunc, organName, sourceRegion) in organs)
+            foreach (var (loc, parentOnly, organFunc, organName, sourceRegion) in organs)
             {
                 if (nuclide.IsProgeny == parentOnly)
                     continue;
@@ -1076,12 +1086,12 @@ public class InputDataReader_OIR : IDisposable
                     var indexS = Array.IndexOf(validSourceRegions, sourceRegion);
                     if (indexS == -1)
                     {
-                        errors.AddError(lineNum, $"Unknown source region name '{sourceRegion}'.");
+                        errors.AddError(loc, $"Unknown source region name '{sourceRegion}'.");
                         continue;
                     }
                     if (nuclide.IsStable)
                     {
-                        errors.AddError(lineNum, $"Cannot specify source region for stable nuclide '{nuclide.Name}'.");
+                        errors.AddError(loc, $"Cannot specify source region for stable nuclide '{nuclide.Name}'.");
                         continue;
                     }
 
@@ -1091,9 +1101,9 @@ public class InputDataReader_OIR : IDisposable
                     otherSourceRegions.Remove(sourceRegion);
 
                     if (sourceRegion == "C-marrow" || sourceRegion == "T-marrow")
-                        organsCTmarrow.Add((lineNum, organ));
+                        organsCTmarrow.Add((loc, organ));
                     if (sourceRegion == "R-marrow" || sourceRegion == "Y-marrow")
-                        organsRYmarrow.Add((lineNum, organ));
+                        organsRYmarrow.Add((loc, organ));
 
                     if (sourceRegion == "Other")
                         otherCompartments.Add(organ);
@@ -1142,12 +1152,12 @@ public class InputDataReader_OIR : IDisposable
                 // C/T-marrowとR/Y-marrowの組み合わせが両方同時に使用されている場合はエラーとする。
                 if (organsRYmarrow.Any())
                 {
-                    var marrowOrgans = organsCTmarrow.Concat(organsRYmarrow).OrderBy(o => o.LineNum).ToArray();
-                    var firstLineNum = marrowOrgans.First().LineNum;
+                    var marrowOrgans = organsCTmarrow.Concat(organsRYmarrow).OrderBy(o => o.Loc.LineNum).ToArray();
+                    var firstLoc = marrowOrgans.First().Loc;
                     var maxOrganNameLength = marrowOrgans.Max(o => o.Organ.Name.Length);
-                    errors.AddError(firstLineNum, $"Both of C/T-marrow and R/Y-marrow source region pairs are used for nuclide '{nuclide.Name}'.");
-                    foreach (var (lineNum, organ) in marrowOrgans)
-                        errors.AddError(lineNum, $"    {organ.Func}  {organ.Name.PadRight(maxOrganNameLength)}  {organ.SourceRegion}");
+                    errors.AddError(firstLoc, $"Both of C/T-marrow and R/Y-marrow source region pairs are used for nuclide '{nuclide.Name}'.");
+                    foreach (var (loc, organ) in marrowOrgans)
+                        errors.AddError(loc, $"    {organ.Func}  {organ.Name.PadRight(maxOrganNameLength)}  {organ.SourceRegion}");
                 }
             }
 
@@ -1158,10 +1168,10 @@ public class InputDataReader_OIR : IDisposable
     /// <summary>
     /// インプットから読み取った摂取経路の情報を保持する。
     /// </summary>
-    /// <param name="LineNum">行番号。</param>
+    /// <param name="Loc">位置情報。</param>
     /// <param name="To">初期配分先コンパートメントの名前。</param>
     /// <param name="Coeff">初期配分割合。</param>
-    private record class InputIntake(int LineNum, string To, string? Coeff);
+    private record class InputIntake(Location Loc, string To, string? Coeff);
 
     /// <summary>
     /// 全ての摂取経路を定義する。
@@ -1174,34 +1184,34 @@ public class InputDataReader_OIR : IDisposable
         var nuclideTo = inputNuclides.First();
 
         var olderrorsN = errors.Count;
-        var sectionLineNum = intakeSectionLoc;
+        var sectionLoc = intakeSectionLoc;
 
         var evaluatorTo = inputEvaluators[nuclideTo];
 
         // 移行経路の定義が正しいことの確認と、
         // 各コンパートメントから流出する移行係数の総計を求める。
         var definedTransfers = new HashSet<Organ>();
-        var transfersCorrect = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
+        var transfersCorrect = new List<(Location loc, Organ from, Organ to, decimal coeff)>();
         decimal sum = 0;
         foreach (var intake in inputIntakes)
         {
             var olderrorsT = errors.Count;
-            var lineNum = intake.LineNum;
+            var loc = intake.Loc;
 
             var nameTo = intake.To;
-            if (!evaluatorTo.TryReadCompartment(lineNum, ref nameTo))
+            if (!evaluatorTo.TryReadCompartment(loc, ref nameTo))
                 continue;
             var organTo = data.Organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
 
             // 移行先がcompartmentセクションで定義済みかを確認する。
             if (organTo is null)
             {
-                errors.AddError(lineNum, $"Undefined compartment '{nuclideFrom.Name}/{nameTo}'.");
+                errors.AddError(loc, $"Undefined compartment '{nuclideFrom.Name}/{nameTo}'.");
             }
             else if (!definedTransfers.Add(organTo))
             {
                 // 同じ移行経路が複数回定義されていないことを確認する。
-                errors.AddError(lineNum, $"Duplicated intake path to '{nameTo}'.");
+                errors.AddError(loc, $"Duplicated intake path to '{nameTo}'.");
             }
             // 以降の処理でorganToが存在していることを確定する。
             if (errors.IfAny(olderrorsT))
@@ -1212,14 +1222,14 @@ public class InputDataReader_OIR : IDisposable
             decimal coeff;
             if (intake.Coeff is not null)
             {
-                if (!evaluatorTo.TryReadCoefficient(LineNum, intake.Coeff, out var res))
+                if (!evaluatorTo.TryReadCoefficient(Loc, intake.Coeff, out var res))
                     continue;
                 (coeff, _) = res;
 
                 // 移行係数が負の値でないことを確認する。
                 if (coeff < 0)
                 {
-                    errors.AddError(lineNum, "Transfer coefficient should be positive.");
+                    errors.AddError(loc, "Transfer coefficient should be positive.");
                     continue;
                 }
 
@@ -1227,11 +1237,11 @@ public class InputDataReader_OIR : IDisposable
             }
             else
             {
-                errors.AddError(lineNum, $"Require fraction of intake activity [%].");
+                errors.AddError(loc, $"Require fraction of intake activity [%].");
                 continue;
             }
 
-            transfersCorrect.Add((lineNum, organFrom, organTo!, coeff));
+            transfersCorrect.Add((loc, organFrom, organTo!, coeff));
         }
 
         if (errors.IfAny(olderrorsN))
@@ -1240,8 +1250,8 @@ public class InputDataReader_OIR : IDisposable
         // 流出放射能に対する移行割合の合計が1.0 == 100%かどうかを確認する。
         if (sum != 1)
         {
-            errors.AddError(sectionLineNum, $"Total [%] of intake paths is not 100%, but {sum * 100:G29}%.");
-            var ts = transfersCorrect.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
+            errors.AddError(sectionLoc, $"Total [%] of intake paths is not 100%, but {sum * 100:G29}%.");
+            var ts = transfersCorrect.Where(t => t.from == organFrom).OrderBy(t => t.loc.LineNum).ToArray();
             for (int i = 0; i < ts.Length; i++)
             {
                 var (lineNum, _, _, coeff) = ts[i];
@@ -1273,12 +1283,12 @@ public class InputDataReader_OIR : IDisposable
     /// <summary>
     /// インプットから読み取った移行経路定義の情報を保持する。
     /// </summary>
-    /// <param name="LineNum">行番号。</param>
+    /// <param name="Loc">位置情報。</param>
     /// <param name="ParentOnly"></param>
     /// <param name="From">移行元コンパートメント。</param>
     /// <param name="To">移行先コンパートメント。</param>
     /// <param name="Coeff">移行係数。</param>
-    private record class InputTransfer(int LineNum, bool? ParentOnly, string From, string To, string? Coeff);
+    private record class InputTransfer(Location Loc, bool? ParentOnly, string From, string To, string? Coeff);
 
     private static bool IsDecayPath(Organ from, Organ to) => from.Nuclide != to.Nuclide;
 
@@ -1323,7 +1333,7 @@ public class InputDataReader_OIR : IDisposable
             result = default;
 
             var olderrorsT = errors.Count;
-            var lineNum = transfer.LineNum;
+            var loc = transfer.Loc;
 
             // 移行元コンパートメントを読み取る。
             IReadOnlyList<NuclideData> nuclidesFrom;
@@ -1335,7 +1345,7 @@ public class InputDataReader_OIR : IDisposable
                 nameFrom = nameFrom[(i + 1)..];
 
                 isFromPattern = nucFrom.StartsWith('{');
-                nuclidesFrom = expander.ExpandNuclides(lineNum, nucFrom);
+                nuclidesFrom = expander.ExpandNuclides(loc, nucFrom);
 
                 // 移行元の核種がパターン指定されている場合は、nuclideの祖先核種に集合を狭める。
                 if (isFromPattern)
@@ -1357,12 +1367,12 @@ public class InputDataReader_OIR : IDisposable
                 nuclideTo = decaySet.Nuclides.FirstOrDefault(n => n.Name == nucTo);
                 if (nuclideTo is null)
                 {
-                    errors.AddError(lineNum, $"Undefined nuclide '{nucTo}'.");
+                    errors.AddError(loc, $"Undefined nuclide '{nucTo}'.");
                 }
                 else if (nuclideTo != nuclide)
                 {
                     // 移行先は定義している核種に属するコンパートメントのみとする。
-                    errors.AddError(lineNum, $"Cannot set transfer path to a compartment which is not belong to '{nuclide.Name}'.");
+                    errors.AddError(loc, $"Cannot set transfer path to a compartment which is not belong to '{nuclide.Name}'.");
                 }
             }
 
@@ -1384,7 +1394,7 @@ public class InputDataReader_OIR : IDisposable
                     var evaluatorFrom = evaluators[nuclideFrom];
 
                     // 移行元がcompartmentセクションで定義済みかを確認する。
-                    if (!evaluatorFrom.TryReadCompartment(lineNum, ref nameFrom))
+                    if (!evaluatorFrom.TryReadCompartment(loc, ref nameFrom))
                         continue;
                     var organFrom = organs.FirstOrDefault(o => o.Name == nameFrom && o.Nuclide == nuclideFrom);
 
@@ -1394,7 +1404,7 @@ public class InputDataReader_OIR : IDisposable
                         // 壊変経路の親核種側がパターン指定されている場合は、移行元コンパートメントが見つからない状態を
                         // エラーにはせず、経路定義が有効な経路を設定できないだけであるように扱う。
                         if (!isFromPattern)
-                            errors.AddError(lineNum, $"Undefined compartment '{nuclideFrom.Name}/{nameFrom}'.");
+                            errors.AddError(loc, $"Undefined compartment '{nuclideFrom.Name}/{nameFrom}'.");
                         continue;
                     }
 
@@ -1405,21 +1415,21 @@ public class InputDataReader_OIR : IDisposable
 
             Organ? GetOrganTo()
             {
-                if (!evaluatorTo.TryReadCompartment(lineNum, ref nameTo))
+                if (!evaluatorTo.TryReadCompartment(loc, ref nameTo))
                     return null;
                 var organTo = organs.FirstOrDefault(o => o.Name == nameTo && o.Nuclide == nuclideTo);
 
                 // 移行先がcompartmentセクションで定義済みかを確認する。
                 if (organTo is null)
                 {
-                    errors.AddError(lineNum, $"Undefined compartment '{nuclideTo.Name}/{nameTo}'.");
+                    errors.AddError(loc, $"Undefined compartment '{nuclideTo.Name}/{nameTo}'.");
                     return null;
                 }
 
                 // 自分自身への移行経路を定義していないことを確認する。
                 if (organsFrom.Contains(organTo))
                 {
-                    errors.AddError(lineNum, "Cannot set transfer path to itself.");
+                    errors.AddError(loc, "Cannot set transfer path to itself.");
                     return null;
                 }
 
@@ -1427,7 +1437,7 @@ public class InputDataReader_OIR : IDisposable
                 foreach (var organFrom in organsFrom)
                 {
                     if (!definedTransfers.Add((organFrom, organTo)))
-                        errors.AddError(lineNum, $"Duplicated transfer path from '{organFrom}' to '{organTo}'.");
+                        errors.AddError(loc, $"Duplicated transfer path from '{organFrom}' to '{organTo}'.");
                 }
 
                 return organTo!;
@@ -1445,14 +1455,14 @@ public class InputDataReader_OIR : IDisposable
             var hasCoeff = false;
             if (transfer.Coeff is not null)
             {
-                if (!evaluatorTo.TryReadCoefficient(lineNum, transfer.Coeff, out var res))
+                if (!evaluatorTo.TryReadCoefficient(loc, transfer.Coeff, out var res))
                     return false;
                 (coeff, isFrac) = res;
                 hasCoeff = true;
 
                 // 移行係数が負の値でないことを確認する。
                 if (coeff < 0)
-                    errors.AddError(lineNum, "Transfer coefficient should be positive.");
+                    errors.AddError(loc, "Transfer coefficient should be positive.");
             }
 
             foreach (var organFrom in organsFrom)
@@ -1467,32 +1477,32 @@ public class InputDataReader_OIR : IDisposable
                         // accからの壊変経路では、係数なし、または移行速度の設定を要求する。
                         // パーセント値(移行割合)の設定はエラーとする。
                         if (isFrac)
-                            errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{organFrom}'.");
+                            errors.AddError(loc, $"Require transfer rate [/d] from {funcFrom} '{organFrom}'.");
 
                         // accからの壊変経路はaccにしか移行できない。
                         // ただし、excへの係数付きの壊変経路は、実際には途中に壊変コンパートメントとしてのaccが生成されるため許可する。
                         if (funcTo != OrganFunc.acc && !(funcTo == OrganFunc.exc && hasCoeff))
-                            errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{organFrom}' to non-acc '{organTo.Name}'.");
+                            errors.AddError(loc, $"Cannot set decay path from {funcFrom} '{organFrom}' to non-acc '{organTo.Name}'.");
                     }
 
                     // excからの壊変経路では、子孫核種のexcへの移行のみ許可する。
                     if (funcFrom == OrganFunc.exc && funcTo != OrganFunc.exc)
-                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{organFrom}' to non-exc '{organTo.Name}'.");
+                        errors.AddError(loc, $"Cannot set decay path from {funcFrom} '{organFrom}' to non-exc '{organTo.Name}'.");
 
                     // mixからの壊変経路は定義できない。
                     if (funcFrom == OrganFunc.mix)
-                        errors.AddError(lineNum, $"Cannot set decay path from {funcFrom} '{organFrom}'.");
+                        errors.AddError(loc, $"Cannot set decay path from {funcFrom} '{organFrom}'.");
                 }
                 else
                 {
                     // accからの流出経路では、移行速度の入力を要求する。
                     // 係数なし、またはパーセント値(移行割合)の設定はエラーとする。
                     if (funcFrom == OrganFunc.acc && (!hasCoeff || isFrac))
-                        errors.AddError(lineNum, $"Require transfer rate [/d] from {funcFrom} '{organFrom.Name}'.");
+                        errors.AddError(loc, $"Require transfer rate [/d] from {funcFrom} '{organFrom.Name}'.");
 
                     // excからの流出は定義できない。
                     if (funcFrom == OrganFunc.exc)
-                        errors.AddError(lineNum, $"Cannot set output path from exc '{organFrom.Name}'.");
+                        errors.AddError(loc, $"Cannot set output path from exc '{organFrom.Name}'.");
 
                     // TODO: mixからmixへの経路は定義できない。
                     //if (funcFrom == OrganFunc.mix && funcTo == OrganFunc.mix)
@@ -1501,7 +1511,7 @@ public class InputDataReader_OIR : IDisposable
                     // mixからの同核種での移行経路では、移行割合の入力を要求する。
                     // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
                     if (funcFrom == OrganFunc.mix && !hasCoeff)
-                        errors.AddError(lineNum, $"Require fraction of output activity [%] from {funcFrom} '{organFrom.Name}'.");
+                        errors.AddError(loc, $"Require fraction of output activity [%] from {funcFrom} '{organFrom.Name}'.");
                 }
             }
 
@@ -1531,7 +1541,7 @@ public class InputDataReader_OIR : IDisposable
         var expandTransfers = ExpandTransfers(expander);
 
         // 有効な移行経路の定義を収集する
-        var correctTransfers = new List<(int lineNum, Organ from, Organ to, decimal coeff)>();
+        var correctTransfers = new List<(Location loc, Organ from, Organ to, decimal coeff)>();
 
         foreach (var nuclide in inputNuclides)
         {
@@ -1549,7 +1559,7 @@ public class InputDataReader_OIR : IDisposable
                 if (!parser.TryParse(nuclide, transfer, out var result))
                     continue;
 
-                var lineNum = transfer.LineNum;
+                var loc = transfer.Loc;
                 var organsFrom = result.OrgansFrom;
                 var organTo = result.OrganTo;
                 var coeff = result.Coeff;
@@ -1574,14 +1584,14 @@ public class InputDataReader_OIR : IDisposable
                         //   Progeny_i/organDecay --(coeff)--> Progeny_i/organTo  ①移行速度あり
                         //   Progeny_i/organDecay == organTo                      ②移行速度なし
 
-                        decaySet.AddDecayPath(lineNum, organFrom, organTo, coeff);
+                        decaySet.AddDecayPath(loc, organFrom, organTo, coeff);
                     }
                     else
                     {
                         // パース処理によって、同じ核種での移行経路では必ず移行係数が存在する。
                         Debug.Assert(coeff is not null);
 
-                        correctTransfers.Add((lineNum, organFrom, organTo, coeff.Value));
+                        correctTransfers.Add((loc, organFrom, organTo, coeff.Value));
                     }
                 }
             }
@@ -1625,7 +1635,7 @@ public class InputDataReader_OIR : IDisposable
                     var sum = sumOfOutflowCoeff[organFrom];
                     if (sum != 1)
                     {
-                        var ts = correctTransfers.Where(t => t.from == organFrom).OrderBy(t => t.lineNum).ToArray();
+                        var ts = correctTransfers.Where(t => t.from == organFrom).OrderBy(t => t.loc.LineNum).ToArray();
                         for (int i = 0; i < ts.Length; i++)
                         {
                             var (lineNum, _, _, coeff) = ts[i];
@@ -1711,7 +1721,7 @@ public class InputDataReader_OIR : IDisposable
                 foreach (var daughter in daughters)
                 {
                     if (!decayNuclides.Contains(daughter))
-                        errors.AddError($"Missing decay path from '{organFrom}' to daughter '{daughter}'");
+                        errors.AddError(TopLoc, $"Missing decay path from '{organFrom}' to daughter '{daughter}'");
                 }
             }
         }

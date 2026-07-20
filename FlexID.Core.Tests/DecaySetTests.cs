@@ -10,13 +10,13 @@ public class DecaySetTests
     /// </summary>
     public class StraightDecayChain
     {
-        protected const int L1 = 1;
-        protected const int L2 = 2;
-        protected const int L3 = 3;
-        protected const int L4 = 4;
-        protected const int L5 = 5;
-        protected const int L6 = 6;
-        protected const int L7 = 7;
+        protected static Location L1 = new Location { LineNum = 1 };
+        protected static Location L2 = new Location { LineNum = 2 };
+        protected static Location L3 = new Location { LineNum = 3 };
+        protected static Location L4 = new Location { LineNum = 4 };
+        protected static Location L5 = new Location { LineNum = 5 };
+        protected static Location L6 = new Location { LineNum = 6 };
+        protected static Location L7 = new Location { LineNum = 7 };
 
         protected readonly NuclideData N1; protected readonly Organ C11, C12, C13, C14;
         protected readonly NuclideData N2; protected readonly Organ C21, C22;
@@ -1806,9 +1806,9 @@ public class DecaySetTests
             {
                 errors.GetErrorLines().ShouldBe(
                 [
-                    $"Line {L2}: Conflict of decay path definitions found:",
-                    $"Line {L1}:     previous, decay to '{C21}' {(coeff1 is null ? "without coefficient" : $"with coefficient {coeff1.Value}")},",
-                    $"Line {L2}:     and here, decay to '{C22}' {(coeff2 is null ? "without coefficient" : $"with coefficient {coeff2.Value}")}.",
+                    $"{L2}: Conflict of decay path definitions found:",
+                    $"{L1}:     previous, decay to '{C21}' {(coeff1 is null ? "without coefficient" : $"with coefficient {coeff1.Value}")},",
+                    $"{L2}:     and here, decay to '{C22}' {(coeff2 is null ? "without coefficient" : $"with coefficient {coeff2.Value}")}.",
                 ]);
             }
         }
@@ -1860,9 +1860,9 @@ public class DecaySetTests
             {
                 errors.GetErrorLines().ShouldBe(
                 [
-                    $"Line {L4}: Conflict of decay path definitions found:",
-                    $"Line {L3}:     previous, decay to '{C31}' without coefficient,",
-                    $"Line {L4}:     and here, decay to '{C32}' without coefficient.",
+                    $"{L4}: Conflict of decay path definitions found:",
+                    $"{L3}:     previous, decay to '{C31}' without coefficient,",
+                    $"{L4}:     and here, decay to '{C32}' without coefficient.",
                 ]);
             }
         }
@@ -1907,9 +1907,9 @@ public class DecaySetTests
             {
                 errors.GetErrorLines().ShouldBe(
                 [
-                    $"Line {L4}: Conflict of decay path definitions found:",
-                    $"Line {L1}:     previous,  decay to '{C31}' without coefficient,",
-                    $"Line {L2}:     and there, decay to '{C32}' without coefficient.",
+                    $"{L4}: Conflict of decay path definitions found:",
+                    $"{L1}:     previous,  decay to '{C31}' without coefficient,",
+                    $"{L2}:     and there, decay to '{C32}' without coefficient.",
                 ]);
             }
         }
@@ -1939,9 +1939,9 @@ public class DecaySetTests
             {
                 errors.GetErrorLines().ShouldBe(
                 [
-                    $"Line {L3}: Conflict of decay path definitions found:",
-                    $"Line {L2}:     previous, decay to '{C31}' with coefficient 123,",
-                    $"Line {L3}:     and here, decay to '{C31}' with coefficient 456.",
+                    $"{L3}: Conflict of decay path definitions found:",
+                    $"{L2}:     previous, decay to '{C31}' with coefficient 123,",
+                    $"{L3}:     and here, decay to '{C31}' with coefficient 456.",
                 ]);
             }
         }
@@ -1971,9 +1971,9 @@ public class DecaySetTests
             {
                 errors.GetErrorLines().ShouldBe(
                 [
-                    $"Line {L3}: Conflict of decay path definitions found:",
-                    $"Line {L1}:     previous,  decay to '{C31}' with coefficient 123,",
-                    $"Line {L2}:     and there, decay to '{C31}' with coefficient 456.",
+                    $"{L3}: Conflict of decay path definitions found:",
+                    $"{L1}:     previous,  decay to '{C31}' with coefficient 123,",
+                    $"{L2}:     and there, decay to '{C31}' with coefficient 456.",
                 ]);
             }
         }
@@ -1989,11 +1989,11 @@ public class DecaySetTests
     [TestClass]
     public class DecayChainType_Diamond
     {
-        const int L1 = 1;
-        const int L2 = 2;
-        const int L3 = 3;
-        const int L4 = 4;
-        const int L5 = 5;
+        static Location L1 = new Location { LineNum = 1 };
+        static Location L2 = new Location { LineNum = 2 };
+        static Location L3 = new Location { LineNum = 3 };
+        static Location L4 = new Location { LineNum = 4 };
+        static Location L5 = new Location { LineNum = 5 };
 
         readonly NuclideData N1; readonly Organ C11, C12, C13;
         readonly NuclideData N2; readonly Organ C21;
@@ -2157,12 +2157,13 @@ public class DecaySetTests
         {
             IReadOnlyList<Organ> compartments = [C1, C2, C3, C4];
 
-            var line = 1;
+            var loc = new Location { LineNum = 1 };
             foreach (var (from, to) in paths)
             {
                 var organFrom = compartments.First(c => c.Name == from);
                 var organTo = compartments.First(c => c.Name == to);
-                decaySet.AddDecayPath(line++, organFrom, organTo, null);
+                decaySet.AddDecayPath(loc, organFrom, organTo, null);
+                loc.LineNum++;
             }
             errors.GetErrorLines().ShouldBe([]);
 
