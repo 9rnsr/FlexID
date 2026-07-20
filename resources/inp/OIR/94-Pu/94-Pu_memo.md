@@ -138,6 +138,9 @@
 
 |96-Cm |95-Am |94-Pu     |93-Np |92-U          |91-Pa     |90-Th     |89-Ac    |88-Ra         |87-Fr |86-Rn  |85-At |84-Po    |83-Bi    |82-Pb         |81-Tl    |
 |------|------|----------|------|--------------|----------|----------|---------|--------------|------|-------|------|---------|---------|--------------|---------|
+|      |      |Blood0    |      |              |          |          |         |              |   *2 |       |   *2 |         |         |              |         |
+|      |      |Blood1    |      |              |          |          |         |              |   *2 |       |   *2 |         |         |              |         |
+|      |      |Blood2    |      |              |          |          |         |              |   *2 |       |   *2 |         |         |              |         |
 |      |      |          |      |              |Blood     |Blood     |Blood    |Blood         |   *2 |Blood  |   *2 |         |         |              |         |
 |      |      |          |      |              |          |          |         |              |   *2 |       |   *2 |Plasma1  |         |              |         |
 |      |      |          |      |              |          |          |         |              |   *2 |       |   *2 |Plasma2  |         |              |         |
@@ -152,6 +155,9 @@
 |      |      |T-bone-V  |      |Noch-T-bone-V |T-bone-V  |T-bone-V  |T-bone-V |Noch-T-bone-V |   *2 |       |   *2 |         |         |Noch-T-bone-V |         |
 |      |      |C-marrow  |      |C-marrow      |C-marrow  |C-marrow  |C-marrow |C-marrow      |   *2 |       |   *2 |C-marrow |C-marrow |C-marrow      |C-marrow |
 |      |      |T-marrow  |      |T-marrow      |T-marrow  |T-marrow  |T-marrow |T-marrow      |   *2 |       |   *2 |T-marrow |T-marrow |T-marrow      |T-marrow |
+|      |      |Liver0    |      |              |          |          |         |              |   *2 |       |   *2 |         |         |              |         |
+|      |      |Liver1    |      |              |          |          |         |              |   *2 |       |   *2 |         |         |              |         |
+|      |      |Liver2    |      |              |          |          |         |              |   *2 |       |   *2 |         |         |              |         |
 |      |      |          |      |Liver1        |Liver1    |Liver1    |Liver1   |Liver1        |   *2 |       |   *2 |Liver1   |Liver1   |Liver1        |Liver    |
 |      |      |          |      |Liver2        |Liver2    |Liver2    |Liver2   |Liver2        |   *2 |       |   *2 |Liver2   |Liver2   |Liver2        |         |
 |      |      |Kidneys1  |      |Kidneys1      |Kidneys1  |Kidneys1  |Kidneys1 |Kidneys1      |   *2 |       |   *2 |Kidneys1 |Kidneys1 |Kidneys1      |         |
@@ -172,6 +178,47 @@
 |      |      |ST1       |      |ST1           |ST1       |ST1       |ST1      |ST1           |      |       |      |         |ST1      |ST1           |         |
 |      |      |ST2       |      |ST2           |ST2       |ST2       |ST2      |ST2           |      |       |      |         |ST2      |ST2           |         |
 
+
+  {*}/Plasma                  
+  {Po}/Plasma1                
+  {Po}/Plasma2                
+  {Po}/Plasma3                
+  {*}/RBC                     
+  {Pu}/Blood0                 
+  {Pu}/Blood1                 
+  {Pu}/Blood2                 
+  {*}/Blood                   
+
+  {*}/C-bone-S                
+  {*}/T-bone-S                
+  {*}/C-bone-V                
+  {*}/T-bone-V                
+  {*}/Noch-C-bone-V           
+  {*}/Noch-T-bone-V           
+  {*}/Exch-C-bone-V           
+  {*}/Exch-T-bone-V           
+
+  {*}/C-marrow                
+  {*}/T-marrow                
+  {Pu}/Liver0                 
+  {Pu}/Liver1                 
+  {Pu}/Liver2                 
+  {^Pu}/Liver1                
+  {^Pu}/Liver2                
+  {*}/Kidneys1                
+  {*}/Kidneys2                
+  {*}/Testes                  
+  {*}/Ovaries                 
+  {*}/Skin                    
+  {*}/Spleen                  
+
+  {Pu}/ST0                    
+  {Pu}/ST1                    
+  {Pu}/ST2                    
+  {^Pu}/ST0                   
+  {^Pu}/ST1                   
+  {^Pu}/ST2                   
+  {*}/Other                   
 
 
 # 翻訳メモ
