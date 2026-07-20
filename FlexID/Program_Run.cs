@@ -172,7 +172,15 @@ internal class Program_Run
         runner.FailureItem += (target, exception) =>
         {
             errors = true;
-            presenter.Stop(target.Input.Name, $"\x1B[31mNG\x1B[0m", exception.Message);
+
+            var message = exception.Message;
+            if (exception is InputErrorsException inputErrors &&
+                inputErrors.Errors.Count > 1)
+            {
+                message = $"{inputErrors.Errors.Count} errors found.{Environment.NewLine}{message}";
+            }
+
+            presenter.Stop(target.Input.Name, $"\x1B[31mNG\x1B[0m", message);
         };
 
         await runner.StartAsync((target, cancellationToken) =>
