@@ -311,7 +311,7 @@ public partial class InputOirViewModel : ViewModelBase
 
             await runner.StartAsync((target, cancellationToken) =>
             {
-                var data = new InputDataReader_OIR(target.InputFilePath, calcProgeny: true).Read();
+                var data = new InputDataReader_OIR(target.InputFilePath).Read();
                 data.OutputDose = OutputDose;
                 data.OutputDoseRate = OutputDoseRate;
                 data.OutputRetention = OutputRetention;

@@ -47,11 +47,6 @@ public class InputDataReader_OIR : IDisposable
     private readonly List<IncludeEntry> IncludeStack = [];
 
     /// <summary>
-    /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
-    /// </summary>
-    private bool CalcProgeny { get; }
-
-    /// <summary>
     /// $if ～ $else ～ $endif指令の挙動を制御する状態フラグ。
     /// </summary>
     enum ConditionDirectiveState
@@ -99,27 +94,21 @@ public class InputDataReader_OIR : IDisposable
     /// コンストラクタ。
     /// </summary>
     /// <param name="inputPath">インプットファイルのパス文字列。</param>
-    /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
-    public InputDataReader_OIR(string inputPath, bool calcProgeny = true)
+    public InputDataReader_OIR(string inputPath)
     {
         var reader = new StreamReader(File.OpenRead(inputPath));
         this.TopLoc = new Location { FilePath = Path.GetFileName(inputPath) };
         this.IncludeStack.Add(new IncludeEntry(reader, Path.GetDirectoryName(inputPath) ?? "", TopLoc));
-
-        this.CalcProgeny = calcProgeny;
     }
 
     /// <summary>
     /// コンストラクタ。
     /// </summary>
     /// <param name="reader">インプットの読み込み元。</param>
-    /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
-    public InputDataReader_OIR(StreamReader reader, bool calcProgeny = true)
+    public InputDataReader_OIR(StreamReader reader)
     {
         this.TopLoc = new Location { FilePath = null };
         this.IncludeStack.Add(new IncludeEntry(reader, "", TopLoc));
-
-        this.CalcProgeny = calcProgeny;
     }
 
     public void Dispose()
@@ -1064,9 +1053,6 @@ public class InputDataReader_OIR : IDisposable
 
         foreach (var nuclide in inputNuclides)
         {
-            if (!CalcProgeny && nuclide.IsProgeny)
-                continue;
-
             if (!expandOrgans.TryGetValue(nuclide, out var organs))
                 continue;
 
@@ -1591,8 +1577,6 @@ public class InputDataReader_OIR : IDisposable
 
         foreach (var nuclide in inputNuclides)
         {
-            if (!CalcProgeny && nuclide.IsProgeny)
-                continue;
             if (!expandTransfers.TryGetValue(nuclide, out var transfers))
                 continue;
 
@@ -1663,9 +1647,6 @@ public class InputDataReader_OIR : IDisposable
         }
         foreach (var nuclide in inputNuclides)
         {
-            if (!CalcProgeny && nuclide.IsProgeny)
-                continue;
-
             // あるコンパートメントから同じ核種のまま流出する全ての移行経路について取り扱う。
             var outflowGroups = correctTransfers.GroupBy(t => t.from);
             foreach (var outflows in outflowGroups)
@@ -1749,9 +1730,6 @@ public class InputDataReader_OIR : IDisposable
 
         foreach (var nuclide in data.Nuclides)
         {
-            if (!CalcProgeny && nuclide.IsProgeny)
-                continue;
-
             foreach (var organFrom in data.Organs.Where(o => o.Nuclide == nuclide))
             {
                 if (organFrom.Func == OrganFunc.inp || organFrom.Func == OrganFunc.mix)
