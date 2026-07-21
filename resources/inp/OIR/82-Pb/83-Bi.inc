@@ -141,12 +141,16 @@
   {*}/Skin                Skin                      ---
   {*}/Spleen              Spleen                    ---
 
+# Publ.137 Para.483には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
+# ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
+# を採用する。
+
   {Bi}/ST0                ST0                       ---
   {Bi}/ST1                ST1                       ---
   {Bi}/ST2                ST2                       ---
-  {^Bi}/ST0               Plasma                 1000       # Publ.151 Annex.B
-  {^Bi}/ST1               Plasma                 1000       # Publ.151 Annex.B
-  {^Bi}/ST2               Plasma                 1000       # Publ.151 Annex.B
-  {*}/Other               Plasma                 1000       # Publ.151 Annex.B
-  {*}/Other1              Plasma                 1000       # Publ.151 Annex.B
-  {*}/Other2              Plasma                 1000       # Publ.151 Annex.B
+  {^Bi}/ST0               Plasma                   66.54
+  {^Bi}/ST1               Plasma                   66.54
+  {^Bi}/ST2               Plasma                   66.54
+  {*}/Other               Plasma                   66.54
+  {*}/Other1              Plasma                   66.54
+  {*}/Other2              Plasma                   66.54
