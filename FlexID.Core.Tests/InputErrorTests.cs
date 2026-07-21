@@ -17,17 +17,17 @@ public class InputErrorTests
             [title]
             dummy2
 
-            [parameter]
-              OutputDose = true
-
-            [parameter]
-              OutputDose = true
-
             [nuclide]
               Sr-90  6.596156E-05
 
             [nuclide]
               Y-90   2.595247E-01
+
+            [parameter]
+              OutputDose = true
+
+            [parameter]
+              OutputRetention = true
 
             [intake]
               ST0    100%
@@ -52,11 +52,8 @@ public class InputErrorTests
         e.ErrorLines.ShouldBe(
         [
             "(4): Duplicated [title] section.",
-            "(10): Duplicated [parameter] section.",
-            "(16): Duplicated [nuclide] section.",
+            "(10): Duplicated [nuclide] section.",
             "(22): Duplicated [intake] section.",
-            "(28): Duplicated [Sr-90:compartment] section.",
-            "(34): Duplicated [Sr-90:transfer] section.",
         ]);
     }
 

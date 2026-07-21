@@ -85,7 +85,6 @@ public class InputDataReader_OIR : IDisposable
     private bool inputNuclidesRead;
     private readonly List<NuclideData> inputNuclides = [];
 
-    private bool inputParametersRead;
     private readonly List<InputParameter> inputParameters = [];
 
     private readonly Dictionary<string, List<InputOrgan>> inputOrgans = [];
@@ -734,13 +733,6 @@ public class InputDataReader_OIR : IDisposable
     /// <returns>セクションの次行。</returns>
     private string? GetParameters()
     {
-        if (inputParametersRead)
-        {
-            errors.AddError(Loc, "Duplicated [parameter] section.");
-            return SkipUntilNextSection();
-        }
-        inputParametersRead = true;
-
         string? line;
         while (true)
         {
@@ -792,12 +784,8 @@ public class InputDataReader_OIR : IDisposable
     /// <returns>セクションの次行。</returns>
     private string? GetCompartments(string nuc)
     {
-        if (inputOrgans.TryGetValue(nuc, out var organs))
-        {
-            errors.AddError(Loc, $"Duplicated [{nuc}:compartment] section.");
-            return SkipUntilNextSection();
-        }
-        inputOrgans.Add(nuc, organs = []);
+        if (!inputOrgans.TryGetValue(nuc, out var organs))
+            inputOrgans.Add(nuc, organs = []);
 
         var olderrors = errors.Count;
         var sectionLineNum = Loc;
@@ -899,12 +887,8 @@ public class InputDataReader_OIR : IDisposable
     /// <param name="line"></param>
     private string? GetTransfers(string nuc)
     {
-        if (inputTransfers.TryGetValue(nuc, out var transfers))
-        {
-            errors.AddError(Loc, $"Duplicated [{nuc}:transfer] section.");
-            return SkipUntilNextSection();
-        }
-        inputTransfers.Add(nuc, transfers = []);
+        if (!inputTransfers.TryGetValue(nuc, out var transfers))
+            inputTransfers.Add(nuc, transfers = []);
 
         var olderrors = errors.Count;
         var sectionLineNum = Loc;
