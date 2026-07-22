@@ -322,11 +322,11 @@ public class InputOtherCalcTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 12: Both of C/T-marrow and R/Y-marrow source region pairs are used for nuclide 'Th-232'.",
-            "Line 12:     acc  C-marrow  C-marrow",
-            "Line 13:     acc  T-marrow  T-marrow",
-            "Line 14:     acc  R-marrow  R-marrow",
-            "Line 15:     acc  Y-marrow  Y-marrow",
+            "(12): Both of C/T-marrow and R/Y-marrow source region pairs are used for nuclide 'Th-232'.",
+            "(12):     acc  C-marrow  C-marrow",
+            "(13):     acc  T-marrow  T-marrow",
+            "(14):     acc  R-marrow  R-marrow",
+            "(15):     acc  Y-marrow  Y-marrow",
         ]);
     }
 }

@@ -165,7 +165,7 @@ public class InputEvaluator : Visitor<AbstractValue>
 
     private readonly Dictionary<string, AbstractValue> variables = [];
 
-    private int lineNum;
+    private Location loc;
 
     /// <summary>
     /// コンストラクタ。
@@ -180,13 +180,13 @@ public class InputEvaluator : Visitor<AbstractValue>
     /// <summary>
     /// 変数の定義行の場合にこれの解釈を行う。
     /// </summary>
-    /// <param name="lineNum">インプットの行番号。</param>
+    /// <param name="loc">位置情報。</param>
     /// <param name="varName">変数名。</param>
     /// <param name="varValue">変数の定義値を表す文字列。</param>
     /// <returns>変数の定義に成功した場合は<see langword="true"/>を返す。</returns>
-    public bool TryReadVarDecl(int lineNum, string varName, string varValue)
+    public bool TryReadVarDecl(Location loc, string varName, string varValue)
     {
-        this.lineNum = lineNum;
+        this.loc = loc;
 
         var resultId = parser.Identifier.Token().End().TryParse(varName);
         var resultIz = parser.Expr.Token().End().TryParse(varValue);
@@ -199,7 +199,7 @@ public class InputEvaluator : Visitor<AbstractValue>
         // 変数定義の上書きに対してエラーを報告する。
         if (variables.ContainsKey(ident))
         {
-            errors.AddError(lineNum, $"Variable '{ident}' is already defined for nuclide '{nuc}'.");
+            errors.AddError(loc, $"Variable '{ident}' is already defined for nuclide '{nuc}'.");
             return false;
         }
 
@@ -208,9 +208,9 @@ public class InputEvaluator : Visitor<AbstractValue>
         return true;
     }
 
-    public bool TryReadCoefficient(int lineNum, string input, out (decimal value, bool isFrac) result)
+    public bool TryReadCoefficient(Location loc, string input, out (decimal value, bool isFrac) result)
     {
-        this.lineNum = lineNum;
+        this.loc = loc;
         result = default;
 
         IResult<AbstractValue> r;
@@ -225,23 +225,23 @@ public class InputEvaluator : Visitor<AbstractValue>
         }
         catch (ArithmeticException ex)
         {
-            errors.AddError(lineNum, $"Transfer coefficient evaluation failed: {ex.Message}.");
+            errors.AddError(loc, $"Transfer coefficient evaluation failed: {ex.Message}.");
             return false;
         }
         if (!r.WasSuccessful || r.Value is not NumberValue n)
         {
-            errors.AddError(lineNum, $"Transfer coefficient should be evaluated to a number, not '{input}'.");
+            errors.AddError(loc, $"Transfer coefficient should be evaluated to a number, not '{input}'.");
             return false;
         }
 
-        //Debug.WriteLine($"Line {lineNum} '{input}' ==> {n.Value * (n.IsFrac ? 100 : 1)}{(n.IsFrac ? "%" : "")}");
+        //Debug.WriteLine($"Line {loc.LineNum} '{input}' ==> {n.Value * (n.IsFrac ? 100 : 1)}{(n.IsFrac ? "%" : "")}");
         result = (n.Value, n.IsFrac);
         return true;
     }
 
-    public bool TryReadCompartment(int lineNum, ref string target)
+    public bool TryReadCompartment(Location loc, ref string target)
     {
-        this.lineNum = lineNum;
+        this.loc = loc;
 
         IResult<AbstractValue> r;
         try
@@ -255,7 +255,7 @@ public class InputEvaluator : Visitor<AbstractValue>
         }
         if (!r.WasSuccessful || r.Value is not StringValue s)
         {
-            errors.AddError(lineNum, $"Expected a compartment name, not '{target}'.");
+            errors.AddError(loc, $"Expected a compartment name, not '{target}'.");
             return false;
         }
         target = s.Content;
@@ -266,7 +266,7 @@ public class InputEvaluator : Visitor<AbstractValue>
     {
         // 定義されていない変数の使用に対してエラーを報告する。
         if (!variables.TryGetValue(ident, out var v))
-            throw new InputErrorsException(lineNum, $"Undefined variable '{ident}' for nuclide '{nuc}'.");
+            throw new InputErrorsException(loc, $"Undefined variable '{ident}' for nuclide '{nuc}'.");
         return v;
     }
 
@@ -287,13 +287,13 @@ public class InputEvaluator : Visitor<AbstractValue>
     public AbstractValue Pos(AbstractValue oper) => oper switch
     {
         NumberValue n => n,
-        _ => throw new InputErrorsException(lineNum, "Unexpected operands"),
+        _ => throw new InputErrorsException(loc, "Unexpected operands"),
     };
 
     public AbstractValue Neg(AbstractValue oper) => oper switch
     {
         NumberValue n => new NumberValue(-n.Value, n.IsFrac),
-        _ => throw new InputErrorsException(lineNum, "Unexpected operands"),
+        _ => throw new InputErrorsException(loc, "Unexpected operands"),
     };
 
     public AbstractValue Add(AbstractValue left, AbstractValue right)
@@ -302,9 +302,9 @@ public class InputEvaluator : Visitor<AbstractValue>
         {
             (NumberValue a, NumberValue b) =>
                 a.IsFrac == b.IsFrac ? new NumberValue(a.Value + b.Value, a.IsFrac)
-                                     : throw new InputErrorsException(lineNum, "Addition with inconsistent value units"),
+                                     : throw new InputErrorsException(loc, "Addition with inconsistent value units"),
             (StringValue a, StringValue b) => new StringValue(a.Content + b.Content),
-            _ => throw new InputErrorsException(lineNum, "Unexpected operands"),
+            _ => throw new InputErrorsException(loc, "Unexpected operands"),
         };
     }
 
@@ -314,15 +314,15 @@ public class InputEvaluator : Visitor<AbstractValue>
         {
             (NumberValue a, NumberValue b) =>
                 a.IsFrac == b.IsFrac ? new NumberValue(a.Value - b.Value, a.IsFrac)
-                                     : throw new InputErrorsException(lineNum, "Subtraction with inconsistent value units"),
-            _ => throw new InputErrorsException(lineNum, "Unexpected operands"),
+                                     : throw new InputErrorsException(loc, "Subtraction with inconsistent value units"),
+            _ => throw new InputErrorsException(loc, "Unexpected operands"),
         };
     }
 
     public AbstractValue Mul(AbstractValue left, AbstractValue right) => (left, right) switch
     {
         (NumberValue a, NumberValue b) => new NumberValue(a.Value * b.Value, a.IsFrac && b.IsFrac),
-        _ => throw new InputErrorsException(lineNum, "Unexpected operands"),
+        _ => throw new InputErrorsException(loc, "Unexpected operands"),
     };
 
     public AbstractValue Div(AbstractValue left, AbstractValue right)
@@ -336,12 +336,12 @@ public class InputEvaluator : Visitor<AbstractValue>
             }
             catch (DivideByZeroException)
             {
-                throw new InputErrorsException(lineNum, "Transfer coefficient evaluation failed: divide by zero.");
+                throw new InputErrorsException(loc, "Transfer coefficient evaluation failed: divide by zero.");
             }
         }
         else
         {
-            throw new InputErrorsException(lineNum, "Unexpected operands");
+            throw new InputErrorsException(loc, "Unexpected operands");
         }
     }
 }

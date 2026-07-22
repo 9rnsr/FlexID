@@ -17,17 +17,17 @@ public class InputErrorTests
             [title]
             dummy2
 
-            [parameter]
-              OutputDose = true
-
-            [parameter]
-              OutputDose = true
-
             [nuclide]
               Sr-90  6.596156E-05
 
             [nuclide]
               Y-90   2.595247E-01
+
+            [parameter]
+              OutputDose = true
+
+            [parameter]
+              OutputRetention = true
 
             [intake]
               ST0    100%
@@ -51,12 +51,9 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 4: Duplicated [title] section.",
-            "Line 10: Duplicated [parameter] section.",
-            "Line 16: Duplicated [nuclide] section.",
-            "Line 22: Duplicated [intake] section.",
-            "Line 28: Duplicated [Sr-90:compartment] section.",
-            "Line 34: Duplicated [Sr-90:transfer] section.",
+            "(4): Duplicated [title] section.",
+            "(10): Duplicated [nuclide] section.",
+            "(22): Duplicated [intake] section.",
         ]);
     }
 
@@ -80,8 +77,8 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 12: Missing [title] section.",
-            "Line 12: Missing [nuclide] section.",
+            "(12): Missing [title] section.",
+            "(12): Missing [nuclide] section.",
         ]);
     }
 
@@ -97,8 +94,8 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 1: Empty [title] section.",
-            "Line 3: Empty [nuclide] section.",
+            "(1): Empty [title] section.",
+            "(3): Empty [nuclide] section.",
         ]);
     }
 
@@ -122,9 +119,9 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 7: Empty [intake] section.",
-            // "Line 9: Empty [Sr-90:compartment] section.",
-            // "Line x: Empty [Sr-90:transfer] section.",
+            "(7): Empty [intake] section.",
+            // "(9): Empty [Sr-90:compartment] section.",
+            // "(x): Empty [Sr-90:transfer] section.",
         ]);
     }
 
@@ -144,7 +141,7 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 4: Unrecognized lines in [title] section." ,
+            "(4): Unrecognized lines in [title] section." ,
         ]);
     }
 
@@ -172,8 +169,8 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 6: 'aaa' is not nuclide name.",
-            "Line 7: Duplicated nuclide definition for 'Sr-90'.",
+            "(6): 'aaa' is not nuclide name.",
+            "(7): Duplicated nuclide definition for 'Sr-90'.",
         ]);
     }
 
@@ -205,13 +202,13 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 5: Nuclide definition should have at least 2 values.",
-            "Line 6: Cannot get nuclide Lambda.",
-            "Line 7: Nuclide Lambda should be positive.",
-            "Line 8: Daughter name and branching fraction should be separated with '/'.",
-            "Line 9: Daughter name should not be empty.",
-            "Line 10: Cannot get branching fraction.",
-            "Line 11: Branching fraction should be positive.",
+            "(5): Nuclide definition should have at least 2 values.",
+            "(6): Cannot get nuclide Lambda.",
+            "(7): Nuclide Lambda should be positive.",
+            "(8): Daughter name and branching fraction should be separated with '/'.",
+            "(9): Daughter name should not be empty.",
+            "(10): Cannot get branching fraction.",
+            "(11): Branching fraction should be positive.",
         ]);
     }
 
@@ -239,9 +236,9 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 11: Compartment definition should have 3 values.",
-            "Line 12: Unrecognized compartment function 'add'.",
-            "Line 13: Unrecognized compartment function 'inp'.",
+            "(11): Compartment definition should have 3 values.",
+            "(12): Unrecognized compartment function 'add'.",
+            "(13): Unrecognized compartment function 'inp'.",
         ]);
     }
 
@@ -267,7 +264,7 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 11: Unknown source region name 'Abcde'.",
+            "(11): Unknown source region name 'Abcde'.",
         ]);
     }
 
@@ -293,7 +290,7 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 11: Cannot specify source region for stable nuclide 'Zr-90'.",
+            "(11): Cannot specify source region for stable nuclide 'Zr-90'.",
         ]);
     }
 
@@ -321,7 +318,7 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 15: Transfer path definition should have 3 values.",
+            "(15): Transfer path definition should have 3 values.",
         ]);
     }
 
@@ -364,14 +361,14 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 17: Undefined nuclide 'X-00'.",
-            "Line 18: Undefined nuclide 'X-00'.",
-            "Line 19: Undefined compartment 'Sr-90/XX'.",
-            "Line 20: Undefined compartment 'Sr-90/XX'.",
-            "Line 21: Cannot set transfer path to itself.",
-            "Line 23: Duplicated transfer path from 'Sr-90/ST0' to 'Sr-90/ST1'.",
-            "Line 24: Transfer coefficient should be evaluated to a number, not 'abc%'.",
-            "Line 30: Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
+            "(17): Undefined nuclide 'X-00'.",
+            "(18): Undefined nuclide 'X-00'.",
+            "(19): Undefined compartment 'Sr-90/XX'.",
+            "(20): Undefined compartment 'Sr-90/XX'.",
+            "(21): Cannot set transfer path to itself.",
+            "(23): Duplicated transfer path from 'Sr-90/ST0' to 'Sr-90/ST1'.",
+            "(24): Transfer coefficient should be evaluated to a number, not 'abc%'.",
+            "(30): Cannot set transfer path to a compartment which is not belong to 'Y-90'.",
         ]);
     }
 
@@ -414,13 +411,13 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 17: Require fraction of output activity [%] from mix 'mix-Blood'.",
-            "Line 18: Cannot set output path from exc 'Excreta'.",
-            "Line 26: Cannot set decay path from mix 'Sr-90/mix-Blood'.",
-            "Line 27: Require transfer rate [/d] from acc 'Sr-90/ST0'.",
-            "Line 28: Require transfer rate [/d] from acc 'ST0'.",
-            "Line 29: Cannot set decay path from exc 'Sr-90/Excreta' to non-exc 'ST0'.",
-            "Line 30: Cannot set decay path from acc 'Sr-90/ST0' to non-acc 'Excreta'.",
+            "(17): Require fraction of output activity [%] from mix 'mix-Blood'.",
+            "(18): Cannot set output path from exc 'Excreta'.",
+            "(26): Cannot set decay path from mix 'Sr-90/mix-Blood'.",
+            "(27): Require transfer rate [/d] from acc 'Sr-90/ST0'.",
+            "(28): Require transfer rate [/d] from acc 'ST0'.",
+            "(29): Cannot set decay path from exc 'Sr-90/Excreta' to non-exc 'ST0'.",
+            "(30): Cannot set decay path from acc 'Sr-90/ST0' to non-acc 'Excreta'.",
         ]);
     }
 
@@ -448,7 +445,7 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 15: Transfer coefficient should be positive.",
+            "(15): Transfer coefficient should be positive.",
         ]);
     }
 
@@ -482,12 +479,12 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 7: Total [%] of intake paths is not 100%, but 99.999%.",
-            "Line 8:     = 63.1462%",
-            "Line 9:     = 36.8528%",
-            "Line 19: Total [%] of transfer paths from 'Mix' is not 100%, but 99.999%.",
-            "Line 19:     = 63.1462%",
-            "Line 20:     = 36.8528%",
+            "(7): Total [%] of intake paths is not 100%, but 99.999%.",
+            "(8):     = 63.1462%",
+            "(9):     = 36.8528%",
+            "(19): Total [%] of transfer paths from 'Mix' is not 100%, but 99.999%.",
+            "(19):     = 63.1462%",
+            "(20):     = 36.8528%",
         ]);
     }
 
@@ -515,7 +512,7 @@ public class InputErrorTests
         var e = new Action(() => reader.Read()).ShouldThrow<InputErrorsException>();
         e.ErrorLines.ShouldBe(
         [
-            "Line 15: Transfer coefficient evaluation failed: divide by zero.",
+            "(15): Transfer coefficient evaluation failed: divide by zero.",
         ]);
     }
 }

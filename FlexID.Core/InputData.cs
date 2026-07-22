@@ -251,7 +251,7 @@ public class InputData
     /// <summary>
     /// 組織加重係数データにおける各標的領域の係数。
     /// </summary>
-    public double[] TargetWeights;
+    public IReadOnlyList<double> TargetWeights;
 
     /// <summary>
     /// 核種毎のS係数データ表(男性)。
@@ -354,76 +354,26 @@ public class InputData
         get => TryGetBooleanParameter("OutputAtoms", false);
         set => Parameters["OutputAtoms"] = value.ToString();
     }
+
+    private static readonly Regex patternBar = new("^-+$", RegexOptions.Compiled);
+
+    public static bool IsBar(string s) => patternBar.IsMatch(s);
 }
 
 #nullable restore
 
-public abstract class InputDataReaderBase : IDisposable
+/// <summary>
+/// 組織加重係数データを保持する。
+/// </summary>
+public class TissueWeightData
 {
-    /// <summary>
-    /// インプットファイルの読み出し用TextReader。
-    /// </summary>
-    private readonly StreamReader reader;
+    public IReadOnlyList<string> TargetRegions { get; }
+    public IReadOnlyList<double> TargetWeights { get; }
 
-    /// <summary>
-    /// 子孫核種のインプットを読み飛ばす場合は<see langword="true"/>。
-    /// </summary>
-    protected bool CalcProgeny { get; }
-
-    /// <summary>
-    /// 行番号(1始まり)。
-    /// </summary>
-    protected int LineNum { get; private set; }
-
-    /// <summary>
-    /// コンストラクタ。
-    /// </summary>
-    /// <param name="reader">インプットの読み込み元。</param>
-    /// <param name="calcProgeny">子孫核種を計算する＝読み込む場合は <see langword="true"/>。</param>
-    public InputDataReaderBase(StreamReader reader, bool calcProgeny = true)
+    private TissueWeightData(IReadOnlyList<string> ts, IReadOnlyList<double> ws)
     {
-        this.reader = reader;
-        this.CalcProgeny = calcProgeny;
-    }
-
-    public void Dispose() => reader.Dispose();
-
-    /// <summary>
-    /// 読み取り位置をファイル先頭に戻す。
-    /// </summary>
-    protected void ResetPosition()
-    {
-        reader.BaseStream.Position = 0;
-        reader.DiscardBufferedData();
-        LineNum = 0;
-    }
-
-    /// <summary>
-    /// インプットの次行を読み取る。
-    /// </summary>
-    /// <returns></returns>
-    protected virtual string? GetNextLine()
-    {
-    Lagain:
-        var line = reader.ReadLine();
-        LineNum++;
-        if (line is null)
-            return null;
-        line = line.Trim();
-
-        // 空行を読み飛ばす。
-        if (line.Length == 0)
-            goto Lagain;
-
-        // コメント行を読み飛ばす。
-        if (line.StartsWith("#"))
-            goto Lagain;
-
-        // 行末コメントを除去する。
-        var trailingComment = line.IndexOf("#");
-        if (trailingComment != -1)
-            line = line.Substring(0, trailingComment).TrimEnd();
-        return line;
+        TargetRegions = ts;
+        TargetWeights = ws;
     }
 
     /// <summary>
@@ -431,7 +381,7 @@ public abstract class InputDataReaderBase : IDisposable
     /// </summary>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public static (string[] targets, double[] weights) ReadTissueWeights(string fileName)
+    public static TissueWeightData Read(string fileName)
     {
         var targets = new List<string>();
         var weights = new List<double>();
@@ -447,12 +397,31 @@ public abstract class InputDataReaderBase : IDisposable
             weights.Add(weight);
         }
 
-        return (targets.ToArray(), weights.ToArray());
+        return new TissueWeightData(targets, weights);
     }
+}
 
-    private static readonly Regex patternBar = new("^-+$", RegexOptions.Compiled);
+public record struct Location
+{
+    /// <summary>
+    /// ファイルパス。
+    /// </summary>
+    public string? FilePath;
 
-    protected static bool IsBar(string s) => patternBar.IsMatch(s);
+    /// <summary>
+    /// 行番号(1始まり)。
+    /// </summary>
+    public int LineNum;
+
+    public override string ToString()
+    {
+        var location = FilePath ?? "";
+        if (LineNum > 0)
+            location += $"({LineNum})";
+        if (location.Length == 0)
+            return "Error";
+        return location;
+    }
 }
 
 /// <summary>
@@ -460,16 +429,14 @@ public abstract class InputDataReaderBase : IDisposable
 /// </summary>
 public class InputErrors
 {
-    private readonly List<(int LineNum, string Message)> errors = [];
+    private readonly List<(Location Loc, string Message)> errors = [];
 
     /// <summary>
     /// 現在保持されているエラーの数を取得する。
     /// </summary>
     public int Count => errors.Count;
 
-    public void AddError(string message) => errors.Add((0, message));
-
-    public void AddError(int lineNum, string message) => errors.Add((lineNum, message));
+    public void AddError(Location loc, string message) => errors.Add((loc, message));
 
     public void AddErrors(InputErrorsException exception) => errors.AddRange(exception.Errors);
 
@@ -489,21 +456,21 @@ public class InputErrors
 /// </summary>
 public class InputErrorsException : ApplicationException
 {
-    public InputErrorsException(int lineNum, string message)
-        : this([(lineNum, message)])
+    public InputErrorsException(Location loc, string message)
+        : this([(loc, message)])
     {
     }
 
-    public InputErrorsException(IReadOnlyList<(int LineNum, string Message)> errors)
+    public InputErrorsException(IReadOnlyList<(Location Loc, string Message)> errors)
         : base(string.Join("\n", CreateMessageFromErrors(errors)))
     {
         Errors = errors;
     }
 
-    public IReadOnlyList<(int LineNum, string Message)> Errors { get; }
+    public IReadOnlyList<(Location Loc, string Message)> Errors { get; }
 
     public IEnumerable<string> ErrorLines => CreateMessageFromErrors(Errors);
 
-    internal static IEnumerable<string> CreateMessageFromErrors(IEnumerable<(int LineNum, string Message)> errors) =>
-        errors.Select(x => x.LineNum < 1 ? x.Message : $"Line {x.LineNum}: {x.Message}");
+    internal static IEnumerable<string> CreateMessageFromErrors(IEnumerable<(Location Loc, string Message)> errors) =>
+        errors.Select(x => $"{x.Loc}: {x.Message}");
 }

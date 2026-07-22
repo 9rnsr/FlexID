@@ -23,10 +23,10 @@ public class InputNuclideExpander
     /// <summary>
     /// 核種パターンを核種データのリストに展開する。
     /// </summary>
-    /// <param name="lineNum">行番号。</param>
+    /// <param name="loc">位置情報。</param>
     /// <param name="nuclidePattern">核種パターン。</param>
     /// <returns>展開結果。</returns>
-    public IReadOnlyList<NuclideData> ExpandNuclides(int lineNum, string nuclidePattern)
+    public IReadOnlyList<NuclideData> ExpandNuclides(Location loc, string nuclidePattern)
     {
         List<NuclideData> results = [];
 
@@ -45,7 +45,7 @@ public class InputNuclideExpander
                 {
                     var nuclide = nuclides.FirstOrDefault(n => n.Name == pattern);
                     if (nuclide is null)
-                        errors.AddError(lineNum, $"Undefined nuclide '{pattern}'.");
+                        errors.AddError(loc, $"Undefined nuclide '{pattern}'.");
                     else
                         results.Add(nuclide);
                 }
@@ -64,11 +64,11 @@ public class InputNuclideExpander
                     if (!anyFound)
                     {
 #if false
-                        errors.AddError(lineNum, $"Unrecognized element name: '{pattern}'.");
+                        errors.AddError(loc, $"Unrecognized element name: '{pattern}'.");
 #else
                         // [nuclide]セクションに定義されていない元素でも、元素名としては正しいならエラーにはしない。
                         if (!ElementTable.Names.Contains(pattern))
-                            errors.AddError(lineNum, $"Unrecognized element name: '{pattern}'.");
+                            errors.AddError(loc, $"Unrecognized element name: '{pattern}'.");
 #endif
                         continue;
                     }
@@ -80,14 +80,14 @@ public class InputNuclideExpander
 
 #if false
             if (results.Count == 0)
-                errors.AddError(lineNum, $"No nuclides match the pattern: '{nuclidePattern}'.");
+                errors.AddError(loc, $"No nuclides match the pattern: '{nuclidePattern}'.");
 #endif
         }
         else
         {
             var nuclide = nuclides.FirstOrDefault(n => n.Name == nuclidePattern);
             if (nuclide is null)
-                errors.AddError(lineNum, $"Undefined nuclide '{nuclidePattern}'.");
+                errors.AddError(loc, $"Undefined nuclide '{nuclidePattern}'.");
             else
                 results.Add(nuclide);
         }
