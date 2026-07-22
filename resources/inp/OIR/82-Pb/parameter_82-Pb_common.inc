@@ -1,10 +1,10 @@
 [parameter]
 
 # ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
-# > ... polonium as a progeny transferred to blood from either the respiratory
-# > or alimentary tract is assigned to Plasma 2.
-# > ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
-# > 血漿2に割り当てられる。
+# > (484) ... polonium as a progeny transferred to blood from either the respiratory
+# > or alimentary tract is assigned to Plasma 2. ...
+# > (484) ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
+# > 血漿2に割り当てられます。 ...
 
   ${Po}/Blood       = 'Plasma2'
 

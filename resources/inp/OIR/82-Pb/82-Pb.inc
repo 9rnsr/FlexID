@@ -1,11 +1,8 @@
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
 # > (482) The systemic model for lead as a progeny of lead is an extension of the
-# > characteristic model for lead described above. Compartments representing red
-# > marrow, spleen, skin, testes, and ovaries are added to the model structure for consistency
-# > with the models for other lead progeny.
+# > characteristic model for lead described above. ...
 # > (482) 鉛の子孫核種としての鉛の全身モデルは、上述の(訳注：親核種としての)
-# > 鉛の特性モデルの拡張である。他の鉛子孫核種のモデルとの整合性を図るため、
-# > 赤色骨髄、脾臓、皮膚、精巣、および卵巣を表すコンパートメントがモデル構造に追加されます。
+# > 鉛の特性モデルの拡張です。 ...
 
 [{Pb}:compartment]
 #-----+---------------------| S-Coefficient
@@ -30,6 +27,13 @@
   exc   Excreta(hair,skin,nails)    ---
 
 $if progeny
+
+# ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
+# > (482) ... Compartments representing red
+# > marrow, spleen, skin, testes, and ovaries are added to the model structure for consistency
+# > with the models for other lead progeny. ...
+# > (482) ... 他の鉛子孫核種のモデルとの整合性を図るため、赤色骨髄、脾臓、皮膚、精巣、および卵巣を
+# > 表すコンパートメントがモデル構造に追加されます。 ...
 
   acc   RedMarrow             R-marrow
   acc   Testes                Testes
@@ -84,7 +88,7 @@ $endif
 $if progeny
 
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
-# > ... Each of the added compartments is
+# > (482) ... Each of the added compartments is
 # > assumed to exchange activity with plasma alone. Transfer coefficients between
 # > plasma and these compartments are set for reasonable consistency with the
 # > equilibrium concentration of lead in these compartments relative to the equilibrium
@@ -96,35 +100,37 @@ $if progeny
 # > goes to skin, 0.005% goes to testes, and 0.002% goes to ovaries. The transfer coefficients
 # > from plasma to each of the soft tissue compartments Other 0, Other 1, and
 # > Other 2 are reduced by approximately 2.5% to maintain a total outflow rate from
-# > plasma of approximately 70 d⁻¹.
-# > ... 追加された各コンパートメントは、
-# > 血漿のみと放射能を交換すると仮定される。血漿とこれらのコンパートメント間の移動係数は、
-# > ヒトを対象とした剖検研究の結果に示されている肝臓中の平衡濃度に対するこれらの
-# > コンパートメント中の鉛の平衡濃度と妥当な整合性を持つように設定されています（Blanchard
-# > and Moore, 1970, 1971; Gross et al., 1975; Skerving et al., 1983）。追加された
-# > 各コンパートメントからの除去半減期は1年と設定されており、これは肝臓からの
+# > plasma of approximately 70 d⁻¹. ...
+# > (482) ... 追加された各コンパートメントは、
+# > 血漿のみと放射能を交換すると仮定されます。血漿とこれらのコンパートメント間の
+# > 移動係数は、ヒトを対象とした剖検研究の結果に示されている肝臓中の平衡濃度に対する
+# > これらのコンパートメント中の鉛の平衡濃度と妥当な整合性を持つように設定されています
+# > （Blanchard and Moore, 1970, 1971; Gross et al., 1975; Skerving et al., 1983）。
+# > 追加された各コンパートメントからの除去半減期は1年と設定されており、これは肝臓からの
 # > 長期除去半減期（肝臓2から血漿へのt½）です。血漿からの流出量の0.6%が赤色骨髄へ、
 # > 0.03%が脾臓へ、0.2%が皮膚へ、0.005%が精巣へ、0.002%が卵巣へ向かうと仮定されます。
 # > 血漿からその他0、その他1、その他2の各軟部組織コンパートメントへの移行係数は、
-# > 血漿からの総流出速度を約70 d⁻¹に維持するために約2.5%減少します。
+# > 血漿からの総流出速度を約70 d⁻¹に維持するために約2.5%減少します。 ...
 
 # 作成者注：
 #   Plasmaからの元々の流出量の総和は
 #      1.75 + 0.7 + 4.86 + 3.89 + 22.16 + 0.7 + 0.14 + 4.9 + 2.45 + 0.0245 + 28 + 0.42 = 69.9945
+#
 #   Plasmaから追加コンパートメントへの流出量＝ST0,1,2への流出量から差し引くべき量は
-#      69.9945 * (0.6% + 0.03% + 0.2% + 0.005% + 0.002%) = 0.585853965
+#      69.9945 * (0.6% + 0.03% + 0.2% + 0.005% + 0.002%) = 0.585854
+#
 #   PlasmaからST0,1,2への流出量の減少率は
-#      (22.16 + 0.7 + 0.14 - 0.585853965) / (22.16 + 0.7 + 0.14) ≒ 0.974528088
-#   ※ 1 - 0.974528088 ≒ 2.54%減少 ⇔「約2.5%減少」
+#      (22.16 + 0.7 + 0.14 - 0.585854) / (22.16 + 0.7 + 0.14) ≒ 0.974528
+#   ※ 1 - 0.974528 ≒ 約2.54%減少 ⇔「約2.5%減少」
 
   Plasma                  RedMarrow         $(69.9945 * 0.6%)
   Plasma                  Skin              $(69.9945 * 0.2%)
   Plasma                  Spleen            $(69.9945 * 0.03%)
   Plasma                  Testes            $(69.9945 * 0.005%)
   Plasma                  Ovaries           $(69.9945 * 0.002%)
-  Plasma                  ST0               $(22.16 * 0.974528088)
-  Plasma                  ST1               $( 0.7  * 0.974528088)
-  Plasma                  ST2               $( 0.14 * 0.974528088)
+  Plasma                  ST0               $(22.16 * 0.974528)
+  Plasma                  ST1               $( 0.7  * 0.974528)
+  Plasma                  ST2               $( 0.14 * 0.974528)
   RedMarrow               Plasma                    0.0019
   Skin                    Plasma                    0.0019
   Spleen                  Plasma                    0.0019
@@ -132,15 +138,15 @@ $if progeny
   Ovaries                 Plasma                    0.0019
 
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
-# > ... Lead produced in a soft tissue compartment of a
+# > (482) ... Lead produced in a soft tissue compartment of a
 # > preceding chain member not identifiable with a compartment of the lead model is
 # > assumed to transfer to plasma at the rate 7.39 d⁻¹; the highest rate of transfer to
 # > plasma in the lead model. Lead produced in a blood compartment of a preceding
 # > chain member that is not identifiable with a blood compartment of the lead model is
 # > assigned the transfer rate 1000 d⁻¹ to plasma.
-# > ... 先行する連鎖メンバーの軟部組織コンパートメントで生成された鉛は、
+# > (482) ... 先行する連鎖メンバーの軟部組織コンパートメントで生成された鉛は、
 # > 鉛モデルのコンパートメントと識別できない場合、血漿へ7.39 d⁻¹の速度で移行すると仮定されます。
-# > これは、鉛モデルにおける血漿への移行速度の最高値です。先行する連鎖メンバーの血液コンパートメントで
+# > これは鉛モデルにおける血漿への移行速度の最高値です。先行する連鎖メンバーの血液コンパートメントで
 # > 生成された鉛は、鉛モデルの血液コンパートメントと識別できない場合、血漿へ1000 d⁻¹の速度で
 # > 移行すると仮定されます。
 
