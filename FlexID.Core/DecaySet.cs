@@ -38,7 +38,7 @@ public class DecaySet
     /// 移行速度付きの壊変経路に対して自動作成されたOrganDecayをキーとし、
     /// そこから同じ核種のまま移行した先であるOragnToとその係数Coeffを値とする辞書。
     /// </summary>
-    public Dictionary<Organ, (int LineNum, (decimal Coeff, Organ OrganTo) Outflow)> AfterDecayPath { get; } = [];
+    public Dictionary<Organ, (Location Loc, (decimal Coeff, Organ OrganTo) Outflow)> AfterDecayPath { get; } = [];
 
     /// <summary>
     /// コンストラクタ。
@@ -116,20 +116,20 @@ public class DecaySet
         /// <param name="nuclideCount">核種の総数。</param>
         public DecayChain(int nuclideCount)
         {
-            Compartments = new (int, Organ?)[nuclideCount];
+            Compartments = new (Location, Organ?)[nuclideCount];
         }
 
         /// <summary>
         /// 崩壊系列において、これを構成する核種毎の位置を占めるコンパートメントを保持する。
         /// </summary>
-        public (int LineNum, Organ? Organ)[] Compartments;
+        public (Location Loc, Organ? Organ)[] Compartments;
 
         /// <summary>
         /// 指定の子孫核種に対応する壊変コンパートメントを取得する。
         /// </summary>
         /// <param name="progeny"></param>
         /// <returns></returns>
-        public ref (int LineNum, Organ? Organ) this[NuclideData progeny] => ref Compartments[progeny.Index];
+        public ref (Location Loc, Organ? Organ) this[NuclideData progeny] => ref Compartments[progeny.Index];
 
         public bool IsSubsetOf(DecayChain other) =>
             other.Compartments
@@ -145,11 +145,11 @@ public class DecaySet
     /// <summary>
     /// 新しい壊変経路を定義する。
     /// </summary>
-    /// <param name="lineNum"></param>
+    /// <param name="loc">位置情報。</param>
     /// <param name="organFrom"></param>
     /// <param name="organTo"></param>
     /// <param name="coeff"></param>
-    public void AddDecayPath(int lineNum, Organ organFrom, Organ organTo, decimal? coeff)
+    public void AddDecayPath(Location loc, Organ organFrom, Organ organTo, decimal? coeff)
     {
         var nuclideFrom = organFrom.Nuclide;
         var nuclideTo = organTo.Nuclide;
@@ -157,7 +157,7 @@ public class DecaySet
         // 分岐比が不明な壊変経路は定義できない。
         if (!GetProgenies(nuclideFrom).Contains(nuclideTo))
         {
-            Errors.AddError(lineNum, $"There is no decay path from {nuclideFrom.Name} to {nuclideTo.Name}.");
+            Errors.AddError(loc, $"There is no decay path from {nuclideFrom.Name} to {nuclideTo.Name}.");
             return;
         }
 
@@ -168,9 +168,9 @@ public class DecaySet
             return chains;
         }
 
-        void AddJointChainsAt(int lineNum, Organ organ, DecayChain chain)
+        void AddJointChainsAt(Location loc, Organ organ, DecayChain chain)
         {
-            chain[organ.Nuclide] = (lineNum, organ);
+            chain[organ.Nuclide] = (loc, organ);
 
             if (!JointChains.TryGetValue(organ, out var chains))
                 JointChains.Add(organ, [chain]);
@@ -198,14 +198,14 @@ public class DecaySet
             {
                 // 以前に設定されたorganFromからorganToへ速度なし壊変経路が
                 // 今回の設定と衝突するため、これについてエラーを報告する。
-                var prevNum = chainsFrom[0][nuclideTo].LineNum;
-                Errors.AddError(lineNum, $"Conflict of decay path definitions found:");
-                Errors.AddError(prevNum, $"    previous, decay to '{organTo}' without coefficient,");
-                Errors.AddError(lineNum, $"    and here, decay to '{organOutflowTo}' with coefficient {coeff.Value}.");
+                var pre = chainsFrom[0][nuclideTo].Loc;
+                Errors.AddError(loc, $"Conflict of decay path definitions found:");
+                Errors.AddError(pre, $"    previous, decay to '{organTo}' without coefficient,");
+                Errors.AddError(loc, $"    and here, decay to '{organOutflowTo}' with coefficient {coeff.Value}.");
                 return;
             }
 
-            var path2 = (LineNum: lineNum, Outflow: (Coeff: coeff.Value, OrganTo: organOutflowTo));
+            var path2 = (Loc: loc, Outflow: (Coeff: coeff.Value, OrganTo: organOutflowTo));
             if (!AfterDecayPath.TryGetValue(organTo, out var path1))
             {
                 AfterDecayPath[organTo] = path2;
@@ -214,12 +214,12 @@ public class DecaySet
             {
                 // 以前に設定されたorganToからnucideToモデル内へ流出する経路が
                 // 今回の設定と衝突するため、これについてエラーを報告する。
-                var prevNum = path1.LineNum;
+                var pre = path1.Loc;
                 var outflow1 = path1.Outflow;
                 var outflow2 = path2.Outflow;
-                Errors.AddError(lineNum, $"Conflict of decay path definitions found:");
-                Errors.AddError(prevNum, $"    previous, decay to '{outflow1.OrganTo}' with coefficient {outflow1.Coeff},");
-                Errors.AddError(lineNum, $"    and here, decay to '{outflow2.OrganTo}' with coefficient {outflow2.Coeff}.");
+                Errors.AddError(loc, $"Conflict of decay path definitions found:");
+                Errors.AddError(pre, $"    previous, decay to '{outflow1.OrganTo}' with coefficient {outflow1.Coeff},");
+                Errors.AddError(loc, $"    and here, decay to '{outflow2.OrganTo}' with coefficient {outflow2.Coeff}.");
                 return;
             }
         }
@@ -242,11 +242,11 @@ public class DecaySet
             {
                 // chainsToも更新される。
                 foreach (var chain in chainsFrom)
-                    AddJointChainsAt(lineNum, organTo, chain);
+                    AddJointChainsAt(loc, organTo, chain);
             }
             else if (decay.Organ != organTo)
             {
-                ConflictDecayPathsError(decay!, (lineNum, organTo));
+                ConflictDecayPathsError(decay!, (loc, organTo));
                 return;
             }
 
@@ -278,7 +278,7 @@ public class DecaySet
 
                 // chainsToも更新されうる。
                 foreach (var chain in chainsMore)
-                    AddJointChainsAt(lineNum, organTo, chain);
+                    AddJointChainsAt(loc, organTo, chain);
             }
         }
 
@@ -290,7 +290,7 @@ public class DecaySet
         foreach (var chain in chainsTo.Where(c => ancestorsOfTo.All(n => c[n].Organ is null)))
         {
             // chainsFromも更新される。
-            AddJointChainsAt(lineNum, organFrom, chain);
+            AddJointChainsAt(loc, organFrom, chain);
         }
 
         if (chainsFrom.Count == 0)
@@ -300,8 +300,8 @@ public class DecaySet
             var chain = new DecayChain(Nuclides.Count);
             DecayChains.Add(chain);
 
-            AddJointChainsAt(lineNum, organFrom, chain);
-            AddJointChainsAt(lineNum, organTo, chain);
+            AddJointChainsAt(loc, organFrom, chain);
+            AddJointChainsAt(loc, organTo, chain);
         }
         else if (chainsTo.Count == 0)
         {
@@ -329,7 +329,7 @@ public class DecaySet
                     ref var decay2 = ref chain[progeny];
                     if (decay2.Organ is null)
                     {
-                        AddJointChainsAt(decay1.LineNum, organProgeny1, chain);
+                        AddJointChainsAt(decay1.Loc, organProgeny1, chain);
                         continue;
                     }
                     if (decay2.Organ == organProgeny1)
@@ -361,35 +361,38 @@ public class DecaySet
             }
         }
 
-        void ConflictDecayPathsError((int LineNum, Organ Organ) decay1, (int LineNum, Organ Organ) decay2)
+        void ConflictDecayPathsError((Location Loc, Organ Organ) decay1, (Location Loc, Organ Organ) decay2)
         {
-            if (decay1.LineNum > decay2.LineNum)
+            if (decay1.Loc.FilePath == decay2.Loc.FilePath &&
+                decay1.Loc.LineNum > decay2.Loc.LineNum)
+            {
                 (decay1, decay2) = (decay2, decay1);
+            }
 
-            var (leading1, leading2) = decay2.LineNum == lineNum
+            var (leading1, leading2) = decay2.Loc == loc
                 ? ("previous,", "and here,")
                 : ("previous, ", "and there,");
 
-            Errors.AddError(lineNum, $"Conflict of decay path definitions found:");
+            Errors.AddError(loc, $"Conflict of decay path definitions found:");
 
             if (decay1.Organ.IsDecayCompartment)
             {
                 var outflow1 = AfterDecayPath[decay1.Organ].Outflow;
-                Errors.AddError(decay1.LineNum, $"    {leading1} decay to '{outflow1.OrganTo}' with coefficient {outflow1.Coeff},");
+                Errors.AddError(decay1.Loc, $"    {leading1} decay to '{outflow1.OrganTo}' with coefficient {outflow1.Coeff},");
             }
             else
             {
-                Errors.AddError(decay1.LineNum, $"    {leading1} decay to '{decay1.Organ}' without coefficient,");
+                Errors.AddError(decay1.Loc, $"    {leading1} decay to '{decay1.Organ}' without coefficient,");
             }
 
             if (decay2.Organ.IsDecayCompartment)
             {
                 var outflow2 = AfterDecayPath[decay2.Organ].Outflow;
-                Errors.AddError(decay2.LineNum, $"    {leading2} decay to '{outflow2.OrganTo}' with coefficient {outflow2.Coeff}.");
+                Errors.AddError(decay2.Loc, $"    {leading2} decay to '{outflow2.OrganTo}' with coefficient {outflow2.Coeff}.");
             }
             else
             {
-                Errors.AddError(decay2.LineNum, $"    {leading2} decay to '{decay2.Organ}' without coefficient.");
+                Errors.AddError(decay2.Loc, $"    {leading2} decay to '{decay2.Organ}' without coefficient.");
             }
         }
     }

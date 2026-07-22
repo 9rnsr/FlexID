@@ -1,0 +1,10 @@
+[title]
+input for include section test
+
+[nuclide]
+Sr-90
+
+[intake]
+  Oralcavity       100%
+
+[include:sub1.inc]
