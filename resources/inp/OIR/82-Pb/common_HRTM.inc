@@ -13,6 +13,7 @@
   acc   ALV-F                 ALV
   acc   INT-F                 ALV
   acc   LNTH-F                LN-Th
+
   acc   ET1-S                 ET1-sur
   acc   ET2-S                 ET2-sur
   acc   ETseq-S               ET2-seq
@@ -24,6 +25,7 @@
   acc   ALV-S                 ALV
   acc   INT-S                 ALV
   acc   LNTH-S                LN-Th
+
   acc   ET2-B                 ET2-bnd
   acc   ETseq-B               ET2-seq
   acc   LNET-B                LN-ET
@@ -34,6 +36,7 @@
   acc   ALV-B                 ALV
   acc   INT-B                 ALV
   acc   LNTH-B                LN-Th
+
   exc   Environment           ---
 
 
@@ -125,6 +128,11 @@
   LNET-B                  $Blood                $sb
   LNTH-B                  $Blood                $sb
 
+[{*}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
 # decay for HRTM
   {*}/ET1-F               ET1-F                     ---
   {*}/ET2-F               ET2-F                     ---
@@ -137,6 +145,7 @@
   {*}/ALV-F               ALV-F                     ---
   {*}/INT-F               INT-F                     ---
   {*}/LNTH-F              LNTH-F                    ---
+
   {*}/ET1-S               ET1-S                     ---
   {*}/ET2-S               ET2-S                     ---
   {*}/ETseq-S             ETseq-S                   ---
@@ -148,6 +157,7 @@
   {*}/ALV-S               ALV-S                     ---
   {*}/INT-S               INT-S                     ---
   {*}/LNTH-S              LNTH-S                    ---
+
   {*}/ET2-B               ET2-B                     ---
   {*}/ETseq-B             ETseq-B                   ---
   {*}/LNET-B              LNET-B                    ---
@@ -158,4 +168,5 @@
   {*}/ALV-B               ALV-B                     ---
   {*}/INT-B               INT-B                     ---
   {*}/LNTH-B              LNTH-B                    ---
+
   {*}/Environment         Environment               ---
