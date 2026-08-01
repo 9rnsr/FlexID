@@ -1,4 +1,4 @@
-# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプルトニウム
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのネプツニウム
 # > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
 # > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
 # > progeny are modifications of their characteristic models described earlier in this
@@ -8,35 +8,28 @@
 # > アインスタイニウム、およびフェルミウムに対してここで適用されるモデルは、
 # > 本節の冒頭で述べた各元素の特性モデルを修正したものです。 ...
 
-[{Pu}:compartment]
+[{Np}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-$if parent
-  acc   Blood0                Blood
-$endif
-  acc   Blood1                Blood
-  acc   Blood2                Blood
+  acc   Blood                 Blood
   acc   C-bone-S              C-bone-S
   acc   T-bone-S              T-bone-S
   acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
-  acc   Liver0                Liver
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   Kidneys1              Kidneys       # Renal tubules
-  acc   Kidneys2              Kidneys       # Other kidney
+  acc   Kidneys1              Kidneys
+  acc   Kidneys2              Kidneys
   acc   Testes                Testes
   acc   Ovaries               Ovaries
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
 
-$if progeny
-
-# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプルトニウム
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのネプツニウム
 # > (566) ... For a given element in this group, two compartments representing the
 # > skin and spleen are added to the explicitly identified source regions in the element’s
 # > characteristic model. ...
@@ -46,60 +39,46 @@ $if progeny
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
-$endif
-
-[{Pu}:transfer]
+[{Np}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
-# ICRP Publ.141 p.225 Table 18.6
-$if parent
-  Blood0                  ST0                       3.0000E+2
-  Blood0                  Blood1                    7.0000E+2
-$endif
-  Blood1                  Liver0                    4.6200E-1
-  Blood1                  C-bone-S                  8.7780E-2
-  Blood1                  C-bone-V                  4.6200E-3
-  Blood1                  T-bone-S                  1.2474E-1
-  Blood1                  T-bone-V                  1.3860E-2
-  Blood1                  UB-con                    1.5400E-2
-  Blood1                  Kidneys1                  7.7000E-3
-  Blood1                  Kidneys2                  3.8500E-4
-  Blood1                  RC-con                    1.1550E-2
-  Blood1                  Testes                    2.6950E-4
-  Blood1                  Ovaries                   0.8470E-4
-$if parent
-  Blood1                  ST1                       1.8511E-2
-$endif
-  Blood1                  ST2                       2.3100E-2
-  ST0                     Blood1                    9.9000E-2
-  Blood2                  UB-con                    3.5000E+0
-  Blood2                  Blood1                    6.7550E+1
-  Blood2                  ST0                       2.8950E+1
-  Kidneys1                UB-con                    1.7329E-2
-  Kidneys2                Blood2                    1.2660E-4
-  ST1                     Blood2                    1.3860E-3
-  ST2                     Blood2                    1.2660E-4
-  Liver0                  SI-conRe                  9.2420E-4
-  Liver0                  Liver1                    4.5286E-2
-  Liver1                  Blood2                    1.5200E-3
-  Liver1                  Liver2                    3.8000E-4
-  Liver2                  Blood2                    1.2660E-4
-  Testes                  Blood2                    3.8000E-4
-  Ovaries                 Blood2                    3.8000E-4
-  C-bone-S                C-marrow                  8.2100E-5
-  C-bone-S                C-bone-V                  2.0500E-5
-  C-bone-V                C-marrow                  8.2100E-5
-  T-bone-S                T-marrow                  4.9300E-4
-  T-bone-S                T-bone-V                  1.2300E-4
-  T-bone-V                T-marrow                  4.9300E-4
-  C-marrow                Blood2                    7.6000E-3
-  T-marrow                Blood2                    7.6000E-3
+# ICRP Publ.141 p.234 Table 18.9
+  Blood                   Liver1                    0.194
+  Blood                   T-bone-S                  0.480
+  Blood                   C-bone-S                  0.393
+  Blood                   Kidneys1                  0.0291
+  Blood                   Kidneys2                  0.0097
+  Blood                   UB-con                    0.621
+  Blood                   RC-con                    0.0136
+  Blood                   Testes                    0.00068
+  Blood                   Ovaries                   0.00021
+  Blood                   ST0                       0.832
+ #Blood                   ST1                       0.161       # fix
+  Blood                   ST2                       0.0388
+  Liver1                  SI-conRe                  0.000133
+  Liver1                  Liver2                    0.00177
+  Liver1                  Blood                     0
+  Liver2                  Blood                     0.0019
+  T-bone-S                T-marrow                  4.93E-4
+  T-bone-S                T-bone-V                  2.47E-4
+  T-bone-V                T-marrow                  4.93E-4
+  T-marrow                Blood                     0.0076
+  C-bone-S                C-marrow                  8.21E-5
+  C-bone-S                C-bone-V                  4.11E-5
+  C-bone-V                C-marrow                  8.21E-5
+  C-marrow                Blood                     0.0076
+  C-marrow                C-bone-S                  0
+  Kidneys1                UB-con                    0.0495
+  Kidneys2                Blood                     0.00139
+  Testes                  Blood                     0.00038
+  Ovaries                 Blood                     0.00038
+  ST0                     Blood                     0.693
+  ST1                     Blood                     0.00693
+  ST2                     Blood                     1.9E-5
 
-$if progeny
-
-# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプルトニウム
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのネプツニウム
 # > (566) ... These compartments are taken from the intermediate soft tissue
 # > compartment, ST1; that is, the deposition fraction for ST1 is reduced by the deposition
 # > fractions assigned to the spleen and skin, and the removal half-time from ST1 is
@@ -119,7 +98,7 @@ $if progeny
 # > 皮膚への沈着割合の3分の1に設定されます。 ...
 
 # 作成者注：
-#   親核種としての、SkinとSpleenを明示していないプルトニウムモデルにおける軟組織の総質量は
+#   親核種としての、SkinとSpleenを明示していないネプツニウムモデルにおける軟組織の総質量は
 #   sregions_2016-08-12.NDX で定義された男性の線源領域から以下のように計算される。
 #     O-mucosa  + Teeth-V   + Tonsils   + Oesophag-w + St-wall   + SI-wall   +
 #     RC-wall   + LC-wall   + RS-wall   + LN-ET      + LN-Th     + Adrenals  +
@@ -136,47 +115,27 @@ $if progeny
 #   = 54.946076
 #
 #   同様に、親核種としてのモデルにおいて血液からST0以外の軟組織に沈着する割合は
-#     Blood1 → ST1     = 1.8511E-2
-#     Blood1 → ST2     = 2.3100E-2
-#   であるため、血液からST1,ST2の軟組織に沈着する総割合は 1.8511E-2 + 2.3100E-2 = 4.1611E-2 となる。
+#     Blood → ST1      = 0.161
+#     Blood → ST2      = 0.0388
+#   であるため、血液からST1,ST2の軟組織に沈着する総割合は 0.161 + 0.0388 = 0.1998 となる。
 #
 #   これらからの数値から、子孫核種における移行係数は以下のように計算される。
 #   血液から皮膚への沈着割合は、軟組織(ST1 + ST2)に対する皮膚の質量分率より、
-#     Blood1 → Skin    = (1.8511E-2 + 2.3100E-2) * (3.300E+00 / 54.946076) ≒ 2.4991E-03
+#     Blood → Skin     = (0.161 + 0.0388) * (3.300E+00 / 54.946076) ≒ 0.012
 #
 #   血液から脾臓への沈着割合は、皮膚への沈着率の1/3となることから、
-#     Blood1 → Spleen  = 2.4991E-03 / 3 ≒ 8.3303E-04
+#     Blood → Spleen   = 0.012 / 3 ≒ 0.004
 #
 #   血液からST1への沈着割合は、皮膚と脾臓に割り当てられた分を差し引くことになり、
-#     Blood1 → ST1     = 1.8511E-2 - 2.4991E-03 - 8.3303E-04 ≒ 1.5179E-02
+#     Blood → ST1      = 0.161 - 0.012 - 0.004 ≒ 0.145
 
-  Blood1                  ST1                   $(1.8511E-2 - 2.4991E-03 - 2.4991E-03/3)
-  Blood1                  Skin                  $(2.4991E-03)
-  Blood1                  Spleen                $(2.4991E-03 / 3)
-  Skin                    Blood2                    1.3860E-3       # ST1→Blood2の移行速度
-  Spleen                  Blood2                    1.3860E-3       # ST1→Blood2の移行速度
+  Blood                   ST1                   $(0.161 - 0.012 - 0.012/3)
+  Blood                   Skin                  $(0.012)
+  Blood                   Spleen                $(0.012 / 3)
+  Skin                    Blood                     0.00693     # ST1→Bloodの移行速度
+  Spleen                  Blood                     0.00693     # ST1→Bloodの移行速度
 
-# ICRP Publ.141 p.236 Para.567
-# > (567) The model for plutonium as a progeny is further modified by removing the
-# > transfers from blood to ST0 and from blood to Blood 1 (Table 18.6), and adding a
-# > transfer of 0.33 d⁻¹ from Blood 1 to ST0. This simplifies the model for plutonium as
-# > a progeny by eliminating a blood compartment (‘Blood 0’ in Table 18.6). The added
-# > transfer coefficient of 0.33 d⁻¹ from Blood 1 to ST0 implies that ST0 receives 30% of
-# > plutonium leaving Blood 1. Total deposition in ST0 is virtually the same as in the
-# > model for plutonium as a parent, but the rate of accumulation of plutonium in ST0 is
-# > substantially lower in this simplified version of the model.
-# > (567) 娘核種としてのプルトニウムに関するモデルは、血液からST0への移行および血液から
-# > Blood 1への移行（表18.6）を削除し、Blood 1からST0への0.33 d⁻¹の移行を追加することに
-# > よって、さらに修正されます。これにより、血液コンパートメント（表18.6における「Blood 0」）が
-# > 排除され、娘核種としてのプルトニウムのモデルが簡素化されます。Blood 1からST0への0.33 d⁻¹
-# > という追加された移行係数は、Blood 1から流出するプルトニウムの30%がST0に移行することを
-# > 意味します。ST0における総沈着量は、親核種としてのプルトニウムのモデルにおける量と実質的に
-# > 同じですが、ST0におけるプルトニウムの蓄積速度は、この簡素化されたモデルでは大幅に
-# > 低くなっています。
-
-  Blood1                  ST0                       0.33
-
-# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプルトニウム
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのネプツニウム
 # > (566) ... If the element is produced in a compartment that is not identifiable with a
 # > compartment in its characteristic model, it is assumed to transfer to the element's
 # > blood compartment [Blood 1 in the case of plutonium, which has multiple blood
@@ -191,20 +150,20 @@ $if progeny
 # > その元素の血液コンパートメント［複数の血液コンパートメントを持つプルトニウムの場合は
 # > Blood 1（表18.6参照）］へ移行すると仮定されます。
 
-  {*}/Plasma              Blood1                 1000
-  {Po}/Plasma1            Blood1                 1000
-  {Po}/Plasma2            Blood1                 1000
-  {Po}/Plasma3            Blood1                 1000
-  {*}/RBC                 Blood1                 1000
-  {Pu}/Blood0             Blood1                 1000
-  {Pu}/Blood1             Blood1                    ---
-  {Pu}/Blood2             Blood2                    ---
-  {*}/Blood               Blood1                 1000
+  {*}/Plasma              Blood                  1000
+  {Po}/Plasma1            Blood                  1000
+  {Po}/Plasma2            Blood                  1000
+  {Po}/Plasma3            Blood                  1000
+  {*}/RBC                 Blood                  1000
+  {Pu}/Blood0             Blood                  1000
+  {Pu}/Blood1             Blood                  1000
+  {Pu}/Blood2             Blood                  1000
+  {*}/Blood               Blood                     ---
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
-  {*}/Exch-C-bone-V       Blood1                $(0.03 / 365)
-  {*}/Exch-T-bone-V       Blood1                $(0.18 / 365)
+  {*}/Exch-C-bone-V       Blood                 $(0.03 / 365)
+  {*}/Exch-T-bone-V       Blood                 $(0.18 / 365)
   {*}/Noch-C-bone-V       C-bone-V                  ---
   {*}/Noch-T-bone-V       T-bone-V                  ---
   {*}/C-bone-V            C-bone-V                  ---
@@ -212,11 +171,11 @@ $if progeny
 
   {*}/C-marrow            C-marrow                  ---
   {*}/T-marrow            T-marrow                  ---
-  {Pu}/Liver0             Liver0                    ---
-  {Pu}/Liver1             Liver1                    ---
-  {Pu}/Liver2             Liver2                    ---
-  {^Pu}/Liver1            Blood1                    9.9000E-2   # ST0→Blood1の移行速度
-  {^Pu}/Liver2            Blood1                    9.9000E-2   # ST0→Blood1の移行速度
+  {Pu}/Liver0             Blood                     0.693       # ST0→Bloodの移行速度
+  {Pu}/Liver1             Blood                     0.693       # ST0→Bloodの移行速度
+  {Pu}/Liver2             Blood                     0.693       # ST0→Bloodの移行速度
+  {^Pu}/Liver1            Liver1                    ---
+  {^Pu}/Liver2            Liver2                    ---
   {*}/Kidneys1            Kidneys1                  ---
   {*}/Kidneys2            Kidneys2                  ---
   {*}/Testes              Testes                    ---
@@ -224,12 +183,10 @@ $if progeny
   {*}/Skin                Skin                      ---
   {*}/Spleen              Spleen                    ---
 
-  {Pu}/ST0                ST0                       ---
-  {Pu}/ST1                ST1                       ---
-  {Pu}/ST2                ST2                       ---
-  {^Pu}/ST0               Blood1                    9.9000E-2   # ST0→Blood1の移行速度
-  {^Pu}/ST1               Blood1                    9.9000E-2   # ST0→Blood1の移行速度
-  {^Pu}/ST2               Blood1                    9.9000E-2   # ST0→Blood1の移行速度
-  {*}/Other               Blood1                    9.9000E-2   # ST0→Blood1の移行速度
-
-$endif
+  {Np}/ST0                ST0                       ---
+  {Np}/ST1                ST1                       ---
+  {Np}/ST2                ST2                       ---
+  {^Np}/ST0               Blood                     0.693       # ST0→Bloodの移行速度
+  {^Np}/ST1               Blood                     0.693       # ST0→Bloodの移行速度
+  {^Np}/ST2               Blood                     0.693       # ST0→Bloodの移行速度
+  {*}/Other               Blood                     0.693       # ST0→Bloodの移行速度
