@@ -1,4 +1,14 @@
-# ICRP Publ.137 p.370 Para.812
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
+# > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
+# > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
+# > progeny are modifications of their characteristic models described earlier in this
+# > section. ...
+# > (566) アクチニドの娘核種であるアクチニウム、プロトアクチニウム、ネプツニウム、
+# > プルトニウム、アメリシウム、キュリウム、バークリウム、カリホルニウム、
+# > アインスタイニウム、およびフェルミウムに対してここで適用されるモデルは、
+# > 本節の冒頭で述べた各元素の特性モデルを修正したものです。 ...
+
+# ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのアクチニウム
 # > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
 # > thallium, francium, and astatine produced systemically by serial decay of members of
 # > a thorium chain are the same as the models applied to these elements as progeny of
@@ -40,8 +50,13 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのアクチニウムは、ラジウム子孫元素としてのモデルを用いる
-# ↓
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
+# > (566) ... For a given element in this group, two compartments representing the
+# > skin and spleen are added to the explicitly identified source regions in the element's
+# > characteristic model. ...
+# > (566) ... このグループの特定の元素について、その特性モデルにおいて明示的に特定された
+# > 線源領域に加え、皮膚と脾臓を表す2つのコンパートメントが追加されます。 ...
+
 # ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
 # > (714) For application to actinium as a progeny of radium, two compartments representing
 # > the spleen and skin are added to the explicitly identified source regions in the
@@ -50,19 +65,6 @@
 # > (714) ラジウムの子孫核種としてのアクチニウムへの適用では、他のラジウム子孫核種のモデルで
 # > 扱われている線源領域との整合性を図るため、アクチニウムの特性モデルで明示的に特定された
 # > 線源領域に、脾臓と皮膚を表す2つのコンパートメントが追加されます。 ...
-
-# ICRP Publ.141 p.566 Para.566 / アクチニド子孫元素としてのアクチニウム
-# > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
-# > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
-# > progeny are modifications of their characteristic models described earlier in this
-# > section. For a given element in this group, two compartments representing the
-# > skin and spleen are added to the explicitly identified source regions in the element's
-# > characteristic model. ...
-# > (566) アクチニウム、プロトアクチニウム、ネプツニウム、プルトニウム、アメリシウム、
-# > キュリウム、バークリウム、カリホルニウム、アインスタイニウム、フェルミウムを
-# > アクチニド娘元素として適用するモデルは、このセクションで先に説明した特性モデルを
-# > 修正したものです。このグループの特定の元素について、その元素の特性モデルで明示的に
-# > 特定された供給源領域に、皮膚と脾臓を表す2つの区画が追加されます。 ...
 
   acc   Skin                  Skin
   acc   Spleen                Spleen
@@ -106,6 +108,25 @@
   ST1                     Blood                     0.0139
   ST2                     Blood                     1.9E-5
 
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
+# > (566) ... These compartments are taken from the intermediate soft tissue
+# > compartment, ST1; that is, the deposition fraction for ST1 is reduced by the deposition
+# > fractions assigned to the spleen and skin, and the removal half-time from ST1 is
+# > assigned to these added compartments. Deposition of the element in the skin is
+# > calculated as its mass fraction of other soft tissue times its deposition fraction in
+# > other soft tissue excluding the rapid-turnover compartment, ST0. The deposition
+# > fraction for the spleen is set at one-third of the deposition fraction for the skin,
+# > considering the relative masses of these tissues and the typically higher concentrations
+# > of the actinides in the spleen than the skin observed in laboratory animals and
+# > humans. ...
+# > (566) ... これらのコンパートメント(訳注：皮膚と脾臓)は、中間代謝軟組織コンパートメントST1から
+# > 取得されます。すなわち、ST1の沈着割合は脾臓と皮膚に割り当てられた沈着割合によって減少し、
+# > ST1からの除去半減期がこれらの追加されたコンパートメントに割り当てられます。皮膚における
+# > 元素の沈着は、その他の軟組織の質量割合と、急速代謝コンパートメントST0を除く
+# > その他の軟組織の沈着割合を乗じて計算されます。脾臓への沈着割合は、これらの組織の相対質量と、
+# > 実験動物やヒトにおいて脾臓の方が皮膚よりもアクチニドの濃度が通常高いことを考慮して、
+# > 皮膚への沈着割合の3分の1に設定されます。 ...
+
 # ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
 # > (714) ... Skin and spleen are taken from the intermediate soft
 # > tissue compartment ST1; that is, the deposition fraction for ST1 is reduced by the
@@ -122,25 +143,6 @@
 # > 急速代謝コンパートメントST0への沈着を除くその他の軟組織への沈着割合を乗じて計算されます。
 # > 脾臓への沈着割合は、これらの組織の相対質量と、実験動物やヒトにおいて脾臓の方が皮膚よりも
 # > アクチニドの濃度が通常高いことを考慮して、皮膚への沈着割合の3分の1に設定されます。
-
-# ICRP Publ.141 p.566 Para.566 / 子孫元素としてのアクチニウム
-# > (566) ... These compartments are taken from the intermediate soft tissue
-# > compartment, ST1; that is, the deposition fraction for ST1 is reduced by the deposition
-# > fractions assigned to the spleen and skin, and the removal half-time from ST1 is
-# > assigned to these added compartments. Deposition of the element in the skin is
-# > calculated as its mass fraction of other soft tissue times its deposition fraction in
-# > other soft tissue excluding the rapid-turnover compartment, ST0. The deposition
-# > fraction for the spleen is set at one-third of the deposition fraction for the skin,
-# > considering the relative masses of these tissues and the typically higher concentrations
-# > of the actinides in the spleen than the skin observed in laboratory animals and
-# > humans. 
-# > これらのコンパートメント(訳注：皮膚と脾臓)は、中間代謝軟組織コンパートメントST1から
-# > 取得されます。すなわち、ST1の沈着割合は脾臓と皮膚に割り当てられた沈着割合によって減少し、
-# > ST1からの除去半減期がこれらの追加されたコンパートメントに割り当てられます。皮膚における
-# > 元素の沈着は、その他の軟組織の質量割合と、急速代謝コンパートメントST0を除く
-# > その他の軟組織の沈着割合を乗じて計算されます。脾臓への沈着割合は、これらの組織の相対質量と、
-# > 実験動物やヒトにおいて脾臓の方が皮膚よりもアクチニドの濃度が通常高いことを考慮して、
-# > 皮膚への沈着割合の3分の1に設定されます。
 
 # 作成者注：
 #   親核種としての、SkinとSpleenを明示していないアクチニウムモデルにおける軟組織の総質量は
@@ -169,7 +171,7 @@
 #     Blood → Skin     = (1.67 + 0.466) * (3.300E+00 / 54.946076) ≒ 0.128286
 #
 #   血液から脾臓への沈着割合は、皮膚への沈着率の1/3となることから、
-#     Blood → Spleen   = 0.128285776 / 3 ≒ 0.042762
+#     Blood → Spleen   = 0.128286 / 3 ≒ 0.042762
 #
 #   血液からST1への沈着割合は、皮膚と脾臓に割り当てられた分を差し引くことになり、
 #     Blood → ST1      = 1.67 - 0.128286 - 0.042762 ≒ 1.498952
@@ -177,8 +179,22 @@
   Blood                   ST1                   $(1.67 - 0.128286 - 0.128286/3)
   Blood                   Skin                  $(0.128286)
   Blood                   Spleen                $(0.128286 / 3)
-  Skin                    Blood                     0.0139
-  Spleen                  Blood                     0.0139
+  Skin                    Blood                     0.0139      # ST1→Bloodの移行速度
+  Spleen                  Blood                     0.0139      # ST1→Bloodの移行速度
+
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
+# > (566) ... If the element is produced in a compartment that is not identifiable with a
+# > compartment in its characteristic model, it is assumed to transfer to the element's
+# > blood compartment [Blood 1 in the case of plutonium, which has multiple blood
+# > compartments (see Table 18.6)] at the rate 1000 d⁻¹ if produced in a blood compartment,
+# > at the rate of transfer from the fast-turnover soft tissue compartment ST0 to
+# > blood if produced in a soft tissue compartment, and at the rate of bone turnover if
+# > produced in a bone volume compartment.
+# > (566) ... 元素がその特性モデルのコンパートメントと識別できないコンパートメントで生成される場合、
+# > 血液コンパートメントで生成された場合は1000 d⁻¹の速度で、軟組織コンパートメントで生成された場合は
+# > 回転の速い軟組織コンパートメントST0から血液への移行速度で、骨量コンパートメントで生成された
+# > 場合は骨代謝速度で、元素の血液コンパートメント [複数の血液コンパートメントを持つプルトニウムの
+# > 場合はBlood 1 (表 18.6 を参照)] に移行すると仮定されます。
 
 # ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
 # > (714) ... If actinium is produced in a
@@ -192,20 +208,6 @@
 # > 速度でアクチニウムの中心血液コンパートメントに、軟部組織コンパートメントで生成された場合は
 # > 回転の速い軟部組織コンパートメントST0から血液への移行速度（1.386 d⁻¹）で、骨量コンパートメントで
 # > 生成された場合は骨代謝速度でアクチニウムの中心血液コンパートメントに移行すると仮定されます。
-
-# ICRP Publ.141 p.566 Para.566 / 子孫元素としてのアクチニウム
-# > (566) ... If the element is produced in a compartment that is not identifiable with a
-# > compartment in its characteristic model, it is assumed to transfer to the element's
-# > blood compartment [Blood 1 in the case of plutonium, which has multiple blood
-# > compartments (see Table 18.6)] at the rate 1000 d⁻¹ if produced in a blood compartment,
-# > at the rate of transfer from the fast-turnover soft tissue compartment ST0 to
-# > blood if produced in a soft tissue compartment, and at the rate of bone turnover if
-# > produced in a bone volume compartment.
-# > (566) ... 元素がその特性モデルのコンパートメントと識別できないコンパートメントで生成される場合、
-# > 血液コンパートメントで生成された場合は1000 d⁻¹の速度で、軟組織コンパートメントで生成された場合は
-# > 回転の速い軟組織コンパートメントST0から血液への移行速度で、骨量コンパートメントで生成された
-# > 場合は骨代謝速度で、元素の血液コンパートメント [複数の血液コンパートメントを持つプルトニウムの
-# > 場合はBlood 1 (表 18.6 を参照)] に移行すると仮定されます。
 
   {U,Bi,Pb,Tl}/Plasma         Blood              1000
   {Po}/Plasma1                Blood              1000

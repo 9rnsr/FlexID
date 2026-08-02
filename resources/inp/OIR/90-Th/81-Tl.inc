@@ -1,4 +1,12 @@
-# ICRP Publ.137 p.370 Para.812
+# ICRP Publ.141 p.232 Para.562 / アクチニド子孫元素としてのタリウム
+# > (562) The models applied here to thallium, lead, bismuth, polonium, and radium
+# > as actinide progeny are the models applied to these elements as progeny of radium
+# > [described in OIR Part 3 (ICRP, 2017)]. ...
+# > (562) ここでアクチニドの子孫核種としてタリウム、鉛、ビスマス、ポロニウム、および
+# > ラジウムに適用されるモデルは、ラジウムの子孫核種としてこれらの元素に適用されるモデルと
+# > 同じになります [OIR Part 3 (ICRP, 2017)に記載されています]。 ...
+
+# ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのタリウム
 # > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
 # > thallium, francium, and astatine produced systemically by serial decay of members of
 # > a thorium chain are the same as the models applied to these elements as progeny of
@@ -19,32 +27,13 @@
 # > 放射性核種のうち、その元素のモデルに関して曖昧なもの（例えば、トリウムモデルにおいて
 # > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
 
-# ICRP Publ.137 p.331 Para.712
+# ICRP Publ.137 p.331 Para.712 / ラジウム子孫元素としてのタリウム
 # > (712) The models for thallium, lead, bismuth, and polonium produced in vivo following
 # > intake of radium are modifications of their systemic models as progeny of lead,
-# > described in Section 9. For each of these four elements, the red marrow compartment
-# > is replaced by a compartment with the same kinetics (i.e. the same paths and rates of
-# > inflow and outflow) named ‘trabecular marrow’ for consistency with the models for
-# > other radium progeny; a compartment is added to represent cortical marrow, which is
-# > assumed to exchange activity with plasma; the transfer coefficient from plasma to
-# > cortical marrow is one-third of the transfer coefficient from plasma to trabecular
-# > marrow; the removal half-time from cortical marrow is the same as that for trabecular
-# > marrow; and the transfer coefficient from plasma to ST1 is reduced to maintain the
-# > original total outflow rate from plasma to all destinations.
+# > described in Section 9. ...
 # > (712) ラジウム摂取後に体内で生成されるタリウム、鉛、ビスマス、およびポロニウムのモデルは、
-# > 第9節で説明した鉛の子孫元素としての全身モデルを修正したものです。これら4元素それぞれに
-# > ついて、赤色骨髄コンパートメントは、他のラジウム子孫元素のモデルとの整合性を図るため、
-# > 同じ動態（すなわち、同じ経路および流入・流出速度）を持つ「骨梁骨髄」と呼ばれる
-# > コンパートメントに置き換えられます。皮質骨髄を表すコンパートメントが追加され、この
-# > コンパートメントは血漿と放射能を交換すると仮定されます。血漿から皮質骨髄への移行係数は、
-# > 血漿から骨梁骨髄への移行係数の3分の1です。皮質骨髄からの除去半減期は、骨梁骨髄の場合と
-# > 同じです。血漿からST1への移行係数は、血漿からすべての目的地への元の総流出速度を
-# > 維持するために低減されます。
+# > 第9節で説明した鉛の子孫元素としての全身モデルを修正したものです。 ...
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのタリウムは、ラジウム子孫元素としてのモデルを用いる
-# ↓
-# ICRP Publ.137 p.331 Para.712 / ラジウム子孫元素としてのタリウムには、鉛子孫元素としてのモデルを修正して用いる
-# ↓
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
 # > (481) The following systemic model is applied to thallium produced in vivo following
 # > intake of lead. ...

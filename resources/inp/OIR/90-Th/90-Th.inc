@@ -1,4 +1,10 @@
-# ICRP Publ.137 p.370 Para.812
+# ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
+# > (565) The model applied here to thorium as an actinide progeny is the model
+# > applied in OIR Part 3 (ICRP, 2017) to thorium as a progeny of radium. ...
+# > (565) ここでアクチニドの娘核種としてのトリウムに適用されるモデルは、OIR Part 3 
+# > (ICRP, 2017) においてラジウムの娘核種としてのトリウムに適用されたモデルです。 ...
+
+# ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのトリウム
 # > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
 # > thallium, francium, and astatine produced systemically by serial decay of members of
 # > a thorium chain are the same as the models applied to these elements as progeny of
@@ -18,6 +24,12 @@
 # > Schuppler et al., 1988; Durbin, 2011)。骨体積コンパートメントで生成される
 # > 放射性核種のうち、その元素のモデルに関して曖昧なもの（例えば、トリウムモデルにおいて
 # > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
+
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) The model for thorium as a progeny of radium is a modification of the systemic
+# > model applied in this publication to thorium as a parent radionuclide. ...
+# > (715) ラジウムの子孫核種としてのトリウムのモデルは、本論文でトリウムを親核種として
+# > 適用した全身モデルを修正したものです。 ...
 
 [{Th}:compartment]
 #-----+---------------------| S-Coefficient
@@ -42,16 +54,20 @@
 
 $if progeny
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのトリウムは、ラジウム子孫元素としてのモデルを用いる。
-# ↓
+# ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
+# > (565) ... Briefly,
+# > two compartments, one representing the spleen and the other representing the skin,
+# > are added to the explicitly identified source regions in the characteristic model for
+# > thorium described in OIR Part 3. ...
+# > (565) ... 簡潔に言えば、OIR Part 3に記載されているトリウムの特性モデルにおける明示的な
+# > 線源領域に対し、脾臓を表すコンパートメントと皮膚を表すコンパートメントの2つが
+# > 追加されています。 ...
+
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
-# > (715) The model for thorium as a progeny of radium is a modification of the systemic
-# > model applied in this publication to thorium as a parent radionuclide. Two
+# > (715) ... Two
 # > compartments, one representing spleen and the other representing skin, are added to
 # > that model.
-# > (715) ラジウムの子孫核種としてのトリウムのモデルは、本論文でトリウムを親核種として
-# > 適用した全身モデルを修正したものです。このモデルには、脾臓と皮膚を表す2つの
-# > コンパートメントが追加されます。
+# > (715) ... このモデルには、脾臓と皮膚を表す2つのコンパートメントが追加されます。
 
   acc   Skin                  Skin
   acc   Spleen                Spleen
@@ -100,6 +116,13 @@ $endif
 
 $if progeny
 
+# ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
+# > (565) ... The spleen and skin are assumed to receive 0.5%
+# > and 2%, respectively, of thorium leaving the circulation, and to return thorium to
+# > blood with a biological half-time of 2 y. ...
+# > (565) ... 脾臓および皮膚は、循環系から移行するトリウムのそれぞれ0.5%および
+# > 2%を受け取り、生物学的半減期2年でトリウムを血液へ戻すと仮定されます。 ...
+
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
 # > (715) ... Spleen and skin are assumed to exchange thorium with blood. Parameter
 # > values for these compartments are based on limited data from animal studies and
@@ -120,10 +143,21 @@ $if progeny
 # > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じです。
 
   Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
-  Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
   Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
-  Spleen                  Blood                 $(0.693 / 2/365)
+  Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
   Skin                    Blood                 $(0.693 / 2/365)
+  Spleen                  Blood                 $(0.693 / 2/365)
+
+# ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
+# > (565) ... Thorium produced in a compartment that is
+# > not identifiable with a compartment in the thorium model is assumed to transfer to
+# > blood at the following rates: 1000 d⁻¹ if produced in blood; 0.462 d⁻¹ if produced in
+# > soft tissue; and at the rate of bone turnover if produced in a bone volume
+# > compartment.
+# > (565) ... トリウムモデル内のコンパートメントとして特定できないコンパートメント内で生成された
+# > トリウムは、以下の速度で血液へ移行すると仮定されます：血液中で生成された場合は1000 d⁻¹、
+# > 軟部組織で生成された場合は0.462 d⁻¹、そして骨体積コンパートメントで生成された場合は
+# > 骨代謝速度となります。
 
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
 # > (715) ... Thorium produced in a compartment
@@ -136,8 +170,8 @@ $if progeny
 # > (715) ... トリウムモデル内のコンパートメントと識別できない先行する連鎖メンバーのコンパートメントで
 # > 生成されたトリウムは、トリウムモデルの血液コンパートメントに以下の速度で移行すると仮定されます。
 # > 血液コンパートメントで生成された場合は 1000 d⁻¹、軟部組織コンパートメントで生成された
-# > 場合は 0.462 d⁻¹です（トリウムモデルにおける他の軟部組織のコンパートメントからの除去速度が
-# > 最も高い）。交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
+# > 場合は 0.462 d⁻¹です（トリウムモデルにおけるその他の軟部組織コンパートメントからの最も高い除去速度）。
+# > 交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
 
   {U,Bi,Pb,Tl}/Plasma         Blood              1000
   {Po}/Plasma1                Blood              1000

@@ -1,12 +1,10 @@
-# ICRP Publ.137 p.369 Para.811 / トリウム系列子孫元素としてのウラン
-# ICRP Publ.137 p.369 Para.811
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # > (811) ... The model for uranium
 # > produced by serial decay of members of a uranium chain is a modification of the
 # > model for uranium as a parent radionuclide (see Section 15). ...
 # > (811) ... ウラン系列の核種の逐次崩壊によって
-# > 生成されるウランのモデルは、親放射性核種としてのウランのモデルを修正したものである
+# > 生成されるウランのモデルは、親放射性核種としてのウランのモデルを修正したものです
 # > （セクション15を参照）。 ...
-
 
 [{U}:compartment]
 #-----+---------------------| S-Coefficient
@@ -28,8 +26,7 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
-# ICRP Publ.137 p.369 Para.811 / トリウム系列子孫元素としてのウラン
-# ICRP Publ.137 p.369 Para.811
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # > (811) ... Single compartments
 # > representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
 # > added for consistency with the models for other progeny of thorium. 
@@ -80,7 +77,7 @@
   Exch-C-bone-V           C-bone-S                  0.0173
   Exch-C-bone-V           Noch-C-bone-V             0.00578
 
-# ICRP Publ.137 p.369 Para.811
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # (811) ... Single compartments
 # representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
 # added for consistency with the models for other progeny of thorium. The six added
@@ -91,22 +88,22 @@
 # fraction for ST1 (0.0665 of uranium ‘leaving the circulation’, as defined in Section
 # 15). Deposition in trabecular marrow is assumed to be three times greater than
 # deposition in cortical marrow. The derived transfer cofficients from blood to
-# spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are 0.004 d-¹,
-# 0.075 d-¹, 0.025 d-¹, 0.001 d-¹, 0.0003 d-¹, and 0.09 d-¹, respectively. The removal
+# spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are 0.004 d⁻¹,
+# 0.075 d⁻¹, 0.025 d⁻¹, 0.001 d⁻¹, 0.0003 d⁻¹, and 0.09 d⁻¹, respectively. The removal
 # half-time from each added compartment is set at 20 d, the removal half-time from
 # ST1. The deposition fraction for ST1 is reduced by the sum of deposition fractions
 # for the six added compartments. 
 # (811) ... トリウムの他の娘核種のモデルとの整合性をとるため、脾臓、海綿骨髄、
-# 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されている。
+# 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されています。
 # これら6つの追加コンパートメントは、親核種としてのウランのモデルにおける中期的軟部組織
-# コンパートメントST1から採用されたものである。脾臓、海綿骨髄＋皮質骨髄（すなわち、合わせた全骨髄）、
+# コンパートメントST1から採用されたものです。脾臓、海綿骨髄＋皮質骨髄（すなわち、合わせた全骨髄）、
 # 精巣、卵巣、または皮膚における娘核種としてのウランの沈着量は、ST1の沈着割合（セクション15で
 # 定義される「循環から離脱する」ウランの0.0665）に、他の軟部組織に対する当該組織の質量分率を
-# 乗じることによって算出される。海綿骨髄における沈着量は、皮質骨髄における沈着量の3倍であると
-# 仮定される。血液から脾臓、海綿骨髄、皮質骨髄、精巣、卵巣、および皮膚への移行係数は、それぞれ
-# 0.004 d⁻¹、0.075 d⁻¹、0.025 d⁻¹、0.001 d⁻¹、0.0003 d⁻¹、および0.09 d⁻¹と導出される。
-# 各追加コンパートメントからの除去半減期は、ST1からの除去半減期である20日と設定される。
-# ST1の沈着割合は、これら6つの追加コンパートメントの沈着割合の合計分だけ低減される。
+# 乗じることによって算出されます。海綿骨髄における沈着量は、皮質骨髄における沈着量の3倍であると
+# 仮定されます。血液から脾臓、海綿骨髄、皮質骨髄、精巣、卵巣、および皮膚への移行係数は、それぞれ
+# 0.004 d⁻¹、0.075 d⁻¹、0.025 d⁻¹、0.001 d⁻¹、0.0003 d⁻¹、および0.09 d⁻¹と導出されます。
+# 各追加コンパートメントからの除去半減期は、ST1からの除去半減期である20日と設定されます。
+# ST1の沈着割合は、これら6つの追加コンパートメントの沈着割合の合計分だけ低減されます。
 
   Plasma                  ST1           $(1.63 - (0.025+0.075+0.001+0.0003+0.09+0.004))
   Plasma                  C-marrow                  0.025
@@ -123,19 +120,19 @@
   Skin                    Plasma                $(0.693 / 20)   # 半減期20日
   Spleen                  Plasma                $(0.693 / 20)   # 半減期20日
 
-# ICRP Publ.137 p.369 Para.811
+# ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # (811) ... Uranium produced in a soft tissue compartment
 # that is not identifiable with a compartment in the characteristic model for uranium is
-# assumed to transfer to plasma at the rate 8.32 d-¹, the highest rate of loss from any
+# assumed to transfer to plasma at the rate 8.32 d⁻¹, the highest rate of loss from any
 # compartment of other soft tissue in the characteristic model for uranium. Uranium
 # produced in a bone volume compartment that is ambiguous with regard to the
 # uranium model (e.g. trabecular or cortical bone volume in the thorium model) is
 # assumed to be produced in non-exchangeable bone.
 # (811) ... ウランの特性モデルにおけるコンパートメントと同一視できない
-# 軟部組織コンパートメント内で生成されたウランは、8.32 d⁻¹の速度で血漿へ移行すると仮定される。
-# この速度は、ウランの特性モデルにおける他の軟部組織のどのコンパートメントからの消失速度よりも
-# 高いものである。ウランのモデルに関してその帰属が不明確な骨体積区画（例：トリウムモデルにおける
-# 海綿骨または皮質骨の体積）で生成されるウランは、非交換性骨で生成されるものと仮定される。
+# 軟部組織コンパートメント内で生成されたウランは、8.32 d⁻¹の速度で血漿へ移行すると仮定されます。
+# この速度は、ウランの特性モデルにおけるその他の軟部組織のコンパートメントからの消失速度として
+# 最も高いものです。ウランのモデルに関してその帰属が不明確な骨体積区画（例：トリウムモデルにおける
+# 海綿骨または皮質骨の体積）で生成されるウランは、非交換性骨で生成されるものと仮定されます。
 
   {U,Bi,Pb,Tl}/Plasma         Plasma                ---
   {Po}/Plasma1                Plasma             1000       # Publ.151 Annex.B
@@ -150,8 +147,8 @@
   {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
   {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
   {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
-  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---     # Publ.137 Para.812
-  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---     # Publ.137 Para.812
+  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---
+  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---
 
   {^Rn}/C-marrow              C-marrow              ---
   {^Rn}/T-marrow              T-marrow              ---

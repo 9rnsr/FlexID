@@ -1,4 +1,12 @@
-# ICRP Publ.137 p.370 Para.812
+# ICRP Publ.141 p.235 Para.563 / アクチニド子孫元素としてのラドン
+# > (563) The model applied here to radon as an actinide progeny is a generic model
+# > applied in the OIR series to radon produced by radioactive decay in a systemic
+# > compartment. ...
+# > (563) ここでアクチニド娘核種としてのラドンに適用したモデルは、OIRシリーズにおいて
+# > 全身コンパートメント内で放射性崩壊によって生成されたラドンに適用された一般的な
+# > モデルです。 ...
+
+# ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのラドン
 # > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
 # > thallium, francium, and astatine produced systemically by serial decay of members of
 # > a thorium chain are the same as the models applied to these elements as progeny of
@@ -19,21 +27,11 @@
 # > 放射性核種のうち、その元素のモデルに関して曖昧なもの（例えば、トリウムモデルにおいて
 # > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラドンは、ラジウム子孫元素としてのモデルを用いる。
-# ↓
 # ICRP Publ.137 p.331 Para.711 / ラジウム子孫元素としてのラドン
 # > (711) A generic model structure is applied in the OIR series to radon, xenon, and
 # > krypton produced in systemic compartments by decay of a parent radionuclide. ...
 # > (711) OIRシリーズでは、親放射性核種の崩壊によって全身コンパートメントで生成されるラドン、
 # > キセノン、およびクリプトンに、一般的なモデル構造が適用されています。 ...
-
-# ICRP Publ.141 p.235 Para.563 / アクチニド子孫核種としてのラドン
-# > (563) The model applied here to radon as an actinide progeny is a generic model
-# > applied in the OIR series to radon produced by radioactive decay in a systemic
-# > compartment. ...
-# > (563) ここでアクチニド娘核種としてのラドンに適用したモデルは、OIRシリーズにおいて
-# > 全身コンパートメント内で放射性崩壊によって生成されたラドンに適用された一般的な
-# > モデルです。 ...
 
 [{Rn}:compartment]
 #-----+---------------------| S-Coefficient
@@ -79,8 +77,20 @@
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Exhaled                  12
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラドンは、ラジウム子孫元素としてのモデルを用いる。
-# ↓
+# ICRP Publ.141 p.235 Para.563 / アクチニド子孫元素としてのラドン
+# > (563) ... Radon produced in a compartment identified as non-exchangeable
+# > bone volume, exchangeable bone volume, or bone surface transfers to blood at the
+# > rate 0.36, 1.5, or 100 d⁻¹, respectively; radon produced in a compartment identified
+# > simply as ‘bone volume’ transfers to blood at 0.36 d⁻¹; radon produced in a soft
+# > tissue compartment transfers to blood at 33.3 d⁻¹; and radon produced in blood or
+# > entering blood is removed from the body (exhaled) at 1000 d⁻¹.
+# > (563) ... 非交換性骨量、交換性骨量、または骨表面として識別されるコンパートメントで
+# > 生成されたラドンは、それぞれ0.36、1.5、または100 d⁻¹の速度で血液に移行します。
+# > 単に「骨量」として識別されるコンパートメントで生成されたラドンは、0.36 d⁻¹で
+# > 血液に移行します。軟組織コンパートメントで生成されたラドンは、33.3 d⁻¹で血液に
+# > 移行します。血液中で生成された、または血液に入ったラドンは、1000 d⁻¹で体から（呼気として）
+# > 除去されます。
+
 # ICRP Publ.137 p.331 Para.711 / ラジウム子孫元素としてのラドン
 # > (711) ... These gases are assigned the model for transfer of radon from bone to blood introduced
 # > in Publication 67 (ICRP, 1993), but are assigned element-specific rates of
@@ -101,20 +111,6 @@
 # > 半減期が30分であるのに対し、キセノンでは半減期が20分、クリプトンは15分です。血液中で
 # > 生成された、または全身コンパートメントで生成された後に血液中に入るラドン、キセノン、
 # > またはクリプトンは、1000 d⁻¹の割合で体外に排出されます（呼気）。これは半減期1分に相当します。
-
-# ICRP Publ.141 p.235 Para.563 / アクチニド子孫核種としてのラドン
-# > (563) ... Radon produced in a compartment identified as non-exchangeable
-# > bone volume, exchangeable bone volume, or bone surface transfers to blood at the
-# > rate 0.36, 1.5, or 100 d⁻¹, respectively; radon produced in a compartment identified
-# > simply as ‘bone volume’ transfers to blood at 0.36 d⁻¹; radon produced in a soft
-# > tissue compartment transfers to blood at 33.3 d⁻¹; and radon produced in blood or
-# > entering blood is removed from the body (exhaled) at 1000 d⁻¹.
-# > (563) ... 非交換性骨量、交換性骨量、または骨表面として識別されるコンパートメントで
-# > 生成されたラドンは、それぞれ0.36、1.5、または100 d⁻¹の速度で血液に移行します。
-# > 単に「骨量」として識別されるコンパートメントで生成されたラドンは、0.36 d⁻¹で
-# > 血液に移行します。軟組織コンパートメントで生成されたラドンは、33.3 d⁻¹で血液に
-# > 移行します。血液中で生成された、または血液に入ったラドンは、1000 d⁻¹で体から（呼気として）
-# > 除去されます。
 
   {U,Bi,Pb,Tl}/Plasma         Blood              1000       # Publ.151 Annex.B
   {Po}/Plasma1                Blood              1000       # Publ.151 Annex.B
