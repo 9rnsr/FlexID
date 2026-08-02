@@ -1,0 +1,31 @@
+[title]
+Pu-232 Inhalation, Aerosols Type F
+
+[nuclide]
+  Pu-232  Np-232  U-228   U-232
+  Th-228  Ra-224  Rn-220  Po-216  Pb-212  Bi-212
+  Th-224  Ra-220  Rn-216  Po-212  Tl-208
+
+[include:../parameter_94-Pu_inh_Aerosols-TypeF.inc]
+
+[include:../common_intake_inh.inc]
+
+[include:../common_HRTM.inc]
+[include:../common_HATM+UB.inc]
+
+[include:../96-Cm.inc]
+[include:../95-Am.inc]
+[include:../94-Pu.inc]
+[include:../93-Np.inc]
+[include:../92-U.inc]
+[include:../91-Pa.inc]
+[include:../90-Th.inc]
+[include:../89-Ac.inc]
+[include:../88-Ra.inc]
+[include:../87-Fr.inc]
+[include:../86-Rn_inh.inc]
+[include:../85-At.inc]
+[include:../84-Po.inc]
+[include:../83-Bi.inc]
+[include:../82-Pb.inc]
+[include:../81-Tl.inc]

@@ -1,0 +1,31 @@
+[title]
+Pu-244 Inhalation, Aerosols Type M
+
+[nuclide]
+  Pu-244  U-240   Np-240m Np-240  Pu-240  U-236
+  Th-232  Ra-228  Ac-228  Th-228  Ra-224  Rn-220
+  Po-216  Pb-212  Bi-212  Po-212  Tl-208
+
+[include:../parameter_94-Pu_inh_Aerosols-TypeM.inc]
+
+[include:../common_intake_inh.inc]
+
+[include:../common_HRTM.inc]
+[include:../common_HATM+UB.inc]
+
+[include:../96-Cm.inc]
+[include:../95-Am.inc]
+[include:../94-Pu.inc]
+[include:../93-Np.inc]
+[include:../92-U.inc]
+[include:../91-Pa.inc]
+[include:../90-Th.inc]
+[include:../89-Ac.inc]
+[include:../88-Ra.inc]
+[include:../87-Fr.inc]
+[include:../86-Rn_inh.inc]
+[include:../85-At.inc]
+[include:../84-Po.inc]
+[include:../83-Bi.inc]
+[include:../82-Pb.inc]
+[include:../81-Tl.inc]
