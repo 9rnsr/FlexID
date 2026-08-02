@@ -1,4 +1,12 @@
-# ICRP Publ.137 p.370 Para.812
+# ICRP Publ.141 p.232 Para.562 / アクチニド子孫元素としてのラジウム
+# > (562) The models applied here to thallium, lead, bismuth, polonium, and radium
+# > as actinide progeny are the models applied to these elements as progeny of radium
+# > [described in OIR Part 3 (ICRP, 2017)]. ...
+# > (562) ここでアクチニドの子孫核種としてタリウム、鉛、ビスマス、ポロニウム、および
+# > ラジウムに適用されるモデルは、ラジウムの子孫核種としてこれらの元素に適用されるモデルと
+# > 同じになります [OIR Part 3 (ICRP, 2017)に記載されています]。
+
+# ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのラジウム
 # > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
 # > thallium, francium, and astatine produced systemically by serial decay of members of
 # > a thorium chain are the same as the models applied to these elements as progeny of
@@ -19,6 +27,12 @@
 # > 放射性核種のうち、その元素のモデルに関して曖昧なもの（例えば、トリウムモデルにおいて
 # > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
 
+# ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
+# > (716) Themodel for radium produced by serial decay of members of a radium chain is
+# > a modification of the model for radium as a parent radionuclide. ...
+# > (716) ラジウム系列の構成核種の逐次崩壊によって生成されるラジウムのモデルは、
+# > 親放射性核種としてのラジウムのモデルを修正したものです。 ...
+
 [{Ra}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
@@ -38,8 +52,6 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのラジウムは、ラジウム子孫元素としてのモデルを用いる
-# ↓
 # ICRP Publ.137 p.334 Para.716 / ラジウム子孫元素としてのラジウム
 # > (716) ... Single compartments representing spleen, trabecular marrow,
 # > cortical marrow, testes, ovaries, and skin are added for consistency

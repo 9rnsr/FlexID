@@ -1,4 +1,14 @@
-# ICRP Publ.137 p.370 Para.812
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプロトアクチニウム
+# > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
+# > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
+# > progeny are modifications of their characteristic models described earlier in this
+# > section. ...
+# > (566) アクチニドの娘核種であるアクチニウム、プロトアクチニウム、ネプツニウム、
+# > プルトニウム、アメリシウム、キュリウム、バークリウム、カリホルニウム、
+# > アインスタイニウム、およびフェルミウムに対してここで適用されるモデルは、
+# > 本節の冒頭で述べた各元素の特性モデルを修正したものです。 ...
+
+# ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのプロトアクチニウム
 # > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
 # > thallium, francium, and astatine produced systemically by serial decay of members of
 # > a thorium chain are the same as the models applied to these elements as progeny of
@@ -18,6 +28,12 @@
 # > Schuppler et al., 1988; Durbin, 2011)。骨体積コンパートメントで生成される
 # > 放射性核種のうち、その元素のモデルに関して曖昧なもの（例えば、トリウムモデルにおいて
 # > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
+
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) The model for thorium as a progeny of radium is a modification of the systemic
+# > model applied in this publication to thorium as a parent radionuclide. ...
+# > (715) ラジウムの子孫核種としてのトリウムのモデルは、本論文でトリウムを親核種として
+# > 適用した全身モデルを修正したものです。 ...
 
 [{Pa}:compartment]
 #-----+---------------------| S-Coefficient
@@ -40,29 +56,18 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのプロトアクチニウムは、ラジウム子孫元素としてのトリウムのモデルを用いる。
-# ↓
-# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
-# > (715) The model for thorium as a progeny of radium is a modification of the systemic
-# > model applied in this publication to thorium as a parent radionuclide. Two
-# > compartments, one representing spleen and the other representing skin, are added to
-# > that model.
-# > (715) ラジウムの子孫核種としてのトリウムのモデルは、本論文でトリウムを親核種として
-# > 適用した全身モデルを修正したものです。このモデルには、脾臓と皮膚を表す2つの
-# > コンパートメントが追加されています。
-
-# ICRP Publ.141 p.566 Para.566 / アクチニド子孫元素としてのプロトアクチニウム
-# > (566) The models applied here to actinium, protactinium, neptunium, plutonium,
-# > americium, curium, berkelium, californium, einsteinium, and fermium as actinide
-# > progeny are modifications of their characteristic models described earlier in this
-# > section. For a given element in this group, two compartments representing the
+# ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプロトアクチニウム
+# > (566) ... For a given element in this group, two compartments representing the
 # > skin and spleen are added to the explicitly identified source regions in the element's
 # > characteristic model. ...
-# > (566) アクチニウム、プロトアクチニウム、ネプツニウム、プルトニウム、アメリシウム、
-# > キュリウム、バークリウム、カリホルニウム、アインスタイニウム、フェルミウムを
-# > アクチニド娘元素として適用するモデルは、このセクションで先に説明した特性モデルを
-# > 修正したものです。このグループの特定の元素について、その元素の特性モデルで明示的に
-# > 特定された供給源領域に、皮膚と脾臓を表す2つの区画が追加されます。 ...
+# > (566) ... このグループの特定の元素について、その特性モデルにおいて明示的に特定された
+# > 線源領域に加え、皮膚と脾臓を表す2つのコンパートメントが追加されます。 ...
+
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# > (715) ... Two
+# > compartments, one representing spleen and the other representing skin, are added to
+# > that model.
+# > (715) ... このモデルには、脾臓と皮膚を表す2つのコンパートメントが追加されています。
 
   acc   Skin                  Skin
   acc   Spleen                Spleen
@@ -106,8 +111,7 @@
   ST1                     Blood                     0.00095
   ST2                     Blood                     1.9E-5
 
-#    ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのプロトアクチニウムは、ラジウム子孫元素としてのトリウムのモデルを用いる。
-# → ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
+# ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
 # > (715) ... Spleen and skin are assumed to exchange thorium with blood. Parameter
 # > values for these compartments are based on limited data from animal studies and
 # > human autopsy studies (Stover et al., 1960; Thomas et al., 1963; Larsen et al., 1984;
@@ -127,10 +131,10 @@
 # > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じです。
 
   Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
-  Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
   Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
-  Spleen                  Blood                 $(0.693 / 2/365)
+  Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
   Skin                    Blood                 $(0.693 / 2/365)
+  Spleen                  Blood                 $(0.693 / 2/365)
 
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
 # > (715) ... Thorium produced in a compartment

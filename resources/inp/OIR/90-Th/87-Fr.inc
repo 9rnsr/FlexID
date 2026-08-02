@@ -1,4 +1,11 @@
-# ICRP Publ.137 p.370 Para.812
+# ICRP Publ.141 p.235 Para.564 / アクチニド子孫元素としてのフランシウムおよびアスタチン
+# > (564) Radioisotopes of francium and astatine appearing in actinide chains considered
+# > in this publication have short half-lives, and are assumed to decay at their site
+# > of production in systemic tissues or blood.
+# > (564) 本書で検討されるアクチニド壊変系列に現れるフランシウムおよびアスタチンの
+# > 放射性同位体は半減期が短く、全身組織または血液中の生成部位において崩壊すると仮定されます。
+
+# ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのフランシウムおよびアスタチン
 # > (812) The models for actinium, thorium, radium, radon, polonium, lead, bismuth,
 # > thallium, francium, and astatine produced systemically by serial decay of members of
 # > a thorium chain are the same as the models applied to these elements as progeny of
@@ -19,8 +26,6 @@
 # > 放射性核種のうち、その元素のモデルに関して曖昧なもの（例えば、トリウムモデルにおいて
 # > 骨梁骨または皮質骨体積で生成されるラジウム）は、非交換性骨で生成されると仮定されます。
 
-# ICRP Publ.137 p.370 Para.812 / トリウム系列子孫元素としてのフランシウムおよびアスタチンは、ラジウム子孫元素としてのモデルを用いる。
-# ↓
 # ICRP Publ.137 p.334 Para.717 / ラジウム子孫元素としてのフランシウムおよびアスタチン
 # > (717) Radioisotopes of francium and astatine appearing in radium chains considered
 # > in this publication have half-lives varying from less than 1 s to 22 min.
