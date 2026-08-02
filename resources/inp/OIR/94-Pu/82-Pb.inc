@@ -210,10 +210,8 @@
   {*}/C-marrow            C-marrow                  ---
   {*}/T-marrow            T-marrow                  ---
   {Pu}/Liver0             Plasma                    7.39
-  {Pu}/Liver1             Plasma                    7.39
-  {Pu}/Liver2             Plasma                    7.39
-  {^Pu}/Liver1            Liver1                    ---
-  {^Pu}/Liver2            Liver2                    ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
   {*}/Kidneys1            Kidneys1                  ---
   {*}/Kidneys2            Kidneys2                  ---
   {*}/Testes              Testes                    ---

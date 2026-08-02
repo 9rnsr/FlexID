@@ -171,10 +171,8 @@
   {*}/C-marrow            C-marrow                  ---
   {*}/T-marrow            T-marrow                  ---
   {Pu}/Liver0             Blood                     1.39        # ST0→Bloodの移行速度
-  {Pu}/Liver1             Blood                     1.39        # ST0→Bloodの移行速度
-  {Pu}/Liver2             Blood                     1.39        # ST0→Bloodの移行速度
-  {^Pu}/Liver1            Liver1                    ---
-  {^Pu}/Liver2            Liver2                    ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
   {*}/Kidneys1            Kidneys1                  ---
   {*}/Kidneys2            Kidneys2                  ---
   {*}/Testes              Testes                    ---

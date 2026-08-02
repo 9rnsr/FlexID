@@ -213,10 +213,8 @@ $if progeny
   {*}/C-marrow            C-marrow                  ---
   {*}/T-marrow            T-marrow                  ---
   {Pu}/Liver0             Liver0                    ---
-  {Pu}/Liver1             Liver1                    ---
-  {Pu}/Liver2             Liver2                    ---
-  {^Pu}/Liver1            Blood1                    9.9000E-2   # ST0→Blood1の移行速度
-  {^Pu}/Liver2            Blood1                    9.9000E-2   # ST0→Blood1の移行速度
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
   {*}/Kidneys1            Kidneys1                  ---
   {*}/Kidneys2            Kidneys2                  ---
   {*}/Testes              Testes                    ---

@@ -20,10 +20,8 @@
 |C-marrow |C-marrow |C-marrow  |C-marrow |C-marrow      |C-marrow |C-marrow |C-marrow |C-marrow      |   *3 |       |   *3 |C-marrow |C-marrow |C-marrow      |C-marrow |
 |T-marrow |T-marrow |T-marrow  |T-marrow |T-marrow      |T-marrow |T-marrow |T-marrow |T-marrow      |   *3 |       |   *3 |T-marrow |T-marrow |T-marrow      |T-marrow |
 |         |         |Liver0    |         |              |         |         |         |              |   *3 |       |   *3 |         |         |              |         |
-|         |         |Liver1    |         |              |         |         |         |              |   *3 |       |   *3 |         |         |              |         |
-|         |         |Liver2    |         |              |         |         |         |              |   *3 |       |   *3 |         |         |              |         |
-|Liver1   |Liver1   |          |Liver1   |Liver1        |Liver1   |Liver1   |Liver1   |Liver1        |   *3 |       |   *3 |Liver1   |Liver1   |Liver1        |Liver    |
-|Liver2   |Liver2   |          |Liver2   |Liver2        |Liver2   |Liver2   |Liver2   |Liver2        |   *3 |       |   *3 |Liver2   |Liver2   |Liver2        |         |
+|Liver1   |Liver1   |Liver1    |Liver1   |Liver1        |Liver1   |Liver1   |Liver1   |Liver1        |   *3 |       |   *3 |Liver1   |Liver1   |Liver1        |Liver    |
+|Liver2   |Liver2   |Liver2    |Liver2   |Liver2        |Liver2   |Liver2   |Liver2   |Liver2        |   *3 |       |   *3 |Liver2   |Liver2   |Liver2        |         |
 |Kidneys1 |Kidneys1 |Kidneys1  |Kidneys1 |Kidneys1      |Kidneys1 |Kidneys1 |Kidneys1 |Kidneys1      |   *3 |       |   *3 |Kidneys1 |Kidneys1 |Kidneys1      |         |
 |Kidneys2 |Kidneys2 |Kidneys2  |Kidneys2 |Kidneys2      |Kidneys2 |Kidneys2 |Kidneys2 |Kidneys2      |   *3 |       |   *3 |Kidneys2 |Kidneys2 |Kidneys2      |Kidneys  |
 |Testes   |Testes   |Testes    |Testes   |Testes        |Testes   |Testes   |Testes   |Testes        |   *3 |       |   *3 |Testes   |Testes   |Testes        |Testes   |
