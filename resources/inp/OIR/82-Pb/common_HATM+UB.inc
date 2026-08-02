@@ -33,6 +33,18 @@
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
+# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
+  SI-con                  $Blood        $(fA    * 6 / (1 - fA   ))
+  SI-conRe                $Blood        $(fA_Re * 6 / (1 - fA_Re))
+
+# ICRP Publ.130 p.85 Para.172
+  UB-con                  Urine                    12
+
+[{*}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
 # decay for HATM
   {*}/Oralcavity          Oralcavity                ---
   {*}/Oesophagus-f        Oesophagus-f              ---
@@ -44,13 +56,6 @@
   {*}/LC-con              LC-con                    ---
   {*}/RS-con              RS-con                    ---
   {*}/Faeces              Faeces                    ---
-
-# λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  $Blood        $(fA    * 6 / (1 - fA   ))
-  SI-conRe                $Blood        $(fA_Re * 6 / (1 - fA_Re))
-
-# ICRP Publ.130 p.85 Para.172
-  UB-con                  Urine                    12
 
 # decay for UB
   {*}/UB-con              UB-con                    ---

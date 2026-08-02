@@ -29,24 +29,26 @@
 #-----------------------+---------------------+--------------------
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
-# > ... Thallium leaves the central blood compartment (plasma) at the
+# > (481) ... Thallium leaves the central blood compartment (plasma) at the
 # > rate 200 d⁻¹ (corresponding to a half-time of 5 min) and is distributed as follows:
 # > 2.5% to red blood cells, 0.75% to urinary bladder contents, 1.75% to right colon
 # > contents, 5% to kidneys, 5% to liver, 2.5% to skin, 1.5% to red marrow, 0.2% to
 # > spleen, 0.3% to testes, 0.1% to ovaries, 7.5% to trabecular bone surfaces, 7.5% to
-# > cortical bone surfaces, and 65.4% to remaining soft tissues (other).
-# > ... タリウムは中心血液区画（血漿）から200 d⁻¹（半減期5分に相当）の速度で排出され、
-# > 以下のように分布します：赤血球に2.5%、膀胱内容物に0.75%、右結腸内容物に1.75%、腎臓に5%、
-# > 肝臓に5%、皮膚に2.5%、赤色骨髄に1.5%、脾臓に0.2%、精巣に0.3%、卵巣に0.1%、
-# > 海綿骨表面に7.5%、皮質骨表面に7.5%、残りの軟部組織（その他）に65.4%。
+# > cortical bone surfaces, and 65.4% to remaining soft tissues (other). ...
+# > (481) ... タリウムは中心血液区画（血漿）から200 d⁻¹（半減期5分に相当）の速度で排出され、
+# > 以下のように分布します：
+# > 赤血球に2.5%、膀胱内容物に0.75%、右結腸内容物に1.75%、腎臓に5%、肝臓に5%、皮膚に2.5%、
+# > 赤色骨髄に1.5%、脾臓に0.2%、精巣に0.3%、卵巣に0.1%、海綿骨表面に7.5%、皮質骨表面に7.5%、
+# > 残りの軟部組織（その他）に65.4%。 ...
 # > ... Thallium returns from red blood cells to plasma at the rate 3.7 d⁻¹, and from
 # > tissue compartments to plasma at the rate 2.5 d⁻¹.
 # > ... タリウムは、赤血球から血漿へは3.7 d⁻¹の速度で戻り、組織コンパートメントから
-# > 血漿へは2.5 d⁻¹の速度で戻ります。
+# > 血漿へは2.5 d⁻¹の速度で戻ります。 ...
 
-# 作成者注：Publ.137で示されている移行係数の設定値は、Publ.151で示された親としての
-# タリウムのモデルにおけるPlasmaと軟組織Otherの間の流量を、追加された
-# 5つのコンパートメントに分配する形になっている。
+# 作成者注：
+#   Publ.137で示されている移行係数の設定値は、Publ.151で示された親としての
+#   タリウムのモデルにおけるPlasmaと軟組織Otherの間の流量を、追加された
+#   5つのコンパートメントに分配する形になっている。
 
   Plasma                  Liver                 $(200 *  5%)
   Plasma                  Kidneys               $(200 *  5%)
@@ -75,9 +77,9 @@
   Ovaries                 Plasma                    2.5
 
 # ICRP Publ.137 p.229 Para.481 / 鉛子孫元素としてのタリウム
-# > ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
-# > in the model for lead (Fig. 9.1).
-# > ... 腎臓と肝臓は、鉛のモデル（図9.1）において、それぞれ腎臓2と肝臓1に相当します。
+# > (481) ... Kidneys and liver are identified with Kidneys 2 and Liver 1, respectively,
+# > in the model for lead (Fig. 9.1). ...
+# > (481) ... 腎臓と肝臓は、鉛のモデル（図9.1）において、それぞれ腎臓2と肝臓1に相当します。 ...
 # > ... Thallium produced by radioactive
 # > decay in a blood compartment that is not identifiable with a blood compartment of
 # > the thallium model is assumed to transfer to plasma at the rate 1000 d⁻¹. Thallium

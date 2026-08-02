@@ -70,7 +70,7 @@
   Other                   Plasma1                   0.099
 
 # ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
-# > ... Polonium produced in a blood compartment
+# > (484) ... Polonium produced in a blood compartment
 # > that is not identifiable with a blood compartment of the polonium model is
 # > assumed to transfer to Plasma 2 in the polonium model (Fig. 11.1) at the rate
 # > 1000 d⁻¹. Polonium produced in a soft tissue compartment not identifiable with a
@@ -78,8 +78,8 @@
 # > of 7 d. Polonium produced in a compartment of cortical or trabecular bone
 # > volume is assumed to transfer to Plasma 2 at the reference rate of turnover of that
 # > bone type.
-# > ... ポロニウムモデルの血液コンパートメントと識別できない血液コンパートメントで
-# > 生成されたポロニウムは、ポロニウムモデル(図11.1)において、
+# > (484) ... ポロニウムモデルの血液コンパートメントと
+# > 識別できない血液コンパートメントで生成されたポロニウムは、ポロニウムモデル(図11.1)において、
 # > 1000 d⁻¹の速度で血漿2に移行すると仮定されます。ポロニウムモデルのコンパートメントに
 # > 識別できない軟部組織コンパートメントで生成されたポロニウムは、7日の半減期で血漿2に
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された

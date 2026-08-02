@@ -1,0 +1,31 @@
+[title]
+Pu-234 Ingestion, Soluble
+
+[nuclide]
+  Pu-234  Np-234  U-230   U-234 
+  Th-230  Ra-226  Rn-222  Po-218  Pb-214  At-218  Bi-214
+  Th-226  Ra-222  Rn-218  Po-214  Tl-210  Pb-210  Bi-210
+  Po-210  Tl-206
+
+[include:../parameter_94-Pu_ing_Soluble.inc]
+
+[include:../common_intake_ing.inc]
+
+[include:../common_HATM+UB.inc]
+
+[include:../96-Cm.inc]
+[include:../95-Am.inc]
+[include:../94-Pu.inc]
+[include:../93-Np.inc]
+[include:../92-U.inc]
+[include:../91-Pa.inc]
+[include:../90-Th.inc]
+[include:../89-Ac.inc]
+[include:../88-Ra.inc]
+[include:../87-Fr.inc]
+[include:../86-Rn_ing.inc]
+[include:../85-At.inc]
+[include:../84-Po.inc]
+[include:../83-Bi.inc]
+[include:../82-Pb.inc]
+[include:../81-Tl.inc]
