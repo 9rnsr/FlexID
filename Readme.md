@@ -109,3 +109,8 @@ Copyright © MHI NS Engineering Co., Ltd.
 
 **FlexID** is provided as-is under the **MIT license**. For more information, see [LICENSE](./LICENSE).
 
+## ICRP Data Usage Permission
+
+This repository includes Specific Absorbed Fractions (SAFs) and source/target region data from ICRP Publication 133.
+Permission for non-commercial distribution has been granted by ICRP.
+See [ICRP-PERMISSION.txt](resources/ICRP-PERMISSION.txt) for the full text of the permission letter.
