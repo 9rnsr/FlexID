@@ -113,4 +113,4 @@ Copyright © MHI NSエンジニアリング株式会社
 
 本リポジトリには、ICRP Publication 133の比吸収率(SAF)および線源・標的領域のデータが含まれています。
 これらのデータについては、ICRPより非営利目的での再配布を含む利用許諾を正式に取得しています。
-許諾レターの全文は [ICRP-PERMISSION.txt](resources/ICRP-PERMISSION.TXT) を参照してください。
+許諾レターの全文は [ICRP-PERMISSION.TXT](resources/ICRP-PERMISSION.TXT) を参照してください。
