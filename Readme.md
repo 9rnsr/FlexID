@@ -113,4 +113,4 @@ Copyright © MHI NS Engineering Co., Ltd.
 
 This repository includes Specific Absorbed Fractions (SAFs) and source/target region data from ICRP Publication 133.
 Permission for non-commercial distribution has been granted by ICRP.
-See [ICRP-PERMISSION.txt](resources/ICRP-PERMISSION.TXT) for the full text of the permission letter.
+See [ICRP-PERMISSION.TXT](resources/ICRP-PERMISSION.TXT) for the full text of the permission letter.
