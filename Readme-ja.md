@@ -108,3 +108,9 @@ Sr-90(Y-90)
 Copyright © MHI NSエンジニアリング株式会社
 
 **FlexID**は **MIT license** に基づいて現状のまま提供されます。詳細については、[LICENSE](./LICENSE)を参照してください。
+
+## ICRPデータの利用許諾
+
+本リポジトリには、ICRP Publication 133の比吸収率(SAF)および線源・標的領域のデータが含まれています。
+これらのデータについては、ICRPより非営利目的での再配布を含む利用許諾を正式に取得しています。
+許諾レターの全文は [ICRP-PERMISSION.txt](resources/ICRP-PERMISSION.txt) を参照してください。
