@@ -203,8 +203,6 @@ static class SubRoutine
     /// <param name="now">今回時間メッシュの計算結果。</param>
     private static void Accumulation(double alpha, double dT, double ave, in OrganRetention pre, ref OrganRetention now)
     {
-        var alpha_dT = alpha * dT;
-
         double rini = pre.end;  // 初期原子数[atoms]
         double rend;            // 末期原子数[atoms]
         double rtot;            // ΔTあたりの積算原子数[atoms]
@@ -213,29 +211,36 @@ static class SubRoutine
             rend = rini + ave * dT;
             rtot = (rini + ave) * dT;
         }
-        else if (alpha_dT <= 1E-9)
-        {
-            rend = ave * alpha_dT / alpha + rini * Math.Exp(-alpha_dT);
-            rtot = ave * (dT - alpha_dT / alpha) / alpha + rini / alpha * alpha_dT;
-        }
         else
         {
-            if (alpha_dT >= 100)
-                alpha_dT = 100;
+            var x = alpha * dT;
 
-            rend = ave * (1 - Math.Exp(-alpha_dT)) / alpha + rini * Math.Exp(-alpha_dT);
-            rtot = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
+            double decayFactor;
+            double intakeFactor;
+            if (x <= 1E-9)
+            {
+                decayFactor = Math.Exp(-x);
+                intakeFactor = x / alpha;
+            }
+            else
+            {
+                if (x >= 100)
+                    x = 100;
+
+                decayFactor = Math.Exp(-x);
+                intakeFactor = (1 - decayFactor) / alpha;
+            }
+
+            rend = rini * decayFactor + ave * intakeFactor;
+            rtot = rini * intakeFactor + ave * (dT - intakeFactor) / alpha;
         }
 
         var rave = rtot / dT;   // 1日あたりの平均原子数[atoms/day] = ΔTあたりの積算原子数[atoms] / ΔT[day]
 
         // 計算値が1E-60以下の場合は0とする
-        if (rave <= 1E-60)
-            rave = 0;
-        if (rend <= 1E-60)
-            rend = 0;
-        if (rtot <= 1E-60)
-            rtot = 0;
+        if (rave <= 1E-60) rave = 0;
+        if (rend <= 1E-60) rend = 0;
+        if (rtot <= 1E-60) rtot = 0;
 
         now.ini = rini;
         now.ave = rave;
