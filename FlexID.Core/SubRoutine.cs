@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace FlexID;
 
 static class SubRoutine
@@ -203,8 +205,6 @@ static class SubRoutine
     /// <param name="now">今回時間メッシュの計算結果。</param>
     private static void Accumulation(double alpha, double dT, double ave, in OrganRetention pre, ref OrganRetention now)
     {
-        var alpha_dT = alpha * dT;
-
         double rini = pre.end;  // 初期原子数[atoms]
         double rend;            // 末期原子数[atoms]
         double rtot;            // ΔTあたりの積算原子数[atoms]
@@ -213,29 +213,40 @@ static class SubRoutine
             rend = rini + ave * dT;
             rtot = (rini + ave) * dT;
         }
-        else if (alpha_dT <= 1E-9)
-        {
-            rend = ave * alpha_dT / alpha + rini * Math.Exp(-alpha_dT);
-            rtot = ave * (dT - alpha_dT / alpha) / alpha + rini / alpha * alpha_dT;
-        }
         else
         {
-            if (alpha_dT >= 100)
-                alpha_dT = 100;
+            var x = alpha * dT;
 
-            rend = ave * (1 - Math.Exp(-alpha_dT)) / alpha + rini * Math.Exp(-alpha_dT);
-            rtot = ave * (dT - (1 - Math.Exp(-alpha_dT)) / alpha) / alpha + rini / alpha * (1 - Math.Exp(-alpha_dT));
+            var decayFactor = Math.Exp(-x);
+            var intakeFactor = -ExpM1(-x) / alpha;
+
+            rend = rini * decayFactor + ave * intakeFactor;
+            rtot = rini * intakeFactor + ave * (dT - intakeFactor) / alpha;
+
+            /// <summary>
+            /// exp(x) - 1 を計算する。
+            /// </summary>
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static double ExpM1(double x)
+            {
+                // NOTE: .NET 7以降にはdouble.ExpM1(x)というメソッドがあるが、残念ながらこれは
+                // .NET 10時点で単に Math.Exp(x) - 1 を返す形で実装されているため、これを使用しても
+                // ここで期待するxが0近傍時の高精度な計算結果を得ることはできない。
+
+                // xが0に近い場合に、exp(x) - 1 の結果をxで近似する。
+                if (Math.Abs(x) <= 1E-9)
+                    return x;
+
+                return Math.Exp(x) - 1;
+            }
         }
 
         var rave = rtot / dT;   // 1日あたりの平均原子数[atoms/day] = ΔTあたりの積算原子数[atoms] / ΔT[day]
 
         // 計算値が1E-60以下の場合は0とする
-        if (rave <= 1E-60)
-            rave = 0;
-        if (rend <= 1E-60)
-            rend = 0;
-        if (rtot <= 1E-60)
-            rtot = 0;
+        if (rave <= 1E-60) rave = 0;
+        if (rend <= 1E-60) rend = 0;
+        if (rtot <= 1E-60) rtot = 0;
 
         now.ini = rini;
         now.ave = rave;
