@@ -215,21 +215,11 @@ static class SubRoutine
         {
             var x = alpha * dT;
 
-            double decayFactor;
-            double intakeFactor;
-            if (x <= 1E-9)
-            {
-                decayFactor = Math.Exp(-x);
-                intakeFactor = x / alpha;
-            }
-            else
-            {
-                if (x >= 100)
-                    x = 100;
+            var decayFactor = Math.Exp(-x);
 
-                decayFactor = Math.Exp(-x);
-                intakeFactor = (1 - decayFactor) / alpha;
-            }
+            var intakeFactor =
+                x <= 1E-9 ? x / alpha
+                            : (1 - decayFactor) / alpha;
 
             rend = rini * decayFactor + ave * intakeFactor;
             rtot = rini * intakeFactor + ave * (dT - intakeFactor) / alpha;
