@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace FlexID;
 
 static class SubRoutine
@@ -216,13 +218,27 @@ static class SubRoutine
             var x = alpha * dT;
 
             var decayFactor = Math.Exp(-x);
-
-            var intakeFactor =
-                x <= 1E-9 ? x / alpha
-                            : (1 - decayFactor) / alpha;
+            var intakeFactor = -ExpM1(-x) / alpha;
 
             rend = rini * decayFactor + ave * intakeFactor;
             rtot = rini * intakeFactor + ave * (dT - intakeFactor) / alpha;
+
+            /// <summary>
+            /// exp(x) - 1 を計算する。
+            /// </summary>
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static double ExpM1(double x)
+            {
+                // NOTE: .NET 7以降にはdouble.ExpM1(x)というメソッドがあるが、残念ながらこれは
+                // .NET 10時点で単に Math.Exp(x) - 1 を返す形で実装されているため、これを使用しても
+                // ここで期待するxが0近傍時の高精度な計算結果を得ることはできない。
+
+                // xが0に近い場合に、exp(x) - 1 の結果をxで近似する。
+                if (Math.Abs(x) <= 1E-9)
+                    return x;
+
+                return Math.Exp(x) - 1;
+            }
         }
 
         var rave = rtot / dT;   // 1日あたりの平均原子数[atoms/day] = ΔTあたりの積算原子数[atoms] / ΔT[day]
