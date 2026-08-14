@@ -173,9 +173,6 @@
 
   {Tl}/Other              Other                     ---
   {^Tl}/Other             Plasma                    2.5
-  {Pu}/ST0                Plasma                    2.5
-  {Pu}/ST1                Plasma                    2.5
-  {Pu}/ST2                Plasma                    2.5
-  {^Pu}/ST0               Plasma                    2.5
-  {^Pu}/ST1               Plasma                    2.5
-  {^Pu}/ST2               Plasma                    2.5
+  {*}/ST0                 Plasma                    2.5
+  {*}/ST1                 Plasma                    2.5
+  {*}/ST2                 Plasma                    2.5

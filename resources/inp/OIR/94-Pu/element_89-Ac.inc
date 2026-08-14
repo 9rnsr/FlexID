@@ -45,7 +45,7 @@
 #-----------------------+---------------------+--------------------
 
 # ICRP Publ.141 p.234 Table 18.9
-  Blood                   Liver1                    11.6
+  Blood                   Liver1                   11.6
   Blood                   T-bone-S                  3.49
   Blood                   C-bone-S                  3.49
   Blood                   Kidneys1                  0.466
@@ -54,7 +54,7 @@
   Blood                   RC-con                    0.303
   Blood                   Testes                    0.0082
   Blood                   Ovaries                   0.0026
-  Blood                   ST0                       10.0
+  Blood                   ST0                      10.0
  #Blood                   ST1                       1.67        # fix
   Blood                   ST2                       0.466
   Liver1                  SI-conRe                  0.0006
