@@ -4,15 +4,4 @@ Pb-195m Injection
 [nuclide]
   Pb-195m  Tl-195  Hg-195m  Hg-195  Au-195
 
-[include:../parameter_82-Pb_ing.inc]
-
-[include:../common_intake_inj.inc]
-
-[include:../common_HATM+UB.inc]
-
-[include:../element_84-Po.inc]
-[include:../element_83-Bi.inc]
-[include:../element_82-Pb.inc]
-[include:../element_81-Tl.inc]
-[include:../element_80-Hg.inc]
-[include:../element_79-Au.inc]
+[include:../common_82-Pb_inj.inc]
