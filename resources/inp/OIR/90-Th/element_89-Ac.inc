@@ -50,6 +50,8 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
 # > (566) ... For a given element in this group, two compartments representing the
 # > skin and spleen are added to the explicitly identified source regions in the element's
@@ -69,6 +71,8 @@
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
+$endif
+
 [{Ac}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
@@ -85,7 +89,9 @@
   Blood                   Testes                    0.0082
   Blood                   Ovaries                   0.0026
   Blood                   ST0                      10.0
- #Blood                   ST1                       1.67        # fix
+$if parent
+  Blood                   ST1                       1.67
+$endif
   Blood                   ST2                       0.466
   Liver1                  SI-conRe                  0.0006
   Liver1                  Liver2                    0.0225
@@ -107,6 +113,8 @@
   ST0                     Blood                     1.39
   ST1                     Blood                     0.0139
   ST2                     Blood                     1.9E-5
+
+$if progeny
 
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
 # > (566) ... These compartments are taken from the intermediate soft tissue
@@ -176,9 +184,10 @@
 #   血液からST1への沈着割合は、皮膚と脾臓に割り当てられた分を差し引くことになり、
 #     Blood → ST1      = 1.67 - 0.128286 - 0.042762 ≒ 1.498952
 
-  Blood                   ST1                   $(1.67 - 0.128286 - 0.128286/3)
   Blood                   Skin                  $(0.128286)
   Blood                   Spleen                $(0.128286 / 3)
+  Blood                   ST1                   $(1.67 - 0.128286 - 0.128286/3)
+
   Skin                    Blood                     0.0139      # ST1→Bloodの移行速度
   Spleen                  Blood                     0.0139      # ST1→Bloodの移行速度
 
@@ -190,11 +199,12 @@
 # > at the rate of transfer from the fast-turnover soft tissue compartment ST0 to
 # > blood if produced in a soft tissue compartment, and at the rate of bone turnover if
 # > produced in a bone volume compartment.
-# > (566) ... 元素がその特性モデルのコンパートメントと識別できないコンパートメントで生成される場合、
-# > 血液コンパートメントで生成された場合は1000 d⁻¹の速度で、軟組織コンパートメントで生成された場合は
-# > 回転の速い軟組織コンパートメントST0から血液への移行速度で、骨量コンパートメントで生成された
-# > 場合は骨代謝速度で、元素の血液コンパートメント [複数の血液コンパートメントを持つプルトニウムの
-# > 場合はBlood 1 (表 18.6 を参照)] に移行すると仮定されます。
+# > (566) ... もし元素が、その特性モデル上のコンパートメントと同一視できない
+# > コンパートメント内で生成された場合、血液コンパートメント内で生成された場合は1000 d⁻¹の
+# > 速度で、軟部組織コンパートメント内で生成された場合は代謝の早い軟部組織コンパートメント
+# > ST0から血液への移行速度で、骨体積コンパートメント内で生成された場合は骨代謝速度で、
+# > その元素の血液コンパートメント［複数の血液コンパートメントを持つプルトニウムの場合は
+# > Blood 1（表18.6参照）］へ移行すると仮定されます。
 
 # ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
 # > (714) ... If actinium is produced in a
@@ -243,3 +253,5 @@
   {^Ac}/ST1                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
   {^Ac}/ST2                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
   {*}/Other                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+
+$endif

@@ -56,6 +56,8 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプロトアクチニウム
 # > (566) ... For a given element in this group, two compartments representing the
 # > skin and spleen are added to the explicitly identified source regions in the element's
@@ -71,6 +73,8 @@
 
   acc   Skin                  Skin
   acc   Spleen                Spleen
+
+$endif
 
 [{Pa}:transfer]
 #-----------------------+---------------------+--------------------
@@ -88,7 +92,9 @@
   Blood                   Testes                    0.00068
   Blood                   Ovaries                   0.00021
   Blood                   ST0                       0.832
- #Blood                   ST1                       0.243       # fix
+$if parent
+  Blood                   ST1                       0.243
+$endif
   Blood                   ST2                       0.0388
   Liver1                  SI-con                    0.000475
   Liver1                  Liver2                    0.00095
@@ -111,6 +117,8 @@
   ST1                     Blood                     0.00095
   ST2                     Blood                     1.9E-5
 
+$if progeny
+
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
 # > (715) ... Spleen and skin are assumed to exchange thorium with blood. Parameter
 # > values for these compartments are based on limited data from animal studies and
@@ -130,9 +138,10 @@
 # > 血液からの元の除去半減期を維持するために低減されます。脾臓および皮膚から血液への
 # > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じです。
 
-  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
   Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
   Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
+  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
+ 
   Skin                    Blood                 $(0.693 / 2/365)
   Spleen                  Blood                 $(0.693 / 2/365)
 
@@ -184,3 +193,5 @@
   {^Pa}/ST1                   Blood                 0.462
   {^Pa}/ST2                   Blood                 0.462
   {*}/Other                   Blood                 0.462
+
+$endif

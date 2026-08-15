@@ -62,12 +62,14 @@
   exc   Excreta(sweat)              ---
   exc   Excreta(hair,skin,nails)    ---
 
+$if progeny
+
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
 # > (482) ... Compartments representing red
 # > marrow, spleen, skin, testes, and ovaries are added to the model structure for consistency
 # > with the models for other lead progeny. ...
 # > (482) ... 他の鉛子孫核種のモデルとの整合性を図るため、赤色骨髄、脾臓、皮膚、精巣、および卵巣を
-# > 表すコンパートメントがモデル構造に追加されます。...
+# > 表すコンパートメントがモデル構造に追加されます。 ...
 
  #acc   RedMarrow             R-marrow      # Publ.137 Para.712
   acc   Testes                Testes
@@ -90,6 +92,8 @@
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
+$endif
+
 [{Pb}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
@@ -100,9 +104,11 @@
   Plasma                  RC-con                    0.7
   Plasma                  T-bone-S                  4.86
   Plasma                  C-bone-S                  3.89
- #Plasma                  ST0                      22.16            # fix(1)
- #Plasma                  ST1                       0.7             # fix(1)
- #Plasma                  ST2                       0.14            # fix(1)
+$if parent
+  Plasma                  ST0                      22.16
+  Plasma                  ST1                       0.7
+  Plasma                  ST2                       0.14
+$endif
   Plasma                  Liver1                    4.9
   Plasma                  Kidneys1                  2.45
   Plasma                  Kidneys2                  0.0245
@@ -129,6 +135,8 @@
   ST1                     Plasma                    0.00416
   ST2                     Plasma                    0.00038
   ST1                     Excreta(hair,skin,nails)  0.00277
+
+$if progeny
 
 # ICRP Publ.137 p.230 Para.482 / 鉛子孫元素としての鉛
 # > (482) ... Each of the added compartments is
@@ -166,15 +174,15 @@
 #      (22.16 + 0.7 + 0.14 - 0.585854) / (22.16 + 0.7 + 0.14) ≒ 0.974528
 #   ※ 1 - 0.974528 ≒ 約2.54%減少 ⇔「約2.5%減少」
 
- #Plasma                  RedMarrow         $(69.9945 * 0.6%)       # fix(2)
+ #Plasma                  RedMarrow         $(69.9945 * 0.6%)       # fix
   Plasma                  Skin              $(69.9945 * 0.2%)
   Plasma                  Spleen            $(69.9945 * 0.03%)
   Plasma                  Testes            $(69.9945 * 0.005%)
   Plasma                  Ovaries           $(69.9945 * 0.002%)
   Plasma                  ST0               $(22.16 * 0.974528)
- #Plasma                  ST1               $( 0.7  * 0.974528)     # fix(2)
+ #Plasma                  ST1               $( 0.7  * 0.974528)     # fix
   Plasma                  ST2               $( 0.14 * 0.974528)
- #RedMarrow               Plasma                    0.0019          # fix(2)
+ #RedMarrow               Plasma                    0.0019          # fix
   Skin                    Plasma                    0.0019
   Spleen                  Plasma                    0.0019
   Testes                  Plasma                    0.0019
@@ -243,3 +251,5 @@
   {^Pb}/ST1                   Plasma                7.39
   {^Pb}/ST2                   Plasma                7.39
   {*}/Other                   Plasma                7.39
+
+$endif
