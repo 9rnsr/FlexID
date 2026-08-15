@@ -38,7 +38,7 @@ $if progeny
 
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのプルトニウム
 # > (566) ... For a given element in this group, two compartments representing the
-# > skin and spleen are added to the explicitly identified source regions in the element’s
+# > skin and spleen are added to the explicitly identified source regions in the element's
 # > characteristic model. ...
 # > (566) ... このグループの特定の元素について、その特性モデルにおいて明示的に特定された
 # > 線源領域に加え、皮膚と脾臓を表す2つのコンパートメントが追加されます。 ...
@@ -150,9 +150,10 @@ $if progeny
 #   血液からST1への沈着割合は、皮膚と脾臓に割り当てられた分を差し引くことになり、
 #     Blood1 → ST1     = 1.8511E-2 - 2.4991E-03 - 8.3303E-04 ≒ 1.5179E-02
 
-  Blood1                  ST1                   $(1.8511E-2 - 2.4991E-03 - 2.4991E-03/3)
   Blood1                  Skin                  $(2.4991E-03)
   Blood1                  Spleen                $(2.4991E-03 / 3)
+  Blood1                  ST1                   $(1.8511E-2 - 2.4991E-03 - 2.4991E-03/3)
+
   Skin                    Blood2                    1.3860E-3       # ST1→Blood2の移行速度
   Spleen                  Blood2                    1.3860E-3       # ST1→Blood2の移行速度
 

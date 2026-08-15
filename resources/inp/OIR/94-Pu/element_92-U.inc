@@ -3,7 +3,7 @@
 # > actinide progeny is the model applied to uranium as a progeny of thorium [also
 # > described in OIR Part 3 (ICRP, 2017)].
 # > (562) ... ここでウランをアクチニドの娘核種として扱う場合に適用するモデルは、
-# > ウランをトリウムの娘核種として扱う場合に適用するモデルと同じになります 
+# > ウランをトリウムの娘核種として扱う場合に適用するモデルと同じになります
 # > [同じくOIR Part 3(ICRP, 2017)に記載されています]。
 
 # ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
@@ -34,10 +34,12 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # > (811) ... Single compartments
 # > representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
-# > added for consistency with the models for other progeny of thorium. 
+# > added for consistency with the models for other progeny of thorium.
 # > (811) ... トリウムの他の娘核種のモデルとの整合性をとるため、脾臓、海綿骨髄、
 # > 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されています。
 
@@ -47,6 +49,8 @@
   acc   Ovaries               Ovaries
   acc   Skin                  Skin
   acc   Spleen                Spleen
+
+$endif
 
 [{U}:transfer]
 #-----------------------+---------------------+--------------------
@@ -61,7 +65,9 @@
   Plasma                  Kidneys2                  0.0122
   Plasma                  RC-con                    0.122
   Plasma                  Liver1                    0.367
- #Plasma                  ST1                       1.63        # fix
+$if parent
+  Plasma                  ST1                       1.63
+$endif
   Plasma                  ST2                       0.0735
   Plasma                  T-bone-S                  2.04
   Plasma                  C-bone-S                  1.63
@@ -85,6 +91,8 @@
   Exch-C-bone-V           C-bone-S                  0.0173
   Exch-C-bone-V           Noch-C-bone-V             0.00578
 
+$if progeny
+
 # ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # (811) ... Single compartments
 # representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
@@ -100,7 +108,7 @@
 # 0.075 d⁻¹, 0.025 d⁻¹, 0.001 d⁻¹, 0.0003 d⁻¹, and 0.09 d⁻¹, respectively. The removal
 # half-time from each added compartment is set at 20 d, the removal half-time from
 # ST1. The deposition fraction for ST1 is reduced by the sum of deposition fractions
-# for the six added compartments. 
+# for the six added compartments.
 # (811) ... トリウムの他の娘核種のモデルとの整合性をとるため、脾臓、海綿骨髄、
 # 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されています。
 # これら6つの追加コンパートメントは、親核種としてのウランのモデルにおける中期的軟部組織
@@ -113,13 +121,13 @@
 # 各追加コンパートメントからの除去半減期は、ST1からの除去半減期である20日と設定されます。
 # ST1の沈着割合は、これら6つの追加コンパートメントの沈着割合の合計分だけ低減されます。
 
-  Plasma                  ST1           $(1.63 - (0.025+0.075+0.001+0.0003+0.09+0.004))
   Plasma                  C-marrow                  0.025
   Plasma                  T-marrow                  0.075
   Plasma                  Testes                    0.001
   Plasma                  Ovaries                   0.0003
   Plasma                  Skin                      0.09
   Plasma                  Spleen                    0.004
+  Plasma                  ST1           $(1.63 - (0.025+0.075+0.001+0.0003+0.09+0.004))
 
   C-marrow                Plasma                $(0.693 / 20)   # 半減期20日
   T-marrow                Plasma                $(0.693 / 20)   # 半減期20日
@@ -180,3 +188,5 @@
   {^U}/ST1                Plasma                    8.32
   {^U}/ST2                Plasma                    8.32
   {*}/Other               Plasma                    8.32
+
+$endif

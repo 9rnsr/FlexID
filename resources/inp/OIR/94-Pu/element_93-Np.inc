@@ -29,15 +29,19 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのネプツニウム
 # > (566) ... For a given element in this group, two compartments representing the
-# > skin and spleen are added to the explicitly identified source regions in the element’s
+# > skin and spleen are added to the explicitly identified source regions in the element's
 # > characteristic model. ...
 # > (566) ... このグループの特定の元素について、その特性モデルにおいて明示的に特定された
 # > 線源領域に加え、皮膚と脾臓を表す2つのコンパートメントが追加されます。 ...
 
   acc   Skin                  Skin
   acc   Spleen                Spleen
+
+$endif
 
 [{Np}:transfer]
 #-----------------------+---------------------+--------------------
@@ -55,7 +59,9 @@
   Blood                   Testes                    0.00068
   Blood                   Ovaries                   0.00021
   Blood                   ST0                       0.832
- #Blood                   ST1                       0.161       # fix
+$if parent
+  Blood                   ST1                       0.161
+$endif
   Blood                   ST2                       0.0388
   Liver1                  SI-conRe                  0.000133
   Liver1                  Liver2                    0.00177
@@ -77,6 +83,8 @@
   ST0                     Blood                     0.693
   ST1                     Blood                     0.00693
   ST2                     Blood                     1.9E-5
+
+$if progeny
 
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのネプツニウム
 # > (566) ... These compartments are taken from the intermediate soft tissue
@@ -129,9 +137,10 @@
 #   血液からST1への沈着割合は、皮膚と脾臓に割り当てられた分を差し引くことになり、
 #     Blood → ST1      = 0.161 - 0.012 - 0.004 ≒ 0.145
 
-  Blood                   ST1                   $(0.161 - 0.012 - 0.012/3)
   Blood                   Skin                  $(0.012)
   Blood                   Spleen                $(0.012 / 3)
+  Blood                   ST1                   $(0.161 - 0.012 - 0.012/3)
+
   Skin                    Blood                     0.00693     # ST1→Bloodの移行速度
   Spleen                  Blood                     0.00693     # ST1→Bloodの移行速度
 
@@ -188,3 +197,5 @@
   {^Np}/ST1               Blood                     0.693       # ST0→Bloodの移行速度
   {^Np}/ST2               Blood                     0.693       # ST0→Bloodの移行速度
   {*}/Other               Blood                     0.693       # ST0→Bloodの移行速度
+
+$endif
