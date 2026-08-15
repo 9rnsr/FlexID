@@ -1,0 +1,9 @@
+[title]
+Am-243 Ingestion
+
+[nuclide]
+  Am-243  Np-239  Pu-239  U-235m  U-235   Th-231  Pa-231
+  Ac-227  Th-227  Fr-223  Ra-223  Rn-219  At-219  Bi-215
+  Po-215  Pb-211  Bi-211  Tl-207  Po-211
+
+[include:../common_95-Am_ing.inc]
