@@ -186,44 +186,44 @@ $if progeny
 # > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
-  {Po}/Plasma1                Plasma             1000
-  {Po}/Plasma2                Plasma             1000
-  {Po}/Plasma3                Plasma             1000
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000
+  {*}/Blood               Plasma                 1000
+  {*}/Plasma              Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365)
-  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365)
-  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365)
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Plasma                $(0.03 / 365)
+  {*}/Exch-T-bone-V       Plasma                $(0.18 / 365)
+  {*}/Noch-C-bone-V       Plasma                $(0.03 / 365)
+  {*}/Noch-T-bone-V       Plasma                $(0.18 / 365)
+  {*}/C-bone-V            Plasma                $(0.03 / 365)
+  {*}/T-bone-V            Plasma                $(0.18 / 365)
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
 # 作成者注：
 #   Publ.137 Para.483には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
 #   ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
 #   を採用する。
 
-  {Bi}/ST0                    ST0                   ---
-  {Bi}/ST1                    ST1                   ---
-  {Bi}/ST2                    ST2                   ---
-  {^Bi}/ST0                   Plasma               66.54
-  {^Bi}/ST1                   Plasma               66.54
-  {^Bi}/ST2                   Plasma               66.54
-  {*}/Other                   Plasma               66.54
+  {Bi}/ST0                ST0                       ---
+  {Bi}/ST1                ST1                       ---
+  {Bi}/ST2                ST2                       ---
+  {^Bi}/ST0               Plasma                   66.54
+  {^Bi}/ST1               Plasma                   66.54
+  {^Bi}/ST2               Plasma                   66.54
+  {*}/Other               Plasma                   66.54
 
 $endif

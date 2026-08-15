@@ -142,39 +142,39 @@ $if progeny
 # 最も高いものです。ウランのモデルに関してその帰属が不明確な骨体積区画（例：トリウムモデルにおける
 # 海綿骨または皮質骨の体積）で生成されるウランは、非交換性骨で生成されるものと仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
-  {Po}/Plasma1                Plasma             1000       # Publ.151 Annex.B
-  {Po}/Plasma2                Plasma             1000       # Publ.151 Annex.B
-  {Po}/Plasma3                Plasma             1000       # Publ.151 Annex.B
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000       # Publ.151 Annex.B
+  {*}/Blood               Plasma                 1000       # Publ.151 Annex.B
+  {*}/Plasma              Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000       # Publ.151 Annex.B
+  {Po}/Plasma2            Plasma                 1000       # Publ.151 Annex.B
+  {Po}/Plasma3            Plasma                 1000       # Publ.151 Annex.B
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Exch-C-bone-V         ---
-  {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
-  {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
-  {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
-  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---
-  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Exch-C-bone-V             ---
+  {*}/Exch-T-bone-V       Exch-T-bone-V             ---
+  {*}/Noch-C-bone-V       Noch-C-bone-V             ---
+  {*}/Noch-T-bone-V       Noch-T-bone-V             ---
+  {*}/C-bone-V            Noch-C-bone-V             ---
+  {*}/T-bone-V            Noch-T-bone-V             ---
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {U}/ST0                     ST0                   ---
-  {U}/ST1                     ST1                   ---
-  {U}/ST2                     ST2                   ---
-  {^U}/ST0                    Plasma                8.32
-  {^U}/ST1                    Plasma                8.32
-  {^U}/ST2                    Plasma                8.32
-  {*}/Other                   Plasma                8.32
+  {U}/ST0                 ST0                       ---
+  {U}/ST1                 ST1                       ---
+  {U}/ST2                 ST2                       ---
+  {^U}/ST0                Plasma                    8.32
+  {^U}/ST1                Plasma                    8.32
+  {^U}/ST2                Plasma                    8.32
+  {*}/Other               Plasma                    8.32
 
 $endif

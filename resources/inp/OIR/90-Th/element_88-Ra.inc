@@ -167,39 +167,39 @@ $if progeny
 # > 軟部組織コンパートメントで生成された場合は6.98 d⁻¹です。6.98 d⁻¹という値は、
 # > ラジウムの特性モデルにおける他の軟部組織コンパートメントからの除去速度の最大値です。
 
-  {U,Bi,Pb,Tl}/Plasma         Blood              1000
-  {Po}/Plasma1                Blood              1000
-  {Po}/Plasma2                Blood              1000
-  {Po}/Plasma3                Blood              1000
-  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
-  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
+  {*}/Blood               Blood                     ---
+  {*}/Plasma              Blood                  1000
+  {Po}/Plasma1            Blood                  1000
+  {Po}/Plasma2            Blood                  1000
+  {Po}/Plasma3            Blood                  1000
+  {*}/RBC                 Blood                  1000
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Exch-C-bone-V         ---
-  {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
-  {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
-  {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
-  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---     # Publ.137 Para.812
-  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---     # Publ.137 Para.812
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Exch-C-bone-V             ---
+  {*}/Exch-T-bone-V       Exch-T-bone-V             ---
+  {*}/Noch-C-bone-V       Noch-C-bone-V             ---
+  {*}/Noch-T-bone-V       Noch-T-bone-V             ---
+  {*}/C-bone-V            Noch-C-bone-V             ---     # Publ.137 Para.812
+  {*}/T-bone-V            Noch-T-bone-V             ---     # Publ.137 Para.812
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Ra}/ST0                    ST0                   ---
-  {Ra}/ST1                    ST1                   ---
-  {Ra}/ST2                    ST2                   ---
-  {^Ra}/ST0                   Blood                 6.98
-  {^Ra}/ST1                   Blood                 6.98
-  {^Ra}/ST2                   Blood                 6.98
-  {*}/Other                   Blood                 6.98
+  {Ra}/ST0                ST0                       ---
+  {Ra}/ST1                ST1                       ---
+  {Ra}/ST2                ST2                       ---
+  {^Ra}/ST0               Blood                     6.98
+  {^Ra}/ST1               Blood                     6.98
+  {^Ra}/ST2               Blood                     6.98
+  {*}/Other               Blood                     6.98
 
 $endif

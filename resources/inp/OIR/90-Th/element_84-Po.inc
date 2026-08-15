@@ -166,37 +166,37 @@ $if progeny
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
 # > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma2            1000
-  {Po}/Plasma1                Plasma1               ---
-  {Po}/Plasma2                Plasma2               ---
-  {Po}/Plasma3                Plasma3               ---
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma2            1000
+  {*}/Blood               Plasma2                1000
+  {*}/Plasma              Plasma2                1000
+  {Po}/Plasma1            Plasma1                   ---
+  {Po}/Plasma2            Plasma2                   ---
+  {Po}/Plasma3            Plasma3                   ---
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma2           $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma2           $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma2           $(0.03 / 365)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma2           $(0.18 / 365)
-  {Pa,Th,Ac}/C-bone-V         Plasma2           $(0.03 / 365)
-  {Pa,Th,Ac}/T-bone-V         Plasma2           $(0.18 / 365)
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Plasma2               $(0.03 / 365)
+  {*}/Exch-T-bone-V       Plasma2               $(0.18 / 365)
+  {*}/Noch-C-bone-V       Plasma2               $(0.03 / 365)
+  {*}/Noch-T-bone-V       Plasma2               $(0.18 / 365)
+  {*}/C-bone-V            Plasma2               $(0.03 / 365)
+  {*}/T-bone-V            Plasma2               $(0.18 / 365)
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Po}/Other                  Other                 ---
-  {^Po}/Other                 Plasma2           $(0.693 / 7)    # 半減期7日
-  {*}/ST0                     Plasma2           $(0.693 / 7)    # 半減期7日
-  {*}/ST1                     Plasma2           $(0.693 / 7)    # 半減期7日
-  {*}/ST2                     Plasma2           $(0.693 / 7)    # 半減期7日
+  {Po}/Other              Other                     ---
+  {^Po}/Other             Plasma2               $(0.693 / 7)    # 半減期7日
+  {*}/ST0                 Plasma2               $(0.693 / 7)    # 半減期7日
+  {*}/ST1                 Plasma2               $(0.693 / 7)    # 半減期7日
+  {*}/ST2                 Plasma2               $(0.693 / 7)    # 半減期7日
 
 $endif

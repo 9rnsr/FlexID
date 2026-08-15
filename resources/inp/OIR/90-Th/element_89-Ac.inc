@@ -219,39 +219,39 @@ $if progeny
 # > 回転の速い軟部組織コンパートメントST0から血液への移行速度（1.386 d⁻¹）で、骨量コンパートメントで
 # > 生成された場合は骨代謝速度でアクチニウムの中心血液コンパートメントに移行すると仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Blood              1000
-  {Po}/Plasma1                Blood              1000
-  {Po}/Plasma2                Blood              1000
-  {Po}/Plasma3                Blood              1000
-  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
-  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
+  {*}/Blood               Blood                     ---
+  {*}/Plasma              Blood                  1000
+  {Po}/Plasma1            Blood                  1000
+  {Po}/Plasma2            Blood                  1000
+  {Po}/Plasma3            Blood                  1000
+  {*}/RBC                 Blood                  1000
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
-  {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
-  {Pa,Th,Ac}/C-bone-V         C-bone-V              ---
-  {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Blood                 $(0.03 / 365)
+  {*}/Exch-T-bone-V       Blood                 $(0.18 / 365)
+  {*}/Noch-C-bone-V       C-bone-V                  ---
+  {*}/Noch-T-bone-V       T-bone-V                  ---
+  {*}/C-bone-V            C-bone-V                  ---
+  {*}/T-bone-V            T-bone-V                  ---
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Ac}/ST0                    ST0                   ---
-  {Ac}/ST1                    ST1                   ---
-  {Ac}/ST2                    ST2                   ---
-  {^Ac}/ST0                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
-  {^Ac}/ST1                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
-  {^Ac}/ST2                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
-  {*}/Other                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Ac}/ST0                ST0                       ---
+  {Ac}/ST1                ST1                       ---
+  {Ac}/ST2                ST2                       ---
+  {^Ac}/ST0               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {^Ac}/ST1               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {^Ac}/ST2               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {*}/Other               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
 
 $endif

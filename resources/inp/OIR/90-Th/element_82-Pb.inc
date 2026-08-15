@@ -217,39 +217,39 @@ $if progeny
 # > 生成された鉛は、鉛モデルの血液コンパートメントと識別できない場合、血漿へ1000 d⁻¹の速度で
 # > 移行すると仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
-  {Po}/Plasma1                Plasma             1000
-  {Po}/Plasma2                Plasma             1000
-  {Po}/Plasma3                Plasma             1000
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000
+  {*}/Blood               Plasma                 1000
+  {*}/Plasma              Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Exch-C-bone-V         ---
-  {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
-  {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
-  {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
-  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---     # Publ.137 Para.812
-  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---     # Publ.137 Para.812
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Exch-C-bone-V             ---
+  {*}/Exch-T-bone-V       Exch-T-bone-V             ---
+  {*}/Noch-C-bone-V       Noch-C-bone-V             ---
+  {*}/Noch-T-bone-V       Noch-T-bone-V             ---
+  {*}/C-bone-V            Noch-C-bone-V             ---     # Publ.137 Para.812
+  {*}/T-bone-V            Noch-T-bone-V             ---     # Publ.137 Para.812
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Pb}/ST0                    ST0                   ---
-  {Pb}/ST1                    ST1                   ---
-  {Pb}/ST2                    ST2                   ---
-  {^Pb}/ST0                   Plasma                7.39
-  {^Pb}/ST1                   Plasma                7.39
-  {^Pb}/ST2                   Plasma                7.39
-  {*}/Other                   Plasma                7.39
+  {Pb}/ST0                ST0                       ---
+  {Pb}/ST1                ST1                       ---
+  {Pb}/ST2                ST2                       ---
+  {^Pb}/ST0               Plasma                    7.39
+  {^Pb}/ST1               Plasma                    7.39
+  {^Pb}/ST2               Plasma                    7.39
+  {*}/Other               Plasma                    7.39
 
 $endif
