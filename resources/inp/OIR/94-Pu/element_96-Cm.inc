@@ -189,12 +189,12 @@ $if progeny
   {*}/Skin                Skin                      ---
   {*}/Spleen              Spleen                    ---
 
-  {Np}/ST0                ST0                       ---
-  {Np}/ST1                ST1                       ---
-  {Np}/ST2                ST2                       ---
-  {^Np}/ST0               Blood                     1.39        # ST0→Bloodの移行速度
-  {^Np}/ST1               Blood                     1.39        # ST0→Bloodの移行速度
-  {^Np}/ST2               Blood                     1.39        # ST0→Bloodの移行速度
+  {Cm}/ST0                ST0                       ---
+  {Cm}/ST1                ST1                       ---
+  {Cm}/ST2                ST2                       ---
+  {^Cm}/ST0               Blood                     1.39        # ST0→Bloodの移行速度
+  {^Cm}/ST1               Blood                     1.39        # ST0→Bloodの移行速度
+  {^Cm}/ST2               Blood                     1.39        # ST0→Bloodの移行速度
   {*}/Other               Blood                     1.39        # ST0→Bloodの移行速度
 
 $endif
