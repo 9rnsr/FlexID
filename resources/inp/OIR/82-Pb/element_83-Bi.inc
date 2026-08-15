@@ -20,6 +20,8 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
 # > (483) ... The structure of the characteristic
 # > model for bismuth is modified by the addition of compartments
@@ -37,6 +39,8 @@
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
+$endif
+
 [{Bi}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
@@ -47,7 +51,9 @@
   Plasma                  RC-con                    4.0
   Plasma                  RBC                       0.5
   Plasma                  ST0                     300
- #Plasma                  ST1                       4.2         # fix
+$if parent
+  Plasma                  ST1                       4.2
+$endif
   Plasma                  ST2                       1.3
   Plasma                  Liver1                   30
   Plasma                  Kidneys1                 30
@@ -66,6 +72,8 @@
   Kidneys2                Plasma                    0.139
   C-bone-S                Plasma                    0.0347
   T-bone-S                Plasma                    0.0347
+
+$if progeny
 
 # ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
 # > (483) ... Transfer coefficients for
@@ -155,3 +163,5 @@
   {*}/Other               Plasma                   66.54
   {*}/Other1              Plasma                   66.54
   {*}/Other2              Plasma                   66.54
+
+$endif

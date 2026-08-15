@@ -69,6 +69,8 @@
   Ovaries                 Plasma1                   0.0139
   Other                   Plasma1                   0.099
 
+$if progeny
+
 # ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
 # > (484) ... Polonium produced in a blood compartment
 # > that is not identifiable with a blood compartment of the polonium model is
@@ -122,3 +124,5 @@
   {*}/ST2                 Plasma2               $(0.693 / 7)
   {*}/Other1              Plasma2               $(0.693 / 7)
   {*}/Other2              Plasma2               $(0.693 / 7)
+
+$endif
