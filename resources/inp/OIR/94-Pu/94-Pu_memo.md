@@ -1,45 +1,44 @@
 # 体内動態モデル間のコンパートメント対応関係
 
-|96-Cm    |95-Am    |94-Pu     |93-Np    |92-U          |91-Pa    |90-Th    |89-Ac    |88-Ra         |87-Fr |86-Rn  |85-At |84-Po    |83-Bi    |82-Pb         |81-Tl    |
-|---------|---------|----------|---------|--------------|---------|---------|---------|--------------|------|-------|------|---------|---------|--------------|---------|
-|         |         |Blood0 *1 |         |              |         |         |         |              |   *3 |       |   *3 |         |         |              |         |
-|         |         |Blood1    |         |              |         |         |         |              |   *3 |       |   *3 |         |         |              |         |
-|         |         |Blood2    |         |              |         |         |         |              |   *3 |       |   *3 |         |         |              |         |
-|Blood    |Blood    |          |Blood    |              |Blood    |Blood    |Blood    |Blood         |   *3 |Blood  |   *3 |         |         |              |         |
-|         |         |          |         |              |         |         |         |              |   *3 |       |   *3 |Plasma1  |         |              |         |
-|         |         |          |         |              |         |         |         |              |   *3 |       |   *3 |Plasma2  |         |              |         |
-|         |         |          |         |              |         |         |         |              |   *3 |       |   *3 |Plasma3  |         |              |         |
-|         |         |          |         |Plasma        |         |         |         |              |   *3 |       |   *3 |         |Plasma   |Plasma        |Plasma   |
-|         |         |          |         |RBC           |         |         |         |              |   *3 |       |   *3 |RBC      |RBC      |RBC           |RBC      |
-|C-bone-S |C-bone-S |C-bone-S  |C-bone-S |C-bone-S      |C-bone-S |C-bone-S |C-bone-S |C-bone-S      |   *3 |       |   *3 |C-bone-S |C-bone-S |C-bone-S      |C-bone-S |
-|T-bone-S |T-bone-S |T-bone-S  |T-bone-S |T-bone-S      |T-bone-S |T-bone-S |T-bone-S |T-bone-S      |   *3 |       |   *3 |T-bone-S |T-bone-S |T-bone-S      |T-bone-S |
-|         |         |          |         |Exch-C-bone-V |         |         |         |Exch-C-bone-V |   *3 |       |   *3 |         |         |Exch-C-bone-V |         |
-|         |         |          |         |Exch-T-bone-V |         |         |         |Exch-T-bone-V |   *3 |       |   *3 |         |         |Exch-T-bone-V |         |
-|C-bone-V |C-bone-V |C-bone-V  |C-bone-V |Noch-C-bone-V |C-bone-V |C-bone-V |C-bone-V |Noch-C-bone-V |   *3 |       |   *3 |         |         |Noch-C-bone-V |         |
-|T-bone-V |T-bone-V |T-bone-V  |T-bone-V |Noch-T-bone-V |T-bone-V |T-bone-V |T-bone-V |Noch-T-bone-V |   *3 |       |   *3 |         |         |Noch-T-bone-V |         |
-|C-marrow |C-marrow |C-marrow  |C-marrow |C-marrow      |C-marrow |C-marrow |C-marrow |C-marrow      |   *3 |       |   *3 |C-marrow |C-marrow |C-marrow      |C-marrow |
-|T-marrow |T-marrow |T-marrow  |T-marrow |T-marrow      |T-marrow |T-marrow |T-marrow |T-marrow      |   *3 |       |   *3 |T-marrow |T-marrow |T-marrow      |T-marrow |
-|         |         |Liver0    |         |              |         |         |         |              |   *3 |       |   *3 |         |         |              |         |
-|Liver1   |Liver1   |Liver1    |Liver1   |Liver1        |Liver1   |Liver1   |Liver1   |Liver1        |   *3 |       |   *3 |Liver1   |Liver1   |Liver1        |Liver    |
-|Liver2   |Liver2   |Liver2    |Liver2   |Liver2        |Liver2   |Liver2   |Liver2   |Liver2        |   *3 |       |   *3 |Liver2   |Liver2   |Liver2        |         |
-|Kidneys1 |Kidneys1 |Kidneys1  |Kidneys1 |Kidneys1      |Kidneys1 |Kidneys1 |Kidneys1 |Kidneys1      |   *3 |       |   *3 |Kidneys1 |Kidneys1 |Kidneys1      |         |
-|Kidneys2 |Kidneys2 |Kidneys2  |Kidneys2 |Kidneys2      |Kidneys2 |Kidneys2 |Kidneys2 |Kidneys2      |   *3 |       |   *3 |Kidneys2 |Kidneys2 |Kidneys2      |Kidneys  |
-|Testes   |Testes   |Testes    |Testes   |Testes        |Testes   |Testes   |Testes   |Testes        |   *3 |       |   *3 |Testes   |Testes   |Testes        |Testes   |
-|Ovaries  |Ovaries  |Ovaries   |Ovaries  |Ovaries       |Ovaries  |Ovaries  |Ovaries  |Ovaries       |   *3 |       |   *3 |Ovaries  |Ovaries  |Ovaries       |Ovaries  |
-|Skin     |Skin     |Skin   *2 |Skin     |Skin          |Skin     |Skin     |Skin     |Skin          |   *3 |       |   *3 |Skin     |Skin     |Skin          |Skin     |
-|Spleen   |Spleen   |Spleen *2 |Spleen   |Spleen        |Spleen   |Spleen   |Spleen   |Spleen        |   *3 |       |   *3 |Spleen   |Spleen   |Spleen        |Spleen   |
+|96-Cm    |95-Am    |94-Pu    |93-Np    |92-U          |91-Pa    |90-Th    |89-Ac    |88-Ra         |87-Fr |86-Rn |85-At |84-Po      |83-Bi      |82-Pb         |81-Tl      |
+|---------|---------|---------|---------|--------------|---------|---------|---------|--------------|------|------|------|-----------|-----------|--------------|-----------|
+|         |         |Blood0 *2|         |              |         |         |         |              |      |      |      |           |           |              |           |
+|         |         |Blood1   |         |              |         |         |         |              |      |      |      |           |           |              |           |
+|         |         |Blood2   |         |              |         |         |         |              |      |      |      |           |           |              |           |
+|Blood    |Blood    |         |Blood    |              |Blood    |Blood    |Blood    |Blood         |      |Blood |      |           |           |              |           |
+|         |         |         |         |              |         |         |         |              |      |      |      |Plasma1    |           |              |           |
+|         |         |         |         |              |         |         |         |              |      |      |      |Plasma2    |           |              |           |
+|         |         |         |         |              |         |         |         |              |      |      |      |Plasma3    |           |              |           |
+|         |         |         |         |Plasma        |         |         |         |              |      |      |      |           |Plasma     |Plasma        |Plasma     |
+|         |         |         |         |RBC           |         |         |         |              |      |      |      |RBC        |RBC        |RBC           |RBC        |
+|C-bone-S |C-bone-S |C-bone-S |C-bone-S |C-bone-S      |C-bone-S |C-bone-S |C-bone-S |C-bone-S      |      |      |      |C-bone-S   |C-bone-S   |C-bone-S      |C-bone-S   |
+|T-bone-S |T-bone-S |T-bone-S |T-bone-S |T-bone-S      |T-bone-S |T-bone-S |T-bone-S |T-bone-S      |      |      |      |T-bone-S   |T-bone-S   |T-bone-S      |T-bone-S   |
+|         |         |         |         |Exch-C-bone-V |         |         |         |Exch-C-bone-V |      |      |      |           |           |Exch-C-bone-V |           |
+|         |         |         |         |Exch-T-bone-V |         |         |         |Exch-T-bone-V |      |      |      |           |           |Exch-T-bone-V |           |
+|C-bone-V |C-bone-V |C-bone-V |C-bone-V |Noch-C-bone-V |C-bone-V |C-bone-V |C-bone-V |Noch-C-bone-V |      |      |      |           |           |Noch-C-bone-V |           |
+|T-bone-V |T-bone-V |T-bone-V |T-bone-V |Noch-T-bone-V |T-bone-V |T-bone-V |T-bone-V |Noch-T-bone-V |      |      |      |           |           |Noch-T-bone-V |           |
+|C-marrow |C-marrow |C-marrow |C-marrow |C-marrow   *1 |C-marrow |C-marrow |C-marrow |C-marrow      |      |      |      |C-marrow *1|C-marrow *1|C-marrow   *1 |C-marrow *1|
+|T-marrow |T-marrow |T-marrow |T-marrow |T-marrow   *1 |T-marrow |T-marrow |T-marrow |T-marrow      |      |      |      |T-marrow *1|T-marrow *1|T-marrow   *1 |T-marrow *1|
+|         |         |Liver0   |         |              |         |         |         |              |      |      |      |           |           |              |           |
+|Liver1   |Liver1   |Liver1   |Liver1   |Liver1        |Liver1   |Liver1   |Liver1   |Liver1        |      |      |      |Liver1     |Liver1     |Liver1        |Liver      |
+|Liver2   |Liver2   |Liver2   |Liver2   |Liver2        |Liver2   |Liver2   |Liver2   |Liver2        |      |      |      |Liver2     |Liver2     |Liver2        |           |
+|Kidneys1 |Kidneys1 |Kidneys1 |Kidneys1 |Kidneys1      |Kidneys1 |Kidneys1 |Kidneys1 |Kidneys1      |      |      |      |Kidneys1   |Kidneys1   |Kidneys1      |           |
+|Kidneys2 |Kidneys2 |Kidneys2 |Kidneys2 |Kidneys2      |Kidneys2 |Kidneys2 |Kidneys2 |Kidneys2      |      |      |      |Kidneys2   |Kidneys2   |Kidneys2      |Kidneys    |
+|Testes   |Testes   |Testes   |Testes   |Testes     *1 |Testes   |Testes   |Testes   |Testes        |      |      |      |Testes     |Testes   *1|Testes     *1 |Testes   *1|
+|Ovaries  |Ovaries  |Ovaries  |Ovaries  |Ovaries    *1 |Ovaries  |Ovaries  |Ovaries  |Ovaries       |      |      |      |Ovaries    |Ovaries  *1|Ovaries    *1 |Ovaries  *1|
+|Skin   *1|Skin   *1|Skin   *1|Skin   *1|Skin       *1 |Skin   *1|Skin   *1|Skin   *1|Skin          |      |      |      |Skin       |Skin     *1|Skin       *1 |Skin     *1|
+|Spleen *1|Spleen *1|Spleen *1|Spleen *1|Spleen     *1 |Spleen *1|Spleen *1|Spleen *1|Spleen        |      |      |      |Spleen     |Spleen   *1|Spleen     *1 |Spleen   *1|
 
-*1 親核種の場合のみ追加する
-*2 子孫核種の場合のみ追加する
-*3 壊変経路の通過点として自動生成されるコンパートメント
+*1 子孫核種の場合のみ追加する
+*2 親核種の場合のみ追加する
 
 軟組織は異なる元素の全身モデル間では同一と識別できないものとして扱う。
 
-|96-Cm    |95-Am    |94-Pu     |93-Np    |92-U          |91-Pa    |90-Th    |89-Ac    |88-Ra         |87-Fr |86-Rn  |85-At |84-Po    |83-Bi    |82-Pb         |81-Tl    |
-|---------|---------|----------|---------|--------------|---------|---------|---------|--------------|------|-------|------|---------|---------|--------------|---------|
-|ST0      |ST0      |ST0       |ST0      |ST0           |ST0      |ST0      |ST0      |ST0           |      |       |      |Other    |ST0      |ST0           |Other    |
-|ST1      |ST1      |ST1       |ST1      |ST1           |ST1      |ST1      |ST1      |ST1           |      |       |      |         |ST1      |ST1           |         |
-|ST2      |ST2      |ST2       |ST2      |ST2           |ST2      |ST2      |ST2      |ST2           |      |       |      |         |ST2      |ST2           |         |
+|96-Cm    |95-Am    |94-Pu    |93-Np    |92-U          |91-Pa    |90-Th    |89-Ac    |88-Ra         |87-Fr |86-Rn |85-At |84-Po      |83-Bi      |82-Pb         |81-Tl      |
+|---------|---------|---------|---------|--------------|---------|---------|---------|--------------|------|------|------|-----------|-----------|--------------|-----------|
+|ST0      |ST0      |ST0      |ST0      |ST0           |ST0      |ST0      |ST0      |ST0           |      |      |      |Other      |ST0        |ST0           |Other      |
+|ST1      |ST1      |ST1      |ST1      |ST1           |ST1      |ST1      |ST1      |ST1           |      |      |      |           |ST1        |ST1           |           |
+|ST2      |ST2      |ST2      |ST2      |ST2           |ST2      |ST2      |ST2      |ST2           |      |      |      |           |ST2        |ST2           |           |
 
 
 # 翻訳メモ
@@ -200,38 +199,38 @@ ICRP Publ.141 p.236 Para.567
 
 アクチニド(プルトニウム以外)の全身の移行係数
 
-	# ICRP Publ.141 p.234 Table 18.9
-	Path					Transfer coefficient (d^-1)
-	From		To			Ac			Pa,Th*		Np			Am,Cm		Bk			Cf			Es,Fm
-	Blood		Liver 1		11.6		0.097		0.194		11.6		0.194		2.33		1.75
-	Blood		Trab surf	3.49		0.679		0.480		3.49		0.129		2.91		3.20
-	Blood		Cort surf	3.49		0.679		0.393		3.49		0.129		2.91		3.20
-	Blood		Kidneys 1	0.466		0.0679		0.0291		0.466		0.0129		0.233		0.116
-	Blood		Kidneys 2	0.116		0.0194		0.0097		0.116		0.00647		0.116		0.0582
-	Blood		UB cont		1.63		0.107		0.621		1.63		0.0582		1.28		1.51
-	Blood		RC cont		0.303		0.0097		0.0136		0.303		0.0388		0.699		0.699
-	Blood		Testes		0.0082		0.00068		0.00068		0.0082		0.00023		0.00408		0.00408
-	Blood		Ovaries		0.0026		0.00021		0.00021		0.0026		0.00007		0.00128		0.00128
-	Blood		ST0			10.0		0.832		0.832		10.0		0.277		4.99		4.99
-	Blood		ST1			1.67		0.243		0.161		1.67		0.0647		0.926		0.868
-	Blood		ST2			0.466		0.0388		0.0388		0.466		0.0129		0.233		0.233
-	Liver 1		SI cont		0.0006		0.000475	0.000133	0.0006		0.0006		0.0006		0.0006
-	Liver 1		Liver 2		0.0225		0.00095		0.00177		0.0225		0.0225		0.0225		0.0225
-	Liver 1		Blood		0			0.000475	0			0			0			0			0
-	Liver 2		Blood		0.0019		0.000211	0.0019		0.0019		0.0019		0.0019		0.0019
-	Trab surf	Trab mar	4.93E-4		4.93E-4		4.93E-4		4.93E-4		4.93E-4		4.93E-4		4.93E-4
-	Trab surf	Trab vol	2.47E-4		2.47E-4		2.47E-4		2.47E-4		2.47E-4		2.47E-4		2.47E-4
-	Trab vol	Trab mar	4.93E-4		4.93E-4		4.93E-4		4.93E-4		4.93E-4		4.93E-4		4.93E-4
-	Trab mar	Blood		0.0076		0.0076		0.0076		0.0076		0.0076		0.0076		0.0076
-	Cort surf	Cort mar	8.21E-5		8.21E-5		8.21E-5		8.21E-5		8.21E-5		8.21E-5		8.21E-5
-	Cort surf	Cort vol	4.11E-5		4.11E-5		4.11E-5		4.11E-5		4.11E-5		4.11E-5		4.11E-5
-	Cort vol	Cort mar	8.21E-5		8.21E-5		8.21E-5		8.21E-5		8.21E-5		8.21E-5		8.21E-5
-	Cort mar	Blood		0.0076		0.0076		0.0076		0.00253		0.0076		0.0076		0.0076
-	Cort mar	Cort surf	0			0			0			0.00507		0			0			0
-	Kidneys 1	UB cont		0.099		0.0462		0.0495		0.099		0.099		0.099		0.099
-	Kidneys 2	Blood		0.00139		0.00038		0.00139		0.00139		0.00038		0.00038		0.00038
-	Testes		Blood		0.00038		0.00038		0.00038		0.00038		0.00038		0.00038		0.00038
-	Ovaries		Blood		0.00038		0.00038		0.00038		0.00038		0.00038		0.00038		0.00038
-	ST0			Blood		1.39		0.462		0.693		1.39		1.39		1.39		1.39
-	ST1			Blood		0.0139		0.00095		0.00693		0.0139		0.00693		0.00693		0.00693
-	ST2			Blood		1.9E-5		1.9E-5		1.9E-5		1.9E-5		1.9E-5		1.9E-5		1.9E-5
+    # ICRP Publ.141 p.234 Table 18.9
+    Path                    Transfer coefficient (d^-1)
+    From        To          Ac          Pa,Th*      Np          Am,Cm       Bk          Cf          Es,Fm
+    Blood       Liver 1     11.6        0.097       0.194       11.6        0.194       2.33        1.75
+    Blood       Trab surf   3.49        0.679       0.480       3.49        0.129       2.91        3.20
+    Blood       Cort surf   3.49        0.679       0.393       3.49        0.129       2.91        3.20
+    Blood       Kidneys 1   0.466       0.0679      0.0291      0.466       0.0129      0.233       0.116
+    Blood       Kidneys 2   0.116       0.0194      0.0097      0.116       0.00647     0.116       0.0582
+    Blood       UB cont     1.63        0.107       0.621       1.63        0.0582      1.28        1.51
+    Blood       RC cont     0.303       0.0097      0.0136      0.303       0.0388      0.699       0.699
+    Blood       Testes      0.0082      0.00068     0.00068     0.0082      0.00023     0.00408     0.00408
+    Blood       Ovaries     0.0026      0.00021     0.00021     0.0026      0.00007     0.00128     0.00128
+    Blood       ST0         10.0        0.832       0.832       10.0        0.277       4.99        4.99
+    Blood       ST1         1.67        0.243       0.161       1.67        0.0647      0.926       0.868
+    Blood       ST2         0.466       0.0388      0.0388      0.466       0.0129      0.233       0.233
+    Liver 1     SI cont     0.0006      0.000475    0.000133    0.0006      0.0006      0.0006      0.0006
+    Liver 1     Liver 2     0.0225      0.00095     0.00177     0.0225      0.0225      0.0225      0.0225
+    Liver 1     Blood       0           0.000475    0           0           0           0           0
+    Liver 2     Blood       0.0019      0.000211    0.0019      0.0019      0.0019      0.0019      0.0019
+    Trab surf   Trab mar    4.93E-4     4.93E-4     4.93E-4     4.93E-4     4.93E-4     4.93E-4     4.93E-4
+    Trab surf   Trab vol    2.47E-4     2.47E-4     2.47E-4     2.47E-4     2.47E-4     2.47E-4     2.47E-4
+    Trab vol    Trab mar    4.93E-4     4.93E-4     4.93E-4     4.93E-4     4.93E-4     4.93E-4     4.93E-4
+    Trab mar    Blood       0.0076      0.0076      0.0076      0.0076      0.0076      0.0076      0.0076
+    Cort surf   Cort mar    8.21E-5     8.21E-5     8.21E-5     8.21E-5     8.21E-5     8.21E-5     8.21E-5
+    Cort surf   Cort vol    4.11E-5     4.11E-5     4.11E-5     4.11E-5     4.11E-5     4.11E-5     4.11E-5
+    Cort vol    Cort mar    8.21E-5     8.21E-5     8.21E-5     8.21E-5     8.21E-5     8.21E-5     8.21E-5
+    Cort mar    Blood       0.0076      0.0076      0.0076      0.00253     0.0076      0.0076      0.0076
+    Cort mar    Cort surf   0           0           0           0.00507     0           0           0
+    Kidneys 1   UB cont     0.099       0.0462      0.0495      0.099       0.099       0.099       0.099
+    Kidneys 2   Blood       0.00139     0.00038     0.00139     0.00139     0.00038     0.00038     0.00038
+    Testes      Blood       0.00038     0.00038     0.00038     0.00038     0.00038     0.00038     0.00038
+    Ovaries     Blood       0.00038     0.00038     0.00038     0.00038     0.00038     0.00038     0.00038
+    ST0         Blood       1.39        0.462       0.693       1.39        1.39        1.39        1.39
+    ST1         Blood       0.0139      0.00095     0.00693     0.0139      0.00693     0.00693     0.00693
+    ST2         Blood       1.9E-5      1.9E-5      1.9E-5      1.9E-5      1.9E-5      1.9E-5      1.9E-5

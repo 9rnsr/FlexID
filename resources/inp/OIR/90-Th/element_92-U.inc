@@ -26,10 +26,12 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # > (811) ... Single compartments
 # > representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
-# > added for consistency with the models for other progeny of thorium. 
+# > added for consistency with the models for other progeny of thorium.
 # > (811) ... トリウムの他の娘核種のモデルとの整合性をとるため、脾臓、海綿骨髄、
 # > 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されています。
 
@@ -39,6 +41,8 @@
   acc   Ovaries               Ovaries
   acc   Skin                  Skin
   acc   Spleen                Spleen
+
+$endif
 
 [{U}:transfer]
 #-----------------------+---------------------+--------------------
@@ -53,7 +57,9 @@
   Plasma                  Kidneys2                  0.0122
   Plasma                  RC-con                    0.122
   Plasma                  Liver1                    0.367
- #Plasma                  ST1                       1.63        # fix
+$if parent
+  Plasma                  ST1                       1.63
+$endif
   Plasma                  ST2                       0.0735
   Plasma                  T-bone-S                  2.04
   Plasma                  C-bone-S                  1.63
@@ -77,6 +83,8 @@
   Exch-C-bone-V           C-bone-S                  0.0173
   Exch-C-bone-V           Noch-C-bone-V             0.00578
 
+$if progeny
+
 # ICRP Publ.137 p.369 Para.811 / トリウム子孫元素としてのウラン
 # (811) ... Single compartments
 # representing spleen, trabecular marrow, cortical marrow, testes, ovaries, and skin are
@@ -92,7 +100,7 @@
 # 0.075 d⁻¹, 0.025 d⁻¹, 0.001 d⁻¹, 0.0003 d⁻¹, and 0.09 d⁻¹, respectively. The removal
 # half-time from each added compartment is set at 20 d, the removal half-time from
 # ST1. The deposition fraction for ST1 is reduced by the sum of deposition fractions
-# for the six added compartments. 
+# for the six added compartments.
 # (811) ... トリウムの他の娘核種のモデルとの整合性をとるため、脾臓、海綿骨髄、
 # 皮質骨髄、精巣、卵巣、および皮膚を表す単一のコンパートメントが追加されています。
 # これら6つの追加コンパートメントは、親核種としてのウランのモデルにおける中期的軟部組織
@@ -105,13 +113,13 @@
 # 各追加コンパートメントからの除去半減期は、ST1からの除去半減期である20日と設定されます。
 # ST1の沈着割合は、これら6つの追加コンパートメントの沈着割合の合計分だけ低減されます。
 
-  Plasma                  ST1           $(1.63 - (0.025+0.075+0.001+0.0003+0.09+0.004))
   Plasma                  C-marrow                  0.025
   Plasma                  T-marrow                  0.075
   Plasma                  Testes                    0.001
   Plasma                  Ovaries                   0.0003
   Plasma                  Skin                      0.09
   Plasma                  Spleen                    0.004
+  Plasma                  ST1           $(1.63 - (0.025+0.075+0.001+0.0003+0.09+0.004))
 
   C-marrow                Plasma                $(0.693 / 20)   # 半減期20日
   T-marrow                Plasma                $(0.693 / 20)   # 半減期20日
@@ -134,37 +142,39 @@
 # 最も高いものです。ウランのモデルに関してその帰属が不明確な骨体積区画（例：トリウムモデルにおける
 # 海綿骨または皮質骨の体積）で生成されるウランは、非交換性骨で生成されるものと仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
-  {Po}/Plasma1                Plasma             1000       # Publ.151 Annex.B
-  {Po}/Plasma2                Plasma             1000       # Publ.151 Annex.B
-  {Po}/Plasma3                Plasma             1000       # Publ.151 Annex.B
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000       # Publ.151 Annex.B
+  {*}/Blood               Plasma                 1000       # Publ.151 Annex.B
+  {*}/Plasma              Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000       # Publ.151 Annex.B
+  {Po}/Plasma2            Plasma                 1000       # Publ.151 Annex.B
+  {Po}/Plasma3            Plasma                 1000       # Publ.151 Annex.B
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Exch-C-bone-V         ---
-  {U,Ra,Pb}/Exch-T-bone-V     Exch-T-bone-V         ---
-  {U,Ra,Pb}/Noch-C-bone-V     Noch-C-bone-V         ---
-  {U,Ra,Pb}/Noch-T-bone-V     Noch-T-bone-V         ---
-  {Pa,Th,Ac}/C-bone-V         Noch-C-bone-V         ---
-  {Pa,Th,Ac}/T-bone-V         Noch-T-bone-V         ---
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Exch-C-bone-V             ---
+  {*}/Exch-T-bone-V       Exch-T-bone-V             ---
+  {*}/Noch-C-bone-V       Noch-C-bone-V             ---
+  {*}/Noch-T-bone-V       Noch-T-bone-V             ---
+  {*}/C-bone-V            Noch-C-bone-V             ---
+  {*}/T-bone-V            Noch-T-bone-V             ---
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {U}/ST0                     ST0                   ---
-  {U}/ST1                     ST1                   ---
-  {U}/ST2                     ST2                   ---
-  {^U}/ST0                    Plasma                8.32
-  {^U}/ST1                    Plasma                8.32
-  {^U}/ST2                    Plasma                8.32
-  {*}/Other                   Plasma                8.32
+  {U}/ST0                 ST0                       ---
+  {U}/ST1                 ST1                       ---
+  {U}/ST2                 ST2                       ---
+  {^U}/ST0                Plasma                    8.32
+  {^U}/ST1                Plasma                    8.32
+  {^U}/ST2                Plasma                    8.32
+  {*}/Other               Plasma                    8.32
+
+$endif

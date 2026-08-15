@@ -54,7 +54,9 @@
   mix   BoneSurface           ---           # Publ.137 Para.605
   acc   C-bone-S              C-bone-S      # Publ.137 Para.605
   acc   T-bone-S              T-bone-S      # Publ.137 Para.605
- #acc   RedMarrow             R-marrow      # Publ.137 Para.712
+$if parent
+  acc   RedMarrow             R-marrow      # Publ.137 Para.712
+$endif
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Kidneys1              Kidneys       # Urinary path
@@ -65,6 +67,8 @@
   acc   Spleen                Spleen
   acc   Other                 Other
   exc   Excreta               ---           # hair,sweat,skin
+
+$if progeny
 
 # ICRP Publ.137 p.331 Para.712 / ラジウム子孫元素としてのポロニウム
 # > (712) ... For each of these four elements, the red marrow compartment
@@ -81,6 +85,8 @@
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
+$endif
+
 [{Po}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
@@ -96,12 +102,16 @@
   Plasma1                 Kidneys1                  5
   Plasma1                 Kidneys2                  5
   Plasma1                 Skin                      5
- #Plasma1                 RedMarrow                 4           # fix
+$if parent
+  Plasma1                 RedMarrow                 4
+$endif
   Plasma1                 BoneSurface               1.5
   Plasma1                 Spleen                    2
   Plasma1                 Testes                    0.1
   Plasma1                 Ovaries                   0.05
- #Plasma1                 Other                    32.35        # fix
+$if parent
+  Plasma1                 Other                    32.35
+$endif
   Plasma3                 Plasma1                   0.099
   RBC                     Plasma1                   0.099
   Liver1                  SI-conRe                  0.139
@@ -110,7 +120,9 @@
   Kidneys2                Plasma1                   0.099
   Skin                    Plasma1                   0.00693
   Skin                    Excreta                   0.00693
- #RedMarrow               Plasma1                   0.099       # fix
+$if parent
+  RedMarrow               Plasma1                   0.099
+$endif
   BoneSurface             C-bone-S                 50%          # Publ.137 Para.605
   BoneSurface             T-bone-S                 50%          # Publ.137 Para.605
   C-bone-S                Plasma1                   0.0231      # Publ.137 Para.605
@@ -119,6 +131,8 @@
   Testes                  Plasma1                   0.0139
   Ovaries                 Plasma1                   0.0139
   Other                   Plasma1                   0.099
+
+$if progeny
 
 # ICRP Publ.137 p.331 Para.712 / ラジウム子孫元素としてのポロニウム
 # > (712) ... the transfer coefficient from plasma to
@@ -152,35 +166,37 @@
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
 # > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma2            1000
-  {Po}/Plasma1                Plasma1               ---
-  {Po}/Plasma2                Plasma2               ---
-  {Po}/Plasma3                Plasma3               ---
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma2            1000
+  {*}/Blood               Plasma2                1000
+  {*}/Plasma              Plasma2                1000
+  {Po}/Plasma1            Plasma1                   ---
+  {Po}/Plasma2            Plasma2                   ---
+  {Po}/Plasma3            Plasma3                   ---
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma2           $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma2           $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma2           $(0.03 / 365)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma2           $(0.18 / 365)
-  {Pa,Th,Ac}/C-bone-V         Plasma2           $(0.03 / 365)
-  {Pa,Th,Ac}/T-bone-V         Plasma2           $(0.18 / 365)
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Plasma2               $(0.03 / 365)
+  {*}/Exch-T-bone-V       Plasma2               $(0.18 / 365)
+  {*}/Noch-C-bone-V       Plasma2               $(0.03 / 365)
+  {*}/Noch-T-bone-V       Plasma2               $(0.18 / 365)
+  {*}/C-bone-V            Plasma2               $(0.03 / 365)
+  {*}/T-bone-V            Plasma2               $(0.18 / 365)
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Po}/Other                  Other                 ---
-  {^Po}/Other                 Plasma2           $(0.693 / 7)    # 半減期7日
-  {*}/ST0                     Plasma2           $(0.693 / 7)    # 半減期7日
-  {*}/ST1                     Plasma2           $(0.693 / 7)    # 半減期7日
-  {*}/ST2                     Plasma2           $(0.693 / 7)    # 半減期7日
+  {Po}/Other              Other                     ---
+  {^Po}/Other             Plasma2               $(0.693 / 7)    # 半減期7日
+  {*}/ST0                 Plasma2               $(0.693 / 7)    # 半減期7日
+  {*}/ST1                 Plasma2               $(0.693 / 7)    # 半減期7日
+  {*}/ST2                 Plasma2               $(0.693 / 7)    # 半減期7日
+
+$endif

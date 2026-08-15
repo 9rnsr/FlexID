@@ -64,15 +64,15 @@
 # > 移行します。血液中で生成された、または血液に入ったラドンは、1000 d⁻¹で体から（呼気として）
 # > 除去されます。
 
+  {*}/Blood               Blood                     ---
+  {Pu}/Blood0             Blood                  1000       # Publ.151 Annex.B
+  {Pu}/Blood1             Blood                  1000       # Publ.151 Annex.B
+  {Pu}/Blood2             Blood                  1000       # Publ.151 Annex.B
   {*}/Plasma              Blood                  1000       # Publ.151 Annex.B
   {Po}/Plasma1            Blood                  1000       # Publ.151 Annex.B
   {Po}/Plasma2            Blood                  1000       # Publ.151 Annex.B
   {Po}/Plasma3            Blood                  1000       # Publ.151 Annex.B
   {*}/RBC                 Blood                  1000       # Publ.151 Annex.B
-  {Pu}/Blood0             Blood                  1000       # Publ.151 Annex.B
-  {Pu}/Blood1             Blood                  1000       # Publ.151 Annex.B
-  {Pu}/Blood2             Blood                  1000       # Publ.151 Annex.B
-  {*}/Blood               Blood                     ---
 
   {*}/C-bone-S            Blood                   100
   {*}/T-bone-S            Blood                   100

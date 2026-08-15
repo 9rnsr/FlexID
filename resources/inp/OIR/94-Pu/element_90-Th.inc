@@ -1,7 +1,7 @@
 # ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
 # > (565) The model applied here to thorium as an actinide progeny is the model
 # > applied in OIR Part 3 (ICRP, 2017) to thorium as a progeny of radium. ...
-# > (565) ここでアクチニドの娘核種としてのトリウムに適用されるモデルは、OIR Part 3 
+# > (565) ここでアクチニドの娘核種としてのトリウムに適用されるモデルは、OIR Part 3
 # > (ICRP, 2017) においてラジウムの娘核種としてのトリウムに適用されたモデルです。 ...
 
 # ICRP Publ.137 p.333 Para.715 / ラジウム子孫元素としてのトリウム
@@ -31,6 +31,8 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
 # > (565) ... Briefly,
 # > two compartments, one representing the spleen and the other representing the skin,
@@ -49,6 +51,8 @@
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
+$endif
+
 [{Th}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
@@ -65,7 +69,9 @@
   Blood                   Testes                    0.00068
   Blood                   Ovaries                   0.00021
   Blood                   ST0                       0.832
- #Blood                   ST1                       0.243
+$if parent
+  Blood                   ST1                       0.243
+$endif
   Blood                   ST2                       0.0388
   Liver1                  Blood                     0.000475
   Liver1                  Liver2                    0.00095
@@ -86,6 +92,8 @@
   C-bone-V                C-marrow                  0.0000821
   T-marrow                Blood                     0.0076
   T-bone-V                T-marrow                  0.000493
+
+$if progeny
 
 # ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
 # > (565) ... The spleen and skin are assumed to receive 0.5%
@@ -113,9 +121,10 @@
 # > 血液からの元の除去半減期を維持するために低減されます。脾臓および皮膚から血液への
 # > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じです。
 
-  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
   Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
   Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
+  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
+
   Skin                    Blood                 $(0.693 / 2/365)
   Spleen                  Blood                 $(0.693 / 2/365)
 
@@ -144,15 +153,15 @@
 # > 場合は 0.462 d⁻¹です（トリウムモデルにおけるその他の軟部組織コンパートメントからの最も高い除去速度）。
 # > 交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
 
+  {*}/Blood               Blood                     ---
+  {Pu}/Blood0             Blood                  1000
+  {Pu}/Blood1             Blood                  1000
+  {Pu}/Blood2             Blood                  1000
   {*}/Plasma              Blood                  1000
   {Po}/Plasma1            Blood                  1000
   {Po}/Plasma2            Blood                  1000
   {Po}/Plasma3            Blood                  1000
   {*}/RBC                 Blood                  1000
-  {Pu}/Blood0             Blood                  1000
-  {Pu}/Blood1             Blood                  1000
-  {Pu}/Blood2             Blood                  1000
-  {*}/Blood               Blood                     ---
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
@@ -182,3 +191,5 @@
   {^Th}/ST1               Blood                     0.462
   {^Th}/ST2               Blood                     0.462
   {*}/Other               Blood                     0.462
+
+$endif

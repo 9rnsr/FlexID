@@ -29,15 +29,19 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのキュリウム
 # > (566) ... For a given element in this group, two compartments representing the
-# > skin and spleen are added to the explicitly identified source regions in the element’s
+# > skin and spleen are added to the explicitly identified source regions in the element's
 # > characteristic model. ...
 # > (566) ... このグループの特定の元素について、その特性モデルにおいて明示的に特定された
 # > 線源領域に加え、皮膚と脾臓を表す2つのコンパートメントが追加されます。 ...
 
   acc   Skin                  Skin
   acc   Spleen                Spleen
+
+$endif
 
 [{Cm}:transfer]
 #-----------------------+---------------------+--------------------
@@ -55,7 +59,9 @@
   Blood                   Testes                    0.0082
   Blood                   Ovaries                   0.0026
   Blood                   ST0                       10.0
- #Blood                   ST1                       1.67        # fix
+$if parent
+  Blood                   ST1                       1.67
+$endif
   Blood                   ST2                       0.466
   Liver1                  SI-conRe                  0.0006
   Liver1                  Liver2                    0.0225
@@ -77,6 +83,8 @@
   ST0                     Blood                     1.39
   ST1                     Blood                     0.0139
   ST2                     Blood                     1.9E-5
+
+$if progeny
 
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのキュリウム
 # > (566) ... These compartments are taken from the intermediate soft tissue
@@ -143,21 +151,22 @@
 # > at the rate of transfer from the fast-turnover soft tissue compartment ST0 to
 # > blood if produced in a soft tissue compartment, and at the rate of bone turnover if
 # > produced in a bone volume compartment.
-# > (566) ... 元素がその特性モデルのコンパートメントと識別できないコンパートメントで生成される場合、
-# > 血液コンパートメントで生成された場合は1000 d⁻¹の速度で、軟組織コンパートメントで生成された場合は
-# > 回転の速い軟組織コンパートメントST0から血液への移行速度で、骨量コンパートメントで生成された
-# > 場合は骨代謝速度で、元素の血液コンパートメント [複数の血液コンパートメントを持つプルトニウムの
-# > 場合はBlood 1 (表 18.6 を参照)] に移行すると仮定されます。
+# > (566) ... もし元素が、その特性モデル上のコンパートメントと同一視できない
+# > コンパートメント内で生成された場合、血液コンパートメント内で生成された場合は1000 d⁻¹の
+# > 速度で、軟部組織コンパートメント内で生成された場合は代謝の早い軟部組織コンパートメント
+# > ST0から血液への移行速度で、骨体積コンパートメント内で生成された場合は骨代謝速度で、
+# > その元素の血液コンパートメント［複数の血液コンパートメントを持つプルトニウムの場合は
+# > Blood 1（表18.6参照）］へ移行すると仮定されます。
 
+  {*}/Blood               Blood                     ---
+  {Pu}/Blood0             Blood                  1000
+  {Pu}/Blood1             Blood                  1000
+  {Pu}/Blood2             Blood                  1000
   {*}/Plasma              Blood                  1000
   {Po}/Plasma1            Blood                  1000
   {Po}/Plasma2            Blood                  1000
   {Po}/Plasma3            Blood                  1000
   {*}/RBC                 Blood                  1000
-  {Pu}/Blood0             Blood                  1000
-  {Pu}/Blood1             Blood                  1000
-  {Pu}/Blood2             Blood                  1000
-  {*}/Blood               Blood                     ---
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
@@ -180,10 +189,12 @@
   {*}/Skin                Skin                      ---
   {*}/Spleen              Spleen                    ---
 
-  {Np}/ST0                ST0                       ---
-  {Np}/ST1                ST1                       ---
-  {Np}/ST2                ST2                       ---
-  {^Np}/ST0               Blood                     1.39        # ST0→Bloodの移行速度
-  {^Np}/ST1               Blood                     1.39        # ST0→Bloodの移行速度
-  {^Np}/ST2               Blood                     1.39        # ST0→Bloodの移行速度
+  {Cm}/ST0                ST0                       ---
+  {Cm}/ST1                ST1                       ---
+  {Cm}/ST2                ST2                       ---
+  {^Cm}/ST0               Blood                     1.39        # ST0→Bloodの移行速度
+  {^Cm}/ST1               Blood                     1.39        # ST0→Bloodの移行速度
+  {^Cm}/ST2               Blood                     1.39        # ST0→Bloodの移行速度
   {*}/Other               Blood                     1.39        # ST0→Bloodの移行速度
+
+$endif

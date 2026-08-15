@@ -161,35 +161,35 @@
 # > 体積コンパートメントで生成されたタリウムは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
-  {Po}/Plasma1                Plasma             1000
-  {Po}/Plasma2                Plasma             1000
-  {Po}/Plasma3                Plasma             1000
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000
+  {*}/Blood               Plasma                 1000
+  {*}/Plasma              Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365)
-  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365)
-  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365)
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Plasma                $(0.03 / 365)
+  {*}/Exch-T-bone-V       Plasma                $(0.18 / 365)
+  {*}/Noch-C-bone-V       Plasma                $(0.03 / 365)
+  {*}/Noch-T-bone-V       Plasma                $(0.18 / 365)
+  {*}/C-bone-V            Plasma                $(0.03 / 365)
+  {*}/T-bone-V            Plasma                $(0.18 / 365)
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver                 ---
-  {^Rn}/Liver2                Plasma                2.5
-  {^Rn}/Kidneys1              Plasma                2.5
-  {^Rn}/Kidneys2              Kidneys               ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver                     ---
+  {*}/Liver2              Plasma                    2.5
+  {*}/Kidneys1            Plasma                    2.5
+  {*}/Kidneys2            Kidneys                   ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Tl}/Other                  Other                 ---
-  {^Tl}/Other                 Plasma                2.5
-  {*}/ST0                     Plasma                2.5
-  {*}/ST1                     Plasma                2.5
-  {*}/ST2                     Plasma                2.5
+  {Tl}/Other              Other                     ---
+  {^Tl}/Other             Plasma                    2.5
+  {*}/ST0                 Plasma                    2.5
+  {*}/ST1                 Plasma                    2.5
+  {*}/ST2                 Plasma                    2.5

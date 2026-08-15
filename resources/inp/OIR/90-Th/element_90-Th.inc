@@ -1,7 +1,7 @@
 # ICRP Publ.141 p.235 Para.565 / アクチニド子孫元素としてのトリウム
 # > (565) The model applied here to thorium as an actinide progeny is the model
 # > applied in OIR Part 3 (ICRP, 2017) to thorium as a progeny of radium. ...
-# > (565) ここでアクチニドの娘核種としてのトリウムに適用されるモデルは、OIR Part 3 
+# > (565) ここでアクチニドの娘核種としてのトリウムに適用されるモデルは、OIR Part 3
 # > (ICRP, 2017) においてラジウムの娘核種としてのトリウムに適用されたモデルです。 ...
 
 # ICRP Publ.137 p.370 Para.812 / トリウム子孫元素としてのトリウム
@@ -142,9 +142,10 @@ $if progeny
 # > 血液からの元の除去半減期を維持するために低減されます。脾臓および皮膚から血液への
 # > 除去半減期の仮定は 2 年であり、これは ST1 から血液への除去半減期と同じです。
 
-  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
   Blood                   Skin                      0.0554      # = 2.0% * 0.693/0.25
   Blood                   Spleen                    0.0139      # = 0.5% * 0.693/0.25
+  Blood                   ST1                   $(0.243 - (0.0139 + 0.0554))
+
   Skin                    Blood                 $(0.693 / 2/365)
   Spleen                  Blood                 $(0.693 / 2/365)
 
@@ -173,39 +174,39 @@ $if progeny
 # > 場合は 0.462 d⁻¹です（トリウムモデルにおけるその他の軟部組織コンパートメントからの最も高い除去速度）。
 # > 交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
 
-  {U,Bi,Pb,Tl}/Plasma         Blood              1000
-  {Po}/Plasma1                Blood              1000
-  {Po}/Plasma2                Blood              1000
-  {Po}/Plasma3                Blood              1000
-  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
-  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
+  {*}/Blood               Blood                     ---
+  {*}/Plasma              Blood                  1000
+  {Po}/Plasma1            Blood                  1000
+  {Po}/Plasma2            Blood                  1000
+  {Po}/Plasma3            Blood                  1000
+  {*}/RBC                 Blood                  1000
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
-  {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
-  {Pa,Th,Ac}/C-bone-V         C-bone-V              ---
-  {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Blood                 $(0.03 / 365)
+  {*}/Exch-T-bone-V       Blood                 $(0.18 / 365)
+  {*}/Noch-C-bone-V       C-bone-V                  ---
+  {*}/Noch-T-bone-V       T-bone-V                  ---
+  {*}/C-bone-V            C-bone-V                  ---
+  {*}/T-bone-V            T-bone-V                  ---
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Th}/ST0                    ST0                   ---
-  {Th}/ST1                    ST1                   ---
-  {Th}/ST2                    ST2                   ---
-  {^Th}/ST0                   Blood                 0.462
-  {^Th}/ST1                   Blood                 0.462
-  {^Th}/ST2                   Blood                 0.462
-  {*}/Other                   Blood                 0.462
+  {Th}/ST0                ST0                       ---
+  {Th}/ST1                ST1                       ---
+  {Th}/ST2                ST2                       ---
+  {^Th}/ST0               Blood                     0.462
+  {^Th}/ST1               Blood                     0.462
+  {^Th}/ST2               Blood                     0.462
+  {*}/Other               Blood                     0.462
 
 $endif

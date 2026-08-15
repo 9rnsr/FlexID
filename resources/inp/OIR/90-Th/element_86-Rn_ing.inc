@@ -112,36 +112,36 @@
 # > 生成された、または全身コンパートメントで生成された後に血液中に入るラドン、キセノン、
 # > またはクリプトンは、1000 d⁻¹の割合で体外に排出されます（呼気）。これは半減期1分に相当します。
 
-  {U,Bi,Pb,Tl}/Plasma         Blood              1000       # Publ.151 Annex.B
-  {Po}/Plasma1                Blood              1000       # Publ.151 Annex.B
-  {Po}/Plasma2                Blood              1000       # Publ.151 Annex.B
-  {Po}/Plasma3                Blood              1000       # Publ.151 Annex.B
-  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000       # Publ.151 Annex.B
-  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
+  {*}/Blood               Blood                     ---
+  {*}/Plasma              Blood                  1000       # Publ.151 Annex.B
+  {Po}/Plasma1            Blood                  1000       # Publ.151 Annex.B
+  {Po}/Plasma2            Blood                  1000       # Publ.151 Annex.B
+  {Po}/Plasma3            Blood                  1000       # Publ.151 Annex.B
+  {*}/RBC                 Blood                  1000       # Publ.151 Annex.B
 
-  {^Rn}/C-bone-S              Blood               100
-  {^Rn}/T-bone-S              Blood               100
-  {U,Ra,Pb}/Exch-C-bone-V     Blood                 1.5
-  {U,Ra,Pb}/Exch-T-bone-V     Blood                 1.5
-  {U,Ra,Pb}/Noch-C-bone-V     Blood                 0.36
-  {U,Ra,Pb}/Noch-T-bone-V     Blood                 0.36
-  {Pa,Th,Ac}/C-bone-V         Blood                 0.36
-  {Pa,Th,Ac}/T-bone-V         Blood                 0.36
+  {*}/C-bone-S            Blood                   100
+  {*}/T-bone-S            Blood                   100
+  {*}/Exch-C-bone-V       Blood                     1.5
+  {*}/Exch-T-bone-V       Blood                     1.5
+  {*}/Noch-C-bone-V       Blood                     0.36
+  {*}/Noch-T-bone-V       Blood                     0.36
+  {*}/C-bone-V            Blood                     0.36
+  {*}/T-bone-V            Blood                     0.36
 
-  {^Rn}/C-marrow              Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/T-marrow              Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Liver1                Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Liver2                Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Kidneys1              Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Kidneys2              Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Testes                Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Ovaries               Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Skin                  Blood         $(0.693 / (30/60/24))   # 半減期30分
-  {^Rn}/Spleen                Blood         $(0.693 / (30/60/24))   # 半減期30分
+  {*}/C-marrow            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/T-marrow            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Liver1              Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Liver2              Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Kidneys1            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Kidneys2            Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Testes              Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Ovaries             Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Skin                Blood             $(0.693 / (30/60/24))   # 半減期30分
+  {*}/Spleen              Blood             $(0.693 / (30/60/24))   # 半減期30分
 
-  {*}/ST0                     Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {*}/ST1                     Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {*}/ST2                     Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
-  {*}/Other                   Blood         $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {*}/ST0                 Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {*}/ST1                 Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {*}/ST2                 Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
+  {*}/Other               Blood             $(0.693 / (30/60/24))   # 半減期30分≒33.3 d⁻¹
 
-  Blood                       Exhaled            1000       # ≒半減期1分
+  Blood                   Exhaled                1000       # ≒半減期1分
