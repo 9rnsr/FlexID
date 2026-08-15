@@ -150,15 +150,15 @@ $if progeny
 # 最も高いものです。ウランのモデルに関してその帰属が不明確な骨体積区画（例：トリウムモデルにおける
 # 海綿骨または皮質骨の体積）で生成されるウランは、非交換性骨で生成されるものと仮定されます。
 
+  {*}/Blood               Plasma                 1000       # Publ.151 Annex.B
+  {Pu}/Blood0             Plasma                 1000       # Publ.151 Annex.B
+  {Pu}/Blood1             Plasma                 1000       # Publ.151 Annex.B
+  {Pu}/Blood2             Plasma                 1000       # Publ.151 Annex.B
   {*}/Plasma              Plasma                    ---
   {Po}/Plasma1            Plasma                 1000       # Publ.151 Annex.B
   {Po}/Plasma2            Plasma                 1000       # Publ.151 Annex.B
   {Po}/Plasma3            Plasma                 1000       # Publ.151 Annex.B
   {*}/RBC                 RBC                       ---
-  {Pu}/Blood0             Plasma                 1000       # Publ.151 Annex.B
-  {Pu}/Blood1             Plasma                 1000       # Publ.151 Annex.B
-  {Pu}/Blood2             Plasma                 1000       # Publ.151 Annex.B
-  {*}/Blood               Plasma                 1000       # Publ.151 Annex.B
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---

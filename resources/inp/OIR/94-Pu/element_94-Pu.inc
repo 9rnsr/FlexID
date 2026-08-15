@@ -192,15 +192,15 @@ $if progeny
 # > その元素の血液コンパートメント［複数の血液コンパートメントを持つプルトニウムの場合は
 # > Blood 1（表18.6参照）］へ移行すると仮定されます。
 
+  {*}/Blood               Blood1                 1000
+  {Pu}/Blood0             Blood1                 1000
+  {Pu}/Blood1             Blood1                    ---
+  {Pu}/Blood2             Blood2                    ---
   {*}/Plasma              Blood1                 1000
   {Po}/Plasma1            Blood1                 1000
   {Po}/Plasma2            Blood1                 1000
   {Po}/Plasma3            Blood1                 1000
   {*}/RBC                 Blood1                 1000
-  {Pu}/Blood0             Blood1                 1000
-  {Pu}/Blood1             Blood1                    ---
-  {Pu}/Blood2             Blood2                    ---
-  {*}/Blood               Blood1                 1000
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---

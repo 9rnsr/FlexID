@@ -145,15 +145,15 @@ $if progeny
 # > 移動するものと仮定されます。皮質骨または海綿骨の体積コンパートメントで生成された
 # > ポロニウムは、その骨の種類に応じた基準代謝速度で血漿2に移行するものと仮定されます。
 
+  {*}/Blood               Plasma2                1000
+  {Pu}/Blood0             Plasma2                1000
+  {Pu}/Blood1             Plasma2                1000
+  {Pu}/Blood2             Plasma2                1000
   {*}/Plasma              Plasma2                1000
   {Po}/Plasma1            Plasma1                   ---
   {Po}/Plasma2            Plasma2                   ---
   {Po}/Plasma3            Plasma3                   ---
   {*}/RBC                 RBC                       ---
-  {Pu}/Blood0             Plasma2                1000
-  {Pu}/Blood1             Plasma2                1000
-  {Pu}/Blood2             Plasma2                1000
-  {*}/Blood               Plasma2                1000
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---

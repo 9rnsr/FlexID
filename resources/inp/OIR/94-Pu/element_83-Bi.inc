@@ -165,15 +165,15 @@ $if progeny
 # > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
+  {*}/Blood               Plasma                 1000
+  {Pu}/Blood0             Plasma                 1000
+  {Pu}/Blood1             Plasma                 1000
+  {Pu}/Blood2             Plasma                 1000
   {*}/Plasma              Plasma                    ---
   {Po}/Plasma1            Plasma                 1000
   {Po}/Plasma2            Plasma                 1000
   {Po}/Plasma3            Plasma                 1000
   {*}/RBC                 RBC                       ---
-  {Pu}/Blood0             Plasma                 1000
-  {Pu}/Blood1             Plasma                 1000
-  {Pu}/Blood2             Plasma                 1000
-  {*}/Blood               Plasma                 1000
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---

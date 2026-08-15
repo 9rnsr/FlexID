@@ -146,15 +146,15 @@ $if progeny
 # > 軟部組織コンパートメントで生成された場合は6.98 d⁻¹です。6.98 d⁻¹という値は、
 # > ラジウムの特性モデルにおける他の軟部組織コンパートメントからの除去速度の最大値です。
 
+  {*}/Blood               Blood                     ---
+  {Pu}/Blood0             Blood                  1000
+  {Pu}/Blood1             Blood                  1000
+  {Pu}/Blood2             Blood                  1000
   {*}/Plasma              Blood                  1000
   {Po}/Plasma1            Blood                  1000
   {Po}/Plasma2            Blood                  1000
   {Po}/Plasma3            Blood                  1000
   {*}/RBC                 Blood                  1000
-  {Pu}/Blood0             Blood                  1000
-  {Pu}/Blood1             Blood                  1000
-  {Pu}/Blood2             Blood                  1000
-  {*}/Blood               Blood                     ---
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---

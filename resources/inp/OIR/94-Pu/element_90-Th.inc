@@ -153,15 +153,15 @@ $if progeny
 # > 場合は 0.462 d⁻¹です（トリウムモデルにおけるその他の軟部組織コンパートメントからの最も高い除去速度）。
 # > 交換可能な骨量コンパートメントで生成された場合は骨代謝速度です。
 
+  {*}/Blood               Blood                     ---
+  {Pu}/Blood0             Blood                  1000
+  {Pu}/Blood1             Blood                  1000
+  {Pu}/Blood2             Blood                  1000
   {*}/Plasma              Blood                  1000
   {Po}/Plasma1            Blood                  1000
   {Po}/Plasma2            Blood                  1000
   {Po}/Plasma3            Blood                  1000
   {*}/RBC                 Blood                  1000
-  {Pu}/Blood0             Blood                  1000
-  {Pu}/Blood1             Blood                  1000
-  {Pu}/Blood2             Blood                  1000
-  {*}/Blood               Blood                     ---
 
   {*}/C-bone-S            C-bone-S                  ---
   {*}/T-bone-S            T-bone-S                  ---
