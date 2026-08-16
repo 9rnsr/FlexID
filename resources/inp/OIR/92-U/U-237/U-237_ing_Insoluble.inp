@@ -1,0 +1,8 @@
+[title]
+U-237 Ingestion, Insoluble
+
+[nuclide]
+  U-237   Np-237  Pa-233  U-233   Th-229  Ra-225  Ac-225
+  Fr-221  At-217  Bi-213  Po-213  Tl-209  Pb-209
+
+[include:../common_92-U_ing_Insoluble.inc]

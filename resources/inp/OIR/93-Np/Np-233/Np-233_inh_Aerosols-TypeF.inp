@@ -1,0 +1,8 @@
+[title]
+Np-233 Inhalation, Aerosols Type F
+
+[nuclide]
+  Np-233  U-233   Pa-229  Th-229  Ra-225  Ac-225
+  Fr-221  At-217  Bi-213  Po-213  Tl-209  Pb-209
+
+[include:../common_93-Np_inh_Aerosols-TypeF.inc]

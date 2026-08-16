@@ -1,0 +1,8 @@
+[title]
+Pa-233 Inhalation, Aerosols Type S
+
+[nuclide]
+  Pa-233  U-233   Th-229  Ra-225  Ac-225  Fr-221
+  At-217  Bi-213  Po-213  Tl-209  Pb-209
+
+[include:../common_91-Pa_inh_Aerosols-TypeS.inc]

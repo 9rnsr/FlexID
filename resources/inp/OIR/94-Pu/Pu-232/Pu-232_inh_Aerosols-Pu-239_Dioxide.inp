@@ -1,0 +1,9 @@
+[title]
+Pu-232 Inhalation, Aerosols Pu-239 dioxide
+
+[nuclide]
+  Pu-232  Np-232  U-228   U-232
+  Th-228  Ra-224  Rn-220  Po-216  Pb-212  Bi-212
+  Th-224  Ra-220  Rn-216  Po-212  Tl-208
+
+[include:../common_94-Pu_inh_Aerosols-Pu-239_Dioxide.inc]

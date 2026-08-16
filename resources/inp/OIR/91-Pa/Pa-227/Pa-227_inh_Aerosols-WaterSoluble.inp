@@ -1,0 +1,8 @@
+[title]
+Pa-227 Inhalation, Aerosols WaterSoluble
+
+[nuclide]
+  Pa-227  Ac-223  Th-227  Fr-219  At-215  Ra-223
+  Rn-219  Po-215  Pb-211  Bi-211  Tl-207  Po-211
+
+[include:../common_91-Pa_inh_Aerosols-WaterSoluble.inc]

@@ -1,0 +1,9 @@
+[title]
+Cm-242 Inhalation, Aerosols Oxide,Nitrate,Chloride
+
+[nuclide]
+  Cm-242  Pu-238  U-234   Th-230  Ra-226  Rn-222
+  Po-218  Pb-214  At-218  Bi-214  Rn-218  Po-214
+  Tl-210  Pb-210  Bi-210  Po-210  Tl-206
+
+[include:../common_96-Cm_inh_Aerosols-Oxide,Nitrate,Chloride.inc]
