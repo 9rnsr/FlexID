@@ -137,8 +137,8 @@ $if progeny
   {Sr}/Noch-C-bone-V      Noch-C-bone-V             ---
   {Sr}/Noch-T-bone-V      Noch-T-bone-V             ---
 
-  {Y}/Liver0              Blood                     6
-  {Y}/Liver1              Blood                     6
+  {Y}/Liver0              Blood                 $(0.693 / 6)
+  {Y}/Liver1              Blood                 $(0.693 / 6)
   {Sr}/Liver              Liver                     ---
   {Y,Sr}/Kidneys          Kidneys                   ---
 
