@@ -1,0 +1,8 @@
+[title]
+U-230 Inhalation, Aerosols Intermediate Type F/M
+
+[nuclide]
+  U-230   Th-226  Ra-222  Rn-218  Po-214
+  Pb-210  Bi-210  Po-210  Tl-206
+
+[include:../common_92-U_inh_Aerosols-Intermediate-TypeF,M.inc]

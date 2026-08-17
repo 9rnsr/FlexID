@@ -1,0 +1,8 @@
+[title]
+U-236 Ingestion, Insoluble
+
+[nuclide]
+  U-236   Th-232  Ra-228  Ac-228  Th-228  Ra-224
+  Rn-220  Po-216  Pb-212  Bi-212  Po-212  Tl-208
+
+[include:../common_92-U_ing_Insoluble.inc]

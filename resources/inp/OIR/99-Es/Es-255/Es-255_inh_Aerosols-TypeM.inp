@@ -1,0 +1,10 @@
+[title]
+Es-255 Inhalation, Aerosols Type M
+
+[nuclide]
+  Es-255  Fm-255  Bk-251  Cf-251  Cm-247  Pu-243
+  Am-243  Np-239  Pu-239  U-235m  U-235   Th-231
+  Pa-231  Ac-227  Th-227  Fr-223  Ra-223  Rn-219
+  At-219  Bi-215  Po-215  Pb-211  Bi-211  Tl-207  Po-211
+
+[include:../common_99-Es_inh_Aerosols-TypeM.inc]

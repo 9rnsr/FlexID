@@ -50,6 +50,8 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
 # > (566) ... For a given element in this group, two compartments representing the
 # > skin and spleen are added to the explicitly identified source regions in the element's
@@ -69,13 +71,15 @@
   acc   Skin                  Skin
   acc   Spleen                Spleen
 
+$endif
+
 [{Ac}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
 
 # ICRP Publ.141 p.234 Table 18.9
-  Blood                   Liver1                    11.6
+  Blood                   Liver1                   11.6
   Blood                   T-bone-S                  3.49
   Blood                   C-bone-S                  3.49
   Blood                   Kidneys1                  0.466
@@ -84,8 +88,10 @@
   Blood                   RC-con                    0.303
   Blood                   Testes                    0.0082
   Blood                   Ovaries                   0.0026
-  Blood                   ST0                       10.0
- #Blood                   ST1                       1.67        # fix
+  Blood                   ST0                      10.0
+$if parent
+  Blood                   ST1                       1.67
+$endif
   Blood                   ST2                       0.466
   Liver1                  SI-conRe                  0.0006
   Liver1                  Liver2                    0.0225
@@ -107,6 +113,8 @@
   ST0                     Blood                     1.39
   ST1                     Blood                     0.0139
   ST2                     Blood                     1.9E-5
+
+$if progeny
 
 # ICRP Publ.141 p.235 Para.566 / アクチニド子孫元素としてのアクチニウム
 # > (566) ... These compartments are taken from the intermediate soft tissue
@@ -176,9 +184,10 @@
 #   血液からST1への沈着割合は、皮膚と脾臓に割り当てられた分を差し引くことになり、
 #     Blood → ST1      = 1.67 - 0.128286 - 0.042762 ≒ 1.498952
 
-  Blood                   ST1                   $(1.67 - 0.128286 - 0.128286/3)
   Blood                   Skin                  $(0.128286)
   Blood                   Spleen                $(0.128286 / 3)
+  Blood                   ST1                   $(1.67 - 0.128286 - 0.128286/3)
+
   Skin                    Blood                     0.0139      # ST1→Bloodの移行速度
   Spleen                  Blood                     0.0139      # ST1→Bloodの移行速度
 
@@ -190,11 +199,12 @@
 # > at the rate of transfer from the fast-turnover soft tissue compartment ST0 to
 # > blood if produced in a soft tissue compartment, and at the rate of bone turnover if
 # > produced in a bone volume compartment.
-# > (566) ... 元素がその特性モデルのコンパートメントと識別できないコンパートメントで生成される場合、
-# > 血液コンパートメントで生成された場合は1000 d⁻¹の速度で、軟組織コンパートメントで生成された場合は
-# > 回転の速い軟組織コンパートメントST0から血液への移行速度で、骨量コンパートメントで生成された
-# > 場合は骨代謝速度で、元素の血液コンパートメント [複数の血液コンパートメントを持つプルトニウムの
-# > 場合はBlood 1 (表 18.6 を参照)] に移行すると仮定されます。
+# > (566) ... もし元素が、その特性モデル上のコンパートメントと同一視できない
+# > コンパートメント内で生成された場合、血液コンパートメント内で生成された場合は1000 d⁻¹の
+# > 速度で、軟部組織コンパートメント内で生成された場合は代謝の早い軟部組織コンパートメント
+# > ST0から血液への移行速度で、骨体積コンパートメント内で生成された場合は骨代謝速度で、
+# > その元素の血液コンパートメント［複数の血液コンパートメントを持つプルトニウムの場合は
+# > Blood 1（表18.6参照）］へ移行すると仮定されます。
 
 # ICRP Publ.137 p.333 Para.714 / ラジウム子孫元素としてのアクチニウム
 # > (714) ... If actinium is produced in a
@@ -209,37 +219,39 @@
 # > 回転の速い軟部組織コンパートメントST0から血液への移行速度（1.386 d⁻¹）で、骨量コンパートメントで
 # > 生成された場合は骨代謝速度でアクチニウムの中心血液コンパートメントに移行すると仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Blood              1000
-  {Po}/Plasma1                Blood              1000
-  {Po}/Plasma2                Blood              1000
-  {Po}/Plasma3                Blood              1000
-  {U,Po,Bi,Pb,Tl}/RBC         Blood              1000
-  {Pa,Th,Ac,Ra,Rn}/Blood      Blood                 ---
+  {*}/Blood               Blood                     ---
+  {*}/Plasma              Blood                  1000
+  {Po}/Plasma1            Blood                  1000
+  {Po}/Plasma2            Blood                  1000
+  {Po}/Plasma3            Blood                  1000
+  {*}/RBC                 Blood                  1000
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Blood             $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Blood             $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     C-bone-V              ---
-  {U,Ra,Pb}/Noch-T-bone-V     T-bone-V              ---
-  {Pa,Th,Ac}/C-bone-V         C-bone-V              ---
-  {Pa,Th,Ac}/T-bone-V         T-bone-V              ---
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Blood                 $(0.03 / 365)
+  {*}/Exch-T-bone-V       Blood                 $(0.18 / 365)
+  {*}/Noch-C-bone-V       C-bone-V                  ---
+  {*}/Noch-T-bone-V       T-bone-V                  ---
+  {*}/C-bone-V            C-bone-V                  ---
+  {*}/T-bone-V            T-bone-V                  ---
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
-  {Ac}/ST0                    ST0                   ---
-  {Ac}/ST1                    ST1                   ---
-  {Ac}/ST2                    ST2                   ---
-  {^Ac}/ST0                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
-  {^Ac}/ST1                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
-  {^Ac}/ST2                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
-  {*}/Other                   Blood                 1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {Ac}/ST0                ST0                       ---
+  {Ac}/ST1                ST1                       ---
+  {Ac}/ST2                ST2                       ---
+  {^Ac}/ST0               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {^Ac}/ST1               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {^Ac}/ST2               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
+  {*}/Other               Blood                     1.39    # ≒1.386   # ST0→Bloodの移行速度
+
+$endif

@@ -56,6 +56,8 @@
   acc   ST1                   Other
   acc   ST2                   Other
 
+$if progeny
+
 # ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
 # > (483) ... The structure of the characteristic
 # > model for bismuth is modified by the addition of compartments
@@ -88,6 +90,8 @@
   acc   C-marrow              C-marrow
   acc   T-marrow              T-marrow
 
+$endif
+
 [{Bi}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
@@ -98,7 +102,9 @@
   Plasma                  RC-con                    4.0
   Plasma                  RBC                       0.5
   Plasma                  ST0                     300
- #Plasma                  ST1                       4.2         # fix(1)
+$if parent
+  Plasma                  ST1                       4.2
+$endif
   Plasma                  ST2                       1.3
   Plasma                  Liver1                   30
   Plasma                  Kidneys1                 30
@@ -117,6 +123,8 @@
   Kidneys2                Plasma                    0.139
   C-bone-S                Plasma                    0.0347
   T-bone-S                Plasma                    0.0347
+
+$if progeny
 
 # ICRP Publ.137 p.231 Para.483 / 鉛子孫元素としてのビスマス
 # > (483) ... Transfer coefficients for
@@ -139,13 +147,13 @@
 # > 移行係数は4.2 d⁻¹から3.576 d⁻¹に減少します。
 # > (3) 追加された各コンパートメントから血漿への割り当て移行係数は0.0347 d⁻¹です。 ...
 
- #Plasma                  RedMarrow                 0.3         # fix(2)
+ #Plasma                  RedMarrow                 0.3         # fix
   Plasma                  Skin                      0.3
   Plasma                  Spleen                    0.02
   Plasma                  Testes                    0.003
   Plasma                  Ovaries                   0.001
- #Plasma                  ST1                       3.576       # fix(2)
- #RedMarrow               Plasma                    0.0347      # fix(2)
+ #Plasma                  ST1                       3.576       # fix
+ #RedMarrow               Plasma                    0.0347      # fix
   Skin                    Plasma                    0.0347
   Spleen                  Plasma                    0.0347
   Testes                  Plasma                    0.0347
@@ -178,42 +186,44 @@
 # > 皮質骨の体積コンパートメントで生成されたビスマスは、その骨の種類に応じた基準代謝速度で
 # > 血漿に移行すると仮定されます。
 
-  {U,Bi,Pb,Tl}/Plasma         Plasma                ---
-  {Po}/Plasma1                Plasma             1000
-  {Po}/Plasma2                Plasma             1000
-  {Po}/Plasma3                Plasma             1000
-  {U,Po,Bi,Pb,Tl}/RBC         RBC                   ---
-  {Pa,Th,Ac,Ra,Rn}/Blood      Plasma             1000
+  {*}/Blood               Plasma                 1000
+  {*}/Plasma              Plasma                    ---
+  {Po}/Plasma1            Plasma                 1000
+  {Po}/Plasma2            Plasma                 1000
+  {Po}/Plasma3            Plasma                 1000
+  {*}/RBC                 RBC                       ---
 
-  {^Rn}/C-bone-S              C-bone-S              ---
-  {^Rn}/T-bone-S              T-bone-S              ---
-  {U,Ra,Pb}/Exch-C-bone-V     Plasma            $(0.03 / 365)
-  {U,Ra,Pb}/Exch-T-bone-V     Plasma            $(0.18 / 365)
-  {U,Ra,Pb}/Noch-C-bone-V     Plasma            $(0.03 / 365)
-  {U,Ra,Pb}/Noch-T-bone-V     Plasma            $(0.18 / 365)
-  {Pa,Th,Ac}/C-bone-V         Plasma            $(0.03 / 365)
-  {Pa,Th,Ac}/T-bone-V         Plasma            $(0.18 / 365)
+  {*}/C-bone-S            C-bone-S                  ---
+  {*}/T-bone-S            T-bone-S                  ---
+  {*}/Exch-C-bone-V       Plasma                $(0.03 / 365)
+  {*}/Exch-T-bone-V       Plasma                $(0.18 / 365)
+  {*}/Noch-C-bone-V       Plasma                $(0.03 / 365)
+  {*}/Noch-T-bone-V       Plasma                $(0.18 / 365)
+  {*}/C-bone-V            Plasma                $(0.03 / 365)
+  {*}/T-bone-V            Plasma                $(0.18 / 365)
 
-  {^Rn}/C-marrow              C-marrow              ---
-  {^Rn}/T-marrow              T-marrow              ---
-  {^Rn}/Liver1                Liver1                ---
-  {^Rn}/Liver2                Liver2                ---
-  {^Rn}/Kidneys1              Kidneys1              ---
-  {^Rn}/Kidneys2              Kidneys2              ---
-  {^Rn}/Testes                Testes                ---
-  {^Rn}/Ovaries               Ovaries               ---
-  {^Rn}/Skin                  Skin                  ---
-  {^Rn}/Spleen                Spleen                ---
+  {*}/C-marrow            C-marrow                  ---
+  {*}/T-marrow            T-marrow                  ---
+  {*}/Liver1              Liver1                    ---
+  {*}/Liver2              Liver2                    ---
+  {*}/Kidneys1            Kidneys1                  ---
+  {*}/Kidneys2            Kidneys2                  ---
+  {*}/Testes              Testes                    ---
+  {*}/Ovaries             Ovaries                   ---
+  {*}/Skin                Skin                      ---
+  {*}/Spleen              Spleen                    ---
 
 # 作成者注：
 #   Publ.137 Para.483には軟組織で生成されたビスマスの血液への移行速度についての記載がないため、
 #   ビスマスモデルにて軟組織から血漿へ移行する速度のうち最も大きなもの(ST0→Plasma, 66.54 d⁻¹)
 #   を採用する。
 
-  {Bi}/ST0                    ST0                   ---
-  {Bi}/ST1                    ST1                   ---
-  {Bi}/ST2                    ST2                   ---
-  {^Bi}/ST0                   Plasma               66.54
-  {^Bi}/ST1                   Plasma               66.54
-  {^Bi}/ST2                   Plasma               66.54
-  {*}/Other                   Plasma               66.54
+  {Bi}/ST0                ST0                       ---
+  {Bi}/ST1                ST1                       ---
+  {Bi}/ST2                ST2                       ---
+  {^Bi}/ST0               Plasma                   66.54
+  {^Bi}/ST1               Plasma                   66.54
+  {^Bi}/ST2               Plasma                   66.54
+  {*}/Other               Plasma                   66.54
+
+$endif

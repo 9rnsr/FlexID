@@ -1,0 +1,9 @@
+[title]
+Es-253 Inhalation, Aerosols Type F
+
+[nuclide]
+  Es-253  Bk-249  Cf-249  Am-245  Cm-245  Pu-241  Am-241
+  U-237   Np-237  Pa-233  U-233   Th-229  Ra-225  Ac-225
+  Fr-221  At-217  Bi-213  Po-213  Tl-209  Pb-209
+
+[include:../common_99-Es_inh_Aerosols-TypeF.inc]

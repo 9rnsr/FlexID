@@ -1,0 +1,8 @@
+[title]
+Cf-244 Ingestion
+
+[nuclide]
+  Cf-244  Cm-240  Pu-236  U-232   Th-228  Ra-224
+  Rn-220  Po-216  Pb-212  Bi-212  Po-212  Tl-208
+
+[include:../common_98-Cf_ing.inc]

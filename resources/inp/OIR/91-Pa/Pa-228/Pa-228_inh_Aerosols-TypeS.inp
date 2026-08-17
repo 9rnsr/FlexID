@@ -1,0 +1,8 @@
+[title]
+Pa-228 Inhalation, Aerosols Type S
+
+[nuclide]
+  Pa-228  Th-228  Ac-224  Ra-224  Rn-220  Po-216  Pb-212
+  Fr-220  At-216  Bi-212  Ra-220  Rn-216  Po-212  Tl-208
+
+[include:../common_91-Pa_inh_Aerosols-TypeS.inc]

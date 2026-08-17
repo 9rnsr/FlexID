@@ -1,0 +1,8 @@
+[title]
+Pu-236 Inhalation, Aerosols Dioxide 1-nm nanoparticles
+
+[nuclide]
+  Pu-236  U-232   Th-228  Ra-224  Rn-220
+  Po-216  Pb-212  Bi-212  Po-212  Tl-208
+
+[include:../common_94-Pu_inh_Aerosols-Dioxide-nanoparticles.inc]
