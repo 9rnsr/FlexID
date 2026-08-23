@@ -10,9 +10,9 @@ $else
 $endif
 
 
-[include:common_intake_inj.inc]
+[include:../share/common_intake_inj.inc]
 
-[include:common_HATM+UB.inc]
+[include:../share/common_HATM+UB.inc]
 
 [include:element_16-S_inorganic.inc]
 [include:element_17-Cl_inorganic.inc]

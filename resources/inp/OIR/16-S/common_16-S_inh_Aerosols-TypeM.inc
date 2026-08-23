@@ -13,15 +13,15 @@ $if parent
   ${S}/fA    = 0.2
   ${S}/fA_Re = fA_MaxValueOfIng     # footnote††
 $else
-  ${*}/fA    = fA_MaxValueOfIng
-  ${*}/fA_Re = fA_MaxValueOfIng
+  ${*}/fA    = fr * fA_MaxValueOfIng
+  ${*}/fA_Re =      fA_MaxValueOfIng
 $endif
 
 
-[include:common_intake_inh_Aerosols.inc]
+[include:../share/common_intake_inh_Aerosols.inc]
 
-[include:common_HRTM.inc]
-[include:common_HATM+UB.inc]
+[include:../share/common_HRTM.inc]
+[include:../share/common_HATM+UB.inc]
 
 [include:element_16-S_inorganic.inc]
 [include:element_17-Cl_inorganic.inc]
