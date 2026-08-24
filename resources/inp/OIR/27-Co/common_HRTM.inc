@@ -71,10 +71,11 @@
   ET1-S                   Environment               0.6
   ET1-S                   ET2-S                     1.5
 
-[{Co}:transfer]
+[{*}:transfer]
 
 # ICRP Publ.130 p.67 Fig.3.5(a)
 # ICRP Publ.130 p.68 Para.107
+# ICRP Publ.134 p.156 Table 8.2 footnote*
   ALV-F                   ALV-B                 $(      fb   * sr )
   INT-F                   INT-B                 $(      fb   * sr )
   bb-F                    bb-B                  $(      fb0  * sr )
@@ -118,66 +119,6 @@
   ETseq-S                 $Blood                $( (1 - fb0) * ss )
   LNET-S                  $Blood                $( (1 - fb0) * ss )
   LNTH-S                  $Blood                $( (1 - fb ) * ss )
-
-  ALV-B                   $Blood                $sb
-  INT-B                   $Blood                $sb
-  bb-B                    $Blood                $sb
-  bbseq-B                 $Blood                $sb
-  BB-B                    $Blood                $sb
-  BBseq-B                 $Blood                $sb
-  ET2-B                   $Blood                $sb
-  ETseq-B                 $Blood                $sb
-  LNET-B                  $Blood                $sb
-  LNTH-B                  $Blood                $sb
-
-
-[{^Co}:transfer]
-
-# ICRP Publ.130 p.67 Fig.3.5(a)
-# ICRP Publ.130 p.68 Para.107
-  ALV-F                   ALV-B                 $(      fb  * sr )
-  INT-F                   INT-B                 $(      fb  * sr )
-  bb-F                    bb-B                  $(      fb  * sr )
-  bbseq-F                 bbseq-B               $(      fb  * sr )
-  BB-F                    BB-B                  $(      fb  * sr )
-  BBseq-F                 BBseq-B               $(      fb  * sr )
-  ET2-F                   ET2-B                 $(      fb  * sr )
-  ETseq-F                 ETseq-B               $(      fb  * sr )
-  LNET-F                  LNET-B                $(      fb  * sr )
-  LNTH-F                  LNTH-B                $(      fb  * sr )
-
-  ALV-S                   ALV-B                 $(      fb  * ss )
-  INT-S                   INT-B                 $(      fb  * ss )
-  bb-S                    bb-B                  $(      fb  * ss )
-  bbseq-S                 bbseq-B               $(      fb  * ss )
-  BB-S                    BB-B                  $(      fb  * ss )
-  BBseq-S                 BBseq-B               $(      fb  * ss )
-  ET2-S                   ET2-B                 $(      fb  * ss )
-  ETseq-S                 ETseq-B               $(      fb  * ss )
-  LNET-S                  LNET-B                $(      fb  * ss )
-  LNTH-S                  LNTH-B                $(      fb  * ss )
-
-  ALV-F                   $Blood                $( (1 - fb) * sr )
-  INT-F                   $Blood                $( (1 - fb) * sr )
-  bb-F                    $Blood                $( (1 - fb) * sr )
-  bbseq-F                 $Blood                $( (1 - fb) * sr )
-  BB-F                    $Blood                $( (1 - fb) * sr )
-  BBseq-F                 $Blood                $( (1 - fb) * sr )
-  ET2-F                   $Blood                $( (1 - fb) * sr )
-  ETseq-F                 $Blood                $( (1 - fb) * sr )
-  LNET-F                  $Blood                $( (1 - fb) * sr )
-  LNTH-F                  $Blood                $( (1 - fb) * sr )
-
-  ALV-S                   $Blood                $( (1 - fb) * ss )
-  INT-S                   $Blood                $( (1 - fb) * ss )
-  bb-S                    $Blood                $( (1 - fb) * ss )
-  bbseq-S                 $Blood                $( (1 - fb) * ss )
-  BB-S                    $Blood                $( (1 - fb) * ss )
-  BBseq-S                 $Blood                $( (1 - fb) * ss )
-  ET2-S                   $Blood                $( (1 - fb) * ss )
-  ETseq-S                 $Blood                $( (1 - fb) * ss )
-  LNET-S                  $Blood                $( (1 - fb) * ss )
-  LNTH-S                  $Blood                $( (1 - fb) * ss )
 
   ALV-B                   $Blood                $sb
   INT-B                   $Blood                $sb
