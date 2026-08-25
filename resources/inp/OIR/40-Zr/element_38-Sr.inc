@@ -141,8 +141,8 @@ $if progeny
   {Zr}/C-bone-V           Blood                 $( 3% / 365)        # 明示されていないため、骨代謝回転率と判断
   {Zr}/T-bone-V           Blood                 $(18% / 365)        # 明示されていないため、骨代謝回転率と判断
 
-  {Zr}/Liver0             Blood                     6
-  {Zr}/Liver1             Blood                     6
+  {Zr}/Liver0             Blood                 $(0.693 / 6)
+  {Zr}/Liver1             Blood                 $(0.693 / 6)
   {Zr}/Kidneys            Kidneys                   ---
 
   {Zr}/ST0                Blood                     2.5
