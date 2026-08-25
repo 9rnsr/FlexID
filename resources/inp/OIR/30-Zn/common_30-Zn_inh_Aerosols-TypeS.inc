@@ -13,14 +13,14 @@ $if parent
   ${Zn}/fA    = 0.005
   ${Zn}/fA_Re = fA_MaxValueOfIng    # footnote¶
 $else
-  ${^Cu}/fA    = fr * fA_MaxValueOfIng
-  ${^Cu}/fA_Re =      fA_MaxValueOfIng
+  ${*}/fA     = fr * fA_MaxValueOfIng
+  ${*}/fA_Re  =      fA_MaxValueOfIng
 $endif
 
-[include:common_intake_inh.inc]
+[include:../share/common_intake_inh_Aerosols.inc]
 
-[include:common_HRTM.inc]
-[include:common_HATM+UB.inc]
+[include:../share/common_HRTM.inc]
+[include:../share/common_HATM+UB.inc]
 
 [include:element_31-Ga.inc]
 [include:element_30-Zn.inc]
