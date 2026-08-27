@@ -17,7 +17,7 @@ $else
   ${^Rn}/fA_Re =      fA_MaxValueOfIng
 $endif
 
-[include:../share/common_intake_inh-Aerosols.inc]
+[include:../share/common_intake_inh_Aerosols.inc]
 
 [include:../share/common_HRTM.inc]
 [include:../share/common_HATM+UB.inc]
