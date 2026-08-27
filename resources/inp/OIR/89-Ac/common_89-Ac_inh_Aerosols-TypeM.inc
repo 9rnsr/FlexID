@@ -17,16 +17,16 @@ $else
   ${^Rn}/fA_Re =      fA_MaxValueOfIng
 $endif
 
-[include:common_intake_inh.inc]
+[include:../share/common_intake_inh-Aerosols.inc]
 
-[include:common_HRTM.inc]
-[include:common_HATM+UB.inc]
+[include:../share/common_HRTM.inc]
+[include:../share/common_HATM+UB.inc]
 
 [include:element_90-Th.inc]
 [include:element_89-Ac.inc]
 [include:element_88-Ra.inc]
 [include:element_87-Fr.inc]
-[include:element_86-Rn_inh.inc]
+[include:element_86-Rn.inc]
 [include:element_85-At.inc]
 [include:element_84-Po.inc]
 [include:element_83-Bi.inc]
