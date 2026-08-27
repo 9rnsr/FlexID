@@ -40,7 +40,7 @@
   exc   Environment           ---
 
 
-[{^Rn}:transfer]
+[{^He,Ne,Ar,Kr,Xe,Rn}:transfer]
 #-----------------------+---------------------+--------------------
 # From                  | To                  | Transfer Coef.[/d]
 #-----------------------+---------------------+--------------------
@@ -127,6 +127,68 @@
   ETseq-B                 $Blood                $sb
   LNET-B                  $Blood                $sb
   LNTH-B                  $Blood                $sb
+
+
+# ICRP Publ.130 p.45 Para.38
+# > (38) Noble gases produced in compartments of the respiratory tract and in the
+# > alimentary tract models by radioactive decay are assumed to escape from these
+# > compartments directly to the environment at a rate of 100 d⁻¹, without transfer to
+# > the blood compartment and without transfer between compartments of respiratory
+# > tract and alimentary tract models. It is assumed that progeny of such noble gases
+# > formed within the body follow the rules stated in Para. 37.
+# > (38) 呼吸器系および消化管系モデルのコンパートメント内で放射性崩壊により生成される
+# > 希ガスは、これらのコンパートメントから100 d⁻¹の速度で直接環境中へ放出され、
+# > 血液コンパートメントへの移行や、呼吸器系および消化管系モデルのコンパートメント間での
+# > 移行は起こらないものと仮定されます。体内において生成されるこれら希ガスの娘核種に
+# > ついては、Para.37に述べた規則に従うものと仮定されます。
+
+# ICRP Publ.130 Para.129
+# > (129) For calculation purposes, the assumption that noble gases, including radon,
+# > that are formed as progeny within the respiratory tract escape from the body at a rate
+# > of 100 d⁻¹is applied in this series of reports.
+# > (129) 計算のために、この一連の報告書では、呼吸器系内で子孫核種として生成される
+# > ラドンを含む希ガスが100 d⁻¹の速度で体から排出されるという仮定を適用しています。
+
+[{He,Ne,Ar,Kr,Xe,Rn}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+  ET1-F                   Exhaled                 100
+  ET2-F                   Exhaled                 100
+  ETseq-F                 Exhaled                 100
+  LNET-F                  Exhaled                 100
+  BB-F                    Exhaled                 100
+  BBseq-F                 Exhaled                 100
+  bb-F                    Exhaled                 100
+  bbseq-F                 Exhaled                 100
+  ALV-F                   Exhaled                 100
+  INT-F                   Exhaled                 100
+  LNTH-F                  Exhaled                 100
+
+  ET1-S                   Exhaled                 100
+  ET2-S                   Exhaled                 100
+  ETseq-S                 Exhaled                 100
+  LNET-S                  Exhaled                 100
+  BB-S                    Exhaled                 100
+  BBseq-S                 Exhaled                 100
+  bb-S                    Exhaled                 100
+  bbseq-S                 Exhaled                 100
+  ALV-S                   Exhaled                 100
+  INT-S                   Exhaled                 100
+  LNTH-S                  Exhaled                 100
+
+  ET2-B                   Exhaled                 100
+  ETseq-B                 Exhaled                 100
+  LNET-B                  Exhaled                 100
+  BB-B                    Exhaled                 100
+  BBseq-B                 Exhaled                 100
+  bb-B                    Exhaled                 100
+  bbseq-B                 Exhaled                 100
+  ALV-B                   Exhaled                 100
+  INT-B                   Exhaled                 100
+  LNTH-B                  Exhaled                 100
+
 
 [{*}:transfer]
 #-----------------------+---------------------+--------------------

@@ -36,7 +36,7 @@ $endif
 [include:element_89-Ac.inc]
 [include:element_88-Ra.inc]
 [include:element_87-Fr.inc]
-[include:element_86-Rn_inh.inc]
+[include:element_86-Rn.inc]
 [include:element_85-At.inc]
 [include:element_84-Po.inc]
 [include:element_83-Bi.inc]
