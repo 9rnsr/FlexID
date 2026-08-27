@@ -6,10 +6,10 @@
 # > (484) ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
 # > 血漿2に割り当てられます。 ...
 
-  ${Po}/Blood               = 'Plasma2'
+  ${Po}/Blood = 'Plasma2'
 
-  ${U,Bi,Pb,Tl}/Blood       = 'Plasma'
-  ${Pa,Th,Ac,Ra,Rn}/Blood   = 'Blood'
+  ${U,Bi,Pb,Tl}/Blood = 'Plasma'
+  ${Pa,Th,Ac,Ra,Fr,Rn,At}/Blood = 'Blood'
 
   ${U}/fA_MaxValueOfIng  = 0.02         # ICRP Publ.137 p.409 Table 15.2  / Ingested materials, Soluble forms
   ${Pa}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.251 Table 20.2  / Ingested materials, All forms

@@ -17,7 +17,7 @@ $else
 
 $endif
 
-  ${Cm,Am,Np,Pa,Th,Ac,Ra,Rn}/Blood  = 'Blood'
+  ${Cm,Am,Np,Pa,Th,Ac,Ra,Fr,Rn,At}/Blood  = 'Blood'
 
 # ICRP Publ.137 p.231 Para.484 / 鉛子孫元素としてのポロニウム
 # > (484) ... polonium as a progeny transferred to blood from either the respiratory

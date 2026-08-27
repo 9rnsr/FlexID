@@ -1,6 +1,6 @@
 [parameter]
 
-  ${Pa,Th,Ac,Ra,Rn}/Blood  = 'Blood'
+  ${Pa,Th,Ac,Ra,Fr,Rn,At}/Blood  = 'Blood'
 
   ${U,Bi,Pb,Tl}/Blood   = 'Plasma'
 

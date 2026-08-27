@@ -36,5 +36,23 @@
 # > 放射性核種は、全身の組織や体液中の生成部位において崩壊すると仮定されます。
 
 [{Fr}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Blood                 Blood
+
 
 [{Fr}:transfer]
+#-----------------------+---------------------+--------------------
+# From                  | To                  | Transfer Coef.[/d]
+#-----------------------+---------------------+--------------------
+
+  {*}/Blood               Blood                     ---
+  {Pu}/Blood0             Blood                  1000
+  {Pu}/Blood1             Blood                  1000
+  {Pu}/Blood2             Blood                  1000
+  {*}/Plasma              Blood                  1000
+  {Po}/Plasma1            Blood                  1000
+  {Po}/Plasma2            Blood                  1000
+  {Po}/Plasma3            Blood                  1000
+  {*}/RBC                 Blood                  1000
