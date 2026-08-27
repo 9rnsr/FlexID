@@ -3,10 +3,16 @@ namespace FlexID;
 [TestClass]
 public class InputReadTests
 {
+    private static readonly string InputOirDir;
+    private static readonly string InputEirDir;
+
     private static readonly string[] RetentionExpects;
 
     static InputReadTests()
     {
+        InputOirDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
+        InputEirDir = Path.Combine(AppResource.BaseDir, @"inp\EIR");
+
         var expectDir = Path.Combine(AppResource.BaseDir, @"expect");
         RetentionExpects = Directory.EnumerateFiles(expectDir, "*.dat", SearchOption.AllDirectories)
             .Select(path =>
@@ -21,6 +27,8 @@ public class InputReadTests
     [DynamicData(nameof(GetOirInuts))]
     public void Test_OIR(string inputPath)
     {
+        inputPath = Path.Combine(InputOirDir, inputPath);
+
         var target = Path.GetFileNameWithoutExtension(inputPath);
         var nuclide = target.Split('_')[0];
 
@@ -36,15 +44,16 @@ public class InputReadTests
 
     public static IEnumerable<object[]> GetOirInuts()
     {
-        var inputDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
-        return Directory.EnumerateFiles(inputDir, "*.inp", SearchOption.AllDirectories)
-            .Select(path => new object[] { path });
+        return Directory.EnumerateFiles(InputOirDir, "*.inp", SearchOption.AllDirectories)
+            .Select(path => new object[] { Path.GetRelativePath(InputOirDir, path) });
     }
 
     [TestMethod]
     [DynamicData(nameof(GetEirInuts))]
     public void Test_EIR(string inputPath)
     {
+        inputPath = Path.Combine(InputEirDir, inputPath);
+
         var target = Path.GetFileNameWithoutExtension(inputPath);
         var nuclide = target.Split('_')[0];
 
@@ -57,8 +66,7 @@ public class InputReadTests
 
     public static IEnumerable<object[]> GetEirInuts()
     {
-        var inputDir = Path.Combine(AppResource.BaseDir, @"inp\EIR");
-        return Directory.EnumerateFiles(inputDir, "*.inp", SearchOption.AllDirectories)
-            .Select(path => new object[] { path });
+        return Directory.EnumerateFiles(InputEirDir, "*.inp", SearchOption.AllDirectories)
+            .Select(path => new object[] { Path.GetRelativePath(InputEirDir, path) });
     }
 }

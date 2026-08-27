@@ -1,6 +1,6 @@
 [parameter]
 
-  ${Am,Np,Pa,Th,Ac,Ra,Rn}/Blood  = 'Blood'
+  ${Am,Np,Pa,Th,Ac,Ra,Fr,Rn,At}/Blood  = 'Blood'
 
 # ICRP Publ.141 p.236 Para.567
 # > (567) The model for plutonium as a progeny is further modified by removing the
