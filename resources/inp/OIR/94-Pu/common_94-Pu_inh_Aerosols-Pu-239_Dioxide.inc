@@ -10,11 +10,11 @@
   $sb = 0           # footnote*
 
 $if parent
-  ${Pu}/fA     = 2E-6
-  ${Pu}/fA_Re  = fA_MaxValueOfIng   # footnote§
+  ${Pu}/fA    = 2E-6
+  ${Pu}/fA_Re = fA_MaxValueOfIng   # footnote§
 $else
-  ${^Rn}/fA    = fr * fA_MaxValueOfIng
-  ${^Rn}/fA_Re =      fA_MaxValueOfIng
+  ${*}/fA     = fr * fA_MaxValueOfIng
+  ${*}/fA_Re  =      fA_MaxValueOfIng
 $endif
 
 [include:../share/common_intake_inh_Aerosols.inc]

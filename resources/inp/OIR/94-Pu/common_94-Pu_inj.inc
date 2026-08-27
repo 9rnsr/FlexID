@@ -2,11 +2,11 @@
 
 [parameter]
 $if parent
-  ${Pu}/fA     = fA_MaxValueOfIng
-  ${Pu}/fA_Re  = fA_MaxValueOfIng   # footnote§
+  ${Pu}/fA    = fA_MaxValueOfIng
+  ${Pu}/fA_Re = fA_MaxValueOfIng   # footnote§
 $else
-  ${^Rn}/fA    = fA_MaxValueOfIng
-  ${^Rn}/fA_Re = fA_MaxValueOfIng
+  ${*}/fA     = fA_MaxValueOfIng
+  ${*}/fA_Re  = fA_MaxValueOfIng
 $endif
 
 [include:../share/common_intake_inj.inc]
