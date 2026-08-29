@@ -129,8 +129,8 @@ $if progeny
   {Tc}/T-bone-V           T-bone-V                  ---
 
   {Mo}/Liver              Liver2                    ---
-  {Mo}/UrinaryPath        Blood                     0.462
-  {Mo}/OtherKidneyTis     Blood                     0.462
+  {Mo}/Kidneys1           Blood                     0.462
+  {Mo}/Kidneys2           Blood                     0.462
   {Tc}/S-glands           S-glands                  ---
   {Tc}/Thyroid1           Thyroid1                  ---
   {Tc}/Thyroid2           Thyroid2                  ---

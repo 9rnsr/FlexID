@@ -80,8 +80,8 @@ $if progeny
   {Nb}/T-bone-V           T-bone-V                  ---
 
   {Mo}/Liver              Blood1                    1.39
-  {Mo}/UrinaryPath        Blood1                    1.39
-  {Mo}/OtherKidneyTis     Blood1                    1.39
+  {Mo}/Kidneys1           Blood1                    1.39
+  {Mo}/Kidneys2           Blood1                    1.39
   {Nb}/Liver0             Liver0                    ---
   {Nb}/Liver1             Liver1                    ---
   {Nb}/Kidneys            Kidneys                   ---
