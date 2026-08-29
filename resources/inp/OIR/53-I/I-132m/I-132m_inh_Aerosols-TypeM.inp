@@ -307,6 +307,7 @@ $endif
   I-132m/ALV-S            ALV-S                     ---
   I-132m/INT-S            INT-S                     ---
   I-132m/LNTH-S           LNTH-S                    ---
+  I-132m/Environment      Environment               ---
 
   I-132m/Oralcavity       Oralcavity                ---
   I-132m/OralcavityRe     OralcavityRe              ---

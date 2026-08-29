@@ -270,6 +270,9 @@ $endif
   I-135/Oesophagus-sRe    Oesophagus-s              ---
   I-135/St-conRe          St-con                    ---
 
+  Xe-135m/Blood           Blood                     ---
+  Xe-135m/Exhaled         Exhaled                   --
+
 # ICRP Publ.130 Para.38
   Oralcavity              Exhaled                 100
   Oesophagus-f            Exhaled                 100
