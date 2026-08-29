@@ -79,17 +79,11 @@ $endif
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
-  acc   St-wall               St-wall
   acc   St-con                St-cont
-  acc   St-conRe              St-cont
-  acc   SI-wall               SI-wall
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
-  acc   RC-wall               RC-wall
   acc   RC-con                RC-cont
-  acc   LC-wall               LC-wall
   acc   LC-con                LC-cont
-  acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
   acc   UB-con                UB-cont
@@ -97,6 +91,14 @@ $endif
 
   acc   Plasma                Blood
   acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   St-conRe              St-cont
+  acc   St-wall               St-wall
+  acc   SI-wall               SI-wall
+  acc   RC-wall               RC-wall
+  acc   LC-wall               LC-wall
+  acc   RS-wall               RS-wall
   acc   Liver                 Liver
   acc   Kidneys               Kidneys
   acc   Spleen                Spleen
@@ -109,8 +111,6 @@ $endif
   acc   Lung-Tis              Lung-Tis
   acc   R-marrow              R-marrow
   acc   Cartilage             Cartilage
-  acc   C-bone-S              C-bone-S
-  acc   T-bone-S              T-bone-S
   acc   Other1                Other
   acc   Other2                Other
   exc   Excreta(sweat)        ---
@@ -295,15 +295,21 @@ $endif
   exc   Urine                 ---
 
   acc   Plasma                Blood
-  acc   Ht-wall               Ht-wall
-  acc   Liver                 Liver
-  acc   Kidneys               Kidneys
-  acc   SkeletalMuscle        Muscle
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Exch-C-bone-V         C-bone-V
+  acc   Exch-T-bone-V         T-bone-V
+  acc   Noch-C-bone-V         C-bone-V
+  acc   Noch-T-bone-V         T-bone-V
   acc   St-wall               St-wall
   acc   SI-wall               SI-wall
   acc   RC-wall               RC-wall
   acc   LC-wall               LC-wall
   acc   RS-wall               RS-wall
+  acc   Ht-wall               Ht-wall
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   SkeletalMuscle        Muscle
   acc   Spleen                Spleen
   acc   Pancreas              Pancreas
   acc   Brain                 Brain
@@ -311,14 +317,8 @@ $endif
   acc   Skin                  Skin
   acc   Lung-Tis              Lung-Tis
   acc   Adipose               Adipose
-  acc   T-bone-S              T-bone-S
-  acc   C-bone-S              C-bone-S
-  acc   Other                 Other
   acc   Cartilage             Cartilage
-  acc   Exch-T-bone-V         T-bone-V
-  acc   Exch-C-bone-V         C-bone-V
-  acc   Noch-T-bone-V         T-bone-V
-  acc   Noch-C-bone-V         C-bone-V
+  acc   Other                 Other
 
 [Ba-137m:transfer]
 #-----------------------+---------------------+--------------------
