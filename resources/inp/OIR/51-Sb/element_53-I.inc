@@ -157,7 +157,7 @@ $if progeny
   {Sb}/C-bone-S           Blood1                  200
   {Sb}/T-bone-S           Blood1                  200
   {Sb}/C-bone-V           Blood1                $(0.03 / 365)
-  {Sb}/T-bone-V           Blood1                $(0.03 / 365)		# TODO
+  {Sb}/T-bone-V           Blood1                $(0.18 / 365)
 
   {Sb}/Thyroid            Blood1                   36
   {Sb}/Liver1             Blood1                  100
