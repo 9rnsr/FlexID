@@ -61,23 +61,23 @@ $if progeny
 
   {Te}/C-bone-S           Blood                   100
   {Te}/T-bone-S           Blood                   100
-  {Te}/C-bone-V           Blood                   100	# TODO: 0.36 d⁻¹の間違い？
-  {Te}/T-bone-V           Blood                   100	# TODO: 0.36 d⁻¹の間違い？
+  {Te}/C-bone-V           Blood                     0.36
+  {Te}/T-bone-V           Blood                     0.36
 
-  {I}/S-glands            Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
+  {I}/S-glands            Blood                 $(0.693 / (20/60/24))   # 半減期20分
   {I}/OralcavityRe        Oralcavity                ---
   {I}/Oesophagus-sRe      Oesophagus-s              ---
   {I}/St-conRe            St-con                    ---
-  {I}/St-wall             Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {Te}/Thyroid            Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {I}/Thyroid1            Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {I}/Thyroid2            Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {Te}/Liver              Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {I}/Liver1              Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {I}/Liver2              Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {Te}/Kidneys            Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {I}/Kidneys1            Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
-  {I}/Kidneys2            Blood                  1000	# 軟部組織コンパートメントなので半減期20分？
+  {I}/St-wall             Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {Te}/Thyroid            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {I}/Thyroid1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {I}/Thyroid2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {Te}/Liver              Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {I}/Liver1              Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {I}/Liver2              Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {Te}/Kidneys            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {I}/Kidneys1            Blood                 $(0.693 / (20/60/24))   # 半減期20分
+  {I}/Kidneys2            Blood                 $(0.693 / (20/60/24))   # 半減期20分
 
   {Te}/ST                 Blood                 $(0.693 / (20/60/24))   # 半減期20分
   {I}/Other1              Blood                  1000
