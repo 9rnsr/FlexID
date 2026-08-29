@@ -11,9 +11,9 @@ $else
   ${*}/fA_Re  = fA_MaxValueOfIng
 $endif
 
-[include:common_intake_ing.inc]
+[include:../share/common_intake_ing.inc]
 
-[include:common_HATM+UB.inc]
+[include:../share/common_HATM+UB.inc]
 
 [include:element_84-Po.inc]
 [include:element_83-Bi.inc]
