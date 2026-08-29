@@ -10,14 +10,14 @@
   $sb = 0           # footnote*
 
 $if parent
-  ${Am}/fA     = 1E-4
-  ${Am}/fA_Re  = fA_MaxValueOfIng   # footnote**
+  ${Am}/fA    = 1E-4
+  ${Am}/fA_Re = fA_MaxValueOfIng   # footnote**
 $else
-  ${^Rn}/fA    = fr * fA_MaxValueOfIng
-  ${^Rn}/fA_Re =      fA_MaxValueOfIng
+  ${*}/fA     = fr * fA_MaxValueOfIng
+  ${*}/fA_Re  =      fA_MaxValueOfIng
 $endif
 
-[include:../share/common_intake_inh-Aerosols.inc]
+[include:../share/common_intake_inh_Aerosols.inc]
 
 [include:../share/common_HRTM.inc]
 [include:../share/common_HATM+UB.inc]

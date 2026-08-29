@@ -4,11 +4,11 @@
   # ICRP Publ.141 p.262 Table 21.2 / Ingested materials, All compounds
 
 $if parent
-  ${Np}/fA     = 5E-4
-  ${Np}/fA_Re  = fA_MaxValueOfIng   # footnote**
+  ${Np}/fA    = 5E-4
+  ${Np}/fA_Re = fA_MaxValueOfIng   # footnote**
 $else
-  ${^Rn}/fA    = fA_MaxValueOfIng
-  ${^Rn}/fA_Re = fA_MaxValueOfIng
+  ${*}/fA     = fA_MaxValueOfIng
+  ${*}/fA_Re  = fA_MaxValueOfIng
 $endif
 
 [include:../share/common_intake_ing.inc]
