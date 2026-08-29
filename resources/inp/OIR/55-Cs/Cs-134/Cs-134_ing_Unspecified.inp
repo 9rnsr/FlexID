@@ -27,17 +27,11 @@ $endif
   acc   Oralcavity            O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
-  acc   St-wall               St-wall
   acc   St-con                St-cont
-  acc   St-conRe              St-cont
-  acc   SI-wall               SI-wall
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
-  acc   RC-wall               RC-wall
   acc   RC-con                RC-cont
-  acc   LC-wall               LC-wall
   acc   LC-con                LC-cont
-  acc   RS-wall               RS-wall
   acc   RS-con                RS-cont
   exc   Faeces                ---
   acc   UB-con                UB-cont
@@ -45,6 +39,14 @@ $endif
 
   acc   Plasma                Blood
   acc   RBC                   Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   St-conRe              St-cont
+  acc   St-wall               St-wall
+  acc   SI-wall               SI-wall
+  acc   RC-wall               RC-wall
+  acc   LC-wall               LC-wall
+  acc   RS-wall               RS-wall
   acc   Liver                 Liver
   acc   Kidneys               Kidneys
   acc   Spleen                Spleen
@@ -57,8 +59,6 @@ $endif
   acc   Lung-Tis              Lung-Tis
   acc   R-marrow              R-marrow
   acc   Cartilage             Cartilage
-  acc   C-bone-S              C-bone-S
-  acc   T-bone-S              T-bone-S
   acc   Other1                Other
   acc   Other2                Other
   exc   Excreta(sweat)        ---
