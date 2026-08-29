@@ -288,6 +288,7 @@ $endif
   Sb-128m/ALV-S           ALV-S                     ---
   Sb-128m/INT-S           INT-S                     ---
   Sb-128m/LNTH-S          LNTH-S                    ---
+  Sb-128m/Environment     Environment               ---
 
   Sb-128m/Oralcavity      Oralcavity                ---
   Sb-128m/Oesophagus-f    Oesophagus-f              ---

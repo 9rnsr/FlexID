@@ -288,6 +288,7 @@ $endif
   Sb-124n/ALV-S           ALV-S                     ---
   Sb-124n/INT-S           INT-S                     ---
   Sb-124n/LNTH-S          LNTH-S                    ---
+  Sb-124n/Environment     Environment               ---
 
   Sb-124n/Oralcavity      Oralcavity                ---
   Sb-124n/Oesophagus-f    Oesophagus-f              ---
@@ -495,6 +496,7 @@ $endif
   Sb-124n/ALV-S           ALV-S                     ---
   Sb-124n/INT-S           INT-S                     ---
   Sb-124n/LNTH-S          LNTH-S                    ---
+  Sb-124n/Environment     Environment               ---
 
   Sb-124n/Oralcavity      Oralcavity                ---
   Sb-124n/Oesophagus-f    Oesophagus-f              ---
