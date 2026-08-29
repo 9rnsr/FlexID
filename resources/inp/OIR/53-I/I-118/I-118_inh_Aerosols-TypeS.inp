@@ -669,7 +669,7 @@ $endif
   I-118/Other4            Plasma                    0.693
 
   Te-118/Blood1           Plasma                    ---
-  Te-118/Blood2           Plasma                    ---
+  Te-118/Blood2           Plasma                 1000
   Te-118/C-bone-S         C-bone-S                  ---
   Te-118/C-bone-V         C-bone-V                  ---
   Te-118/T-bone-S         T-bone-S                  ---

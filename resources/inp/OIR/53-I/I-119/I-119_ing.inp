@@ -488,7 +488,7 @@ $endif
   I-119/Other4            Plasma                    0.693
 
   Te-119m/Blood1          Plasma                    ---
-  Te-119m/Blood2          Plasma                    ---
+  Te-119m/Blood2          Plasma                 1000
   Te-119m/C-bone-S        C-bone-S                  ---
   Te-119m/C-bone-V        C-bone-V                  ---
   Te-119m/T-bone-S        T-bone-S                  ---
