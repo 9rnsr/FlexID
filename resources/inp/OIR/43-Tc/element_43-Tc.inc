@@ -2,18 +2,17 @@
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
-  acc   OralcavityRe          O-cavity
-  acc   Oesophagus-sRe        Oesophag-s
-  acc   St-wall               St-wall
-  acc   St-conRe              St-cont
-  acc   RC-wall               RC-wall
-
   acc   Blood                 Blood
   acc   C-bone-S              C-bone-S
   acc   T-bone-S              T-bone-S
   acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
   acc   S-glands              S-glands
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-conRe              St-cont
+  acc   St-wall               St-wall
+  acc   RC-wall               RC-wall
   acc   Thyroid1              Thyroid       # fast turnover
   acc   Thyroid2              Thyroid       # slow turnover
   acc   Liver1                Liver         # fast turnover
