@@ -11,7 +11,8 @@ $if parent
 $else
   ${Ba}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.168 Table 7.2 / Ingested materials, Soluble forms
 
-  $fA = fA_MaxValueOfIng
+  $fA    = fA_MaxValueOfIng
+  $fA_Re = fA_MaxValueOfIng
 $endif
 
 
@@ -79,12 +80,12 @@ $endif
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
   St-conRe                SI-conRe                 20.57
-  SI-conRe                RC-con                    6
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
@@ -167,6 +168,7 @@ $endif
   acc   Oesophagus-s          Oesophag-s
   acc   St-con                St-cont
   acc   SI-con                SI-cont
+  acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
   acc   LC-con                LC-cont
   acc   RS-con                RS-cont
@@ -212,7 +214,7 @@ $endif
   Cs-137/St-con           St-con                    ---
   Cs-137/St-conRe         St-con                    ---
   Cs-137/SI-con           SI-con                    ---
-  Cs-137/SI-conRe         SI-con                    ---
+  Cs-137/SI-conRe         SI-conRe                  ---
   Cs-137/RC-con           RC-con                    ---
   Cs-137/LC-con           LC-con                    ---
   Cs-137/RS-con           RS-con                    ---
@@ -231,12 +233,14 @@ $endif
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
-  SI-con                  Plasma                $(fA * 6 / (1 - fA))
+  SI-con                  Plasma                $(fA    * 6 / (1 - fA   ))
+  SI-conRe                Plasma                $(fA_Re * 6 / (1 - fA_Re))
 
 # ICRP Publ.130 p.85 Para.172
   UB-con                  Urine                    12
