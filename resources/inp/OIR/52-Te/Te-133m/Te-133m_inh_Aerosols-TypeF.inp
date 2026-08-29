@@ -1046,6 +1046,9 @@ $endif
   I-133/Oesophagus-sRe    Oesophagus-s              ---
   I-133/St-conRe          St-con                    ---
 
+  Xe-133m/Blood           Blood                     ---
+  Xe-133m/Exhaled         Exhaled                   ---
+
 # ICRP Publ.130 Para.38
   ET1-F                   Exhaled                 100
   ET2-F                   Exhaled                 100
