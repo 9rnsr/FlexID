@@ -40,11 +40,11 @@ $endif
   acc   Blood1                Blood         # plasma
   acc   Blood2                Blood         # red blood cells
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
-  acc   Liver                 Liver
   acc   Thyroid               Thyroid
+  acc   Liver                 Liver
   acc   Kidneys               Kidneys
   acc   ST                    Other
 

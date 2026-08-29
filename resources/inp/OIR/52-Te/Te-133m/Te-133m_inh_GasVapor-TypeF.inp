@@ -82,11 +82,11 @@ $endif
   acc   Blood1                Blood         # plasma
   acc   Blood2                Blood         # red blood cells
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
-  acc   Liver                 Liver
   acc   Thyroid               Thyroid
+  acc   Liver                 Liver
   acc   Kidneys               Kidneys
   acc   ST                    Other
 
@@ -228,11 +228,11 @@ $endif
   acc   Blood1                Blood         # plasma
   acc   Blood2                Blood         # red blood cells
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
-  acc   Liver                 Liver
   acc   Thyroid               Thyroid
+  acc   Liver                 Liver
   acc   Kidneys               Kidneys
   acc   ST                    Other
 
@@ -417,12 +417,9 @@ $endif
   exc   Environment           ---
 
   acc   Oralcavity            O-cavity
-  acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
-  acc   Oesophagus-sRe        Oesophag-s
   acc   St-con                St-cont
-  acc   St-conRe              St-cont
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
@@ -434,14 +431,17 @@ $endif
 
   acc   Blood1                Blood         # inorganic iodine in blood
   acc   Blood2                Blood         #   organic iodine in blood
+  acc   S-glands              S-glands
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-conRe              St-cont
+  acc   St-wall               St-wall
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Kidneys1              Kidneys
   acc   Kidneys2              Kidneys
-  acc   Thyroid1              Thyroid
-  acc   Thyroid2              Thyroid
-  acc   S-glands              S-glands
-  acc   St-wall               St-wall
  #acc   Other1                Other
  #acc   Other2                Other
  #acc   Other3                Other
@@ -623,6 +623,7 @@ $endif
   Oesophagus-s            St-con                 2160
   St-con                  SI-con                   20.57
   SI-con                  RC-con                    6
+  SI-conRe                RC-con                    6
   RC-con                  LC-con                    2
   LC-con                  RS-con                    2
   RS-con                  Faeces                    2
@@ -633,7 +634,6 @@ $endif
   OralcavityRe            Oesophagus-sRe          720
   Oesophagus-sRe          St-conRe               2160
   St-conRe                SI-conRe                 20.57
-  SI-conRe                RC-con                    6
 
 # λ(SI->Blood) = fA * λ(SI->RC) / (1 - fA)
   SI-con                  Blood1                $(fA    * 6 / (1 - fA   ))
