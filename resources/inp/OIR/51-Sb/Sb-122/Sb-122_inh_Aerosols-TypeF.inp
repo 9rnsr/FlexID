@@ -88,12 +88,12 @@ $endif
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
+  acc   Thyroid               Thyroid
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   Thyroid               Thyroid
   acc   Kidneys               Kidneys
   acc   ST0                   Other
   acc   ST1                   Other

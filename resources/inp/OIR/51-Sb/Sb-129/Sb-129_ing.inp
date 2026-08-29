@@ -46,12 +46,12 @@ $endif
   acc   Plasma                Blood
   acc   RBC                   Blood
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
+  acc   Thyroid               Thyroid
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   Thyroid               Thyroid
   acc   Kidneys               Kidneys
   acc   ST0                   Other
   acc   ST1                   Other
@@ -130,11 +130,11 @@ $endif
   acc   Blood1                Blood         # plasma
   acc   Blood2                Blood         # red blood cells
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
-  acc   Liver                 Liver
   acc   Thyroid               Thyroid
+  acc   Liver                 Liver
   acc   Kidneys               Kidneys
   acc   ST                    Other
 
@@ -244,11 +244,11 @@ $endif
   acc   Blood1                Blood         # plasma
   acc   Blood2                Blood         # red blood cells
   acc   C-bone-S              C-bone-S
-  acc   C-bone-V              C-bone-V
   acc   T-bone-S              T-bone-S
+  acc   C-bone-V              C-bone-V
   acc   T-bone-V              T-bone-V
-  acc   Liver                 Liver
   acc   Thyroid               Thyroid
+  acc   Liver                 Liver
   acc   Kidneys               Kidneys
   acc   ST                    Other
 
@@ -343,12 +343,9 @@ $endif
 # Func| Compartment         | Source Region
 #-----+---------------------+---------------
   acc   Oralcavity            O-cavity
-  acc   OralcavityRe          O-cavity
   acc   Oesophagus-f          Oesophag-f
   acc   Oesophagus-s          Oesophag-s
-  acc   Oesophagus-sRe        Oesophag-s
   acc   St-con                St-cont
-  acc   St-conRe              St-cont
   acc   SI-con                SI-cont
   acc   SI-conRe              SI-cont
   acc   RC-con                RC-cont
@@ -360,14 +357,17 @@ $endif
 
   acc   Blood1                Blood         # inorganic iodine in blood
   acc   Blood2                Blood         #   organic iodine in blood
+  acc   S-glands              S-glands
+  acc   OralcavityRe          O-cavity
+  acc   Oesophagus-sRe        Oesophag-s
+  acc   St-conRe              St-cont
+  acc   St-wall               St-wall
+  acc   Thyroid1              Thyroid
+  acc   Thyroid2              Thyroid
   acc   Liver1                Liver
   acc   Liver2                Liver
   acc   Kidneys1              Kidneys
   acc   Kidneys2              Kidneys
-  acc   Thyroid1              Thyroid
-  acc   Thyroid2              Thyroid
-  acc   S-glands              S-glands
-  acc   St-wall               St-wall
  #acc   Other1                Other
  #acc   Other2                Other
  #acc   Other3                Other
