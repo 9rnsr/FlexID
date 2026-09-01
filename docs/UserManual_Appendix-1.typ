@@ -1,22 +1,14 @@
 #import "common.typ": *
+#show: style
 
 //#set enum(numbering: "①")
 
-//#show enum.item: it => {
-//  if it.body.has("children") { it } else { it }
-//}
-
-// #maketitle(
-//   title: "添付資料1 「体内残留放射能の計算方法」",
-//   authors: "HARA, Kenji",
-//   //abstract: [
-//   //  内部被ばく線量評価コードFlexID (Flexible code for Internal Dosimetry)の
-//   //  ユーザーマニュアル
-//   //],
-// )
-
 #outline()
 #pagebreak()
+
+#maketitle(
+  title: "添付資料1 「体内残留放射能の計算方法」",
+)
 
 = FlexIDの体内残留放射能の計算方法
 
@@ -113,12 +105,12 @@
     )
   ]
 
-  FlexIDの計算処理フローチャートを下図に示す。
+  FlexIDの計算処理フローチャートを 図@calc-flow に示す。
 
   #figure(
     image("images/Figure_A1-4.png", height: 70%),
     caption: "FlexIDの計算処理フロー",
-  )
+  ) <calc-flow>
 
 = 集合した臓器・組織の残留放射能の計算
 

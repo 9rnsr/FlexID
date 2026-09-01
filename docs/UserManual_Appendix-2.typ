@@ -1,22 +1,14 @@
 #import "common.typ": *
+#show: style
 
 //#set enum(numbering: "①")
 
-//#show enum.item: it => {
-//  if it.body.has("children") { it } else { it }
-//}
-
-// #maketitle(
-//   title: "添付資料2 「等価線量・預託実効線量の計算方法」",
-//   authors: "HARA, Kenji",
-//   //abstract: [
-//   //  内部被ばく線量評価コードFlexID (Flexible code for Internal Dosimetry)の
-//   //  ユーザーマニュアル
-//   //],
-// )
-
 #outline()
 #pagebreak()
+
+#maketitle(
+  title: "添付資料2 「等価線量・預託実効線量の計算方法」",
+)
 
 = 預託線量の計算
 

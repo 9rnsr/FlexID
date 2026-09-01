@@ -1,29 +1,24 @@
 #import "common.typ": *
+#show: style
 
 #set enum(numbering: "①")
 
-//#show enum.item: it => {
-//  if it.body.has("children") { it } else { it }
-//}
-
 = はじめに
-
 本書は、ICRP2007年勧告に基づく内部被ばく線量評価コードFlexID（Flexible code for Internal Dosimetry）のユーザーマニュアルである。FlexIDは、ICRP2007年勧告に基づく体内動態モデルを臓器・組織ごとに組合せ、放射性核種の人間の体内での移行を計算し、子孫核種も含めた体内動態、及び線量評価を行う。入力データの変更だけで体内動態モデルの組合せや移行係数等を変更でき、ICRPの体内動態モデルの変更に迅速かつ容易に対応可能な汎用コードである。
 
 
 = 動作環境
-
 プログラムの動作環境を以下に示す。
-
 - Windows 11以降
 
 
 = 導入方法
-
 FlexIDフォルダを任意の場所にコピーすることでFlexIDプログラムを導入できる。以下にFlexIDフォルダの構成を示す。
 
 ```
 FlexID
+  ┣ FlexID.exe（残留放射能・線量計算プログラム：CLI用）
+  ┣ FlexUI.exe（残留放射能・線量計算プログラム：GUI用）
   ┣ inp
   ┃  ┣ OIR
   ┃  ┃  ┗ 元素ごとの職業人（OIR）に対する作成済みインプットファイル
@@ -31,7 +26,6 @@ FlexID
   ┃     ┗ 元素ごとの公衆の構成員（EIR）に対する作成済みインプットファイル
   ┣ expect 
   ┃  ┗ OIRに対する残留放射能と預託線量の期待値データ
-  ┃
   ┣ lib
   ┃  ┣ OIR
   ┃  ┃  ┗ 元素ごとのOIRに対する組織加重係数データ
@@ -39,19 +33,13 @@ FlexID
   ┃  ┃  ┗ 元素ごとのEIRに対する組織加重係数データやSEEファイル
   ┃  ┗ TimeMesh
   ┃     ┗ 計算時間と出力時間を定義するタイムメッシュファイル
-  ┃
-  ┣ license
-  ┃     ┗ 添付データの再配布に関する許諾など
-  ┃
-  ┣ FlexID.exe（残留放射能・線量計算プログラム：CLI用）
-  ┗ FlexUI.exe（残留放射能・線量計算プログラム：GUI用）
+  ┗ license
+        ┗ 添付データの再配布に関する許諾など
 ```
 
 
 = 主な機能
-
 FlexID の主な機能を以下に示す。
-
 - 臓器／組織ごとの残留・積算放射能量の計算
   （#link("UserManual_Appendix-1.typ")[添付資料1] 参照）
 
@@ -70,7 +58,7 @@ FlexID の主な機能を以下に示す。
 `FlexUI.exe`をダブルクリックする。
 
 #figure(
-  image("images/Figure_1.png", width: 70%),
+  image("images/Figure_1.png", width: 80%),
   caption: "入力画面",
 )
 
@@ -83,23 +71,24 @@ FlexID の主な機能を以下に示す。
 == OIR計算実行画面 <oir-calc>
 
 #figure(
-  image("images/Figure_1.png", width: 70%),
+  image("images/Figure_1.png", width: 100%),
   caption: "OIR計算実行画面",
 )
 
 新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
 
-+ 一覧から計算対象のインプットをチェックボックスで選択する。
+#pagebreak()
++ 計算対象とするインプットを一覧からチェックボックスで選択する。
 
   #figure(
-    image("images/OIR/Select_Sr-90.png", width: 70%),
+    image("images/OIR/Select_Sr-90.png", width: 100%),
     caption: "チェックボックスによる計算対象インプットの選択",
   )
 
-  - 上部左側のドロップダウン`Elements ...`では、元素によるインプットのフィルタリングが可能。
+  - 上部左側のドロップダウン`Elements ...`では、元素による一覧のフィルタリングが可能。
 
     #figure(
-      pad(left:1cm, image("images/OIR/Elements.png", width: 80%)),
+      image("images/OIR/Elements.png", width: 100%),
       caption: "元素記号によるフィルタリング",
     )
 
@@ -113,8 +102,15 @@ FlexID の主な機能を以下に示す。
   - 上部右側のテキストボックス`Search Filter`では、インプットのタイトルテキストに対する正規表現でのフィルタリングが可能。
 
     #figure(
-      image("images/OIR/SearchFilter.png", width: 70%),
+      image("images/OIR/SearchFilter.png", width: 100%),
       caption: "タイトルテキストに対する正規表現でのフィルタリング",
+    )
+
+  - 左上のチェックボックスで、一覧に表示されている全てのインプットの選択状態を切り替えることが可能。
+
+    #figure(
+      image("images/OIR/Select_All.png", width: 100%),
+      caption: "全てのインプットを一括選択する",
     )
 
 //+ 子孫核種の考慮の有無を選択する。
