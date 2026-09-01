@@ -95,10 +95,10 @@
 
 - 放射能$N$の計算
 
-  $ frac(dif N, dif t) &= A - (lambda + beta) dot.c N \
+  $ frac(dif N, dif t) &= A - (lambda + beta) dot N \
 
-    N &= N_0 dot.c          exp{-(lambda + beta) dot.c t} +
-         A   dot.c frac(1 - exp{-(lambda + beta) dot.c t}, lambda + beta) $
+    N &= N_0 dot          exp{-(lambda + beta) dot t} +
+         A   dot frac(1 - exp{-(lambda + beta) dot t}, lambda + beta) $
 
   ここで、
 
@@ -106,7 +106,7 @@
     #table(
       columns: 2,
       align: (center, left),
-      [式],       [意味],
+      table.header([式], [意味]),
       [$N_0$],    [当該時間メッシュにおける初期放射能 \[Bq\]],
       [$lambda$], [崩壊定数 \[/d\]],
       [$beta$],   [流出放射能 \[Bq/d\]],
@@ -116,15 +116,15 @@
 - 時間積分放射能$Q$の計算
 
   $ Q &= integral_0^T  N_i dif t \
-      &= N_0 dot.c           frac(1 - exp{ -(lambda + beta) dot.c T }, lambda + beta)
-       + A   dot.c frac( T - frac(1 - exp{ -(lambda + beta) dot.c T }, lambda + beta), lambda + beta)
+      &= N_0 dot           frac(1 - exp{ -(lambda + beta) dot T }, lambda + beta)
+       + A   dot frac( T - frac(1 - exp{ -(lambda + beta) dot T }, lambda + beta), lambda + beta)
   $
 
 - 時間平均放射能$overline(N)$の計算
 
   $ overline(N) &= Q_i / T \
-                &= N_0 dot.c          frac(1 - exp{ -(lambda + beta) dot.c T }, (lambda + beta) dot.c T)
-                 + A   dot.c frac(1 - frac(1 - exp{ -(lambda + beta) dot.c T }, (lambda + beta) dot.c T), lambda + beta)
+                &= N_0 dot          frac(1 - exp{ -(lambda + beta) dot T }, (lambda + beta) dot T)
+                 + A   dot frac(1 - frac(1 - exp{ -(lambda + beta) dot T }, (lambda + beta) dot T), lambda + beta)
   $
 
   ここで、
@@ -133,7 +133,7 @@
     #table(
       columns: 2,
       align: (center, left),
-      [式],  [意味],
+      table.header([式], [意味]),
       [$T$], [時間メッシュインターバル \[d\]],
     )
   ]
