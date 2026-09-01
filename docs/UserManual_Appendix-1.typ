@@ -49,31 +49,31 @@
 
 == 残留放射能計算方法の概要
 
-1. 各臓器等を機能毎に分類し、その分類に基づき計算機能（入力（摂取：仮想ノードである摂取ノードにのみ設定可能）、混合、蓄積）を作成。その計算機能を組み合わせることで体内挙動モデルを形成する。
++ 各臓器等を機能毎に分類し、その分類に基づき計算機能（混合、蓄積、排出）を作成。その計算機能を組み合わせることで体内挙動モデルを形成する。
 
-2. 計算は時間を分割し、先ず親核種について各臓器等の放射能が収束するまで繰り返し計算を行う。これを時間分割について行う。次に子孫核種について順次同様の収束計算を実施する。
++ 計算は時間を分割し、先ず親核種について各臓器等の放射能が収束するまで繰り返し計算を行う。これを時間分割について行う。次に子孫核種について順次同様の収束計算を実施する。
+
+  #figure(
+    image("images/Figure_A1-1.png", width: 80%),
+    caption: "",
+  )
+
+  臓器1,2は計算機能1を、臓器3は計算機能2を使用する。
+
+  臓器3から臓器2へ入力があるため、収束計算を行う。
+
+  機能：混合、蓄積（流入、流出、蓄積）、排出
+
++ 各計算機能は次図のように入力と出力に分けて取り扱う。子孫核種も同様に取り扱う。（子孫核種への移行も臓器等の間での移行として取り扱う。）
 
     #figure(
-      image("images/Figure_A1-1.png"),
+      image("images/Figure_A1-2.png", width: 55%),
       caption: "",
     )
 
-    臓器1，2は計算機能1を、臓器3は計算機能2を使用する。
++ 核種により体内での挙動が異なる場合の取り扱い
 
-    臓器3から臓器2へ入力があるため、収束計算を行う。
-
-    機能：混合、蓄積（流入、流出、蓄積）、排出
-
-3. 各計算機能は次図のように入力と出力に分けて取り扱う。子孫核種も同様に取り扱う。（子孫核種への移行も臓器等の間での移行として取り扱う。）
-
-    #figure(
-      image("images/Figure_A1-2.png"),
-      caption: "",
-    )
-
-1. 核種により体内での挙動が異なる場合の取扱
-
- 親核種と子孫核種で挙動が異なる場合（例えば、Te-131⇒I-131）は、核種の分類によりその流出先を指定することで対応する。
+  親核種と子孫核種で挙動が異なる場合（例えば、Te-131⇒I-131）は、核種の分類によりその流出先を指定することで対応する。
 
 
 == 基本計算式
@@ -86,36 +86,99 @@
 
 - 蓄積機能における前提条件
 
-    #figure(
-      image("images/Figure_A1-3.png"),
-      caption: "",
-    )
+  #figure(
+    image("images/Figure_A1-3.png", width: 80%),
+    caption: "蓄積機能",
+  )
 
-    流入放射能（$A$ \[Bq/d\]）は時間メッシュ期間中に一定であると仮定する。
+  流入放射能（$A$ \[Bq/d\]）は時間メッシュ期間中に一定であると仮定する。
 
 - 放射能$N$の計算
 
-  $frac(d N, d t) = A - (lambda + beta) dot.c N $
+  $ frac(dif N, dif t) &= A - (lambda + beta) dot.c N \
 
-  $N = A dot.c frac(1 - exp(-(lambda + beta) dot.c t), lambda + beta) +
-        N_0 dot.c exp(-(lambda + beta) dot.c t) $
- 
+    N &= N_0 dot.c          exp{-(lambda + beta) dot.c t} +
+         A   dot.c frac(1 - exp{-(lambda + beta) dot.c t}, lambda + beta) $
+
   ここで、
 
-  #table(
-    columns: 2,
-    [式], [意味],
-    [$lambda$], [崩壊定数 \[/d\]],
-    [$beta$],   [流出放射能 \[Bq/d\]],
-    [$N_0$],    [当該時間メッシュにおける初期放射能 \[Bq\]],
-  )
+  #align(center)[
+    #table(
+      columns: 2,
+      align: (center, left),
+      [式],       [意味],
+      [$N_0$],    [当該時間メッシュにおける初期放射能 \[Bq\]],
+      [$lambda$], [崩壊定数 \[/d\]],
+      [$beta$],   [流出放射能 \[Bq/d\]],
+    )
+  ]
 
 - 時間積分放射能$Q$の計算
 
-// $$\begin{align*}
-//     Q &= \int\limits_0^T N_i\ \mathrm{d}t \\
-//       &= N_0 \cdot            \frac{1 - \exp{\{ -(\lambda + \beta) \cdot T \}}}{\lambda + \beta}
-//        + A   \cdot \frac{ T - \frac{1 - \exp{\{ -(\lambda + \beta) \cdot T \}}}{\lambda + \beta} }{\lambda + \beta}
-//   \end{align*}$$
+  $ Q &= integral_0^T  N_i dif t \
+      &= N_0 dot.c           frac(1 - exp{ -(lambda + beta) dot.c T }, lambda + beta)
+       + A   dot.c frac( T - frac(1 - exp{ -(lambda + beta) dot.c T }, lambda + beta), lambda + beta)
+  $
 
 - 時間平均放射能$overline(N)$の計算
+
+  $ overline(N) &= Q_i / T \
+                &= N_0 dot.c          frac(1 - exp{ -(lambda + beta) dot.c T }, (lambda + beta) dot.c T)
+                 + A   dot.c frac(1 - frac(1 - exp{ -(lambda + beta) dot.c T }, (lambda + beta) dot.c T), lambda + beta)
+  $
+
+  ここで、
+
+  #align(center)[
+    #table(
+      columns: 2,
+      align: (center, left),
+      [式],  [意味],
+      [$T$], [時間メッシュインターバル \[d\]],
+    )
+  ]
+
+  FlexIDの計算処理フローチャートを下図に示す。
+
+  #figure(
+    image("images/Figure_A1-4.png", height: 70%),
+    caption: "FlexIDの計算処理フロー",
+  )
+
+= 2. 集合した臓器・組織の残留放射能の計算
+
+ICRP Electronic Annex OIR Data Viewerで出力される「Whole Body」(全身)、「Alimentaryt Tract」(消化管)、「Lungs」(肺)、「Skeleton」(骨格)、「Liver」(肝臓)、「Thyroid」(甲状腺)の残留放射能データと比較可能な値を算出するための手法について示す。
+なおここで示した "Blood fraction" については、OIR Data ViewerのHelpに記載されている。
+
+- 「Whole Body」(全身)
+
+    核種毎に、機能として`acc`が設定された各コンパートメンの残留放射能を合算した数値を出力する。
+
+- 「Blood」(血液、輸送コンパートメント)
+
+    核種毎に、線源領域として`Blood`が設定されたコンパートメントの残留放射能を合算した数値を出力する。
+
+- 「Alimentary Tract」(消化管)
+
+    核種毎に、線源領域として`St-cont`、`St-wall`、`SI-cont`、`SI-wall`、`RC-cont`、`RC-wall`、`LC-cont`、`LC-wall`、`RS-cont`、`RS-wall`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.07`を掛けたものを加算した数値を出力する。
+
+- 「Lungs」(肺)
+
+    核種毎に、線源領域として`Bronchi`、`Bronchi-b`、`Bronchi-q`、`Brchiole`、`Brchiole-b`、`Brchiole-q`、`ALV`、`LN-Th`、`Lung-Tis`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.125`を掛けたものを加算した数値を出力する。
+
+- 「Skeleton」(骨格)
+
+    核種毎に、線源領域として`C-bone-S`、`C-bone-V`、`T-bone-S`、`T-bone-V`、`C-marrow`、`T-marrow`、`R-marrow`、`Y-marrow`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.07`を掛けたものを加算した数値を出力する。
+
+- 「Liver」(肝臓)
+
+    核種毎に、線源領域として`Liver`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.1`を掛けたものを加算した数値を出力する。
+
+- 「Thyroid」(甲状腺)
+
+    核種毎に、線源領域として`Thyroid`
+    が設定されたコンパートメントの残留放射能を合算し、これに「Blood」(血液)の残留放射能にBlood fractionとして`0.0006`を掛けたものを加算した数値を出力する。
