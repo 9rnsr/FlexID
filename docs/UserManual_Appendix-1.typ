@@ -1,29 +1,4 @@
-#import "@preview/js:0.1.3": *
-
-#show: js.with(
-  lang: "ja",
-  sansfont: "Harano Aji Gothic",//sansfont: "Microsoft Sans Serif", // or "Helvetica", "Source Sans Pro", "Arial", ...
-  seriffont-cjk: "Harano Aji Mincho",
-  sansfont-cjk: "Harano Aji Gothic",
-)
-
-// ページの余白を設定
-#set page(margin: (x: 20mm, y: 20mm))
-
-// 図の下に空行を挿入する
-#show figure: it => {
-  if it.kind == image { [ #it #v(1em) ] } else { it }
-}
-
-// ラベルから「番号 タイトル」のリンクを作成する
-#let chapref(label) = context {
-  let h = query(label).first()
-  let num = numbering(
-    h.numbering,
-    ..counter(heading).at(h.location())
-  )
-  link(h.location())[ 「#num #h.body」 ]
-}
+#import "common.typ": *
 
 //#set enum(numbering: "①")
 
@@ -31,14 +6,14 @@
 //  if it.body.has("children") { it } else { it }
 //}
 
-#maketitle(
-  title: "添付資料1 「体内残留放射能の計算方法」",
-  authors: "HARA, Kenji",
-  //abstract: [
-  //  内部被ばく線量評価コードFlexID (Flexible code for Internal Dosimetry)の
-  //  ユーザーマニュアル
-  //],
-)
+// #maketitle(
+//   title: "添付資料1 「体内残留放射能の計算方法」",
+//   authors: "HARA, Kenji",
+//   //abstract: [
+//   //  内部被ばく線量評価コードFlexID (Flexible code for Internal Dosimetry)の
+//   //  ユーザーマニュアル
+//   //],
+// )
 
 #outline()
 #pagebreak()
@@ -145,7 +120,7 @@
     caption: "FlexIDの計算処理フロー",
   )
 
-= 2. 集合した臓器・組織の残留放射能の計算
+= 集合した臓器・組織の残留放射能の計算
 
 ICRP Electronic Annex OIR Data Viewerで出力される「Whole Body」(全身)、「Alimentaryt Tract」(消化管)、「Lungs」(肺)、「Skeleton」(骨格)、「Liver」(肝臓)、「Thyroid」(甲状腺)の残留放射能データと比較可能な値を算出するための手法について示す。
 なおここで示した "Blood fraction" については、OIR Data ViewerのHelpに記載されている。
