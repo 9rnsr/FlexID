@@ -1,11 +1,5 @@
 #import "common.typ": *
-
-#show: js.with(
-  lang: "ja",
-  sansfont: "Harano Aji Gothic",//sansfont: "Microsoft Sans Serif", // or "Helvetica", "Source Sans Pro", "Arial", ...
-  seriffont-cjk: "Harano Aji Mincho",
-  sansfont-cjk: "Harano Aji Gothic",
-)
+#show: style
 
 #maketitle(
   title: "FlexID ユーザーマニュアル",
