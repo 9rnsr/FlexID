@@ -49,7 +49,7 @@
 
 標的領域$T$の預託等価線量（$H_("T")(delta t)$）\[Sv\]は、S–coefficient \[MeV/kg/nt\]を用いて以下のように計算した。
 
-$ H_("T")(Delta t) = sum_"S" U_("S")(Delta t) dot.c text("S–coefficient")("T" ← "S") dot.c f(r_"T", "T") dot.c C $
+$ H_("T")(Delta t) = sum_"S" U_("S")(Delta t) dot "S–coefficient"("T" ← "S") dot f(r_"T", "T") dot C $
 
 ここで、
 
@@ -57,21 +57,21 @@ $ H_("T")(Delta t) = sum_"S" U_("S")(Delta t) dot.c text("S–coefficient")("T" 
     table(
       columns: 2,
       align: (center, left),
-      [式],                 [意味],
+      table.header([式], [意味]),
       [$U_("S")(Delta t)$], [摂取した放射性物質が、預託期間$Delta t$の間に線源領域$"S"$で壊変する総数],
       [$f(r_"T", "T")$],    [標的組織の部分的な重量（ICRP Publ.133 Table2.3）],
       [$C$],                [MeV/kgからGy(J/kg)への換算係数（$1.60218×10^(-13)$ \[J/MeV\]）],
     )
   )
 
-ここで使用する$text("S–coefficient")("T" ← "S")$について、線源領域の集合$"S"$は、コンパートメントモデル図で明確にされていない「その他の組織」からの寄与を計算するための線源領域$text("Other")$を含んでいる。$text("S–coefficient")("T" ← text("Other"))$を含めたS係数の計算方法については[添付資料3](UserManual_Appendix-3.md) を参照。
+ここで使用する$"S–coefficient"("T" ← "S")$について、線源領域の集合$"S"$は、コンパートメントモデル図で明確にされていない「その他の組織」からの寄与を計算するための線源領域$"Other"$を含んでいる。$"S–coefficient"("T" ← "Other")$を含めたS係数の計算方法については#link("UserManual_Appendix-3.md")[添付資料3] を参照。
 
 
 == 預託実効線量の計算方法
 
 預託実効線量$E(Delta t)$ \[Sv\]は、預託等価線量$H_("T")(Delta t)$を用いて以下のように計算した。
 
-$ E(Delta t) = sum_"T" H_("T")(Delta t) dot.c w_"T" $
+$ E(Delta t) = sum_"T" H_("T")(Delta t) dot w_"T" $
 
 ここで、
 
@@ -79,8 +79,8 @@ $ E(Delta t) = sum_"T" H_("T")(Delta t) dot.c w_"T" $
     table(
       columns: 2,
       align: (center, left),
-      [式],      [意味],
-      [$w_"T"$], [組織加重係数 \[-\]（ICRP Publ.103 Table3データを使用 ※2）]
+      table.header([式], [意味]),
+      [$w_"T"$], [組織加重係数 \[-\]（ICRP Publ.103 Table 3 のデータを使用 ※2）]
     ),
   )
 
