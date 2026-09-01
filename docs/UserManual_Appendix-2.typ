@@ -1,29 +1,4 @@
-#import "@preview/js:0.1.3": *
-
-#show: js.with(
-  lang: "ja",
-  sansfont: "Harano Aji Gothic",//sansfont: "Microsoft Sans Serif", // or "Helvetica", "Source Sans Pro", "Arial", ...
-  seriffont-cjk: "Harano Aji Mincho",
-  sansfont-cjk: "Harano Aji Gothic",
-)
-
-// ページの余白を設定
-#set page(margin: (x: 20mm, y: 20mm))
-
-// 図の下に空行を挿入する
-#show figure: it => {
-  if it.kind == image { [ #it #v(1em) ] } else { [ #it #v(1em) ] }
-}
-
-// ラベルから「番号 タイトル」のリンクを作成する
-#let chapref(label) = context {
-  let h = query(label).first()
-  let num = numbering(
-    h.numbering,
-    ..counter(heading).at(h.location())
-  )
-  link(h.location())[ 「#num #h.body」 ]
-}
+#import "common.typ": *
 
 //#set enum(numbering: "①")
 
@@ -31,14 +6,14 @@
 //  if it.body.has("children") { it } else { it }
 //}
 
-#maketitle(
-  title: "添付資料2 「等価線量・預託実効線量の計算方法」",
-  authors: "HARA, Kenji",
-  //abstract: [
-  //  内部被ばく線量評価コードFlexID (Flexible code for Internal Dosimetry)の
-  //  ユーザーマニュアル
-  //],
-)
+// #maketitle(
+//   title: "添付資料2 「等価線量・預託実効線量の計算方法」",
+//   authors: "HARA, Kenji",
+//   //abstract: [
+//   //  内部被ばく線量評価コードFlexID (Flexible code for Internal Dosimetry)の
+//   //  ユーザーマニュアル
+//   //],
+// )
 
 #outline()
 #pagebreak()
