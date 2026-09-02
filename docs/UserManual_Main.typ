@@ -71,51 +71,19 @@ FlexID の主な機能を以下に示す。
 == OIR計算実行画面 <oir-calc>
 
 #figure(
-  image("images/Figure_1.png", width: 100%),
+    markrect(
+      image("images/Figure_1.png"), factor: 80%,
+      (x:24.2%, y:69.70%, w: 29.6%, h: 4.3%),
+      (x:57.5%, y:69.70%, w: 24.0%, h: 4.3%),
+      (x:24.2%, y:75.10%, w: 73.0%, h: 4.3%),
+      (x:24.2%, y:80.55%, w: 73.0%, h: 4.3%),
+      (x:24.2%, y:86.00%, w: 73.0%, h: 4.3%),
+    )
+  ,
   caption: "OIR計算実行画面",
 )
 
-新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
-
-#pagebreak()
-+ 計算対象とするインプットを一覧からチェックボックスで選択する。
-
-  #figure(
-    image("images/OIR/Select_Sr-90.png", width: 100%),
-    caption: "チェックボックスによる計算対象インプットの選択",
-  )
-
-  - 上部左側のドロップダウン`Elements ...`では、元素による一覧のフィルタリングが可能。
-
-    #figure(
-      image("images/OIR/Elements.png", width: 100%),
-      caption: "元素記号によるフィルタリング",
-    )
-
-  - 上部中央のドロップダウン`Intake Route`では、摂取形態によるフィルタリングが可能。
-
-    #figure(
-      image("images/OIR/IntakeRoute.png", height: 20%),
-      caption: "摂取形態によるフィルタリング",
-    )
-
-  - 上部右側のテキストボックス`Search Filter`では、インプットのタイトルテキストに対する正規表現でのフィルタリングが可能。
-
-    #figure(
-      image("images/OIR/SearchFilter.png", width: 100%),
-      caption: "タイトルテキストに対する正規表現でのフィルタリング",
-    )
-
-  - 左上のチェックボックスで、一覧に表示されている全てのインプットの選択状態を切り替えることが可能。
-
-    #figure(
-      image("images/OIR/Select_All.png", width: 100%),
-      caption: "全てのインプットを一括選択する",
-    )
-
-//+ 子孫核種の考慮の有無を選択する。
-
-+ 預託期間を`Commitment Period`欄に整数で入力し、ドロップダウンから預託期間の単位を選択する
++ 預託期間を`Commitment Period`欄に整数で入力し、ドロップダウンから預託期間の単位を選択する <a>
 
 + 計算結果をOIR Data Viewerの値と比較する場合は、`Compare with OIR data`にチェックを入れる。
 
@@ -127,6 +95,61 @@ FlexID の主な機能を以下に示す。
 
 + 出力フォルダのパスを`Output Directory`欄で指定する。
 
++ 計算対象とするインプットを一覧からチェックボックスで選択する。
+
+  #figure(
+    markrect(
+      image("images/OIR/Select_Sr-90.png"),
+      (x:4.0%, y:36%, w: 5%, h: 64%)
+    ),
+    caption: "チェックボックスによる計算対象インプットの選択",
+  )
+
+  - 上部左側のドロップダウン`Elements ...`では、元素による一覧のフィルタリングが可能。
+
+    #figure(
+      markrect(
+        image("images/OIR/Elements.png"),
+        (x: 2.5%, y: 15.2%, w: 15.4%, h: 5.8%)
+      ),
+      caption: "元素記号によるフィルタリング",
+    )
+
+  - 上部中央のドロップダウン`Intake Route`では、摂取形態によるフィルタリングが可能。
+
+    #figure(
+      markrect(
+        image("images/OIR/IntakeRoute.png"),
+        factor: 60%,
+        (x: 1%, y: 1%, w: 60%, h: 18%)
+      ),
+      caption: "摂取形態によるフィルタリング",
+    )
+
+  - 上部右側のテキストボックス`Search Filter`では、インプットのタイトルテキストに対する正規表現でのフィルタリングが可能。
+
+    #figure(
+      markrect(
+        image("images/OIR/SearchFilter.png"),
+        (x: 37.8%, y: 24.2%, w: 59.4%, h: 9.5%)
+      ),
+      caption: "タイトルテキストに対する正規表現でのフィルタリング",
+    )
+
+  - 左上のチェックボックスで、一覧に表示されている全てのインプットの選択状態を切り替えることが可能。
+
+    #figure(
+      markrect(
+        image("images/OIR/Select_All.png"),
+        (x: 4%, y: 0%, w: 5%, h: 16%)
+      ),
+      caption: "全インプットの一括選択",
+    )
+
+//+ 子孫核種の考慮の有無を選択する。
+
+
+新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
 
 == EIR計算実行画面
 
