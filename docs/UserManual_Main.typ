@@ -55,7 +55,7 @@ FlexID の主な機能を以下に示す。
 
 = 計算実行画面
 
-`FlexUI.exe`をダブルクリックする。
+本画面は、`FlexUI.exe`をダブルクリックすることによって開くことができる。
 
 #figure(
   image("images/Figure_1.png", width: 80%),
@@ -72,7 +72,7 @@ FlexID の主な機能を以下に示す。
 
 #figure(
     markrect(
-      image("images/Figure_1.png"), factor: 80%,
+      image("images/Figure_1.png"), factor: 75%,
       (x:24.2%, y:69.70%, w: 29.6%, h: 4.3%),
       (x:57.5%, y:69.70%, w: 24.0%, h: 4.3%),
       (x:24.2%, y:75.10%, w: 73.0%, h: 4.3%),
@@ -82,6 +82,8 @@ FlexID の主な機能を以下に示す。
   ,
   caption: "OIR計算実行画面",
 )
+
+新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
 
 + 預託期間を`Commitment Period`欄に整数で入力し、ドロップダウンから預託期間の単位を選択する <a>
 
@@ -94,6 +96,8 @@ FlexID の主な機能を以下に示す。
   #v(0.5em)
 
 + 出力フォルダのパスを`Output Directory`欄で指定する。
+  #linebreak()
+  #linebreak()
 
 + 計算対象とするインプットを一覧からチェックボックスで選択する。
 
@@ -149,18 +153,16 @@ FlexID の主な機能を以下に示す。
 //+ 子孫核種の考慮の有無を選択する。
 
 
-新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
-
 == EIR計算実行画面
 
 #figure(
-  image("images/Figure_2.png", width: 70%),
+  image("images/Figure_2.png", width: 90%),
   caption: "EIR計算実行画面",
 )
 
 + 一覧から計算対象のインプットをチェックボックスで選択する。
 
-  インプットの選択方法については #chapref(<oir-calc>) と同様となる。
+  インプットの選択方法については #chapref(<oir-calc>) と同様。
   #v(0.5em)
 
 //+ 子孫核種の考慮の有無を選択する。
@@ -181,7 +183,7 @@ FlexID の主な機能を以下に示す。
 == S係数作成画面
 
 #figure(
-  image("images/Figure_3.png", width: 70%),
+  image("images/Figure_3.png", width: 90%),
   caption: "S係数作成画面",
 )
 
@@ -194,20 +196,31 @@ FlexID の主な機能を以下に示す。
   - 線形補間
   #v(0.5em)
 
++ 出力ファイルの形式を`Output Format`欄のラジオボタンで、FlexID独自形式(`*.txt`)と、IDAC-Dose 2.1互換の出力形式(`*.csv`)から選択する。
+
 + 出力フォルダのパスを`Output Directory`欄で指定する。
 
 
 #pagebreak()
 = 結果表示画面
 
-== 結果表示画面(Model)
+本画面は、`FlexUI.exe`に計算結果ファイル(`*.out`や`*.log`)をドラッグ＆ドロップすることによって開くことができる。
 
-計算結果ファイル(`*.out`や`*.log`)`FlexUI.exe`にドラッグ＆ドロップすることによって本画面が開く。
+== 結果表示画面(共通部分)
 
 #figure(
-  image("images/Figure_4.png", width: 100%),
-  caption: " 結果表示画面(Model)",
+  markrect(
+    image("images/Viewer/Viewer_Common.png"),
+    (x:  1%, y: 19%, w: 75.5%, h: 80%),
+    (x: 82%, y: 19%, w: 17.0%, h: 30%),
+  ),
+  caption: " 結果表示画面（共通部分）",
 )
+
+画面右上には、計算結果データの臓器/組織ごとの数値を表示する`Model`画面と、時系列データをグラフ表示する`Graph`画面を切り替えるタブが配置されている。
+
+画面左上には、表示対象となる計算結果データを選択するための入力欄が配置されている。
+ここでは以下に示す4つの操作を行うことができる。
 
 + 結果表示のために読み込むファイルを選択する。
 
@@ -215,6 +228,11 @@ FlexID の主な機能を以下に示す。
   - `Open`ボタンで開くファイル選択ダイアログを使用する
   - ファイルパスを入力欄に入れてEnterキーを押す
   - 結果表示画面に対して対象ファイルをドラッグ＆ドロップする
+  #v(0.5em)
+
++ 表示中データのインプットタイトルが`Title`欄に表示される。
+
+  この欄は表示専用とだが、テキストを選択してコピーすることが可能。
   #v(0.5em)
 
 + 表示するデータを`Output Type`ドロップダウンで選択する。
@@ -225,15 +243,30 @@ FlexID の主な機能を以下に示す。
       align: left,
       table.header([項目],[説明]),
       table.hline(),
-      [RetentionActivity],[臓器/組織毎の残留放射能量 [－]],
-      [CumulativeActivity],[臓器/組織毎の積算残留放射能量 [Bq]],
-      [Dose],[預託実効線量(WholeBody)と預託等価線量 [Sv/Bq]],
-      [DoseRate],[等価線量率 [Sv/Bq/h]],
+      [`RetentionActivity`],[臓器/組織毎の残留放射能量 [－]],
+      [`CumulativeActivity`],[臓器/組織毎の積算残留放射能量 [Bq]],
+      [`Dose`],[預託実効線量(`WholeBody`)と預託等価線量 [Sv/Bq]],
+      [`DoseRate`],[等価線量率 [Sv/Bq/h]],
     ),
   )
 
-  これらの項目は、現在表示中のファイルと同じフォルダにあるものを対象とするため、対応ファイルが存在しない項目については表示されなくなる。
+  これらの項目は現在表示中のデータと同じフォルダにあるファイルが存在する場合に選択可能となる。データが存在しない項目は表示されない。
   #v(0.5em)
+
++ ドロップダウン`Nuclides`から表示対象とするデータブロックを選択する。
+
+  `RetentionActivity`と`CumulativeActivity`の場合は、崩壊系列上の核種を選択可能。
+
+  `Dose`と`DoseRate`の場合は、男女別に計算された数値データを選択可能。
+  #v(0.5em)
+
+
+== 結果表示画面(Model)
+
+#figure(
+  image("images/Figure_4.png", width: 100%),
+  caption: " 結果表示画面(Model)",
+)
 
 + 対象時刻の計算結果のデジタル値を表示する。
 
@@ -250,24 +283,6 @@ FlexID の主な機能を以下に示す。
   image("images/Figure_5.png", width: 100%),
   caption: " 結果表示画面(Graph)",
 )
-
-+ ドロップダウン`Output Type`から表示対象とするデータを選択する。
-
-  #table(
-    columns: 2,
-    [項目],[説明],
-    [RetentionActivity],[単位摂取放射能量（1 [Bq]）当たり、計算時間 ステップ当たりの残留放射能量 [－]],
-    [CumulativeActivity],[臓器/組織ごとの積算残留放射能量 [Bq]],
-    [Dose],[預託実効線量(WholeBody)と預託等価線量 [Sv/Bq]],
-    [DoseRate],[等価線量率 [Sv/Bq/h]],
-  )
-
-+ ドロップダウン`Nuclides`から表示対象とするデータブロックを選択する。
-
-  RetentionActivityとCumulativeActivityの場合は、崩壊系列上の核種を選択可能。
-
-  DoseとDoseRateの場合は、男女別に計算された数値データを選択可能。
-  #v(0.5em)
 
 + 表示したい臓器/組織にチェックを入れる。
 
