@@ -1,0 +1,47 @@
+icrp103:
+  type: report
+  author:
+    - name: International Commission on Radiological Protection
+  title: "The 2007 Recommendations of the International Commission on Radiological Protection"
+  series:
+    title: ICRP Publication
+    number: 103
+  publisher: Elsevier
+  date: 2007
+  parent:
+    type: periodical
+    title: Annals of the ICRP
+    volume: 37
+    issue: "2-4"
+
+icrp107:
+  type: report
+  author:
+    - name: International Commission on Radiological Protection
+  title: "Nuclear Decay Data for Dosimetric Calculations"
+  series:
+    title: ICRP Publication
+    number: 107
+  publisher: Elsevier
+  date: 2008
+  parent:
+    type: periodical
+    title: Annals of the ICRP
+    volume: 38
+    issue: "3"
+
+icrp133:
+  type: report
+  author:
+    - name: International Commission on Radiological Protection
+  title: "The ICRP Computational Framework for Internal Dose Assessment for Reference Adults: Specific Absorbed Fractions"
+  series:
+    title: ICRP Publication
+    number: 133
+  date: 2016
+  parent:
+    type: periodical
+    title: Annals of the ICRP
+    volume: 45
+    issue: "2"
+  page-range: 1-74

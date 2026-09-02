@@ -9,7 +9,7 @@
   )
 
   // ページの余白を設定
-  set page(margin: (x: 25mm, y: 25mm))
+  set page(margin: (x: 25mm, top: 25mm, bottom: 15mm))
 
   // 図の下に空行を挿入する
   // #show figure: it => {
@@ -20,7 +20,8 @@
   show figure: set block(breakable: true)
 
   show figure: it => {
-    if it.kind == image { [ #it #v(1em) ] } else { [ #it #v(1em) ] }
+    //if it.kind == image { [ #it #v(1em) ] } else { [ #v(1em) #it #v(1em) ] }
+    [ #v(1em) #it #v(1em) ]
   }
 
   //#show enum.item: it => {
