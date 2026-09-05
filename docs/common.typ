@@ -19,14 +19,19 @@
   // figureに入ったtableが複数ページにまたがることを許す
   show figure: set block(breakable: true)
 
-  show figure: it => {
-    //if it.kind == image { [ #it #v(1em) ] } else { [ #v(1em) #it #v(1em) ] }
-    [ #v(1em) #it #v(1em) ]
-  }
+  //show figure: it => {
+  //  //if it.kind == image { [ #it #v(1em) ] } else { [ #v(1em) #it #v(1em) ] }
+  //  [ #v(1em) #it #v(1em) ]
+  //}
+
+// 図表（figure）の上の余白を2em、下の余白を2emに設定
+  //show figure: set block(above: 1em, below: 1em)
 
   //#show enum.item: it => {
   //  if it.body.has("children") { it } else { it }
   //}
+
+  set math.equation(numbering: "(1)")
 
   body
 }
