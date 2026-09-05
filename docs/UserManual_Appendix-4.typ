@@ -1,7 +1,8 @@
 #import "common.typ": *
 #show: style
 
-//#set enum(numbering: "①")
+#set page(numbering: (..n) => [付4 - #n.at(0)])
+#set enum(numbering: "(1)")
 
 #outline()
 #pagebreak()

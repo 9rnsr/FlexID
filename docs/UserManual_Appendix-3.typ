@@ -1,33 +1,30 @@
 #import "common.typ": *
 #show: style
 
-//#set enum(numbering: "①")
-
 #outline()
 #pagebreak()
+
+#set page(numbering: (..n) => [付3 - #n.at(0)])
+#set enum(numbering: "(1)")
 
 #maketitle(
   title: "添付資料3 「S係数の計算方法」",
 )
 
-= はじめに
+= 計算の流れ
 
-本資料では、ICRP Publ.103の放射線加重係数データ #cite(<icrp103>)、ICRP Publ.107の核崩壊（放出放射線）データ #cite(<icrp107>)、
+FlexIDでは、ICRP Publ.103の放射線加重係数データ #cite(<icrp103>)、ICRP Publ.107の核崩壊（放出放射線）データ #cite(<icrp107>)、
 およびICRP Publ.133のSAFデータ #cite(<icrp133>) を用いて、線源領域に蓄積した残留放射能から標的領域への線量寄与を計算する際に必要となる、
-S係数（S-Coefficient）を算出するための計算方法について説明する。
-
-= 概要
-
-== 計算の流れ
+S係数（S-Coefficient）を算出する。計算の流れは以下のようになっている。
 
 + 各パラメータ（放射線加重係数データ、放出放射線データ、SAFデータ）を読み込む。
 + 各パラメータを用いて、1つの線源領域から1つの標的領域へのS係数を計算する。
-+ 2.を線源領域から標的領域の全てのパターン（79*43通り）について実施する。
++ 線源領域から標的領域の全てのパターン（79*43通り）について2)を実施する。
 
 S係数計算処理の概略フローを以下に示す。
 
 #figure(
-  image("images/Figure_A3-1.png"),
+  image("images/Figure_A3-1.png", height: 60%),
   caption: "S係数計算処理の概略フロー図",
 )
 
@@ -40,13 +37,15 @@ ICRP Publ.133において公開された最新の比吸収割合（SAF）デー�
 
 光子、単一エネルギー電子、及びα線の$Y_i$、$E_i$、及び$w_("R"_i)$を用いて、式@pea から核種毎のS係数を計算する。
 
+#block(above: 1em, below: 1em, [
 $ "S–coefficient"("T"←"S") = sum_i ( Y_i dot E_i dot "SAF"("T"←"S")_i dot w_("R"_i) ) "[MeV/kg/nt]" $ <pea>
+])
 
 ここで、
 
 #figure(
   table(
-    columns: (auto,70%),
+    columns: (25%,70%),
     align: (center+horizon, left),
     table.header([式], [意味]),
     [$"S–coefficient"("T"←"S")$],[ある核種がある線源領域$"S"$で1壊変したとき、標的領域$"T"$の1kg当たりに吸収されるエネルギー [MeV/kg/nt]],
@@ -61,13 +60,15 @@ $ "S–coefficient"("T"←"S") = sum_i ( Y_i dot E_i dot "SAF"("T"←"S")_i dot 
 
 β#super[-]、及びβ#super[+]線スペクトルのS係数は、スペクトル全体で積分して、式@beta から計算される。
 
+#block(above: 1em, below: 1em, [
 $ "S–coefficient"("T"←"S") = w_"R" integral_0^(E_(max)) Y(E) dot E dot "SAF"("T"←"S", E) dif E "[MeV/kg/nt]" $ <beta>
+])
 
 ここで、
 
 #figure(
   table(
-    columns: 2,
+    columns: (20%,75%),
     align: (center, left),
     table.header([式], [意味]),
     [$E$],     [スペクトルデータ点のエネルギー [MeV]],
@@ -81,13 +82,15 @@ $ "S–coefficient"("T"←"S") = w_"R" integral_0^(E_(max)) Y(E) dot E dot "SAF"
 
 ICRP Publ.133では、自発核分裂中性子放出核種（28核種）については、核種毎に核分裂中性子スペクトルの平均エネルギーで正規化されたスペクトル平均のSAFが記載されている。従って、式@neut により、核種毎のS係数$("T"←"S")$を計算することができる。
 
+#block(above: 1em, below: 1em, [
 $ "S–coefficient"("T"←"S") = overline("SAF"("T"←"S")) * overline(w_"R") "[MeV/kg/nt]" $ <neut>
+])
 
 ここで、
 
 #figure(
   table(
-    columns: 2,
+    columns: (20%, 75%),
     align: (center, left),
     table.header([式], [意味]),
     [$overline("SAF"("T"←"S"))$], [スペクトル平均の比吸収割合 [/kg]],
@@ -96,41 +99,37 @@ $ "S–coefficient"("T"←"S") = overline("SAF"("T"←"S")) * overline(w_"R") "[
 )
 
 
-#pagebreak()
 = 線源領域Other×標的領域43個のS係数計算
 
-体内動態モデル図では、明示された、言い換えると対応する線源領域が一意に決まる臓器/組織の他に、明示されていないその他の臓器/組織をその内訳として一纏めにした「その他の組織」が提示される。FlexIDではこれらの「その他の組織」に`Other`という名称の線源領域を割り当て、このS係数をその内訳となる臓器/組織に応じて自動的に算出し使用することで、これらの「その他の組織」からの線量寄与を適切に計算する。線源領域`Other`の内訳はFlexIDがインプットを読み込んだ後に判明することから、この自動計算はインプットごとに、計算処理開始の直前に実施される。
+核種毎の体内動態モデル図では、明示された、言い換えると対応する線源領域が一意に決まる臓器/組織の他に、明示されていないその他の臓器/組織をその内訳として一纏めにした「その他の組織」が提示される。FlexIDではこれらの「その他の組織」に`Other`という名称の線源領域を割り当て、このS係数をその内訳となる臓器/組織に応じて自動的に算出し使用することで、これらの「その他の組織」からの線量寄与を適切に計算する。線源領域`Other`の内訳はFlexIDがインプットを読み込んだ後に判明することから、この自動計算はインプットごとに、計算処理開始の直前に実施される。
 
 まず、ICRP Publ.133のSAFデータに含まれる`sregions_2016-08-12.NDX`にてID列が`1`となっている43個の線源領域を`Other`内訳の初期値とする。
-次にFlexIDインプットにおいてコンパートメントに対応付けられている線源領域を`Other`内訳から除去することで、当該インプットに対する実際の「その他の組織」`Other`の内訳を決定する。
+次にFlexIDインプットにおいてコンパートメントに対応付けられている線源領域を`Other`の内訳から除去することで、当該インプットに対する実際の「その他の組織」`Other`の内訳を決定する。さらに、骨格コンパートメントを構成する線源領域について、以下の追加調整を行う。
 
-さらに、骨格コンパートメントを構成する線源領域について、この内訳に対する以下の追加調整を行う。
++ ICRP Publ.110でのボクセルファントムでの骨組織の整理、およびICRP Publ.133での線源領域についての整理から、FlexIDでは、骨髄を構成する線源領域のうち`R-marrow`+`Y-marrow`の組と`C-marrow`+`T-marrow`の組は動態モデルにおいて排他となるという解釈を採用している。これを反映してFlexIDでは、インプットにおいてある核種の動態モデルが`C-marrow`+`T-marrow`の組を使用している（どちらか片方、または両方をコンパートメントの線源領域として設定している）場合に、`sregions_2016-08-12.NDX`において`ID=1`である`R-marrow`+`Y-marrow`の2つの線源領域が「その他の組織」の内訳に含まれないようこれらを`Other`から除去する追加の調整を実施する。他方、動態モデルにおいて`R-marrow`+`Y-marrow`の組が使用されている場合は、元々`Other`の内訳には`C-marrow`+`T-marrow`の組が含まれていないことから、特段の調整は行わない。さらに、もしインプットにおいてこれらの排他となるべき組み合わせが同時に使用されている（例：`C-marrow`と`R-marrow`が動態モデル内で線源領域として同時に設定されている）場合、FlexIDはこれらの使用に対してエラーを報告する。
 
-#set enum(numbering: "1)")
-
-+ ICRP Publ.110でのボクセルファントムでの骨組織の整理、およびICRP Publ.133での線源領域についての整理から、FlexIDでは、骨髄を構成する線源領域のうち`R-marrow`+`Y-marrow`の組と`C-marrow`+`T-marrow`の組は動態モデルにおいて排他となるという解釈を採用している。これを反映して、インプットにおいてある核種の動態モデルが`C-marrow`+`T-marrow`の組を使用している（どちらか片方、または両方をコンパートメントの線源領域として設定している）場合、FlexIDは`sregions_2016-08-12.NDX`においてID=1である`R-marrow`+`Y-marrow`の2つの線源領域が「その他の組織」の内訳に含まれないようこれらを`Other`から除去する追加の調整が実施される。他方、動態モデルにおいて`R-marrow`+`Y-marrow`の組が使用されている場合は、元々`Other`の内訳には`C-marrow`+`T-marrow`の組が含まれていないことから、特段の調整は行われない。さらに、もしインプットにおいてこれらの排他となるべき組み合わせが同時に使用されている（例：`C-marrow`と`R-marrow`が動態モデル内で線源領域として同時に設定されている）場合、FlexIDはこれらの使用に対してエラーを報告する。
-
-+ OIRの動態モデルでは、「その他の組織」が、軟組織（Soft tissue）のみを指す場合とそうでない場合がある。これが明確に示されているのはICRP Publ.134 OIR Part.2に記載された42-Moの体内動態モデルで、Table 14.3の脚注\*では、`Other tissue`対して「骨と軟組織を含む」と書かれている。ここで問題となるのが、`sregions_2016-08-12.NDX`においてID=1とされている組織のうち、無機質骨である、言い換えると明確に軟組織ではない線源領域`C-bone-V`と`T-bone-V`であり、これらを線源領域`Other`に含めるかどうかは線量計算において少なくない比重を持つことがFlexID開発の過程において分かっている。この点について、OIRに示されるほとんどの元素では42-Moのような明確な記述が存在しないのだが、しかし体内動態モデル図やコンパートメント間の移行速度を提示するテーブルにおいて「その他の組織」に付けられた名前を大別すると、`ST1`, `ST2`など、ST: Soft Tissueで始まる名称と、`Other`, `Other tissue`, `Systemic tissue`などそうでない名称に二分できることから、FlexIDでは前者について「その他の組織」が軟組織のみで構成され、無機質骨である`C-bone-V`と`T-bone-V`を含まない動態モデルを表現しているという解釈を採用している。これを反映して、線源領域`Other`が設定された全てのコンパートメントの名称が`ST`で始まる場合は、`C-bone-V`と`T-bone-V`の2つの線源領域が「その他の組織」の内訳に含まれないようこれらを`Other`から除去する追加の調整が実施される。
-
++ ICRP OIRシリーズの動態モデルでは、「その他の組織」が、軟組織（Soft tissue）のみを指す場合とそうでない場合がある。これが明確に示されているのはICRP Publ.134 OIR Part.2に記載されたMoの体内動態モデルで、Table 14.3の脚注\*では`Other tissue`に対して「骨と軟組織を含む」と書かれている。ここで問題となるのが、`sregions_2016-08-12.NDX`において`ID=1`とされている組織のうち、無機質骨である、言い換えると明確に軟組織ではない線源領域`C-bone-V`と`T-bone-V`であり、これらを線源領域`Other`に含めるかどうかは線量計算において少なくない比重を持つことがFlexID開発の過程において分かっている。この点について、OIRに示されるほとんどの元素ではMoのような明確な記述が存在しないが、しかし体内動態モデル図やコンパートメント間の移行速度を提示するテーブルにおいて「その他の組織」に付けられた名前を大別すると、`ST1`, `ST2`など、ST: Soft Tissueで始まる名称と、`Other`, `Other tissue`, `Systemic tissue`などそうでない名称に二分できることから、FlexIDでは前者について「その他の組織」が軟組織のみで構成され、無機質骨である`C-bone-V`と`T-bone-V`を含まない動態モデルを表現しているという解釈を採用している。これを反映してFlexIDでは、線源領域`Other`が設定された全てのコンパートメントの名称が`ST`で始まる場合は、`C-bone-V`と`T-bone-V`の2つの線源領域が「その他の組織」の内訳に含まれないようこれらを`Other`から除去する追加の調整を実施する。
 
 最後に、決定された`Other`の内訳と、それらの質量を用いて、式@other から43個の標的領域それぞれへのS係数$("T"←"Other")$を計算する。
 
+#block(above: 1.5em, below: 1em, [
 $ "S–coefficient"("T"←"Other") = frac(1, M_"Other") sum_"S" M_"S" dot "S–coefficient"("T"←"S") $ <other>
+])
 
 ここで、
 
 #figure(
   table(
-    columns: 2,
+    columns: (12%,auto),
     align: (center+horizon, left),
     table.header([式], [意味]),
-    [$M_"Other"$], [コンパートメントモデルで明確にされていない組織の \ 合計質量（ICRP Publ.133 Table A3.3 ※1）],
-    [$M_"S"$],     [コンパートメントモデル図で明確にされていない \ 個々の線源領域の質量],
+    [$M_"Other"$], [コンパートメントモデル図で明確にされていない組織の合計質量],
+    [$M_"S"$],     [コンパートメントモデル図で明確にされていない個々の線源領域の質量\ （ICRP Publ.133 Table A.3および`sregions_2016-08-12.NDX`から）],
   )
 )
+#v(1em)
 
-
-#pagebreak()
+#v(1em)
 = ICRP Publication 103 放射線加重係数データ
 
 ICRP Publication 103 に示されている放射線加重係数（$w_"R"$）を 表@w_R に示す。
@@ -139,7 +138,7 @@ ICRP Publication 103 に示されている放射線加重係数（$w_"R"$）を 
 #figure(
   caption: "放射線加重係数",
   table(
-    columns: (4cm, 4cm),
+    columns: (3cm, 3cm),
     align: (center+horizon, center),
     table.header([放射タイプ], [$w_"R"$]),
     [光子],       [1],
@@ -150,11 +149,11 @@ ICRP Publication 103 に示されている放射線加重係数（$w_"R"$）を 
 ) <w_R>
 #v(1em)
 
-S係数計算の為の光子、電子及びα粒子の$w_"R"$は 表@w_R に示す値を用いる。しかし、中性子については、ICRP Publ.133 のSAFデータにおいて、中性子スペクトル平均の$overline(w_"R")$が用いられている為、その値からS係数を計算する。
+S係数計算の為の光子、電子及びα粒子の$w_"R"$は 表@w_R に示す値を用いる。しかし中性子については、ICRP Publ.133 のSAFデータにおいて中性子スペクトル平均の$overline(w_"R")$が用いられているため、その値からS係数を計算する。
 
 #v(1em)
 #figure(
-  image("images/Figure_A3-2.png"),
+  image("images/Figure_A3-2.png", width: 80%),
   caption: "中性子スペクトル平均の放射線加重係数",
 ) <neutron_w_R>
 
@@ -169,7 +168,7 @@ S係数計算の為の光子、電子及びα粒子の$w_"R"$は 表@w_R に示�
 #figure(
   caption: [`ICRP-07.RAD`ファイルの構造],
   table(
-    columns: 3,
+    columns: (16%,16%,auto),
     align: (center+horizon, center, left),
     table.header([フィールド], [フォーマット], [説明]),
     table.cell(colspan: 3, align: left)[#underline[核種フィールド] ],
@@ -186,48 +185,45 @@ S係数計算の為の光子、電子及びα粒子の$w_"R"$は 表@w_R に示�
 ) <rad_fields>
 
 #v(1em)
-表@rad_fields に示す核種フィールドには核種名、半減期、放射線データの数が記載されている。データフィールドには、放射線タイプを識別する整数コード（ICODE）、壊変あたりの放射線収率、放射線の固有エネルギーまたは平均エネルギー、放射線の種類を示す2文字の簡易標記（JCODE）が記載されている。
+核種フィールドには核種名、半減期、放射線データの数が記載されている。データフィールドには放射線タイプ、壊変あたりの放射線収率、放射線の固有エネルギーまたは平均エネルギーが記載されている。放射線タイプは表@icode_jcode に示す数値と略称が使用される。
 
-ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m の核崩壊データの一部を 図@rad_file に示す。データフォーマットは 表@rad_fields に従っており、データはエネルギーの小さい順に並んでいる。
+RADファイルの一部を 図@rad_file に示す。データフォーマットは 表@rad_fields に従っており、データはエネルギーの小さい順に並んでいる。
 
-//#v(1em)
-#block()[
-  #columns(2, gutter: 0.5cm)[
-    #figure(
-      caption: [ICODE, JCODE変数の説明],
-      table(
-        //columns: 3,
-        rows: 1.65em,
-        columns: (2cm, 2cm, 3cm),
-        align: (center+horizon, center, left),
-        table.header([ICODE], [JCODE], [説明]),
-        table.cell(rowspan: 3)[
-          1  ], [ `G`  ], [ γ線 ],
-                [ `PG` ], [ 遅発γ線 ],
-                [ `DG` ], [ 即発γ線 ],
-        [ 2  ], [ `X`  ], [ X線 ],
-        [ 3  ], [ `AQ` ], [ 消滅光子 ],
-        [ 4  ], [ `B+` ], [ β#super[+]粒子 ],
-        table.cell(rowspan: 2)[
-          5  ], [ `B`  ], [ β粒子 ],
-                [ `DB` ], [ 遅発β粒子 ],
-        [ 6  ], [ `IE` ], [ 内部転換電子 ],
-        [ 7  ], [ `AE` ], [ オージェ電子 ],
-        [ 8  ], [ `A`  ], [ α粒子 ],
-        [ 9  ], [ `AR` ], [ α反跳核 ],
-        [ 10 ], [ `FF` ], [ 核分裂断片 ],
-        [ 11 ], [ `N`  ], [ 中性子 ],
-      )
-    ) <icode_jcode>
+#v(1em)
+#columns(2, gutter: 0.5cm)[
+  #figure(
+    caption: [ICODE, JCODE変数の説明],
+    table(
+      //columns: 3,
+      rows: 1.7em,
+      columns: (2cm, 2cm, 3cm),
+      align: (center+horizon, center, left),
+      table.header([ICODE], [JCODE], [説明]),
+      table.cell(rowspan: 3)[
+        1  ], [ `G`  ], [ γ線 ],
+              [ `PG` ], [ 遅発γ線 ],
+              [ `DG` ], [ 即発γ線 ],
+      [ 2  ], [ `X`  ], [ X線 ],
+      [ 3  ], [ `AQ` ], [ 消滅光子 ],
+      [ 4  ], [ `B+` ], [ β#super[+]粒子 ],
+      table.cell(rowspan: 2)[
+        5  ], [ `B`  ], [ β粒子 ],
+              [ `DB` ], [ 遅発β粒子 ],
+      [ 6  ], [ `IE` ], [ 内部転換電子 ],
+      [ 7  ], [ `AE` ], [ オージェ電子 ],
+      [ 8  ], [ `A`  ], [ α粒子 ],
+      [ 9  ], [ `AR` ], [ α反跳核 ],
+      [ 10 ], [ `FF` ], [ 核分裂断片 ],
+      [ 11 ], [ `N`  ], [ 中性子 ],
+    )
+  ) <icode_jcode>
 
-    #colbreak()
+  #colbreak()
 
-    #v(1em)
-    #figure(
-      image("images/Figure_A3-3.png", width: 7cm),
-      caption: [`ICRP-07.RAD`サンプル],
-    ) <rad_file>
-  ]
+  #figure(
+    image("images/Figure_A3-3.png", width: 7cm),
+    caption: [`ICRP-07.RAD`サンプル],
+  ) <rad_file>
 ]
 
 == ICRP-07.BET ファイル
@@ -238,7 +234,7 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
 #figure(
   caption: [`ICRP-07.BET`ファイルの構造],
   table(
-    columns: 3,
+    columns: (16%,16%,auto),
     align: (center+horizon, center, left),
     table.header([フィールド], [フォーマット], [説明]),
     table.cell(colspan: 3, align: left)[#underline[核種フィールド] ],
@@ -257,6 +253,7 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
 ) <bet_file>
 
 
+#pagebreak()
 = ICRP Publication 133 比吸収割合（SAF）データファイルの仕様
 
 == α粒子、電子および光子のSAFファイル
@@ -267,7 +264,7 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
 #figure(
   caption: "α粒子、電子及び光子のSAFファイル名",
   table(
-    columns: 3,
+    columns: (10%,10%,auto),
     align: (center+horizon, center, left),
     table.header([性別], [粒子], [ファイル名]),
     table.cell(rowspan: 3)[男性],
@@ -309,6 +306,7 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
   )
 ) <saf_fields>
 
+#pagebreak()
 電子と光子のSAFファイルのエネルギー数nは28であり、αのSAFファイルは24のエネルギーについて示されている。前述のとおり、αのSAFファイルの`Ecut`パラメータは長さが5（`F5.0`）である。
 
 各ファイルの4番目のレコードは、SAFの値に対応する放射線エネルギーを表示するものである。エネルギーの単位はMeVである。
@@ -317,7 +315,7 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
 
 #v(1em)
 #figure(
-  image("images/Figure_A3-5.png", width: 95%),
+  image("images/Figure_A3-5.png", width: 100%),
   caption: [`rcp-af_photon_2016-08-12.SAF`サンプル],
 )
 
@@ -330,7 +328,7 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
 #figure(
   caption: "中性子のSAFファイル名",
   table(
-    columns: 3,
+    columns: (10%,10%,auto),
     align: (center+horizon, center, left),
     table.header([性別], [粒子], [ファイル名]),
     [男性], [N], [`rcp-af_neutron_2016-08-12.SAF`],
@@ -370,12 +368,14 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
   )
 ) <neutron_saf_fields>
 
+#v(2em)
 #figure(
-  image("images/Figure_A3-6.png", width: 90%),
+  image("images/Figure_A3-6.png", width: 100%),
   caption: [`rcp-am_neutron_2016-08-12.SAF`サンプル],
 )
 
 
+#pagebreak()
 == 標的領域と線源領域の索引ファイル
 
 ファイル`torgans_2016-08-12.NDX`と`sregions_2016-08-12.NDX`にそれぞれ、SAFデータファイルと同じ順序で線源領域と標的領域が示されている。これらのSAFファイルには79の線源領域によって照射される43の標的領域のSAFデータが示されている。i番目の標的領域とj番目の線源領域のSAFファイルのレコードは、次式のとおりである。
@@ -383,10 +383,11 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
 ここで、43はこれらのファイルの中に記録されている標的領域の数の合計量である。例えば、脳は`torgans_2016-08-12.NDX`ファイルの18番目の標的領域であり、胃の内容物は`sregions_2016-08-12.NDX`ファイルの10番目の線源領域である。したがって、SAF（Brain←St-cont）のレコード番号は43×9+23の410番目のレコードである。`sregions_2016-08-12.NDX`ファイルのレコードには、線源領域の実質組織質量とその他の組織の線源領域の一部の領域を識別する「`ID`」フィールドがある（`ID=1`：「その他の組織の線源領域の一部」の対象、`ID=0`：対象外）。`torgans_2016-0812.NDX`ファイルには、様々な標的領域の質量がある（図@sregions_and_torgans 参照）。
 
 #figure(
-  image("images/Figure_A3-7.png", width: 94%),
+  image("images/Figure_A3-7.png", width: 100%),
   caption: [`sregions_2016-08-12.NDX`及び`torgans_2016-08-12.NDX`サンプル],
 ) <sregions_and_torgans>
 
+#v(1em)
 #figure(
   caption: "標的領域の名称",
   table(
@@ -439,6 +440,7 @@ ICODEとJCODEに対応する放射線について表@icode_jcode に、Tc-99m �
   )
 )
 
+#pagebreak()
 #figure(
   caption: "線源領域の名称",
   table(
