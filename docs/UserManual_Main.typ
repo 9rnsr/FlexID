@@ -36,7 +36,7 @@ FlexID
   ┃  ┣ EIR
   ┃  ┃  ┗ 元素ごとのEIRに対する組織加重係数データやSEEファイル
   ┃  ┗ TimeMesh
-  ┃     ┗ 計算時間と出力時間を定義するタイムメッシュファイル
+  ┃     ┗ 計算時間と出力時間を定義する時間メッシュファイル
   ┃
   ┗ license
         ┗ 添付データの再配布に関する許諾など
@@ -61,10 +61,9 @@ FlexIDの主な機能を以下に示す。
 
 本画面は、`FlexUI.exe`をダブルクリックすることによって開くことができる。
 
-#figure(
-  image("images/Figure_1.png", width: 80%),
-  caption: "計算実行画面",
-)
+#figure(caption: "計算実行画面")[
+  #image("images/Figure_1.png", width: 80%)
+]
 
 
 + 被ばく対象のタブを選択する。
@@ -72,127 +71,104 @@ FlexIDの主な機能を以下に示す。
    - EIR：公衆の構成員の内部被ばく（Environmental Intakes of Radionuclides）
 
 
+#pagebreak()
 == OIR計算実行画面 <oir-calc>
 
-#figure(
-    markrect(
-      image("images/Figure_1.png"), factor: 75%,
-      (x:24.2%, y:69.70%, w: 29.6%, h: 4.3%),
-      (x:57.5%, y:69.70%, w: 24.0%, h: 4.3%),
-      (x:24.2%, y:75.10%, w: 73.0%, h: 4.3%),
-      (x:24.2%, y:80.55%, w: 73.0%, h: 4.3%),
-      (x:24.2%, y:86.00%, w: 73.0%, h: 4.3%),
-    )
-  ,
-  caption: "OIR計算実行画面",
-)
-#v(1em)
+本画面では、ICRP OIRシリーズに提示されている核種の計算を実行することができる。
+//新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
 
-新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
+//   時間メッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
+// #v(0.5em)
 
-+ 預託期間を`Commitment Period`欄に整数で入力し、ドロップダウンから預託期間の単位を選択する <a>
-
++ 組み込み済みのインプット一覧から、計算対象とするものをチェックボックスで選択する。
++ 預託期間を`Commitment Period`欄に整数とその単位で設定する <a>
 + 計算結果をOIR Data Viewerの値と比較する場合は、`Compare with OIR data`にチェックを入れる。
++ 計算時間メッシュと出力時間メッシュのファイルを、それぞれ`Computational Time Mesh`欄と`Output Time Mesh`欄で設定する。
++ 出力フォルダのパスを`Output Directory`欄で設定する。
++ `Run`ボタンを押下して計算処理を開始する。
 
-+ 計算タイムメッシュファイルと出力タイムメッシュファイルを、それぞれ#linebreak()
-  `Computational Time Mesh`欄と`Output Time Mesh`欄で選択する。
-
-    タイムメッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
-  #v(0.5em)
-
-+ 出力フォルダのパスを`Output Directory`欄で指定する。
-  #linebreak()
-  #linebreak()
-
-+ 計算対象とするインプットを一覧からチェックボックスで選択する。
-
-  #figure(
-    markrect(
-      image("images/OIR/Select_Sr-90.png"),
-      (x:4.0%, y:36%, w: 5%, h: 64%)
-    ),
-    caption: "チェックボックスによる計算対象インプットの選択",
-  )
   #v(1em)
-
-  - 上部左側のドロップダウン`Elements ...`では、元素による一覧のフィルタリングが可能。
-
-    #figure(
-      markrect(
-        image("images/OIR/Elements.png"),
-        (x: 2.5%, y: 15.2%, w: 15.4%, h: 5.8%)
-      ),
-      caption: "元素記号によるフィルタリング",
+  #figure(caption: "OIR計算実行画面")[
+    #markrect(
+      image("images/Figure_1.png"),
+      (x: 24.2%, y: 69.70%, w: 29.6%, h: 4.3%),
+      (x: 57.5%, y: 69.70%, w: 24.0%, h: 4.3%),
+      (x: 24.2%, y: 75.10%, w: 73.0%, h: 4.3%),
+      (x: 24.2%, y: 80.55%, w: 73.0%, h: 4.3%),
+      (x: 24.2%, y: 86.00%, w: 73.0%, h: 4.3%),
     )
+  ]
 #pagebreak()
 
-  - 上部中央のドロップダウン`Intake Route`では、摂取形態によるフィルタリングが可能。
-
-    #figure(
-      markrect(
-        image("images/OIR/IntakeRoute.png"),
-        factor: 60%,
-        (x: 1%, y: 1%, w: 60%, h: 18%)
-      ),
-      caption: "摂取形態によるフィルタリング",
+- 計算対象とするインプットは、一覧表示されているインプットの左端列にあるチェックボックスで選択状態を切り替え可能。左上のチェックボックスを使うと、一覧に表示されている全てのインプットの選択状態を一括で切り替え可能。
+  #figure(caption: "チェックボックスによる計算対象インプットの選択")[
+    #markrect(
+      image("images/OIR/Select_Sr-90.png"),
+      (x: 4%, y: 36.2%, w: 5%, h: 64%),
+      (x: 4%, y: 29.0%, w: 5%, h: 7.2%),
     )
+  ]
+  #v(1em)
 
-  - 上部右側のテキストボックス`Search Filter`では、インプットのタイトルテキストに対する正規表現でのフィルタリングが可能。
-
-    #figure(
-      markrect(
-        image("images/OIR/SearchFilter.png"),
-        (x: 37.8%, y: 24.2%, w: 59.4%, h: 9.5%)
-      ),
-      caption: "タイトルテキストに対する正規表現でのフィルタリング",
+- 上部左側のドロップダウン`Elements ...`では、元素による一覧のフィルタリングが可能。
+  #figure(caption: "元素記号によるフィルタリング")[
+    #markrect(
+      image("images/OIR/Elements.png"),
+      (x: 2.5%, y: 15.2%, w: 15.4%, h: 5.8%)
     )
+  ]
 
-  - 左上のチェックボックスで、一覧に表示されている全てのインプットの選択状態を切り替えることが可能。
-
-    #figure(
-      markrect(
-        image("images/OIR/Select_All.png"),
-        (x: 4%, y: 0%, w: 5%, h: 16%)
-      ),
-      caption: "全インプットの一括選択",
+- 上部中央のドロップダウン`Intake Route`では、摂取形態によるフィルタリングが可能。
+  #figure(caption: "摂取形態によるフィルタリング")[
+    #markrect(
+      image("images/OIR/IntakeRoute.png"),
+      factor: 60%,
+      (x: 1%, y: 1%, w: 60%, h: 18%)
     )
+  ]
+  #v(1em)
+
+- 上部右側のテキストボックス`Search Filter`では、インプットのタイトルテキストに対する正規表現でのフィルタリングが可能。
+  #figure(caption: "タイトルテキストに対する正規表現でのフィルタリング")[
+    #markrect(
+      image("images/OIR/SearchFilter.png"),
+      (x: 37.8%, y: 24.2%, w: 59.4%, h: 9.5%)
+    )
+  ]
 
 //+ 子孫核種の考慮の有無を選択する。
 
+- `External inputs ...`ボタンを押下することで、組み込みではない外部のインプットを対象とする計算を行う画面に切り替えることが可能。元の画面に戻すには代わりに表示される`Internal inputs ...`ボタンを押下する。
 
+- 歯車アイコンのボタンを押下すると表示されるドロップダウンでは、計算によって出力されるファイルのうち不必要なものを一部無効化することができる。
+
+#pagebreak()
 == EIR計算実行画面
-
-#figure(
-  image("images/Figure_2.png", width: 90%),
-  caption: "EIR計算実行画面",
-)
-
-+ 一覧から計算対象のインプットをチェックボックスで選択する。
-
-  インプットの選択方法については #chapref(<oir-calc>) と同様。
-  #v(0.5em)
-
-//+ 子孫核種の考慮の有無を選択する。
 
 + 預託期間を`Commitment Period`欄に整数で入力し、ドロップダウンから預託期間の単位を選択する
 
 + 被ばく時の年齢（摂取時年齢）を`Intake Age`ドロップダウンから選択する。
 
-+ 計算タイムメッシュファイルと出力タイムメッシュファイルを、それぞれ#linebreak()
++ 計算時間メッシュファイルと出力時間メッシュファイルを、それぞれ \
   `Computational Time Mesh`欄と`Output Time Mesh`欄で選択する。
 
-    タイムメッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
+    時間メッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
   #v(0.5em)
 
 + 出力フォルダのパスを`Output Directory`欄で指定する。
 
+//+ 子孫核種の考慮の有無を選択する。
+
++ 一覧から計算対象のインプットをチェックボックスで選択する。
+
+  インプットの選択方法については #chapref(<oir-calc>) と同様。
+
+  #v(1em)
+  #figure(caption: "EIR計算実行画面")[
+    #image("images/Figure_2.png")
+  ]
 
 == S係数作成画面
-
-#figure(
-  image("images/Figure_3.png", width: 90%),
-  caption: "S係数作成画面",
-)
 
 + 出力対象の核種にチェックを入れて選択する。
 
@@ -207,6 +183,13 @@ FlexIDの主な機能を以下に示す。
 
 + 出力フォルダのパスを`Output Directory`欄で指定する。
 
+  #v(1.5em)
+  #figure(caption: "S係数作成画面")[
+    #image("images/Figure_3.png")
+  ]
+
+
+== バージョン情報画面
 
 #pagebreak()
 = 結果表示画面
@@ -215,14 +198,13 @@ FlexIDの主な機能を以下に示す。
 
 == 結果表示画面(共通部分)
 
-#figure(
-  markrect(
+#figure(caption: " 結果表示画面（共通部分）")[
+  #markrect(
     image("images/Viewer/Viewer_Common.png"),
     (x:  1%, y: 19%, w: 75.5%, h: 80%),
     (x: 82%, y: 19%, w: 17.0%, h: 30%),
-  ),
-  caption: " 結果表示画面（共通部分）",
-)
+  )
+]
 #v(1em)
 
 画面右上には、計算結果データの臓器/組織ごとの数値を表示する`Model`画面と、時系列データをグラフ表示する`Graph`画面を切り替えるタブが配置されている。
@@ -244,9 +226,8 @@ FlexIDの主な機能を以下に示す。
   #v(0.5em)
 
 + 表示するデータを`Output Type`ドロップダウンで選択する。
-  #figure(
-    caption: "表示対象データの選択",
-    table(
+  #figure(caption: "表示対象データの選択")[
+    #table(
       columns: 2,
       align: left,
       table.header([項目],[説明]),
@@ -255,8 +236,8 @@ FlexIDの主な機能を以下に示す。
       [`CumulativeActivity`],[臓器/組織毎の積算残留放射能量 [Bq]],
       [`Dose`],[預託実効線量(`WholeBody`)と預託等価線量 [Sv/Bq]],
       [`DoseRate`],[等価線量率 [Sv/Bq/h]],
-    ),
-  )
+    )
+  ]
 
   これらの項目は現在表示中のデータと同じフォルダにあるファイルが存在する場合に選択可能となる。データが存在しない項目は表示されない。
   #v(1em)
@@ -270,10 +251,9 @@ FlexIDの主な機能を以下に示す。
 
 == 結果表示画面(Model)
 
-#figure(
-  image("images/Figure_4.png", width: 100%),
-  caption: " 結果表示画面(Model)",
-)
+#figure(caption: " 結果表示画面(Model)")[
+  #image("images/Figure_4.png", width: 100%)
+]
 
 + 対象時刻の計算結果のデジタル値を表示する。
 
@@ -286,10 +266,9 @@ FlexIDの主な機能を以下に示す。
 
 == 結果表示画面(Graph)
 
-#figure(
-  image("images/Figure_5.png", width: 100%),
-  caption: " 結果表示画面(Graph)",
-)
+#figure(caption: " 結果表示画面(Graph)")[
+  #image("images/Figure_5.png", width: 100%)
+]
 
 + 表示したい臓器/組織にチェックを入れる。
 
@@ -299,9 +278,8 @@ FlexIDの主な機能を以下に示す。
 
 + グラフ領域において、マウスによるドラッグやスクロールにより、グラフの移動、拡大縮小、軸レンジの変更が行える。
 
-  #figure(
-    caption: "グラフ領域で使用できるマウス操作",
-    table(
+  #figure(caption: "グラフ領域で使用できるマウス操作")[
+    #table(
       columns: 2,
       [マウス操作],[動作],
       [軸位置でホイール回転],[軸レンジの拡大縮小],
@@ -311,4 +289,4 @@ FlexIDの主な機能を以下に示す。
       [ホイールボタンによる範囲選択],[選択範囲内の拡大表示],
       [ホイールボタンのダブルクリック],[全てのプロットデータの収まる最小範囲の軸レンジによる表示],
     )
-  )
+  ]

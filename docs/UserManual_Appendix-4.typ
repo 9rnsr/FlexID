@@ -15,11 +15,11 @@
 
 インプットファイルは作成対象の核種が記載されているICRP OIR の$f_"A"$ 値および移行係数を参考とする。
 
-作成したインプットは以下のように保存する。
-
-- （例：Sr-90 の場合）
-
-    `FlexID\inp\OIR\Sr-90`フォルダ内にインプットファイルを置く。
+// 作成したインプットは以下のように保存する。
+//
+// - （例：Sr-90 の場合）
+//
+//     `FlexID\inp\OIR\Sr-90`フォルダ内にインプットファイルを置く。
 
 == 入力フォーマット
 
@@ -32,9 +32,8 @@
 インプットはセクションによる区分けが行われ、#underline([`[` *セクション名* `]`])という行がその始まりとなる。
 
 #v(1em)
-#figure(
-  caption: "使用可能なセクション名とその設定内容",
-  table(
+#figure(caption: "使用可能なセクション名とその設定内容")[
+  #table(
     columns: 2,
     align: (left, left),
     table.header([ セクション名 ], [ 内容 ]),
@@ -45,7 +44,7 @@
     [ 核種 + `:compartment` ], [ 当該核種の体内動態モデルにおいて使用するコンパートメントを設定する。 ],
     [ 核種 + `:transfer` ], [ 当該核種の体内動態モデルにおけるコンパートメント間の移行を設定する。 ],
   )
-)
+]
 #v(1em)
 
 === `nuclide`セクション
@@ -56,25 +55,22 @@
 簡易形式では、下図のように核種名のみを空白または改行文字で区切って列挙する。
 
 #v(1em)
-#figure(
-  block(width: 40%)[
+#figure(caption: "簡易記述の例", kind: image)[
+  #block(width: 40%)[
     ```
     [nuclide]
       Sr-90  Y-90
     ```
-  ],
-  kind: image,
-  caption: "簡易記述の例",
-)
+  ]
+]
 #v(1em)
 
 詳細形式では、1行に崩壊系列を構成する1つの核種情報を記述し、これを繰り返す。このとき親核種の情報は1行目に記述する必要がある。
 各行は次表で示す3つ以上の列で構成される。
 
 #v(1em)
-#figure(
-  caption: [`[nuclide]`セクションの詳細形式における各行のフィールド],
-  table(
+#figure(caption: [`[nuclide]`セクションの詳細形式における各行のフィールド])[
+  #table(
     columns: 3,
     align: left,
     table.header([ 列番号 ], [ 内容 ], [ 備考 ]),
@@ -82,7 +78,7 @@
     [ 2 ], [ 崩壊定数λ [/day] ], [$=ln(2)\/"半減期"$ [day]、安定核種の場合は0を設定可能。],
     [ 3…n ], [ 娘核種とその分岐比 [-] ], [ `<核種名>/<分岐比>`を空白区切りで娘核種の数だけ入力する。\ 娘核種が存在しない場合は空とする。 ],
   )
-)
+]
 #v(1em)
 
 
@@ -92,16 +88,15 @@
 そうでない場合はインプット全体を対象としてパラメータ設定を行う。
 
 #v(1em)
-#figure(
-  caption: [`[parmeter]`セクションで指定可能なパラメータ],
-  table(
+#figure(caption: [`[parmeter]`セクションで指定可能なパラメータ])[
+  #table(
     columns: 3,
     align: left,
     table.header([ パラメータ名 ], [ 対象 ], [ 内容 ]),
     [ `ExcludeOtherSourceRegions` ], [ 全体, 核種 ], [ 線源領域`Other`の内訳から除外する線源領域を空白区切りで並べる。  ],
     [ `IncludeOtherSourceRegions` ], [ 全体, 核種 ], [ 線源領域`Other`の内訳として含める線源領域を空白区切りで並べる。  ],
   )
-)
+]
 #v(1em)
 
 === `compartment`セクション
@@ -111,9 +106,8 @@
 1行につき1個のコンパートメントを設定でき、各行は次表で示す3つの列で構成される。
 
 #v(1em)
-#figure(
-  caption: [`[compartment]`セクションの定義行],
-  table(
+#figure(caption: [`[compartment]`セクションの定義行])[
+  #table(
     columns: 3,
     align: left,
     table.header([ 列番号 ], [ 内容 ], [ 備考 ]),
@@ -121,7 +115,7 @@
     [ 2 ], [ コンパートメント名 ], [ ],
     [ 3 ], [ 対応する線源領域の名称 ], [ `acc`のみ指定可能。指定しない場合は「-」を入力する。 ],
   )
-)
+]
 #v(1em)
 
 コンパートメント機能の詳細は以下の通り。
@@ -141,9 +135,8 @@
 1行につき1個の移行経路を設定でき、各行は次表で示す3つの列で構成される。
 
 #v(1em)
-#figure(
-  caption: [`[transfer]`セクションの定義行],
-  table(
+#figure(caption: [`[transfer]`セクションの定義行])[
+  #table(
     columns: 3,
     align: (center+horizon, left+horizon, left),
     table.header([ 列番号 ], [ 内容 ], [ 備考 ]),
@@ -151,7 +144,7 @@
     [ 2 ], [ 移行先のコンパートメント名 ], [],
     [ 3 ], [ 移行速度[/d] (`acc`の場合) または \ 移行割合[%] (`mix`の場合) ], [ 速度がない壊変経路の場合は「`---`」を入力する。 ],
   )
-)
+]
 #v(1em)
 
 時間経過を伴う移行には移行速度[/d]を設定し、これは一般的に、OIRに定義された数値をそのまま入力することができる。
@@ -418,9 +411,8 @@ Oesophagus-s    Stomach-con      2160
 
 表@abosorption に消化管から血液への吸収割合を示す$f_"A"$値の例を示す。
 
-#figure(
-  caption: "吸入摂取と経口摂取の吸収パラメータ",
-  table(
+#figure(caption: "吸入摂取と経口摂取の吸収パラメータ")[
+  #table(
     columns: (auto, 10%, 10%, 10%, 20%),
     align: center+horizon,
     table.cell(rowspan: 2, align: left+bottom)[Inhaled particulate materials],
@@ -432,13 +424,12 @@ Oesophagus-s    Stomach-con      2160
     table.cell(colspan: 5, align: left)[Ingested materials],
     [All forms], [ ― ], [  ―   ], [ ―  ], [0.1],
   )
-) <abosorption>
+ ] <abosorption>
 
 - $f_"A"$値（SI からBlood への吸収値）を伴う場合の生物学的半減期及び移行割合の計算方法
 
-  #figure(
-    image("images/Figure_A4-1.png"),
-    caption: [],
-  )
+  #figure(caption: [])[
+    #image("images/Figure_A4-1.png")
+  ]
 
 `SI-con`から`Blood`への移行割合は、$f_"A"=0.1$ より10%となり、「SI-con」から「Blood」への移行係数は、下記の方法で導出する。

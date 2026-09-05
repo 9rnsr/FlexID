@@ -23,10 +23,9 @@ S係数（S-Coefficient）を算出する。計算の流れは以下のように
 
 S係数計算処理の概略フローを以下に示す。
 
-#figure(
-  image("images/Figure_A3-1.png", height: 60%),
-  caption: "S係数計算処理の概略フロー図",
-)
+#figure(caption: "S係数計算処理の概略フロー図")[
+  #image("images/Figure_A3-1.png", height: 60%)
+]
 
 
 = 線源領域79個×標的領域43個のS係数計算
@@ -42,9 +41,8 @@ $ "S–coefficient"("T"←"S") = sum_i ( Y_i dot E_i dot "SAF"("T"←"S")_i dot 
 ])
 
 ここで、
-
-#figure(
-  table(
+#figure[
+  #table(
     columns: (25%,70%),
     align: (center+horizon, left),
     table.header([式], [意味]),
@@ -54,7 +52,7 @@ $ "S–coefficient"("T"←"S") = sum_i ( Y_i dot E_i dot "SAF"("T"←"S")_i dot 
     [$"SAF"("T"←"S")_i$],[線源領域$"S"$内で放出されるエネルギー$E_i$の放射線から、標的領域$"T"$の単位質量あたりに吸収されるエネルギーの割合（比吸収割合） [/kg]],
     [$w_("R"_i)$],[放射線$i$の放射線加重係数 [-]],
   )
-)
+]
 
 == β#super[-]・β#super[+]線スペクトル
 
@@ -66,8 +64,8 @@ $ "S–coefficient"("T"←"S") = w_"R" integral_0^(E_(max)) Y(E) dot E dot "SAF"
 
 ここで、
 
-#figure(
-  table(
+#figure[
+  #table(
     columns: (20%,75%),
     align: (center, left),
     table.header([式], [意味]),
@@ -76,7 +74,7 @@ $ "S–coefficient"("T"←"S") = w_"R" integral_0^(E_(max)) Y(E) dot E dot "SAF"
     [$"SAF"("T"←"S", E)$], [$E$[MeV]における比吸収割合 [/kg]],
     [$w_"R"$], [放射線$"R"$（電子、陽電）の放射線加重係数 [-]],
   )
-)
+]
 
 == 自発核分裂中性子スペクトル
 
@@ -88,15 +86,15 @@ $ "S–coefficient"("T"←"S") = overline("SAF"("T"←"S")) * overline(w_"R") "[
 
 ここで、
 
-#figure(
-  table(
+#figure[
+  #table(
     columns: (20%, 75%),
     align: (center, left),
     table.header([式], [意味]),
     [$overline("SAF"("T"←"S"))$], [スペクトル平均の比吸収割合 [/kg]],
     [$overline(w_"R")$], [対象核種におけるスペクトル平均の中性子の放射線加重係数 [-]]
   )
-)
+]
 
 
 = 線源領域Other×標的領域43個のS係数計算
@@ -118,15 +116,15 @@ $ "S–coefficient"("T"←"Other") = frac(1, M_"Other") sum_"S" M_"S" dot "S–c
 
 ここで、
 
-#figure(
-  table(
-    columns: (12%,auto),
+#figure[
+  #table(
+    columns: (12%, auto),
     align: (center+horizon, left),
     table.header([式], [意味]),
     [$M_"Other"$], [コンパートメントモデル図で明確にされていない組織の合計質量],
     [$M_"S"$],     [コンパートメントモデル図で明確にされていない個々の線源領域の質量\ （ICRP Publ.133 Table A.3および`sregions_2016-08-12.NDX`から）],
   )
-)
+]
 #v(1em)
 
 #v(1em)
@@ -135,9 +133,8 @@ $ "S–coefficient"("T"←"Other") = frac(1, M_"Other") sum_"S" M_"S" dot "S–c
 ICRP Publication 103 に示されている放射線加重係数（$w_"R"$）を 表@w_R に示す。
 
 #v(1em)
-#figure(
-  caption: "放射線加重係数",
-  table(
+#figure(caption: "放射線加重係数")[
+  #table(
     columns: (3cm, 3cm),
     align: (center+horizon, center),
     table.header([放射タイプ], [$w_"R"$]),
@@ -146,16 +143,15 @@ ICRP Publication 103 に示されている放射線加重係数（$w_"R"$）を 
     [α粒子],     [20],
     [中性子],     [図@neutron_w_R 参照],
   )
-) <w_R>
+] <w_R>
 #v(1em)
 
 S係数計算の為の光子、電子及びα粒子の$w_"R"$は 表@w_R に示す値を用いる。しかし中性子については、ICRP Publ.133 のSAFデータにおいて中性子スペクトル平均の$overline(w_"R")$が用いられているため、その値からS係数を計算する。
 
 #v(1em)
-#figure(
-  image("images/Figure_A3-2.png", width: 80%),
-  caption: "中性子スペクトル平均の放射線加重係数",
-) <neutron_w_R>
+#figure(caption: "中性子スペクトル平均の放射線加重係数")[
+  #image("images/Figure_A3-2.png", width: 80%)
+] <neutron_w_R>
 
 #pagebreak()
 = ICRP Publication 107 核崩壊データファイルの仕様
@@ -165,10 +161,9 @@ S係数計算の為の光子、電子及びα粒子の$w_"R"$は 表@w_R に示�
 `ICRP-07.RAD`ファイル（以下RADファイルと呼ぶ）には、放射性核種の壊変で放出された各放射線のエネルギーと収率に関するデータが含まれている。このファイルの放射線にはカットオフエネルギーが適用されていない。RADファイルのデータフィールドを 表@rad_fields に示す。
 #v(1em)
 
-#figure(
-  caption: [`ICRP-07.RAD`ファイルの構造],
-  table(
-    columns: (16%,16%,auto),
+#figure(caption: [`ICRP-07.RAD`ファイルの構造])[
+  #table(
+    columns: (16%, 16%, auto),
     align: (center+horizon, center, left),
     table.header([フィールド], [フォーマット], [説明]),
     table.cell(colspan: 3, align: left)[#underline[核種フィールド] ],
@@ -182,7 +177,7 @@ S係数計算の為の光子、電子及びα粒子の$w_"R"$は 表@w_R に示�
     [エネルギー], [`E12.0`],      [放射線のエネルギー [MeV]],
     [JCODE],      [`A3`],         [放射線のタイプ（表@icode_jcode 参照）],
   )
-) <rad_fields>
+] <rad_fields>
 
 #v(1em)
 核種フィールドには核種名、半減期、放射線データの数が記載されている。データフィールドには放射線タイプ、壊変あたりの放射線収率、放射線の固有エネルギーまたは平均エネルギーが記載されている。放射線タイプは表@icode_jcode に示す数値と略称が使用される。
@@ -191,9 +186,8 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
 
 #v(1em)
 #columns(2, gutter: 0.5cm)[
-  #figure(
-    caption: [ICODE, JCODE変数の説明],
-    table(
+  #figure(caption: [ICODE, JCODE変数の説明])[
+    #table(
       //columns: 3,
       rows: 1.7em,
       columns: (2cm, 2cm, 3cm),
@@ -216,14 +210,13 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
       [ 10 ], [ `FF` ], [ 核分裂断片 ],
       [ 11 ], [ `N`  ], [ 中性子 ],
     )
-  ) <icode_jcode>
+  ] <icode_jcode>
 
   #colbreak()
 
-  #figure(
-    image("images/Figure_A3-3.png", width: 7cm),
-    caption: [`ICRP-07.RAD`サンプル],
-  ) <rad_file>
+  #figure(caption: [`ICRP-07.RAD`サンプル])[
+    #image("images/Figure_A3-3.png", width: 7cm)
+   ] <rad_file>
 ]
 
 == ICRP-07.BET ファイル
@@ -231,10 +224,9 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
 `ICRP-07.BET`（以下、BETファイルと呼ぶ）には、RADファイルに含まれるβ粒子のスペクトルデータが含まれている。スペクトルデータは任意のエネルギー幅毎の積算値で示されている。核種フィールドには、核種毎に核種名とその核種の全放射線データが記録されている。データフィールドには、このエネルギー幅で放出される1壊変当たり、1MeV当たりの電子エネルギーE（MeV）とβ粒子の数が含まれている。BETファイルのデータフィールドを 表@bet_fields に、ファイル内容の一部を 図@bet_file に示す。
 #v(1em)
 
-#figure(
-  caption: [`ICRP-07.BET`ファイルの構造],
-  table(
-    columns: (16%,16%,auto),
+#figure(caption: [`ICRP-07.BET`ファイルの構造])[
+  #table(
+    columns: (16%, 16%, auto),
     align: (center+horizon, center, left),
     table.header([フィールド], [フォーマット], [説明]),
     table.cell(colspan: 3, align: left)[#underline[核種フィールド] ],
@@ -244,13 +236,12 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
     [エネルギー], [`F7.0`],   [エネルギーグリッドポイント [MeV]],
     [β粒子数],    [`E10.0`],  [エネルギーにおける壊変1MeVあたりのβ粒子数],
   )
-) <bet_fields>
+] <bet_fields>
 
 #v(1em)
-#figure(
-  image("images/Figure_A3-4.png", width: 34%),
-  caption: [`ICRP-07.BET`サンプル],
-) <bet_file>
+#figure(caption: [`ICRP-07.BET`サンプル])[
+  #image("images/Figure_A3-4.png", width: 34%)
+] <bet_file>
 
 
 #pagebreak()
@@ -261,10 +252,9 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
 α粒子、電子及び光子のSAFファイル名を 表@saf_files に示す。
 #v(1em)
 
-#figure(
-  caption: "α粒子、電子及び光子のSAFファイル名",
-  table(
-    columns: (10%,10%,auto),
+#figure(caption: "α粒子、電子及び光子のSAFファイル名")[
+  #table(
+    columns: (10%, 10%, auto),
     align: (center+horizon, center, left),
     table.header([性別], [粒子], [ファイル名]),
     table.cell(rowspan: 3)[男性],
@@ -276,15 +266,14 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
     [β], [`rcp-af_electron_2016-08-12.SAF`],
     [γ], [`rcp-af_photon_2016-08-12.SAF`],
   )
-) <saf_files>
+] <saf_files>
 
 #v(1em)
 ここで、`am`は標準成人男性（Adult Male）、`af`は標準成人女性（Adult Female）を表わす。それぞれのファイルには5つの見出しレコードがあり、6番目以降のレコードが対象となる全ての線源領域と標的領域に対応する全てのSAFレコードとなる。これらのファイルは、79の線源領域から43の標的領域に対するSAFが示されており、レコードの総数は43×79+5の3402である。ファイル内のレコードはすべて同じ長さである。電子と光子のレコードの長さは315で、αのSAFレコードの長さは270である。それに伴うキャリッジリターンとラインフィード（CrLf）は、これらの値に含まれていない。SAFファイルのデータフィールドを 表@saf_fields に示す。
 #v(1em)
 
-#figure(
-  caption: "SAFファイル（α粒子、電子及び光子）の構造",
-  table(
+#figure(caption: "SAFファイル（α粒子、電子及び光子）の構造")[
+  #table(
     columns: 3,
     align: (left, center, left),
     table.header([フィールド], [フォーマット], [説明]),
@@ -304,7 +293,7 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
     [`Icut`],     [`I3`], [`Ecut`のエネルギー指数],
     [CrLf],       [―], [改行],
   )
-) <saf_fields>
+] <saf_fields>
 
 #pagebreak()
 電子と光子のSAFファイルのエネルギー数nは28であり、αのSAFファイルは24のエネルギーについて示されている。前述のとおり、αのSAFファイルの`Ecut`パラメータは長さが5（`F5.0`）である。
@@ -314,10 +303,9 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
 `Icut`フィールドには、ゼロでないSAF（T←S）値が示されているエネルギーの低エネルギー側からの順番が示されている。SAFがすべてゼロであれば、`Icut`は`0`に設定される。`Icut`がjであれば、レコードには`E(j)`から`E(n)`までの範囲のエネルギーのゼロでないSAF値が含まれている。ここで、`n`は電子と光子のSAFファイルで28、αのSAFファイルで24である。つまりゼロでないSAF値の数は、`n-j+1`である。
 
 #v(1em)
-#figure(
-  image("images/Figure_A3-5.png", width: 100%),
-  caption: [`rcp-af_photon_2016-08-12.SAF`サンプル],
-)
+#figure(caption: [`rcp-af_photon_2016-08-12.SAF`サンプル])[
+  #image("images/Figure_A3-5.png", width: 100%)
+]
 
 
 == 中性子のSAFファイル
@@ -325,16 +313,15 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
 中性子のSAFファイル名を 表@neutron_saf_files に示す。
 
 #v(1em)
-#figure(
-  caption: "中性子のSAFファイル名",
-  table(
-    columns: (10%,10%,auto),
+#figure(caption: "中性子のSAFファイル名")[
+  #table(
+    columns: (10%, 10%, auto),
     align: (center+horizon, center, left),
     table.header([性別], [粒子], [ファイル名]),
     [男性], [N], [`rcp-af_neutron_2016-08-12.SAF`],
     [女性], [N], [`rcp-am_neutron_2016-08-12.SAF`],
   )
-) <neutron_saf_files>
+] <neutron_saf_files>
 #v(1em)
 
 ここで、`am`は標準成人男性（Adult Male）、`af`は標準成人女性（Adult Female）を表わす。中性子のSAFファイルは、Publ.107（ICRP、2008年）にある自発核分裂崩壊モードの放射性核種に関する、43の標的領域と79の線源領域について、核分裂中性子スペクトルの平均エネルギーで正規化されたスペクトル平均のSAFを表示するものである。中性子のSAFファイルに示されている28の核種は`U-238`、`Pu-236`、`Pu-238`、`Pu-240`、`Pu-242`、`Pu-244`、`Cm-240`、`Cm-242`、`Cm-244`、`Cm-245`、`Cm-246`、`Cm-248`、`Cm-250`、`Cf-246`、`Cf-248`、`Cf-249`、`Cf-250`、`Cf-252`、`Cf-254`、`Es-253`、`Es-254`、`Es-254m`、`Es-255`、`Fm-252`、`Fm-254`、`Fm-255`、`Fm-256`、および`Fm-257`である。
@@ -342,9 +329,8 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
 これらのファイルの4番目のレコードは、Publ.103（ICRP、2007年）に示すスペクトル平均の中性子の$W_"R"$を表示するものである。長さ302のSAFレコードのデータフィールドを 表@neutron_saf_fields に示す。
 
 #v(1em)
-#figure(
-  caption: "SAFファイル（中性子）の構造",
-  table(
+#figure(caption: "SAFファイル（中性子）の構造")[
+  #table(
     columns: 3,
     align: (left, center, left),
     table.header([フィールド], [フォーマット], [説明]),
@@ -366,13 +352,12 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
     [SAF(1…28)], [`E10.0`], [28個のSAF値（kg#super[-1]）],
     [CrLf],      [―],  [改行],
   )
-) <neutron_saf_fields>
+ ] <neutron_saf_fields>
 
 #v(2em)
-#figure(
-  image("images/Figure_A3-6.png", width: 100%),
-  caption: [`rcp-am_neutron_2016-08-12.SAF`サンプル],
-)
+#figure(caption: [`rcp-am_neutron_2016-08-12.SAF`サンプル])[
+  #image("images/Figure_A3-6.png", width: 100%)
+]
 
 
 #pagebreak()
@@ -382,15 +367,13 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
 
 ここで、43はこれらのファイルの中に記録されている標的領域の数の合計量である。例えば、脳は`torgans_2016-08-12.NDX`ファイルの18番目の標的領域であり、胃の内容物は`sregions_2016-08-12.NDX`ファイルの10番目の線源領域である。したがって、SAF（Brain←St-cont）のレコード番号は43×9+23の410番目のレコードである。`sregions_2016-08-12.NDX`ファイルのレコードには、線源領域の実質組織質量とその他の組織の線源領域の一部の領域を識別する「`ID`」フィールドがある（`ID=1`：「その他の組織の線源領域の一部」の対象、`ID=0`：対象外）。`torgans_2016-0812.NDX`ファイルには、様々な標的領域の質量がある（図@sregions_and_torgans 参照）。
 
-#figure(
-  image("images/Figure_A3-7.png", width: 100%),
-  caption: [`sregions_2016-08-12.NDX`及び`torgans_2016-08-12.NDX`サンプル],
-) <sregions_and_torgans>
+#figure(caption: [`sregions_2016-08-12.NDX`及び`torgans_2016-08-12.NDX`サンプル])[
+  #image("images/Figure_A3-7.png", width: 100%)
+ ] <sregions_and_torgans>
 
 #v(1em)
-#figure(
-  caption: "標的領域の名称",
-  table(
+#figure(caption: "標的領域の名称")[
+  #table(
     columns: (3cm,5.5cm,7cm),
     align: (left, left, left),
     table.header([略称], [領域名], [英名]),
@@ -438,12 +421,11 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
     [Adipose], [脂肪組織], [Adipose tissue],
     [Muscle], [筋肉], [Muscle],
   )
-)
+]
 
 #pagebreak()
-#figure(
-  caption: "線源領域の名称",
-  table(
+#figure(caption: "線源領域の名称")[
+  #table(
     columns: (3cm,5.5cm,7cm),
     align: (left, left, left),
     table.header([略称], [領域名], [英名]),
@@ -527,6 +509,6 @@ RADファイルの一部を 図@rad_file に示す。データフォーマット
     [Lung-Tis], [肺組織], [Lung tissue],
     [RT-air], [呼吸器の空気], [Respiratory tract air],
   )
-)
+]
 
 #bibliography("Bibliography.yaml", style: "ieee")
