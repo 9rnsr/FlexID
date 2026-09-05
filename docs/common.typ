@@ -36,6 +36,36 @@
   body
 }
 
+#let maketitle(
+  title: "",
+  authors: "",
+  abstract: [],
+  keywords: (),
+) = {
+  set document(title: title, author: authortext(authors), keywords: keywords)
+  place(top + center, scope: "parent", float: true)[
+    #set align(center)
+    #v(2em)
+    #text(1.7em, title)
+    #v(2em)
+    #if authors != "" [
+      #pad(
+        x: 2em,
+        if type(authors) == array {
+          authors.map(boxtable).join("      ")
+        } else {
+          authors
+        }
+      )
+    ]
+    // #let date = datetime.today().display("[year]年[month repr:numerical padding:none]月[day padding:none]日"),
+    // #if date != none [
+    //   #v(1em)
+    //   #date
+    // ]
+  ]
+}
+
 // ラベルから「番号 タイトル」のリンクを作成する
 #let chapref(label) = context {
   let matches = query(label)
