@@ -7,7 +7,7 @@
 #pagebreak()
 
 #maketitle(
-  title: "添付資料2 「等価線量・預託実効線量の計算方法」",
+  title: "添付資料2 「預託等価線量・預託実効線量の計算方法」",
 )
 
 = 預託線量の計算
@@ -30,6 +30,7 @@ $ H_("T")(Delta t) = sum_"S" U_("S")(Delta t) dot "S–coefficient"("T" ← "S")
       [$C$],                [MeV/kgからGy(J/kg)への換算係数（$1.60218×10^(-13)$ [J/MeV]）],
     )
   )
+  #v(1.0em)
 
 ここで使用する$"S–coefficient"("T" ← "S")$について、線源領域の集合$"S"$は、コンパートメントモデル図で明確にされていない「その他の組織」からの寄与を計算するための線源領域$"Other"$を含んでいる。$"S–coefficient"("T" ← "Other")$を含めたS係数の計算方法については#link("UserManual_Appendix-3.typ")[添付資料3] を参照。
 
