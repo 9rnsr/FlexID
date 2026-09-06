@@ -1,14 +1,7 @@
 #import "common.typ": *
-#show: style
-
-#set page(numbering: (..n) => [付4 - #n.at(0)])
-#set enum(numbering: "(1)")
-
-#outline()
-#pagebreak()
-
-#maketitle(
-  title: "添付資料4 「インプットファイル等の作成方法」",
+#show: style.with(
+  appendix: 4,
+  title: "インプットファイル等の作成方法",
 )
 
 = インプットファイルの作成
@@ -352,8 +345,8 @@ Sr-90 Ingestion:Other
 
 吸入摂取における呼吸器への初期配分割合と、これをインプットとして設定する例を示す。
 
-#figure(
-  table(
+#figure[
+  #table(
     columns: 2,
     align: left,
     table.header([ Region ], [ Deposition (%) ]),
@@ -364,7 +357,7 @@ Sr-90 Ingestion:Other
     [ AI        ], [  5.32 ],
     [ Total     ], [ 81.96 ],
   )
-)
+]
 
 ```
 [intake]
@@ -386,8 +379,8 @@ Sr-90 Ingestion:Other
 
 コンパートメント間の移行係数の例と、これをインプットとして設定する例を示す。
 
-#figure(
-  table(
+#figure[
+  #table(
     columns: 3,
     align: left,
     table.header([ From ], [ To ], [ 移行速度[/d] ]),
@@ -396,7 +389,7 @@ Sr-90 Ingestion:Other
     [ Oesophagus-F ], [ Stomach-con  ], [ 12343 ],
     [ Oesophagus-S ], [ Stomach-con  ], [  2160 ],
   )
-)
+]
 
 ```
 [Sr-90:transfer]

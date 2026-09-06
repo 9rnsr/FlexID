@@ -1,6 +1,36 @@
 #import "@preview/js:0.1.3": *
 
-#let style(body) = {
+#let maketitle(
+  title: "",
+  authors: "",
+  abstract: [],
+  keywords: (),
+) = {
+  set document(title: title, author: authortext(authors), keywords: keywords)
+  place(top + center, scope: "parent", float: true)[
+    #set align(center)
+    #v(2em)
+    #text(1.7em, title)
+    #v(2em)
+    #if authors != "" [
+      #pad(
+        x: 2em,
+        if type(authors) == array {
+          authors.map(boxtable).join("      ")
+        } else {
+          authors
+        }
+      )
+    ]
+    // #let date = datetime.today().display("[year]年[month repr:numerical padding:none]月[day padding:none]日"),
+    // #if date != none [
+    //   #v(1em)
+    //   #date
+    // ]
+  ]
+}
+
+#let style(title: "", appendix: none, authors: "", body) = {
   show: js.with(
     seriffont:     "New Computer Modern",
     seriffont-cjk: "Harano Aji Mincho",
@@ -31,39 +61,33 @@
   //  if it.body.has("children") { it } else { it }
   //}
 
+  let page-prefix = ""
+  if appendix != none {
+    page-prefix = [付#appendix - ]
+  }
+
+  // 目次セクション
+  counter(page).update(1)
+  set page(numbering: (n, ..) => [#page-prefix #numbering("i", n)])
+  outline()
+  pagebreak()
+
+  // 本文セクション
+  counter(page).update(1)
+  counter(heading).update(0)
+  set page(numbering: (n, ..) => [#page-prefix #numbering("1", n)])
+  set heading(numbering: "1.")
+  set enum(numbering: "1)")
   set math.equation(numbering: "(1)")
 
-  body
-}
+  // 文書タイトル
+  if appendix != none {
+    maketitle(title: [添付資料#appendix 「#title」], authors: authors)
+  } else {
+    maketitle(title: title, authors: authors)
+  }
 
-#let maketitle(
-  title: "",
-  authors: "",
-  abstract: [],
-  keywords: (),
-) = {
-  set document(title: title, author: authortext(authors), keywords: keywords)
-  place(top + center, scope: "parent", float: true)[
-    #set align(center)
-    #v(2em)
-    #text(1.7em, title)
-    #v(2em)
-    #if authors != "" [
-      #pad(
-        x: 2em,
-        if type(authors) == array {
-          authors.map(boxtable).join("      ")
-        } else {
-          authors
-        }
-      )
-    ]
-    // #let date = datetime.today().display("[year]年[month repr:numerical padding:none]月[day padding:none]日"),
-    // #if date != none [
-    //   #v(1em)
-    //   #date
-    // ]
-  ]
+  body
 }
 
 // ラベルから「番号 タイトル」のリンクを作成する

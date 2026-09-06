@@ -1,14 +1,7 @@
 #import "common.typ": *
-#show: style
-
-#set page(numbering: (..n) => [付1 - #n.at(0)])
-#set enum(numbering: "(1)")
-
-#outline()
-#pagebreak()
-
-#maketitle(
-  title: "添付資料1 「体内残留放射能の計算方法」",
+#show: style.with(
+  appendix: 1,
+  title: "体内残留放射能の計算方法",
 )
 
 = FlexIDの体内残留放射能の計算方法
@@ -42,6 +35,7 @@ FlexIDの計算処理フローチャートを 図@flow に示す。
 #figure(caption: "FlexIDの計算処理フロー")[
   #image("images/Figure_A1-4.png", width: 85%)
 ] <flow>
+
 
 == 基本計算式
 
@@ -96,7 +90,7 @@ FlexIDの計算処理フローチャートを 図@flow に示す。
 
 混合機能（コンパートメント機能: `mix`）を設定したコンパートメントでは、複数の流入に対して平均値を計算し、その後、流出ジャンクションから移行割合に応じて流出させる。
 
-#pagebreak()
+
 = 集合した臓器・組織の残留放射能の計算
 
 ICRP Electronic Annex OIR Data Viewerで出力される「Whole Body」（全身）、「Alimentaryt Tract」（消化管）、「Lungs」（肺）、「Skeleton」（骨格）、「Liver」（肝臓）、「Thyroid」（甲状腺）の残留放射能データと比較可能な値を算出するための手法について示す。

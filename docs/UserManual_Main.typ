@@ -1,8 +1,8 @@
 #import "common.typ": *
-#show: style
-
-#set page(numbering: "1")
-#set enum(numbering: "(1)")
+#show: style.with(
+  title: "FlexID ユーザーマニュアル",
+  authors: "HARA, Kenji",
+)
 
 = はじめに
 本書は、ICRP2007年勧告に基づく内部被ばく線量評価コードFlexID（Flexible code for Internal Dosimetry）のユーザーマニュアルである。FlexIDは、ICRP2007年勧告に基づく体内動態モデルを臓器・組織ごとに組合せ、放射性核種の人間の体内での移行を計算し、子孫核種も含めた体内動態、及び線量評価を行う。入力データの変更だけで体内動態モデルの組合せや移行係数等を変更でき、ICRPの体内動態モデルの変更に迅速かつ容易に対応可能な汎用コードである。
@@ -64,9 +64,9 @@ FlexIDの主な機能を以下に示す。
 #figure(caption: "計算実行画面")[
   #image("images/Figure_1.png", width: 80%)
 ]
+#v(1em)
 
-
-+ 被ばく対象のタブを選択する。
+被ばく対象のタブを選択する。
    - OIR：職業人の内部被ばく（Occupational Intakes of Radionuclides）
    - EIR：公衆の構成員の内部被ばく（Environmental Intakes of Radionuclides）
 
@@ -75,10 +75,9 @@ FlexIDの主な機能を以下に示す。
 == OIR計算実行画面 <oir-calc>
 
 本画面では、ICRP OIRシリーズに提示されている核種の計算を実行することができる。
-//新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
 
-//   時間メッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
-// #v(0.5em)
+//新しい核種を追加するためのインプットファイル作成方法は、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
+//時間メッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
 
 + 組み込み済みのインプット一覧から、計算対象とするものをチェックボックスで選択する。
 + 預託期間を`Commitment Period`欄に整数とその単位で設定する <a>
@@ -86,8 +85,8 @@ FlexIDの主な機能を以下に示す。
 + 計算時間メッシュと出力時間メッシュのファイルを、それぞれ`Computational Time Mesh`欄と`Output Time Mesh`欄で設定する。
 + 出力フォルダのパスを`Output Directory`欄で設定する。
 + `Run`ボタンを押下して計算処理を開始する。
+//+ 子孫核種の考慮の有無を選択する。
 
-  #v(1em)
   #figure(caption: "OIR計算実行画面")[
     #markrect(
       image("images/Figure_1.png"),
@@ -135,6 +134,7 @@ FlexIDの主な機能を以下に示す。
       (x: 37.8%, y: 24.2%, w: 59.4%, h: 9.5%)
     )
   ]
+  #v(1em)
 
 //+ 子孫核種の考慮の有無を選択する。
 
@@ -145,28 +145,21 @@ FlexIDの主な機能を以下に示す。
 #pagebreak()
 == EIR計算実行画面
 
-+ 預託期間を`Commitment Period`欄に整数で入力し、ドロップダウンから預託期間の単位を選択する
+// 時間メッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
 
++ 組み込み済みのインプット一覧から、計算対象とするものをチェックボックスで選択する。
++ 預託期間を`Commitment Period`欄に整数とその単位で設定する <a>
 + 被ばく時の年齢（摂取時年齢）を`Intake Age`ドロップダウンから選択する。
-
-+ 計算時間メッシュファイルと出力時間メッシュファイルを、それぞれ \
-  `Computational Time Mesh`欄と`Output Time Mesh`欄で選択する。
-
-    時間メッシュファイルの作成方法については、#link("UserManual_Appendix-4.md")[添付資料4]を参照。
-  #v(0.5em)
-
-+ 出力フォルダのパスを`Output Directory`欄で指定する。
-
++ 計算時間メッシュと出力時間メッシュのファイルを、それぞれ`Computational Time Mesh`欄と`Output Time Mesh`欄で設定する。
++ 出力フォルダのパスを`Output Directory`欄で設定する。
++ `Run`ボタンを押下して計算処理を開始する。
 //+ 子孫核種の考慮の有無を選択する。
 
-+ 一覧から計算対象のインプットをチェックボックスで選択する。
-
-  インプットの選択方法については #chapref(<oir-calc>) と同様。
-
-  #v(1em)
   #figure(caption: "EIR計算実行画面")[
     #image("images/Figure_2.png")
   ]
+
+  インプットの選択方法については #chapref(<oir-calc>) と同様。
 
 == S係数作成画面
 

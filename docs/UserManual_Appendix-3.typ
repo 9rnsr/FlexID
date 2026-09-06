@@ -1,21 +1,12 @@
 #import "common.typ": *
-#show: style
-
-#outline()
-#pagebreak()
-
-#set page(numbering: (..n) => [付3 - #n.at(0)])
-#set enum(numbering: "(1)")
-
-#maketitle(
-  title: "添付資料3 「S係数の計算方法」",
+#show: style.with(
+  appendix: 3,
+  title: "S係数の計算方法",
 )
 
 = 計算の流れ
 
-FlexIDでは、ICRP Publ.103の放射線加重係数データ #cite(<icrp103>)、ICRP Publ.107の核崩壊（放出放射線）データ #cite(<icrp107>)、
-およびICRP Publ.133のSAFデータ #cite(<icrp133>) を用いて、線源領域に蓄積した残留放射能から標的領域への線量寄与を計算する際に必要となる、
-S係数（S-Coefficient）を算出する。計算の流れは以下のようになっている。
+FlexIDでは、ICRP Publ.103の放射線加重係数データ #cite(<icrp103>)、ICRP Publ.107の核崩壊（放出放射線）データ #cite(<icrp107>)、およびICRP Publ.133のSAFデータ #cite(<icrp133>) を用いて、線源領域に蓄積した残留放射能から標的領域への線量寄与を計算する際に必要となる、S係数（S-Coefficient）を算出する。計算の流れは以下のようになっている。
 
 + 各パラメータ（放射線加重係数データ、放出放射線データ、SAFデータ）を読み込む。
 + 各パラメータを用いて、1つの線源領域から1つの標的領域へのS係数を計算する。
