@@ -38,6 +38,10 @@
     sansfont-cjk:  "Harano Aji Gothic",
   )
 
+  show raw: set text(font:
+    ((name: "DejaVu Sans Mono", covers: "latin-in-cjk"),
+     "Harano Aji Gothic"))
+
   // ページの余白を設定
   set page(margin: (x: 25mm, top: 25mm, bottom: 15mm))
 
