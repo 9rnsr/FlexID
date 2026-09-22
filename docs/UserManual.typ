@@ -13,3 +13,6 @@
 
 #pagebreak()
 #include "UserManual_Appendix-4.typ"
+
+#pagebreak()
+#include "UserManual_Appendix-5.typ"
