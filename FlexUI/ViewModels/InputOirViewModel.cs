@@ -138,7 +138,7 @@ public partial class InputOirViewModel : ViewModelBase
     [ObservableProperty]
     public partial int CommitmentPeriod { get; set; }
 
-    public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
+    public IReadOnlyList<string> CommitmentPeriodUnits { get; } = (string[])
     [
         "days",
         "months",

@@ -11,7 +11,7 @@ public class InputTarget
         FilePath = filePath;
         Title = data.Title;
         Nuclide = data.Nuclides[0].Name;
-        Progenies = [.. data.Nuclides.Skip(1).Select(nuc => nuc.Name)];
+        Progenies = (string[])[.. data.Nuclides.Skip(1).Select(nuc => nuc.Name)];
     }
 
     /// <summary>
