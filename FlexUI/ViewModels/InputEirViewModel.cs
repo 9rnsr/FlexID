@@ -137,7 +137,7 @@ public partial class InputEirViewModel : ViewModelBase
     [ObservableProperty]
     public partial int CommitmentPeriod { get; set; }
 
-    public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
+    public IReadOnlyList<string> CommitmentPeriodUnits { get; } = (string[])
     [
         "days",
         "months",
@@ -147,7 +147,7 @@ public partial class InputEirViewModel : ViewModelBase
     [ObservableProperty]
     public partial string SelectedCommitmentPeriodUnit { get; set; }
 
-    public IReadOnlyList<string> IntakeAges { get; } =
+    public IReadOnlyList<string> IntakeAges { get; } = (string[])
     [
         "3months old",
         "1years old",
