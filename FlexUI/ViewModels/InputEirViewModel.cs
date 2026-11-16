@@ -93,7 +93,11 @@ public partial class InputEirViewModel : ViewModelBase
         }
 
         var inputs = GetTargets(inputFiles);
-        await BuiltinTargets.AddRangeAsync(inputs);
+
+        await foreach (var item in inputs)
+        {
+            BuiltinTargets.AddSorted(item);
+        }
     }
 
     [RelayCommand]
@@ -122,7 +126,10 @@ public partial class InputEirViewModel : ViewModelBase
                     .All(targetVM => Path.GetFullPath(targetVM.InputTarget.FilePath) != inputFile);
             }));
 
-            await ExternalTargets.AddRangeAsync(inputs, initialCheck: true);
+            await foreach (var item in inputs)
+            {
+                ExternalTargets.AddChecked(item);
+            }
         }
     }
 
