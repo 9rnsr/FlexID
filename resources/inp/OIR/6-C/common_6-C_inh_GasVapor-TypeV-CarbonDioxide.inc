@@ -14,7 +14,8 @@
 
 # ICRP Publ.134 p.52 Table 3.2
 # ICRP Publ.134 p.53 Para.87
-  $Blood                  100.0%
+  $Blood                 100%
+  Exhalation               0%
 
 
 [include:../share/common_HATM+UB.inc]
