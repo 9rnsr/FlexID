@@ -1,0 +1,7 @@
+[title]
+I-123 Inhalation, Gas or Vapor Type V, Methyl iodine, ethyl iodine
+
+[nuclide]
+  I-123  Te-123m  Te-123
+
+[include:../common_53-I_inh_GasVapor-TypeV.inc]
