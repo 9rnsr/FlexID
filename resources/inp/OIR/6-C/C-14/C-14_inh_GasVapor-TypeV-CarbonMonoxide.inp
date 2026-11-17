@@ -1,0 +1,7 @@
+[title]
+C-14 Inhalation, Gas or Vapor Type V, Carbon monoxide
+
+[nuclide]
+  C-14
+
+[include:../common_6-C_inh_GasVapor-TypeV-CarbonMonoxide.inc]

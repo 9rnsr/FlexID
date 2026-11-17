@@ -1,0 +1,7 @@
+[title]
+C-11 Inhalation, Gas or Vapor Type V, Methane
+
+[nuclide]
+  C-11
+
+[include:../common_6-C_inh_GasVapor-TypeV-Methane.inc]
