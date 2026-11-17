@@ -1,3 +1,7 @@
+[parameter]
+  ${H}/Blood = 'mix-Blood'
+
+
 [{H}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region

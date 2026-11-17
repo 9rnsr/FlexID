@@ -1,10 +1,10 @@
+[include:common_1-H_parameter.inc]
+
 [parameter]
-  # ICRP Publ.134 p.21 Table 2.3 / Ingested materials, Soluble forms
+  # ICRP Publ.134 p.28 Para.49,53
 
   ${H}/fA    = 0.99 # ≒1
-  ${H}/fA_Re = 0
-
-  $Blood = 'mix-Blood'
+  ${H}/fA_Re = fA_MaxValueOfIng
 
 
 [include:../share/common_intake_ing.inc]

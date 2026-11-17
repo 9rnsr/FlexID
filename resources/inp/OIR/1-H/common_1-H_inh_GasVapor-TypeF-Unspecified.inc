@@ -1,16 +1,16 @@
+[include:common_1-H_parameter.inc]
+
 [parameter]
   # ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Absorption type F
 
   $fr = 1
   $sr = 100
   $ss =   0
-  $fb = 0
-  $sb = 0
+  $fb = 0           # footnote†
+  $sb = 0           # footnote†
 
-  ${H}/fA    = 0.99 # ≒1   # ICRP Publ.134 p.20 Table 2.2 / Unspecified, Absorption type F
-  ${H}/fA_Re = 0
-
-  $Blood = 'Blood'
+  ${H}/fA    = 0.99 # ≒1       # ICRP Publ.134 p.20 Table 2.2 / Unspecified, Absorption type F
+  ${H}/fA_Re = fA_MaxValueOfIng
 
 
 [intake]

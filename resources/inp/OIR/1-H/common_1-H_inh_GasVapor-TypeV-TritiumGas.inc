@@ -1,10 +1,8 @@
+[include:common_1-H_parameter.inc]
+
 [parameter]
-  # ICRP Publ.134 p.20 Table 2.2 / Tritium gas, Absorption type V
-
-  ${H}/fA    = 0            # 小腸から血液への吸収は無い
-  ${H}/fA_Re = 0            # 小腸から血液への吸収は無い
-
-  ${H}/Blood = 'Blood'
+  ${H}/fA    = fA_MaxValueOfIng
+  ${H}/fA_Re = fA_MaxValueOfIng
 
 
 [intake]
