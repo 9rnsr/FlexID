@@ -1,3 +1,5 @@
+[include:common_6-C_parameter.inc]
+
 [parameter]
   # ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Absorption type F
 
@@ -7,10 +9,8 @@
   $fb = 0                   # footnote†
   $sb = 0                   # footnote†
 
-  ${C}/fA    = 0.99 # ≒1   # ICRP Publ.134 p.52 Table 3.2 / Unspecified, Absorption type F
-  ${C}/fA_Re = 0.99 # ≒1   # footnote††
-
-  ${C}/Blood = 'Blood0'     # Generic model
+  ${C}/fA    = 0.99 # ≒1           # ICRP Publ.134 p.52 Table 3.2 / Unspecified, Absorption type F
+  ${C}/fA_Re = fA_MaxValueOfIng     # footnote††
 
 
 [intake]

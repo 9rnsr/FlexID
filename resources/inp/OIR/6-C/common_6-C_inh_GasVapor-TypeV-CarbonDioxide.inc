@@ -1,10 +1,8 @@
+[include:common_6-C_parameter.inc]
+
 [parameter]
-  # ICRP Publ.134 p.53 Table 3.3 / Carbon dioxide, Absorption type V
-
-  ${C}/fA    = 0            # 小腸から血液への吸収は無い
-  ${C}/fA_Re = 0            # 小腸から血液への吸収は無い
-
-  ${C}/Blood = 'Blood1'     # CO2 model
+  ${C}/fA    = fA_MaxValueOfIng
+  ${C}/fA_Re = fA_MaxValueOfIng
 
 
 [intake]
