@@ -15,7 +15,14 @@
 # ICRP Publ.134 p.20 Table 2.2
 # ICRP Publ.134 p.21 Para.23-34
   $Blood                   0.01%
-  Breath(discharge)       99.99%
+  Environment             99.99%
+
+
+[{H}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  exc   Environment           ---
 
 
 [include:../share/common_HATM+UB.inc]
