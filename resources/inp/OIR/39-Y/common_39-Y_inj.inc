@@ -1,13 +1,8 @@
 [include:common_39-Y_parameter.inc]
 
 [parameter]
-$if parent
-  ${Y}/fA    = fA_MaxValueOfIng
-  ${Y}/fA_Re = fA_MaxValueOfIng     # footnote**
-$else
   ${*}/fA    = fA_MaxValueOfIng
   ${*}/fA_Re = fA_MaxValueOfIng
-$endif
 
 [include:../share/common_intake_inj.inc]
 

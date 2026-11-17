@@ -1,13 +1,8 @@
 [include:common_40-Zr_parameter.inc]
 
 [parameter]
-$if parent
-  ${Zr}/fA    = fA_MaxValueOfIng
-  ${Zr}/fA_Re = fA_MaxValueOfIng    # footnote¶
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

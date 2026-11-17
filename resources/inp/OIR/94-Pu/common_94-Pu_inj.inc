@@ -1,13 +1,8 @@
 [include:common_94-Pu_parameter.inc]
 
 [parameter]
-$if parent
-  ${Pu}/fA    = fA_MaxValueOfIng
-  ${Pu}/fA_Re = fA_MaxValueOfIng   # footnote§
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

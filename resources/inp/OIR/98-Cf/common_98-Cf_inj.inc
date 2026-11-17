@@ -1,13 +1,8 @@
 [include:common_98-Cf_parameter.inc]
 
 [parameter]
-$if parent
-  ${Cf}/fA    = fA_MaxValueOfIng
-  ${Cf}/fA_Re = fA_MaxValueOfIng   # footnote¶
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

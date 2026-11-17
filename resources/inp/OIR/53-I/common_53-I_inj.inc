@@ -1,13 +1,8 @@
 [include:common_53-I_parameter.inc]
 
 [parameter]
-$if parent
-  ${I}/fA    = 0.99 # ≒1
-  ${I}/fA_Re = fA_MaxValueOfIng     # footnote¶
-$else
   ${*}/fA    = fA_MaxValueOfIng
   ${*}/fA_Re = fA_MaxValueOfIng
-$endif
 
 [include:../share/common_intake_inj.inc]
 

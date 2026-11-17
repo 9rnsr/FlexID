@@ -1,13 +1,8 @@
 [include:common_16-S_parameter_inorganic.inc]
 
 [parameter]
-$if parent
-  ${S}/fA    = fA_MaxValueOfIng
-  ${S}/fA_Re = fA_MaxValueOfIng     # footnote††
-$else
   ${*}/fA    = fA_MaxValueOfIng
   ${*}/fA_Re = fA_MaxValueOfIng
-$endif
 
 
 [include:../share/common_intake_inj.inc]

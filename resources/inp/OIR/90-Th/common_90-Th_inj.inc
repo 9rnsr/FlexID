@@ -1,13 +1,8 @@
 [include:common_90-Th_parameter.inc]
 
 [parameter]
-$if parent
-  ${Th}/fA    = fA_MaxValueOfIng
-  ${Th}/fA_Re = fA_MaxValueOfIng   # footnote**
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 
