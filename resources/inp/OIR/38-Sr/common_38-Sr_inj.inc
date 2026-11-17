@@ -3,7 +3,7 @@
 [parameter]
 $if parent
   ${Sr}/fA    = fA_MaxValueOfIng
-  ${Sr}/fA_Re = 0
+  ${Sr}/fA_Re = fA_MaxValueOfIng
 $else
   ${*}/fA     = fA_MaxValueOfIng
   ${*}/fA_Re  = fA_MaxValueOfIng

@@ -11,7 +11,7 @@
 
 $if parent
   ${Sr}/fA    = 0.0025
-  ${Sr}/fA_Re = 0
+  ${Sr}/fA_Re = fA_MaxValueOfIng
 $else
   ${*}/fA     = fr * fA_MaxValueOfIng
   ${*}/fA_Re  =      fA_MaxValueOfIng
