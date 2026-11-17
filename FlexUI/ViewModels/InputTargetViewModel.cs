@@ -10,7 +10,7 @@ public partial class InputTargetViewModel : ViewModelBase, ICheckableItem
     {
         InputTarget = target;
 
-        Progenies = [.. target.Progenies.Select(p => new ProgenySelectionViewModel(this, p))];
+        Progenies = target.Progenies.Select(p => new ProgenySelectionViewModel(this, p)).ToList();
 
         OnCheckedProgeniesChanged();
     }

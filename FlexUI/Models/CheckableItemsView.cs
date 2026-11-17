@@ -132,9 +132,9 @@ public partial class CheckableItemsView<T, TView> : ObservableObject, IDisposabl
             Items.Insert(index, item);
         });
 
-        static int FindInsertIndex<T>(ObservableList<T> list, T item, IComparer<T>? comparer = null)
+        static int FindInsertIndex<E>(ObservableList<E> list, E item, IComparer<E>? comparer = null)
         {
-            comparer ??= Comparer<T>.Default;
+            comparer ??= Comparer<E>.Default;
 
             int low = 0;
             int high = list.Count;

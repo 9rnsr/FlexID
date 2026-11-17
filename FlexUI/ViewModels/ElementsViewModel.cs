@@ -107,7 +107,7 @@ public partial class ElementGroup : ViewModelBase
     /// <param name="elementVMs"></param>
     public ElementGroup(IEnumerable<ElementViewModel> elementVMs)
     {
-        ElementVMs = [.. elementVMs];
+        ElementVMs = elementVMs.ToArray();
 
         ElementVMs.Select(el =>
             // IsCheckedの変更に対して、ElementViewModelそれ自体を通知する
