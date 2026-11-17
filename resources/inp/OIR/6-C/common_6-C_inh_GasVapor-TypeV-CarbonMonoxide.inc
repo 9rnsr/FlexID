@@ -15,7 +15,14 @@
 # ICRP Publ.134 p.52 Table 3.2
 # ICRP Publ.134 p.52 Para.86
   $Blood                  40%
-  Exhalation              60%
+  Environment             60%
+
+
+[{C}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  exc   Environment           ---
 
 
 [include:../share/common_HATM+UB.inc]

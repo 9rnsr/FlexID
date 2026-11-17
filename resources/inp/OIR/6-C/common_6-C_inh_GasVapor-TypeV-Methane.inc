@@ -15,7 +15,14 @@
 # ICRP Publ.134 p.52 Table 3.2
 # ICRP Publ.134 p.54 Para.88
   $Blood                   0.3%
-  Exhalation              99.7%
+  Environment             99.7%
+
+
+[{C}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  exc   Environment           ---
 
 
 [include:../share/common_HATM+UB.inc]
