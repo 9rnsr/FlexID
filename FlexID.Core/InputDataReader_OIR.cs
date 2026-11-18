@@ -458,11 +458,11 @@ public class InputDataReader_OIR : IDisposable
         }
         inputTitleRead = true;
 
-        var sectionLineNum = Loc;
+        var sectionLoc = Loc;
         var title = GetNextLine();
         if (title is null || CheckSectionHeader(title))
         {
-            errors.AddError(sectionLineNum, "Empty [title] section.");
+            errors.AddError(sectionLoc, "Empty [title] section.");
             return title;
         }
 
@@ -492,7 +492,7 @@ public class InputDataReader_OIR : IDisposable
         inputNuclidesRead = true;
 
         var olderrors = errors.Count;
-        var sectionLineNum = Loc;
+        var sectionLoc = Loc;
 
         // 最初の1行を見て、新旧どちらの型式で入力されているかを判定する。
         var autoMode = default(bool?);
@@ -634,16 +634,14 @@ public class InputDataReader_OIR : IDisposable
             return line;
         if (!inputNuclides.Any())
         {
-            errors.AddError(sectionLineNum, "Empty [nuclide] section.");
+            errors.AddError(sectionLoc, "Empty [nuclide] section.");
             return line;
         }
 
         // 壊変する娘核種とその分岐比を設定する。
-        foreach (var entry in branchTable)
+        foreach (var (nuclide, branches) in branchTable)
         {
-            var nuclide = entry.Key;
-            var lineNum = nuclideLines[nuclide];
-            var branches = entry.Value;
+            var loc = nuclideLines[nuclide];
 
             NuclideData? GetNuclide(string nuc)
                 => inputNuclides.FirstOrDefault(n => n.Name == nuc);
@@ -663,7 +661,7 @@ public class InputDataReader_OIR : IDisposable
                 {
                     var daughter = GetNuclide(b.Daughter);
                     if (daughter is null)
-                        errors.AddError(lineNum, $"Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
+                        errors.AddError(loc, $"Nuclide '{nuclide.Name}' defines a branch to undefined daughter '{b.Daughter}'.");
                     return (Daughter: daughter, (double)b.Fraction);
                 }).Where(b => b.Daughter != null).ToArray();
             }
@@ -679,21 +677,21 @@ public class InputDataReader_OIR : IDisposable
 
             void CycleCheck(NuclideData target)
             {
-                var lineNum = nuclideLines[target];
+                var loc = nuclideLines[target];
 
                 foreach (var (daughter, _) in target.Branches)
                 {
                     // 自分自身へ壊変する経路が存在しないことを確認する。
                     if (daughter == target)
                     {
-                        errors.AddError(lineNum, $"Nuclide '{target.Name}' has a decay path to itself.");
+                        errors.AddError(loc, $"Nuclide '{target.Name}' has a decay path to itself.");
                         continue;
                     }
 
                     // 親核種に壊変する核種が存在しないことを確認する。
                     if (daughter == root)
                     {
-                        errors.AddError(lineNum, $"Nuclide '{target.Name}' has a decay path to parent nuclide '{root.Name}'.");
+                        errors.AddError(loc, $"Nuclide '{target.Name}' has a decay path to parent nuclide '{root.Name}'.");
                         continue;
                     }
 
@@ -788,8 +786,8 @@ public class InputDataReader_OIR : IDisposable
             inputOrgans.Add(nuc, organs = []);
 
         var olderrors = errors.Count;
-        var sectionLineNum = Loc;
-        compartmentSectionLocs[nuc] = sectionLineNum;
+        var sectionLoc = Loc;
+        compartmentSectionLocs[nuc] = sectionLoc;
 
         string? line;
         while (true)
@@ -831,7 +829,7 @@ public class InputDataReader_OIR : IDisposable
             return line;
 
         //if (!organs.Any())
-        //    errors.AddError(sectionLineNum, $"Empty [{nuc}:compartment] section.");
+        //    errors.AddError(sectionLoc, $"Empty [{nuc}:compartment] section.");
 
         return line;
     }
@@ -846,8 +844,8 @@ public class InputDataReader_OIR : IDisposable
         inputIntakesRead = true;
 
         var olderrors = errors.Count;
-        var sectionLineNum = Loc;
-        intakeSectionLoc = sectionLineNum;
+        var sectionLoc = Loc;
+        intakeSectionLoc = sectionLoc;
 
         string? line;
         while (true)
@@ -874,7 +872,7 @@ public class InputDataReader_OIR : IDisposable
             return line;
 
         if (!inputIntakes.Any())
-            errors.AddError(sectionLineNum, $"Empty [intake] section.");
+            errors.AddError(sectionLoc, $"Empty [intake] section.");
 
         return line;
     }
@@ -891,8 +889,8 @@ public class InputDataReader_OIR : IDisposable
             inputTransfers.Add(nuc, transfers = []);
 
         var olderrors = errors.Count;
-        var sectionLineNum = Loc;
-        transferSectionLocs[nuc] = sectionLineNum;
+        var sectionLoc = Loc;
+        transferSectionLocs[nuc] = sectionLoc;
 
         string? line;
         while (true)
@@ -923,7 +921,7 @@ public class InputDataReader_OIR : IDisposable
             return line;
 
         //if (!transfers.Any())
-        //    errors.AddError(sectionLineNum, $"Empty [{nuc}:transfer] section.");
+        //    errors.AddError(sectionLoc, $"Empty [{nuc}:transfer] section.");
 
         return line;
     }
@@ -1025,10 +1023,10 @@ public class InputDataReader_OIR : IDisposable
 
         foreach (var (nuc, inputs) in inputOrgans)
         {
-            var lineNum = compartmentSectionLocs[nuc];
+            var loc = compartmentSectionLocs[nuc];
 
             var olderrors = errors.Count;
-            var nuclides = expander.ExpandNuclides(lineNum, nuc);
+            var nuclides = expander.ExpandNuclides(loc, nuc);
             if (errors.IfAny(olderrors))
                 continue;
 
@@ -1300,8 +1298,8 @@ public class InputDataReader_OIR : IDisposable
             var ts = transfersCorrect.Where(t => t.from == organFrom).OrderBy(t => t.loc.LineNum).ToArray();
             for (int i = 0; i < ts.Length; i++)
             {
-                var (lineNum, _, _, coeff) = ts[i];
-                errors.AddError(lineNum, $"    = {coeff * 100:G29}%");
+                var (loc, _, _, coeff) = ts[i];
+                errors.AddError(loc, $"    = {coeff * 100:G29}%");
             }
         }
 
@@ -1344,10 +1342,10 @@ public class InputDataReader_OIR : IDisposable
 
         foreach (var (nuc, inputs) in inputTransfers)
         {
-            var lineNum = transferSectionLocs[nuc];
+            var loc = transferSectionLocs[nuc];
 
             var olderrors = errors.Count;
-            var nuclides = expander.ExpandNuclides(lineNum, nuc);
+            var nuclides = expander.ExpandNuclides(loc, nuc);
             if (errors.IfAny(olderrors))
                 continue;
 
@@ -1552,7 +1550,7 @@ public class InputDataReader_OIR : IDisposable
 
                     // TODO: mixからmixへの経路は定義できない。
                     //if (funcFrom == OrganFunc.mix && funcTo == OrganFunc.mix)
-                    //    errors.AddError(lineNum, "Cannot set transfer path from 'mix' to 'mix'.");
+                    //    errors.AddError(loc, "Cannot set transfer path from 'mix' to 'mix'.");
 
                     // mixからの同核種での移行経路では、移行割合の入力を要求する。
                     // なお、ここでは割合値(0.15など)とパーセント値(10.5%など)の両方を受け付ける。
@@ -1644,9 +1642,9 @@ public class InputDataReader_OIR : IDisposable
         }
 
         // 移行速度付き壊変経路によって核種のモデルへ流入する経路を追加する。
-        foreach (var (organDecay, (lineNum, (coeff, organTo))) in decaySet.AfterDecayPath)
+        foreach (var (organDecay, (loc, (coeff, organTo))) in decaySet.AfterDecayPath)
         {
-            correctTransfers.Add((lineNum, organDecay, organTo, coeff));
+            correctTransfers.Add((loc, organDecay, organTo, coeff));
         }
 
         // 全ての核種について陽に設定された移行経路と係数にエラーがないことを確定する。
@@ -1684,10 +1682,10 @@ public class InputDataReader_OIR : IDisposable
                         var ts = correctTransfers.Where(t => t.from == organFrom).OrderBy(t => t.loc.LineNum).ToArray();
                         for (int i = 0; i < ts.Length; i++)
                         {
-                            var (lineNum, _, _, coeff) = ts[i];
+                            var (loc, _, _, coeff) = ts[i];
                             if (i == 0)
-                                errors.AddError(lineNum, $"Total [%] of transfer paths from '{nameFrom}' is not 100%, but {sum * 100:G29}%.");
-                            errors.AddError(lineNum, $"    = {coeff * 100:G29}%");
+                                errors.AddError(loc, $"Total [%] of transfer paths from '{nameFrom}' is not 100%, but {sum * 100:G29}%.");
+                            errors.AddError(loc, $"    = {coeff * 100:G29}%");
                         }
                     }
                 }
