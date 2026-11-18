@@ -74,8 +74,6 @@ public class InputDataReader_OIR : IDisposable
     private bool? IsParentOnly => InsideConditionDirective ? insideParentBlock : null;
 
     private readonly InputErrors errors = new();
-    private readonly Dictionary<string, Location> transferSectionLocs = [];
-
     private readonly Dictionary<NuclideData, InputEvaluator> inputEvaluators = [];
 
     private bool inputTitleRead;
@@ -92,7 +90,7 @@ public class InputDataReader_OIR : IDisposable
     private Location intakeSectionLoc;
     private readonly List<InputIntake> inputIntakes = [];
 
-    private readonly Dictionary<string, List<InputTransfer>> inputTransfers = [];
+    private readonly List<(Location, string, List<InputTransfer>)> inputTransfers = [];
 
     /// <summary>
     /// コンストラクタ。
@@ -884,12 +882,10 @@ public class InputDataReader_OIR : IDisposable
     /// <param name="line"></param>
     private string? GetTransfers(string nuc)
     {
-        if (!inputTransfers.TryGetValue(nuc, out var transfers))
-            inputTransfers.Add(nuc, transfers = []);
+        List<InputTransfer> transfers = [];
 
         var olderrors = errors.Count;
         var sectionLoc = Loc;
-        transferSectionLocs[nuc] = sectionLoc;
 
         string? line;
         while (true)
@@ -921,6 +917,8 @@ public class InputDataReader_OIR : IDisposable
 
         //if (!transfers.Any())
         //    errors.AddError(sectionLoc, $"Empty [{nuc}:transfer] section.");
+
+        inputTransfers.Add((sectionLoc, nuc, transfers));
 
         return line;
     }
@@ -1337,10 +1335,8 @@ public class InputDataReader_OIR : IDisposable
     {
         var resultTransfers = new Dictionary<NuclideData, List<InputTransfer>>();
 
-        foreach (var (nuc, inputs) in inputTransfers)
+        foreach (var (loc, nuc, inputs) in inputTransfers)
         {
-            var loc = transferSectionLocs[nuc];
-
             var olderrors = errors.Count;
             var nuclides = expander.ExpandNuclides(loc, nuc);
             if (errors.IfAny(olderrors))
