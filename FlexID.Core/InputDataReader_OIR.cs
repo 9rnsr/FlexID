@@ -74,7 +74,6 @@ public class InputDataReader_OIR : IDisposable
     private bool? IsParentOnly => InsideConditionDirective ? insideParentBlock : null;
 
     private readonly InputErrors errors = new();
-    private readonly Dictionary<string, Location> compartmentSectionLocs = [];
     private readonly Dictionary<string, Location> transferSectionLocs = [];
 
     private readonly Dictionary<NuclideData, InputEvaluator> inputEvaluators = [];
@@ -87,7 +86,7 @@ public class InputDataReader_OIR : IDisposable
 
     private readonly List<InputParameter> inputParameters = [];
 
-    private readonly Dictionary<string, List<InputOrgan>> inputOrgans = [];
+    private readonly List<(Location, string, List<InputOrgan>)> inputOrgans = [];
 
     private bool inputIntakesRead;
     private Location intakeSectionLoc;
@@ -782,12 +781,10 @@ public class InputDataReader_OIR : IDisposable
     /// <returns>セクションの次行。</returns>
     private string? GetCompartments(string nuc)
     {
-        if (!inputOrgans.TryGetValue(nuc, out var organs))
-            inputOrgans.Add(nuc, organs = []);
+        List<InputOrgan> organs = [];
 
         var olderrors = errors.Count;
         var sectionLoc = Loc;
-        compartmentSectionLocs[nuc] = sectionLoc;
 
         string? line;
         while (true)
@@ -830,6 +827,8 @@ public class InputDataReader_OIR : IDisposable
 
         //if (!organs.Any())
         //    errors.AddError(sectionLoc, $"Empty [{nuc}:compartment] section.");
+
+        inputOrgans.Add((sectionLoc, nuc, organs));
 
         return line;
     }
@@ -1021,10 +1020,8 @@ public class InputDataReader_OIR : IDisposable
     {
         var resultOrgans = new Dictionary<NuclideData, List<InputOrgan>>();
 
-        foreach (var (nuc, inputs) in inputOrgans)
+        foreach (var (loc, nuc, inputs) in inputOrgans)
         {
-            var loc = compartmentSectionLocs[nuc];
-
             var olderrors = errors.Count;
             var nuclides = expander.ExpandNuclides(loc, nuc);
             if (errors.IfAny(olderrors))
