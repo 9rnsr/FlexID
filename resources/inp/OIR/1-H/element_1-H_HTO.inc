@@ -1,3 +1,7 @@
+[parameter]
+  ${H}/Blood = 'Blood'
+
+
 [{H}:compartment]
 #-----+---------------------| S-Coefficient
 # Func| Compartment         | Source Region

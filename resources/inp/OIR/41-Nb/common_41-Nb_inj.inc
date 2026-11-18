@@ -1,13 +1,8 @@
 [include:common_41-Nb_parameter.inc]
 
 [parameter]
-$if parent
-  ${Nb}/fA    = 0.01
-  ${Nb}/fA_Re = 0.01        # footnote¶
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

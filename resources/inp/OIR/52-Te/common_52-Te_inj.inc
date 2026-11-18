@@ -1,13 +1,8 @@
 [include:common_52-Te_parameter.inc]
 
 [parameter]
-$if parent
-  ${Te}/fA    = fA_MaxValueOfIng
-  ${Te}/fA_Re = fA_MaxValueOfIng    # footnote¶
-$else
-  $fA    = fA_MaxValueOfIng
-  $fA_Re = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

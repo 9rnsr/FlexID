@@ -1,13 +1,8 @@
 [include:common_26-Fe_parameter.inc]
 
 [parameter]
-$if parent
-  ${Fe}/fA    = fA_MaxValueOfIng
-  ${Fe}/fA_Re = fA_MaxValueOfIng    # footnote¶
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

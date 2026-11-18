@@ -1,16 +1,16 @@
+[include:common_1-H_parameter.inc]
+
 [parameter]
   # ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Absorption type S
 
   $fr = 0.01
   $sr = 3
   $ss = 1E-4
-  $fb = 0
-  $sb = 0
+  $fb = 0           # footnote†
+  $sb = 0           # footnote†
 
   ${H}/fA    = 0.01
-  ${H}/fA_Re = 0
-
-  $Blood = 'Blood'
+  ${H}/fA_Re = fA_MaxValueOfIng
 
 
 [include:../share/common_intake_inh_Aerosols.inc]

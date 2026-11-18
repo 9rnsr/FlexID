@@ -1,13 +1,8 @@
 [include:common_99-Es_parameter.inc]
 
 [parameter]
-$if parent
-  ${Es}/fA    = fA_MaxValueOfIng
-  ${Es}/fA_Re = fA_MaxValueOfIng   # footnote§
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

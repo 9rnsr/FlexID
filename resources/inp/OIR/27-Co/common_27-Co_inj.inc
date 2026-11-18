@@ -1,13 +1,8 @@
 [include:common_27-Co_parameter.inc]
 
 [parameter]
-$if parent
-  ${Co}/fA    = fA_MaxValueOfIng
-  ${Co}/fA_Re = fA_MaxValueOfIng	# footnote¶
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

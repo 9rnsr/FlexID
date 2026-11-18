@@ -1,13 +1,8 @@
 [include:common_51-Sb_parameter.inc]
 
 [parameter]
-$if parent
-  ${Sb}/fA    = fA_MaxValueOfIng
-  ${Sb}/fA_Re = fA_MaxValueOfIng    # footnote¶
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

@@ -1,3 +1,5 @@
+[include:common_6-C_parameter.inc]
+
 [parameter]
   # ICRP Publ.134 p.53 Table 3.3 / Inhaled particulate materials, Barium carbonate
 
@@ -8,9 +10,7 @@
   $sb = 0                   # footnote†
 
   ${C}/fA    = 0.99 # ≒1
-  ${C}/fA_Re = 0.99 # ≒1   # footnote††
-
-  ${C}/Blood = 'Blood1'     # CO2 model
+  ${C}/fA_Re = fA_MaxValueOfIng     # footnote††
 
 
 [include:../share/common_intake_inh_Aerosols.inc]

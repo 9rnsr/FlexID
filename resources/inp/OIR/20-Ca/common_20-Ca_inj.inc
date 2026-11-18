@@ -1,13 +1,8 @@
 [include:common_20-Ca_parameter.inc]
 
 [parameter]
-$if parent
-  ${Ca}/fA    = fA_MaxValueOfIng
-  ${Ca}/fA_Re = fA_MaxValueOfIng
-$else
-  ${*}/fA     = fA_MaxValueOfIng
-  ${*}/fA_Re  = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 
