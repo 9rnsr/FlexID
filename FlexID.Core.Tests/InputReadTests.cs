@@ -1,8 +1,37 @@
 namespace FlexID;
 
+using static InputReadTestHelpers;
+
 [TestClass]
 public class InputReadTests
 {
+    [TestMethod]
+    public void CompartmentOrderTest()
+    {
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90
+
+            [intake]
+              C1    100%
+
+            [{Sr}:compartment]
+              acc    C1         ---
+
+            [{*}:compartment]
+              acc    C2         ---
+
+            [{Sr}:compartment]
+              acc    C3         ---
+            """);
+
+        var input = reader.Read();
+        input.Organs.TakeLast(3).Select(o => o.Name).ShouldBe(["C1", "C2", "C3"]);
+    }
+
     private static readonly string InputOirDir;
     private static readonly string InputEirDir;
 
