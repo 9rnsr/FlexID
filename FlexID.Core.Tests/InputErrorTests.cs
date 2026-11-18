@@ -1,8 +1,6 @@
-using System.Text;
-
 namespace FlexID;
 
-using static InputErrorTestHelpers;
+using static InputReadTestHelpers;
 
 [TestClass]
 public class InputErrorTests
@@ -514,33 +512,5 @@ public class InputErrorTests
         [
             "(15): Transfer coefficient evaluation failed: divide by zero.",
         ]);
-    }
-}
-
-static class InputErrorTestHelpers
-{
-    public static InputDataReader_OIR CreateReader(string[] inputLines)
-    {
-        var inputFileBytes = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, inputLines));
-
-        var stream = new MemoryStream(inputFileBytes);
-        var reader = new StreamReader(stream);
-        return new InputDataReader_OIR(reader);
-    }
-
-    public static InputDataReader_OIR CreateReader(string inputText)
-    {
-        var inputFileBytes = Encoding.UTF8.GetBytes(inputText);
-
-        var stream = new MemoryStream(inputFileBytes);
-        var reader = new StreamReader(stream);
-        return new InputDataReader_OIR(reader);
-    }
-
-    public static IEnumerable<string> GetErrorLines(this InputErrors errors)
-    {
-        try { errors.RaiseIfAny(); }
-        catch (InputErrorsException e) { return e.ErrorLines; }
-        return Enumerable.Empty<string>();
     }
 }
