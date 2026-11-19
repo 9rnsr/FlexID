@@ -1,4 +1,4 @@
-[include:common_16-S_parameter_inorganic.inc]
+[include:common_16-S_parameter.inc]
 
 [parameter]
   # ICRP Publ.134 p.104 Table 5.3 / Inhaled particulate materials, Absorption type F
