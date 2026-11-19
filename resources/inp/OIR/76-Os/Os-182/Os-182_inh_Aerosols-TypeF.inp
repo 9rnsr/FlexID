@@ -1,0 +1,7 @@
+[title]
+Os-182 Inhalation, Aerosols Type F
+
+[nuclide]
+  Os-182  Re-182m
+
+[include:../common_76-Os_inh_Aerosols-TypeF.inc]

@@ -1,0 +1,7 @@
+[title]
+Os-186 Inhalation, Aerosols Type M
+
+[nuclide]
+  Os-186
+
+[include:../common_76-Os_inh_Aerosols-TypeM.inc]

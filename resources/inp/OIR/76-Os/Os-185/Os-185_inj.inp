@@ -1,0 +1,7 @@
+[title]
+Os-185 Injection
+
+[nuclide]
+  Os-185
+
+[include:../common_76-Os_inj.inc]

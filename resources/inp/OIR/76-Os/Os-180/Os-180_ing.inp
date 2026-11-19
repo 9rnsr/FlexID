@@ -1,0 +1,7 @@
+[title]
+Os-180 Ingestion
+
+[nuclide]
+  Os-180  Re-180
+
+[include:../common_76-Os_ing.inc]

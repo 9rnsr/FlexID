@@ -1,0 +1,7 @@
+[title]
+Os-180 Inhalation, Aerosols Type F
+
+[nuclide]
+  Os-180  Re-180
+
+[include:../common_76-Os_inh_Aerosols-TypeF.inc]

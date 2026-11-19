@@ -1,0 +1,7 @@
+[title]
+Os-182 Ingestion
+
+[nuclide]
+  Os-182  Re-182m
+
+[include:../common_76-Os_ing.inc]

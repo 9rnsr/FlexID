@@ -1,0 +1,7 @@
+[title]
+Os-193 Injection
+
+[nuclide]
+  Os-193  Ir-193m
+
+[include:../common_76-Os_inj.inc]
