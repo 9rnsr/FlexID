@@ -1,0 +1,7 @@
+[title]
+Os-191m Inhalation, Aerosols Type F
+
+[nuclide]
+  Os-191m  Os-191
+
+[include:../common_76-Os_inh_Aerosols-TypeF.inc]

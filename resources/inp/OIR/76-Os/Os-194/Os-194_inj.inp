@@ -1,0 +1,7 @@
+[title]
+Os-194 Injection
+
+[nuclide]
+  Os-194  Ir-194
+
+[include:../common_76-Os_inj.inc]

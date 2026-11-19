@@ -1,0 +1,7 @@
+[title]
+Os-189m Inhalation, Aerosols Type S
+
+[nuclide]
+  Os-189m
+
+[include:../common_76-Os_inh_Aerosols-TypeS.inc]

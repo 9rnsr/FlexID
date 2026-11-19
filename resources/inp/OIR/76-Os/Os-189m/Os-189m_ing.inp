@@ -1,0 +1,7 @@
+[title]
+Os-189m Ingestion
+
+[nuclide]
+  Os-189m
+
+[include:../common_76-Os_ing.inc]

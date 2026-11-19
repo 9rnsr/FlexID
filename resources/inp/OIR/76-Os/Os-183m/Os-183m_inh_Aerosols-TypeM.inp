@@ -1,0 +1,7 @@
+[title]
+Os-183m Inhalation, Aerosols Type M
+
+[nuclide]
+  Os-183m  Os-183  Re-183
+
+[include:../common_76-Os_inh_Aerosols-TypeM.inc]

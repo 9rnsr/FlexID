@@ -1,0 +1,7 @@
+[title]
+Os-186 Ingestion
+
+[nuclide]
+  Os-186
+
+[include:../common_76-Os_ing.inc]

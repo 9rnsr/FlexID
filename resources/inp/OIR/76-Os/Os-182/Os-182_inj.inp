@@ -1,0 +1,7 @@
+[title]
+Os-182 Injection
+
+[nuclide]
+  Os-182  Re-182m
+
+[include:../common_76-Os_inj.inc]
