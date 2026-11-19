@@ -1,3 +1,7 @@
+[parameter]
+  ${Cl}/Blood = 'Blood'
+
+
 # ICRP Publ.134 p.110 Para.217
 # > (217) The only radioactive progeny of a sulphur isotope addressed in this publication
 # > is 38Cl (t½=37.24 min), produced by decay of 38S. It is assumed for dosimetric
