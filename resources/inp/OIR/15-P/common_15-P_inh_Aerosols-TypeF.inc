@@ -1,15 +1,16 @@
+[include:common_15-P_parameter.inc]
+
 [parameter]
   # ICRP Publ.134 p.84 Table 4.2 / Inhaled particulate materials, Absorption type F
+
   $fr = 1
   $sr = 1
   $ss = 0
   $fb = 0                   # footnote*
   $sb = 0                   # footnote*
 
-  ${P}/fA    = 0.8          # ICRP Publ.134 p.84 Table 4.2 / Inhaled particulate materials, Absorption type F
-  ${P}/fA_Re = 0.8          # footnote¶
-
-  ${P}/Blood = 'Plasma'
+  ${P}/fA    = 0.8
+  ${P}/fA_Re = fA_MaxValueOfIng     # footnote¶
 
 
 [include:../share/common_intake_inh_Aerosols.inc]
