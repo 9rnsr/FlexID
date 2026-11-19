@@ -1,0 +1,7 @@
+[title]
+Pt-193 Ingestion, Metal, oxide and hydroxide
+
+[nuclide]
+  Pt-193
+
+[include:../common_78-Pt_ing_MOH.inc]

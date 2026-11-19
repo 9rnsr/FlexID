@@ -1,0 +1,7 @@
+[title]
+Pt-186 Ingestion, Metal, oxide and hydroxide
+
+[nuclide]
+  Pt-186  Ir-186m  Ir-186  Os-186  Os-182  Re-182m
+
+[include:../common_78-Pt_ing_MOH.inc]

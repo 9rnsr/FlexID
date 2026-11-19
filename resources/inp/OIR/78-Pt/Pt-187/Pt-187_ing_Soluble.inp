@@ -1,0 +1,7 @@
+[title]
+Pt-187 Ingestion, Soluble
+
+[nuclide]
+  Pt-187  Ir-187
+
+[include:../common_78-Pt_ing_Soluble.inc]

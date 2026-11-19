@@ -1,0 +1,7 @@
+[title]
+Pt-202 Ingestion, Metal, oxide and hydroxide
+
+[nuclide]
+  Pt-202  Au-202
+
+[include:../common_78-Pt_ing_MOH.inc]

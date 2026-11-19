@@ -1,0 +1,7 @@
+[title]
+Pt-195m Inhalation, Aerosols Type M
+
+[nuclide]
+  Pt-195m
+
+[include:../common_78-Pt_inh_Aerosols-TypeM.inc]

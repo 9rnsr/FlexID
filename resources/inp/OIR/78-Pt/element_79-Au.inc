@@ -1,0 +1,81 @@
+[{Au}:compartment]
+#-----+---------------------| S-Coefficient
+# Func| Compartment         | Source Region
+#-----+---------------------+---------------
+  acc   Blood1                Blood
+  acc   Blood2                Blood
+  acc   C-bone-S              C-bone-S
+  acc   T-bone-S              T-bone-S
+  acc   Liver                 Liver
+  acc   Kidneys               Kidneys
+  acc   Other1                Other
+  acc   Other2                Other
+
+
+[{Au}:transfer]
+#-----------------------+---------------------+--------------
+# From                  | To                  | Coefficient[/d] or [%]
+#-----------------------+---------------------+--------------
+
+# ICRP Publ.151 p.321 Table 35.3
+  Blood1                  Blood2                    0.1
+  Blood1                  Kidneys                   0.1
+  Blood1                  Liver                     0.1
+  Blood1                  Other1                    0.18
+  Blood1                  Other2                    0.1
+  Blood1                  UB-con                    0.3
+  Blood1                  RC-con                    0.1
+  Blood1                  T-bone-S                  0.01
+  Blood1                  C-bone-S                  0.01
+  Blood2                  Blood1                    0.139
+  Kidneys                 UB-con                    0.0693
+  Liver                   Blood1                    0.0693
+  Other1                  Blood1                    0.0693
+  Other2                  Blood1                    0.0139
+  T-bone-S                Blood1                    0.0693
+  C-bone-S                Blood1                    0.0693
+
+# ICRP Publ.151 p.307 Para.601
+# > (601) Progeny of platinum addressed in this publication are isotopes of platinum,
+# > rhenium, osmium, iridium, and gold. The characteristic models for platinum,
+# > osmium, and iridium used in this publication are applied to these elements as progeny
+# > of platinum. The models for rhenium and gold as progeny of platinum are
+# > expansions of the characteristic models for these elements with added compartments
+# > and associated transfer coefficients needed to solve the linked biokinetic models for
+# > chains headed by platinum (see Annex B). The following transfer rates to the central
+# > blood compartment are assigned to rhenium or gold produced in an ambiguous
+# > compartment (i.e. a compartment of a preceding chain member that is not a compartment
+# > in the characteristic model for the progeny: 1000 d⁻¹ if produced in a blood
+# > compartment; at the rate of bone turnover if produced in a bone volume compartment;
+# > and at the following element-specific rates if produced in any other ambiguous
+# > compartment: rhenium, 0.462 d⁻¹; and gold, 0.0693 d⁻¹).
+# > (601) 本刊行物で扱う白金の子孫元素は、白金、レニウム、オスミウム、イリジウム、および
+# > 金の同位体である。本刊行物で用いられる白金、オスミウム、およびイリジウムの特性モデルは、
+# > 白金の子孫元素としてのこれらの元素に適用される。白金の子孫元素としてのレニウムと
+# > 金のモデルは、これらの元素の特性モデルを拡張したもので、白金を先頭とする連鎖の
+# > 連結生体反応速度論モデルを解くために必要なコンパートメントと関連する移動係数が
+# > 追加されたものである（付録B参照）。不明瞭なコンパートメント（すなわち、子孫元素の
+# > 特性モデルにおけるコンパートメントではない先行する連鎖メンバーのコンパートメント）で
+# > 生成されたレニウムまたは金には、中心血液コンパートメントへの移行速度として以下が
+# > 割り当てられます：
+# >   血液コンパートメントで生成された場合は1000 d⁻¹、
+# >   骨量コンパートメントで生成された場合は骨代謝の速度、
+# >   その他の不明瞭なコンパートメントで生成された場合は、以下の元素固有の移行速度：
+# >   レニウム：0.462 d⁻¹、金：0.0693 d⁻¹。
+
+  {Pt}/Blood1             Blood1                    ---
+  {Pt}/Blood2             Blood2                    ---
+
+  {Pt}/C-bone-S           C-bone-S                  ---
+  {Pt}/T-bone-S           T-bone-S                  ---
+  {Pt}/C-bone-V           Blood1                $( 3% / 365)
+  {Pt}/T-bone-V           Blood1                $(18% / 365)
+
+  {Pt}/Liver1             Blood1                    0.0693
+  {Pt}/Liver2             Blood1                    0.0693
+  {Pt}/Kidneys1           Blood1                    0.0693
+  {Pt}/Kidneys2           Blood1                    0.0693
+
+  {Pt}/ST0                Blood1                    0.0693
+  {Pt}/ST1                Blood1                    0.0693
+  {Pt}/ST2                Blood1                    0.0693

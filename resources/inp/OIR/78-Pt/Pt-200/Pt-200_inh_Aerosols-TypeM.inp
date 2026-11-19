@@ -1,0 +1,7 @@
+[title]
+Pt-200 Inhalation, Aerosols Type M
+
+[nuclide]
+  Pt-200  Au-200
+
+[include:../common_78-Pt_inh_Aerosols-TypeM.inc]
