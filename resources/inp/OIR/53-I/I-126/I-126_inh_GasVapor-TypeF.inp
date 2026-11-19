@@ -1,0 +1,7 @@
+[title]
+I-126 Inhalation, Gas or Vapor Type F, Elemental iodine, and unspecified form
+
+[nuclide]
+  I-126
+
+[include:../common_53-I_inh_GasVapor-TypeF.inc]

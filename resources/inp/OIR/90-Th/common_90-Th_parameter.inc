@@ -6,10 +6,10 @@
 # > (484) ... 呼吸器系または消化器系から血液に移行する子孫核種としてのポロニウムは、
 # > 血漿2に割り当てられます。 ...
 
-  ${Po}/Blood               = 'Plasma2'
+  ${Po}/Blood = 'Plasma2'
 
-  ${U,Bi,Pb,Tl}/Blood       = 'Plasma'
-  ${Pa,Th,Ac,Ra,Rn}/Blood   = 'Blood'
+  ${U,Bi,Pb,Tl}/Blood = 'Plasma'
+  ${Pa,Th,Ac,Ra,Fr,Rn,At}/Blood = 'Blood'
 
   ${U}/fA_MaxValueOfIng  = 0.02         # ICRP Publ.137 p.409 Table 15.2  / Ingested materials, Soluble forms
   ${Pa}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.251 Table 20.2  / Ingested materials, All forms
@@ -17,7 +17,7 @@
   ${Ac}/fA_MaxValueOfIng = 5E-4         # ICRP Publ.141 p.240 Table 19.2  / Ingested materials, All compounds
   ${Ra}/fA_MaxValueOfIng = 0.2          # ICRP Publ.137 p.325 Table 13.2  / Ingested materials, All forms
   ${Fr}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.363 Table 39.2  / Ingested materials, All forms
- #${Rn}
+  ${Rn}/fA_MaxValueOfIng = 0            # ICRP Publ.130 p.45 Para.38
   ${At}/fA_MaxValueOfIng = 0.99 # ≒1   # ICRP Publ.151 p.356 Table 38.3  / Ingested materials, All forms
   ${Po}/fA_MaxValueOfIng = 0.1          # ICRP Publ.137 p.279 Table 11.2  / Ingested materials, All chemical forms
   ${Bi}/fA_MaxValueOfIng = 0.05         # ICRP Publ.137 p.253 Table 10.2  / Ingested materials, All forms

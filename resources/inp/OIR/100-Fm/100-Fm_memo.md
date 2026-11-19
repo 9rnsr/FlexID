@@ -5,7 +5,7 @@
 |         |         |         |         |         |         |Blood0 *2|         |              |         |         |         |              |      |      |      |           |           |              |           |
 |         |         |         |         |         |         |Blood1   |         |              |         |         |         |              |      |      |      |           |           |              |           |
 |         |         |         |         |         |         |Blood2   |         |              |         |         |         |              |      |      |      |           |           |              |           |
-|Blood    |Blood    |Blood    |Blood    |Blood    |Blood    |         |Blood    |              |Blood    |Blood    |Blood    |Blood         |      |Blood |      |           |           |              |           |
+|Blood    |Blood    |Blood    |Blood    |Blood    |Blood    |         |Blood    |              |Blood    |Blood    |Blood    |Blood         |Blood |Blood |Blood |           |           |              |           |
 |         |         |         |         |         |         |         |         |              |         |         |         |              |      |      |      |Plasma1    |           |              |           |
 |         |         |         |         |         |         |         |         |              |         |         |         |              |      |      |      |Plasma2    |           |              |           |
 |         |         |         |         |         |         |         |         |              |         |         |         |              |      |      |      |Plasma3    |           |              |           |

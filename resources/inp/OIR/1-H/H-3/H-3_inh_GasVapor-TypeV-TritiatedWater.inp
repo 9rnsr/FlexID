@@ -1,0 +1,7 @@
+[title]
+H-3 Inhalation, Gas or Vapor Type V, Tritiated water
+
+[nuclide]
+  H-3
+
+[include:../common_1-H_inh_GasVapor-TypeV-TritiatedWater.inc]

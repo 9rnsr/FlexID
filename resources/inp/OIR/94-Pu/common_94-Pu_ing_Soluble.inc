@@ -4,16 +4,16 @@
   # ICRP Publ.141 p.337 Table 22.11 / Ingested materials, Soluble forms
 
 $if parent
-  ${Pu}/fA     = 5E-4
-  ${Pu}/fA_Re  = fA_MaxValueOfIng   # footnote§
+  ${Pu}/fA    = 5E-4
+  ${Pu}/fA_Re = fA_MaxValueOfIng   # footnote§
 $else
-  ${^Rn}/fA    = fA_MaxValueOfIng
-  ${^Rn}/fA_Re = fA_MaxValueOfIng
+  ${*}/fA     = fA_MaxValueOfIng
+  ${*}/fA_Re  = fA_MaxValueOfIng
 $endif
 
-[include:common_intake_ing.inc]
+[include:../share/common_intake_ing.inc]
 
-[include:common_HATM+UB.inc]
+[include:../share/common_HATM+UB.inc]
 
 [include:element_96-Cm.inc]
 [include:element_95-Am.inc]
@@ -25,7 +25,7 @@ $endif
 [include:element_89-Ac.inc]
 [include:element_88-Ra.inc]
 [include:element_87-Fr.inc]
-[include:element_86-Rn_ing.inc]
+[include:element_86-Rn.inc]
 [include:element_85-At.inc]
 [include:element_84-Po.inc]
 [include:element_83-Bi.inc]

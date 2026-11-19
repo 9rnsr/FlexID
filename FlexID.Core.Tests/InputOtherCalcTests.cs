@@ -1,6 +1,6 @@
 namespace FlexID;
 
-using static InputErrorTestHelpers;
+using static InputReadTestHelpers;
 
 [TestClass]
 public class InputOtherCalcTests

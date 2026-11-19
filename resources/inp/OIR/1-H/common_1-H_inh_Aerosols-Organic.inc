@@ -1,0 +1,21 @@
+[include:common_1-H_parameter.inc]
+
+[parameter]
+  # ICRP Publ.134 p.21 Table 2.3 / Inhaled particulate materials, Biogenic organic compounds
+
+  $fr = 1
+  $sr = 100
+  $ss =   0
+  $fb = 0           # footnote†
+  $sb = 0           # footnote†
+
+  ${H}/fA    = 0.99 # ≒1
+  ${H}/fA_Re = fA_MaxValueOfIng
+
+
+[include:../share/common_intake_inh_Aerosols.inc]
+
+[include:../share/common_HRTM.inc]
+[include:../share/common_HATM+UB.inc]
+
+[include:element_1-H_OBT.inc]

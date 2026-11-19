@@ -1,0 +1,7 @@
+[title]
+I-119 Inhalation, Gas or Vapor Type V, Methyl iodine, ethyl iodine
+
+[nuclide]
+  I-119  Te-119m  Te-119  Sb-119
+
+[include:../common_53-I_inh_GasVapor-TypeV.inc]

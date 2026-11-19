@@ -1,17 +1,12 @@
 [include:common_98-Cf_parameter.inc]
 
 [parameter]
-$if parent
-  ${Cf}/fA     = fA_MaxValueOfIng
-  ${Cf}/fA_Re  = fA_MaxValueOfIng   # footnote¶
-$else
-  ${^Rn}/fA    = fA_MaxValueOfIng
-  ${^Rn}/fA_Re = fA_MaxValueOfIng
-$endif
+  ${*}/fA    = fA_MaxValueOfIng
+  ${*}/fA_Re = fA_MaxValueOfIng
 
-[include:common_intake_inj.inc]
+[include:../share/common_intake_inj.inc]
 
-[include:common_HATM+UB.inc]
+[include:../share/common_HATM+UB.inc]
 
 [include:element_100-Fm.inc]
 [include:element_99-Es.inc]
@@ -27,7 +22,7 @@ $endif
 [include:element_89-Ac.inc]
 [include:element_88-Ra.inc]
 [include:element_87-Fr.inc]
-[include:element_86-Rn_ing.inc]
+[include:element_86-Rn.inc]
 [include:element_85-At.inc]
 [include:element_84-Po.inc]
 [include:element_83-Bi.inc]

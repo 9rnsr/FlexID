@@ -88,27 +88,68 @@ public partial class CheckableItemsView<T, TView> : ObservableObject, IDisposabl
         }
     }
 
-    public void Add(T item, bool initialCheck = false)
+    /// <summary>
+    /// 項目を一覧の末尾に追加する。
+    /// </summary>
+    /// <param name="item"></param>
+    public void Add(T item)
     {
         App.Current?.UIQueue?.TryEnqueue(() =>
         {
             Items.Add(item);
-            if (initialCheck)
-            {
-                var view = View.Filtered.Concat(View.Unfiltered)
-                               .Where(pair => EqualityComparer<T>.Default.Equals(pair.Value, item))
-                               .Select(pair => pair.View)
-                               .FirstOrDefault();
-                view?.IsChecked = initialCheck;
-            }
         });
     }
 
-    public async Task AddRangeAsync(IAsyncEnumerable<T> items, bool initialCheck = false)
+    /// <summary>
+    /// 項目をチェック済み状態で一覧の末尾に追加する。
+    /// </summary>
+    /// <param name="item"></param>
+    public void AddChecked(T item)
     {
-        await foreach (var item in items)
+        App.Current?.UIQueue?.TryEnqueue(() =>
         {
-            Add(item, initialCheck);
+            Items.Add(item);
+
+            // 初期状態でチェック済みにする。
+            var view = View.Filtered.Concat(View.Unfiltered)
+                            .Where(pair => EqualityComparer<T>.Default.Equals(pair.Value, item))
+                            .Select(pair => pair.View)
+                            .FirstOrDefault();
+            view?.IsChecked = true;
+        });
+    }
+
+    /// <summary>
+    /// ソート済みの項目一覧に対して、これを維持する位置に項目を追加する。
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="comparer"></param>
+    public void AddSorted(T item, Comparer<T>? comparer = null)
+    {
+        App.Current?.UIQueue?.TryEnqueue(() =>
+        {
+            var index = FindInsertIndex(Items, item, comparer);
+            Items.Insert(index, item);
+        });
+
+        static int FindInsertIndex<E>(ObservableList<E> list, E item, IComparer<E>? comparer = null)
+        {
+            comparer ??= Comparer<E>.Default;
+
+            int low = 0;
+            int high = list.Count;
+
+            while (low < high)
+            {
+                int mid = low + ((high - low) >> 1);
+
+                if (comparer.Compare(list[mid], item) < 0)
+                    low = mid + 1;
+                else
+                    high = mid;
+            }
+
+            return low;
         }
     }
 

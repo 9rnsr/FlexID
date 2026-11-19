@@ -93,7 +93,11 @@ public partial class InputEirViewModel : ViewModelBase
         }
 
         var inputs = GetTargets(inputFiles);
-        await BuiltinTargets.AddRangeAsync(inputs);
+
+        await foreach (var item in inputs)
+        {
+            BuiltinTargets.AddSorted(item);
+        }
     }
 
     [RelayCommand]
@@ -122,7 +126,10 @@ public partial class InputEirViewModel : ViewModelBase
                     .All(targetVM => Path.GetFullPath(targetVM.InputTarget.FilePath) != inputFile);
             }));
 
-            await ExternalTargets.AddRangeAsync(inputs, initialCheck: true);
+            await foreach (var item in inputs)
+            {
+                ExternalTargets.AddChecked(item);
+            }
         }
     }
 
@@ -137,7 +144,7 @@ public partial class InputEirViewModel : ViewModelBase
     [ObservableProperty]
     public partial int CommitmentPeriod { get; set; }
 
-    public IReadOnlyList<string> CommitmentPeriodUnits { get; } =
+    public IReadOnlyList<string> CommitmentPeriodUnits { get; } = (string[])
     [
         "days",
         "months",
@@ -147,7 +154,7 @@ public partial class InputEirViewModel : ViewModelBase
     [ObservableProperty]
     public partial string SelectedCommitmentPeriodUnit { get; set; }
 
-    public IReadOnlyList<string> IntakeAges { get; } =
+    public IReadOnlyList<string> IntakeAges { get; } = (string[])
     [
         "3months old",
         "1years old",

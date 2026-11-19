@@ -177,7 +177,7 @@ public partial class ViewerViewModel : ObservableObject
         }
     }
 
-    private static readonly IReadOnlyList<OutputType> candidateTypes =
+    private static readonly IReadOnlyList<OutputType> candidateTypes = (OutputType[])
     [
         OutputType.RetentionActivity,
         OutputType.CumulativeActivity,

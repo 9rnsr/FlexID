@@ -37,7 +37,10 @@ public partial class InputScoeffViewModel : ViewModelBase
         // 放射線データに定義されている核種の一覧を取得する。
         Task.Run(async () =>
         {
-            await Nuclides.AddRangeAsync(SAFDataReader.ReadRadNuclides());
+            await foreach (var nuclide in SAFDataReader.ReadRadNuclides())
+            {
+                Nuclides.Add(nuclide);
+            }
 
             //Debug.WriteLine("Got Nuclides");
             WeakReferenceMessenger.Default.Send(new Views.ScoeffState { IsRead = true });

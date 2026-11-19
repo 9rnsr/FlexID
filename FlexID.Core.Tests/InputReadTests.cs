@@ -1,12 +1,47 @@
 namespace FlexID;
 
+using static InputReadTestHelpers;
+
 [TestClass]
 public class InputReadTests
 {
+    [TestMethod]
+    public void CompartmentOrderTest()
+    {
+        var reader = CreateReader("""
+            [title]
+            dummy
+
+            [nuclide]
+              Sr-90
+
+            [intake]
+              C1    100%
+
+            [{Sr}:compartment]
+              acc    C1         ---
+
+            [{*}:compartment]
+              acc    C2         ---
+
+            [{Sr}:compartment]
+              acc    C3         ---
+            """);
+
+        var input = reader.Read();
+        input.Organs.TakeLast(3).Select(o => o.Name).ShouldBe(["C1", "C2", "C3"]);
+    }
+
+    private static readonly string InputOirDir;
+    private static readonly string InputEirDir;
+
     private static readonly string[] RetentionExpects;
 
     static InputReadTests()
     {
+        InputOirDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
+        InputEirDir = Path.Combine(AppResource.BaseDir, @"inp\EIR");
+
         var expectDir = Path.Combine(AppResource.BaseDir, @"expect");
         RetentionExpects = Directory.EnumerateFiles(expectDir, "*.dat", SearchOption.AllDirectories)
             .Select(path =>
@@ -21,6 +56,8 @@ public class InputReadTests
     [DynamicData(nameof(GetOirInuts))]
     public void Test_OIR(string inputPath)
     {
+        inputPath = Path.Combine(InputOirDir, inputPath);
+
         var target = Path.GetFileNameWithoutExtension(inputPath);
         var nuclide = target.Split('_')[0];
 
@@ -36,15 +73,16 @@ public class InputReadTests
 
     public static IEnumerable<object[]> GetOirInuts()
     {
-        var inputDir = Path.Combine(AppResource.BaseDir, @"inp\OIR");
-        return Directory.EnumerateFiles(inputDir, "*.inp", SearchOption.AllDirectories)
-            .Select(path => new object[] { path });
+        return Directory.EnumerateFiles(InputOirDir, "*.inp", SearchOption.AllDirectories)
+            .Select(path => new object[] { Path.GetRelativePath(InputOirDir, path) });
     }
 
     [TestMethod]
     [DynamicData(nameof(GetEirInuts))]
     public void Test_EIR(string inputPath)
     {
+        inputPath = Path.Combine(InputEirDir, inputPath);
+
         var target = Path.GetFileNameWithoutExtension(inputPath);
         var nuclide = target.Split('_')[0];
 
@@ -57,8 +95,7 @@ public class InputReadTests
 
     public static IEnumerable<object[]> GetEirInuts()
     {
-        var inputDir = Path.Combine(AppResource.BaseDir, @"inp\EIR");
-        return Directory.EnumerateFiles(inputDir, "*.inp", SearchOption.AllDirectories)
-            .Select(path => new object[] { path });
+        return Directory.EnumerateFiles(InputEirDir, "*.inp", SearchOption.AllDirectories)
+            .Select(path => new object[] { Path.GetRelativePath(InputEirDir, path) });
     }
 }
