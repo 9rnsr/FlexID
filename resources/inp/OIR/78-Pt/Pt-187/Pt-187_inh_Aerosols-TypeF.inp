@@ -1,0 +1,7 @@
+[title]
+Pt-187 Inhalation, Aerosols Type F
+
+[nuclide]
+  Pt-187  Ir-187
+
+[include:../common_78-Pt_inh_Aerosols-TypeF.inc]

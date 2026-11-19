@@ -1,0 +1,7 @@
+[title]
+Pt-200 Ingestion, Soluble
+
+[nuclide]
+  Pt-200  Au-200
+
+[include:../common_78-Pt_ing_Soluble.inc]

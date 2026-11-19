@@ -1,0 +1,7 @@
+[title]
+Pt-184 Ingestion, Soluble
+
+[nuclide]
+  Pt-184  Ir-184  Os-180  Re-180
+
+[include:../common_78-Pt_ing_Soluble.inc]

@@ -1,0 +1,7 @@
+[title]
+Pt-191 Inhalation, Aerosols Type F
+
+[nuclide]
+  Pt-191
+
+[include:../common_78-Pt_inh_Aerosols-TypeF.inc]

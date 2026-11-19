@@ -1,0 +1,7 @@
+[title]
+Pt-197 Ingestion, Soluble
+
+[nuclide]
+  Pt-197
+
+[include:../common_78-Pt_ing_Soluble.inc]

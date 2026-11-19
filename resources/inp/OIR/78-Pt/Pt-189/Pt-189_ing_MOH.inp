@@ -1,0 +1,7 @@
+[title]
+Pt-189 Ingestion, Metal, oxide and hydroxide
+
+[nuclide]
+  Pt-189  Ir-189  Os-189m
+
+[include:../common_78-Pt_ing_MOH.inc]
