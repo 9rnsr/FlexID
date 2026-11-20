@@ -1,0 +1,7 @@
+[title]
+As-70 Injection
+
+[nuclide]
+  As-70
+
+[include:../common_33-As_inj.inc]

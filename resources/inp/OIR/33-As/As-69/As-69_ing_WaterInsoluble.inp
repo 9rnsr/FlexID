@@ -1,0 +1,7 @@
+[title]
+As-69 Ingestion, WaterInsoluble
+
+[nuclide]
+  As-69  Ge-69
+
+[include:../common_33-As_ing_WaterInsoluble.inc]

@@ -1,0 +1,7 @@
+[title]
+As-76 Ingestion, WaterSoluble
+
+[nuclide]
+  As-76
+
+[include:../common_33-As_ing_WaterSoluble.inc]
