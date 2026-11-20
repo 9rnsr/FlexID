@@ -23,3 +23,9 @@
 |Kidneys  |         |         |         |               |
 |         |Kidneys1 |Kidneys1 |Kidneys1 |Kidneys1       |
 |         |Kidneys2 |Kidneys2 |Kidneys2 |Kidneys2       |
+
+|79-Au    |78-Pt    |77-Ir    |76-Os    |75-Re          |
+|---------|---------|---------|---------|---------------|
+|Other1   |ST0      |ST0      |ST0      |ST0            |
+|Other2   |ST1      |ST1      |ST1      |ST1            |
+|         |ST2      |ST2      |ST2      |ST2            |

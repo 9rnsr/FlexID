@@ -10,8 +10,8 @@
   acc   T-bone-V              T-bone-V
   acc   Liver1                Liver
   acc   Liver2                Liver
-  acc   Kidneys1              Kidneys
-  acc   Kidneys2              Kidneys
+  acc   Kidneys1              Kidneys       # Urinary path
+  acc   Kidneys2              Kidneys       # Other kidney tissue
   acc   ST0                   Other
   acc   ST1                   Other
   acc   ST2                   Other
