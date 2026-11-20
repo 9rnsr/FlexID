@@ -1,0 +1,7 @@
+[title]
+Ga-72 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ga-72
+
+[include:../common_31-Ga_inh_Aerosols-TypeM.inc]

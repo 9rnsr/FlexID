@@ -1,0 +1,7 @@
+[title]
+Ga-73 Ingestion
+
+[nuclide]
+  Ga-73
+
+[include:../common_31-Ga_ing.inc]

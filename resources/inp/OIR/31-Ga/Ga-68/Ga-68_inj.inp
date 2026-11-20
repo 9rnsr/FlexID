@@ -1,0 +1,7 @@
+[title]
+Ga-68 Injection
+
+[nuclide]
+  Ga-68
+
+[include:../common_31-Ga_inj.inc]
