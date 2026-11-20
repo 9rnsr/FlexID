@@ -1,0 +1,7 @@
+[title]
+Ge-66 Inhalation, Aerosols Type S
+
+[nuclide]
+  Ge-66  Ga-66
+
+[include:../common_32-Ge_inh_Aerosols-TypeS.inc]

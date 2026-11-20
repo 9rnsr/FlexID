@@ -1,0 +1,7 @@
+[title]
+Ge-71 Ingestion
+
+[nuclide]
+  Ge-71
+
+[include:../common_32-Ge_ing.inc]

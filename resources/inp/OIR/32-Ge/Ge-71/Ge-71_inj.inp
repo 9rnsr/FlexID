@@ -1,0 +1,7 @@
+[title]
+Ge-71 Injection
+
+[nuclide]
+  Ge-71
+
+[include:../common_32-Ge_inj.inc]

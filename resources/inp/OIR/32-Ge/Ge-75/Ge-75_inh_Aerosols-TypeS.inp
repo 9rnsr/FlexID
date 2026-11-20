@@ -1,0 +1,7 @@
+[title]
+Ge-75 Inhalation, Aerosols Type S
+
+[nuclide]
+  Ge-75
+
+[include:../common_32-Ge_inh_Aerosols-TypeS.inc]

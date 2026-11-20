@@ -1,0 +1,7 @@
+[title]
+Ge-67 Inhalation, Aerosols Type F
+
+[nuclide]
+  Ge-67  Ga-67
+
+[include:../common_32-Ge_inh_Aerosols-TypeF.inc]
