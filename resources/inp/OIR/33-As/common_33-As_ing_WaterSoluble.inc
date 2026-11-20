@@ -17,3 +17,4 @@ $endif
 [include:../share/common_HATM+UB.inc]
 
 [include:element_33-As.inc]
+[include:element_32-Ge.inc]

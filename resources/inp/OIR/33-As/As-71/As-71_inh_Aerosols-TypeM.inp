@@ -1,0 +1,7 @@
+[title]
+As-71 Inhalation, Aerosols Type M
+
+[nuclide]
+  As-71  Ge-71
+
+[include:../common_33-As_inh_Aerosols-TypeM.inc]

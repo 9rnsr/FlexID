@@ -1,0 +1,7 @@
+[title]
+As-70 Ingestion, WaterSoluble
+
+[nuclide]
+  As-70
+
+[include:../common_33-As_ing_WaterSoluble.inc]

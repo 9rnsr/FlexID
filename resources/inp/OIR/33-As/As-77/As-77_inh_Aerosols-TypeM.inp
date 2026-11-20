@@ -1,0 +1,7 @@
+[title]
+As-77 Inhalation, Aerosols Type M
+
+[nuclide]
+  As-77
+
+[include:../common_33-As_inh_Aerosols-TypeM.inc]

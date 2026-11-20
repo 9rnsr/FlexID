@@ -1,0 +1,7 @@
+[title]
+As-76 Injection
+
+[nuclide]
+  As-76
+
+[include:../common_33-As_inj.inc]

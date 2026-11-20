@@ -1,0 +1,7 @@
+[title]
+As-76 Inhalation, Aerosols Type M
+
+[nuclide]
+  As-76
+
+[include:../common_33-As_inh_Aerosols-TypeM.inc]
