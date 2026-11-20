@@ -11,7 +11,7 @@
   acc   Kidneys               Kidneys
   acc   Pancreas              Pancreas
   acc   Spleen                Spleen
-  acc   SkeletalMuscle        Muscle
+  acc   Muscle                Muscle
   acc   ST0                   Other
   acc   ST1                   Other
 
@@ -83,7 +83,7 @@
   Blood                   C-bone-S              $(5 * 20% * 0.5)                    # == 0.5
   Blood                   T-marrow              $(5 * 10% * 0.5)                    # == 0.25   # <--
   Blood                   C-marrow              $(5 * 10% * 0.5)                    # == 0.25   # <--
-  Blood                   SkeletalMuscle        $(5 *  4%)                          # == 0.2
+  Blood                   Muscle                $(5 *  4%)                          # == 0.2
   Blood                   Spleen                $(5 *  1%)                          # == 0.05
   Blood                   Pancreas              $(5 *  0.1%)                        # == 0.005
   Blood                   RC-con                $(5 *  3%)                          # == 0.15
@@ -94,7 +94,7 @@
   Liver                   Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Spleen                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Pancreas                Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
-  SkeletalMuscle          Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
+  Muscle                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Kidneys                 UB-con                $(0.693 / 0.5)      # 半減期0.5日   # == 1.39
   T-bone-S                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
   C-bone-S                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
@@ -119,7 +119,7 @@
 #   Blood                   T-bone-S                  0.5
 #   Blood                   C-bone-S                  0.5
 #   Blood                   RedMarrow                 0.25      # <--
-#   Blood                   SkeletalMuscle            0.2
+#   Blood                   Muscle                    0.2
 #   Blood                   Pancreas                  0.005
 #   Blood                   ST0                       2.145     # <--
 #   Blood                   ST1                       0.5
@@ -129,7 +129,7 @@
 #   T-bone-S                Blood                     0.347
 #   C-bone-S                Blood                     0.347
 #   RedMarrow               Blood                     0.347
-#   SkeletalMuscle          Blood                     0.139
+#   Muscle                  Blood                     0.139
 #   Pancreas                Blood                     0.139
 #   ST0                     Blood                     1.39
 #   ST1                     Blood                     0.0019
