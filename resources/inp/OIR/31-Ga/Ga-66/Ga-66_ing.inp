@@ -1,0 +1,7 @@
+[title]
+Ga-66 Ingestion
+
+[nuclide]
+  Ga-66
+
+[include:../common_31-Ga_ing.inc]

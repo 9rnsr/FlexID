@@ -1,0 +1,7 @@
+[title]
+Ga-73 Inhalation, Aerosols Type F
+
+[nuclide]
+  Ga-73
+
+[include:../common_31-Ga_inh_Aerosols-TypeF.inc]
