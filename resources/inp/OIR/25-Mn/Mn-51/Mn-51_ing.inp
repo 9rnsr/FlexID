@@ -1,0 +1,7 @@
+[title]
+Mn-51 Ingestion
+
+[nuclide]
+  Mn-51  Cr-51
+
+[include:../common_25-Mn_ing.inc]

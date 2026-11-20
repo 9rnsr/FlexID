@@ -1,0 +1,7 @@
+[title]
+Mn-52m Ingestion
+
+[nuclide]
+  Mn-52m  Mn-52
+
+[include:../common_25-Mn_ing.inc]

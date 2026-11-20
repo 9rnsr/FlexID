@@ -1,0 +1,7 @@
+[title]
+Mn-52m Inhalation, Aerosols Type S
+
+[nuclide]
+  Mn-52m  Mn-52
+
+[include:../common_25-Mn_inh_Aerosols-TypeS.inc]

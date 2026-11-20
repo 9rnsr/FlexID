@@ -1,0 +1,7 @@
+[title]
+Mn-56 Ingestion
+
+[nuclide]
+  Mn-56
+
+[include:../common_25-Mn_ing.inc]
