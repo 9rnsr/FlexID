@@ -1,0 +1,7 @@
+[title]
+Ge-68 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ge-68  Ga-68
+
+[include:../common_32-Ge_inh_Aerosols-TypeM.inc]

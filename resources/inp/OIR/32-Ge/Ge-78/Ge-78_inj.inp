@@ -1,0 +1,7 @@
+[title]
+Ge-78 Injection
+
+[nuclide]
+  Ge-78  As-78
+
+[include:../common_32-Ge_inj.inc]
