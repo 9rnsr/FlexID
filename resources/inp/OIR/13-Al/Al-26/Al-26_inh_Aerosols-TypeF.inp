@@ -1,0 +1,7 @@
+[title]
+Al-26 Inhalation, Aerosols Type F
+
+[nuclide]
+  Al-26
+
+[include:../common_13-Al_inh_Aerosols-TypeF.inc]
