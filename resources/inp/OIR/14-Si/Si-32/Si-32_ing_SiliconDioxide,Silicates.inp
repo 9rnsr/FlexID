@@ -1,0 +1,7 @@
+[title]
+Si-32 Ingestion, Silicon dioxide and silicates
+
+[nuclide]
+  Si-32  P-32
+
+[include:../common_14-Si_ing_SiliconDioxide,Silicates.inc]

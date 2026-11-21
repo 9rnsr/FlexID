@@ -1,0 +1,7 @@
+[title]
+Si-31 Inhalation, Aerosols Type M
+
+[nuclide]
+  Si-31
+
+[include:../common_14-Si_inh_Aerosols-TypeM.inc]
