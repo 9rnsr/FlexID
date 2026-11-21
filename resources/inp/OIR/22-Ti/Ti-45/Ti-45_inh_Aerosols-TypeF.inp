@@ -1,0 +1,7 @@
+[title]
+Ti-45 Inhalation, Aerosols Type F
+
+[nuclide]
+  Ti-45
+
+[include:../common_22-Ti_inh_Aerosols-TypeF.inc]
