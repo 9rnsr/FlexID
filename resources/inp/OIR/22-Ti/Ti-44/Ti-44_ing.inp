@@ -1,0 +1,7 @@
+[title]
+Ti-44 Ingestion
+
+[nuclide]
+  Ti-44  Sc-44
+
+[include:../common_22-Ti_ing.inc]

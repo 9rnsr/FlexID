@@ -1,0 +1,7 @@
+[title]
+Ti-44 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ti-44  Sc-44
+
+[include:../common_22-Ti_inh_Aerosols-TypeM.inc]

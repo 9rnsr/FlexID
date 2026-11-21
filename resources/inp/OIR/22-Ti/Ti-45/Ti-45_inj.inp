@@ -1,0 +1,7 @@
+[title]
+Ti-45 Injection
+
+[nuclide]
+  Ti-45
+
+[include:../common_22-Ti_inj.inc]
