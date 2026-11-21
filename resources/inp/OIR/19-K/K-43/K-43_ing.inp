@@ -1,0 +1,7 @@
+[title]
+K-43 Ingestion
+
+[nuclide]
+  K-43
+
+[include:../common_19-K_ing.inc]

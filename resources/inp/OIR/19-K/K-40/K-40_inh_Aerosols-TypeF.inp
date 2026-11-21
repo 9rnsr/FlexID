@@ -1,0 +1,7 @@
+[title]
+K-40 Inhalation, Aerosols Type F
+
+[nuclide]
+  K-40
+
+[include:../common_19-K_inh_Aerosols-TypeF.inc]

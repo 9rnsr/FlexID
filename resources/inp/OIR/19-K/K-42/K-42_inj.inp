@@ -1,0 +1,7 @@
+[title]
+K-42 Injection
+
+[nuclide]
+  K-42
+
+[include:../common_19-K_inj.inc]

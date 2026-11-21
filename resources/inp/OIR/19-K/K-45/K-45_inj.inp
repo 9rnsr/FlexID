@@ -1,0 +1,7 @@
+[title]
+K-45 Injection
+
+[nuclide]
+  K-45  Ca-45
+
+[include:../common_19-K_inj.inc]
