@@ -1,0 +1,7 @@
+[title]
+Na-22 Inhalation, Aerosols Type S
+
+[nuclide]
+  Na-22
+
+[include:../common_11-Na_inh_Aerosols-TypeS.inc]
