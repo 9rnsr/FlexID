@@ -1,0 +1,7 @@
+[title]
+Mg-28 Ingestion, All other forms, unspecified forms
+
+[nuclide]
+  Mg-28  Al-28
+
+[include:../common_12-Mg_ing_Other.inc]

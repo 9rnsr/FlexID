@@ -1,0 +1,7 @@
+[title]
+Mg-28 Ingestion, Magnesium oxide
+
+[nuclide]
+  Mg-28  Al-28
+
+[include:../common_12-Mg_ing_Oxide.inc]
