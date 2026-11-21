@@ -1,0 +1,7 @@
+[title]
+Cl-36 Inhalation, Aerosols Type S
+
+[nuclide]
+  Cl-36
+
+[include:../common_17-Cl_inh_Aerosols-TypeS.inc]

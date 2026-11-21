@@ -1,0 +1,7 @@
+[title]
+Cl-39 Inhalation, Aerosols Type M
+
+[nuclide]
+  Cl-39  Ar-39
+
+[include:../common_17-Cl_inh_Aerosols-TypeM.inc]

@@ -1,0 +1,7 @@
+[title]
+Cl-34m Inhalation, Aerosols Type M
+
+[nuclide]
+  Cl-34m  Cl-34
+
+[include:../common_17-Cl_inh_Aerosols-TypeM.inc]
