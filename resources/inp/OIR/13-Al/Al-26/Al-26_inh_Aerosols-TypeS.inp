@@ -1,0 +1,7 @@
+[title]
+Al-26 Inhalation, Aerosols Type S
+
+[nuclide]
+  Al-26
+
+[include:../common_13-Al_inh_Aerosols-TypeS.inc]
