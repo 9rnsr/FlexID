@@ -1,0 +1,7 @@
+[title]
+V-48 Ingestion, Sodium metavanadate
+
+[nuclide]
+  V-48
+
+[include:../common_23-V_ing_SodiumMetavanadate.inc]

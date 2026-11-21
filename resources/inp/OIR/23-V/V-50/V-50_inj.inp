@@ -1,0 +1,7 @@
+[title]
+V-50 Injection
+
+[nuclide]
+  V-50
+
+[include:../common_23-V_inj.inc]

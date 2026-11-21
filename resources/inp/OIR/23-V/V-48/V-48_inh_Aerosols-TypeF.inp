@@ -1,0 +1,7 @@
+[title]
+V-48 Inhalation, Aerosols Type F
+
+[nuclide]
+  V-48
+
+[include:../common_23-V_inh_Aerosols-TypeF.inc]
