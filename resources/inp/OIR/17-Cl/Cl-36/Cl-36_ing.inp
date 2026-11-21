@@ -1,0 +1,7 @@
+[title]
+Cl-36 Ingestion
+
+[nuclide]
+  Cl-36
+
+[include:../common_17-Cl_ing.inc]

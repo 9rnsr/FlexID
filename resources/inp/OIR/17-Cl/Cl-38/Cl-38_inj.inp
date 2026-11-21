@@ -1,0 +1,7 @@
+[title]
+Cl-38 Injection
+
+[nuclide]
+  Cl-38
+
+[include:../common_17-Cl_inj.inc]

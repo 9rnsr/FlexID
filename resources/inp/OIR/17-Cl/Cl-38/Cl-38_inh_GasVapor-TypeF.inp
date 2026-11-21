@@ -1,0 +1,7 @@
+[title]
+Cl-38 Inhalation, Gas or Vapor Type F, Unspecified
+
+[nuclide]
+  Cl-38
+
+[include:../common_17-Cl_inh_GasVapor-TypeF.inc]
