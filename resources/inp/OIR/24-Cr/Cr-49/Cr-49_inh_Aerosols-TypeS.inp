@@ -1,0 +1,7 @@
+[title]
+Cr-49 Inhalation, Aerosols Type S
+
+[nuclide]
+  Cr-49  V-49
+
+[include:../common_24-Cr_inh_Aerosols-TypeS.inc]

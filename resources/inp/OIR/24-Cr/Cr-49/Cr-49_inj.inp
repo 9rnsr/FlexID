@@ -1,0 +1,7 @@
+[title]
+Cr-49 Injection
+
+[nuclide]
+  Cr-49  V-49
+
+[include:../common_24-Cr_inj.inc]

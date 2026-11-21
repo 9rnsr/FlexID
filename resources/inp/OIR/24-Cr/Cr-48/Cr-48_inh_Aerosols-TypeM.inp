@@ -1,0 +1,7 @@
+[title]
+Cr-48 Inhalation, Aerosols Type M
+
+[nuclide]
+  Cr-48  V-48
+
+[include:../common_24-Cr_inh_Aerosols-TypeM.inc]
