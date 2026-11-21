@@ -1,0 +1,7 @@
+[title]
+Sc-48 Inhalation, Aerosols Type S
+
+[nuclide]
+  Sc-48
+
+[include:../common_21-Sc_inh_Aerosols-TypeS.inc]
