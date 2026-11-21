@@ -1,0 +1,7 @@
+[title]
+Ni-59 Ingestion, Nickel in soluble forms
+
+[nuclide]
+  Ni-59
+
+[include:../common_28-Ni_ing_Soluble.inc]

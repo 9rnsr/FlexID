@@ -1,0 +1,7 @@
+[title]
+Ni-57 Inhalation, Gas or Vapor Type F, Nickel carbonyl
+
+[nuclide]
+  Ni-57  Co-57
+
+[include:../common_28-Ni_inh_GasVapor-TypeF.inc]

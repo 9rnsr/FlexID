@@ -1,0 +1,7 @@
+[title]
+Ni-66 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ni-66  Cu-66
+
+[include:../common_28-Ni_inh_Aerosols-TypeM.inc]

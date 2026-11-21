@@ -1,0 +1,7 @@
+[title]
+Ni-65 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ni-65
+
+[include:../common_28-Ni_inh_Aerosols-TypeM.inc]

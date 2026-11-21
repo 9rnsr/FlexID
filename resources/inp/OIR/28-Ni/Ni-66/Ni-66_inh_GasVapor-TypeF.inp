@@ -1,0 +1,7 @@
+[title]
+Ni-66 Inhalation, Gas or Vapor Type F, Nickel carbonyl
+
+[nuclide]
+  Ni-66  Cu-66
+
+[include:../common_28-Ni_inh_GasVapor-TypeF.inc]
