@@ -1,0 +1,7 @@
+[title]
+Cr-48 Ingestion
+
+[nuclide]
+  Cr-48  V-48
+
+[include:../common_24-Cr_ing_TrivalentState.inc]

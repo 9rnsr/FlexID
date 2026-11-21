@@ -1,0 +1,7 @@
+[title]
+Cr-51 Ingestion
+
+[nuclide]
+  Cr-51
+
+[include:../common_24-Cr_ing_TrivalentState.inc]
