@@ -1,0 +1,7 @@
+[title]
+V-50 Ingestion, All other chemical forms
+
+[nuclide]
+  V-50
+
+[include:../common_23-V_ing_Other.inc]

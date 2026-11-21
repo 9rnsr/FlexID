@@ -1,0 +1,7 @@
+[title]
+V-47 Ingestion, All other chemical forms
+
+[nuclide]
+  V-47
+
+[include:../common_23-V_ing_Other.inc]

@@ -1,0 +1,7 @@
+[title]
+V-49 Inhalation, Aerosols Type M
+
+[nuclide]
+  V-49
+
+[include:../common_23-V_inh_Aerosols-TypeM.inc]
