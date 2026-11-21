@@ -1,0 +1,7 @@
+[title]
+K-45 Inhalation, Aerosols Type S
+
+[nuclide]
+  K-45  Ca-45
+
+[include:../common_19-K_inh_Aerosols-TypeS.inc]

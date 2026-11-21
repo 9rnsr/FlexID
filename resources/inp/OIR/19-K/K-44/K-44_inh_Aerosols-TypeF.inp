@@ -1,0 +1,7 @@
+[title]
+K-44 Inhalation, Aerosols Type F
+
+[nuclide]
+  K-44
+
+[include:../common_19-K_inh_Aerosols-TypeF.inc]
