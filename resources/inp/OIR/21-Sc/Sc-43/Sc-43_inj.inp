@@ -1,0 +1,7 @@
+[title]
+Sc-43 Injection
+
+[nuclide]
+  Sc-43
+
+[include:../common_21-Sc_inj.inc]

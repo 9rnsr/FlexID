@@ -1,0 +1,7 @@
+[title]
+Sc-44m Inhalation, Aerosols Type F
+
+[nuclide]
+  Sc-44m  Sc-44
+
+[include:../common_21-Sc_inh_Aerosols-TypeF.inc]

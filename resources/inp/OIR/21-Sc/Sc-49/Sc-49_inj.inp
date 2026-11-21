@@ -1,0 +1,7 @@
+[title]
+Sc-49 Injection
+
+[nuclide]
+  Sc-49
+
+[include:../common_21-Sc_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+Sc-43 Inhalation, Aerosols Type M
+
+[nuclide]
+  Sc-43
+
+[include:../common_21-Sc_inh_Aerosols-TypeM.inc]

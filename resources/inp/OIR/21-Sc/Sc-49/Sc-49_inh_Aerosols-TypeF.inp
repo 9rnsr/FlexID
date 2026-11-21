@@ -1,0 +1,7 @@
+[title]
+Sc-49 Inhalation, Aerosols Type F
+
+[nuclide]
+  Sc-49
+
+[include:../common_21-Sc_inh_Aerosols-TypeF.inc]

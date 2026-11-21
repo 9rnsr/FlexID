@@ -1,0 +1,7 @@
+[title]
+Sc-49 Ingestion
+
+[nuclide]
+  Sc-49
+
+[include:../common_21-Sc_ing.inc]
