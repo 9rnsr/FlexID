@@ -1,0 +1,7 @@
+[title]
+Na-22 Injection
+
+[nuclide]
+  Na-22
+
+[include:../common_11-Na_inj.inc]
