@@ -1,0 +1,7 @@
+[title]
+Mg-28 Inhalation, Aerosols Type F
+
+[nuclide]
+  Mg-28  Al-28
+
+[include:../common_12-Mg_inh_Aerosols-TypeF.inc]
