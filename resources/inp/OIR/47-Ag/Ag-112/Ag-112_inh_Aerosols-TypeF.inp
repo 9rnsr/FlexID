@@ -1,0 +1,7 @@
+[title]
+Ag-112 Inhalation, Aerosols Type F
+
+[nuclide]
+  Ag-112
+
+[include:../common_47-Ag_inh_Aerosols-TypeF.inc]

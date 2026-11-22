@@ -1,0 +1,7 @@
+[title]
+Ag-115 Inhalation, Aerosols Type S
+
+[nuclide]
+  Ag-115  Cd-115m  Cd-115  In-115m  In-115
+
+[include:../common_47-Ag_inh_Aerosols-TypeS.inc]

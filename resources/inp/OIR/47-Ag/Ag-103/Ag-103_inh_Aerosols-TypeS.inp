@@ -1,0 +1,7 @@
+[title]
+Ag-103 Inhalation, Aerosols Type S
+
+[nuclide]
+  Ag-103  Pd-103  Rh-103m
+
+[include:../common_47-Ag_inh_Aerosols-TypeS.inc]

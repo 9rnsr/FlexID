@@ -1,0 +1,7 @@
+[title]
+Ag-103 Injection
+
+[nuclide]
+  Ag-103  Pd-103  Rh-103m
+
+[include:../common_47-Ag_inj.inc]

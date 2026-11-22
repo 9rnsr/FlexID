@@ -1,0 +1,7 @@
+[title]
+Ag-104 Inhalation, Aerosols Type S
+
+[nuclide]
+  Ag-104
+
+[include:../common_47-Ag_inh_Aerosols-TypeS.inc]

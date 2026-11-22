@@ -1,0 +1,7 @@
+[title]
+Ag-101 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ag-101  Pd-101  Rh-101m  Rh-101
+
+[include:../common_47-Ag_inh_Aerosols-TypeM.inc]

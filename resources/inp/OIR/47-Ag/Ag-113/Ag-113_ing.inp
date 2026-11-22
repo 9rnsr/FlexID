@@ -1,0 +1,7 @@
+[title]
+Ag-113 Ingestion
+
+[nuclide]
+  Ag-113  Cd-113m  Cd-113
+
+[include:../common_47-Ag_ing.inc]

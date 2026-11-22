@@ -1,0 +1,7 @@
+[title]
+Ag-110m Inhalation, Aerosols Type F
+
+[nuclide]
+  Ag-110m  Ag-110
+
+[include:../common_47-Ag_inh_Aerosols-TypeF.inc]

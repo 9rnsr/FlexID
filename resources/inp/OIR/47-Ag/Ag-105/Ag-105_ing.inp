@@ -1,0 +1,7 @@
+[title]
+Ag-105 Ingestion
+
+[nuclide]
+  Ag-105
+
+[include:../common_47-Ag_ing.inc]

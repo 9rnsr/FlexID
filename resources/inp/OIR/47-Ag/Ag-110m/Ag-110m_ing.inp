@@ -1,0 +1,7 @@
+[title]
+Ag-110m Ingestion
+
+[nuclide]
+  Ag-110m  Ag-110
+
+[include:../common_47-Ag_ing.inc]
