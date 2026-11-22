@@ -1,0 +1,7 @@
+[title]
+Cu-67 Injection
+
+[nuclide]
+  Cu-67
+
+[include:../common_29-Cu_inj.inc]

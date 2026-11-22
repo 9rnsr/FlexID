@@ -1,0 +1,7 @@
+[title]
+Cu-64 Inhalation, Aerosols Type S
+
+[nuclide]
+  Cu-64
+
+[include:../common_29-Cu_inh_Aerosols-TypeS.inc]

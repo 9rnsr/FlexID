@@ -1,0 +1,7 @@
+[title]
+Cu-60 Injection
+
+[nuclide]
+  Cu-60
+
+[include:../common_29-Cu_inj.inc]
