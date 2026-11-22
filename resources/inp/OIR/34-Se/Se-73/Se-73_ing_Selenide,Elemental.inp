@@ -1,0 +1,7 @@
+[title]
+Se-73 Ingestion, Selenide and elemental selenium
+
+[nuclide]
+  Se-73  As-73
+
+[include:../common_34-Se_ing_Selenide,Elemental.inc]

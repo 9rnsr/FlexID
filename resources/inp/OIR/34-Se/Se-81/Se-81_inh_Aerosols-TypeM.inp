@@ -1,0 +1,7 @@
+[title]
+Se-81 Inhalation, Aerosols Type M
+
+[nuclide]
+  Se-81
+
+[include:../common_34-Se_inh_Aerosols-TypeM.inc]

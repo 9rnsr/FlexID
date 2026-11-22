@@ -1,0 +1,7 @@
+[title]
+Se-70 Inhalation, Aerosols Type S
+
+[nuclide]
+  Se-70  As-70
+
+[include:../common_34-Se_inh_Aerosols-TypeS.inc]

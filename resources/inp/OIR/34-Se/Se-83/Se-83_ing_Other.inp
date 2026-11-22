@@ -1,0 +1,7 @@
+[title]
+Se-83 Ingestion, All other forms
+
+[nuclide]
+  Se-83  Br-83  Kr-83m
+
+[include:../common_34-Se_ing_Other.inc]

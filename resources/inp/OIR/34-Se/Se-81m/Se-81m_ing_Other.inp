@@ -1,0 +1,7 @@
+[title]
+Se-81m Ingestion, All other forms
+
+[nuclide]
+  Se-81m  Se-81
+
+[include:../common_34-Se_ing_Other.inc]

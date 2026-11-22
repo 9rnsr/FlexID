@@ -1,0 +1,7 @@
+[title]
+Se-70 Ingestion, Selenide and elemental selenium
+
+[nuclide]
+  Se-70  As-70
+
+[include:../common_34-Se_ing_Selenide,Elemental.inc]

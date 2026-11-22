@@ -1,0 +1,7 @@
+[title]
+Se-75 Injection
+
+[nuclide]
+  Se-75
+
+[include:../common_34-Se_inj.inc]

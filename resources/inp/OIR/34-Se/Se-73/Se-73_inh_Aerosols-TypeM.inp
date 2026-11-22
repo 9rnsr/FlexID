@@ -1,0 +1,7 @@
+[title]
+Se-73 Inhalation, Aerosols Type M
+
+[nuclide]
+  Se-73  As-73
+
+[include:../common_34-Se_inh_Aerosols-TypeM.inc]

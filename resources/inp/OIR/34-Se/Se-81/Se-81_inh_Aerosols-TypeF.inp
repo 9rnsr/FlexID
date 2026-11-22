@@ -1,0 +1,7 @@
+[title]
+Se-81 Inhalation, Aerosols Type F
+
+[nuclide]
+  Se-81
+
+[include:../common_34-Se_inh_Aerosols-TypeF.inc]
