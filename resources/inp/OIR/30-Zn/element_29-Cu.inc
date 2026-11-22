@@ -32,27 +32,27 @@
 # > parent radionuclide from the time it is produced in the body. 62Cu produced by
 # > decay of 62Zn is assumed to decay at its site of production.
 # > (436) この刊行物で取り上げられている3つの亜鉛同位体には、親放射性核種の線量係数の
-# > 導出において考慮される子孫核種がある。69mZn（t½=13.8 時間）は 69Zn（56.4 分）に崩壊し、
+# > 導出において考慮される子孫核種があります。69mZn（t½=13.8 時間）は 69Zn（56.4 分）に崩壊し、
 # > 62Zn（9.19 時間）は 62Cu（9.67 分）に崩壊し、72Zn（46.5 時間）は 72Ga（14.1 時間）に
-# > 崩壊する。69Znは体内で生成された時点から親放射性核種と同じように振舞うと考えられる。
-# > 62Znの崩壊によって生成された62Cuは、その生成部位で崩壊すると想定される。
+# > 崩壊します。69Znは体内で生成された時点から親放射性核種と同じように振舞うと考えられます。
+# > 62Znの崩壊によって生成された62Cuは、その生成部位で崩壊すると仮定されます。
 
-  {Zn}/Plasma             Plasma                ---
-  {Zn}/RBC                RBC                   ---
+  {Zn}/Plasma             Plasma                    ---
+  {Zn}/RBC                RBC                       ---
 
-  {Zn}/C-bone-S           C-bone-S              ---
-  {Zn}/T-bone-S           T-bone-S              ---
-  {Zn}/C-bone-V           C-bone-V              ---
-  {Zn}/T-bone-V           T-bone-V              ---
+  {Zn}/C-bone-S           C-bone-S                  ---
+  {Zn}/T-bone-S           T-bone-S                  ---
+  {Zn}/C-bone-V           C-bone-V                  ---
+  {Zn}/T-bone-V           T-bone-V                  ---
 
-  {Zn}/Liver1             Liver1                ---
-  {Zn}/Liver2             Liver2                ---
-  {Zn}/Kidneys            Kidneys               ---
-  {Zn}/Pancreas           Pancreas              ---
-  {Zn}/Muscle             Muscle                ---
+  {Zn}/Liver1             Liver1                    ---
+  {Zn}/Liver2             Liver2                    ---
+  {Zn}/Kidneys            Kidneys                   ---
+  {Zn}/Pancreas           Pancreas                  ---
+  {Zn}/Muscle             Muscle                    ---
 
-  {Zn}/ST0                ST0                   ---
-  {Zn}/ST1                ST1                   ---
-  {Zn}/ST2                ST2                   ---
+  {Zn}/ST0                ST0                       ---
+  {Zn}/ST1                ST1                       ---
+  {Zn}/ST2                ST2                       ---
 
-  {Zn}/Excreta            Excreta               ---
+  {Zn}/Excreta            Excreta                   ---
