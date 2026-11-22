@@ -1,0 +1,7 @@
+[title]
+Pd-100 Injection
+
+[nuclide]
+  Pd-100  Rh-100
+
+[include:../common_46-Pd_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+Pd-109 Inhalation, Aerosols Type F
+
+[nuclide]
+  Pd-109
+
+[include:../common_46-Pd_inh_Aerosols-TypeF.inc]

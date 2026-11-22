@@ -1,0 +1,7 @@
+[title]
+Pd-99 Inhalation, Aerosols Type M
+
+[nuclide]
+  Pd-99  Rh-99m  Rh-99
+
+[include:../common_46-Pd_inh_Aerosols-TypeM.inc]

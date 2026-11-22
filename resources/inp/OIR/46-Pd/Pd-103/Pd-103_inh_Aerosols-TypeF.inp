@@ -1,0 +1,7 @@
+[title]
+Pd-103 Inhalation, Aerosols Type F
+
+[nuclide]
+  Pd-103  Rh-103m
+
+[include:../common_46-Pd_inh_Aerosols-TypeF.inc]

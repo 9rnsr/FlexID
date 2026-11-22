@@ -1,0 +1,7 @@
+[title]
+Pd-112 Inhalation, Aerosols Type M
+
+[nuclide]
+  Pd-112  Ag-112
+
+[include:../common_46-Pd_inh_Aerosols-TypeM.inc]

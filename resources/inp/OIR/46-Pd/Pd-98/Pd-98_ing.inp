@@ -1,0 +1,7 @@
+[title]
+Pd-98 Ingestion
+
+[nuclide]
+  Pd-98  Rh-98
+
+[include:../common_46-Pd_ing.inc]

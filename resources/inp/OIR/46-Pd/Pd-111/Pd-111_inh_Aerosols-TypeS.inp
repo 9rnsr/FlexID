@@ -1,0 +1,7 @@
+[title]
+Pd-111 Inhalation, Aerosols Type S
+
+[nuclide]
+  Pd-111  Ag-111m  Ag-111
+
+[include:../common_46-Pd_inh_Aerosols-TypeS.inc]

@@ -1,0 +1,7 @@
+[title]
+Pd-107 Inhalation, Aerosols Type F
+
+[nuclide]
+  Pd-107
+
+[include:../common_46-Pd_inh_Aerosols-TypeF.inc]

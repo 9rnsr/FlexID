@@ -1,0 +1,7 @@
+[title]
+Pd-100 Inhalation, Aerosols Type F
+
+[nuclide]
+  Pd-100  Rh-100
+
+[include:../common_46-Pd_inh_Aerosols-TypeF.inc]
