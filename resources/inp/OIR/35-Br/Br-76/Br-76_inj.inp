@@ -1,0 +1,7 @@
+[title]
+Br-76 Injection
+
+[nuclide]
+  Br-76
+
+[include:../common_35-Br_inj.inc]

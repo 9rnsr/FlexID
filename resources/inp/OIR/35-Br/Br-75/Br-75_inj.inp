@@ -1,0 +1,7 @@
+[title]
+Br-75 Injection
+
+[nuclide]
+  Br-75  Se-75
+
+[include:../common_35-Br_inj.inc]

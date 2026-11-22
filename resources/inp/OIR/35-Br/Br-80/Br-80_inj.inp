@@ -1,0 +1,7 @@
+[title]
+Br-80 Injection
+
+[nuclide]
+  Br-80
+
+[include:../common_35-Br_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+Br-77 Injection
+
+[nuclide]
+  Br-77
+
+[include:../common_35-Br_inj.inc]

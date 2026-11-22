@@ -1,0 +1,7 @@
+[title]
+Br-74 Inhalation, Aerosols Type F
+
+[nuclide]
+  Br-74
+
+[include:../common_35-Br_inh_Aerosols-TypeF.inc]

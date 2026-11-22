@@ -1,0 +1,7 @@
+[title]
+Br-84 Inhalation, Aerosols Type S
+
+[nuclide]
+  Br-84
+
+[include:../common_35-Br_inh_Aerosols-TypeS.inc]

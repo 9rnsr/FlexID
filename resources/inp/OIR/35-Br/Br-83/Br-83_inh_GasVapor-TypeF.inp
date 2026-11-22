@@ -1,0 +1,7 @@
+[title]
+Br-83 Inhalation, Gas or Vapor Type F, Unspecified
+
+[nuclide]
+  Br-83  Kr-83m
+
+[include:../common_35-Br_inh_GasVapor-TypeF.inc]

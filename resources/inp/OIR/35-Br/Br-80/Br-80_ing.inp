@@ -1,0 +1,7 @@
+[title]
+Br-80 Ingestion
+
+[nuclide]
+  Br-80
+
+[include:../common_35-Br_ing.inc]

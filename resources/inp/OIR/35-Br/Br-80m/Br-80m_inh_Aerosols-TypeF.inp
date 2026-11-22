@@ -1,0 +1,7 @@
+[title]
+Br-80m Inhalation, Aerosols Type F
+
+[nuclide]
+  Br-80m  Br-80
+
+[include:../common_35-Br_inh_Aerosols-TypeF.inc]

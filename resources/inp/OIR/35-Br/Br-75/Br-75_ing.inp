@@ -1,0 +1,7 @@
+[title]
+Br-75 Ingestion
+
+[nuclide]
+  Br-75  Se-75
+
+[include:../common_35-Br_ing.inc]
