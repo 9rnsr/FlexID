@@ -1,0 +1,7 @@
+[title]
+Rb-84m Inhalation, Aerosols Type M
+
+[nuclide]
+  Rb-84m  Rb-84
+
+[include:../common_37-Rb_inh_Aerosols-TypeM.inc]

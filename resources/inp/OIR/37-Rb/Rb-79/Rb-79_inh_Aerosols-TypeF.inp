@@ -1,0 +1,7 @@
+[title]
+Rb-79 Inhalation, Aerosols Type F
+
+[nuclide]
+  Rb-79  Kr-79
+
+[include:../common_37-Rb_inh_Aerosols-TypeF.inc]

@@ -1,0 +1,7 @@
+[title]
+Rb-89 Injection
+
+[nuclide]
+  Rb-89  Sr-89
+
+[include:../common_37-Rb_inj.inc]

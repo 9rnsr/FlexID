@@ -1,0 +1,7 @@
+[title]
+Rb-81 Ingestion
+
+[nuclide]
+  Rb-81  Kr-81m  Kr-81
+
+[include:../common_37-Rb_ing.inc]

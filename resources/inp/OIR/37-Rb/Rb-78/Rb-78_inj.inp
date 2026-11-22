@@ -1,0 +1,7 @@
+[title]
+Rb-78 Injection
+
+[nuclide]
+  Rb-78
+
+[include:../common_37-Rb_inj.inc]

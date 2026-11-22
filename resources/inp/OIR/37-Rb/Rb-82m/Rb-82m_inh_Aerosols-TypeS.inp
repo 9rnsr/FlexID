@@ -1,0 +1,7 @@
+[title]
+Rb-82m Inhalation, Aerosols Type S
+
+[nuclide]
+  Rb-82m
+
+[include:../common_37-Rb_inh_Aerosols-TypeS.inc]

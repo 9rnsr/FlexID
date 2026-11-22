@@ -1,0 +1,7 @@
+[title]
+Rb-81m Inhalation, Aerosols Type F
+
+[nuclide]
+  Rb-81m  Rb-81  Kr-81m  Kr-81
+
+[include:../common_37-Rb_inh_Aerosols-TypeF.inc]

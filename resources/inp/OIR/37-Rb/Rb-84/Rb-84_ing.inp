@@ -1,0 +1,7 @@
+[title]
+Rb-84 Ingestion
+
+[nuclide]
+  Rb-84
+
+[include:../common_37-Rb_ing.inc]

@@ -1,0 +1,7 @@
+[title]
+Rb-88 Inhalation, Aerosols Type F
+
+[nuclide]
+  Rb-88
+
+[include:../common_37-Rb_inh_Aerosols-TypeF.inc]

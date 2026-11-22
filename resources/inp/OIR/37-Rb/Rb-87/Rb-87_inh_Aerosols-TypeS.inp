@@ -1,0 +1,7 @@
+[title]
+Rb-87 Inhalation, Aerosols Type S
+
+[nuclide]
+  Rb-87
+
+[include:../common_37-Rb_inh_Aerosols-TypeS.inc]
