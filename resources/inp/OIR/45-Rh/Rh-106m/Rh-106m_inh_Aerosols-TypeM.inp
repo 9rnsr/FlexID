@@ -1,0 +1,7 @@
+[title]
+Rh-106m Inhalation, Aerosols Type M
+
+[nuclide]
+  Rh-106m
+
+[include:../common_45-Rh_inh_Aerosols-TypeM.inc]

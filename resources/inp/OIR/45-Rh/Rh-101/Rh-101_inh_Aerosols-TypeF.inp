@@ -1,0 +1,7 @@
+[title]
+Rh-101 Inhalation, Aerosols Type F
+
+[nuclide]
+  Rh-101
+
+[include:../common_45-Rh_inh_Aerosols-TypeF.inc]

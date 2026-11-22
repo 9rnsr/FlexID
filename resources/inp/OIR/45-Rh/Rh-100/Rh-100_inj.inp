@@ -1,0 +1,7 @@
+[title]
+Rh-100 Injection
+
+[nuclide]
+  Rh-100
+
+[include:../common_45-Rh_inj.inc]

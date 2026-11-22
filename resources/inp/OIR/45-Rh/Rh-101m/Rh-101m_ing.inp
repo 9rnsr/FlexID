@@ -1,0 +1,7 @@
+[title]
+Rh-101m Ingestion
+
+[nuclide]
+  Rh-101m  Rh-101
+
+[include:../common_45-Rh_ing.inc]

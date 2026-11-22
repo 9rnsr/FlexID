@@ -1,0 +1,7 @@
+[title]
+Rh-99 Inhalation, Aerosols Type S
+
+[nuclide]
+  Rh-99
+
+[include:../common_45-Rh_inh_Aerosols-TypeS.inc]

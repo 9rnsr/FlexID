@@ -1,0 +1,7 @@
+[title]
+Rh-97 Injection
+
+[nuclide]
+  Rh-97  Ru-97  Tc-97m  Tc-97
+
+[include:../common_45-Rh_inj.inc]

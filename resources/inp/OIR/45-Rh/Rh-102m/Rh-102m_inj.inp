@@ -1,0 +1,7 @@
+[title]
+Rh-102m Injection
+
+[nuclide]
+  Rh-102m  Rh-102
+
+[include:../common_45-Rh_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+Rh-107 Injection
+
+[nuclide]
+  Rh-107
+
+[include:../common_45-Rh_inj.inc]

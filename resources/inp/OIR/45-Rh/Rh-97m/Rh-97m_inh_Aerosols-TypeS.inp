@@ -1,0 +1,7 @@
+[title]
+Rh-97m Inhalation, Aerosols Type S
+
+[nuclide]
+  Rh-97m  Rh-97  Ru-97  Tc-97m  Tc-97
+
+[include:../common_45-Rh_inh_Aerosols-TypeS.inc]
