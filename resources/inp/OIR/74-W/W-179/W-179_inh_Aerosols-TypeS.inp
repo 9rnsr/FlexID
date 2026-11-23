@@ -1,0 +1,7 @@
+[title]
+W-179 Inhalation, Aerosols Type S
+
+[nuclide]
+  W-179  Ta-179
+
+[include:../common_74-W_inh_Aerosols-TypeS.inc]

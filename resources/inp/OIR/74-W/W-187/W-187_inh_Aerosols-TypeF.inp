@@ -1,0 +1,7 @@
+[title]
+W-187 Inhalation, Aerosols Type F
+
+[nuclide]
+  W-187  Re-187
+
+[include:../common_74-W_inh_Aerosols-TypeF.inc]

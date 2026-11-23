@@ -1,0 +1,7 @@
+[title]
+W-190 Ingestion, All other forms
+
+[nuclide]
+  W-190  Re-190
+
+[include:../common_74-W_ing_Other.inc]

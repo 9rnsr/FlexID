@@ -1,0 +1,7 @@
+[title]
+W-190 Inhalation, Aerosols Type S
+
+[nuclide]
+  W-190  Re-190
+
+[include:../common_74-W_inh_Aerosols-TypeS.inc]

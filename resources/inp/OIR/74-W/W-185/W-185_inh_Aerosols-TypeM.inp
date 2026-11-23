@@ -1,0 +1,7 @@
+[title]
+W-185 Inhalation, Aerosols Type M
+
+[nuclide]
+  W-185
+
+[include:../common_74-W_inh_Aerosols-TypeM.inc]

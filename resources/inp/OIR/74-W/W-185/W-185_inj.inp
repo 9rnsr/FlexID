@@ -1,0 +1,7 @@
+[title]
+W-185 Injection
+
+[nuclide]
+  W-185
+
+[include:../common_74-W_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+W-178 Ingestion, Tungstic acid
+
+[nuclide]
+  W-178  Ta-178
+
+[include:../common_74-W_ing_TungsticAcid.inc]

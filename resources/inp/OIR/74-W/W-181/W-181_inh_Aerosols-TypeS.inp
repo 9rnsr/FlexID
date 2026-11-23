@@ -1,0 +1,7 @@
+[title]
+W-181 Inhalation, Aerosols Type S
+
+[nuclide]
+  W-181
+
+[include:../common_74-W_inh_Aerosols-TypeS.inc]
