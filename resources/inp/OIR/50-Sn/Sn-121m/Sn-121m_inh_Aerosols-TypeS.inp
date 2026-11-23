@@ -1,0 +1,7 @@
+[title]
+Sn-121m Inhalation, Aerosols Type S
+
+[nuclide]
+  Sn-121m  Sn-121
+
+[include:../common_50-Sn_inh_Aerosols-TypeS.inc]

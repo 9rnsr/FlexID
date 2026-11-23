@@ -1,0 +1,7 @@
+[title]
+Sn-127 Inhalation, Aerosols Type M
+
+[nuclide]
+  Sn-127  Sb-127  Te-127m  Te-127
+
+[include:../common_50-Sn_inh_Aerosols-TypeM.inc]

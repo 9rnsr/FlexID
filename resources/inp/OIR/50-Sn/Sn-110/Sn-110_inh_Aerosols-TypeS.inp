@@ -1,0 +1,7 @@
+[title]
+Sn-110 Inhalation, Aerosols Type S
+
+[nuclide]
+  Sn-110  In-110m
+
+[include:../common_50-Sn_inh_Aerosols-TypeS.inc]

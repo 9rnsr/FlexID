@@ -1,0 +1,7 @@
+[title]
+Sn-123m Inhalation, Aerosols Type M
+
+[nuclide]
+  Sn-123m
+
+[include:../common_50-Sn_inh_Aerosols-TypeM.inc]

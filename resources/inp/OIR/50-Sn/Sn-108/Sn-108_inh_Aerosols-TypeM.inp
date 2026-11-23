@@ -1,0 +1,7 @@
+[title]
+Sn-108 Inhalation, Aerosols Type M
+
+[nuclide]
+  Sn-108  In-108m
+
+[include:../common_50-Sn_inh_Aerosols-TypeM.inc]

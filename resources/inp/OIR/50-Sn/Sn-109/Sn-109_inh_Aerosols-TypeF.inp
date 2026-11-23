@@ -1,0 +1,7 @@
+[title]
+Sn-109 Inhalation, Aerosols Type F
+
+[nuclide]
+  Sn-109  In-109m  In-109  Cd-109
+
+[include:../common_50-Sn_inh_Aerosols-TypeF.inc]

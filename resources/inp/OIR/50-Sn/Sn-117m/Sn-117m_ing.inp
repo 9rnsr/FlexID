@@ -1,0 +1,7 @@
+[title]
+Sn-117m Ingestion
+
+[nuclide]
+  Sn-117m
+
+[include:../common_50-Sn_ing.inc]

@@ -1,0 +1,7 @@
+[title]
+Sn-117m Inhalation, Aerosols Type F
+
+[nuclide]
+  Sn-117m
+
+[include:../common_50-Sn_inh_Aerosols-TypeF.inc]

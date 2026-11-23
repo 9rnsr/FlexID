@@ -1,0 +1,7 @@
+[title]
+Sn-123m Injection
+
+[nuclide]
+  Sn-123m
+
+[include:../common_50-Sn_inj.inc]

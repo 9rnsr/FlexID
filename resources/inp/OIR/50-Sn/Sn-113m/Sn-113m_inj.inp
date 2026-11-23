@@ -1,0 +1,7 @@
+[title]
+Sn-113m Injection
+
+[nuclide]
+  Sn-113m  Sn-113  In-113m
+
+[include:../common_50-Sn_inj.inc]

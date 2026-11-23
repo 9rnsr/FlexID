@@ -1,0 +1,7 @@
+[title]
+Sn-113 Ingestion
+
+[nuclide]
+  Sn-113  In-113m
+
+[include:../common_50-Sn_ing.inc]
