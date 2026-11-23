@@ -1,0 +1,7 @@
+[title]
+Hf-178 Inhalation, Aerosols Type F
+
+[nuclide]
+  Hf-178
+
+[include:../common_72-Hf_inh_Aerosols-TypeF.inc]

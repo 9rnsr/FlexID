@@ -1,0 +1,7 @@
+[title]
+Hf-172 Injection
+
+[nuclide]
+  Hf-172  Lu-172m  Lu-172
+
+[include:../common_72-Hf_inj.inc]

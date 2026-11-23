@@ -1,0 +1,7 @@
+[title]
+Hf-183 Injection
+
+[nuclide]
+  Hf-183  Ta-183
+
+[include:../common_72-Hf_inj.inc]

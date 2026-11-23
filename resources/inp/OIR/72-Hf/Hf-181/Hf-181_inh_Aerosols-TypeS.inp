@@ -1,0 +1,7 @@
+[title]
+Hf-181 Inhalation, Aerosols Type S
+
+[nuclide]
+  Hf-181
+
+[include:../common_72-Hf_inh_Aerosols-TypeS.inc]

@@ -1,0 +1,7 @@
+[title]
+Hf-179m Injection
+
+[nuclide]
+  Hf-179m
+
+[include:../common_72-Hf_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+Hf-180m Ingestion
+
+[nuclide]
+  Hf-180m
+
+[include:../common_72-Hf_ing.inc]

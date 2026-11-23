@@ -1,0 +1,7 @@
+[title]
+Hf-182m Ingestion
+
+[nuclide]
+  Hf-182m  Hf-182  Ta-182m  Ta-182
+
+[include:../common_72-Hf_ing.inc]

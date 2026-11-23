@@ -1,0 +1,7 @@
+[title]
+Hf-177m Inhalation, Aerosols Type M
+
+[nuclide]
+  Hf-177m
+
+[include:../common_72-Hf_inh_Aerosols-TypeM.inc]

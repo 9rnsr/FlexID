@@ -1,0 +1,7 @@
+[title]
+Hf-184 Ingestion
+
+[nuclide]
+  Hf-184  Ta-184
+
+[include:../common_72-Hf_ing.inc]

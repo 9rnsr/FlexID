@@ -1,0 +1,7 @@
+[title]
+Hf-181 Ingestion
+
+[nuclide]
+  Hf-181
+
+[include:../common_72-Hf_ing.inc]

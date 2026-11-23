@@ -1,0 +1,7 @@
+[title]
+Hf-170 Inhalation, Aerosols Type F
+
+[nuclide]
+  Hf-170  Lu-170
+
+[include:../common_72-Hf_inh_Aerosols-TypeF.inc]

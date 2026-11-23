@@ -1,0 +1,7 @@
+[title]
+Hf-182 Inhalation, Aerosols Type M
+
+[nuclide]
+  Hf-182  Ta-182
+
+[include:../common_72-Hf_inh_Aerosols-TypeM.inc]

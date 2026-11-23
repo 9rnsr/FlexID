@@ -1,0 +1,7 @@
+[title]
+Hf-174 Inhalation, Aerosols Type S
+
+[nuclide]
+  Hf-174
+
+[include:../common_72-Hf_inh_Aerosols-TypeS.inc]

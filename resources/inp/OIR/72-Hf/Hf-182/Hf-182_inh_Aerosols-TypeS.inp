@@ -1,0 +1,7 @@
+[title]
+Hf-182 Inhalation, Aerosols Type S
+
+[nuclide]
+  Hf-182  Ta-182
+
+[include:../common_72-Hf_inh_Aerosols-TypeS.inc]
