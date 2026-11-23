@@ -1,0 +1,7 @@
+[title]
+Cd-107 Ingestion
+
+[nuclide]
+  Cd-107
+
+[include:../common_48-Cd_ing.inc]

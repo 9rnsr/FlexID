@@ -1,0 +1,7 @@
+[title]
+Cd-118 Injection
+
+[nuclide]
+  Cd-118  In-118
+
+[include:../common_48-Cd_inj.inc]

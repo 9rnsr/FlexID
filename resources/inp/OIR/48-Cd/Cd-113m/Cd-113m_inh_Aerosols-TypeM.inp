@@ -1,0 +1,7 @@
+[title]
+Cd-113m Inhalation, Aerosols Type M
+
+[nuclide]
+  Cd-113m  Cd-113
+
+[include:../common_48-Cd_inh_Aerosols-TypeM.inc]

@@ -1,0 +1,7 @@
+[title]
+Cd-118 Inhalation, Aerosols Type F
+
+[nuclide]
+  Cd-118  In-118
+
+[include:../common_48-Cd_inh_Aerosols-TypeF.inc]

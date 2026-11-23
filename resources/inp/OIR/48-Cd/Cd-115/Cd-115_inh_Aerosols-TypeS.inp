@@ -1,0 +1,7 @@
+[title]
+Cd-115 Inhalation, Aerosols Type S
+
+[nuclide]
+  Cd-115  In-115m  In-115
+
+[include:../common_48-Cd_inh_Aerosols-TypeS.inc]

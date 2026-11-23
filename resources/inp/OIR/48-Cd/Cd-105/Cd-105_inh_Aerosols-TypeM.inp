@@ -1,0 +1,7 @@
+[title]
+Cd-105 Inhalation, Aerosols Type M
+
+[nuclide]
+  Cd-105  Ag-105m  Ag-105
+
+[include:../common_48-Cd_inh_Aerosols-TypeM.inc]

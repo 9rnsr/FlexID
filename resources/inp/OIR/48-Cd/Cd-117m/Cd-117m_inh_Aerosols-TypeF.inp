@@ -1,0 +1,7 @@
+[title]
+Cd-117m Inhalation, Aerosols Type F
+
+[nuclide]
+  Cd-117m  In-117m  In-117  Sn-117m
+
+[include:../common_48-Cd_inh_Aerosols-TypeF.inc]

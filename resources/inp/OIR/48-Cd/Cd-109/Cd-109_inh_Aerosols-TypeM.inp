@@ -1,0 +1,7 @@
+[title]
+Cd-109 Inhalation, Aerosols Type M
+
+[nuclide]
+  Cd-109
+
+[include:../common_48-Cd_inh_Aerosols-TypeM.inc]

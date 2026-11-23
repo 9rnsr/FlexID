@@ -1,0 +1,7 @@
+[title]
+Cd-111m Ingestion
+
+[nuclide]
+  Cd-111m
+
+[include:../common_48-Cd_ing.inc]

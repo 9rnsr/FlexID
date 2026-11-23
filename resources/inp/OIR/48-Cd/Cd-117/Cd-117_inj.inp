@@ -1,0 +1,7 @@
+[title]
+Cd-117 Injection
+
+[nuclide]
+  Cd-117  In-117m  In-117  Sn-117m
+
+[include:../common_48-Cd_inj.inc]

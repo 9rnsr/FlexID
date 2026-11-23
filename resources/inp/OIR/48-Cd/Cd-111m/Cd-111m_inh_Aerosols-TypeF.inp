@@ -1,0 +1,7 @@
+[title]
+Cd-111m Inhalation, Aerosols Type F
+
+[nuclide]
+  Cd-111m
+
+[include:../common_48-Cd_inh_Aerosols-TypeF.inc]

@@ -1,0 +1,7 @@
+[title]
+Cd-118 Inhalation, Aerosols Type M
+
+[nuclide]
+  Cd-118  In-118
+
+[include:../common_48-Cd_inh_Aerosols-TypeM.inc]

@@ -1,0 +1,7 @@
+[title]
+Cd-113 Ingestion
+
+[nuclide]
+  Cd-113
+
+[include:../common_48-Cd_ing.inc]
