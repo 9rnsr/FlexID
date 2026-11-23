@@ -1,0 +1,7 @@
+[title]
+Ta-185 Ingestion
+
+[nuclide]
+  Ta-185  W-185
+
+[include:../common_73-Ta_ing.inc]

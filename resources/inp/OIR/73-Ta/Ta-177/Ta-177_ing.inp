@@ -1,0 +1,7 @@
+[title]
+Ta-177 Ingestion
+
+[nuclide]
+  Ta-177
+
+[include:../common_73-Ta_ing.inc]

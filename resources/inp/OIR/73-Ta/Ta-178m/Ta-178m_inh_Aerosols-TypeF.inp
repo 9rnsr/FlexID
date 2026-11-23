@@ -1,0 +1,7 @@
+[title]
+Ta-178m Inhalation, Aerosols Type F
+
+[nuclide]
+  Ta-178m
+
+[include:../common_73-Ta_inh_Aerosols-TypeF.inc]

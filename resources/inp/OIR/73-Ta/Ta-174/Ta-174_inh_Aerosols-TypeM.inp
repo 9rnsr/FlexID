@@ -1,0 +1,7 @@
+[title]
+Ta-174 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ta-174  Hf-174
+
+[include:../common_73-Ta_inh_Aerosols-TypeM.inc]

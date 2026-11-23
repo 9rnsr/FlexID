@@ -1,0 +1,7 @@
+[title]
+Ta-175 Inhalation, Aerosols Type S
+
+[nuclide]
+  Ta-175  Hf-175
+
+[include:../common_73-Ta_inh_Aerosols-TypeS.inc]

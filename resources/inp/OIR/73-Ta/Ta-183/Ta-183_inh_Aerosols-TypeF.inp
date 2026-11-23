@@ -1,0 +1,7 @@
+[title]
+Ta-183 Inhalation, Aerosols Type F
+
+[nuclide]
+  Ta-183
+
+[include:../common_73-Ta_inh_Aerosols-TypeF.inc]

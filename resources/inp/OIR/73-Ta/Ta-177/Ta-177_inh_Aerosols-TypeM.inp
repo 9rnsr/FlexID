@@ -1,0 +1,7 @@
+[title]
+Ta-177 Inhalation, Aerosols Type M
+
+[nuclide]
+  Ta-177
+
+[include:../common_73-Ta_inh_Aerosols-TypeM.inc]

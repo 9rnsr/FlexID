@@ -1,0 +1,7 @@
+[title]
+Ta-186 Injection
+
+[nuclide]
+  Ta-186
+
+[include:../common_73-Ta_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+Ta-173 Injection
+
+[nuclide]
+  Ta-173  Hf-173  Lu-173
+
+[include:../common_73-Ta_inj.inc]

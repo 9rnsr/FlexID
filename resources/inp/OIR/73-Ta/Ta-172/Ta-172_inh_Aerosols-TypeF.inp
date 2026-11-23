@@ -1,0 +1,7 @@
+[title]
+Ta-172 Inhalation, Aerosols Type F
+
+[nuclide]
+  Ta-172  Hf-172  Lu-172m  Lu-172
+
+[include:../common_73-Ta_inh_Aerosols-TypeF.inc]
