@@ -1,0 +1,7 @@
+[title]
+Re-190m Ingestion
+
+[nuclide]
+  Re-190m  Re-190
+
+[include:../common_75-Re_ing.inc]

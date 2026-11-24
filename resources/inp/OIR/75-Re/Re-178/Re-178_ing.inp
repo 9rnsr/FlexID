@@ -1,0 +1,7 @@
+[title]
+Re-178 Ingestion
+
+[nuclide]
+  Re-178  W-178  Ta-178
+
+[include:../common_75-Re_ing.inc]

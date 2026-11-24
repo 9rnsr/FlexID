@@ -1,0 +1,7 @@
+[title]
+Re-183 Inhalation, Aerosols Type M
+
+[nuclide]
+  Re-183
+
+[include:../common_75-Re_inh_Aerosols-TypeM.inc]

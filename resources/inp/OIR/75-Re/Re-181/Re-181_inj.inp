@@ -1,0 +1,7 @@
+[title]
+Re-181 Injection
+
+[nuclide]
+  Re-181  W-181
+
+[include:../common_75-Re_inj.inc]

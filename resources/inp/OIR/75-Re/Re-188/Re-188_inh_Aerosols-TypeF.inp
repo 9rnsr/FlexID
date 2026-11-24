@@ -1,0 +1,7 @@
+[title]
+Re-188 Inhalation, Aerosols Type F
+
+[nuclide]
+  Re-188
+
+[include:../common_75-Re_inh_Aerosols-TypeF.inc]

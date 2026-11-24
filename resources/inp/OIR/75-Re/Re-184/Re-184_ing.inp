@@ -1,0 +1,7 @@
+[title]
+Re-184 Ingestion
+
+[nuclide]
+  Re-184
+
+[include:../common_75-Re_ing.inc]

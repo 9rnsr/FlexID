@@ -1,0 +1,7 @@
+[title]
+Re-189 Inhalation, Aerosols Type M
+
+[nuclide]
+  Re-189  Os-189m
+
+[include:../common_75-Re_inh_Aerosols-TypeM.inc]

@@ -1,0 +1,7 @@
+[title]
+Re-178 Inhalation, Aerosols Type S
+
+[nuclide]
+  Re-178  W-178  Ta-178
+
+[include:../common_75-Re_inh_Aerosols-TypeS.inc]

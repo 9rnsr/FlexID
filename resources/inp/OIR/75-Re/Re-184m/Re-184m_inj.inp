@@ -1,0 +1,7 @@
+[title]
+Re-184m Injection
+
+[nuclide]
+  Re-184m  Re-184
+
+[include:../common_75-Re_inj.inc]

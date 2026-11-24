@@ -1,0 +1,7 @@
+[title]
+Re-186m Inhalation, Aerosols Type S
+
+[nuclide]
+  Re-186m  Re-186  Os-186
+
+[include:../common_75-Re_inh_Aerosols-TypeS.inc]

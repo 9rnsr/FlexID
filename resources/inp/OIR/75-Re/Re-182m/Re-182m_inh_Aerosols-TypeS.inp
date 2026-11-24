@@ -1,0 +1,7 @@
+[title]
+Re-182m Inhalation, Aerosols Type S
+
+[nuclide]
+  Re-182m
+
+[include:../common_75-Re_inh_Aerosols-TypeS.inc]
