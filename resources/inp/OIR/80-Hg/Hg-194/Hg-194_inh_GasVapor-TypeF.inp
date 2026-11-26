@@ -1,0 +1,7 @@
+[title]
+Hg-194 Inhalation, Gas or Vapor Type F
+
+[nuclide]
+  Hg-194  Au-194
+
+[include:../common_80-Hg_inh_GasVapor-TypeF.inc]

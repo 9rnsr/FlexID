@@ -1,0 +1,7 @@
+[title]
+Hg-193m Inhalation, Aerosols Type S
+
+[nuclide]
+  Hg-193m  Hg-193  Au-193m  Au-193  Pt-193  Pt-193m
+
+[include:../common_80-Hg_inh_Aerosols-TypeS.inc]

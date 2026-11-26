@@ -1,0 +1,7 @@
+[title]
+Hg-191m Injection
+
+[nuclide]
+  Hg-191m  Au-191  Pt-191
+
+[include:../common_80-Hg_inj.inc]

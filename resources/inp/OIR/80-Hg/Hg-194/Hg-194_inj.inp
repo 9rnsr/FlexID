@@ -1,0 +1,7 @@
+[title]
+Hg-194 Injection
+
+[nuclide]
+  Hg-194  Au-194
+
+[include:../common_80-Hg_inj.inc]

@@ -1,0 +1,7 @@
+[title]
+Hg-193 Ingestion
+
+[nuclide]
+  Hg-193  Au-193m  Au-193  Pt-193  Pt-193m
+
+[include:../common_80-Hg_ing.inc]

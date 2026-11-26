@@ -1,0 +1,7 @@
+[title]
+Hg-191m Inhalation, Gas or Vapor Type F
+
+[nuclide]
+  Hg-191m  Au-191  Pt-191
+
+[include:../common_80-Hg_inh_GasVapor-TypeF.inc]

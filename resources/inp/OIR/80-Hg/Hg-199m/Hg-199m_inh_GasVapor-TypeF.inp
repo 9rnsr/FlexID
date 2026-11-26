@@ -1,0 +1,7 @@
+[title]
+Hg-199m Inhalation, Gas or Vapor Type F
+
+[nuclide]
+  Hg-199m
+
+[include:../common_80-Hg_inh_GasVapor-TypeF.inc]

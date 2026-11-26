@@ -1,0 +1,7 @@
+[title]
+Hg-194 Inhalation, Aerosols Type S
+
+[nuclide]
+  Hg-194  Au-194
+
+[include:../common_80-Hg_inh_Aerosols-TypeS.inc]

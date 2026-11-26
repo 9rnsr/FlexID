@@ -1,0 +1,7 @@
+[title]
+Hg-199m Injection
+
+[nuclide]
+  Hg-199m
+
+[include:../common_80-Hg_inj.inc]
