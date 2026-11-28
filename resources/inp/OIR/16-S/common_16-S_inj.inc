@@ -1,4 +1,4 @@
-[include:common_16-S_parameter_inorganic.inc]
+[include:common_16-S_parameter.inc]
 
 [parameter]
   ${*}/fA    = fA_MaxValueOfIng

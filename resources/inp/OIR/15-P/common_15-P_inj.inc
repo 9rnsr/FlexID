@@ -1,8 +1,8 @@
-[parameter]
-  ${P}/fA    = 0.8          # ICRP Publ.134 p.84 Table 4.2 / Ingested materials, All unspecified forms
-  ${P}/fA_Re = 0.8          # footnote¶
+[include:common_15-P_parameter.inc]
 
-  ${P}/Blood = 'Plasma'
+[parameter]
+  ${P}/fA    = fA_MaxValueOfIng
+  ${P}/fA_Re = fA_MaxValueOfIng
 
 [include:../share/common_intake_inj.inc]
 

@@ -11,7 +11,7 @@
   acc   Kidneys               Kidneys
   acc   Pancreas              Pancreas
   acc   Spleen                Spleen
-  acc   SkeletalMuscle        Muscle
+  acc   Muscle                Muscle
   acc   ST0                   Other
   acc   ST1                   Other
 
@@ -30,12 +30,12 @@
 # > tissue; 2 d for bone surface compartments; and the bone turnover half-time for
 # > bone volume compartments. The subsequent behaviour of gallium that reaches the
 # > blood compartment is determined by the gallium model described above.
-# > (437) ...ガリウムモデルにおける血液は、亜鉛モデルの血漿コンパートメントと同一視される。
+# > (437) ...ガリウムモデルにおける血液は、亜鉛モデルの血漿コンパートメントと同一視されます。
 # > 亜鉛全身モデル（図9.1）の血漿以外のコンパートメントで生成されたガリウムは、以下の半減期で
-# > ガリウムモデルの血液コンパートメントに移行すると仮定する。赤血球では1分、
+# > ガリウムモデルの血液コンパートメントに移行すると仮定されます。赤血球では1分、
 # > 肝臓、脾臓、膵臓、筋肉では5日、腎臓およびその他の軟部組織コンパートメントでは0.5日、
-# > 骨表面コンパートメントでは2日、骨体積コンパートメントでは骨代謝の半減期である。
-# > 血液コンパートメントに到達したガリウムのその後の挙動は、上記のガリウムモデルによって決定される。
+# > 骨表面コンパートメントでは2日、骨体積コンパートメントでは骨代謝の半減期です。
+# > 血液コンパートメントに到達したガリウムのその後の挙動は、上記のガリウムモデルによって決定されます。
 
   {Zn}/Plasma             Blood                     ---
   {Zn}/RBC                Blood                 $(0.693 / (1/60/24))    # 半減期1分
@@ -69,13 +69,13 @@
 # > half-time of 2 d.  ...
 # > (437) ... ガリウムモデルは、血液、肝臓、腎臓、脾臓、膵臓、筋肉、海綿骨表面、海綿骨髄、
 # > 皮質骨表面、皮質骨髄を表すコンパートメントと、その他の軟部組織を表す2つのコンパートメントから
-# > 構成される。ガリウムは5 d⁻¹の速度で血液から消失すると仮定され、20%が骨表面に沈着し、
+# > 構成されます。ガリウムは5 d⁻¹の速度で血液から消失すると仮定され、20%が骨表面に沈着し、
 # > 10%が骨髄に、6%が肝臓に、8%が腎臓に、4%が筋肉に、1%が脾臓に、0.1%が膵臓に、3%が右結腸内容物に
 # > 沈着し、10%が比較的ゆっくりと血液に戻る軟部組織区画（t½=1年）に沈着し、残り（37.9%）は
-# > 比較的速く血液に戻る軟部組織区画（t½=0.5日）に沈着する。骨髄への沈着は、海綿骨と皮質骨に
-# > 均等に分配されると仮定される。ガリウムは、肝臓、脾臓、膵臓、筋肉から血液へは半減期5日で、
-# > 腎臓から膀胱内容物へは半減期0.5日で沈着する。骨表面および骨髄から血液へは、半減期2日で移行する。
-# > ...
+# > 比較的速く血液に戻る軟部組織区画（t½=0.5日）に沈着します。骨髄への沈着は、海綿骨と皮質骨に
+# > 均等に分配されると仮定されます。ガリウムは、肝臓、脾臓、膵臓、筋肉から血液へは半減期5日で、
+# > 腎臓から膀胱内容物へは半減期0.5日で沈着します。骨表面および骨髄から血液へは、半減期2日で
+# > 移行します。 ...
 
   Blood                   Liver                 $(5 *  6%)                          # == 0.3
   Blood                   Kidneys               $(5 *  8%)                          # == 0.4
@@ -83,7 +83,7 @@
   Blood                   C-bone-S              $(5 * 20% * 0.5)                    # == 0.5
   Blood                   T-marrow              $(5 * 10% * 0.5)                    # == 0.25   # <--
   Blood                   C-marrow              $(5 * 10% * 0.5)                    # == 0.25   # <--
-  Blood                   SkeletalMuscle        $(5 *  4%)                          # == 0.2
+  Blood                   Muscle                $(5 *  4%)                          # == 0.2
   Blood                   Spleen                $(5 *  1%)                          # == 0.05
   Blood                   Pancreas              $(5 *  0.1%)                        # == 0.005
   Blood                   RC-con                $(5 *  3%)                          # == 0.15
@@ -94,7 +94,7 @@
   Liver                   Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Spleen                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Pancreas                Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
-  SkeletalMuscle          Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
+  Muscle                  Blood                 $(0.693 / 5)        # 半減期5日     # == 0.139
   Kidneys                 UB-con                $(0.693 / 0.5)      # 半減期0.5日   # == 1.39
   T-bone-S                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
   C-bone-S                Blood                 $(0.693 / 2)        # 半減期2日     # == 0.347
@@ -119,7 +119,7 @@
 #   Blood                   T-bone-S                  0.5
 #   Blood                   C-bone-S                  0.5
 #   Blood                   RedMarrow                 0.25      # <--
-#   Blood                   SkeletalMuscle            0.2
+#   Blood                   Muscle                    0.2
 #   Blood                   Pancreas                  0.005
 #   Blood                   ST0                       2.145     # <--
 #   Blood                   ST1                       0.5
@@ -129,7 +129,7 @@
 #   T-bone-S                Blood                     0.347
 #   C-bone-S                Blood                     0.347
 #   RedMarrow               Blood                     0.347
-#   SkeletalMuscle          Blood                     0.139
+#   Muscle                  Blood                     0.139
 #   Pancreas                Blood                     0.139
 #   ST0                     Blood                     1.39
 #   ST1                     Blood                     0.0019
